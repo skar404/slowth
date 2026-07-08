@@ -1,0 +1,22 @@
+Configs/Local.xcconfig
+*.xcodeproj/
+.DS_Store
+build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Tooling / scratch output
+.playwright-mcp/
+
+# Internal notes — not for the public repo
+tmp.txt
+LAUNCH.md
+release-notes-*.txt
+patch.json
+CLAUDE.md
+
+# Screenshot generators / marketing tooling — kept local, not published
+screenshot/
+screenshots-gen/
+screenshots-mac/

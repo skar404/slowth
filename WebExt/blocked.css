@@ -1,0 +1,254 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  color: #f2f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html { background: #1a1340; }
+body {
+  background:
+    linear-gradient(180deg, rgba(74, 60, 173, 0.55), rgba(35, 22, 80, 0.55)),
+    #1a1340;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 24px 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+}
+
+.icon-wrap {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+  box-shadow:
+    0 30px 60px -20px rgba(89, 81, 235, 0.55),
+    0 0 0 1px rgba(255,255,255,0.06) inset;
+  display: grid;
+  place-items: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.icon-wrap img {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  display: block;
+}
+
+h1 {
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.1;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+h1 .host {
+  background: linear-gradient(135deg, #c9b6ff, #ff9fd6 60%, #6db4ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(242, 242, 245, 0.65);
+  max-width: 520px;
+}
+
+.quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  margin-top: 8px;
+}
+.quotes[hidden] { display: none; }
+
+.quote {
+  position: relative;
+  padding: 20px 22px;
+  text-align: left;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  font-size: 17px;
+  line-height: 1.45;
+  color: rgba(242, 242, 245, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.quote::before {
+  content: "\201C";
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  font-size: 56px;
+  line-height: 1;
+  color: rgba(255,255,255,0.15);
+  font-family: Georgia, serif;
+}
+.quote b {
+  color: #fff;
+  font-weight: 600;
+}
+.quote.clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.quote.clickable:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.14);
+  transform: translateY(-1px);
+}
+.quote.clickable:active { transform: translateY(0); }
+.quote.clickable::after {
+  content: "🦥 tap to play Slow Flap →";
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgba(242, 242, 245, 0.55);
+  font-weight: 500;
+}
+
+.footer {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer[hidden] { display: none; }
+
+.btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  color: #0b0b15;
+  background: linear-gradient(135deg, #ffffff, #d8d8e8);
+}
+.btn-primary:hover { background: linear-gradient(135deg, #ffffff, #c8c8db); }
+
+.btn-ghost {
+  color: rgba(242, 242, 245, 0.85);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.10); }
+
+.best-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgba(242, 242, 245, 0.78);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.best-badge .best-label {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(242, 242, 245, 0.55);
+}
+.best-badge .best-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+}
+
+.signature {
+  margin-top: 24px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(242, 242, 245, 0.4);
+}
+
+.game {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+.game[hidden] { display: none; }
+.game-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: rgba(242, 242, 245, 0.8);
+}
+.game-head .score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+.muted { opacity: 0.6; }
+.game-canvas {
+  width: 100%;
+  aspect-ratio: 320 / 460;
+  border-radius: 22px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  display: block;
+  touch-action: manipulation;
+}
+.game-help {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(242, 242, 245, 0.55);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 480px) {
+  main { padding: 40px 18px 32px; gap: 22px; }
+  .quote { font-size: 15.5px; padding: 18px 18px; border-radius: 18px; }
+  .icon-wrap { width: 84px; height: 84px; border-radius: 22px; }
+  .icon-wrap img { width: 66px; height: 66px; border-radius: 16px; }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Blocked by Slowth</title>
+  <link rel="icon" href="images/icon-128.png">
+  <link rel="stylesheet" href="blocked.css">
+</head>
+<body>
+  <main>
+    <div class="icon-wrap">
+      <img src="images/icon-128.png" alt="Slowth">
+    </div>
+
+    <h1><span class="host" id="title-host">this site</span> is blocked</h1>
+    <p class="lede" id="subtitle">Slowth is keeping you off the infinite feed. Take a breath. Do something else.</p>
+
+    <section class="quotes" id="quotes" aria-label="Why">
+      <div class="quote" data-quote>
+        Reels was built by a team of hundreds of people making <b>$400k salaries</b>.
+        Slowth was built by <b>one dev over a weekend</b>.
+      </div>
+      <div class="quote" data-quote>
+        They spent <b>billions</b> to keep you scrolling.
+        We spent <b>3 KB</b> to make you stop.
+      </div>
+      <div class="quote" data-quote>
+        The infinite feed is a bug. <b>Here's the fix.</b>
+      </div>
+    </section>
+
+    <section class="game" id="game-section" aria-label="Slow Flap" hidden>
+      <div class="game-head">
+        <span>🦥 Slow Flap</span>
+        <span class="score"><span id="score">0</span> · <span class="muted">best <span id="best">0</span></span></span>
+      </div>
+      <canvas id="game" class="game-canvas" width="320" height="460" aria-label="Mini flap game"></canvas>
+      <div class="game-help" id="game-help">Tap or press space to flap</div>
+    </section>
+
+    <div class="footer" id="footer" hidden>
+      <a class="btn btn-ghost" id="back-link" href="#">← Back</a>
+    </div>
+
+    <div class="signature">Slowth · slow down, breathe, build</div>
+  </main>
+
+  <script src="blocked.js"></script>
+</body>
+</html>

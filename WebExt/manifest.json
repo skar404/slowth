@@ -1,0 +1,95 @@
+{
+  "manifest_version": 3,
+  "name": "Slowth",
+  "version": "0.5.0",
+  "default_locale": "en",
+  "description": "Hide Shorts and Reels on YouTube, Instagram, Facebook, X; block TikTok. Per-site control with remote rules.",
+  "permissions": [
+    "storage",
+    "scripting",
+    "webNavigation",
+    "alarms",
+    "tabs",
+    "nativeMessaging"
+  ],
+
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.instagram.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.facebook.com/*",
+    "*://*.x.com/*",
+    "*://*.twitter.com/*",
+    "https://gist.githubusercontent.com/*"
+  ],
+
+  "action": {
+    "default_popup": "app.html",
+    "default_title": "Slowth",
+    "default_icon": {
+      "48":  "images/icon-48.png",
+      "96":  "images/icon-96.png",
+      "128": "images/icon-128.png"
+    }
+  },
+
+  "icons": {
+    "48":  "images/icon-48.png",
+    "96":  "images/icon-96.png",
+    "128": "images/icon-128.png",
+    "256": "images/icon-256.png",
+    "512": "images/icon-512.png"
+  },
+
+  "background": {
+    "scripts": ["config.js", "rules-loader.js", "background.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*", "*://m.youtube.com/*"],
+      "js": ["config.js", "content/common.js", "content/youtube.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://*.instagram.com/*"],
+      "js": ["config.js", "content/common.js", "content/instagram.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://*.tiktok.com/*"],
+      "js": ["config.js", "content/common.js", "content/tiktok.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://*.facebook.com/*"],
+      "js": ["config.js", "content/common.js", "content/facebook.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://*.x.com/*", "*://*.twitter.com/*"],
+      "js": ["config.js", "content/common.js", "content/x.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html", "images/icon-128.png"],
+      "matches": [
+        "*://*.tiktok.com/*",
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*",
+        "*://*.facebook.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*"
+      ]
+    }
+  ]
+}

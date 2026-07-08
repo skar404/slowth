@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Slowth</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="container">
+    <header><h1>Slowth</h1></header>
+
+    <section id="onboarding" class="card hero-card hidden">
+      <div class="hero-tagline">
+        Hide Shorts and Reels on YouTube, Instagram, Facebook and X. Block TikTok entirely. Lock your settings with Strict mode for 24 hours.
+      </div>
+      <div class="card-title">Enable in Safari</div>
+      <ol class="steps-list">
+        <li>Open <b>Settings</b> on your device</li>
+        <li>Go to <b>Apps → Safari → Extensions</b></li>
+        <li>Turn on <b>Slowth</b> and allow it on every website</li>
+      </ol>
+      <div class="card-actions">
+        <button id="open-settings-btn" class="btn-primary">Open Settings</button>
+        <button id="dismiss-onboarding-btn" class="btn-link">I've enabled it</button>
+      </div>
+    </section>
+
+    <div id="strict-banner" class="banner hidden">
+      <span id="strict-banner-text"></span>
+    </div>
+
+    <section class="group">
+      <div class="group-header">Blocking</div>
+      <div class="rows" id="sites"></div>
+    </section>
+
+    <section class="group">
+      <div class="group-header">Strict mode</div>
+      <div class="rows">
+        <label class="row">
+          <span>Strict mode</span>
+          <input type="checkbox" id="strict-toggle" role="switch">
+        </label>
+      </div>
+      <div class="group-footer">
+        Prevents disabling settings for 24 hours, even after restarting your device.
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="group-header">Updates</div>
+      <div class="rows">
+        <button class="row-btn" id="refresh-btn">
+          <span class="row-btn-title">Update now</span>
+          <span class="row-btn-subtitle" id="rules-status">Loading…</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="group landing-only">
+      <div class="group-header">Guide</div>
+      <div class="rows">
+        <button class="row-btn" id="how-to-use-btn">
+          <span class="row-btn-title">How to use Slowth</span>
+          <span class="row-btn-subtitle">Strict mode and per-site modes explained</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="guide-cards" class="landing-only">
+      <div class="card guide-card">
+        <div class="card-title">What Strict mode does</div>
+        <div class="guide-body">
+          Strict mode locks every toggle on this screen for 24 hours. The timer survives restarts, force-quits and reinstalling Safari. Once it's on, you can't lower it — only wait it out, or delete and reinstall the app.
+        </div>
+        <div class="guide-body">
+          Turn it on when willpower alone isn't enough. Leave it off if you just want a soft nudge.
+        </div>
+      </div>
+
+      <div class="card guide-card">
+        <div class="card-title">How blocking works</div>
+        <div class="guide-mode-row">
+          <span class="mode-pill mode-off">Off</span>
+          <span>The site loads as usual. Slowth does nothing.</span>
+        </div>
+        <div class="guide-mode-row">
+          <span class="mode-pill mode-shorts">Block shorts</span>
+          <span>The Shorts/Reels feed, tab and ribbon are hidden. The rest of the site keeps working.</span>
+        </div>
+        <div class="guide-mode-row">
+          <span class="mode-pill mode-feed">Block shorts + feed</span>
+          <span>Also stops the endless home feed with a blocked page after a few screens. Facebook &amp; Instagram only.</span>
+        </div>
+        <div class="guide-mode-row">
+          <span class="mode-pill mode-all">Block site</span>
+          <span>Visiting the site shows a friendly blocked page instead.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="rows">
+        <a href="#" id="feedback-link" class="row-btn">
+          <span class="row-btn-title">Leave feedback</span>
+        </a>
+      </div>
+      <div class="group-footer">Slowth v0.5.0</div>
+    </section>
+
+    <button id="show-intro-btn" class="btn-link intro-replay landing-only hidden">
+      Show intro again
+    </button>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

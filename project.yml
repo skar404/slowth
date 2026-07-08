@@ -1,0 +1,192 @@
+name: Unscroll
+options:
+  bundleIdPrefix: $(BUNDLE_ID_PREFIX)
+  deploymentTarget:
+    macOS: "13.0"
+    iOS: "16.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+  groupSortPosition: top
+
+configFiles:
+  Debug: Configs/Local.xcconfig
+  Release: Configs/Local.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "0.5.0"
+    CURRENT_PROJECT_VERSION: 3
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
+    ENABLE_HARDENED_RUNTIME: YES
+
+targets:
+  Unscroll:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - path: App
+        excludes:
+          - "Info.plist"
+          - "Unscroll.entitlements"
+      - path: Shared
+        excludes:
+          - "ContentView_iOS.swift"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
+        PRODUCT_NAME: Slowth
+        INFOPLIST_FILE: App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: App/Unscroll.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        COMBINE_HIDPI_IMAGES: YES
+    dependencies:
+      - target: UnscrollExtension
+        embed: true
+
+  UnscrollExtension:
+    type: app-extension
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - path: Extension
+        excludes:
+          - "Info.plist"
+          - "UnscrollExtension.entitlements"
+      - path: Shared
+        excludes:
+          - "UnscrollApp.swift"
+          - "ContentView_iOS.swift"
+          - "ContentView_macOS.swift"
+          - "AppState.swift"
+      - path: WebExt/manifest.json
+        buildPhase: resources
+      - path: WebExt/config.js
+        buildPhase: resources
+      - path: WebExt/rules-loader.js
+        buildPhase: resources
+      - path: WebExt/background.js
+        buildPhase: resources
+      - path: WebExt/app.html
+        buildPhase: resources
+      - path: WebExt/app.css
+        buildPhase: resources
+      - path: WebExt/app.js
+        buildPhase: resources
+      - path: WebExt/blocked.html
+        buildPhase: resources
+      - path: WebExt/blocked.css
+        buildPhase: resources
+      - path: WebExt/blocked.js
+        buildPhase: resources
+      - path: WebExt/_locales
+        type: folder
+        buildPhase: resources
+      - path: WebExt/content
+        type: folder
+        buildPhase: resources
+      - path: WebExt/images
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Extension
+        PRODUCT_NAME: UnscrollExtension
+        INFOPLIST_FILE: Extension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Extension/UnscrollExtension.entitlements
+        SKIP_INSTALL: YES
+
+  UnscrollIOS:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: iOS
+        excludes:
+          - "Info.plist"
+          - "Unscroll.entitlements"
+          - "FamilyActivityPickerHost.swift"
+          - "FamilyControlsAuth.swift"
+          - "ManagedSettingsApplier.swift"
+      - path: Shared
+        # iOS compiles both ContentView_iOS.swift and ContentView_macOS.swift —
+        # the iOS UI is default, macOS-style is a "Compact" alternative selected
+        # at runtime via @AppStorage("uiMode").
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
+        PRODUCT_NAME: Unscroll
+        INFOPLIST_FILE: iOS/Info.plist
+        CODE_SIGN_ENTITLEMENTS: iOS/Unscroll.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+    dependencies:
+      - target: UnscrollExtensionIOS
+        embed: true
+
+  UnscrollExtensionIOS:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Extension/SafariWebExtensionHandler.swift
+        buildPhase: sources
+      - path: Shared
+        excludes:
+          - "UnscrollApp.swift"
+          - "ContentView_iOS.swift"
+          - "ContentView_macOS.swift"
+          - "AppState.swift"
+      - path: WebExt/manifest.json
+        buildPhase: resources
+      - path: WebExt/config.js
+        buildPhase: resources
+      - path: WebExt/rules-loader.js
+        buildPhase: resources
+      - path: WebExt/background.js
+        buildPhase: resources
+      - path: WebExt/app.html
+        buildPhase: resources
+      - path: WebExt/app.css
+        buildPhase: resources
+      - path: WebExt/app.js
+        buildPhase: resources
+      - path: WebExt/blocked.html
+        buildPhase: resources
+      - path: WebExt/blocked.css
+        buildPhase: resources
+      - path: WebExt/blocked.js
+        buildPhase: resources
+      - path: WebExt/_locales
+        type: folder
+        buildPhase: resources
+      - path: WebExt/content
+        type: folder
+        buildPhase: resources
+      - path: WebExt/images
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Extension
+        PRODUCT_NAME: UnscrollExtension
+        INFOPLIST_FILE: ExtensionIOS/Info.plist
+        CODE_SIGN_ENTITLEMENTS: ExtensionIOS/UnscrollExtension.entitlements
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+schemes:
+  Unscroll:
+    build:
+      targets:
+        Unscroll: all
+    run:
+      config: Debug
+  Unscroll (iOS):
+    build:
+      targets:
+        UnscrollIOS: all
+    run:
+      config: Debug

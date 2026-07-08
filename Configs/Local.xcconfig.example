@@ -1,0 +1,15 @@
+// Copy this file to Local.xcconfig, fill in your values, then run `xcodegen generate`.
+//
+// DEVELOPMENT_TEAM: your 10-character Team ID.
+//   Find it at https://developer.apple.com/account → Membership → Team ID
+//   or in Xcode → Settings → Accounts → your Apple ID → (column "Team ID").
+//
+// BUNDLE_ID_PREFIX: a reverse-DNS prefix you own (e.g. com.yourname.unscroll).
+//   Must be globally unique under your team. The app will use:
+//     macOS app:  $(BUNDLE_ID_PREFIX).mac
+//     macOS ext:  $(BUNDLE_ID_PREFIX).mac.Extension
+//     iOS  app:   $(BUNDLE_ID_PREFIX).ios
+//     iOS  ext:   $(BUNDLE_ID_PREFIX).ios.Extension
+
+DEVELOPMENT_TEAM = ABCDE12345
+BUNDLE_ID_PREFIX = com.example.unscroll
