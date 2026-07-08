@@ -1,12 +1,31 @@
+<div align="center">
+
+<img src="docs/icon.png" width="120" alt="Slowth" />
+
 # Slowth
 
 **Infinite scroll is a bug. This is the patch.**
 
-Slowth removes the infinite-feed traps — YouTube Shorts, Instagram &
-Facebook Reels — while leaving the rest of each site usable. You don't have
-to delete anything; you just lose the black hole.
+Hide YouTube Shorts, Instagram &amp; Facebook Reels, and block TikTok — right
+in Safari. Free. No accounts. No tracking.
 
-Free. No accounts. No tracking. No monetization.
+[![Download on the App Store](https://img.shields.io/badge/Download-App_Store-0D96F6?logo=apple&logoColor=white)](https://apps.apple.com/us/app/slowth-block-reels/id6764140763)
+[![Website](https://img.shields.io/badge/Website-malina.page%2Fslowth-6E56CF)](https://malina.page/slowth/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+![Platforms](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS-lightgrey)
+
+</div>
+
+Slowth removes the infinite-feed traps while leaving the rest of each site
+usable. You don't have to delete anything; you just lose the black hole.
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/showcase-00.jpg" width="30%" alt="Infinite scroll is a bug. This is the patch." />
+  <img src="docs/showcase-01.jpg" width="30%" alt="Your attention is the product. We're taking it off the shelf." />
+  <img src="docs/showcase-02.jpg" width="30%" alt="Slowth host app on macOS" />
+</p>
 
 ## What it does
 
