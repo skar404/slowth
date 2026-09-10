@@ -1,0 +1,119 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "E47C2F95-611B-4B37-A0F6-862FCE680FF6",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "5.00",
+      "familyShareable" : false,
+      "internalID" : "8E144F9D-6A38-4CC8-9092-96DACD9313C2",
+      "localizations" : [
+        {
+          "description" : "Thanks for the coffee.",
+          "displayName" : "Cup of Coffee",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "tip.coffee",
+      "referenceName" : "Cup of Coffee",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "10.00",
+      "familyShareable" : false,
+      "internalID" : "E850075D-5798-4727-BBF2-4160240C20A7",
+      "localizations" : [
+        {
+          "description" : "Fuel for a sleepless coding night.",
+          "displayName" : "Coffee Beans",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "tip.beans",
+      "referenceName" : "Coffee Beans",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "25.00",
+      "familyShareable" : false,
+      "internalID" : "49A9DB1F-3EDD-4C78-AD11-FB23ED6659C5",
+      "localizations" : [
+        {
+          "description" : "Funds my next climb - no signal up there.",
+          "displayName" : "Climbing Pass",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "tip.climbingpass",
+      "referenceName" : "Climbing Pass",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 5,
+    "minor" : 0
+  }
+}

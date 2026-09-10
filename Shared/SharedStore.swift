@@ -20,6 +20,7 @@ struct SharedState: Codable, Equatable {
     var strictModeUntil: Date?
     var rulesFetchedAt: Date?
     var onboardingDone: Bool
+    var supportCardDismissed: Bool
 
     static let supportedSites = ["youtube", "instagram", "tiktok", "facebook", "x"]
 
@@ -35,7 +36,8 @@ struct SharedState: Codable, Equatable {
             ],
             strictModeUntil: nil,
             rulesFetchedAt: nil,
-            onboardingDone: false
+            onboardingDone: false,
+            supportCardDismissed: false
         )
     }
 
@@ -54,6 +56,7 @@ enum SharedStoreKey {
     static let rulesLastAttemptAt = "rulesLastAttemptAt"
     static let blockedAppsData = "blockedAppsData"
     static let onboardingDone = "onboardingDone"
+    static let supportCardDismissed = "supportCardDismissed"
 }
 
 enum SharedStoreError: Error {
@@ -93,12 +96,14 @@ enum SharedStore {
         }()
 
         let onboardingDone = d.bool(forKey: SharedStoreKey.onboardingDone)
+        let supportCardDismissed = d.bool(forKey: SharedStoreKey.supportCardDismissed)
 
         return SharedState(
             toggles: toggles,
             strictModeUntil: until,
             rulesFetchedAt: fetchedAt,
-            onboardingDone: onboardingDone
+            onboardingDone: onboardingDone,
+            supportCardDismissed: supportCardDismissed
         )
     }
 
@@ -157,6 +162,10 @@ enum SharedStore {
 
     static func setOnboardingDone(_ value: Bool) {
         d.set(value, forKey: SharedStoreKey.onboardingDone)
+    }
+
+    static func setSupportCardDismissed(_ value: Bool) {
+        d.set(value, forKey: SharedStoreKey.supportCardDismissed)
     }
 
     static func blockedAppsData() -> Data? {

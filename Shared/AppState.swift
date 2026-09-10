@@ -94,6 +94,11 @@ final class AppState: ObservableObject {
         reload()
     }
 
+    func dismissSupportCard() {
+        SharedStore.setSupportCardDismissed(true)
+        reload()
+    }
+
     #if os(iOS)
     func openSystemSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {

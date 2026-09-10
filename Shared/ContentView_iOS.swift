@@ -1,5 +1,7 @@
 #if os(iOS)
 import SwiftUI
+import StoreKit
+import UIKit
 
 private struct SiteSpec: Identifiable {
     let id: String
@@ -17,13 +19,31 @@ private let sites: [SiteSpec] = [
     .init(id: "x",         label: "X (Twitter)",      modes: [.off, .shorts, .all])
 ]
 
-private let feedbackURL = URL(string: "mailto:denis@malina.page?subject=Slowth%20feedback")!
+private extension View {
+    // iPhone-style bottom-sheet detents only make sense in a compact-width
+    // context. On full-screen iPad (regular width) they force an
+    // undersized, bottom-anchored sheet instead of the platform's normal
+    // centered form-sheet — so only apply them when the size class is compact.
+    @ViewBuilder
+    func compactSheetDetents(isCompact: Bool) -> some View {
+        if isCompact {
+            self.presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        } else {
+            self
+        }
+    }
+}
+
 
 struct ContentView: View {
     @StateObject private var state = AppState()
+    @StateObject private var tipStore = TipStore()
     @AppStorage("uiMode") private var uiMode: String = "ios"
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var showSafariHelp = false
     @State private var showAbout = false
+    @State private var showSupportSheet = false
 
     var body: some View {
         NavigationStack {
@@ -50,13 +70,15 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showSafariHelp) {
             SafariHelpSheet(openSettings: { state.openSafariExtensionSettings() })
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
+                .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
         }
         .sheet(isPresented: $showAbout) {
             AboutSheet()
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
+                .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
+        }
+        .sheet(isPresented: $showSupportSheet) {
+            SupportSheet(tipStore: tipStore)
+                .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
         }
     }
 
@@ -97,6 +119,17 @@ struct ContentView: View {
                             ? nil
                             : { state.setStrictMode(true) }
                     )
+                    if !state.snapshot.supportCardDismissed {
+                        HeroCard(
+                            title: "Support",
+                            subtitle: "Tip the developer",
+                            icon: "heart.fill",
+                            gradient: [Color(red: 0.95, green: 0.42, blue: 0.55),
+                                       Color(red: 0.85, green: 0.20, blue: 0.45)],
+                            action: { showSupportSheet = true },
+                            onDismiss: { state.dismissSupportCard() }
+                        )
+                    }
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
@@ -196,6 +229,16 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            Button {
+                showSupportSheet = true
+            } label: {
+                HStack {
+                    Text("Support")
+                    Spacer()
+                    Image(systemName: "heart.fill")
+                        .foregroundStyle(.secondary)
+                }
+            }
         } header: {
             Text("Help")
         } footer: {
@@ -242,6 +285,22 @@ struct ContentView: View {
         return "v\(v) (\(b))"
     }
 
+    private var deviceInfo: String {
+        let device = UIDevice.current
+        return "\(device.systemName) \(device.systemVersion), \(device.model)"
+    }
+
+    private var feedbackURL: URL {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = "denis@malina.page"
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "Slowth feedback"),
+            URLQueryItem(name: "body", value: "\n\n(Helps me debug — delete if you'd rather not share.)\n\(appVersion)\n\(deviceInfo)")
+        ]
+        return components.url!
+    }
+
     private static let relativeFormatter: RelativeDateTimeFormatter = {
         let f = RelativeDateTimeFormatter()
         f.unitsStyle = .short
@@ -255,6 +314,7 @@ private struct HeroCard: View {
     let icon: String
     let gradient: [Color]
     let action: (() -> Void)?
+    var onDismiss: (() -> Void)? = nil
 
     var body: some View {
         Group {
@@ -263,6 +323,20 @@ private struct HeroCard: View {
                     .buttonStyle(.plain)
             } else {
                 content
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if let onDismiss {
+                Button(action: onDismiss) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 24))
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.white, .black.opacity(0.35))
+                        .padding(8)
+                        .frame(minWidth: 44, minHeight: 44, alignment: .topTrailing)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -455,6 +529,224 @@ private struct InfoRow: View {
                 Text(title).font(.subheadline.weight(.semibold))
                 Text(detail).font(.footnote).foregroundStyle(.secondary)
             }
+        }
+    }
+}
+
+private struct SupportSheet: View {
+    @ObservedObject var tipStore: TipStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var showThanks = false
+    @State private var failedAttempts = 0
+    @State private var isRetrying = false
+
+    private static let maxAttempts = 5
+    private static let retryCooldown: Duration = .seconds(2)
+
+    private func loadProducts() async {
+        await tipStore.loadProducts()
+        if tipStore.products.isEmpty {
+            failedAttempts += 1
+        }
+    }
+
+    private func retryTapped() {
+        guard !isRetrying, failedAttempts < Self.maxAttempts else { return }
+        isRetrying = true
+        Task {
+            await loadProducts()
+            try? await Task.sleep(for: Self.retryCooldown)
+            isRetrying = false
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if !tipStore.products.isEmpty {
+                        HStack(spacing: 12) {
+                            Image(systemName: "heart.fill")
+                                .font(.title)
+                                .foregroundStyle(.white)
+                                .frame(width: 44, height: 44)
+                                .background(
+                                    LinearGradient(
+                                        colors: [Color(red: 0.95, green: 0.42, blue: 0.55),
+                                                 Color(red: 0.85, green: 0.20, blue: 0.45)],
+                                        startPoint: .topLeading, endPoint: .bottomTrailing
+                                    ),
+                                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                )
+                            VStack(alignment: .leading) {
+                                Text("Support Slowth")
+                                    .font(.title3.weight(.semibold))
+                                Text("Doesn't unlock anything. Just a way to say thanks.")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+
+                    if tipStore.isLoadingProducts && tipStore.products.isEmpty {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 24)
+                    } else if tipStore.products.isEmpty {
+                        VStack(spacing: 10) {
+                            if failedAttempts >= Self.maxAttempts {
+                                Text("Looks like this is broken for now")
+                                    .font(.subheadline.weight(.semibold))
+                                Text("We'll fix it soon — come back later.")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                            } else {
+                                Text("Oops... try again later")
+                                    .font(.subheadline.weight(.semibold))
+                                Text("Something broke. Even for a sloth, this is slow.")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                Button {
+                                    retryTapped()
+                                } label: {
+                                    if isRetrying {
+                                        ProgressView()
+                                    } else {
+                                        Text("Reload")
+                                    }
+                                }
+                                .buttonStyle(.bordered)
+                                .disabled(isRetrying)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                    } else {
+                        VStack(spacing: 12) {
+                            ForEach(tipStore.products) { product in
+                                TipRow(
+                                    product: product,
+                                    isPurchasing: tipStore.purchasingProductID == product.id,
+                                    action: { Task { await tipStore.purchase(product) } }
+                                )
+                            }
+                        }
+                    }
+
+                    if showThanks {
+                        Label("Thanks! It really helps.", systemImage: "heart.fill")
+                            .foregroundStyle(.pink)
+                            .font(.subheadline.weight(.semibold))
+                            .frame(maxWidth: .infinity)
+                    }
+
+                    if !tipStore.history.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Your support")
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            VStack(spacing: 8) {
+                                ForEach(tipStore.history) { entry in
+                                    TipHistoryRow(
+                                        productID: entry.productID,
+                                        displayName: tipStore.displayName(for: entry.productID),
+                                        date: entry.date
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(20)
+            }
+            .navigationTitle("Support")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+        .task {
+            await loadProducts()
+        }
+        .onChange(of: tipStore.lastPurchasedProductID) { newValue in
+            guard newValue != nil else { return }
+            withAnimation { showThanks = true }
+            tipStore.lastPurchasedProductID = nil
+            Task {
+                try? await Task.sleep(for: .seconds(2.5))
+                withAnimation { showThanks = false }
+            }
+        }
+        .alert("Heads up",
+               isPresented: Binding(
+                get: { tipStore.lastError != nil },
+                set: { if !$0 { tipStore.lastError = nil } })) {
+            Button("OK", role: .cancel) { tipStore.lastError = nil }
+        } message: {
+            Text(tipStore.lastError ?? "")
+        }
+    }
+}
+
+private func tipEmoji(for productID: String) -> String {
+    switch productID {
+    case TipStore.TipProductID.coffee.rawValue: return "☕️"
+    case TipStore.TipProductID.beans.rawValue: return "🫘"
+    default: return "🏔️"
+    }
+}
+
+private struct TipRow: View {
+    let product: Product
+    let isPurchasing: Bool
+    let action: () -> Void
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Text(tipEmoji(for: product.id))
+                .font(.system(size: 32))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(product.displayName)
+                    .font(.subheadline.weight(.semibold))
+                Text(product.description)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button(action: action) {
+                if isPurchasing {
+                    ProgressView().controlSize(.small)
+                } else {
+                    Text(product.displayPrice)
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(isPurchasing)
+        }
+        .padding(14)
+        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+}
+
+private struct TipHistoryRow: View {
+    let productID: String
+    let displayName: String
+    let date: Date
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Text(tipEmoji(for: productID))
+                .font(.body)
+            Text(displayName)
+                .font(.footnote)
+            Spacer()
+            Text(date.formatted(date: .abbreviated, time: .omitted))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 }

@@ -1,4 +1,8 @@
 import SwiftUI
+import StoreKit
+#if os(iOS)
+import UIKit
+#endif
 
 private struct SiteSpec: Identifiable {
     let id: String
@@ -16,11 +20,12 @@ private let sites: [SiteSpec] = [
     .init(id: "x",         label: "X",         modes: [.off, .shorts, .all])
 ]
 
-private let feedbackURL = URL(string: "mailto:denis@malina.page?subject=Slowth%20feedback")!
 
 struct MacContentView: View {
     @StateObject private var state = AppState()
+    @StateObject private var tipStore = TipStore()
     @State private var showAbout = false
+    @State private var showSupportSheet = false
     #if os(iOS)
     @AppStorage("uiMode") private var uiMode: String = "ios"
     #endif
@@ -45,6 +50,17 @@ struct MacContentView: View {
                                    Color(red: 0.14, green: 0.45, blue: 0.84)],
                         action: { state.openSafariExtensionSettings() }
                     )
+                    if !state.snapshot.supportCardDismissed {
+                        HeroCard(
+                            title: "Support",
+                            subtitle: "Tip the developer",
+                            icon: "heart.fill",
+                            gradient: [Color(red: 0.95, green: 0.42, blue: 0.55),
+                                       Color(red: 0.85, green: 0.20, blue: 0.45)],
+                            action: { showSupportSheet = true },
+                            onDismiss: { state.dismissSupportCard() }
+                        )
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
@@ -133,6 +149,17 @@ struct MacContentView: View {
 
             Section {
                 Link("Send feedback", destination: feedbackURL)
+                Button {
+                    showSupportSheet = true
+                } label: {
+                    HStack {
+                        Text("Support")
+                        Spacer()
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
             } header: {
                 Text("Help")
             } footer: {
@@ -153,6 +180,9 @@ struct MacContentView: View {
         }
         .sheet(isPresented: $showAbout) {
             AboutSheet()
+        }
+        .sheet(isPresented: $showSupportSheet) {
+            SupportSheet(tipStore: tipStore)
         }
     }
 
@@ -195,6 +225,27 @@ struct MacContentView: View {
         let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
         let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
         return "Slowth v\(v) (\(b))"
+    }
+
+    private var deviceInfo: String {
+        #if os(iOS)
+        let device = UIDevice.current
+        return "\(device.systemName) \(device.systemVersion), \(device.model)"
+        #elseif os(macOS)
+        let v = ProcessInfo.processInfo.operatingSystemVersion
+        return "macOS \(v.majorVersion).\(v.minorVersion).\(v.patchVersion)"
+        #endif
+    }
+
+    private var feedbackURL: URL {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = "denis@malina.page"
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "Slowth feedback"),
+            URLQueryItem(name: "body", value: "\n\n(Helps me debug — delete if you'd rather not share.)\n\(appVersion)\n\(deviceInfo)")
+        ]
+        return components.url!
     }
 
     private static let relativeFormatter: RelativeDateTimeFormatter = {
@@ -253,6 +304,7 @@ private struct HeroCard: View {
     let icon: String
     let gradient: [Color]
     let action: (() -> Void)?
+    var onDismiss: (() -> Void)? = nil
 
     var body: some View {
         Group {
@@ -261,6 +313,28 @@ private struct HeroCard: View {
                     .buttonStyle(.plain)
             } else {
                 content
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if let onDismiss {
+                Button(action: onDismiss) {
+                    Image(systemName: "xmark.circle.fill")
+                        #if os(iOS)
+                        .font(.system(size: 22))
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.white, .black.opacity(0.35))
+                        .padding(6)
+                        .frame(minWidth: 44, minHeight: 44, alignment: .topTrailing)
+                        .contentShape(Rectangle())
+                        #else
+                        .font(.system(size: 14))
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.white, .black.opacity(0.35))
+                        .padding(4)
+                        .contentShape(Circle())
+                        #endif
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -311,6 +385,208 @@ private struct InfoRow: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+        }
+    }
+}
+
+private struct SupportSheet: View {
+    @ObservedObject var tipStore: TipStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var showThanks = false
+    @State private var failedAttempts = 0
+    @State private var isRetrying = false
+
+    private static let maxAttempts = 5
+    private static let retryCooldown: Duration = .seconds(2)
+
+    private func loadProducts() async {
+        await tipStore.loadProducts()
+        if tipStore.products.isEmpty {
+            failedAttempts += 1
+        }
+    }
+
+    private func retryTapped() {
+        guard !isRetrying, failedAttempts < Self.maxAttempts else { return }
+        isRetrying = true
+        Task {
+            await loadProducts()
+            try? await Task.sleep(for: Self.retryCooldown)
+            isRetrying = false
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            if !tipStore.products.isEmpty {
+                HStack(spacing: 10) {
+                    Image(systemName: "heart.fill")
+                        .font(.title2)
+                        .foregroundStyle(.pink)
+                    VStack(alignment: .leading) {
+                        Text("Support Slowth")
+                            .font(.title3.weight(.semibold))
+                        Text("Doesn't unlock anything. Just a way to say thanks.")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+            }
+
+            if tipStore.isLoadingProducts && tipStore.products.isEmpty {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+            } else if tipStore.products.isEmpty {
+                VStack(spacing: 8) {
+                    if failedAttempts >= Self.maxAttempts {
+                        Text("Looks like this is broken for now")
+                            .font(.subheadline.weight(.semibold))
+                        Text("We'll fix it soon — come back later.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    } else {
+                        Text("Oops... try again later")
+                            .font(.subheadline.weight(.semibold))
+                        Text("Something broke. Even for a sloth, this is slow.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                        Button {
+                            retryTapped()
+                        } label: {
+                            if isRetrying {
+                                ProgressView().controlSize(.small)
+                            } else {
+                                Text("Reload")
+                            }
+                        }
+                        .disabled(isRetrying)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+            } else {
+                VStack(spacing: 10) {
+                    ForEach(tipStore.products) { product in
+                        TipRow(
+                            product: product,
+                            isPurchasing: tipStore.purchasingProductID == product.id,
+                            action: { Task { await tipStore.purchase(product) } }
+                        )
+                    }
+                }
+            }
+
+            if showThanks {
+                Label("Thanks! It really helps.", systemImage: "heart.fill")
+                    .foregroundStyle(.pink)
+                    .font(.callout.weight(.semibold))
+            }
+
+            if !tipStore.history.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Your support")
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    VStack(spacing: 6) {
+                        ForEach(tipStore.history) { entry in
+                            TipHistoryRow(
+                                productID: entry.productID,
+                                displayName: tipStore.displayName(for: entry.productID),
+                                date: entry.date
+                            )
+                        }
+                    }
+                }
+            }
+
+            HStack {
+                Spacer()
+                Button("Done") { dismiss() }
+                    .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(20)
+        .frame(width: 420)
+        .task {
+            await loadProducts()
+        }
+        .onChange(of: tipStore.lastPurchasedProductID) { newValue in
+            guard newValue != nil else { return }
+            withAnimation { showThanks = true }
+            tipStore.lastPurchasedProductID = nil
+            Task {
+                try? await Task.sleep(for: .seconds(2.5))
+                withAnimation { showThanks = false }
+            }
+        }
+        .alert("Heads up",
+               isPresented: Binding(
+                get: { tipStore.lastError != nil },
+                set: { if !$0 { tipStore.lastError = nil } })) {
+            Button("OK", role: .cancel) { tipStore.lastError = nil }
+        } message: {
+            Text(tipStore.lastError ?? "")
+        }
+    }
+}
+
+private func tipEmoji(for productID: String) -> String {
+    switch productID {
+    case TipStore.TipProductID.coffee.rawValue: return "☕️"
+    case TipStore.TipProductID.beans.rawValue: return "🫘"
+    default: return "🏔️"
+    }
+}
+
+private struct TipRow: View {
+    let product: Product
+    let isPurchasing: Bool
+    let action: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text(tipEmoji(for: product.id))
+                .font(.system(size: 26))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(product.displayName).fontWeight(.semibold)
+                Text(product.description)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button(action: action) {
+                if isPurchasing {
+                    ProgressView().controlSize(.small)
+                } else {
+                    Text(product.displayPrice)
+                }
+            }
+            .disabled(isPurchasing)
+        }
+        .padding(10)
+        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+private struct TipHistoryRow: View {
+    let productID: String
+    let displayName: String
+    let date: Date
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Text(tipEmoji(for: productID))
+                .font(.body)
+            Text(displayName)
+                .font(.callout)
+            Spacer()
+            Text(date.formatted(date: .abbreviated, time: .omitted))
+                .font(.callout)
+                .foregroundStyle(.secondary)
         }
     }
 }
