@@ -6,8 +6,10 @@
 
 **Infinite scroll is a bug. This is the patch.**
 
-Block YouTube Shorts, Instagram &amp; Facebook Reels, and X Explore and trends;
-block TikTok entirely — right in Safari. Free. No accounts. No tracking.
+Block YouTube Shorts, Instagram &amp; Facebook Reels, X Explore and trends, and
+TikTok in Safari. On iOS, optional Real-time Blocking (Beta) also covers
+Shorts, Reels, and Stories inside the YouTube and Instagram apps. Free. No
+accounts. No tracking.
 
 [![Download on the App Store](https://img.shields.io/badge/Download-App_Store-0D96F6?logo=apple&logoColor=white)](https://apps.apple.com/us/app/slowth-block-reels/id6764140763)
 [![Website](https://img.shields.io/badge/Website-malina.page%2Fslowth-6E56CF)](https://malina.page/slowth/)
@@ -16,8 +18,9 @@ block TikTok entirely — right in Safari. Free. No accounts. No tracking.
 
 </div>
 
-Slowth removes the infinite-feed traps while leaving the rest of each site
-usable. You don't have to delete anything; you just lose the black hole.
+Slowth removes targeted infinite-feed traps while leaving other sections
+usable, or blocks a whole site when you choose. You don't have to delete
+anything; you just lose the black hole.
 
 ## Screenshots
 
