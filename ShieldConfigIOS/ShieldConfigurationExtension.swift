@@ -1,6 +1,9 @@
 import ManagedSettings
 import ManagedSettingsUI
 import UIKit
+#if canImport(FamilyControls)
+import FamilyControls
+#endif
 
 // Customizes the system Shield screen shown when ManagedSettingsStore
 // shields YouTube. Reads SharedStore (App Group) to tell apart
@@ -12,11 +15,13 @@ import UIKit
 // Continue action that adds a brief intentional pause before release.
 final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     override func configuration(shielding application: Application) -> ShieldConfiguration {
-        Self.currentConfiguration
+        Self.recordInstagramShieldPresentation(for: application)
+        return Self.currentConfiguration
     }
 
     override func configuration(shielding application: Application, in category: ActivityCategory) -> ShieldConfiguration {
-        Self.currentConfiguration
+        Self.recordInstagramShieldPresentation(for: application)
+        return Self.currentConfiguration
     }
 
     override func configuration(shielding webDomain: WebDomain) -> ShieldConfiguration {
@@ -34,6 +39,22 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         return broadcastActive
             ? detectedConfiguration(state: state)
             : recordingOffConfiguration(state: state)
+    }
+
+    private static func recordInstagramShieldPresentation(for application: Application) {
+        #if canImport(FamilyControls)
+        guard let token = application.token,
+              let data = SharedStore.instagramSelectionData(),
+              let selection = try? JSONDecoder().decode(
+                  FamilyActivitySelection.self,
+                  from: data
+              ),
+              selection.applicationTokens.contains(token) else {
+            return
+        }
+        SharedStore.setLastInstagramShieldPresentedAt(Date())
+        RTLog.shieldConfig.notice("Instagram shield presented — app launch observed")
+        #endif
     }
 
     private static func recordingOffConfiguration(state: SharedState) -> ShieldConfiguration {

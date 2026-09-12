@@ -329,6 +329,20 @@ struct MacContentView: View {
                 ))
                 .disabled(disabledByStrict || !state.hasYouTubeSelection)
 
+                Toggle("Soft YouTube blocking", isOn: Binding(
+                    get: { state.snapshot.softYouTubeBlockingEnabled },
+                    set: { state.setSoftYouTubeBlockingEnabled($0) }
+                ))
+                .disabled(
+                    disabledByStrict
+                        || !state.hasYouTubeSelection
+                        || !state.snapshot.realtimeYouTubeBlockingEnabled
+                )
+
+                Text("Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
                 Button {
                     instagramSelection = decodedSelection(state.snapshot.instagramSelectionData)
                     showInstagramPicker = true
@@ -363,6 +377,8 @@ struct MacContentView: View {
                         DebugStatusRow(label: "Feature", value: state.snapshot.realtimeShieldEnabled ? "on" : "off")
                         DebugStatusRow(label: "Recording", value: state.snapshot.broadcastActive ? "active" : "inactive")
                         DebugStatusRow(label: "YouTube Shorts", value: state.snapshot.realtimeYouTubeBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "YouTube soft mode", value: state.snapshot.softYouTubeBlockingEnabled ? "on" : "off")
+                        DebugStatusRow(label: "YouTube restore", value: state.snapshot.youtubeShieldRestoreDeferred ? "waiting for 1s usage" : "normal")
                         DebugStatusRow(label: "YouTube app", value: state.hasYouTubeSelection ? "picked" : "not picked")
                         DebugStatusRow(label: "Instagram Reels", value: state.snapshot.realtimeInstagramReelsBlockingEnabled ? "blocked" : "allowed")
                         DebugStatusRow(label: "Instagram Stories", value: state.snapshot.realtimeInstagramStoriesBlockingEnabled ? "blocked" : "allowed")
@@ -387,6 +403,7 @@ struct MacContentView: View {
                         DebugStatusRow(label: "Last YouTube Shorts", value: relativeOrNever(state.snapshot.lastYouTubeShortsDetectionAt))
                         DebugStatusRow(label: "Last Instagram Reels", value: relativeOrNever(state.snapshot.lastInstagramReelsDetectionAt))
                         DebugStatusRow(label: "Last Instagram Stories", value: relativeOrNever(state.snapshot.lastInstagramStoriesDetectionAt))
+                        DebugStatusRow(label: "Last Instagram shield", value: relativeOrNever(state.snapshot.lastInstagramShieldPresentedAt))
                         DebugStatusRow(label: "Last shield tap", value: relativeOrNever(state.snapshot.lastShieldActionInvokedAt))
                     }
                     .padding(.vertical, 2)
@@ -395,7 +412,7 @@ struct MacContentView: View {
         } header: {
             Text("Real-time blocking (Beta)")
         } footer: {
-            Text("Choose YouTube or Instagram, then enable the content you want to block. Reels and Stories are separate options. Enabled apps stay blocked unless you're recording your screen. Pick one app icon per service, not a category or \"All Apps\".")
+            Text("Choose YouTube or Instagram, then enable the content you want to block. Enabled apps stay blocked unless you're recording your screen. Optional soft YouTube mode works well for audio podcasts, but Picture in Picture may still be blocked when recording is off. Pick one app icon per service, not a category or \"All Apps\".")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }

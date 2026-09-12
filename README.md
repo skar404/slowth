@@ -149,9 +149,8 @@ production-proven V9 threshold. V10 passes validation, the full regression
 test, Core ML parity, and direct Core ML checks on 710 critical train frames;
 the previous Apple Stocks Stories false block is gone. See
 `REALTIME_SHIELD_HANDOFF.md` for the full promotion record and the test-integrity
-note for the post-fix regression run. A code-signature-verified development IPA
-for version 0.8.0 build 2 is ready for testing on a provisioned iPhone; it has
-not been uploaded to App Store Connect.
+note for the post-fix regression run. A code-signature-verified App Store
+Connect IPA for version 0.8.1 build 1 is ready; it has not been uploaded.
 
 Each recording is one `session_id`; never place frames from the same session
 in different splits. New canonical imports stay `unassigned` until their

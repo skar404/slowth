@@ -14,7 +14,7 @@ struct RealtimeBlockingBetaSheet: View {
                 LazyVStack(alignment: .leading, spacing: 20) {
                     header
 
-                    Text("Block YouTube Shorts, Instagram Reels, and Instagram Stories while keeping regular app screens available during an active screen recording.")
+                    Text("Block YouTube Shorts, Instagram Reels, and Instagram Stories while keeping regular app screens available during an active screen recording. Soft YouTube mode works well for audio podcasts, but Picture in Picture may still be blocked when screen recording is off.")
                         .font(.body)
                         .fixedSize(horizontal: false, vertical: true)
 

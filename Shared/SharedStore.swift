@@ -26,6 +26,8 @@ struct SharedState: Codable, Equatable {
     var supportCardDismissed: Bool
     var realtimeShieldEnabled: Bool
     var realtimeYouTubeBlockingEnabled: Bool
+    var softYouTubeBlockingEnabled: Bool
+    var youtubeShieldRestoreDeferred: Bool
     var realtimeInstagramReelsBlockingEnabled: Bool
     var realtimeInstagramStoriesBlockingEnabled: Bool
     var youtubeSelectionData: Data?
@@ -34,6 +36,7 @@ struct SharedState: Codable, Equatable {
     var lastYouTubeShortsDetectionAt: Date?
     var lastInstagramReelsDetectionAt: Date?
     var lastInstagramStoriesDetectionAt: Date?
+    var lastInstagramShieldPresentedAt: Date?
     var lastShieldActionInvokedAt: Date?
     var realtimeShieldDiagnostics: RealtimeShieldDiagnostics
 
@@ -55,6 +58,8 @@ struct SharedState: Codable, Equatable {
             supportCardDismissed: false,
             realtimeShieldEnabled: false,
             realtimeYouTubeBlockingEnabled: false,
+            softYouTubeBlockingEnabled: false,
+            youtubeShieldRestoreDeferred: false,
             realtimeInstagramReelsBlockingEnabled: false,
             realtimeInstagramStoriesBlockingEnabled: false,
             youtubeSelectionData: nil,
@@ -63,6 +68,7 @@ struct SharedState: Codable, Equatable {
             lastYouTubeShortsDetectionAt: nil,
             lastInstagramReelsDetectionAt: nil,
             lastInstagramStoriesDetectionAt: nil,
+            lastInstagramShieldPresentedAt: nil,
             lastShieldActionInvokedAt: nil,
             realtimeShieldDiagnostics: .empty
         )
@@ -152,6 +158,10 @@ enum SharedStoreKey {
     static let supportCardDismissed = "supportCardDismissed"
     static let realtimeShieldEnabled = "realtimeShieldEnabled"
     static let realtimeYouTubeBlockingEnabled = "realtimeYouTubeBlockingEnabled"
+    static let softYouTubeBlockingEnabled = "softYouTubeBlockingEnabled"
+    static let youtubeShieldRestoreDeferred = "youtubeShieldRestoreDeferred"
+    static let softYouTubeMonitorGeneration = "softYouTubeMonitorGeneration"
+    static let slowthAppForeground = "slowthAppForeground"
     static let realtimeInstagramReelsBlockingEnabled = "realtimeInstagramReelsBlockingEnabled"
     static let realtimeInstagramStoriesBlockingEnabled = "realtimeInstagramStoriesBlockingEnabled"
     static let youtubeSelectionData = "youtubeSelectionData"
@@ -160,6 +170,7 @@ enum SharedStoreKey {
     static let lastYouTubeShortsDetectionAt = "lastYouTubeShortsDetectionAt"
     static let lastInstagramReelsDetectionAt = "lastInstagramReelsDetectionAt"
     static let lastInstagramStoriesDetectionAt = "lastInstagramStoriesDetectionAt"
+    static let lastInstagramShieldPresentedAt = "lastInstagramShieldPresentedAt"
     static let lastShieldActionInvokedAt = "lastShieldActionInvokedAt"
     static let realtimeRecordingPromptRequestedAt = "realtimeRecordingPromptRequestedAt"
     static let youtubeShieldUnlockRequestedAt = "youtubeShieldUnlockRequestedAt"
@@ -214,10 +225,23 @@ enum SharedStore {
         let hasValidYouTubeSelection = hasValidYouTubeSelection()
         let requestedYouTubeBlocking = d.bool(forKey: SharedStoreKey.realtimeYouTubeBlockingEnabled)
         let realtimeYouTubeBlockingEnabled = requestedYouTubeBlocking && hasValidYouTubeSelection
+        let softYouTubeBlockingEnabled = d.bool(forKey: SharedStoreKey.softYouTubeBlockingEnabled)
+        var youtubeShieldRestoreDeferred = d.bool(
+            forKey: SharedStoreKey.youtubeShieldRestoreDeferred
+        )
         if requestedYouTubeBlocking && !hasValidYouTubeSelection {
             // Normalize stale state left by an empty/cancelled picker result:
             // selecting an app later must not silently enable blocking.
             d.set(false, forKey: SharedStoreKey.realtimeYouTubeBlockingEnabled)
+        }
+        if youtubeShieldRestoreDeferred
+            && (!realtimeShieldEnabled
+                || !realtimeYouTubeBlockingEnabled
+                || !softYouTubeBlockingEnabled) {
+            // A deferral only makes sense while every part of soft YouTube
+            // blocking is still enabled. Normalize stale cross-process state.
+            youtubeShieldRestoreDeferred = false
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
         }
         let hasValidInstagramSelection = hasValidInstagramSelection()
         let requestedInstagramReelsBlocking = d.bool(
@@ -253,6 +277,8 @@ enum SharedStore {
             supportCardDismissed: supportCardDismissed,
             realtimeShieldEnabled: realtimeShieldEnabled,
             realtimeYouTubeBlockingEnabled: realtimeYouTubeBlockingEnabled,
+            softYouTubeBlockingEnabled: softYouTubeBlockingEnabled,
+            youtubeShieldRestoreDeferred: youtubeShieldRestoreDeferred,
             realtimeInstagramReelsBlockingEnabled: realtimeInstagramReelsBlockingEnabled,
             realtimeInstagramStoriesBlockingEnabled: realtimeInstagramStoriesBlockingEnabled,
             youtubeSelectionData: d.data(forKey: SharedStoreKey.youtubeSelectionData),
@@ -262,6 +288,9 @@ enum SharedStore {
             lastInstagramReelsDetectionAt: date(forKey: SharedStoreKey.lastInstagramReelsDetectionAt),
             lastInstagramStoriesDetectionAt: date(
                 forKey: SharedStoreKey.lastInstagramStoriesDetectionAt
+            ),
+            lastInstagramShieldPresentedAt: date(
+                forKey: SharedStoreKey.lastInstagramShieldPresentedAt
             ),
             lastShieldActionInvokedAt: date(forKey: SharedStoreKey.lastShieldActionInvokedAt),
             realtimeShieldDiagnostics: {
@@ -388,6 +417,8 @@ enum SharedStore {
             d.set(data, forKey: SharedStoreKey.youtubeSelectionData)
         } else {
             d.removeObject(forKey: SharedStoreKey.youtubeSelectionData)
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
         }
     }
 
@@ -395,6 +426,8 @@ enum SharedStore {
         if snapshot().isStrictModeActive { throw SharedStoreError.strictModeActive }
         d.removeObject(forKey: SharedStoreKey.youtubeSelectionData)
         d.set(false, forKey: SharedStoreKey.realtimeYouTubeBlockingEnabled)
+        d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+        d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
     }
 
     static func instagramSelectionData() -> Data? {
@@ -438,7 +471,11 @@ enum SharedStore {
         if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
         state.realtimeShieldEnabled = enabled
         d.set(enabled, forKey: SharedStoreKey.realtimeShieldEnabled)
-        return state
+        if !enabled {
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        }
+        return snapshot()
     }
 
     static func setRealtimeYouTubeBlockingEnabled(_ enabled: Bool) throws -> SharedState {
@@ -447,7 +484,31 @@ enum SharedStore {
         if enabled && !hasValidYouTubeSelection() { throw SharedStoreError.invalidValue }
         state.realtimeYouTubeBlockingEnabled = enabled
         d.set(enabled, forKey: SharedStoreKey.realtimeYouTubeBlockingEnabled)
-        return state
+        if !enabled {
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        }
+        return snapshot()
+    }
+
+    // Soft mode is a deliberate weakening: while Slowth is foregrounded,
+    // YouTube remains unshielded; after Slowth leaves the foreground (or
+    // ReplayKit stops), YouTube gets a one-second usage threshold before its
+    // shield returns. Strict mode may lock an existing choice in place, but it
+    // must never allow soft mode to be turned on. Turning it off strengthens
+    // protection and is therefore allowed.
+    static func setSoftYouTubeBlockingEnabled(_ enabled: Bool) throws -> SharedState {
+        let state = snapshot()
+        if state.isStrictModeActive && enabled { throw SharedStoreError.strictModeActive }
+        if enabled && !state.realtimeYouTubeBlockingEnabled {
+            throw SharedStoreError.invalidValue
+        }
+        d.set(enabled, forKey: SharedStoreKey.softYouTubeBlockingEnabled)
+        if !enabled {
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        }
+        return snapshot()
     }
 
     static func setRealtimeInstagramReelsBlockingEnabled(_ enabled: Bool) throws -> SharedState {
@@ -473,6 +534,53 @@ enum SharedStore {
     // mode. Gating this could leave the shield's own re-detection loop stuck.
     static func setBroadcastActive(_ active: Bool) {
         d.set(active, forKey: SharedStoreKey.broadcastActive)
+        if active {
+            // An active broadcast is controlled by the classifier, not by an
+            // at-rest restoration deferral left by a previous session.
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        }
+    }
+
+    // Internal lifecycle state shared by the host app and broadcast extension.
+    // This is not a user setting, so Strict mode does not gate it.
+    static func setYouTubeShieldRestoreDeferred(_ deferred: Bool) {
+        d.set(deferred, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+    }
+
+    static func isSlowthAppForeground() -> Bool {
+        d.synchronize()
+        return d.bool(forKey: SharedStoreKey.slowthAppForeground)
+    }
+
+    static func setSlowthAppForeground(_ foreground: Bool) {
+        d.set(foreground, forKey: SharedStoreKey.slowthAppForeground)
+        d.synchronize()
+    }
+
+    static func softYouTubeMonitorGeneration() -> String? {
+        d.synchronize()
+        return d.string(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+    }
+
+    static func setSoftYouTubeMonitorGeneration(_ generation: String?) {
+        if let generation {
+            d.set(generation, forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        } else {
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        }
+        d.synchronize()
+    }
+
+    @discardableResult
+    static func clearSoftYouTubeMonitorGeneration(ifMatching generation: String) -> Bool {
+        guard softYouTubeMonitorGeneration() == generation else { return false }
+        setSoftYouTubeMonitorGeneration(nil)
+        return true
+    }
+
+    static func clearRetiredDeviceActivityState() {
+        d.removeObject(forKey: "lastInstagramUsageThresholdAt")
     }
 
     static func setLastYouTubeShortsDetectionAt(_ date: Date) {
@@ -485,6 +593,10 @@ enum SharedStore {
 
     static func setLastInstagramStoriesDetectionAt(_ date: Date) {
         d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastInstagramStoriesDetectionAt)
+    }
+
+    static func setLastInstagramShieldPresentedAt(_ date: Date) {
+        d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastInstagramShieldPresentedAt)
     }
 
     // Diagnostic only: confirms the Shield Action Extension is actually being

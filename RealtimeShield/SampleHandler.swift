@@ -45,6 +45,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
         RTLog.sampleHandler.notice("broadcastStarted — loading hierarchical SurfaceDetector")
+        SoftYouTubeActivityMonitoring.stop()
         SharedStore.setBroadcastActive(true)
         resetSessionState()
         let sharedState = SharedStore.snapshot()
@@ -58,17 +59,17 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     override func broadcastPaused() {
-        RTLog.sampleHandler.notice("broadcastPaused — reshielding enabled surfaces")
+        RTLog.sampleHandler.notice("broadcastPaused — applying at-rest shield policy")
         SharedStore.setBroadcastActive(false)
         resetStreaks()
-        youtubeShieldLatched = true
-        instagramShieldLatched = SharedStore.snapshot().realtimeInstagramBlockingEnabled
+        prepareEnabledSurfacesAfterBroadcastStops()
         publishDiagnostics(force: true)
         reshieldEnabledSurfaces()
     }
 
     override func broadcastResumed() {
         RTLog.sampleHandler.notice("broadcastResumed — restoring SurfaceDetector state")
+        SoftYouTubeActivityMonitoring.stop()
         SharedStore.setBroadcastActive(true)
         resetStreaks()
         resetLatchesForActiveBroadcast()
@@ -82,11 +83,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     override func broadcastFinished() {
-        RTLog.sampleHandler.notice("broadcastFinished — reshielding enabled surfaces")
+        RTLog.sampleHandler.notice("broadcastFinished — applying at-rest shield policy")
         SharedStore.setBroadcastActive(false)
         resetStreaks()
-        youtubeShieldLatched = true
-        instagramShieldLatched = SharedStore.snapshot().realtimeInstagramBlockingEnabled
+        prepareEnabledSurfacesAfterBroadcastStops()
         publishDiagnostics(force: true)
         reshieldEnabledSurfaces()
     }
@@ -232,6 +232,39 @@ final class SampleHandler: RPBroadcastSampleHandler {
             classifier == nil ? applyShield(surface: .instagram) : ManagedSettingsApplier.clear(surface: .instagram)
         } else {
             ManagedSettingsApplier.clear(surface: .instagram)
+        }
+    }
+
+    private func prepareEnabledSurfacesAfterBroadcastStops() {
+        let sharedState = SharedStore.snapshot()
+        let shouldDeferYouTubeRestore = sharedState.realtimeShieldEnabled
+            && sharedState.realtimeYouTubeBlockingEnabled
+            && sharedState.softYouTubeBlockingEnabled
+        SharedStore.setYouTubeShieldRestoreDeferred(shouldDeferYouTubeRestore)
+        youtubeShieldLatched = sharedState.realtimeYouTubeBlockingEnabled
+            && !shouldDeferYouTubeRestore
+        instagramShieldLatched = sharedState.realtimeInstagramBlockingEnabled
+        if shouldDeferYouTubeRestore {
+            if SharedStore.isSlowthAppForeground() {
+                SoftYouTubeActivityMonitoring.stop()
+                RTLog.sampleHandler.notice(
+                    "Soft YouTube blocking active — Slowth is foregrounded; monitor will arm after leaving"
+                )
+            } else if SoftYouTubeActivityMonitoring.start() {
+                RTLog.sampleHandler.notice(
+                    "Soft YouTube blocking active — waiting for 1s of YouTube use"
+                )
+            } else {
+                // A failed monitor must not turn soft mode into an unlimited
+                // unlock. Restore the ordinary at-rest shield immediately.
+                SharedStore.setYouTubeShieldRestoreDeferred(false)
+                youtubeShieldLatched = sharedState.realtimeYouTubeBlockingEnabled
+                RTLog.sampleHandler.error(
+                    "Soft YouTube monitor failed to arm — applying shield immediately"
+                )
+            }
+        } else {
+            SoftYouTubeActivityMonitoring.stop()
         }
     }
 
@@ -649,7 +682,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     private func reshieldEnabledSurfaces() {
         let sharedState = SharedStore.snapshot()
-        if sharedState.realtimeShieldEnabled && sharedState.realtimeYouTubeBlockingEnabled {
+        if sharedState.realtimeShieldEnabled
+            && sharedState.realtimeYouTubeBlockingEnabled
+            && !sharedState.youtubeShieldRestoreDeferred {
             applyShield(surface: .youtube)
         } else {
             ManagedSettingsApplier.clear(surface: .youtube)

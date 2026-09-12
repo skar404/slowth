@@ -4,6 +4,9 @@ import SafariServices
 #if os(iOS)
 import UIKit
 #endif
+#if os(iOS) && canImport(DeviceActivity)
+import DeviceActivity
+#endif
 #if os(macOS)
 import AppKit
 #endif
@@ -27,7 +30,8 @@ final class AppState: ObservableObject {
     @Published var refreshing: Bool = false
     @Published var lastRefreshOutcome: ForceRefreshOutcome? = nil
 
-    private var observer: NSObjectProtocol?
+    private var foregroundObserver: NSObjectProtocol?
+    private var backgroundObserver: NSObjectProtocol?
     private var tickTimer: Timer?
 
     init() {
@@ -36,28 +40,50 @@ final class AppState: ObservableObject {
         #elseif os(macOS)
         let foregroundName = NSApplication.didBecomeActiveNotification
         #endif
-        observer = NotificationCenter.default.addObserver(
+        foregroundObserver = NotificationCenter.default.addObserver(
             forName: foregroundName,
             object: nil,
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor in
-                self?.reload()
                 #if os(iOS) && canImport(FamilyControls)
-                self?.enforceRealtimeShieldAtRest()
+                self?.restoreRealtimeShieldAfterAppActivation()
+                #else
+                self?.reload()
                 #endif
             }
         }
+        #if os(iOS)
+        backgroundObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                #if canImport(FamilyControls)
+                self?.armSoftYouTubeShieldAfterLeavingSlowth()
+                #else
+                self?.reload()
+                #endif
+            }
+        }
+        #endif
         tickTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.objectWillChange.send() }
         }
         #if os(iOS) && canImport(FamilyControls)
-        enforceRealtimeShieldAtRest()
+        if UIApplication.shared.applicationState == .background {
+            SharedStore.setSlowthAppForeground(false)
+            armSoftYouTubeShieldAfterLeavingSlowth()
+        } else {
+            restoreRealtimeShieldAfterAppActivation()
+        }
         #endif
     }
 
     deinit {
-        if let o = observer { NotificationCenter.default.removeObserver(o) }
+        if let foregroundObserver { NotificationCenter.default.removeObserver(foregroundObserver) }
+        if let backgroundObserver { NotificationCenter.default.removeObserver(backgroundObserver) }
         tickTimer?.invalidate()
     }
 
@@ -164,6 +190,7 @@ final class AppState: ObservableObject {
            selection.webDomainTokens.isEmpty {
             do {
                 try SharedStore.clearYouTubeSelection()
+                SoftYouTubeActivityMonitoring.stop()
                 RTLog.appState.notice("saveYouTubeSelection: selection cleared; disabling YouTube Shorts blocking")
                 ManagedSettingsApplier.clear(surface: .youtube)
                 reload()
@@ -186,7 +213,7 @@ final class AppState: ObservableObject {
             try SharedStore.setYouTubeSelectionData(data)
             RTLog.appState.notice("saveYouTubeSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
-            enforceRealtimeShieldAtRest()
+            restoreRealtimeShieldAfterAppActivation()
         } catch SharedStoreError.strictModeActive {
             lastError = "Strict mode is active"
         } catch {
@@ -238,13 +265,14 @@ final class AppState: ObservableObject {
             RTLog.appState.notice("setRealtimeShieldEnabled(\(enabled, privacy: .public))")
             reload()
             if enabled {
-                enforceRealtimeShieldAtRest()
+                restoreRealtimeShieldAfterAppActivation()
             } else {
                 // Turning the feature off must always clear any shield still
                 // in place — enforceRealtimeShieldAtRest() only ever APPLIES
                 // shields, it has no "definitely clear" path, so disabling
                 // wouldn't otherwise unshield an app that's currently blocked.
                 RTLog.appState.notice("setRealtimeShieldEnabled(false): clearing both surfaces")
+                SoftYouTubeActivityMonitoring.stop()
                 ManagedSettingsApplier.clear(surface: .youtube)
                 ManagedSettingsApplier.clear(surface: .instagram)
             }
@@ -262,8 +290,9 @@ final class AppState: ObservableObject {
             RTLog.appState.notice("setRealtimeYouTubeBlockingEnabled(\(enabled, privacy: .public))")
             reload()
             if enabled {
-                enforceRealtimeShieldAtRest()
+                restoreRealtimeShieldAfterAppActivation()
             } else {
+                SoftYouTubeActivityMonitoring.stop()
                 ManagedSettingsApplier.clear(surface: .youtube)
             }
         } catch SharedStoreError.strictModeActive {
@@ -271,6 +300,32 @@ final class AppState: ObservableObject {
             reload()
         } catch SharedStoreError.invalidValue {
             lastError = "Choose the YouTube app before enabling Shorts blocking."
+            reload()
+        } catch {
+            lastError = "Could not save"
+        }
+    }
+
+    func setSoftYouTubeBlockingEnabled(_ enabled: Bool) {
+        do {
+            _ = try SharedStore.setSoftYouTubeBlockingEnabled(enabled)
+            RTLog.appState.notice("setSoftYouTubeBlockingEnabled(\(enabled, privacy: .public))")
+            reload()
+            if enabled {
+                restoreRealtimeShieldAfterAppActivation()
+            } else {
+                // Disabling soft mode ends any pending grace immediately and
+                // returns to the normal shield-at-rest behavior.
+                SoftYouTubeActivityMonitoring.stop()
+                if !snapshot.broadcastActive {
+                    enforceRealtimeShieldAtRest()
+                }
+            }
+        } catch SharedStoreError.strictModeActive {
+            lastError = "Strict mode is active"
+            reload()
+        } catch SharedStoreError.invalidValue {
+            lastError = "Enable YouTube Shorts blocking before enabling soft blocking."
             reload()
         } catch {
             lastError = "Could not save"
@@ -341,7 +396,11 @@ final class AppState: ObservableObject {
     func enforceRealtimeShieldAtRest() {
         guard snapshot.realtimeShieldEnabled, !snapshot.broadcastActive else { return }
         RTLog.appState.notice("enforceRealtimeShieldAtRest: re-applying shields (feature on, no active broadcast)")
+        let keepYouTubeUnlockedInSlowth = snapshot.softYouTubeBlockingEnabled
+            && SharedStore.isSlowthAppForeground()
         if snapshot.realtimeYouTubeBlockingEnabled,
+           !snapshot.youtubeShieldRestoreDeferred,
+           !keepYouTubeUnlockedInSlowth,
            let data = snapshot.youtubeSelectionData,
            let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
             ManagedSettingsApplier.apply(surface: .youtube, selection: selection)
@@ -355,6 +414,58 @@ final class AppState: ObservableObject {
         } else {
             ManagedSettingsApplier.clear(surface: .instagram)
         }
+    }
+
+    private func restoreRealtimeShieldAfterAppActivation() {
+        // Slowth itself is the explicit soft-mode unlock window. Cancel any
+        // pending usage event first so an older callback cannot reshield
+        // YouTube while this app is in front.
+        SharedStore.setSlowthAppForeground(true)
+        SoftYouTubeActivityMonitoring.stop()
+        reload()
+        guard !snapshot.broadcastActive else { return }
+
+        if snapshot.realtimeShieldEnabled,
+           snapshot.realtimeYouTubeBlockingEnabled,
+           snapshot.softYouTubeBlockingEnabled {
+            SharedStore.setYouTubeShieldRestoreDeferred(true)
+            reload()
+            ManagedSettingsApplier.clear(surface: .youtube)
+            RTLog.appState.notice(
+                "Slowth active — YouTube unshielded until 1s of use after leaving"
+            )
+        } else {
+            SharedStore.setYouTubeShieldRestoreDeferred(false)
+            reload()
+        }
+        enforceRealtimeShieldAtRest()
+    }
+
+    private func armSoftYouTubeShieldAfterLeavingSlowth() {
+        SharedStore.setSlowthAppForeground(false)
+        reload()
+        guard !snapshot.broadcastActive,
+              snapshot.realtimeShieldEnabled,
+              snapshot.realtimeYouTubeBlockingEnabled,
+              snapshot.softYouTubeBlockingEnabled else {
+            SoftYouTubeActivityMonitoring.stop()
+            return
+        }
+
+        SharedStore.setYouTubeShieldRestoreDeferred(true)
+        reload()
+        guard SoftYouTubeActivityMonitoring.start() else {
+            // Fail closed: if iOS refuses the one-second monitor, don't leave
+            // YouTube indefinitely available without recording.
+            SharedStore.setYouTubeShieldRestoreDeferred(false)
+            reload()
+            enforceRealtimeShieldAtRest()
+            RTLog.appState.error(
+                "Soft YouTube monitor failed to arm — applied shield immediately"
+            )
+            return
+        }
+        ManagedSettingsApplier.clear(surface: .youtube)
     }
     #endif
 
