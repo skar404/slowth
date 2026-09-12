@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 11,
   "youtube": {
     "redirects": [{ "from": "^/shorts/([\\w-]+)", "to": "/watch?v=$1" }],
     "hideSelectors": [

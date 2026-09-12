@@ -96,15 +96,102 @@ xcodebuild -project Unscroll.xcodeproj -scheme 'Unscroll (iOS)' \
   -configuration Debug -destination 'generic/platform=iOS Simulator' build
 ```
 
+### Realtime Shield models
+
+Private training images use the session-aware schema documented in
+[`docs/realtime-dataset.md`](docs/realtime-dataset.md). Validate the canonical
+inventory before training:
+
+```sh
+uv sync
+uv run python scripts/realtime_dataset.py validate sandbox/dataset/manifest.csv
+```
+
+`SurfaceDetector` is the only real-time classifier and uses only the canonical dataset. Training
+requires every class in both train and validation; final evaluation requires
+every class in test:
+
+```sh
+uv run python scripts/surface_ml.py train \
+  sandbox/dataset/manifest.csv sandbox/surface-detector.pt
+uv run python scripts/surface_ml.py evaluate \
+  sandbox/dataset/manifest.csv sandbox/surface-detector.pt --split validation
+uv run python scripts/surface_ml.py evaluate \
+  sandbox/dataset/manifest.csv sandbox/surface-detector.pt --split test
+uv run python scripts/surface_ml.py export \
+  sandbox/surface-detector.pt sandbox/SurfaceDetector.mlpackage \
+  sandbox/SurfaceDetectorMetadata.json
+uv run python scripts/surface_ml.py verify-export \
+  sandbox/dataset/manifest.csv sandbox/surface-detector.pt \
+  sandbox/SurfaceDetector.mlpackage --split validation
+uv run python scripts/surface_ml.py verify-export \
+  sandbox/dataset/manifest.csv sandbox/surface-detector.pt \
+  sandbox/SurfaceDetector.mlpackage --split test
+```
+
+The network has an app head (`youtube`, `instagram`, `other`) and conditional
+content heads (`shorts`/`normal` for YouTube and `reels`/`stories`/`normal`
+for Instagram). Blocking uses `P(app) × P(content | app)`. Shorts, Reels, and Stories
+thresholds are calibrated independently on validation sessions, with three
+positive votes in the latest five inference frames required for a detection
+event. Test is not used for training or calibration.
+
+After a candidate passes validation, test, and Core ML parity, copy
+`SurfaceDetector.mlpackage` and `SurfaceDetectorMetadata.json` into
+`RealtimeShield/` and regenerate the Xcode project. Until both resources are
+present, enabled real-time surfaces fail closed. Instagram enforcement remains
+off until the user chooses Instagram and enables Reels and/or Stories.
+
+The currently bundled FP32 model is
+`surface-hierarchical-v10-expanded-dataset`. Its release policy keeps each
+validation-calibrated threshold at least as conservative as the corresponding
+production-proven V9 threshold. V10 passes validation, the full regression
+test, Core ML parity, and direct Core ML checks on 710 critical train frames;
+the previous Apple Stocks Stories false block is gone. See
+`REALTIME_SHIELD_HANDOFF.md` for the full promotion record and the test-integrity
+note for the post-fix regression run. A code-signature-verified development IPA
+for version 0.8.0 build 2 is ready for testing on a provisioned iPhone; it has
+not been uploaded to App Store Connect.
+
+Each recording is one `session_id`; never place frames from the same session
+in different splits. New canonical imports stay `unassigned` until their
+session boundaries are reviewed. Checkpoint selection and threshold
+calibration use validation sessions only. The runtime blocks after three
+positive votes in the latest five inference frames and fails closed if the
+model cannot load or run.
+`sandbox/` is intentionally ignored because it contains private captures and
+local training artifacts.
+
+#### Device logs on macOS
+
+The Broadcast Extension writes lifecycle events, errors, detections, and a
+structured metrics snapshot every 10 seconds to Apple Unified Logging under
+the `com.slowth.realtimeshield` subsystem. Connect and trust the iPhone, run a
+test session, then collect the last 30 minutes on the Mac:
+
+```sh
+scripts/collect_realtime_shield_logs.sh 30m
+```
+
+Pass the device UDID as the second argument when more than one device is
+connected. macOS asks for an administrator password because Apple restricts
+physical-device log collection to root. The command stores a `.logarchive` plus `events.ndjson`,
+machine-readable and text error/metrics files, and `summary.txt` under
+`sandbox/realtime-shield-logs/`. The archive opens in Console.app. For a live
+view, select the connected iPhone in Console.app and filter by subsystem
+`com.slowth.realtimeshield`.
+
 ## Layout
 
 ```
 Shared/        SwiftUI host-app UI + App Group store (shared across targets)
 App/           macOS host app (Info.plist, entitlements, icon)
 iOS/           iOS host app + Family Controls integration
+RealtimeShield/ ReplayKit detector, bundled Core ML model, and diagnostics
 Extension/     macOS Safari Web Extension native handler
 ExtensionIOS/  iOS Safari Web Extension native handler
 WebExt/        Extension resources — manifest, popup, content scripts, rules
+scripts/       Session-aware dataset, training, evaluation, and export tools
 project.yml    XcodeGen spec — single source of truth for the project
 ```
 

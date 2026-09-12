@@ -6,5 +6,7 @@
     <array>
         <string>group.$(BUNDLE_ID_PREFIX).shared</string>
     </array>
+    <key>com.apple.developer.family-controls</key>
+    <true/>
 </dict>
 </plist>

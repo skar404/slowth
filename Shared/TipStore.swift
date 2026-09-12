@@ -33,7 +33,7 @@ final class TipStore: ObservableObject {
     private var updatesTask: Task<Void, Never>?
 
     init() {
-        updatesTask = listenForTransactionUpdates()
+        ensureTransactionListener()
     }
 
     deinit {
@@ -41,6 +41,8 @@ final class TipStore: ObservableObject {
     }
 
     func loadProducts() async {
+        guard FeatureFlags.tipsEnabled else { return }
+        ensureTransactionListener()
         guard products.isEmpty else { return }
         isLoadingProducts = true
         defer { isLoadingProducts = false }
@@ -53,6 +55,8 @@ final class TipStore: ObservableObject {
     }
 
     func purchase(_ product: Product) async {
+        guard FeatureFlags.tipsEnabled else { return }
+        ensureTransactionListener()
         guard purchasingProductID == nil else { return }
         purchasingProductID = product.id
         defer { purchasingProductID = nil }
@@ -76,6 +80,8 @@ final class TipStore: ObservableObject {
     }
 
     func loadHistory() async {
+        guard FeatureFlags.tipsEnabled else { return }
+        ensureTransactionListener()
         isLoadingHistory = true
         defer { isLoadingHistory = false }
         let ourProductIDs = Set(TipProductID.allCases.map(\.rawValue))
@@ -91,6 +97,11 @@ final class TipStore: ObservableObject {
 
     func displayName(for productID: String) -> String {
         products.first { $0.id == productID }?.displayName ?? productID
+    }
+
+    private func ensureTransactionListener() {
+        guard FeatureFlags.tipsEnabled, updatesTask == nil else { return }
+        updatesTask = listenForTransactionUpdates()
     }
 
     private func listenForTransactionUpdates() -> Task<Void, Never> {

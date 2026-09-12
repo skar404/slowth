@@ -28,8 +28,8 @@ fileGroups:
 settings:
   base:
     SWIFT_VERSION: "5.9"
-    MARKETING_VERSION: "0.7.2"
-    CURRENT_PROJECT_VERSION: 2
+    MARKETING_VERSION: "0.8.0"
+    CURRENT_PROJECT_VERSION: 3
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
     ENABLE_HARDENED_RUNTIME: YES
@@ -73,6 +73,7 @@ targets:
           - "UnscrollApp.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
+          - "RealtimeBlockingBetaSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
       - path: WebExt/manifest.json
@@ -121,9 +122,6 @@ targets:
         excludes:
           - "Info.plist"
           - "Unscroll.entitlements"
-          - "FamilyActivityPickerHost.swift"
-          - "FamilyControlsAuth.swift"
-          - "ManagedSettingsApplier.swift"
       - path: Shared
         # iOS compiles both ContentView_iOS.swift and ContentView_macOS.swift —
         # the iOS UI is default, macOS-style is a "Compact" alternative selected
@@ -146,6 +144,94 @@ targets:
     dependencies:
       - target: UnscrollExtensionIOS
         embed: true
+      - target: UnscrollBroadcastIOS
+        embed: true
+      - target: UnscrollShieldConfigIOS
+        embed: true
+      - target: UnscrollShieldActionIOS
+        embed: true
+
+  UnscrollBroadcastIOS:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: RealtimeShield
+        excludes:
+          - "Info.plist"
+          - "UnscrollBroadcast.entitlements"
+      - path: iOS/ManagedSettingsApplier.swift
+        buildPhase: sources
+      - path: Shared
+        excludes:
+          - "UnscrollApp.swift"
+          - "ContentView_iOS.swift"
+          - "ContentView_macOS.swift"
+          - "RealtimeBlockingBetaSheet.swift"
+          - "AppState.swift"
+          - "TipStore.swift"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Broadcast
+        PRODUCT_NAME: UnscrollBroadcastIOS
+        INFOPLIST_FILE: RealtimeShield/Info.plist
+        CODE_SIGN_ENTITLEMENTS: RealtimeShield/UnscrollBroadcast.entitlements
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+  UnscrollShieldConfigIOS:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: ShieldConfigIOS
+        excludes:
+          - "Info.plist"
+          - "UnscrollShieldConfig.entitlements"
+      - path: Shared
+        excludes:
+          - "UnscrollApp.swift"
+          - "ContentView_iOS.swift"
+          - "ContentView_macOS.swift"
+          - "RealtimeBlockingBetaSheet.swift"
+          - "AppState.swift"
+          - "TipStore.swift"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.ShieldConfig
+        PRODUCT_NAME: UnscrollShieldConfigIOS
+        INFOPLIST_FILE: ShieldConfigIOS/Info.plist
+        CODE_SIGN_ENTITLEMENTS: ShieldConfigIOS/UnscrollShieldConfig.entitlements
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+  UnscrollShieldActionIOS:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: ShieldActionIOS
+        excludes:
+          - "Info.plist"
+          - "UnscrollShieldAction.entitlements"
+      - path: iOS/ManagedSettingsApplier.swift
+        buildPhase: sources
+      - path: Shared
+        excludes:
+          - "UnscrollApp.swift"
+          - "ContentView_iOS.swift"
+          - "ContentView_macOS.swift"
+          - "RealtimeBlockingBetaSheet.swift"
+          - "AppState.swift"
+          - "TipStore.swift"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.ShieldAction
+        PRODUCT_NAME: UnscrollShieldActionIOS
+        INFOPLIST_FILE: ShieldActionIOS/Info.plist
+        CODE_SIGN_ENTITLEMENTS: ShieldActionIOS/UnscrollShieldAction.entitlements
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
 
   UnscrollExtensionIOS:
     type: app-extension
@@ -159,6 +245,7 @@ targets:
           - "UnscrollApp.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
+          - "RealtimeBlockingBetaSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
       - path: WebExt/manifest.json

@@ -21,3 +21,12 @@ screenshot/
 screenshots-gen/
 screenshots-mac/
 screenshots-ipad/
+
+# Personal device screenshots used to tune RealtimeShield heuristics — not for the public repo
+sandbox/
+/REALTIME_SHIELD_HANDOFF.md
+
+# Python / uv tooling
+.venv/
+__pycache__/
+*.py[cod]

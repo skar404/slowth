@@ -26,6 +26,10 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Slowth saves confirmed debug detection frames to your Photos library when you explicitly enable debug capture.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Slowth creates private debug albums for confirmed Shorts, Reels, and Stories detections when you explicitly enable debug capture.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UISupportedInterfaceOrientations</key>

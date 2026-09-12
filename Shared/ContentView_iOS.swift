@@ -2,6 +2,9 @@
 import SwiftUI
 import StoreKit
 import UIKit
+#if canImport(FamilyControls)
+import FamilyControls
+#endif
 
 private struct SiteSpec: Identifiable {
     let id: String
@@ -39,11 +42,26 @@ private extension View {
 struct ContentView: View {
     @StateObject private var state = AppState()
     @StateObject private var tipStore = TipStore()
+    @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
     @AppStorage("uiMode") private var uiMode: String = "ios"
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var showSafariHelp = false
     @State private var showAbout = false
     @State private var showSupportSheet = false
+    @State private var showRealtimeBlockingBeta = false
+    @State private var showRealtimeRecordingPrompt = false
+    @AppStorage(DebugMode.storageKey, store: AppGroup.defaults) private var debugModeEnabled = false
+    @AppStorage(DebugCaptureSettings.storageKey, store: AppGroup.defaults) private var debugCaptureEnabled = false
+    @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
+    @State private var versionTapCount = 0
+    #if canImport(FamilyControls)
+    @ObservedObject private var familyControlsAuthorization = AuthorizationCenter.shared
+    @State private var isAuthorizingFamilyControls = false
+    @State private var showYouTubePicker = false
+    @State private var showInstagramPicker = false
+    @State private var youtubeSelection = FamilyActivitySelection()
+    @State private var instagramSelection = FamilyActivitySelection()
+    #endif
 
     var body: some View {
         NavigationStack {
@@ -53,8 +71,14 @@ struct ContentView: View {
                     strictBannerSection
                 }
                 sitesSection
+                #if canImport(FamilyControls)
+                realtimeShieldSection
+                #endif
                 strictModeSection
                 updatesSection
+                if debugModeEnabled {
+                    debugSection
+                }
                 helpSection
             }
             .navigationTitle("Slowth")
@@ -80,14 +104,87 @@ struct ContentView: View {
             SupportSheet(tipStore: tipStore)
                 .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
         }
+        .sheet(isPresented: $showRealtimeBlockingBeta) {
+            RealtimeBlockingBetaSheet(
+                feedbackURL: realtimeBlockingFeedbackURL
+            )
+            .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
+        }
+        #if canImport(FamilyControls)
+        .sheet(isPresented: $showRealtimeRecordingPrompt) {
+            RealtimeRecordingPromptSheet(
+                preferredExtensionBundleID: state.broadcastExtensionBundleID,
+                isRecording: state.snapshot.broadcastActive
+            )
+            .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
+        }
+        .sheet(isPresented: $showYouTubePicker) {
+            FamilyActivityPickerWrapper(
+                selection: youtubeSelection,
+                onDone: { selection in
+                    state.saveYouTubeSelection(selection)
+                    showYouTubePicker = false
+                },
+                onCancel: { showYouTubePicker = false }
+            )
+        }
+        .sheet(isPresented: $showInstagramPicker) {
+            FamilyActivityPickerWrapper(
+                selection: instagramSelection,
+                onDone: { selection in
+                    state.saveInstagramSelection(selection)
+                    showInstagramPicker = false
+                },
+                onCancel: { showInstagramPicker = false }
+            )
+        }
+        .onAppear(perform: presentRealtimeRecordingPromptIfRequested)
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            presentRealtimeRecordingPromptIfRequested()
+        }
+        #endif
+        .onAppear {
+            if !debugModeEnabled {
+                debugCaptureEnabled = false
+            }
+            debugCaptureLibrary.refresh(importIfPossible: debugCaptureEnabled)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            debugCaptureLibrary.refresh(importIfPossible: debugCaptureEnabled)
+        }
+        .onChange(of: debugModeEnabled) { enabled in
+            if !enabled {
+                debugCaptureEnabled = false
+            }
+        }
+        .onChange(of: debugCaptureEnabled) { enabled in
+            guard enabled else { return }
+            debugCaptureLibrary.requestAccessAndImport()
+        }
     }
 
     private var disabledByStrict: Bool { state.snapshot.isStrictModeActive }
+
+    #if canImport(FamilyControls)
+    private func presentRealtimeRecordingPromptIfRequested() {
+        guard SharedStore.consumeRealtimeRecordingPromptRequest() else { return }
+        state.reload()
+        showRealtimeRecordingPrompt = true
+    }
+    #endif
 
     private var heroSection: some View {
         Section {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
+                    HeroCard(
+                        title: "Real-time blocking",
+                        subtitle: "Shorts, Reels & Stories · Beta",
+                        icon: "record.circle.fill",
+                        gradient: [Color(red: 0.98, green: 0.24, blue: 0.34),
+                                   Color(red: 0.79, green: 0.12, blue: 0.45)],
+                        action: { showRealtimeBlockingBeta = true }
+                    )
                     HeroCard(
                         title: "How it works",
                         subtitle: "What Slowth does for you",
@@ -119,7 +216,7 @@ struct ContentView: View {
                             ? nil
                             : { state.setStrictMode(true) }
                     )
-                    if !state.snapshot.supportCardDismissed {
+                    if FeatureFlags.tipsEnabled && !state.snapshot.supportCardDismissed {
                         HeroCard(
                             title: "Support",
                             subtitle: "Tip the developer",
@@ -175,6 +272,181 @@ struct ContentView: View {
         }
     }
 
+    #if canImport(FamilyControls)
+    private var realtimeShieldSection: some View {
+        Section {
+            Toggle(isOn: Binding(
+                get: { state.snapshot.realtimeShieldEnabled },
+                set: { state.setRealtimeShieldEnabled($0) }
+            )) {
+                Text("Real-time app blocking")
+            }
+            .disabled(disabledByStrict)
+
+            if state.snapshot.realtimeShieldEnabled {
+                RealtimeRecordingCard(
+                    preferredExtensionBundleID: state.broadcastExtensionBundleID,
+                    isRecording: state.snapshot.broadcastActive,
+                    guidance: realtimeRecordingGuidance
+                )
+            }
+
+            if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
+                Button {
+                    Task {
+                        isAuthorizingFamilyControls = true
+                        _ = await state.requestFamilyControlsAuthorization()
+                        isAuthorizingFamilyControls = false
+                    }
+                } label: {
+                    HStack {
+                        Text("Allow Screen Time access")
+                        Spacer()
+                        if isAuthorizingFamilyControls { ProgressView() }
+                    }
+                }
+                .disabled(isAuthorizingFamilyControls)
+            } else {
+                Button {
+                    youtubeSelection = decodedSelection(state.snapshot.youtubeSelectionData)
+                    showYouTubePicker = true
+                } label: {
+                    HStack {
+                        Text("Choose YouTube app")
+                        Spacer()
+                        if state.hasYouTubeSelection {
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                        }
+                    }
+                }
+
+                Toggle("Block YouTube Shorts", isOn: Binding(
+                    get: { state.snapshot.realtimeYouTubeBlockingEnabled },
+                    set: { state.setRealtimeYouTubeBlockingEnabled($0) }
+                ))
+                .disabled(disabledByStrict || !state.hasYouTubeSelection)
+
+                Button {
+                    instagramSelection = decodedSelection(state.snapshot.instagramSelectionData)
+                    showInstagramPicker = true
+                } label: {
+                    HStack {
+                        Text("Choose Instagram app")
+                        Spacer()
+                        if state.hasInstagramSelection {
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                        }
+                    }
+                }
+
+                Toggle("Block Instagram Reels", isOn: Binding(
+                    get: { state.snapshot.realtimeInstagramReelsBlockingEnabled },
+                    set: { state.setRealtimeInstagramReelsBlockingEnabled($0) }
+                ))
+                .disabled(disabledByStrict || !state.hasInstagramSelection)
+
+                Toggle("Block Instagram Stories", isOn: Binding(
+                    get: { state.snapshot.realtimeInstagramStoriesBlockingEnabled },
+                    set: { state.setRealtimeInstagramStoriesBlockingEnabled($0) }
+                ))
+                .disabled(disabledByStrict || !state.hasInstagramSelection)
+
+                if debugModeEnabled {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Debug status")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        DebugStatusRow(label: "Feature", value: state.snapshot.realtimeShieldEnabled ? "on" : "off")
+                        DebugStatusRow(label: "Recording", value: state.snapshot.broadcastActive ? "active" : "inactive")
+                        DebugStatusRow(label: "YouTube Shorts", value: state.snapshot.realtimeYouTubeBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "YouTube app", value: state.hasYouTubeSelection ? "picked" : "not picked")
+                        DebugStatusRow(label: "Instagram Reels", value: state.snapshot.realtimeInstagramReelsBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "Instagram Stories", value: state.snapshot.realtimeInstagramStoriesBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "Instagram app", value: state.hasInstagramSelection ? "picked" : "not picked")
+                        DebugStatusRow(label: "Surface model", value: modelStatusText(state.snapshot.realtimeShieldDiagnostics))
+                        DebugStatusRow(label: "Prediction", value: predictionText(state.snapshot.realtimeShieldDiagnostics))
+                        DebugStatusRow(label: "YouTube app p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.appProbabilities, key: "youtube"))
+                        DebugStatusRow(label: "Instagram app p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.appProbabilities, key: "instagram"))
+                        DebugStatusRow(label: "Shorts joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "youtube_shorts"))
+                        DebugStatusRow(label: "Reels joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "instagram_reels"))
+                        DebugStatusRow(label: "Stories joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "instagram_stories"))
+                        DebugStatusRow(label: "Video frames", value: "\(state.snapshot.realtimeShieldDiagnostics.receivedVideoFrames)")
+                        DebugStatusRow(label: "Inferences", value: "\(state.snapshot.realtimeShieldDiagnostics.inferenceCount)")
+                        DebugStatusRow(label: "Inference", value: formatted(state.snapshot.realtimeShieldDiagnostics.lastInferenceDurationMS, digits: 1, suffix: " ms"))
+                        DebugStatusRow(label: "Inference p95", value: formatted(state.snapshot.realtimeShieldDiagnostics.inferenceP95MS, digits: 1, suffix: " ms"))
+                        DebugStatusRow(label: "Candidates", value: "Shorts \(state.snapshot.realtimeShieldDiagnostics.youtubeCandidateEvents) · Reels \(state.snapshot.realtimeShieldDiagnostics.instagramCandidateEvents) · Stories \(state.snapshot.realtimeShieldDiagnostics.instagramStoriesCandidateEvents)")
+                        DebugStatusRow(label: "Memory footprint", value: footprintText(state.snapshot.realtimeShieldDiagnostics))
+                        DebugStatusRow(label: "Available memory", value: formatted(state.snapshot.realtimeShieldDiagnostics.availableMemoryMB, digits: 1, suffix: " MB"))
+                        if let error = state.snapshot.realtimeShieldDiagnostics.lastClassifierError {
+                            DebugStatusRow(label: "Model error", value: error)
+                        }
+                        DebugStatusRow(label: "Last YouTube Shorts", value: relativeOrNever(state.snapshot.lastYouTubeShortsDetectionAt))
+                        DebugStatusRow(label: "Last Instagram Reels", value: relativeOrNever(state.snapshot.lastInstagramReelsDetectionAt))
+                        DebugStatusRow(label: "Last Instagram Stories", value: relativeOrNever(state.snapshot.lastInstagramStoriesDetectionAt))
+                        DebugStatusRow(label: "Last shield tap", value: relativeOrNever(state.snapshot.lastShieldActionInvokedAt))
+                    }
+                    .padding(.vertical, 2)
+                }
+            }
+        } header: {
+            Text("Real-time blocking (Beta)")
+        } footer: {
+            Text("Choose YouTube or Instagram, then enable the content you want to block. Reels and Stories are separate options. Enabled apps stay blocked unless you're recording your screen. Pick one app icon per service, not a category or \"All Apps\".")
+        }
+    }
+
+    private var realtimeRecordingGuidance: String {
+        if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
+            return "Allow Screen Time access below to finish setup."
+        }
+        let youtubeReady = state.hasYouTubeSelection
+            && state.snapshot.realtimeYouTubeBlockingEnabled
+        let instagramReady = state.hasInstagramSelection
+            && state.snapshot.realtimeInstagramBlockingEnabled
+        if !youtubeReady && !instagramReady {
+            return "Choose an app and enable at least one blocking option below."
+        }
+        return "Tap anywhere here to start."
+    }
+
+    private func decodedSelection(_ data: Data?) -> FamilyActivitySelection {
+        guard let data, let decoded = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
+            return FamilyActivitySelection()
+        }
+        return decoded
+    }
+
+    private func relativeOrNever(_ date: Date?) -> String {
+        guard let date else { return "never" }
+        return Self.relativeFormatter.localizedString(for: date, relativeTo: Date())
+    }
+
+    private func modelStatusText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
+        guard let version = diagnostics.modelVersion else { return diagnostics.modelStatus }
+        return "\(diagnostics.modelStatus) · \(version)"
+    }
+
+    private func predictionText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
+        guard let app = diagnostics.lastApp else { return "—" }
+        return "\(app) / \(diagnostics.lastContent ?? "—")"
+    }
+
+    private func probabilityText(_ probabilities: [String: Double]?, key: String) -> String {
+        formatted(probabilities?[key], digits: 3)
+    }
+
+    private func formatted(_ value: Double?, digits: Int, suffix: String = "") -> String {
+        guard let value else { return "—" }
+        return String(format: "%.*f%@", digits, value, suffix)
+    }
+
+    private func footprintText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
+        let current = formatted(diagnostics.currentFootprintMB, digits: 1, suffix: " MB")
+        let peak = formatted(diagnostics.peakFootprintMB, digits: 1, suffix: " MB")
+        return "\(current) · peak \(peak)"
+    }
+    #endif
+
     private var strictModeSection: some View {
         Section {
             Toggle(isOn: Binding(
@@ -229,21 +501,102 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            Button {
-                showSupportSheet = true
-            } label: {
-                HStack {
-                    Text("Support")
-                    Spacer()
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(.secondary)
+            if FeatureFlags.tipsEnabled {
+                Button {
+                    showSupportSheet = true
+                } label: {
+                    HStack {
+                        Text("Support")
+                        Spacer()
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
         } header: {
             Text("Help")
         } footer: {
-            Text(appVersion)
+            Button(action: appVersionTapped) {
+                Text(appVersion)
+            }
+            .buttonStyle(.plain)
         }
+    }
+
+    private var debugSection: some View {
+        Section {
+            Toggle("Debug mode", isOn: $debugModeEnabled)
+            Toggle("Save detection frames", isOn: $debugCaptureEnabled)
+            if debugCaptureEnabled {
+                DebugStatusRow(
+                    label: "Photos access",
+                    value: debugCaptureLibrary.authorizationText
+                )
+                DebugStatusRow(
+                    label: "Pending captures",
+                    value: "\(debugCaptureLibrary.pendingEvents) · \(debugCapturePendingSize)"
+                )
+                DebugStatusRow(
+                    label: "Saved events",
+                    value: "\(debugCaptureLibrary.savedEvents)"
+                )
+                if let error = debugCaptureLibrary.lastError {
+                    DebugStatusRow(label: "Capture error", value: error)
+                }
+                if debugCaptureLibrary.authorizationStatus == .authorized
+                    || debugCaptureLibrary.authorizationStatus == .limited {
+                    Button {
+                        debugCaptureLibrary.importPending()
+                    } label: {
+                        HStack {
+                            Text("Save pending frames to Photos")
+                            Spacer()
+                            if debugCaptureLibrary.isImporting { ProgressView() }
+                        }
+                    }
+                    .disabled(
+                        debugCaptureLibrary.isImporting
+                            || debugCaptureLibrary.pendingEvents == 0
+                    )
+                } else {
+                    Button("Allow Photos access") {
+                        debugCaptureLibrary.requestAccessAndImport()
+                    }
+                }
+                Button("Clear pending capture queue", role: .destructive) {
+                    debugCaptureLibrary.clearPending()
+                }
+                .disabled(debugCaptureLibrary.pendingEvents == 0)
+            }
+            Toggle("Tips", isOn: $tipsFeatureEnabled)
+            Button("Reset Strict mode") {
+                state.resetStrictModeForDebug()
+            }
+            .disabled(!state.snapshot.isStrictModeActive)
+            Button("Show Tips card again") {
+                state.resetTipsDisplayForDebug()
+            }
+            .disabled(!state.snapshot.supportCardDismissed)
+        } header: {
+            Text("Debug")
+        } footer: {
+            Text("Detection capture is off by default and local only. When enabled, three model-input frames from each confirmed 3-of-5 trigger are saved to Photos. Frames may contain private screen content. Albums are grouped in “Slowth — Triggers”.")
+        }
+    }
+
+    private var debugCapturePendingSize: String {
+        ByteCountFormatter.string(
+            fromByteCount: debugCaptureLibrary.pendingBytes,
+            countStyle: .file
+        )
+    }
+
+    private func appVersionTapped() {
+        guard !debugModeEnabled else { return }
+        versionTapCount += 1
+        guard versionTapCount >= DebugMode.requiredVersionTapCount else { return }
+        versionTapCount = 0
+        debugModeEnabled = true
     }
 
     private func bindingForSite(_ siteID: String) -> Binding<SiteMode> {
@@ -297,6 +650,31 @@ struct ContentView: View {
         components.queryItems = [
             URLQueryItem(name: "subject", value: "Slowth feedback"),
             URLQueryItem(name: "body", value: "\n\n(Helps me debug — delete if you'd rather not share.)\n\(appVersion)\n\(deviceInfo)")
+        ]
+        return components.url!
+    }
+
+    private var realtimeBlockingFeedbackURL: URL {
+        Self.mailURL(
+            subject: "Slowth — Real-time blocking Beta feedback",
+            body: """
+            Tell me what happened:
+
+
+            App and device details (you can delete these if you'd rather not share):
+            \(appVersion)
+            \(deviceInfo)
+            """
+        )
+    }
+
+    private static func mailURL(subject: String, body: String) -> URL {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = "denis@malina.page"
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: subject),
+            URLQueryItem(name: "body", value: body)
         ]
         return components.url!
     }
@@ -491,6 +869,22 @@ private struct AboutSheet: View {
         }
     }
 }
+
+#if canImport(FamilyControls)
+private struct DebugStatusRow: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(label).foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+        }
+        .font(.caption2)
+    }
+}
+#endif
 
 private struct StepRow: View {
     let number: Int

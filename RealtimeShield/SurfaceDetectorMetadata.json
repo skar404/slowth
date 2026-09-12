@@ -1,0 +1,195 @@
+{
+  "modelVersion": "surface-hierarchical-v10-expanded-dataset",
+  "appLabels": [
+    "youtube",
+    "instagram",
+    "other"
+  ],
+  "youtubeContentLabels": [
+    "shorts",
+    "normal"
+  ],
+  "instagramContentLabels": [
+    "reels",
+    "stories",
+    "normal"
+  ],
+  "inputWidth": 192,
+  "inputHeight": 384,
+  "architecture": "spatial-v2",
+  "confidenceThresholds": {
+    "youtube_shorts": 0.999,
+    "instagram_reels": 0.9014815453163335,
+    "instagram_stories": 0.0905472284169555
+  },
+  "inferenceIntervalSeconds": 0.25,
+  "requiredConsecutiveHits": 3,
+  "observationWindowFrames": 5,
+  "criticalScoreMargin": 0.025,
+  "criticalScoreMarginPolicy": "probability-headroom-fraction",
+  "computePrecision": "float32",
+  "validation": {
+    "frames": {
+      "accuracy": 0.7485029940119761,
+      "confusion_matrix": [
+        [
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          7,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          19,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          29,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          51,
+          33
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          11
+        ]
+      ],
+      "matrix_labels": [
+        "youtube_shorts",
+        "youtube_normal",
+        "instagram_reels",
+        "instagram_stories",
+        "instagram_normal",
+        "other_app"
+      ],
+      "per_class": {
+        "youtube_shorts": {
+          "precision": 0.8888888888888888,
+          "recall": 1.0,
+          "support": 8
+        },
+        "youtube_normal": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "support": 14
+        },
+        "instagram_reels": {
+          "precision": 1.0,
+          "recall": 0.95,
+          "support": 20
+        },
+        "instagram_stories": {
+          "precision": 1.0,
+          "recall": 0.9666666666666667,
+          "support": 30
+        },
+        "instagram_normal": {
+          "precision": 1.0,
+          "recall": 0.6071428571428571,
+          "support": 84
+        },
+        "other_app": {
+          "precision": 0.21153846153846154,
+          "recall": 1.0,
+          "support": 11
+        }
+      }
+    },
+    "sessions": {
+      "youtube_shorts": {
+        "threshold": 0.999,
+        "required_hits": 3,
+        "observation_window_frames": 5,
+        "positive_sessions": 1,
+        "detected_sessions": 1,
+        "session_recall": 1.0,
+        "false_blocks": {
+          "youtube_normal": 0,
+          "instagram_reels": 0,
+          "instagram_stories": 0,
+          "instagram_normal": 0,
+          "other_app": 0
+        },
+        "false_block_total": 0,
+        "critical_false_frames": 0,
+        "critical_false_sessions": 0,
+        "p95_detection_seconds": 0.5
+      },
+      "instagram_reels": {
+        "threshold": 0.9014815453163335,
+        "required_hits": 3,
+        "observation_window_frames": 5,
+        "positive_sessions": 2,
+        "detected_sessions": 2,
+        "session_recall": 1.0,
+        "false_blocks": {
+          "youtube_shorts": 0,
+          "youtube_normal": 0,
+          "instagram_stories": 0,
+          "instagram_normal": 0,
+          "other_app": 0
+        },
+        "false_block_total": 0,
+        "critical_false_frames": 0,
+        "critical_false_sessions": 0,
+        "p95_detection_seconds": 0.75
+      },
+      "instagram_stories": {
+        "threshold": 0.0905472284169555,
+        "required_hits": 3,
+        "observation_window_frames": 5,
+        "positive_sessions": 1,
+        "detected_sessions": 1,
+        "session_recall": 1.0,
+        "false_blocks": {
+          "youtube_shorts": 0,
+          "youtube_normal": 0,
+          "instagram_reels": 0,
+          "instagram_normal": 0,
+          "other_app": 0
+        },
+        "false_block_total": 0,
+        "critical_false_frames": 0,
+        "critical_false_sessions": 0,
+        "p95_detection_seconds": 0.5
+      }
+    }
+  },
+  "thresholdFloor": {
+    "source_checkpoint": "sandbox/experiments/surface-v9-critical-cases.pt",
+    "model_version": "surface-hierarchical-v9-critical-cases",
+    "thresholds": {
+      "youtube_shorts": 0.999,
+      "instagram_reels": 0.9014815453163335,
+      "instagram_stories": 0.0905472284169555
+    },
+    "policy": "maximum-of-validation-calibrated-and-incumbent"
+  }
+}
