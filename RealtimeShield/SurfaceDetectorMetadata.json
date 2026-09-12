@@ -1,5 +1,7 @@
 {
   "modelVersion": "surface-hierarchical-v10-expanded-dataset",
+  "license": "GPL-3.0-only",
+  "licenseFile": "MODEL_LICENSE.md",
   "appLabels": [
     "youtube",
     "instagram",

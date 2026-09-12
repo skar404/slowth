@@ -6,8 +6,8 @@
 
 **Infinite scroll is a bug. This is the patch.**
 
-Hide YouTube Shorts, Instagram &amp; Facebook Reels, and block TikTok — right
-in Safari. Free. No accounts. No tracking.
+Block YouTube Shorts, Instagram &amp; Facebook Reels, and X Explore and trends;
+block TikTok entirely — right in Safari. Free. No accounts. No tracking.
 
 [![Download on the App Store](https://img.shields.io/badge/Download-App_Store-0D96F6?logo=apple&logoColor=white)](https://apps.apple.com/us/app/slowth-block-reels/id6764140763)
 [![Website](https://img.shields.io/badge/Website-malina.page%2Fslowth-6E56CF)](https://malina.page/slowth/)
@@ -29,31 +29,37 @@ usable. You don't have to delete anything; you just lose the black hole.
 
 ## What it does
 
-- Hides Shorts / Reels on **YouTube, Instagram, Facebook, X** and blocks
-  **TikTok** entirely.
-- **Per-site control** — for each site, pick one of three states.
+- Blocks **YouTube Shorts**, **Instagram and Facebook Reels**, and **X Explore
+  and trends**, while blocking **TikTok** entirely by default.
+- **Per-site control** — each site offers the modes supported by its actual
+  blocking behavior, with up to four choices.
 - **Strict mode** — a 24-hour lock. Once on, you can't loosen your own
   settings until it expires. Survives app restart and reboot; the only
   bypass is uninstall + reinstall.
-- **Family Controls (iOS)** — optionally block the native apps too, not just
-  the web.
+- **Real-time app blocking (iOS Beta)** — use Family Controls and an on-device
+  screen-recording classifier to block selected content in the native YouTube
+  and Instagram apps.
 - **Remote blocking rules** — CSS selectors and redirects load from a remote
-  config and are cached on-device, so breakage from a site redesign gets
-  fixed without shipping an app update.
+  config and are cached on-device, allowing site fixes without an app update.
+  Strict mode pauses rule changes until its lock expires.
 
 ### Sites and modes
 
-| Site      | Modes                        | Default |
-|-----------|------------------------------|---------|
-| YouTube   | off / shorts only / block    | shorts  |
-| Instagram | off / shorts only / block    | shorts  |
-| Facebook  | off / shorts only / block    | shorts  |
-| X         | off / shorts only / block    | shorts  |
-| TikTok    | off / block                  | block   |
+| Site      | Modes                                                   | Default              |
+|-----------|---------------------------------------------------------|----------------------|
+| YouTube   | off / block Shorts / block site                         | block Shorts         |
+| Instagram | off / block Reels / block Reels + feeds / block site    | block Reels + feeds  |
+| Facebook  | off / block Reels / block Reels + feed / block site     | block Reels + feed   |
+| X         | off / block Explore &amp; trends / block site            | block Explore &amp; trends |
+| TikTok    | off / block site                                        | block site           |
 
 - **off** — do nothing.
-- **shorts only** — hide the short-video surfaces and redirect their URLs.
-- **block** — redirect the whole site to a local blocked page.
+- **site-specific block** — block Shorts on YouTube, Reels on Instagram and
+  Facebook, or Explore and trends on X.
+- **site-specific block + feed** — on Instagram and Facebook, also stop the
+  endless home feed after a few screens. Instagram additionally covers
+  Explore, Stories, and more Reels surfaces.
+- **block site** — redirect the whole site to a local blocked page.
 
 ## How it works
 
@@ -64,12 +70,14 @@ Two UI surfaces on top of one shared store:
 - **Safari Web Extension popup** — talks to the extension's native handler
   over native messaging.
 
-The source of truth is **App Group `UserDefaults`**, shared across all four
-targets (macOS app, iOS app, and both Safari extension targets). The
-extension's background script uses `webNavigation` as a tri-state
-dispatcher: *off* → no-op, *shorts* → inject hide-CSS + URL redirects,
-*block* → redirect the tab to a local blocked page. Blocking rules are
-versioned, fetched with an ETag and a throttle, and refreshed on a 6h alarm.
+The source of truth is **App Group `UserDefaults`**, shared by the host apps,
+both Safari extensions, and the iOS real-time blocking helper extensions. The
+Safari extension uses four internal mode values: *off* → no-op, *shorts* →
+site-specific hide-CSS and URL redirects, *feed* → the same blocking plus
+Instagram/Facebook feed limits, and *all* → redirect the tab to a local
+blocked page. Blocking rules are versioned, fetched with an ETag and a
+throttle, and checked on a 6h alarm; Strict mode prevents downloaded changes
+from being saved until the lock expires.
 
 ## Build
 
@@ -206,3 +214,8 @@ held by the OS in a privacy-protected token that the app itself cannot read.
 [GNU General Public License v3.0](LICENSE). You may use, study, share, and
 modify this code, but any distributed derivative must also be released under
 GPLv3 with source available.
+
+The bundled `SurfaceDetector` Core ML package, its trained weights, and its
+metadata are also licensed under GPLv3; see the
+[model license notice](RealtimeShield/MODEL_LICENSE.md). Private training
+captures and datasets are not distributed and are not covered by that notice.

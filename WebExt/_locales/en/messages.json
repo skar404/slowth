@@ -4,7 +4,7 @@
     "description": "Name of the extension shown in Safari."
   },
   "extensionDescription": {
-    "message": "Hide Shorts and Reels on YouTube, Instagram, Facebook, X; block TikTok. Per-site control with remote rules.",
+    "message": "Block YouTube Shorts, Instagram/Facebook Reels, X Explore and trends; block TikTok. Per-site control with remote rules.",
     "description": "Description of the extension."
   }
 }

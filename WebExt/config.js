@@ -39,6 +39,27 @@
     x:         "X (Twitter)"
   };
 
+  // User-facing labels are site-aware because the shared `shorts` wire value
+  // means Shorts on YouTube, Reels on Instagram/Facebook, and Explore/trends
+  // on X. Keep these labels in sync with the two SwiftUI implementations.
+  ns.SITE_MODE_LABELS = {
+    youtube: {
+      off: "Off", shorts: "Block Shorts", all: "Block site"
+    },
+    instagram: {
+      off: "Off", shorts: "Block Reels", feed: "Block Reels + feeds", all: "Block site"
+    },
+    tiktok: {
+      off: "Off", all: "Block site"
+    },
+    facebook: {
+      off: "Off", shorts: "Block Reels", feed: "Block Reels + feed", all: "Block site"
+    },
+    x: {
+      off: "Off", shorts: "Block Explore & trends", all: "Block site"
+    }
+  };
+
   ns.DEFAULT_RULES = {
     version: 8,
     youtube: {

@@ -72,9 +72,7 @@
     for (const mode of ns.SITE_AVAILABLE_MODES[site]) {
       const opt = document.createElement("option");
       opt.value = mode;
-      // ⚠️ Mode labels — keep in sync with modeLabel() in Shared/ContentView_iOS.swift
-      // and Shared/ContentView_macOS.swift (the host-app version of this settings UI).
-      opt.textContent = ({ off: "Off", shorts: "Block shorts", feed: "Block shorts + feed", all: "Block site" })[mode];
+      opt.textContent = ns.SITE_MODE_LABELS[site][mode];
       select.appendChild(opt);
     }
     row.appendChild(span);

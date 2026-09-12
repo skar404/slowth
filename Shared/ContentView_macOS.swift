@@ -113,7 +113,7 @@ struct MacContentView: View {
                 ForEach(sites) { site in
                     Picker(site.label, selection: bindingForSite(site.id)) {
                         ForEach(site.modes, id: \.self) { mode in
-                            Text(modeLabel(mode)).tag(mode)
+                            Text(modeLabel(mode, for: site.id)).tag(mode)
                         }
                     }
                     .disabled(disabledByStrict)
@@ -121,7 +121,7 @@ struct MacContentView: View {
             } header: {
                 Text("Sites")
             } footer: {
-                Text("Off — extension does nothing. Block shorts hides reels & shorts. Block shorts + feed also blocks the infinite feed (Facebook & Instagram). Block site redirects the whole site.")
+                Text("Off — the extension does nothing. YouTube blocks Shorts; Instagram and Facebook block Reels; X blocks Explore and trends. Instagram and Facebook also offer a feed mode; Instagram’s includes Explore, Stories, and additional Reels surfaces. Block site redirects the whole site.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -506,13 +506,18 @@ struct MacContentView: View {
         debugModeEnabled = true
     }
 
-    // ⚠️ Mode labels mirror the JS popup map in WebExt/app.js — keep in sync.
-    private func modeLabel(_ mode: SiteMode) -> String {
-        switch mode {
-        case .off: return "Off"
-        case .shorts: return "Block shorts"
-        case .feed: return "Block shorts + feed"
-        case .all: return "Block site"
+    // ⚠️ Mode labels mirror SITE_MODE_LABELS in WebExt/config.js.
+    private func modeLabel(_ mode: SiteMode, for siteID: String) -> String {
+        switch (siteID, mode) {
+        case (_, .off): return "Off"
+        case ("youtube", .shorts): return "Block Shorts"
+        case ("instagram", .shorts), ("facebook", .shorts): return "Block Reels"
+        case ("instagram", .feed): return "Block Reels + feeds"
+        case ("facebook", .feed): return "Block Reels + feed"
+        case ("x", .shorts): return "Block Explore & trends"
+        case (_, .all): return "Block site"
+        case (_, .shorts): return "Block selected content"
+        case (_, .feed): return "Block selected content + feed"
         }
     }
 
@@ -528,7 +533,7 @@ struct MacContentView: View {
         case .updated?: return "Rules updated."
         case .notModified?: return "Rules already up to date."
         case .failed(let reason)?: return "Update failed (\(reason))."
-        case .none: return "Rules are pulled from a remote GitHub Gist every 6 hours."
+        case .none: return "Safari checks for remote rule updates every 6 hours. Strict mode pauses rule changes until the lock expires."
         }
     }
 
@@ -609,20 +614,20 @@ private struct AboutSheet: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 InfoRow(icon: "eye.slash.fill",
-                        title: "Hide Shorts & Reels",
-                        detail: "On YouTube, Instagram, Facebook and X, Slowth hides the Shorts/Reels tab, ribbon and feed entries.")
+                        title: "Hide distracting surfaces",
+                        detail: "Slowth blocks YouTube Shorts, Instagram and Facebook Reels, plus Explore and trends on X while leaving the rest of each site available.")
                 InfoRow(icon: "shield.lefthalf.filled",
                         title: "Block whole sites",
                         detail: "TikTok is replaced with a friendly blocked page. You can opt any site into full block too.")
                 InfoRow(icon: "slider.horizontal.3",
                         title: "Per-site control",
-                        detail: "For each site choose Off, Block shorts, Block shorts + feed, or Block site. Facebook & Instagram add the feed option; TikTok is Off or Block.")
+                        detail: "Each site has labels that match what it blocks. Instagram and Facebook add a feed mode; TikTok is Off or Block site.")
                 InfoRow(icon: "lock.fill",
                         title: "Strict mode (24 h)",
                         detail: "Locks every toggle for 24 hours. Survives restart and force-quit. The only bypass is reinstalling the app.")
                 InfoRow(icon: "arrow.triangle.2.circlepath",
                         title: "Self-updating rules",
-                        detail: "Selectors and redirects are pulled from a remote rules file, so the extension keeps working when sites change their layout.")
+                        detail: "Safari checks a remote rules file for selector and redirect fixes. Strict mode pauses rule changes until its lock expires.")
             }
 
             HStack {

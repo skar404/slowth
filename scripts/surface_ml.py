@@ -886,6 +886,8 @@ def export(args: argparse.Namespace) -> None:
     converted.save(package)
     metadata = {
         "modelVersion": checkpoint["model_version"],
+        "license": "GPL-3.0-only",
+        "licenseFile": "MODEL_LICENSE.md",
         "appLabels": checkpoint["app_labels"],
         "youtubeContentLabels": checkpoint["youtube_content_labels"],
         "instagramContentLabels": checkpoint["instagram_content_labels"],
