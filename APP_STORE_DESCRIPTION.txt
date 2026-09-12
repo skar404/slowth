@@ -1,0 +1,114 @@
+Infinite scroll isn't broken. It's working exactly as designed.
+
+Slowth is the patch.
+
+
+WHAT IT DOES
+
+Slowth blocks distracting feeds and short-form content in Safari on iPhone,
+iPad, and Mac. You choose what disappears while the useful parts of each site
+stay available.
+
+On iPhone and iPad, optional Real-time Blocking (Beta) can also detect YouTube
+Shorts and Instagram Reels or Stories inside the native apps. Analysis happens
+on your device with Core ML.
+
+
+WHAT YOU CAN BLOCK IN SAFARI
+
+- YouTube Shorts — tabs, shelves, entries, and Shorts URLs
+- Instagram Reels — plus optional limits for Home, Explore, Stories, and
+  additional Reels surfaces
+- Facebook Reels and Watch — plus an optional Home feed limit
+- X — Explore and trending surfaces
+- TikTok — the entire site
+
+Every supported service can also be blocked completely. Each site has its own
+mode picker, so you stay in control. Turn a mode off whenever you want — unless
+you deliberately enable Strict mode.
+
+
+STRICT MODE
+
+Strict mode locks your blocking choices for 24 hours. It survives restarts and
+force-quits, so a moment of temptation can't undo the decision you made for
+yourself.
+
+
+HOW IT WORKS
+
+For Safari:
+
+1. Install and open Slowth.
+2. Enable Slowth in Settings → Apps → Safari → Extensions.
+3. Choose a mode for each supported site in the Slowth app.
+4. Browse normally. Slowth hides or redirects the surfaces you blocked.
+
+For Real-time Blocking (Beta) on iPhone and iPad:
+
+1. Allow Screen Time access and choose the YouTube or Instagram app.
+2. Select Shorts, Reels, or Stories.
+3. Start Slowth Realtime Shield from the recording card.
+
+Regular app screens remain available while Slowth monitors locally. If
+selected content is detected, iOS shows the Screen Time shield. The standard
+red recording indicator remains visible while monitoring is active.
+
+No Slowth account or login is required.
+
+
+WHY A SLOTH
+
+Sloths move so slowly that algae grows on their fur.
+
+That's the opposite of what an engagement algorithm is built to do — which is
+exactly the point. Meet Moss, our mascot. He's not in a hurry, and he doesn't
+think you should be either.
+
+
+WHO BUILT IT
+
+One independent developer. No venture capital, growth team, or A/B testing
+department.
+
+The biggest platforms use enormous teams to keep people scrolling. Slowth is
+a small, open-source patch that helps you stop.
+
+
+YOUR ATTENTION IS THE PRODUCT
+
+Every second spent scrolling can be sold to an advertiser. The platforms may
+feel free, but attention is the currency.
+
+Slowth steps between you and the part of the feed designed to keep you there.
+
+
+PRIVACY
+
+Slowth has no analytics, advertising SDKs, tracking, accounts, or
+developer-operated backend. We can't see what you browse or block.
+
+Settings and cached rules stay in the app's local container. The Safari
+extension periodically checks a public rules file on GitHub Gist so site fixes
+can arrive without an app update. No browsing history or page content is sent
+with that request.
+
+Real-time Blocking analyzes screen frames locally. Frames are not uploaded or
+saved during normal use. The bundled Core ML model and weights are licensed
+under GPLv3.
+
+
+FREE TO USE
+
+All blocking features are free. There is no subscription, paywall, premium
+tier, or "upgrade to unlock."
+
+Optional one-time tips may be offered as a way to support development. They
+unlock nothing and never change how Slowth works.
+
+
+SUPPORT
+
+Questions, bugs, or ideas: denis@malina.page
+
+P.S. If you read this far, you're already winning.
