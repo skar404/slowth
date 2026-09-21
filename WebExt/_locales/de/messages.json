@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blockiere YouTube Shorts, Reels, TikTok und ablenkende Feeds in Safari mit Einstellungen pro Website."
+  },
+  "locale": {
+    "message": "de"
+  },
+  "tagline": {
+    "message": "Blockiere YouTube Shorts, Instagram und Facebook Reels sowie Entdecken und Trends auf X. Sperre TikTok vollständig. Sichere deine Einstellungen mit dem strengen Modus für 24 Stunden."
+  },
+  "stepSettings": {
+    "message": "Öffne die Einstellungen auf deinem Gerät"
+  },
+  "stepExtensions": {
+    "message": "Gehe zu Apps → Safari → Erweiterungen"
+  },
+  "stepEnable": {
+    "message": "Aktiviere Slowth und erlaube es auf allen Websites"
+  },
+  "onboardingDone": {
+    "message": "Ist aktiviert"
+  },
+  "blocking": {
+    "message": "Blockieren"
+  },
+  "strictHelp": {
+    "message": "Aktive Einschränkungen lassen sich 24 Stunden lang nicht deaktivieren. Du kannst weitere Einschränkungen aktivieren, aber keine ganzen Websites sperren."
+  },
+  "updates": {
+    "message": "Aktualisierungen"
+  },
+  "updateNow": {
+    "message": "Jetzt aktualisieren"
+  },
+  "loading": {
+    "message": "Wird geladen …"
+  },
+  "guide": {
+    "message": "Anleitung"
+  },
+  "howToUse": {
+    "message": "Slowth verwenden"
+  },
+  "modesExplained": {
+    "message": "Strenger Modus und Website-Modi erklärt"
+  },
+  "strictGuideTitle": {
+    "message": "Was der strenge Modus bewirkt"
+  },
+  "strictGuide": {
+    "message": "Aktive Einschränkungen lassen sich 24 Stunden lang nicht deaktivieren. Du kannst weitere Einschränkungen aktivieren, aber keine ganzen Websites sperren. Der Timer läuft nach Neustarts und erzwungenem Beenden weiter."
+  },
+  "strictAdvice": {
+    "message": "Aktiviere ihn, wenn Willenskraft allein nicht reicht. Lass ihn aus, wenn du nur einen sanften Anstoß möchtest."
+  },
+  "howBlockingWorks": {
+    "message": "So funktioniert das Blockieren"
+  },
+  "modeOffHelp": {
+    "message": "Die Website lädt wie gewohnt. Slowth greift nicht ein."
+  },
+  "siteSpecific": {
+    "message": "Gezielt blockieren"
+  },
+  "modeShortsHelp": {
+    "message": "Blockiert YouTube Shorts, Instagram/Facebook Reels oder Entdecken und Trends auf X. Der Rest der Website bleibt verfügbar."
+  },
+  "addFeed": {
+    "message": "Feed ebenfalls blockieren"
+  },
+  "modeFeedHelp": {
+    "message": "Stoppt auch den endlosen Startseiten-Feed nach einigen Bildschirmen. Bei Instagram umfasst dies zusätzlich Entdecken, Stories und weitere Reels-Bereiche."
+  },
+  "modeAllHelp": {
+    "message": "Beim Aufrufen der Website erscheint stattdessen eine freundliche Sperrseite."
+  },
+  "leaveFeedback": {
+    "message": "Feedback geben"
+  },
+  "showIntro": {
+    "message": "Einführung erneut anzeigen"
+  },
+  "rulesNever": {
+    "message": "Regeln: noch nie geladen"
+  },
+  "rulesNow": {
+    "message": "Regeln: gerade eben"
+  },
+  "rulesRelative": {
+    "message": "Regeln: $1"
+  },
+  "strictUntil": {
+    "message": "Strenger Modus aktiv bis $1"
+  },
+  "openSafariSettings": {
+    "message": "Safari-Einstellungen öffnen"
+  },
+  "rulesCurrent": {
+    "message": "Regeln: aktuell"
+  },
+  "rulesFailed": {
+    "message": "Regeln: Aktualisierung fehlgeschlagen. Bitte erneut versuchen."
+  },
+  "blockedPageTitle": {
+    "message": "Von Slowth gesperrt"
+  },
+  "thisSite": {
+    "message": "diese Website"
+  },
+  "blockedTitle": {
+    "message": "$1 ist gesperrt"
+  },
+  "blockedTabTitle": {
+    "message": "Gesperrt: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth hält dich von $1 fern. Atme durch. Mach etwas anderes."
+  },
+  "backToSite": {
+    "message": "← Zurück zu $1"
+  },
+  "why": {
+    "message": "Warum"
+  },
+  "quoteTeam": {
+    "message": "Reels wurde von Hunderten Menschen mit einem Jahresgehalt von 400.000 Dollar entwickelt. Slowth entstand an einem Wochenende bei einem einzelnen Entwickler."
+  },
+  "quoteBillions": {
+    "message": "Sie haben Milliarden ausgegeben, damit du weiterscrollst. Wir haben eine kleine lokale Erweiterung gebaut, damit du aufhörst."
+  },
+  "quoteBug": {
+    "message": "Der endlose Feed ist ein Fehler. Hier ist die Lösung."
+  },
+  "best": {
+    "message": "Rekord"
+  },
+  "gameLabel": {
+    "message": "Kleines Flugspiel"
+  },
+  "gameHelp": {
+    "message": "Tippe oder drücke die Leertaste, um zu fliegen"
+  },
+  "back": {
+    "message": "← Zurück"
+  },
+  "signature": {
+    "message": "Slowth · langsamer werden, durchatmen, gestalten"
+  },
+  "playHint": {
+    "message": "🦥 tippen, um Slow Flap zu spielen →"
+  },
+  "avoidBranches": {
+    "message": "Weiche den Ästen aus"
+  },
+  "newBest": {
+    "message": "Neuer Rekord! Tippe, um erneut zu fliegen"
+  },
+  "flyAgain": {
+    "message": "Tippe, um erneut zu fliegen"
+  },
+  "tapStart": {
+    "message": "Zum Starten tippen"
+  },
+  "gameOver": {
+    "message": "Spiel vorbei"
+  },
+  "feedTitle": {
+    "message": "Der endlose Feed ist gesperrt"
+  },
+  "feedSubtitle": {
+    "message": "Slowth hält dich vom endlosen Feed fern. Atme durch. Mach etwas anderes."
+  },
+  "backHome": {
+    "message": "Zur Startseite"
+  },
+  "dismiss": {
+    "message": "Schließen"
+  },
+  "storiesTime": {
+    "message": "Du hast schon $1 mit Stories verbracht. Atme durch."
+  },
+  "enableSafari": {
+    "message": "In Safari aktivieren"
+  },
+  "openSettings": {
+    "message": "Einstellungen öffnen"
+  },
+  "strictMode": {
+    "message": "Strenger Modus"
+  },
+  "off": {
+    "message": "Aus"
+  },
+  "blockShorts": {
+    "message": "Shorts blockieren"
+  },
+  "blockReels": {
+    "message": "Reels blockieren"
+  },
+  "blockFeeds": {
+    "message": "Reels und Feeds blockieren"
+  },
+  "blockFeed": {
+    "message": "Reels und Feed blockieren"
+  },
+  "blockExplore": {
+    "message": "Entdecken und Trends blockieren"
+  },
+  "blockSite": {
+    "message": "Website blockieren"
+  },
+  "updating": {
+    "message": "Wird aktualisiert …"
+  },
+  "blockInfiniteFeed": {
+    "message": "Endlosen Feed blockieren"
+  },
+  "infiniteFeedHelp": {
+    "message": "Begrenzt endloses Scrollen. Auf Instagram sind auch Explore und Stories enthalten."
+  },
+  "settingsSaveFailed": {
+    "message": "Speichern fehlgeschlagen"
+  },
+  "strictConfirmTitle": {
+    "message": "Strengen Modus aktivieren?"
+  },
+  "enable": {
+    "message": "Aktivieren"
+  },
+  "strictEnableConfirm": {
+    "message": "Aktive Einschränkungen lassen sich 24 Stunden lang nicht deaktivieren. Du kannst weitere Einschränkungen aktivieren, aber keine ganzen Websites sperren."
+  },
+  "cancel": {
+    "message": "Abbrechen"
+  }
+}

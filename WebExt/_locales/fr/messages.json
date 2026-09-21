@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Bloquez les Shorts YouTube, les Reels, TikTok et les fils distrayants dans Safari, avec des réglages par site."
+  },
+  "locale": {
+    "message": "fr"
+  },
+  "tagline": {
+    "message": "Bloquez les Shorts YouTube, les Reels Instagram et Facebook, ainsi qu’Explorer et les tendances sur X. Bloquez TikTok entièrement. Verrouillez vos réglages pendant 24 heures avec le mode strict."
+  },
+  "stepSettings": {
+    "message": "Ouvrez Réglages sur votre appareil"
+  },
+  "stepExtensions": {
+    "message": "Allez dans Apps → Safari → Extensions"
+  },
+  "stepEnable": {
+    "message": "Activez Slowth et autorisez-le sur tous les sites web"
+  },
+  "onboardingDone": {
+    "message": "C’est activé"
+  },
+  "blocking": {
+    "message": "Blocage"
+  },
+  "strictHelp": {
+    "message": "Pendant 24 heures, les restrictions actives ne peuvent pas être désactivées. Vous pouvez ajouter des restrictions, mais pas activer le blocage de sites entiers."
+  },
+  "updates": {
+    "message": "Mises à jour"
+  },
+  "updateNow": {
+    "message": "Mettre à jour"
+  },
+  "loading": {
+    "message": "Chargement…"
+  },
+  "guide": {
+    "message": "Guide"
+  },
+  "howToUse": {
+    "message": "Utiliser Slowth"
+  },
+  "modesExplained": {
+    "message": "Le mode strict et les modes par site expliqués"
+  },
+  "strictGuideTitle": {
+    "message": "À quoi sert le mode strict"
+  },
+  "strictGuide": {
+    "message": "Pendant 24 heures, les restrictions actives ne peuvent pas être désactivées. Vous pouvez ajouter des restrictions, mais pas activer le blocage de sites entiers. Le compte à rebours continue après un redémarrage ou une fermeture forcée."
+  },
+  "strictAdvice": {
+    "message": "Activez-le lorsque la volonté seule ne suffit pas. Laissez-le désactivé si vous préférez un simple rappel."
+  },
+  "howBlockingWorks": {
+    "message": "Fonctionnement du blocage"
+  },
+  "modeOffHelp": {
+    "message": "Le site se charge normalement. Slowth n’intervient pas."
+  },
+  "siteSpecific": {
+    "message": "Blocage propre au site"
+  },
+  "modeShortsHelp": {
+    "message": "Bloque les Shorts YouTube, les Reels Instagram/Facebook ou Explorer et les tendances sur X. Le reste du site reste accessible."
+  },
+  "addFeed": {
+    "message": "Bloquer aussi le fil"
+  },
+  "modeFeedHelp": {
+    "message": "Arrête aussi le fil d’accueil infini après quelques écrans. Sur Instagram, cela inclut Explorer, les Stories et d’autres emplacements de Reels."
+  },
+  "modeAllHelp": {
+    "message": "Une page de blocage accueillante s’affiche à la place du site."
+  },
+  "leaveFeedback": {
+    "message": "Donner un avis"
+  },
+  "showIntro": {
+    "message": "Revoir l’introduction"
+  },
+  "rulesNever": {
+    "message": "Règles : jamais téléchargées"
+  },
+  "rulesNow": {
+    "message": "Règles : à l’instant"
+  },
+  "rulesRelative": {
+    "message": "Règles : $1"
+  },
+  "strictUntil": {
+    "message": "Mode strict actif jusqu’au $1"
+  },
+  "openSafariSettings": {
+    "message": "Ouvrir les réglages Safari"
+  },
+  "rulesCurrent": {
+    "message": "Règles : à jour"
+  },
+  "rulesFailed": {
+    "message": "Règles : mise à jour impossible. Veuillez réessayer."
+  },
+  "blockedPageTitle": {
+    "message": "Bloqué par Slowth"
+  },
+  "thisSite": {
+    "message": "ce site"
+  },
+  "blockedTitle": {
+    "message": "$1 est bloqué"
+  },
+  "blockedTabTitle": {
+    "message": "Bloqué : $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth vous éloigne de $1. Respirez. Faites autre chose."
+  },
+  "backToSite": {
+    "message": "← Retour à $1"
+  },
+  "why": {
+    "message": "Pourquoi"
+  },
+  "quoteTeam": {
+    "message": "Reels a été créé par des centaines de personnes payées 400 000 dollars par an. Slowth a été créé par un seul développeur en un week-end."
+  },
+  "quoteBillions": {
+    "message": "Ils ont dépensé des milliards pour vous faire défiler sans fin. Nous avons créé une petite extension locale pour vous aider à arrêter."
+  },
+  "quoteBug": {
+    "message": "Le fil infini est un bug. Voici le correctif."
+  },
+  "best": {
+    "message": "Record"
+  },
+  "gameLabel": {
+    "message": "Mini-jeu de vol"
+  },
+  "gameHelp": {
+    "message": "Touchez l’écran ou appuyez sur Espace pour voler"
+  },
+  "back": {
+    "message": "← Retour"
+  },
+  "signature": {
+    "message": "Slowth · ralentissez, respirez, créez"
+  },
+  "playHint": {
+    "message": "🦥 touchez pour jouer à Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Évitez les branches"
+  },
+  "newBest": {
+    "message": "Nouveau record ! Touchez pour rejouer"
+  },
+  "flyAgain": {
+    "message": "Touchez pour rejouer"
+  },
+  "tapStart": {
+    "message": "Touchez pour commencer"
+  },
+  "gameOver": {
+    "message": "Partie terminée"
+  },
+  "feedTitle": {
+    "message": "Le fil infini est bloqué"
+  },
+  "feedSubtitle": {
+    "message": "Slowth vous éloigne du fil infini. Respirez. Faites autre chose."
+  },
+  "backHome": {
+    "message": "Retour à l’accueil"
+  },
+  "dismiss": {
+    "message": "Fermer"
+  },
+  "storiesTime": {
+    "message": "Vous avez déjà passé $1 sur les Stories. Respirez."
+  },
+  "enableSafari": {
+    "message": "Activer dans Safari"
+  },
+  "openSettings": {
+    "message": "Ouvrir Réglages"
+  },
+  "strictMode": {
+    "message": "Mode strict"
+  },
+  "off": {
+    "message": "Désactivé"
+  },
+  "blockShorts": {
+    "message": "Bloquer les Shorts"
+  },
+  "blockReels": {
+    "message": "Bloquer les Reels"
+  },
+  "blockFeeds": {
+    "message": "Bloquer les Reels et les fils"
+  },
+  "blockFeed": {
+    "message": "Bloquer les Reels et le fil"
+  },
+  "blockExplore": {
+    "message": "Bloquer Explorer et les tendances"
+  },
+  "blockSite": {
+    "message": "Bloquer le site"
+  },
+  "updating": {
+    "message": "Mise à jour…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Bloquer le fil infini"
+  },
+  "infiniteFeedHelp": {
+    "message": "Limite le défilement infini. Sur Instagram, cela inclut aussi Explorer et les stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Impossible d’enregistrer"
+  },
+  "strictConfirmTitle": {
+    "message": "Activer le mode strict ?"
+  },
+  "enable": {
+    "message": "Activer"
+  },
+  "strictEnableConfirm": {
+    "message": "Pendant 24 heures, les restrictions actives ne peuvent pas être désactivées. Vous pouvez ajouter des restrictions, mais pas activer le blocage de sites entiers."
+  },
+  "cancel": {
+    "message": "Annuler"
+  }
+}

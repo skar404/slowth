@@ -53,14 +53,9 @@
   }
 
   function normalizeState(raw) {
-    const togglesRaw = (raw && raw.toggles) || {};
-    const toggles = { ...ns.DEFAULT_TOGGLES };
-    for (const site of ns.SITES) {
-      const v = togglesRaw[site];
-      if (typeof v === "string" && (ns.SITE_AVAILABLE_MODES[site] || []).includes(v)) {
-        toggles[site] = v;
-      }
-    }
+    const toggles = Object.fromEntries(ns.SITES.map(site => [
+      site, ns.normalizeSiteSettings(site, raw?.toggles?.[site])
+    ]));
 
     let strictModeUntil = 0;
     if (raw && typeof raw.strictModeUntil === "number") {
@@ -68,10 +63,10 @@
     }
 
     let rules = ns.DEFAULT_RULES;
-    if (raw && typeof raw.rules === "string") {
+    if (raw && raw.rules) {
       try {
-        const parsed = JSON.parse(raw.rules);
-        if (isValidRules(parsed)) rules = parsed;
+        const parsed = typeof raw.rules === "string" ? JSON.parse(raw.rules) : raw.rules;
+        if (isValidRules(parsed) && parsed.version >= ns.DEFAULT_RULES.version) rules = parsed;
       } catch (_) {}
     }
 
@@ -79,12 +74,17 @@
     const rulesEtag = (raw && typeof raw.rulesEtag === "string") ? raw.rulesEtag : "";
     const onboardingDone = !!(raw && raw.onboardingDone);
 
-    return { toggles, strictModeUntil, rules, rulesFetchedAt, rulesEtag, onboardingDone };
+    return { settingsVersion: 2, toggles, strictModeUntil, rules, rulesFetchedAt, rulesEtag, onboardingDone };
   }
 
   async function getStateFresh() {
     const resp = await sendNative({ action: "getState" });
-    const state = normalizeState(resp && resp.state);
+    if (!resp?.ok || !resp.state) {
+      const items = await storageGet([ns.STORAGE_KEYS.cachedState]);
+      // A transient bridge failure must not replace user choices with defaults.
+      return normalizeState(items[ns.STORAGE_KEYS.cachedState]);
+    }
+    const state = normalizeState(resp.state);
     await storageSet({
       [ns.STORAGE_KEYS.cachedState]: state,
       [ns.STORAGE_KEYS.cachedAt]: Date.now()
@@ -96,12 +96,13 @@
     const items = await storageGet([ns.STORAGE_KEYS.cachedState, ns.STORAGE_KEYS.cachedAt]);
     const cached = items[ns.STORAGE_KEYS.cachedState];
     const at = items[ns.STORAGE_KEYS.cachedAt] || 0;
-    if (cached && Date.now() - at < ns.STATE_CACHE_TTL_MS) return cached;
+    if (cached && cached.settingsVersion === 2 && Date.now() - at < ns.STATE_CACHE_TTL_MS &&
+        isValidRules(cached.rules) && cached.rules.version >= ns.DEFAULT_RULES.version) return cached;
     return getStateFresh();
   }
 
-  async function setToggle(site, value) {
-    const resp = await sendNative({ action: "setToggle", site, value });
+  async function setToggle(site, feature, enabled) {
+    const resp = await sendNative({ action: "setToggle", site, feature, enabled });
     if (resp && resp.state) {
       const state = normalizeState(resp.state);
       await storageSet({

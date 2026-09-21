@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Toshe YouTube Shorts, Reels, TikTok da jerin wallafe-wallafe masu ɗauke hankali a Safari."
+  },
+  "locale": {
+    "message": "ha"
+  },
+  "tagline": {
+    "message": "Toshe YouTube Shorts, Instagram da Facebook Reels, da Bincike da abubuwan da ke tashe a X. Toshe TikTok gaba ɗaya. Kulle saitunanka da yanayi mai tsauri na awa 24."
+  },
+  "stepSettings": {
+    "message": "Buɗe Saituna a na'urarka"
+  },
+  "stepExtensions": {
+    "message": "Je zuwa Manhajoji → Safari → Ƙari"
+  },
+  "stepEnable": {
+    "message": "Kunna Slowth kuma ba shi izini a duk shafuka"
+  },
+  "onboardingDone": {
+    "message": "Na kunna shi"
+  },
+  "blocking": {
+    "message": "Toshewa"
+  },
+  "strictHelp": {
+    "message": "Ba za a iya kashe takunkumin da aka kunna ba na awa 24. Za ka iya ƙara takunkumi, amma ba za ka iya kunna toshe shafi gaba ɗaya ba."
+  },
+  "updates": {
+    "message": "Sabuntawa"
+  },
+  "updateNow": {
+    "message": "Sabunta yanzu"
+  },
+  "loading": {
+    "message": "Ana lodawa…"
+  },
+  "guide": {
+    "message": "Jagora"
+  },
+  "howToUse": {
+    "message": "Yadda ake amfani da Slowth"
+  },
+  "modesExplained": {
+    "message": "Bayanin yanayi mai tsauri da yanayin kowane shafi"
+  },
+  "strictGuideTitle": {
+    "message": "Abin da yanayi mai tsauri yake yi"
+  },
+  "strictGuide": {
+    "message": "Ba za a iya kashe takunkumin da aka kunna ba na awa 24. Za ka iya ƙara takunkumi, amma ba za ka iya kunna toshe shafi gaba ɗaya ba. Mai ƙidayar lokaci yana ci gaba bayan sake kunnawa ko rufe manhajar da ƙarfi."
+  },
+  "strictAdvice": {
+    "message": "Kunna shi idan ƙarfin zuciya kaɗai bai isa ba. Bar shi a kashe idan tunatarwa kaɗan kawai kake so."
+  },
+  "howBlockingWorks": {
+    "message": "Yadda toshewa take aiki"
+  },
+  "modeOffHelp": {
+    "message": "Shafin yana loda kamar yadda aka saba. Slowth ba ya yin komai."
+  },
+  "siteSpecific": {
+    "message": "Toshewa na musamman ga shafi"
+  },
+  "modeShortsHelp": {
+    "message": "Yana toshe YouTube Shorts, Instagram/Facebook Reels, ko Bincike da abubuwan da ke tashe a X. Sauran shafin yana ci gaba da aiki."
+  },
+  "addFeed": {
+    "message": "Ƙara toshe jerin wallafe-wallafe"
+  },
+  "modeFeedHelp": {
+    "message": "Yana kuma dakatar da jerin wallafe-wallafen gida marasa ƙarewa bayan wasu alluna. A Instagram ya haɗa da Bincike, Labarai da ƙarin wuraren Reels."
+  },
+  "modeAllHelp": {
+    "message": "Shafin toshewa mai sauƙin fahimta zai bayyana maimakon shafin da ka ziyarta."
+  },
+  "leaveFeedback": {
+    "message": "Bar ra'ayi"
+  },
+  "showIntro": {
+    "message": "Sake nuna gabatarwa"
+  },
+  "rulesNever": {
+    "message": "Dokoki: ba a taɓa samo su ba"
+  },
+  "rulesNow": {
+    "message": "Dokoki: yanzu-yanzu"
+  },
+  "rulesRelative": {
+    "message": "Dokoki: $1"
+  },
+  "strictUntil": {
+    "message": "Yanayi mai tsauri yana aiki har zuwa $1"
+  },
+  "openSafariSettings": {
+    "message": "Buɗe Saitunan Safari"
+  },
+  "rulesCurrent": {
+    "message": "Dokoki: sun zama sabbi"
+  },
+  "rulesFailed": {
+    "message": "Dokoki: an kasa sabuntawa. Sake gwadawa."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ya toshe"
+  },
+  "thisSite": {
+    "message": "wannan shafi"
+  },
+  "blockedTitle": {
+    "message": "An toshe $1"
+  },
+  "blockedTabTitle": {
+    "message": "An toshe: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth yana taimaka maka nisantar $1. Ja numfashi. Yi wani abu dabam."
+  },
+  "backToSite": {
+    "message": "← Koma zuwa $1"
+  },
+  "why": {
+    "message": "Me ya sa"
+  },
+  "quoteTeam": {
+    "message": "Ƙungiyar ɗaruruwan mutane masu albashin $$400k ce ta gina Reels. Mutum ɗaya ne ya gina Slowth a ƙarshen mako."
+  },
+  "quoteBillions": {
+    "message": "Sun kashe biliyoyi don ka ci gaba da gungurawa. Mun gina ƙaramin ƙari na cikin na'ura don taimaka maka ka daina."
+  },
+  "quoteBug": {
+    "message": "Jerin wallafe-wallafe marasa ƙarewa kuskure ne. Ga gyaran."
+  },
+  "best": {
+    "message": "mafi kyau"
+  },
+  "gameLabel": {
+    "message": "Ƙaramin wasan tashi"
+  },
+  "gameHelp": {
+    "message": "Taɓa ko danna sarari don kaɗa fuka-fuki"
+  },
+  "back": {
+    "message": "← Komawa"
+  },
+  "signature": {
+    "message": "Slowth · rage gudu, ja numfashi, ƙirƙira"
+  },
+  "playHint": {
+    "message": "🦥 taɓa don buga Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Kada ka buga rassan"
+  },
+  "newBest": {
+    "message": "Sabon tarihi! Taɓa don sake tashi"
+  },
+  "flyAgain": {
+    "message": "Taɓa don sake tashi"
+  },
+  "tapStart": {
+    "message": "Taɓa don farawa"
+  },
+  "gameOver": {
+    "message": "Wasan ya ƙare"
+  },
+  "feedTitle": {
+    "message": "An toshe jerin wallafe-wallafe marasa ƙarewa"
+  },
+  "feedSubtitle": {
+    "message": "Slowth yana taimaka maka nisantar jerin wallafe-wallafe marasa ƙarewa. Ja numfashi. Yi wani abu dabam."
+  },
+  "backHome": {
+    "message": "Koma shafin gida"
+  },
+  "dismiss": {
+    "message": "Rufe"
+  },
+  "storiesTime": {
+    "message": "Ka riga ka kashe $1 a kan labarai. Ja numfashi."
+  },
+  "enableSafari": {
+    "message": "Kunna a Safari"
+  },
+  "openSettings": {
+    "message": "Buɗe Saituna"
+  },
+  "strictMode": {
+    "message": "Yanayi mai tsauri"
+  },
+  "off": {
+    "message": "Kashe"
+  },
+  "blockShorts": {
+    "message": "Toshe Shorts"
+  },
+  "blockReels": {
+    "message": "Toshe Reels"
+  },
+  "blockFeeds": {
+    "message": "Toshe Reels da jerin wallafe-wallafe"
+  },
+  "blockFeed": {
+    "message": "Toshe Reels da jerin wallafe-wallafe"
+  },
+  "blockExplore": {
+    "message": "Toshe Bincike da abubuwan da ke tashe"
+  },
+  "blockSite": {
+    "message": "Toshe shafi"
+  },
+  "updating": {
+    "message": "Ana sabuntawa…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Toshe jerin da ba ya ƙarewa"
+  },
+  "infiniteFeedHelp": {
+    "message": "Yana iyakance gungurawa marar ƙarewa. A Instagram ya haɗa da Explore da Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "An kasa adanawa"
+  },
+  "strictConfirmTitle": {
+    "message": "A kunna yanayi mai tsauri?"
+  },
+  "enable": {
+    "message": "Kunna"
+  },
+  "strictEnableConfirm": {
+    "message": "Ba za a iya kashe takunkumin da aka kunna ba na awa 24. Za ka iya ƙara takunkumi, amma ba za ka iya kunna toshe shafi gaba ɗaya ba."
+  },
+  "cancel": {
+    "message": "Soke"
+  }
+}

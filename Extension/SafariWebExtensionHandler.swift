@@ -35,12 +35,13 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
         case "setToggle":
             guard let site = payload["site"] as? String,
-                  let value = payload["value"] as? String,
-                  let mode = SiteMode(rawValue: value) else {
+                  let key = payload["feature"] as? String,
+                  let feature = SiteFeature(rawValue: key),
+                  let enabled = payload["enabled"] as? Bool else {
                 return ["ok": false, "reason": "invalid_args"]
             }
             do {
-                _ = try SharedStore.setToggle(site: site, mode: mode)
+                _ = try SharedStore.setToggle(site: site, feature: feature, enabled: enabled)
                 return ["ok": true, "state": stateDict()]
             } catch SharedStoreError.strictModeActive {
                 return ["ok": false, "reason": "strict", "state": stateDict()]
@@ -91,9 +92,10 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
     private func stateDict() -> [String: Any] {
         let s = SharedStore.snapshot()
-        let togglesRaw = s.toggles.mapValues { $0.rawValue }
+        let togglesRaw = s.toggles.mapValues { $0.dictionary }
         var dict: [String: Any] = [
             "toggles": togglesRaw,
+            "settingsVersion": 2,
             "strictModeUntil": s.strictModeUntil?.timeIntervalSince1970 ?? 0,
             "onboardingDone": s.onboardingDone,
             "rulesFetchedAt": s.rulesFetchedAt?.timeIntervalSince1970 ?? 0

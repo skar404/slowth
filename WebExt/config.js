@@ -6,62 +6,43 @@
 
   ns.SITES = ["youtube", "instagram", "tiktok", "facebook", "x"];
 
-  // ⚠️ KEEP MODES IN SYNC with the Swift host-app settings UI (a separate, parallel
-  // implementation of the same per-site modes):
-  //   Shared/SharedStore.swift  — `SiteMode` enum (raw values must match these strings)
-  //                               + `defaultState` (mirrors DEFAULT_TOGGLES below).
-  //   Shared/ContentView_iOS.swift / ContentView_macOS.swift — `sites` arrays (mirror
-  //                               SITE_AVAILABLE_MODES) + `modeLabel()` (mirrors app.js).
-  // Adding a mode here without updating Swift = popup and host app disagree.
-  ns.MODES = { OFF: "off", SHORTS: "shorts", FEED: "feed", ALL: "all" };
-
-  ns.SITE_AVAILABLE_MODES = {
-    youtube:   ["off", "shorts", "all"],
-    instagram: ["off", "shorts", "feed", "all"],
-    tiktok:    ["off", "all"],
-    facebook:  ["off", "shorts", "feed", "all"],
-    x:         ["off", "shorts", "all"]
+  // Wire keys and migration mirror Shared/SharedStore.swift.
+  ns.SITE_FEATURES = {
+    youtube: ["shorts", "all"],
+    instagram: ["shorts", "feed", "all"],
+    tiktok: ["all"],
+    facebook: ["shorts", "feed", "all"],
+    x: ["shorts", "all"]
   };
+  ns.DEFAULT_TOGGLES = Object.fromEntries(ns.SITES.map(site => [site, {
+    shorts: site !== "tiktok",
+    feed: site === "instagram" || site === "facebook",
+    all: site === "tiktok"
+  }]));
+  ns.SITE_LABELS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", facebook: "Facebook", x: "X" };
 
-  ns.DEFAULT_TOGGLES = {
-    youtube:   "shorts",
-    instagram: "feed",
-    tiktok:    "all",
-    facebook:  "feed",
-    x:         "shorts"
-  };
-
-  ns.SITE_LABELS = {
-    youtube:   "YouTube Shorts",
-    instagram: "Instagram Reels",
-    tiktok:    "TikTok",
-    facebook:  "Facebook Reels",
-    x:         "X (Twitter)"
-  };
-
-  // User-facing labels are site-aware because the shared `shorts` wire value
-  // means Shorts on YouTube, Reels on Instagram/Facebook, and Explore/trends
-  // on X. Keep these labels in sync with the two SwiftUI implementations.
-  ns.SITE_MODE_LABELS = {
-    youtube: {
-      off: "Off", shorts: "Block Shorts", all: "Block site"
-    },
-    instagram: {
-      off: "Off", shorts: "Block Reels", feed: "Block Reels + feeds", all: "Block site"
-    },
-    tiktok: {
-      off: "Off", all: "Block site"
-    },
-    facebook: {
-      off: "Off", shorts: "Block Reels", feed: "Block Reels + feed", all: "Block site"
-    },
-    x: {
-      off: "Off", shorts: "Block Explore & trends", all: "Block site"
+  ns.normalizeSiteSettings = function (site, value) {
+    const defaults = { ...ns.DEFAULT_TOGGLES[site] };
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      for (const feature of ns.SITE_FEATURES[site] || []) {
+        if (typeof value[feature] === "boolean") defaults[feature] = value[feature];
+      }
+      return defaults;
+    }
+    // Old cached states can survive an extension update.
+    if (typeof value === "boolean") value = value ? (site === "tiktok" ? "all" : "shorts") : "off";
+    switch (value) {
+      case "off": return { shorts: false, feed: false, all: false };
+      case "shorts": return { shorts: site !== "tiktok", feed: false, all: false };
+      case "feed": return { shorts: site !== "tiktok", feed: site === "instagram" || site === "facebook", all: false };
+      case "all": return { ...defaults, all: true };
+      default: return defaults;
     }
   };
 
   ns.DEFAULT_RULES = {
-    version: 8,
+    // Bump when changing bundled rules. Newer bundled rules override stored rules.
+    version: 16,
     youtube: {
       redirects: [
         { from: "^/shorts/([\\w-]+)", to: "/watch?v=$1" }
@@ -121,28 +102,49 @@
     },
     facebook: {
       redirects: [
-        { from: "^/reel/[^/]+/?", to: "unscroll:blocked" },
-        { from: "^/reels(/|$)", to: "unscroll:blocked" },
+        { from: "^/reels?(/|[?#]|$)", to: "unscroll:blocked" },
+        { from: "^/[^/?]+/(reels(_tab)?|owner_reels)(/|[?#]|$)", to: "unscroll:blocked" },
+        { from: "^/[^/?]+/?\\?([^#]*&)?sk=reels(_tab)?(&|$)", to: "unscroll:blocked" },
         { from: "^/watch(/|$)", to: "unscroll:blocked" },
         { from: "^/video(/|$)", to: "unscroll:blocked" }
       ],
       hideSelectors: [
         "a[href^=\"/reel/\"]",
         "a[href^=\"/reels/\"]",
+        "a[href^=\"https://www.facebook.com/reel/\"]",
+        "a[href^=\"https://www.facebook.com/reels/\"]",
+        "a[href^=\"https://m.facebook.com/reel/\"]",
+        "a[href^=\"https://m.facebook.com/reels/\"]",
+        "a[href^=\"https://facebook.com/reel/\"]",
+        "a[href^=\"https://facebook.com/reels/\"]",
+        // Facebook removes href from overflowed tabs. Hiding tabs by href makes
+        // them alternate between visible/hidden every frame; facebook.js marks them.
+        "a[data-unscroll-facebook-reels-tab]",
+        // Mobile navigation uses a div tab with a label and unread count, no href.
+        // Hide content two levels inside while preserving the tab and its wrappers.
+        "[role=\"tab\"]:is([aria-label=\"reels\" i], [aria-label^=\"reels,\" i]) > * > *",
+        "a:not([role=\"tab\"]):is([href$=\"/reels\"], [href*=\"/reels/\"], [href*=\"/reels?\"])",
+        "a:not([role=\"tab\"]):is([href$=\"/reels_tab\"], [href*=\"/reels_tab/\"], [href*=\"/reels_tab?\"])",
+        "a:not([role=\"tab\"]):is([href$=\"/owner_reels\"], [href*=\"/owner_reels/\"], [href*=\"/owner_reels?\"])",
+        "a:not([role=\"tab\"]):is([href*=\"?sk=reels_tab\"], [href*=\"&sk=reels_tab\"])",
         "a[href=\"/reels/\"]",
         "a[href=\"/watch/\"]",
         "a[href^=\"/video\"]",
         "a[aria-label=\"Reels\"]",
         "[role=\"navigation\"] a[href*=\"/reels\"]",
         "[role=\"navigation\"] li:has(a[aria-label=\"Reels\"])",
-        "div[aria-label=\"Reels\"]",
+        "div[aria-label=\"Reels\"]:not([role=\"tab\"])",
         "div[aria-label=\"Reels and short videos\"]",
         "div[role=\"main\"] [aria-label=\"Reels and short videos\"]",
         "div[data-pagelet=\"VideoChainingFeedUnit\"]",
         "div[data-pagelet^=\"Reels\"]",
         "div[data-pagelet*=\"Reels\"]",
-        "div[role=\"feed\"] > div:has(a[href^=\"/reel/\"])",
-        "div[role=\"article\"]:has(a[href^=\"/reel/\"])"
+        // Mobile feed cards have no reel link or article role. Remove the whole
+        // feed unit containing the labeled Reels button, including its fixed height.
+        "[data-type=\"vscroller\"] > [data-dcm-id]:has([role=\"button\"][aria-label*=\"Reels\" i])",
+        "div[aria-posinset]:has(a:is([href^=\"/reel/\"], [href^=\"https://www.facebook.com/reel/\"], [href^=\"https://m.facebook.com/reel/\"], [href^=\"https://facebook.com/reel/\"]))",
+        "div[role=\"feed\"] > div:has(a:is([href^=\"/reel/\"], [href^=\"https://www.facebook.com/reel/\"], [href^=\"https://m.facebook.com/reel/\"], [href^=\"https://facebook.com/reel/\"]))",
+        "div[role=\"article\"]:has(a:is([href^=\"/reel/\"], [href^=\"https://www.facebook.com/reel/\"], [href^=\"https://m.facebook.com/reel/\"], [href^=\"https://facebook.com/reel/\"]))"
       ]
     },
     x: {

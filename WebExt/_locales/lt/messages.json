@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokuokite „YouTube Shorts“, „Reels“, „TikTok“ ir blaškančius srautus „Safari“ naršyklėje."
+  },
+  "locale": {
+    "message": "lt"
+  },
+  "tagline": {
+    "message": "Blokuokite „YouTube Shorts“, „Instagram“ ir „Facebook Reels“, „X“ naršymo skiltį ir tendencijas. Visiškai blokuokite „TikTok“. Griežtuoju režimu užrakinkite nustatymus 24 valandoms."
+  },
+  "stepSettings": {
+    "message": "Atverkite įrenginio nustatymus"
+  },
+  "stepExtensions": {
+    "message": "Eikite į Programos → Safari → Plėtiniai"
+  },
+  "stepEnable": {
+    "message": "Įjunkite „Slowth“ ir leiskite veikti visose svetainėse"
+  },
+  "onboardingDone": {
+    "message": "Įjungta"
+  },
+  "blocking": {
+    "message": "Blokavimas"
+  },
+  "strictHelp": {
+    "message": "24 valandas negalėsite išjungti įjungtų apribojimų. Galite pridėti apribojimų, tačiau negalite įjungti visos svetainės blokavimo."
+  },
+  "updates": {
+    "message": "Atnaujinimai"
+  },
+  "updateNow": {
+    "message": "Atnaujinti dabar"
+  },
+  "loading": {
+    "message": "Įkeliama…"
+  },
+  "guide": {
+    "message": "Vadovas"
+  },
+  "howToUse": {
+    "message": "Kaip naudotis „Slowth“"
+  },
+  "modesExplained": {
+    "message": "Apie griežtąjį režimą ir svetainių režimus"
+  },
+  "strictGuideTitle": {
+    "message": "Ką daro griežtasis režimas"
+  },
+  "strictGuide": {
+    "message": "24 valandas negalėsite išjungti įjungtų apribojimų. Galite pridėti apribojimų, tačiau negalite įjungti visos svetainės blokavimo. Laikmatis veikia toliau paleidus iš naujo ar priverstinai uždarius programą."
+  },
+  "strictAdvice": {
+    "message": "Įjunkite, kai vien valios nepakanka. Palikite išjungtą, jei tereikia švelnaus priminimo."
+  },
+  "howBlockingWorks": {
+    "message": "Kaip veikia blokavimas"
+  },
+  "modeOffHelp": {
+    "message": "Svetainė įkeliama įprastai. „Slowth“ nieko nedaro."
+  },
+  "siteSpecific": {
+    "message": "Konkrečios svetainės blokavimas"
+  },
+  "modeShortsHelp": {
+    "message": "Blokuoja „YouTube Shorts“, „Instagram/Facebook Reels“ arba „X“ naršymo skiltį ir tendencijas. Likusi svetainės dalis veikia."
+  },
+  "addFeed": {
+    "message": "Pridėti srauto blokavimą"
+  },
+  "modeFeedHelp": {
+    "message": "Po kelių ekranų sustabdo ir begalinį pagrindinį srautą. „Instagram“ taip pat apima naršymo skiltį, istorijas ir daugiau „Reels“ vietų."
+  },
+  "modeAllHelp": {
+    "message": "Vietoj svetainės rodomas draugiškas blokavimo puslapis."
+  },
+  "leaveFeedback": {
+    "message": "Palikti atsiliepimą"
+  },
+  "showIntro": {
+    "message": "Vėl rodyti įvadą"
+  },
+  "rulesNever": {
+    "message": "Taisyklės: dar neatsiųstos"
+  },
+  "rulesNow": {
+    "message": "Taisyklės: ką tik"
+  },
+  "rulesRelative": {
+    "message": "Taisyklės: $1"
+  },
+  "strictUntil": {
+    "message": "Griežtasis režimas aktyvus iki $1"
+  },
+  "openSafariSettings": {
+    "message": "Atverti „Safari“ nustatymus"
+  },
+  "rulesCurrent": {
+    "message": "Taisyklės: naujausios"
+  },
+  "rulesFailed": {
+    "message": "Taisyklės: nepavyko atnaujinti. Bandykite dar kartą."
+  },
+  "blockedPageTitle": {
+    "message": "Užblokavo „Slowth“"
+  },
+  "thisSite": {
+    "message": "ši svetainė"
+  },
+  "blockedTitle": {
+    "message": "$1 užblokuota"
+  },
+  "blockedTabTitle": {
+    "message": "Užblokuota: $1"
+  },
+  "blockedSubtitle": {
+    "message": "„Slowth“ padeda atsitraukti nuo $1. Įkvėpkite. Nuveikite ką nors kita."
+  },
+  "backToSite": {
+    "message": "← Grįžti į $1"
+  },
+  "why": {
+    "message": "Kodėl"
+  },
+  "quoteTeam": {
+    "message": "„Reels“ kūrė šimtai žmonių, gaunančių $$400k atlyginimus. „Slowth“ per savaitgalį sukūrė vienas kūrėjas."
+  },
+  "quoteBillions": {
+    "message": "Jie išleido milijardus, kad toliau slinktumėte. Mes sukūrėme mažą vietinį plėtinį, kad sustotumėte."
+  },
+  "quoteBug": {
+    "message": "Begalinis srautas yra klaida. Štai pataisa."
+  },
+  "best": {
+    "message": "rekordas"
+  },
+  "gameLabel": {
+    "message": "Skraidymo minižaidimas"
+  },
+  "gameHelp": {
+    "message": "Palieskite arba spauskite tarpo klavišą, kad suplasnotumėte"
+  },
+  "back": {
+    "message": "← Atgal"
+  },
+  "signature": {
+    "message": "Slowth · sulėtink, kvėpuok, kurk"
+  },
+  "playHint": {
+    "message": "🦥 palieskite ir žaiskite „Slow Flap“ →"
+  },
+  "avoidBranches": {
+    "message": "Neatsitrenkite į šakas"
+  },
+  "newBest": {
+    "message": "Naujas rekordas! Palieskite ir skriskite vėl"
+  },
+  "flyAgain": {
+    "message": "Palieskite ir skriskite vėl"
+  },
+  "tapStart": {
+    "message": "Palieskite, kad pradėtumėte"
+  },
+  "gameOver": {
+    "message": "Žaidimas baigtas"
+  },
+  "feedTitle": {
+    "message": "Begalinis srautas užblokuotas"
+  },
+  "feedSubtitle": {
+    "message": "„Slowth“ padeda atsitraukti nuo begalinio srauto. Įkvėpkite. Nuveikite ką nors kita."
+  },
+  "backHome": {
+    "message": "Į pagrindinį puslapį"
+  },
+  "dismiss": {
+    "message": "Uždaryti"
+  },
+  "storiesTime": {
+    "message": "Istorijoms jau skyrėte $1. Įkvėpkite."
+  },
+  "enableSafari": {
+    "message": "Įjungti „Safari“"
+  },
+  "openSettings": {
+    "message": "Atverti nustatymus"
+  },
+  "strictMode": {
+    "message": "Griežtasis režimas"
+  },
+  "off": {
+    "message": "Išjungta"
+  },
+  "blockShorts": {
+    "message": "Blokuoti „Shorts“"
+  },
+  "blockReels": {
+    "message": "Blokuoti „Reels“"
+  },
+  "blockFeeds": {
+    "message": "Blokuoti „Reels“ ir srautus"
+  },
+  "blockFeed": {
+    "message": "Blokuoti „Reels“ ir srautą"
+  },
+  "blockExplore": {
+    "message": "Blokuoti „Naršyti“ ir tendencijas"
+  },
+  "blockSite": {
+    "message": "Blokuoti svetainę"
+  },
+  "updating": {
+    "message": "Atnaujinama…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokuoti begalinį srautą"
+  },
+  "infiniteFeedHelp": {
+    "message": "Riboja begalinį slinkimą. Instagram taip pat apima Explore ir Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Nepavyko išsaugoti"
+  },
+  "strictConfirmTitle": {
+    "message": "Įjungti griežtąjį režimą?"
+  },
+  "enable": {
+    "message": "Įjungti"
+  },
+  "strictEnableConfirm": {
+    "message": "24 valandas negalėsite išjungti įjungtų apribojimų. Galite pridėti apribojimų, tačiau negalite įjungti visos svetainės blokavimo."
+  },
+  "cancel": {
+    "message": "Atšaukti"
+  }
+}

@@ -1,12 +1,14 @@
 (function () {
+  const { t, locale, localize } = globalThis.Unscroll.i18n;
+  localize();
+  globalThis.Unscroll.i18n.setLocale(document.documentElement);
   const params = new URLSearchParams(location.search);
-  const host = params.get("host") || "this site";
-  document.title = "Blocked: " + host;
-  const titleHost = document.getElementById("title-host");
-  if (titleHost) titleHost.textContent = host;
+  const host = params.get("host") || "";
+  const label = { facebook: "Facebook", instagram: "Instagram", youtube: "YouTube", x: "X", tiktok: "TikTok" }[host] || host || t("thisSite");
+  document.title = t("blockedTabTitle", label);
+  document.getElementById("blocked-title").textContent = t("blockedTitle", label);
   const subtitle = document.getElementById("subtitle");
-  if (subtitle) subtitle.textContent =
-    "Slowth is keeping you off " + host + ". Take a breath. Do something else.";
+  if (subtitle) subtitle.textContent = t("blockedSubtitle", label);
 
   // "Back to <site>" button — maps the host key to its home URL. The blocked
   // paths (reels/watch/etc.) never match "/", so home is safe to return to.
@@ -25,7 +27,7 @@
   const backLink = document.getElementById("back-link");
   if (footer && backLink && HOME_URLS[host]) {
     backLink.href = HOME_URLS[host];
-    backLink.textContent = "← Back to " + (HOST_LABELS[host] || host);
+    backLink.textContent = t("backToSite", HOST_LABELS[host] || host);
     footer.hidden = false;
   }
 
@@ -35,6 +37,7 @@
   if (quotes.length) {
     const pick = Math.floor(Math.random() * quotes.length);
     quotes.forEach((q, i) => {
+      q.dataset.playHint = t("playHint");
       if (i !== pick) q.hidden = true;
       else activeQuote = q;
     });
@@ -88,7 +91,7 @@
     try { localStorage.setItem(BEST_KEY, String(v)); } catch (_) {}
   }
   best = loadBest();
-  if (bestEl) bestEl.textContent = best;
+  if (bestEl) bestEl.textContent = best.toLocaleString(locale);
 
   function reset() {
     y = H * 0.45;
@@ -110,7 +113,7 @@
     reset();
     for (let i = 0; i < 3; i++) spawnPipe(W + 120 + i * PIPE_SPACING);
     state = "playing";
-    if (helpEl) helpEl.textContent = "Don't hit the branches";
+    if (helpEl) helpEl.textContent = t("avoidBranches");
   }
 
   function die() {
@@ -118,10 +121,10 @@
     if (score > best) {
       best = score;
       saveBest(best);
-      if (bestEl) bestEl.textContent = best;
-      if (helpEl) helpEl.textContent = "New best! Tap to fly again";
+      if (bestEl) bestEl.textContent = best.toLocaleString(locale);
+      if (helpEl) helpEl.textContent = t("newBest");
     } else {
-      if (helpEl) helpEl.textContent = "Tap to fly again";
+      if (helpEl) helpEl.textContent = t("flyAgain");
     }
   }
 
@@ -154,7 +157,7 @@
         if (!p.scored && p.x + PIPE_W < SLOTH_X - SLOTH_R) {
           p.scored = true;
           score += 1;
-          if (scoreEl) scoreEl.textContent = score;
+          if (scoreEl) scoreEl.textContent = score.toLocaleString(locale);
         }
       }
     } else if (state === "idle") {
@@ -171,8 +174,8 @@
     drawFloor();
     drawSloth();
 
-    if (state === "idle") drawCenter("Tap to start");
-    if (state === "dead") drawCenter("Game over");
+    if (state === "idle") drawCenter(t("tapStart"));
+    if (state === "dead") drawCenter(t("gameOver"));
 
     requestAnimationFrame(step);
   }
@@ -242,7 +245,7 @@
     ctx.font = "600 18px -apple-system, system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(text, W / 2, H / 2);
+    ctx.fillText(text, W / 2, H / 2, W - 24);
   }
 
   function roundRect(x, y, w, h, r) {

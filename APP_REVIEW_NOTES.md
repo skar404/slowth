@@ -3,7 +3,7 @@
 Hi App Review team,
 
 Slowth is a free iOS app with a Safari Web Extension and an optional Real-time
-Blocking beta for YouTube Shorts and Instagram Reels/Stories in the native
+Blocking for YouTube Shorts and Instagram Reels/Stories in the native
 apps. Safari blocking supports YouTube, Instagram, Facebook, X, and TikTok.
 Real-time analysis runs locally using Screen Time, ReplayKit, and Core ML.
 
@@ -39,7 +39,7 @@ backend.
 Do not enable Strict mode during normal testing: it prevents reducing or
 disabling settings for 24 hours.
 
-## How to test — Real-time Blocking Beta
+## How to test — Real-time Blocking
 
 This feature requires a physical iOS device.
 

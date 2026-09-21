@@ -22,7 +22,22 @@ screenshots-gen/
 screenshots-mac/
 screenshots-ipad/
 
-# Personal device screenshots used to tune RealtimeShield heuristics — not for the public repo
+# Private ML sources, training data, device logs, and local agent artifacts
+/data-model/
+/analitics/
+/.hermes/
+/app-store/
+/.agents/
+/.codex/
+/tmp/
+/temp/
+/release-output/
+/release-notes.txt
+# Retired model artifacts stay local; production models ship as release assets.
+/RealtimeShield/SurfaceDetector.mlpackage/
+/RealtimeShield/SurfaceDetectorMetadata.json
+/logs/
+# Retired scratch location; keep ignored if historical tools recreate it.
 sandbox/
 /REALTIME_SHIELD_HANDOFF.md
 

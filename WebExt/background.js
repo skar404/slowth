@@ -56,17 +56,16 @@
     if (!site) return;
 
     const state = await ns.getStateCached();
-    const mode = (state.toggles && state.toggles[site]) || "off";
-    if (mode === "off") return;
+    const settings = ns.normalizeSiteSettings(site, state.toggles?.[site]);
 
-    if (mode === "all") {
+    if (settings.all) {
       const blockedUrl = api.runtime.getURL("blocked.html") + "?host=" + site;
       if (details.url === blockedUrl) return;
       api.tabs.update(details.tabId, { url: blockedUrl });
       return;
     }
 
-    if (mode === "shorts" || mode === "feed") {
+    if (settings.shorts) {
       const siteRules = state.rules && state.rules[site];
       if (!siteRules) return;
       const newPath = applyRedirect(url.pathname, url.search, siteRules.redirects);
@@ -123,7 +122,7 @@
         return { ok: true, state };
       }
       case "setToggle": {
-        const r = await ns.setToggle(payload.site, payload.value);
+        const r = await ns.setToggle(payload.site, payload.feature, payload.enabled);
         if (r.ok) await broadcastUpdated();
         return r;
       }

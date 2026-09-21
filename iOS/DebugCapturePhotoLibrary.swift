@@ -1,3 +1,4 @@
+#if DEBUG
 #if os(iOS)
 import Combine
 import Foundation
@@ -278,4 +279,5 @@ final class DebugCapturePhotoLibrary: ObservableObject {
         }
     }
 }
+#endif
 #endif

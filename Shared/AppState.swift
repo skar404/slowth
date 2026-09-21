@@ -36,6 +36,7 @@ final class AppState: ObservableObject {
 
     init() {
         #if os(iOS)
+        ShieldLocalization.syncAppLanguage()
         let foregroundName = UIApplication.willEnterForegroundNotification
         #elseif os(macOS)
         let foregroundName = NSApplication.didBecomeActiveNotification
@@ -88,24 +89,28 @@ final class AppState: ObservableObject {
     }
 
     func reload() {
+        #if os(iOS)
+        ShieldLocalization.syncAppLanguage()
+        #endif
         snapshot = SharedStore.snapshot()
         rulesEtag = SharedStore.rulesEtag()
         rulesLastAttemptAt = SharedStore.rulesLastAttemptAt()
     }
 
-    func mode(for site: String) -> SiteMode {
-        snapshot.toggles[site] ?? .off
+    func setting(_ feature: SiteFeature, for site: String) -> Bool {
+        snapshot.toggles[site]?[feature] ?? false
     }
 
-    func setMode(_ mode: SiteMode, for site: String) {
+    func setSetting(_ feature: SiteFeature, enabled: Bool, for site: String) {
         do {
-            _ = try SharedStore.setToggle(site: site, mode: mode)
+            _ = try SharedStore.setToggle(site: site, feature: feature, enabled: enabled)
             reload()
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
+            reload()
         }
     }
 
@@ -114,10 +119,10 @@ final class AppState: ObservableObject {
             _ = try SharedStore.setStrictMode(enabled)
             reload()
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode cannot be turned off until it expires"
+            lastError = AppLocalization.string("Strict mode cannot be turned off until it expires")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -136,15 +141,19 @@ final class AppState: ObservableObject {
         reload()
     }
 
+    #if DEBUG
     func resetStrictModeForDebug() {
         SharedStore.resetStrictModeForDebug()
         reload()
     }
+    #endif
 
+    #if DEBUG
     func resetTipsDisplayForDebug() {
         SharedStore.resetTipsDisplayForDebug()
         reload()
     }
+    #endif
 
     #if os(iOS) && canImport(FamilyControls)
     var hasYouTubeSelection: Bool { SharedStore.hasValidYouTubeSelection() }
@@ -168,17 +177,17 @@ final class AppState: ObservableObject {
         blockedContent: String
     ) -> Bool {
         guard selection.categoryTokens.isEmpty else {
-            lastError = "Pick a single app, not a whole category or \"All Apps\" — that would block everything."
+            lastError = AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything.")
             return false
         }
         guard selection.webDomainTokens.isEmpty else {
-            lastError = "Pick the \(appName) app icon, not a website."
+            lastError = AppLocalization.string("Pick the \(appName) app icon, not a website.")
             return false
         }
         guard selection.applicationTokens.count == 1 else {
             lastError = selection.applicationTokens.isEmpty
-                ? "Choose the \(appName) app before enabling \(blockedContent) blocking."
-                : "Choose exactly one app."
+                ? AppLocalization.string("Choose the \(appName) app before enabling \(blockedContent) blocking.")
+                : AppLocalization.string("Choose exactly one app.")
             return false
         }
         return true
@@ -195,10 +204,10 @@ final class AppState: ObservableObject {
                 ManagedSettingsApplier.clear(surface: .youtube)
                 reload()
             } catch SharedStoreError.strictModeActive {
-                lastError = "Strict mode is active"
+                lastError = AppLocalization.string("Strict mode is active")
                 reload()
             } catch {
-                lastError = "Could not clear the YouTube app"
+                lastError = AppLocalization.string("Could not clear the YouTube app")
             }
             return
         }
@@ -209,15 +218,25 @@ final class AppState: ObservableObject {
             blockedContent: "Shorts"
         ) else { return }
         guard let data = try? JSONEncoder().encode(selection) else { return }
+        let isFirstSelection = !SharedStore.hasValidYouTubeSelection()
         do {
             try SharedStore.setYouTubeSelectionData(data)
+            // Initialize blocking only for a new binding; preserve choices on replacement.
+            if isFirstSelection {
+                _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(true)
+                _ = try SharedStore.setSoftYouTubeBlockingEnabled(
+                    true,
+                    allowInitialStrictActivation: true
+                )
+                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            }
             RTLog.appState.notice("saveYouTubeSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             restoreRealtimeShieldAfterAppActivation()
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -233,10 +252,10 @@ final class AppState: ObservableObject {
                 ManagedSettingsApplier.clear(surface: .instagram)
                 reload()
             } catch SharedStoreError.strictModeActive {
-                lastError = "Strict mode is active"
+                lastError = AppLocalization.string("Strict mode is active")
                 reload()
             } catch {
-                lastError = "Could not clear the Instagram app"
+                lastError = AppLocalization.string("Could not clear the Instagram app")
             }
             return
         }
@@ -244,18 +263,25 @@ final class AppState: ObservableObject {
         guard validatedForSingleApp(
             selection,
             appName: "Instagram",
-            blockedContent: "Reels or Stories"
+            blockedContent: AppLocalization.string("Reels or Stories")
         ) else { return }
         guard let data = try? JSONEncoder().encode(selection) else { return }
+        let isFirstSelection = !SharedStore.hasValidInstagramSelection()
         do {
             try SharedStore.setInstagramSelectionData(data)
+            // Clearing a binding makes the next valid selection a first selection again.
+            if isFirstSelection {
+                _ = try SharedStore.setRealtimeInstagramReelsBlockingEnabled(true)
+                _ = try SharedStore.setRealtimeInstagramStoriesBlockingEnabled(true)
+                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            }
             RTLog.appState.notice("saveInstagramSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -277,10 +303,10 @@ final class AppState: ObservableObject {
                 ManagedSettingsApplier.clear(surface: .instagram)
             }
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -296,13 +322,13 @@ final class AppState: ObservableObject {
                 ManagedSettingsApplier.clear(surface: .youtube)
             }
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
             reload()
         } catch SharedStoreError.invalidValue {
-            lastError = "Choose the YouTube app before enabling Shorts blocking."
+            lastError = AppLocalization.string("Choose the YouTube app before enabling Shorts blocking.")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -322,13 +348,13 @@ final class AppState: ObservableObject {
                 }
             }
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
             reload()
         } catch SharedStoreError.invalidValue {
-            lastError = "Enable YouTube Shorts blocking before enabling soft blocking."
+            lastError = AppLocalization.string("Enable YouTube Shorts blocking before enabling soft blocking.")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -345,13 +371,13 @@ final class AppState: ObservableObject {
                 clearInstagramShieldIfDisabled()
             }
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
             reload()
         } catch SharedStoreError.invalidValue {
-            lastError = "Choose the Instagram app before enabling Reels blocking."
+            lastError = AppLocalization.string("Choose the Instagram app before enabling Reels blocking.")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -368,13 +394,13 @@ final class AppState: ObservableObject {
                 clearInstagramShieldIfDisabled()
             }
         } catch SharedStoreError.strictModeActive {
-            lastError = "Strict mode is active"
+            lastError = AppLocalization.string("Strict mode is active")
             reload()
         } catch SharedStoreError.invalidValue {
-            lastError = "Choose the Instagram app before enabling Stories blocking."
+            lastError = AppLocalization.string("Choose the Instagram app before enabling Stories blocking.")
             reload()
         } catch {
-            lastError = "Could not save"
+            lastError = AppLocalization.string("Could not save")
         }
     }
 
@@ -541,4 +567,29 @@ final class AppState: ObservableObject {
 
     private static let rulesURL =
         "https://gist.githubusercontent.com/skar404/485fdd43d2d94b068a6869fa0670fce9/raw/unscroll_v0.json"
+}
+
+
+enum L10n {
+    // macOS can override its app language; iOS follows the system preference.
+    static var locale: Locale {
+        AppLocalization.locale
+    }
+
+    static func dateTime(_ date: Date) -> String {
+        date.formatted(.dateTime.year().month(.abbreviated).day().hour().minute().locale(locale))
+    }
+
+    static func refreshError(_ reason: String) -> String {
+        switch reason {
+        case "strict": return AppLocalization.string("Strict mode is active")
+        case "no_url": return AppLocalization.string("Invalid update address")
+        case "no_response": return AppLocalization.string("No server response")
+        default:
+            if reason.hasPrefix("http_"), let code = Int(reason.dropFirst(5)) {
+                return AppLocalization.string("Server error (\(code))")
+            }
+            return AppLocalization.string("Network error")
+        }
+    }
 }

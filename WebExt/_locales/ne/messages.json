@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safari मा हरेक वेबसाइटको छुट्टै नियन्त्रणसहित YouTube Shorts, Reels, TikTok र ध्यान भड्काउने फिडहरू रोक्नुहोस्।"
+  },
+  "locale": {
+    "message": "ne"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram र Facebook Reels, साथै X को अन्वेषण र ट्रेन्डहरू रोक्नुहोस्। TikTok पूरै रोक्नुहोस्। कडा मोडले सेटिङ २४ घण्टाका लागि लक गर्नुहोस्।"
+  },
+  "stepSettings": {
+    "message": "उपकरणमा सेटिङ खोल्नुहोस्"
+  },
+  "stepExtensions": {
+    "message": "एपहरू → Safari → एक्स्टेन्सनहरूमा जानुहोस्"
+  },
+  "stepEnable": {
+    "message": "Slowth सक्रिय गरेर सबै वेबसाइटमा अनुमति दिनुहोस्"
+  },
+  "onboardingDone": {
+    "message": "मैले सक्रिय गरेँ"
+  },
+  "blocking": {
+    "message": "रोकथाम"
+  },
+  "strictHelp": {
+    "message": "२४ घण्टासम्म सक्रिय प्रतिबन्धहरू बन्द गर्न सकिँदैन। तपाईं थप प्रतिबन्धहरू लगाउन सक्नुहुन्छ, तर पूरै साइट ब्लक गर्ने विकल्प सक्रिय गर्न सक्नुहुन्न।"
+  },
+  "updates": {
+    "message": "अद्यावधिकहरू"
+  },
+  "updateNow": {
+    "message": "अहिले अद्यावधिक गर्नुहोस्"
+  },
+  "loading": {
+    "message": "लोड हुँदैछ…"
+  },
+  "guide": {
+    "message": "मार्गदर्शन"
+  },
+  "howToUse": {
+    "message": "Slowth कसरी प्रयोग गर्ने"
+  },
+  "modesExplained": {
+    "message": "कडा मोड र हरेक वेबसाइटका मोडबारे जानकारी"
+  },
+  "strictGuideTitle": {
+    "message": "कडा मोडले के गर्छ"
+  },
+  "strictGuide": {
+    "message": "२४ घण्टासम्म सक्रिय प्रतिबन्धहरू बन्द गर्न सकिँदैन। तपाईं थप प्रतिबन्धहरू लगाउन सक्नुहुन्छ, तर पूरै साइट ब्लक गर्ने विकल्प सक्रिय गर्न सक्नुहुन्न। पुनः सुरु गर्दा वा एप जबर्जस्ती बन्द गर्दा पनि टाइमर चलिरहन्छ।"
+  },
+  "strictAdvice": {
+    "message": "इच्छाशक्ति मात्रै पर्याप्त नभए सक्रिय गर्नुहोस्। हल्का सम्झना मात्र चाहिएको हो भने बन्द राख्नुहोस्।"
+  },
+  "howBlockingWorks": {
+    "message": "रोकथामले कसरी काम गर्छ"
+  },
+  "modeOffHelp": {
+    "message": "वेबसाइट सधैँझैँ लोड हुन्छ। Slowth ले केही गर्दैन।"
+  },
+  "siteSpecific": {
+    "message": "वेबसाइटअनुसारको रोकथाम"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels वा X को अन्वेषण र ट्रेन्डहरू रोक्छ। वेबसाइटको बाँकी भाग चलिरहन्छ।"
+  },
+  "addFeed": {
+    "message": "फिड रोकथाम थप्नुहोस्"
+  },
+  "modeFeedHelp": {
+    "message": "केही स्क्रिनपछि होमको अनन्त फिड पनि रोक्छ। Instagram मा अन्वेषण, स्टोरीहरू र थप Reels क्षेत्रसमेत समेट्छ।"
+  },
+  "modeAllHelp": {
+    "message": "वेबसाइट खोल्दा त्यसको सट्टा मैत्रीपूर्ण रोकिएको पृष्ठ देखिन्छ।"
+  },
+  "leaveFeedback": {
+    "message": "प्रतिक्रिया दिनुहोस्"
+  },
+  "showIntro": {
+    "message": "परिचय फेरि देखाउनुहोस्"
+  },
+  "rulesNever": {
+    "message": "नियमहरू: अहिलेसम्म ल्याइएको छैन"
+  },
+  "rulesNow": {
+    "message": "नियमहरू: भर्खरै"
+  },
+  "rulesRelative": {
+    "message": "नियमहरू: $1"
+  },
+  "strictUntil": {
+    "message": "कडा मोड $1 सम्म सक्रिय छ"
+  },
+  "openSafariSettings": {
+    "message": "Safari सेटिङ खोल्नुहोस्"
+  },
+  "rulesCurrent": {
+    "message": "नियमहरू: अद्यावधिक छन्"
+  },
+  "rulesFailed": {
+    "message": "नियमहरू: अद्यावधिक गर्न सकिएन। फेरि प्रयास गर्नुहोस्।"
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ले रोकेको छ"
+  },
+  "thisSite": {
+    "message": "यो वेबसाइट"
+  },
+  "blockedTitle": {
+    "message": "$1 रोकिएको छ"
+  },
+  "blockedTabTitle": {
+    "message": "रोकिएको: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth ले तपाईंलाई $1 बाट टाढा राख्दैछ। सास फेर्नुहोस्। अरू केही गर्नुहोस्।"
+  },
+  "backToSite": {
+    "message": "← $1 मा फर्कनुहोस्"
+  },
+  "why": {
+    "message": "किन"
+  },
+  "quoteTeam": {
+    "message": "Reels सयौँ मानिसको टोलीले बनाएको हो, जसको तलब $$400k थियो। Slowth एक विकासकर्ताले एक सप्ताहान्तमा बनाएको हो।"
+  },
+  "quoteBillions": {
+    "message": "तपाईंलाई स्क्रोल गराइराख्न उनीहरूले अर्बौँ खर्च गरे। तपाईंलाई रोक्न हामीले सानो स्थानीय एक्स्टेन्सन बनायौँ।"
+  },
+  "quoteBug": {
+    "message": "अनन्त फिड एउटा त्रुटि हो। यसको समाधान यहाँ छ।"
+  },
+  "best": {
+    "message": "उत्कृष्ट"
+  },
+  "gameLabel": {
+    "message": "सानो उड्ने खेल"
+  },
+  "gameHelp": {
+    "message": "पखेटा फटफटाउन ट्याप गर्नुहोस् वा स्पेस थिच्नुहोस्"
+  },
+  "back": {
+    "message": "← पछाडि"
+  },
+  "signature": {
+    "message": "Slowth · सुस्ताउनुहोस्, सास फेर्नुहोस्, सिर्जना गर्नुहोस्"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap खेल्न ट्याप गर्नुहोस् →"
+  },
+  "avoidBranches": {
+    "message": "हाँगामा नठोक्किनुहोस्"
+  },
+  "newBest": {
+    "message": "नयाँ कीर्तिमान! फेरि उड्न ट्याप गर्नुहोस्"
+  },
+  "flyAgain": {
+    "message": "फेरि उड्न ट्याप गर्नुहोस्"
+  },
+  "tapStart": {
+    "message": "सुरु गर्न ट्याप गर्नुहोस्"
+  },
+  "gameOver": {
+    "message": "खेल सकियो"
+  },
+  "feedTitle": {
+    "message": "अनन्त फिड रोकिएको छ"
+  },
+  "feedSubtitle": {
+    "message": "Slowth ले तपाईंलाई अनन्त फिडबाट टाढा राख्दैछ। सास फेर्नुहोस्। अरू केही गर्नुहोस्।"
+  },
+  "backHome": {
+    "message": "होममा फर्कनुहोस्"
+  },
+  "dismiss": {
+    "message": "बन्द गर्नुहोस्"
+  },
+  "storiesTime": {
+    "message": "तपाईंले स्टोरीहरूमा $1 खर्च गरिसक्नुभयो। सास फेर्नुहोस्।"
+  },
+  "enableSafari": {
+    "message": "Safari मा सक्रिय गर्नुहोस्"
+  },
+  "openSettings": {
+    "message": "सेटिङ खोल्नुहोस्"
+  },
+  "strictMode": {
+    "message": "कडा मोड"
+  },
+  "off": {
+    "message": "बन्द"
+  },
+  "blockShorts": {
+    "message": "Shorts रोक्नुहोस्"
+  },
+  "blockReels": {
+    "message": "Reels रोक्नुहोस्"
+  },
+  "blockFeeds": {
+    "message": "Reels र फिडहरू रोक्नुहोस्"
+  },
+  "blockFeed": {
+    "message": "Reels र फिड रोक्नुहोस्"
+  },
+  "blockExplore": {
+    "message": "अन्वेषण र ट्रेन्डहरू रोक्नुहोस्"
+  },
+  "blockSite": {
+    "message": "वेबसाइट रोक्नुहोस्"
+  },
+  "updating": {
+    "message": "अद्यावधिक हुँदैछ…"
+  },
+  "blockInfiniteFeed": {
+    "message": "अनन्त फिड ब्लक गर्नुहोस्"
+  },
+  "infiniteFeedHelp": {
+    "message": "अनन्त स्क्रोलिङ सीमित गर्छ। Instagram मा Explore र Stories पनि समावेश छन्।"
+  },
+  "settingsSaveFailed": {
+    "message": "सुरक्षित गर्न सकिएन"
+  },
+  "strictConfirmTitle": {
+    "message": "कडा मोड सक्रिय गर्ने?"
+  },
+  "enable": {
+    "message": "सक्रिय गर्नुहोस्"
+  },
+  "strictEnableConfirm": {
+    "message": "२४ घण्टासम्म सक्रिय प्रतिबन्धहरू बन्द गर्न सकिँदैन। तपाईं थप प्रतिबन्धहरू लगाउन सक्नुहुन्छ, तर पूरै साइट ब्लक गर्ने विकल्प सक्रिय गर्न सक्नुहुन्न।"
+  },
+  "cancel": {
+    "message": "रद्द गर्नुहोस्"
+  }
+}

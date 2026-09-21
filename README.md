@@ -7,7 +7,7 @@
 **Infinite scroll is a bug. This is the patch.**
 
 Block YouTube Shorts, Instagram &amp; Facebook Reels, X Explore and trends, and
-TikTok in Safari. On iOS, optional Real-time Blocking (Beta) also covers
+TikTok in Safari. On iOS, optional Real-time Blocking also covers
 Shorts, Reels, and Stories inside the YouTube and Instagram apps. Free. No
 accounts. No tracking.
 
@@ -39,30 +39,31 @@ anything; you just lose the black hole.
 - **Strict mode** — a 24-hour lock. Once on, you can't loosen your own
   settings until it expires. Survives app restart and reboot; the only
   bypass is uninstall + reinstall.
-- **Real-time app blocking (iOS Beta)** — use Family Controls and an on-device
+- **Real-time app blocking (iOS)** — use Family Controls and an on-device
   screen-recording classifier to block selected content in the native YouTube
   and Instagram apps.
 - **Remote blocking rules** — CSS selectors and redirects load from a remote
   config and are cached on-device, allowing site fixes without an app update.
   Strict mode pauses rule changes until its lock expires.
 
-### Sites and modes
+### Safari blocking switches
 
-| Site      | Modes                                                   | Default              |
-|-----------|---------------------------------------------------------|----------------------|
-| YouTube   | off / block Shorts / block site                         | block Shorts         |
-| Instagram | off / block Reels / block Reels + feeds / block site    | block Reels + feeds  |
-| Facebook  | off / block Reels / block Reels + feed / block site     | block Reels + feed   |
-| X         | off / block Explore &amp; trends / block site            | block Explore &amp; trends |
-| TikTok    | off / block site                                        | block site           |
+| Site | Independent content switches |
+|------|------------------------------|
+| YouTube | Shorts |
+| Instagram | Reels; Infinite Feed (home feed, Explore, Stories and continuous reel scrolling) |
+| Facebook | Reels; Infinite Feed (home feed) |
+| X | Explore and trends together |
+| TikTok | Whole-site blocking only |
 
-- **off** — do nothing.
-- **site-specific block** — block Shorts on YouTube, Reels on Instagram and
-  Facebook, or Explore and trends on X.
-- **site-specific block + feed** — on Instagram and Facebook, also stop the
-  endless home feed after a few screens. Instagram additionally covers
-  Explore, Stories, and more Reels surfaces.
-- **block site** — redirect the whole site to a local blocked page.
+Every site also has a **Block site** switch. Content switches default to on;
+whole-site blocking defaults to off except for TikTok. Blocking a whole site
+disables its content controls without clearing their values. Existing users'
+mode/boolean settings migrate once with their effective restrictions intact,
+even during Strict mode.
+
+Infinite Feed retains the existing scrolling limits and Stories reminder;
+it does not implicitly enable the separate Reels hiding/redirect switch.
 
 ## How it works
 
@@ -75,12 +76,23 @@ Two UI surfaces on top of one shared store:
 
 The source of truth is **App Group `UserDefaults`**, shared by the host apps,
 both Safari extensions, and the iOS real-time blocking helper extensions. The
-Safari extension uses four internal mode values: *off* → no-op, *shorts* →
-site-specific hide-CSS and URL redirects, *feed* → the same blocking plus
-Instagram/Facebook feed limits, and *all* → redirect the tab to a local
-blocked page. Blocking rules are versioned, fetched with an ETag and a
+Safari extension uses independent `shorts`, `feed`, and `all` boolean flags
+per site, stored under `siteBlockingV2`. Here `shorts` means the site's targeted
+content (Shorts, Reels, or Explore and trends), `feed` enables scrolling limits,
+and `all` redirects the whole site to a local blocked page. The native handler
+accepts per-feature writes so changing one switch preserves the others.
+Open visible tabs refresh at the existing 30-second cache interval and when
+focused; popup changes are broadcast immediately. Blocking rules are versioned, fetched with an ETag and a
 throttle, and checked on a 6h alarm; Strict mode prevents downloaded changes
 from being saved until the lock expires.
+
+### macOS app language
+
+Choose **Help → Language** at the bottom of the macOS app to switch its interface
+immediately. All 46 bundled translations are available, named in their own
+languages. The choice survives relaunch; **System default** follows macOS's
+per-app language preference. This setting does not change Safari's popup language
+or the iOS app language.
 
 ## Build
 
@@ -109,35 +121,49 @@ xcodebuild -project Unscroll.xcodeproj -scheme 'Unscroll (iOS)' \
 
 ### Realtime Shield models
 
-Private training images use the session-aware schema documented in
-[`docs/realtime-dataset.md`](docs/realtime-dataset.md). Validate the canonical
-inventory before training:
+For public Release archives, signed GitHub releases, and rebuilding with the
+separate production model asset, see [the release workflow](scripts/README.md#signed-public-releases).
+Run `scripts/release.sh check` to validate the public snapshot without publishing.
+
+ML tooling, dependency files, tests, and private data live in
+[`data-model/`](data-model/README.md). Production Swift/Core ML resources remain
+in `RealtimeShield/`; generate and build Xcode from the repository root.
+The relocation does not retrain or promote a model.
+
+Private images use the [session-aware schema](data-model/docs/realtime-dataset.md).
+Run ML commands from `data-model`, reusing the root Python environment:
 
 ```sh
-uv sync
-uv run python scripts/realtime_dataset.py validate sandbox/dataset/manifest.csv
+cd data-model
+export UV_PROJECT_ENVIRONMENT="$(cd .. && pwd)/.venv"
+uv sync --locked
+uv run --locked python -m tools.realtime_dataset validate dataset/manifest.csv
+# Local annotation UI: http://127.0.0.1:8765
+uv run --locked python -m tools.screenshot_labeler
 ```
 
-`SurfaceDetector` is the only real-time classifier and uses only the canonical dataset. Training
+`SurfaceDetector` remains the production classifier; the cascade is experimental.
+The following are optional candidate commands, not relocation steps. Training
 requires every class in both train and validation; final evaluation requires
 every class in test:
 
 ```sh
-uv run python scripts/surface_ml.py train \
-  sandbox/dataset/manifest.csv sandbox/surface-detector.pt
-uv run python scripts/surface_ml.py evaluate \
-  sandbox/dataset/manifest.csv sandbox/surface-detector.pt --split validation
-uv run python scripts/surface_ml.py evaluate \
-  sandbox/dataset/manifest.csv sandbox/surface-detector.pt --split test
-uv run python scripts/surface_ml.py export \
-  sandbox/surface-detector.pt sandbox/SurfaceDetector.mlpackage \
-  sandbox/SurfaceDetectorMetadata.json
-uv run python scripts/surface_ml.py verify-export \
-  sandbox/dataset/manifest.csv sandbox/surface-detector.pt \
-  sandbox/SurfaceDetector.mlpackage --split validation
-uv run python scripts/surface_ml.py verify-export \
-  sandbox/dataset/manifest.csv sandbox/surface-detector.pt \
-  sandbox/SurfaceDetector.mlpackage --split test
+uv run --locked python -m tools.surface_ml train \
+  dataset/manifest.csv epochs/checkpoints/surface-detector.pt
+uv run --locked python -m tools.surface_ml evaluate \
+  dataset/manifest.csv epochs/checkpoints/surface-detector.pt --split validation
+uv run --locked python -m tools.surface_ml evaluate \
+  dataset/manifest.csv epochs/checkpoints/surface-detector.pt --split test
+mkdir -p exports/surface-candidate
+uv run --locked python -m tools.surface_ml export \
+  epochs/checkpoints/surface-detector.pt exports/surface-candidate/SurfaceDetector.mlpackage \
+  exports/surface-candidate/SurfaceDetectorMetadata.json
+uv run --locked python -m tools.surface_ml verify-export \
+  dataset/manifest.csv epochs/checkpoints/surface-detector.pt \
+  exports/surface-candidate/SurfaceDetector.mlpackage --split validation
+uv run --locked python -m tools.surface_ml verify-export \
+  dataset/manifest.csv epochs/checkpoints/surface-detector.pt \
+  exports/surface-candidate/SurfaceDetector.mlpackage --split test
 ```
 
 The network has an app head (`youtube`, `instagram`, `other`) and conditional
@@ -149,11 +175,12 @@ event. Test is not used for training or calibration.
 
 After a candidate passes validation, test, and Core ML parity, copy
 `SurfaceDetector.mlpackage` and `SurfaceDetectorMetadata.json` into
-`RealtimeShield/` and regenerate the Xcode project. Until both resources are
+`RealtimeShield/` at the repository root and regenerate Xcode there only as a
+separately approved promotion. Until both resources are
 present, enabled real-time surfaces fail closed. Instagram enforcement remains
 off until the user chooses Instagram and enables Reels and/or Stories.
 
-The currently bundled FP32 model is
+The historical promotion record for the former bundled FP32 model is
 `surface-hierarchical-v10-expanded-dataset`. Its release policy keeps each
 validation-calibrated threshold at least as conservative as the corresponding
 production-proven V9 threshold. V10 passes validation, the full regression
@@ -169,8 +196,34 @@ session boundaries are reviewed. Checkpoint selection and threshold
 calibration use validation sessions only. The runtime blocks after three
 positive votes in the latest five inference frames and fails closed if the
 model cannot load or run.
-`sandbox/` is intentionally ignored because it contains private captures and
-local training artifacts.
+Private ML data lives under `data-model/dataset/`, `data-model/staging/`,
+`data-model/epochs/`, and `data-model/exports/` and is ignored by Git.
+Historical artifact paths/hashes are not rewritten by relocation; the current
+dataset may reject legacy v2 artifacts. Do not bypass provenance guards.
+
+#### Experimental independent cascade training
+
+An independent router plus YouTube/Instagram specialists can be trained in
+parallel on Apple Silicon using `uv run --locked python -m tools.cascade_ml train`
+from `data-model`. A companion
+`benchmark` command compares one, two and three concurrent MPS jobs using a
+shared resized-image cache. See [cascade training](data-model/docs/cascade-training.md) for
+commands, resource controls and the remaining promotion checks. These outputs
+are experimental candidates. Cascade V6 is the default. Debug builds also bundle
+V14/V15 and the complete calibration metadata for comparison in the hidden Debug
+menu. Release builds contain only Cascade V6, once in the Broadcast extension,
+with compact metadata preserving the exact policy, model identities and qualification.
+Training exports remain unchanged. These candidates remain unqualified; changing
+the default does not change their validation results.
+
+The Debug menu, version-tap unlock, model overrides, frame capture/Photos import,
+session recording/export/upload and test reset actions are compiled only in Debug.
+Release ignores saved Debug preferences and has no Photos usage permissions.
+Ordinary recording, blocking, unlock handling and operational logs remain available.
+TestFlight/App Store archives use Release and therefore omit these developer tools.
+Run `python3 scripts/prepare_release_resources.py --check` to verify the compact
+metadata and Release Info.plist; regenerate them intentionally without `--check`
+when their source changes.
 
 #### Device logs on macOS
 
@@ -180,6 +233,7 @@ the `com.slowth.realtimeshield` subsystem. Connect and trust the iPhone, run a
 test session, then collect the last 30 minutes on the Mac:
 
 ```sh
+# From the repository root, not data-model
 scripts/collect_realtime_shield_logs.sh 30m
 ```
 
@@ -187,7 +241,7 @@ Pass the device UDID as the second argument when more than one device is
 connected. macOS asks for an administrator password because Apple restricts
 physical-device log collection to root. The command stores a `.logarchive` plus `events.ndjson`,
 machine-readable and text error/metrics files, and `summary.txt` under
-`sandbox/realtime-shield-logs/`. The archive opens in Console.app. For a live
+`logs/realtime-shield/`. The archive opens in Console.app. For a live
 view, select the connected iPhone in Console.app and filter by subsystem
 `com.slowth.realtimeshield`.
 
@@ -201,7 +255,9 @@ RealtimeShield/ ReplayKit detector, bundled Core ML model, and diagnostics
 Extension/     macOS Safari Web Extension native handler
 ExtensionIOS/  iOS Safari Web Extension native handler
 WebExt/        Extension resources — manifest, popup, content scripts, rules
-scripts/       Session-aware dataset, training, evaluation, and export tools
+data-model/    ML tools, Python project, dataset, experiments, exports and all tests
+logs/          Private device diagnostics (gitignored)
+scripts/       App icon generation and device-log collection (see scripts/README.md)
 project.yml    XcodeGen spec — single source of truth for the project
 ```
 

@@ -4,7 +4,7 @@ set -euo pipefail
 
 duration="${1:-30m}"
 device_udid="${2:-}"
-output_root="${3:-sandbox/realtime-shield-logs}"
+output_root="${3:-logs/realtime-shield}"
 
 if [[ ! "$duration" =~ ^[1-9][0-9]*[mhd]$ ]]; then
     print -u2 "usage: $0 [duration: 30m|2h|1d] [device-udid] [output-root]"

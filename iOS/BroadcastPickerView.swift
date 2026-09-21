@@ -57,7 +57,7 @@ private final class ChromeHidingBroadcastPickerView: RPSystemBroadcastPickerView
 struct BroadcastPickerView: UIViewRepresentable {
     let preferredExtensionBundleID: String
     var showsSystemControl = true
-    var accessibilityLabel = "Start or stop screen recording"
+    var accessibilityLabel = String(localized: "Start or stop screen recording")
 
     func makeUIView(context: Context) -> UIView {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
@@ -110,9 +110,9 @@ struct RealtimeRecordingCard: View {
             }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(displayedRecording ? "Screen recording is active" : "Start screen recording")
+                Text(displayedRecording ? String(localized: "Screen recording is active") : String(localized: "Start screen recording"))
                     .font(.headline)
-                Text(displayedRecording ? "Tap anywhere here to stop." : guidance)
+                Text(displayedRecording ? String(localized: "Tap anywhere here to stop.") : guidance)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -142,8 +142,8 @@ struct RealtimeRecordingCard: View {
                 preferredExtensionBundleID: preferredExtensionBundleID,
                 showsSystemControl: false,
                 accessibilityLabel: displayedRecording
-                    ? "Stop screen recording"
-                    : "Start screen recording"
+                    ? String(localized: "Stop screen recording")
+                    : String(localized: "Start screen recording")
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -185,9 +185,9 @@ struct RealtimeRecordingPromptSheet: View {
                     .foregroundStyle(.red)
 
                 VStack(spacing: 8) {
-                    Text("Start screen recording")
+                    Text(String(localized: "Start screen recording"))
                         .font(.title2.weight(.bold))
-                    Text("Tap the recording card below. Enabled apps unlock while Slowth monitors the selected content on your device.")
+                    Text(String(localized: "Tap the recording card below. Enabled apps unlock while Slowth monitors the selected content on your device."))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
@@ -195,17 +195,17 @@ struct RealtimeRecordingPromptSheet: View {
                 RealtimeRecordingCard(
                     preferredExtensionBundleID: preferredExtensionBundleID,
                     isRecording: isRecording,
-                    guidance: "Tap anywhere here to start."
+                    guidance: String(localized: "Tap anywhere here to start.")
                 )
 
                 Spacer(minLength: 0)
             }
             .padding(20)
-            .navigationTitle("Real-time blocking")
+            .navigationTitle(String(localized: "Real-time blocking"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
+                    Button(String(localized: "Done")) { dismiss() }
                 }
             }
         }

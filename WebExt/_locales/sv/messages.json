@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blockera YouTube Shorts, Reels, TikTok och distraherande flöden i Safari med kontroll per webbplats."
+  },
+  "locale": {
+    "message": "sv"
+  },
+  "tagline": {
+    "message": "Blockera YouTube Shorts, Instagram och Facebook Reels samt Utforska och trender på X. Blockera TikTok helt. Lås dina inställningar med Strikt läge i 24 timmar."
+  },
+  "stepSettings": {
+    "message": "Öppna Inställningar på enheten"
+  },
+  "stepExtensions": {
+    "message": "Gå till Appar → Safari → Tillägg"
+  },
+  "stepEnable": {
+    "message": "Slå på Slowth och tillåt det på alla webbplatser"
+  },
+  "onboardingDone": {
+    "message": "Jag har aktiverat det"
+  },
+  "blocking": {
+    "message": "Blockering"
+  },
+  "strictHelp": {
+    "message": "Aktiva begränsningar kan inte stängas av på 24 timmar. Du kan lägga till begränsningar, men inte aktivera blockering av hela webbplatser."
+  },
+  "updates": {
+    "message": "Uppdateringar"
+  },
+  "updateNow": {
+    "message": "Uppdatera nu"
+  },
+  "loading": {
+    "message": "Läser in…"
+  },
+  "guide": {
+    "message": "Guide"
+  },
+  "howToUse": {
+    "message": "Så använder du Slowth"
+  },
+  "modesExplained": {
+    "message": "Om Strikt läge och lägen per webbplats"
+  },
+  "strictGuideTitle": {
+    "message": "Vad Strikt läge gör"
+  },
+  "strictGuide": {
+    "message": "Aktiva begränsningar kan inte stängas av på 24 timmar. Du kan lägga till begränsningar, men inte aktivera blockering av hela webbplatser. Timern fortsätter efter omstart och tvångsavslutning."
+  },
+  "strictAdvice": {
+    "message": "Slå på det när viljestyrka inte räcker. Låt det vara av om du bara vill ha en mild påminnelse."
+  },
+  "howBlockingWorks": {
+    "message": "Så fungerar blockering"
+  },
+  "modeOffHelp": {
+    "message": "Webbplatsen laddas som vanligt. Slowth gör ingenting."
+  },
+  "siteSpecific": {
+    "message": "Webbplatsspecifik blockering"
+  },
+  "modeShortsHelp": {
+    "message": "Blockerar YouTube Shorts, Instagram/Facebook Reels eller Utforska och trender på X. Resten av webbplatsen fungerar fortfarande."
+  },
+  "addFeed": {
+    "message": "Lägg till flödesblockering"
+  },
+  "modeFeedHelp": {
+    "message": "Stoppar också det oändliga startflödet efter några skärmar. På Instagram omfattas även Utforska, Stories och fler Reels-ytor."
+  },
+  "modeAllHelp": {
+    "message": "När du besöker webbplatsen visas en vänlig blockeringssida i stället."
+  },
+  "leaveFeedback": {
+    "message": "Lämna feedback"
+  },
+  "showIntro": {
+    "message": "Visa introduktionen igen"
+  },
+  "rulesNever": {
+    "message": "Regler: aldrig hämtade"
+  },
+  "rulesNow": {
+    "message": "Regler: just nu"
+  },
+  "rulesRelative": {
+    "message": "Regler: $1"
+  },
+  "strictUntil": {
+    "message": "Strikt läge aktivt till $1"
+  },
+  "openSafariSettings": {
+    "message": "Öppna Safari-inställningar"
+  },
+  "rulesCurrent": {
+    "message": "Regler: uppdaterade"
+  },
+  "rulesFailed": {
+    "message": "Regler: kunde inte uppdateras. Försök igen."
+  },
+  "blockedPageTitle": {
+    "message": "Blockerat av Slowth"
+  },
+  "thisSite": {
+    "message": "den här webbplatsen"
+  },
+  "blockedTitle": {
+    "message": "$1 är blockerad"
+  },
+  "blockedTabTitle": {
+    "message": "Blockerat: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth håller dig borta från $1. Ta ett andetag. Gör något annat."
+  },
+  "backToSite": {
+    "message": "← Tillbaka till $1"
+  },
+  "why": {
+    "message": "Varför"
+  },
+  "quoteTeam": {
+    "message": "Reels byggdes av hundratals personer med löner på $$400k. Slowth byggdes av en enda utvecklare under en helg."
+  },
+  "quoteBillions": {
+    "message": "De lade miljarder på att få dig att fortsätta rulla. Vi byggde ett litet lokalt tillägg för att få dig att sluta."
+  },
+  "quoteBug": {
+    "message": "Det oändliga flödet är en bugg. Här är lösningen."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Litet flygspel"
+  },
+  "gameHelp": {
+    "message": "Tryck eller använd mellanslag för att flaxa"
+  },
+  "back": {
+    "message": "← Tillbaka"
+  },
+  "signature": {
+    "message": "Slowth · sakta ner, andas, skapa"
+  },
+  "playHint": {
+    "message": "🦥 tryck för att spela Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Undvik grenarna"
+  },
+  "newBest": {
+    "message": "Nytt rekord! Tryck för att flyga igen"
+  },
+  "flyAgain": {
+    "message": "Tryck för att flyga igen"
+  },
+  "tapStart": {
+    "message": "Tryck för att starta"
+  },
+  "gameOver": {
+    "message": "Spelet är slut"
+  },
+  "feedTitle": {
+    "message": "Det oändliga flödet är blockerat"
+  },
+  "feedSubtitle": {
+    "message": "Slowth håller dig borta från det oändliga flödet. Ta ett andetag. Gör något annat."
+  },
+  "backHome": {
+    "message": "Tillbaka till startsidan"
+  },
+  "dismiss": {
+    "message": "Stäng"
+  },
+  "storiesTime": {
+    "message": "Du har redan lagt $1 på Stories. Ta ett andetag."
+  },
+  "enableSafari": {
+    "message": "Aktivera i Safari"
+  },
+  "openSettings": {
+    "message": "Öppna Inställningar"
+  },
+  "strictMode": {
+    "message": "Strikt läge"
+  },
+  "off": {
+    "message": "Av"
+  },
+  "blockShorts": {
+    "message": "Blockera Shorts"
+  },
+  "blockReels": {
+    "message": "Blockera Reels"
+  },
+  "blockFeeds": {
+    "message": "Blockera Reels och flöden"
+  },
+  "blockFeed": {
+    "message": "Blockera Reels och flöde"
+  },
+  "blockExplore": {
+    "message": "Blockera Utforska och trender"
+  },
+  "blockSite": {
+    "message": "Blockera webbplats"
+  },
+  "updating": {
+    "message": "Uppdaterar…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blockera oändligt flöde"
+  },
+  "infiniteFeedHelp": {
+    "message": "Begränsar oändlig rullning. På Instagram ingår även Utforska och Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Kunde inte spara"
+  },
+  "strictConfirmTitle": {
+    "message": "Aktivera strikt läge?"
+  },
+  "enable": {
+    "message": "Aktivera"
+  },
+  "strictEnableConfirm": {
+    "message": "Aktiva begränsningar kan inte stängas av på 24 timmar. Du kan lägga till begränsningar, men inte aktivera blockering av hela webbplatser."
+  },
+  "cancel": {
+    "message": "Avbryt"
+  }
+}

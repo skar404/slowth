@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "প্রতি সাইটের নিয়ন্ত্রণ দিয়ে Safari-তে YouTube Shorts, Reels, TikTok ও মনোযোগ সরিয়ে নেওয়া ফিড ব্লক করুন।"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram ও Facebook Reels এবং X-এর এক্সপ্লোর ও ট্রেন্ড ব্লক করুন। পুরো TikTok ব্লক করুন। কঠোর মোডে সেটিংস ২৪ ঘণ্টা লক করুন।"
+  },
+  "stepSettings": {
+    "message": "ডিভাইসের সেটিংস খুলুন"
+  },
+  "stepExtensions": {
+    "message": "অ্যাপ → Safari → এক্সটেনশনে যান"
+  },
+  "stepEnable": {
+    "message": "Slowth চালু করে সব ওয়েবসাইটে অনুমতি দিন"
+  },
+  "onboardingDone": {
+    "message": "চালু করেছি"
+  },
+  "blocking": {
+    "message": "ব্লক করা"
+  },
+  "strictHelp": {
+    "message": "২৪ ঘণ্টার জন্য চালু থাকা বিধিনিষেধ বন্ধ করা যাবে না। আরও বিধিনিষেধ যোগ করতে পারবেন, তবে পুরো সাইট ব্লক করা চালু করতে পারবেন না।"
+  },
+  "updates": {
+    "message": "আপডেট"
+  },
+  "updateNow": {
+    "message": "এখনই আপডেট করুন"
+  },
+  "loading": {
+    "message": "লোড হচ্ছে…"
+  },
+  "guide": {
+    "message": "নির্দেশিকা"
+  },
+  "howToUse": {
+    "message": "Slowth ব্যবহারের নিয়ম"
+  },
+  "modesExplained": {
+    "message": "কঠোর মোড ও প্রতি সাইটের মোডের ব্যাখ্যা"
+  },
+  "strictGuideTitle": {
+    "message": "কঠোর মোড যা করে"
+  },
+  "strictGuide": {
+    "message": "২৪ ঘণ্টার জন্য চালু থাকা বিধিনিষেধ বন্ধ করা যাবে না। আরও বিধিনিষেধ যোগ করতে পারবেন, তবে পুরো সাইট ব্লক করা চালু করতে পারবেন না। রিস্টার্ট বা জোর করে অ্যাপ বন্ধ করলেও টাইমার চলতে থাকে।"
+  },
+  "strictAdvice": {
+    "message": "শুধু ইচ্ছাশক্তি যথেষ্ট না হলে চালু করুন। হালকা মনে করিয়ে দেওয়া চাইলে বন্ধ রাখুন।"
+  },
+  "howBlockingWorks": {
+    "message": "ব্লক করা যেভাবে কাজ করে"
+  },
+  "modeOffHelp": {
+    "message": "সাইট স্বাভাবিকভাবে লোড হয়। Slowth কিছু করে না।"
+  },
+  "siteSpecific": {
+    "message": "সাইট অনুযায়ী ব্লক"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels বা X-এর এক্সপ্লোর ও ট্রেন্ড ব্লক করে। সাইটের বাকি অংশ কাজ করে।"
+  },
+  "addFeed": {
+    "message": "ফিড ব্লক করাও যোগ করুন"
+  },
+  "modeFeedHelp": {
+    "message": "কয়েক স্ক্রিনের পর অবিরাম হোম ফিডও থামায়। Instagram-এ এক্সপ্লোর, Stories ও Reels-এর অন্যান্য অংশও অন্তর্ভুক্ত।"
+  },
+  "modeAllHelp": {
+    "message": "সাইটের বদলে একটি সহজ ব্লক পৃষ্ঠা দেখায়।"
+  },
+  "leaveFeedback": {
+    "message": "মতামত দিন"
+  },
+  "showIntro": {
+    "message": "পরিচিতি আবার দেখান"
+  },
+  "rulesNever": {
+    "message": "নিয়ম: এখনও আনা হয়নি"
+  },
+  "rulesNow": {
+    "message": "নিয়ম: এইমাত্র"
+  },
+  "rulesRelative": {
+    "message": "নিয়ম: $1"
+  },
+  "strictUntil": {
+    "message": "কঠোর মোড $1 পর্যন্ত সক্রিয়"
+  },
+  "openSafariSettings": {
+    "message": "Safari সেটিংস খুলুন"
+  },
+  "rulesCurrent": {
+    "message": "নিয়ম: হালনাগাদ আছে"
+  },
+  "rulesFailed": {
+    "message": "নিয়ম আপডেট করা যায়নি। আবার চেষ্টা করুন।"
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ব্লক করেছে"
+  },
+  "thisSite": {
+    "message": "এই সাইট"
+  },
+  "blockedTitle": {
+    "message": "$1 ব্লক করা হয়েছে"
+  },
+  "blockedTabTitle": {
+    "message": "ব্লক করা হয়েছে: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth আপনাকে $1 থেকে দূরে রাখছে। একটু শ্বাস নিন। অন্য কিছু করুন।"
+  },
+  "backToSite": {
+    "message": "← $1-এ ফিরে যান"
+  },
+  "why": {
+    "message": "কেন"
+  },
+  "quoteTeam": {
+    "message": "Reels তৈরি করেছে বছরে ৪ লক্ষ ডলার বেতন পাওয়া শত শত মানুষের দল। Slowth তৈরি করেছে একজন ডেভেলপার এক সপ্তাহান্তে।"
+  },
+  "quoteBillions": {
+    "message": "তারা আপনাকে স্ক্রল করিয়ে রাখতে কোটি কোটি খরচ করেছে। আমরা থামতে সাহায্য করতে একটি ছোট স্থানীয় এক্সটেনশন বানিয়েছি।"
+  },
+  "quoteBug": {
+    "message": "অবিরাম ফিড একটি ত্রুটি। এই তার সমাধান।"
+  },
+  "best": {
+    "message": "সেরা"
+  },
+  "gameLabel": {
+    "message": "ছোট উড়ান খেলা"
+  },
+  "gameHelp": {
+    "message": "উড়তে ট্যাপ করুন বা স্পেস চাপুন"
+  },
+  "back": {
+    "message": "← ফিরে যান"
+  },
+  "signature": {
+    "message": "Slowth · ধীরে চলুন, শ্বাস নিন, তৈরি করুন"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap খেলতে ট্যাপ করুন →"
+  },
+  "avoidBranches": {
+    "message": "ডালে ধাক্কা খাবেন না"
+  },
+  "newBest": {
+    "message": "নতুন রেকর্ড! আবার উড়তে ট্যাপ করুন"
+  },
+  "flyAgain": {
+    "message": "আবার উড়তে ট্যাপ করুন"
+  },
+  "tapStart": {
+    "message": "শুরু করতে ট্যাপ করুন"
+  },
+  "gameOver": {
+    "message": "খেলা শেষ"
+  },
+  "feedTitle": {
+    "message": "অবিরাম ফিড ব্লক করা হয়েছে"
+  },
+  "feedSubtitle": {
+    "message": "Slowth আপনাকে অবিরাম ফিড থেকে দূরে রাখছে। একটু শ্বাস নিন। অন্য কিছু করুন।"
+  },
+  "backHome": {
+    "message": "হোমে ফিরে যান"
+  },
+  "dismiss": {
+    "message": "বন্ধ করুন"
+  },
+  "storiesTime": {
+    "message": "আপনি ইতিমধ্যেই Stories-এ $1 কাটিয়েছেন। একটু শ্বাস নিন।"
+  },
+  "enableSafari": {
+    "message": "Safari-তে চালু করুন"
+  },
+  "openSettings": {
+    "message": "সেটিংস খুলুন"
+  },
+  "strictMode": {
+    "message": "কঠোর মোড"
+  },
+  "off": {
+    "message": "বন্ধ"
+  },
+  "blockShorts": {
+    "message": "Shorts ব্লক করুন"
+  },
+  "blockReels": {
+    "message": "Reels ব্লক করুন"
+  },
+  "blockFeeds": {
+    "message": "Reels ও ফিডগুলি ব্লক করুন"
+  },
+  "blockFeed": {
+    "message": "Reels ও ফিড ব্লক করুন"
+  },
+  "blockExplore": {
+    "message": "এক্সপ্লোর ও ট্রেন্ড ব্লক করুন"
+  },
+  "blockSite": {
+    "message": "সাইট ব্লক করুন"
+  },
+  "updating": {
+    "message": "আপডেট হচ্ছে…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "bn"
+  },
+  "blockInfiniteFeed": {
+    "message": "অন্তহীন ফিড ব্লক করুন"
+  },
+  "infiniteFeedHelp": {
+    "message": "অন্তহীন ফিড স্ক্রল করা সীমিত করে। Instagram-এ Explore ও Stories-ও অন্তর্ভুক্ত।"
+  },
+  "settingsSaveFailed": {
+    "message": "সংরক্ষণ করা যায়নি"
+  },
+  "strictConfirmTitle": {
+    "message": "কঠোর মোড চালু করবেন?"
+  },
+  "enable": {
+    "message": "চালু করুন"
+  },
+  "strictEnableConfirm": {
+    "message": "২৪ ঘণ্টার জন্য চালু থাকা বিধিনিষেধ বন্ধ করা যাবে না। আরও বিধিনিষেধ যোগ করতে পারবেন, তবে পুরো সাইট ব্লক করা চালু করতে পারবেন না।"
+  },
+  "cancel": {
+    "message": "বাতিল"
+  }
+}

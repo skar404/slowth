@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "احظر ⁦YouTube Shorts⁩ و⁦Reels⁩ و⁦TikTok⁩ والفيدات اللي بتشتت الانتباه في ⁦Safari⁩، بتحكم لكل موقع."
+  },
+  "locale": {
+    "message": "ar-EG"
+  },
+  "tagline": {
+    "message": "احظر ⁦YouTube Shorts⁩ و⁦Instagram⁩ و⁦Facebook Reels⁩، والاستكشاف والتريندات على ⁦X⁩. احظر ⁦TikTok⁩ بالكامل. اقفل إعداداتك بالوضع الصارم لمدة 24 ساعة."
+  },
+  "stepSettings": {
+    "message": "افتح الإعدادات على جهازك"
+  },
+  "stepExtensions": {
+    "message": "روح للتطبيقات ← ⁦Safari⁩ ← الإضافات"
+  },
+  "stepEnable": {
+    "message": "شغّل ⁦Slowth⁩ واسمح له على كل المواقع"
+  },
+  "onboardingDone": {
+    "message": "شغّلته"
+  },
+  "blocking": {
+    "message": "الحظر"
+  },
+  "strictHelp": {
+    "message": "مش هتقدر تلغي القيود المفعّلة لمدة 24 ساعة. تقدر تضيف قيود، لكن مش هتقدر تفعّل حظر موقع بالكامل."
+  },
+  "updates": {
+    "message": "التحديثات"
+  },
+  "updateNow": {
+    "message": "حدّث دلوقتي"
+  },
+  "loading": {
+    "message": "بيحمّل…"
+  },
+  "guide": {
+    "message": "الدليل"
+  },
+  "howToUse": {
+    "message": "تستخدم ⁦Slowth⁩ إزاي"
+  },
+  "modesExplained": {
+    "message": "شرح الوضع الصارم وأوضاع المواقع"
+  },
+  "strictGuideTitle": {
+    "message": "الوضع الصارم بيعمل إيه"
+  },
+  "strictGuide": {
+    "message": "مش هتقدر تلغي القيود المفعّلة لمدة 24 ساعة. تقدر تضيف قيود، لكن مش هتقدر تفعّل حظر موقع بالكامل. المؤقت بيكمل حتى بعد إعادة التشغيل أو قفل التطبيق بالقوة."
+  },
+  "strictAdvice": {
+    "message": "شغّله لما الإرادة لوحدها متكفيش. سيبه مقفول لو عايز تذكير خفيف بس."
+  },
+  "howBlockingWorks": {
+    "message": "الحظر بيشتغل إزاي"
+  },
+  "modeOffHelp": {
+    "message": "الموقع بيتحمّل عادي. ⁦Slowth⁩ مش بيعمل حاجة."
+  },
+  "siteSpecific": {
+    "message": "حظر مخصوص لكل موقع"
+  },
+  "modeShortsHelp": {
+    "message": "بيحظر ⁦YouTube Shorts⁩ و⁦Instagram⁩/⁦Facebook Reels⁩، أو الاستكشاف والتريندات على ⁦X⁩. باقي الموقع بيفضل شغّال."
+  },
+  "addFeed": {
+    "message": "ضيف حظر الفيد"
+  },
+  "modeFeedHelp": {
+    "message": "بيوقف كمان فيد الصفحة الرئيسية اللي ملوش نهاية بعد كام شاشة. في ⁦Instagram⁩ بيشمل الاستكشاف والستوريز وأماكن ⁦Reels⁩ إضافية."
+  },
+  "modeAllHelp": {
+    "message": "لما تزور الموقع، بتظهر مكانه صفحة حظر لطيفة."
+  },
+  "leaveFeedback": {
+    "message": "سيب ملاحظات"
+  },
+  "showIntro": {
+    "message": "اعرض المقدمة تاني"
+  },
+  "rulesNever": {
+    "message": "القواعد: لسه متحمّلتش"
+  },
+  "rulesNow": {
+    "message": "القواعد: حالًا"
+  },
+  "rulesRelative": {
+    "message": "القواعد: ⁨$1⁩"
+  },
+  "strictUntil": {
+    "message": "الوضع الصارم شغّال لحد ⁨$1⁩"
+  },
+  "openSafariSettings": {
+    "message": "افتح إعدادات ⁦Safari⁩"
+  },
+  "rulesCurrent": {
+    "message": "القواعد: محدّثة"
+  },
+  "rulesFailed": {
+    "message": "القواعد: مقدرناش نحدّثها. جرّب تاني."
+  },
+  "blockedPageTitle": {
+    "message": "محظور عن طريق ⁦Slowth⁩"
+  },
+  "thisSite": {
+    "message": "الموقع ده"
+  },
+  "blockedTitle": {
+    "message": "⁨$1⁩ محظور"
+  },
+  "blockedTabTitle": {
+    "message": "محظور: ⁨$1⁩"
+  },
+  "blockedSubtitle": {
+    "message": "⁦Slowth⁩ بيساعدك تبعد عن ⁨$1⁩. خد نفس. اعمل حاجة تانية."
+  },
+  "backToSite": {
+    "message": "→ ارجع لـ⁨$1⁩"
+  },
+  "why": {
+    "message": "ليه"
+  },
+  "quoteTeam": {
+    "message": "⁦Reels⁩ عمله فريق من مئات الناس بمرتبات ⁦$$400k⁩. ⁦Slowth⁩ عمله مطور واحد في ويك إند."
+  },
+  "quoteBillions": {
+    "message": "صرفوا مليارات عشان تفضل تمرّر. إحنا عملنا إضافة محلية صغيرة عشان تساعدك توقّف."
+  },
+  "quoteBug": {
+    "message": "الفيد اللي ملوش نهاية غلطة. وده الإصلاح."
+  },
+  "best": {
+    "message": "أعلى نتيجة"
+  },
+  "gameLabel": {
+    "message": "لعبة طيران صغيرة"
+  },
+  "gameHelp": {
+    "message": "اضغط على الشاشة أو زر المسافة عشان ترفرف"
+  },
+  "back": {
+    "message": "→ رجوع"
+  },
+  "signature": {
+    "message": "⁦Slowth⁩ · هدّي، اتنفس، ابتكر"
+  },
+  "playHint": {
+    "message": "🦥 اضغط عشان تلعب ⁦Slow Flap⁩ ←"
+  },
+  "avoidBranches": {
+    "message": "متخبطش في الفروع"
+  },
+  "newBest": {
+    "message": "رقم قياسي جديد! اضغط عشان تطير تاني"
+  },
+  "flyAgain": {
+    "message": "اضغط عشان تطير تاني"
+  },
+  "tapStart": {
+    "message": "اضغط عشان تبدأ"
+  },
+  "gameOver": {
+    "message": "اللعبة خلصت"
+  },
+  "feedTitle": {
+    "message": "الفيد اللي ملوش نهاية محظور"
+  },
+  "feedSubtitle": {
+    "message": "⁦Slowth⁩ بيساعدك تبعد عن الفيد اللي ملوش نهاية. خد نفس. اعمل حاجة تانية."
+  },
+  "backHome": {
+    "message": "ارجع للرئيسية"
+  },
+  "dismiss": {
+    "message": "اقفل"
+  },
+  "storiesTime": {
+    "message": "إنت قضيت ⁨$1⁩ على الستوريز بالفعل. خد نفس."
+  },
+  "enableSafari": {
+    "message": "شغّلها في ⁦Safari⁩"
+  },
+  "openSettings": {
+    "message": "افتح الإعدادات"
+  },
+  "strictMode": {
+    "message": "الوضع الصارم"
+  },
+  "off": {
+    "message": "إيقاف"
+  },
+  "blockShorts": {
+    "message": "حظر ⁦Shorts⁩"
+  },
+  "blockReels": {
+    "message": "حظر ⁦Reels⁩"
+  },
+  "blockFeeds": {
+    "message": "حظر ⁦Reels⁩ والفيدات"
+  },
+  "blockFeed": {
+    "message": "حظر ⁦Reels⁩ والفيد"
+  },
+  "blockExplore": {
+    "message": "حظر الاستكشاف والتريندات"
+  },
+  "blockSite": {
+    "message": "حظر الموقع"
+  },
+  "updating": {
+    "message": "بيتحدّث…"
+  },
+  "blockInfiniteFeed": {
+    "message": "حظر الفيد اللانهائي"
+  },
+  "infiniteFeedHelp": {
+    "message": "بيحد من السكرول اللانهائي. على Instagram بيشمل كمان الاستكشاف والستوريز."
+  },
+  "settingsSaveFailed": {
+    "message": "مقدرناش نحفظ"
+  },
+  "strictConfirmTitle": {
+    "message": "تفعّل الوضع الصارم؟"
+  },
+  "enable": {
+    "message": "تفعيل"
+  },
+  "strictEnableConfirm": {
+    "message": "مش هتقدر تلغي القيود المفعّلة لمدة 24 ساعة. تقدر تضيف قيود، لكن مش هتقدر تفعّل حظر موقع بالكامل."
+  },
+  "cancel": {
+    "message": "إلغاء"
+  }
+}

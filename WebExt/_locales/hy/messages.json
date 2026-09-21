@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safari-ում արգելափակեք YouTube Shorts-ը, Reels-ը, TikTok-ը և շեղող ժապավենները։"
+  },
+  "locale": {
+    "message": "hy"
+  },
+  "tagline": {
+    "message": "Արգելափակեք YouTube Shorts-ը, Instagram և Facebook Reels-ը, X-ի Բացահայտումն ու թրենդները։ Ամբողջությամբ արգելափակեք TikTok-ը։ Խիստ ռեժիմով կողպեք կարգավորումները 24 ժամով։"
+  },
+  "stepSettings": {
+    "message": "Բացեք սարքի կարգավորումները"
+  },
+  "stepExtensions": {
+    "message": "Անցեք Հավելվածներ → Safari → Ընդլայնումներ"
+  },
+  "stepEnable": {
+    "message": "Միացրեք Slowth-ը և թույլատրեք այն բոլոր կայքերում"
+  },
+  "onboardingDone": {
+    "message": "Միացրել եմ"
+  },
+  "blocking": {
+    "message": "Արգելափակում"
+  },
+  "strictHelp": {
+    "message": "24 ժամվա ընթացքում միացված սահմանափակումները հնարավոր չէ անջատել։ Կարող եք ավելացնել սահմանափակումներ, բայց չեք կարող միացնել ամբողջ կայքի արգելափակումը։"
+  },
+  "updates": {
+    "message": "Թարմացումներ"
+  },
+  "updateNow": {
+    "message": "Թարմացնել հիմա"
+  },
+  "loading": {
+    "message": "Բեռնվում է…"
+  },
+  "guide": {
+    "message": "Ուղեցույց"
+  },
+  "howToUse": {
+    "message": "Ինչպես օգտագործել Slowth-ը"
+  },
+  "modesExplained": {
+    "message": "Խիստ ռեժիմի և կայքերի ռեժիմների բացատրություն"
+  },
+  "strictGuideTitle": {
+    "message": "Ինչ է անում խիստ ռեժիմը"
+  },
+  "strictGuide": {
+    "message": "24 ժամվա ընթացքում միացված սահմանափակումները հնարավոր չէ անջատել։ Կարող եք ավելացնել սահմանափակումներ, բայց չեք կարող միացնել ամբողջ կայքի արգելափակումը։ Ժամանակաչափը շարունակում է աշխատել վերագործարկումից և հարկադիր փակումից հետո։"
+  },
+  "strictAdvice": {
+    "message": "Միացրեք, երբ միայն կամքի ուժը բավարար չէ։ Թողեք անջատված, եթե պարզապես մեղմ հիշեցում է պետք։"
+  },
+  "howBlockingWorks": {
+    "message": "Ինչպես է աշխատում արգելափակումը"
+  },
+  "modeOffHelp": {
+    "message": "Կայքը բեռնվում է սովորականի պես։ Slowth-ը ոչինչ չի անում։"
+  },
+  "siteSpecific": {
+    "message": "Կայքին հատուկ արգելափակում"
+  },
+  "modeShortsHelp": {
+    "message": "Արգելափակում է YouTube Shorts-ը, Instagram/Facebook Reels-ը կամ X-ի Բացահայտումն ու թրենդները։ Կայքի մնացած մասը շարունակում է աշխատել։"
+  },
+  "addFeed": {
+    "message": "Ավելացնել ժապավենի արգելափակում"
+  },
+  "modeFeedHelp": {
+    "message": "Մի քանի էկրանից հետո կանգնեցնում է նաև գլխավոր էջի անվերջ ժապավենը։ Instagram-ում ներառում է նաև Բացահայտումը, պատմությունները և Reels-ի այլ բաժիններ։"
+  },
+  "modeAllHelp": {
+    "message": "Կայքի փոխարեն ցուցադրվում է բարեհամբույր արգելափակման էջ։"
+  },
+  "leaveFeedback": {
+    "message": "Թողնել կարծիք"
+  },
+  "showIntro": {
+    "message": "Կրկին ցուցադրել ներածությունը"
+  },
+  "rulesNever": {
+    "message": "Կանոններ. դեռ չեն ներբեռնվել"
+  },
+  "rulesNow": {
+    "message": "Կանոններ. հենց նոր"
+  },
+  "rulesRelative": {
+    "message": "Կանոններ. $1"
+  },
+  "strictUntil": {
+    "message": "Խիստ ռեժիմն ակտիվ է մինչև $1"
+  },
+  "openSafariSettings": {
+    "message": "Բացել Safari-ի կարգավորումները"
+  },
+  "rulesCurrent": {
+    "message": "Կանոններ. արդիական են"
+  },
+  "rulesFailed": {
+    "message": "Կանոններ. չհաջողվեց թարմացնել։ Կրկին փորձեք։"
+  },
+  "blockedPageTitle": {
+    "message": "Արգելափակված է Slowth-ի կողմից"
+  },
+  "thisSite": {
+    "message": "այս կայքը"
+  },
+  "blockedTitle": {
+    "message": "$1-ն արգելափակված է"
+  },
+  "blockedTabTitle": {
+    "message": "Արգելափակված է. $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth-ն օգնում է հեռու մնալ $1-ից։ Շունչ քաշեք։ Ուրիշ բան արեք։"
+  },
+  "backToSite": {
+    "message": "← Վերադառնալ $1"
+  },
+  "why": {
+    "message": "Ինչու"
+  },
+  "quoteTeam": {
+    "message": "Reels-ը ստեղծել է հարյուրավոր մարդկանց թիմ՝ $$400k աշխատավարձերով։ Slowth-ը ստեղծել է մեկ մշակող՝ մեկ շաբաթավերջում։"
+  },
+  "quoteBillions": {
+    "message": "Նրանք միլիարդներ են ծախսել, որ շարունակեք ոլորել։ Մենք փոքր տեղային ընդլայնում ենք ստեղծել, որ օգնեն ձեզ կանգ առնել։"
+  },
+  "quoteBug": {
+    "message": "Անվերջ ժապավենը սխալ է։ Ահա ուղղումը։"
+  },
+  "best": {
+    "message": "ռեկորդ"
+  },
+  "gameLabel": {
+    "message": "Թռիչքի փոքր խաղ"
+  },
+  "gameHelp": {
+    "message": "Հպեք կամ սեղմեք բացատը՝ թևերը թափահարելու համար"
+  },
+  "back": {
+    "message": "← Հետ"
+  },
+  "signature": {
+    "message": "Slowth · դանդաղեցրու, շնչիր, ստեղծիր"
+  },
+  "playHint": {
+    "message": "🦥 հպեք՝ Slow Flap խաղալու համար →"
+  },
+  "avoidBranches": {
+    "message": "Մի բախվեք ճյուղերին"
+  },
+  "newBest": {
+    "message": "Նոր ռեկորդ։ Հպեք՝ կրկին թռչելու համար"
+  },
+  "flyAgain": {
+    "message": "Հպեք՝ կրկին թռչելու համար"
+  },
+  "tapStart": {
+    "message": "Հպեք՝ սկսելու համար"
+  },
+  "gameOver": {
+    "message": "Խաղն ավարտվեց"
+  },
+  "feedTitle": {
+    "message": "Անվերջ ժապավենն արգելափակված է"
+  },
+  "feedSubtitle": {
+    "message": "Slowth-ն օգնում է հեռու մնալ անվերջ ժապավենից։ Շունչ քաշեք։ Ուրիշ բան արեք։"
+  },
+  "backHome": {
+    "message": "Վերադառնալ գլխավոր էջ"
+  },
+  "dismiss": {
+    "message": "Փակել"
+  },
+  "storiesTime": {
+    "message": "Պատմություններին արդեն ծախսել եք $1։ Շունչ քաշեք։"
+  },
+  "enableSafari": {
+    "message": "Միացնել Safari-ում"
+  },
+  "openSettings": {
+    "message": "Բացել կարգավորումները"
+  },
+  "strictMode": {
+    "message": "Խիստ ռեժիմ"
+  },
+  "off": {
+    "message": "Անջատված"
+  },
+  "blockShorts": {
+    "message": "Արգելափակել Shorts-ը"
+  },
+  "blockReels": {
+    "message": "Արգելափակել Reels-ը"
+  },
+  "blockFeeds": {
+    "message": "Արգելափակել Reels-ն ու ժապավենները"
+  },
+  "blockFeed": {
+    "message": "Արգելափակել Reels-ն ու ժապավենը"
+  },
+  "blockExplore": {
+    "message": "Արգելափակել Բացահայտումն ու թրենդները"
+  },
+  "blockSite": {
+    "message": "Արգելափակել կայքը"
+  },
+  "updating": {
+    "message": "Թարմացվում է…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Արգելափակել անվերջ լրահոսը"
+  },
+  "infiniteFeedHelp": {
+    "message": "Սահմանափակում է անվերջ ոլորումը։ Instagram-ում ներառում է նաև Explore-ը և Stories-ը։"
+  },
+  "settingsSaveFailed": {
+    "message": "Չհաջողվեց պահպանել"
+  },
+  "strictConfirmTitle": {
+    "message": "Միացնե՞լ խիստ ռեժիմը։"
+  },
+  "enable": {
+    "message": "Միացնել"
+  },
+  "strictEnableConfirm": {
+    "message": "24 ժամվա ընթացքում միացված սահմանափակումները հնարավոր չէ անջատել։ Կարող եք ավելացնել սահմանափակումներ, բայց չեք կարող միացնել ամբողջ կայքի արգելափակումը։"
+  },
+  "cancel": {
+    "message": "Չեղարկել"
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "⁦Safari⁩ وچ ہر سائٹ دے وکھرے کنٹرول نال ⁦YouTube Shorts⁩، ⁦Reels⁩، ⁦TikTok⁩ تے دھیان ونڈن والیاں فیڈاں بلاک کرو۔"
+  },
+  "locale": {
+    "message": "pa-Arab"
+  },
+  "tagline": {
+    "message": "⁦YouTube Shorts⁩، ⁦Instagram⁩ تے ⁦Facebook Reels⁩، نالے ⁦X⁩ تے کھوج تے رجحان بلاک کرو۔ ⁦TikTok⁩ پورا بلاک کرو۔ سخت موڈ نال سیٹنگاں 24 گھنٹیاں لئی لاک کرو۔"
+  },
+  "stepSettings": {
+    "message": "اپنے آلے تے سیٹنگاں کھولو"
+  },
+  "stepExtensions": {
+    "message": "ایپاں ← ⁦Safari⁩ ← توسیعاں تے جاؤ"
+  },
+  "stepEnable": {
+    "message": "⁦Slowth⁩ چالو کرو تے ساریاں ویب سائٹاں تے اجازت دیو"
+  },
+  "onboardingDone": {
+    "message": "میں چالو کر دِتا"
+  },
+  "blocking": {
+    "message": "بلاکنگ"
+  },
+  "strictHelp": {
+    "message": "24 گھنٹے تک چالو پابندیاں بند نہیں کیتیاں جا سکدیاں۔ تسیں ہور پابندیاں لا سکدے او، پر پوری سائٹ نوں بلاک کرن دا آپشن چالو نہیں کر سکدے۔"
+  },
+  "updates": {
+    "message": "اپ ڈیٹاں"
+  },
+  "updateNow": {
+    "message": "ہُن اپ ڈیٹ کرو"
+  },
+  "loading": {
+    "message": "لوڈ ہو ریا اے…"
+  },
+  "guide": {
+    "message": "رہنما"
+  },
+  "howToUse": {
+    "message": "⁦Slowth⁩ کِویں ورتنا اے"
+  },
+  "modesExplained": {
+    "message": "سخت موڈ تے ہر سائٹ دے موڈاں دی وضاحت"
+  },
+  "strictGuideTitle": {
+    "message": "سخت موڈ کی کردا اے"
+  },
+  "strictGuide": {
+    "message": "24 گھنٹے تک چالو پابندیاں بند نہیں کیتیاں جا سکدیاں۔ تسیں ہور پابندیاں لا سکدے او، پر پوری سائٹ نوں بلاک کرن دا آپشن چالو نہیں کر سکدے۔ دوبارہ شروع کرن یا ایپ نوں زبردستی بند کرن توں بعد وی ٹائمر چلدا رہندا اے۔"
+  },
+  "strictAdvice": {
+    "message": "جدوں اکو ارادہ کافی نہ ہووے تے چالو کرو۔ بس ہلکی یاددہانی چاہیدی اے تے بند رکھو۔"
+  },
+  "howBlockingWorks": {
+    "message": "بلاکنگ کِویں کم کردی اے"
+  },
+  "modeOffHelp": {
+    "message": "سائٹ عام وانگ لوڈ ہُندی اے۔ ⁦Slowth⁩ کجھ نئیں کردا۔"
+  },
+  "siteSpecific": {
+    "message": "سائٹ مطابق بلاکنگ"
+  },
+  "modeShortsHelp": {
+    "message": "⁦YouTube Shorts⁩، ⁦Instagram⁩/⁦Facebook Reels⁩، یا ⁦X⁩ تے کھوج تے رجحان بلاک کردا اے۔ باقی سائٹ کم کردی رہندی اے۔"
+  },
+  "addFeed": {
+    "message": "فیڈ بلاکنگ شامل کرو"
+  },
+  "modeFeedHelp": {
+    "message": "کجھ سکریناں توں بعد ہوم دی نہ مکّن والی فیڈ وی روک دیندا اے۔ ⁦Instagram⁩ تے کھوج، سٹوریاں تے ⁦Reels⁩ دے ہور حصے وی شامل نیں۔"
+  },
+  "modeAllHelp": {
+    "message": "سائٹ کھولن تے اوہدی جگہ دوستانہ بلاک صفحہ دِسدا اے۔"
+  },
+  "leaveFeedback": {
+    "message": "رائے دیو"
+  },
+  "showIntro": {
+    "message": "تعارف فیر وکھاؤ"
+  },
+  "rulesNever": {
+    "message": "اصول: ہجے نئیں لیندے"
+  },
+  "rulesNow": {
+    "message": "اصول: ہُنے ای"
+  },
+  "rulesRelative": {
+    "message": "اصول: ⁨$1⁩"
+  },
+  "strictUntil": {
+    "message": "سخت موڈ ⁨$1⁩ تک چالو اے"
+  },
+  "openSafariSettings": {
+    "message": "⁦Safari⁩ دیاں سیٹنگاں کھولو"
+  },
+  "rulesCurrent": {
+    "message": "اصول: تازہ نیں"
+  },
+  "rulesFailed": {
+    "message": "اصول: اپ ڈیٹ نئیں ہوئے۔ فیر کوشش کرو۔"
+  },
+  "blockedPageTitle": {
+    "message": "⁦Slowth⁩ نے بلاک کیتا اے"
+  },
+  "thisSite": {
+    "message": "ایہہ سائٹ"
+  },
+  "blockedTitle": {
+    "message": "⁨$1⁩ بلاک اے"
+  },
+  "blockedTabTitle": {
+    "message": "بلاک اے: ⁨$1⁩"
+  },
+  "blockedSubtitle": {
+    "message": "⁦Slowth⁩ تہانوں ⁨$1⁩ توں دور رکھ ریا اے۔ ساہ لوو۔ کجھ ہور کرو۔"
+  },
+  "backToSite": {
+    "message": "→ ⁨$1⁩ تے واپس جاؤ"
+  },
+  "why": {
+    "message": "کیوں"
+  },
+  "quoteTeam": {
+    "message": "⁦Reels⁩ سینکڑیاں بندیاں دی ٹیم نے بنایا جنہاں دیاں تنخواہاں ⁦$$400k⁩ سن۔ ⁦Slowth⁩ اک ڈویلپر نے اک ہفتے دی چھٹی وچ بنایا۔"
+  },
+  "quoteBillions": {
+    "message": "اوہناں تہانوں سکرول کرواندے رہن لئی ارباں خرچے۔ اسی تہانوں رُکن وچ مدد دین لئی اک نِکی مقامی توسیع بنائی۔"
+  },
+  "quoteBug": {
+    "message": "نہ مکّن والی فیڈ اک خرابی اے۔ ایہہ اوہدا حل اے۔"
+  },
+  "best": {
+    "message": "سب توں چنگا"
+  },
+  "gameLabel": {
+    "message": "نِکی اُڈّن دی کھیڈ"
+  },
+  "gameHelp": {
+    "message": "پر پھڑپھڑاؤن لئی ٹیپ کرو یا سپیس دبو"
+  },
+  "back": {
+    "message": "→ واپس"
+  },
+  "signature": {
+    "message": "⁦Slowth⁩ · ہولی ہوؤ، ساہ لوو، کجھ بناؤ"
+  },
+  "playHint": {
+    "message": "🦥 ⁦Slow Flap⁩ کھیڈن لئی ٹیپ کرو ←"
+  },
+  "avoidBranches": {
+    "message": "ٹہنیاں نال نہ وجّو"
+  },
+  "newBest": {
+    "message": "نواں ریکارڈ! فیر اُڈّن لئی ٹیپ کرو"
+  },
+  "flyAgain": {
+    "message": "فیر اُڈّن لئی ٹیپ کرو"
+  },
+  "tapStart": {
+    "message": "شروع کرن لئی ٹیپ کرو"
+  },
+  "gameOver": {
+    "message": "کھیڈ مُک گئی"
+  },
+  "feedTitle": {
+    "message": "نہ مکّن والی فیڈ بلاک اے"
+  },
+  "feedSubtitle": {
+    "message": "⁦Slowth⁩ تہانوں نہ مکّن والی فیڈ توں دور رکھ ریا اے۔ ساہ لوو۔ کجھ ہور کرو۔"
+  },
+  "backHome": {
+    "message": "ہوم تے واپس جاؤ"
+  },
+  "dismiss": {
+    "message": "بند کرو"
+  },
+  "storiesTime": {
+    "message": "تسی سٹوریاں تے پہلاں ای ⁨$1⁩ لا چُکے او۔ ساہ لوو۔"
+  },
+  "enableSafari": {
+    "message": "⁦Safari⁩ وچ چالو کرو"
+  },
+  "openSettings": {
+    "message": "سیٹنگاں کھولو"
+  },
+  "strictMode": {
+    "message": "سخت موڈ"
+  },
+  "off": {
+    "message": "بند"
+  },
+  "blockShorts": {
+    "message": "⁦Shorts⁩ بلاک کرو"
+  },
+  "blockReels": {
+    "message": "⁦Reels⁩ بلاک کرو"
+  },
+  "blockFeeds": {
+    "message": "⁦Reels⁩ تے فیڈاں بلاک کرو"
+  },
+  "blockFeed": {
+    "message": "⁦Reels⁩ تے فیڈ بلاک کرو"
+  },
+  "blockExplore": {
+    "message": "کھوج تے رجحان بلاک کرو"
+  },
+  "blockSite": {
+    "message": "سائٹ بلاک کرو"
+  },
+  "updating": {
+    "message": "اپ ڈیٹ ہو ریا اے…"
+  },
+  "blockInfiniteFeed": {
+    "message": "بے انت فیڈ بلاک کرو"
+  },
+  "infiniteFeedHelp": {
+    "message": "بے انت سکرولنگ نوں محدود کردا اے۔ Instagram اُتے Explore تے Stories وی شامل نیں۔"
+  },
+  "settingsSaveFailed": {
+    "message": "محفوظ نئیں ہو سکیا"
+  },
+  "strictConfirmTitle": {
+    "message": "سخت موڈ چالو کرنا اے؟"
+  },
+  "enable": {
+    "message": "چالو کرو"
+  },
+  "strictEnableConfirm": {
+    "message": "24 گھنٹے تک چالو پابندیاں بند نہیں کیتیاں جا سکدیاں۔ تسیں ہور پابندیاں لا سکدے او، پر پوری سائٹ نوں بلاک کرن دا آپشن چالو نہیں کر سکدے۔"
+  },
+  "cancel": {
+    "message": "منسوخ کرو"
+  }
+}

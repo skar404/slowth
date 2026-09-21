@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "SafariでYouTube Shorts、Reels、TikTok、気が散るフィードをサイトごとの設定でブロックします。"
+  },
+  "tagline": {
+    "message": "YouTube Shorts、InstagramとFacebookのReels、Xの話題を検索とトレンドをブロック。TikTokは全体をブロック。厳格モードで設定を24時間ロックできます。"
+  },
+  "stepSettings": {
+    "message": "端末の設定を開く"
+  },
+  "stepExtensions": {
+    "message": "アプリ → Safari → 拡張機能を開く"
+  },
+  "stepEnable": {
+    "message": "Slowthをオンにして、すべてのWebサイトで許可する"
+  },
+  "onboardingDone": {
+    "message": "有効にしました"
+  },
+  "blocking": {
+    "message": "ブロック"
+  },
+  "strictHelp": {
+    "message": "24時間は、有効にした制限を解除できません。制限を追加することはできますが、サイト全体のブロックを有効にすることはできません。"
+  },
+  "updates": {
+    "message": "更新"
+  },
+  "updateNow": {
+    "message": "今すぐ更新"
+  },
+  "loading": {
+    "message": "読み込み中…"
+  },
+  "guide": {
+    "message": "ガイド"
+  },
+  "howToUse": {
+    "message": "Slowthの使い方"
+  },
+  "modesExplained": {
+    "message": "厳格モードとサイト別モードの説明"
+  },
+  "strictGuideTitle": {
+    "message": "厳格モードの働き"
+  },
+  "strictGuide": {
+    "message": "24時間は、有効にした制限を解除できません。制限を追加することはできますが、サイト全体のブロックを有効にすることはできません。 再起動や強制終了後もタイマーは継続します。"
+  },
+  "strictAdvice": {
+    "message": "意志の力だけでは難しいときに有効にしてください。軽く背中を押してほしいだけなら、オフのままで大丈夫です。"
+  },
+  "howBlockingWorks": {
+    "message": "ブロックの仕組み"
+  },
+  "modeOffHelp": {
+    "message": "サイトは通常どおり表示され、Slowthは何もしません。"
+  },
+  "siteSpecific": {
+    "message": "サイトに合わせたブロック"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts、Instagram/FacebookのReels、Xの話題を検索とトレンドをブロックします。サイトのほかの部分は利用できます。"
+  },
+  "addFeed": {
+    "message": "フィードもブロック"
+  },
+  "modeFeedHelp": {
+    "message": "ホームの無限フィードも数画面分で止めます。Instagramでは発見、Stories、その他のReels表示も対象になります。"
+  },
+  "modeAllHelp": {
+    "message": "サイトの代わりに穏やかなブロックページを表示します。"
+  },
+  "leaveFeedback": {
+    "message": "フィードバックする"
+  },
+  "showIntro": {
+    "message": "紹介をもう一度見る"
+  },
+  "rulesNever": {
+    "message": "ルール：未取得"
+  },
+  "rulesNow": {
+    "message": "ルール：たった今"
+  },
+  "rulesRelative": {
+    "message": "ルール：$1"
+  },
+  "strictUntil": {
+    "message": "$1まで厳格モードが有効"
+  },
+  "openSafariSettings": {
+    "message": "Safariの設定を開く"
+  },
+  "rulesCurrent": {
+    "message": "ルール：最新"
+  },
+  "rulesFailed": {
+    "message": "ルールを更新できませんでした。もう一度お試しください。"
+  },
+  "blockedPageTitle": {
+    "message": "Slowthがブロックしました"
+  },
+  "thisSite": {
+    "message": "このサイト"
+  },
+  "blockedTitle": {
+    "message": "$1はブロックされています"
+  },
+  "blockedTabTitle": {
+    "message": "ブロック中：$1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowthが$1から離れるお手伝いをしています。ひと呼吸おいて、別のことをしましょう。"
+  },
+  "backToSite": {
+    "message": "← $1に戻る"
+  },
+  "why": {
+    "message": "その理由"
+  },
+  "quoteTeam": {
+    "message": "Reelsは年収40万ドルの数百人のチームが作りました。Slowthは1人の開発者が週末に作りました。"
+  },
+  "quoteBillions": {
+    "message": "彼らはスクロールを続けさせるために何十億も費やしました。私たちは止めるために、小さなローカル拡張機能を作りました。"
+  },
+  "quoteBug": {
+    "message": "無限フィードはバグです。これで修正しましょう。"
+  },
+  "best": {
+    "message": "ベスト"
+  },
+  "gameLabel": {
+    "message": "ミニ飛行ゲーム"
+  },
+  "gameHelp": {
+    "message": "タップまたはスペースキーで羽ばたく"
+  },
+  "back": {
+    "message": "← 戻る"
+  },
+  "signature": {
+    "message": "Slowth · ゆっくり、深呼吸、ものづくり"
+  },
+  "playHint": {
+    "message": "🦥 タップしてSlow Flapをプレイ →"
+  },
+  "avoidBranches": {
+    "message": "枝にぶつからないで"
+  },
+  "newBest": {
+    "message": "新記録！タップでもう一度"
+  },
+  "flyAgain": {
+    "message": "タップでもう一度飛ぶ"
+  },
+  "tapStart": {
+    "message": "タップして開始"
+  },
+  "gameOver": {
+    "message": "ゲームオーバー"
+  },
+  "feedTitle": {
+    "message": "無限フィードはブロックされています"
+  },
+  "feedSubtitle": {
+    "message": "Slowthが無限フィードから離れるお手伝いをしています。ひと呼吸おいて、別のことをしましょう。"
+  },
+  "backHome": {
+    "message": "ホームに戻る"
+  },
+  "dismiss": {
+    "message": "閉じる"
+  },
+  "storiesTime": {
+    "message": "Storiesにもう$1使っています。ひと呼吸おきましょう。"
+  },
+  "enableSafari": {
+    "message": "Safariで有効にする"
+  },
+  "openSettings": {
+    "message": "設定を開く"
+  },
+  "strictMode": {
+    "message": "厳格モード"
+  },
+  "off": {
+    "message": "オフ"
+  },
+  "blockShorts": {
+    "message": "Shortsをブロック"
+  },
+  "blockReels": {
+    "message": "Reelsをブロック"
+  },
+  "blockFeeds": {
+    "message": "Reelsとフィードをブロック"
+  },
+  "blockFeed": {
+    "message": "Reelsとフィードをブロック"
+  },
+  "blockExplore": {
+    "message": "話題を検索とトレンドをブロック"
+  },
+  "blockSite": {
+    "message": "サイトをブロック"
+  },
+  "updating": {
+    "message": "更新中…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "ja"
+  },
+  "blockInfiniteFeed": {
+    "message": "無限フィードをブロック"
+  },
+  "infiniteFeedHelp": {
+    "message": "無限スクロールを制限します。Instagramでは発見とストーリーズも含まれます。"
+  },
+  "settingsSaveFailed": {
+    "message": "保存できませんでした"
+  },
+  "strictConfirmTitle": {
+    "message": "厳格モードを有効にしますか？"
+  },
+  "enable": {
+    "message": "有効にする"
+  },
+  "strictEnableConfirm": {
+    "message": "24時間は、有効にした制限を解除できません。制限を追加することはできますが、サイト全体のブロックを有効にすることはできません。"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  }
+}

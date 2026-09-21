@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "احظر ⁦YouTube Shorts⁩ و⁦Reels⁩ و⁦TikTok⁩ والموجزات المشتتة في ⁦Safari⁩ مع تحكم لكل موقع."
+  },
+  "locale": {
+    "message": "ar"
+  },
+  "tagline": {
+    "message": "احظر ⁦YouTube Shorts⁩ و⁦Instagram⁩ و⁦Facebook Reels⁩، والاستكشاف والمواضيع الرائجة على ⁦X⁩. احظر ⁦TikTok⁩ بالكامل. اقفل إعداداتك بالوضع الصارم لمدة 24 ساعة."
+  },
+  "stepSettings": {
+    "message": "افتح الإعدادات على جهازك"
+  },
+  "stepExtensions": {
+    "message": "انتقل إلى التطبيقات ← ⁦Safari⁩ ← الإضافات"
+  },
+  "stepEnable": {
+    "message": "فعّل ⁦Slowth⁩ واسمح له بالعمل على جميع المواقع"
+  },
+  "onboardingDone": {
+    "message": "تم التفعيل"
+  },
+  "blocking": {
+    "message": "الحظر"
+  },
+  "strictHelp": {
+    "message": "لا يمكن إيقاف القيود المفعّلة لمدة 24 ساعة. يمكنك إضافة قيود، لكن لا يمكنك تفعيل حظر موقع بالكامل."
+  },
+  "updates": {
+    "message": "التحديثات"
+  },
+  "updateNow": {
+    "message": "التحديث الآن"
+  },
+  "loading": {
+    "message": "جارٍ التحميل…"
+  },
+  "guide": {
+    "message": "الدليل"
+  },
+  "howToUse": {
+    "message": "كيفية استخدام ⁦Slowth⁩"
+  },
+  "modesExplained": {
+    "message": "شرح الوضع الصارم وأوضاع المواقع"
+  },
+  "strictGuideTitle": {
+    "message": "ما يفعله الوضع الصارم"
+  },
+  "strictGuide": {
+    "message": "لا يمكن إيقاف القيود المفعّلة لمدة 24 ساعة. يمكنك إضافة قيود، لكن لا يمكنك تفعيل حظر موقع بالكامل. يستمر المؤقت بعد إعادة التشغيل والإغلاق القسري."
+  },
+  "strictAdvice": {
+    "message": "فعّله عندما لا تكفي قوة الإرادة وحدها. اتركه متوقفًا إذا كنت تريد مجرد تذكير لطيف."
+  },
+  "howBlockingWorks": {
+    "message": "كيفية عمل الحظر"
+  },
+  "modeOffHelp": {
+    "message": "يُحمّل الموقع كالمعتاد. لا يفعل ⁦Slowth⁩ شيئًا."
+  },
+  "siteSpecific": {
+    "message": "حظر خاص بالموقع"
+  },
+  "modeShortsHelp": {
+    "message": "يحظر ⁦YouTube Shorts⁩ و⁦Instagram⁩/⁦Facebook Reels⁩ أو الاستكشاف والمواضيع الرائجة على ⁦X⁩. تستمر بقية الموقع في العمل."
+  },
+  "addFeed": {
+    "message": "إضافة حظر الموجز"
+  },
+  "modeFeedHelp": {
+    "message": "يوقف أيضًا موجز الصفحة الرئيسية اللانهائي بعد بضع شاشات. ويشمل في ⁦Instagram⁩ الاستكشاف والقصص ومساحات ⁦Reels⁩ إضافية."
+  },
+  "modeAllHelp": {
+    "message": "تظهر صفحة حظر ودودة بدلًا من الموقع عند زيارته."
+  },
+  "leaveFeedback": {
+    "message": "ترك ملاحظات"
+  },
+  "showIntro": {
+    "message": "عرض المقدمة مجددًا"
+  },
+  "rulesNever": {
+    "message": "القواعد: لم تُجلب بعد"
+  },
+  "rulesNow": {
+    "message": "القواعد: الآن للتو"
+  },
+  "rulesRelative": {
+    "message": "القواعد: ⁨$1⁩"
+  },
+  "strictUntil": {
+    "message": "الوضع الصارم مفعّل حتى ⁨$1⁩"
+  },
+  "openSafariSettings": {
+    "message": "فتح إعدادات ⁦Safari⁩"
+  },
+  "rulesCurrent": {
+    "message": "القواعد: محدّثة"
+  },
+  "rulesFailed": {
+    "message": "القواعد: تعذّر التحديث. حاول مجددًا."
+  },
+  "blockedPageTitle": {
+    "message": "محظور بواسطة ⁦Slowth⁩"
+  },
+  "thisSite": {
+    "message": "هذا الموقع"
+  },
+  "blockedTitle": {
+    "message": "تم حظر ⁨$1⁩"
+  },
+  "blockedTabTitle": {
+    "message": "محظور: ⁨$1⁩"
+  },
+  "blockedSubtitle": {
+    "message": "يساعدك ⁦Slowth⁩ على الابتعاد عن ⁨$1⁩. خذ نفسًا. افعل شيئًا آخر."
+  },
+  "backToSite": {
+    "message": "→ العودة إلى ⁨$1⁩"
+  },
+  "why": {
+    "message": "لماذا"
+  },
+  "quoteTeam": {
+    "message": "طوّر ⁦Reels⁩ فريق من مئات الأشخاص برواتب تبلغ ⁦$$400k⁩. أما ⁦Slowth⁩ فطوّره شخص واحد خلال عطلة نهاية أسبوع."
+  },
+  "quoteBillions": {
+    "message": "أنفقوا المليارات لتواصل التمرير. صنعنا إضافة محلية صغيرة لتساعدك على التوقف."
+  },
+  "quoteBug": {
+    "message": "الموجز اللانهائي خطأ. وهذا هو الإصلاح."
+  },
+  "best": {
+    "message": "أفضل نتيجة"
+  },
+  "gameLabel": {
+    "message": "لعبة طيران صغيرة"
+  },
+  "gameHelp": {
+    "message": "اضغط على الشاشة أو مفتاح المسافة للرفرفة"
+  },
+  "back": {
+    "message": "→ رجوع"
+  },
+  "signature": {
+    "message": "⁦Slowth⁩ · تمهّل، تنفّس، ابتكر"
+  },
+  "playHint": {
+    "message": "🦥 اضغط للعب ⁦Slow Flap⁩ ←"
+  },
+  "avoidBranches": {
+    "message": "تجنّب الاصطدام بالأغصان"
+  },
+  "newBest": {
+    "message": "رقم قياسي جديد! اضغط للطيران مجددًا"
+  },
+  "flyAgain": {
+    "message": "اضغط للطيران مجددًا"
+  },
+  "tapStart": {
+    "message": "اضغط للبدء"
+  },
+  "gameOver": {
+    "message": "انتهت اللعبة"
+  },
+  "feedTitle": {
+    "message": "تم حظر الموجز اللانهائي"
+  },
+  "feedSubtitle": {
+    "message": "يساعدك ⁦Slowth⁩ على الابتعاد عن الموجز اللانهائي. خذ نفسًا. افعل شيئًا آخر."
+  },
+  "backHome": {
+    "message": "العودة للرئيسية"
+  },
+  "dismiss": {
+    "message": "إغلاق"
+  },
+  "storiesTime": {
+    "message": "لقد أمضيت ⁨$1⁩ في القصص بالفعل. خذ نفسًا."
+  },
+  "enableSafari": {
+    "message": "التفعيل في ⁦Safari⁩"
+  },
+  "openSettings": {
+    "message": "فتح الإعدادات"
+  },
+  "strictMode": {
+    "message": "الوضع الصارم"
+  },
+  "off": {
+    "message": "إيقاف"
+  },
+  "blockShorts": {
+    "message": "حظر ⁦Shorts⁩"
+  },
+  "blockReels": {
+    "message": "حظر ⁦Reels⁩"
+  },
+  "blockFeeds": {
+    "message": "حظر ⁦Reels⁩ والموجزات"
+  },
+  "blockFeed": {
+    "message": "حظر ⁦Reels⁩ والموجز"
+  },
+  "blockExplore": {
+    "message": "حظر الاستكشاف والمواضيع الرائجة"
+  },
+  "blockSite": {
+    "message": "حظر الموقع"
+  },
+  "updating": {
+    "message": "جارٍ التحديث…"
+  },
+  "blockInfiniteFeed": {
+    "message": "حظر الموجز اللانهائي"
+  },
+  "infiniteFeedHelp": {
+    "message": "يحد من التمرير اللانهائي. في Instagram يشمل أيضًا الاستكشاف والقصص."
+  },
+  "settingsSaveFailed": {
+    "message": "تعذّر الحفظ"
+  },
+  "strictConfirmTitle": {
+    "message": "هل تريد تفعيل الوضع الصارم؟"
+  },
+  "enable": {
+    "message": "تفعيل"
+  },
+  "strictEnableConfirm": {
+    "message": "لا يمكن إيقاف القيود المفعّلة لمدة 24 ساعة. يمكنك إضافة قيود، لكن لا يمكنك تفعيل حظر موقع بالكامل."
+  },
+  "cancel": {
+    "message": "إلغاء"
+  }
+}

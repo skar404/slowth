@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blocca YouTube Shorts, Reels, TikTok e i feed che distraggono in Safari, con controlli per ogni sito."
+  },
+  "locale": {
+    "message": "it"
+  },
+  "tagline": {
+    "message": "Blocca YouTube Shorts, Instagram e Facebook Reels, oltre a Esplora e tendenze su X. Blocca TikTok completamente. Blocca le impostazioni con la modalità rigorosa per 24 ore."
+  },
+  "stepSettings": {
+    "message": "Apri Impostazioni sul dispositivo"
+  },
+  "stepExtensions": {
+    "message": "Vai su App → Safari → Estensioni"
+  },
+  "stepEnable": {
+    "message": "Attiva Slowth e consenti l'accesso a tutti i siti web"
+  },
+  "onboardingDone": {
+    "message": "L'ho attivato"
+  },
+  "blocking": {
+    "message": "Blocco"
+  },
+  "strictHelp": {
+    "message": "Per 24 ore non puoi disattivare le restrizioni attive. Puoi aggiungere restrizioni, ma non attivare il blocco di interi siti."
+  },
+  "updates": {
+    "message": "Aggiornamenti"
+  },
+  "updateNow": {
+    "message": "Aggiorna ora"
+  },
+  "loading": {
+    "message": "Caricamento…"
+  },
+  "guide": {
+    "message": "Guida"
+  },
+  "howToUse": {
+    "message": "Come usare Slowth"
+  },
+  "modesExplained": {
+    "message": "Guida alla modalità rigorosa e alle modalità per sito"
+  },
+  "strictGuideTitle": {
+    "message": "Cosa fa la modalità rigorosa"
+  },
+  "strictGuide": {
+    "message": "Per 24 ore non puoi disattivare le restrizioni attive. Puoi aggiungere restrizioni, ma non attivare il blocco di interi siti. Il timer continua dopo un riavvio o una chiusura forzata."
+  },
+  "strictAdvice": {
+    "message": "Attivala quando la sola forza di volontà non basta. Lasciala disattivata se vuoi solo un piccolo incoraggiamento."
+  },
+  "howBlockingWorks": {
+    "message": "Come funziona il blocco"
+  },
+  "modeOffHelp": {
+    "message": "Il sito si carica normalmente. Slowth non fa nulla."
+  },
+  "siteSpecific": {
+    "message": "Blocco specifico per sito"
+  },
+  "modeShortsHelp": {
+    "message": "Blocca YouTube Shorts, Instagram/Facebook Reels o Esplora e tendenze su X. Il resto del sito continua a funzionare."
+  },
+  "addFeed": {
+    "message": "Aggiungi il blocco del feed"
+  },
+  "modeFeedHelp": {
+    "message": "Ferma anche il feed infinito della home dopo poche schermate. Su Instagram include anche Esplora, storie e altre sezioni Reels."
+  },
+  "modeAllHelp": {
+    "message": "Al posto del sito viene mostrata una pagina di blocco amichevole."
+  },
+  "leaveFeedback": {
+    "message": "Lascia un feedback"
+  },
+  "showIntro": {
+    "message": "Mostra di nuovo l'introduzione"
+  },
+  "rulesNever": {
+    "message": "Regole: mai scaricate"
+  },
+  "rulesNow": {
+    "message": "Regole: appena aggiornate"
+  },
+  "rulesRelative": {
+    "message": "Regole: $1"
+  },
+  "strictUntil": {
+    "message": "Modalità rigorosa attiva fino a $1"
+  },
+  "openSafariSettings": {
+    "message": "Apri Impostazioni di Safari"
+  },
+  "rulesCurrent": {
+    "message": "Regole: aggiornate"
+  },
+  "rulesFailed": {
+    "message": "Regole: aggiornamento non riuscito. Riprova."
+  },
+  "blockedPageTitle": {
+    "message": "Bloccato da Slowth"
+  },
+  "thisSite": {
+    "message": "questo sito"
+  },
+  "blockedTitle": {
+    "message": "$1 è bloccato"
+  },
+  "blockedTabTitle": {
+    "message": "Bloccato: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth ti tiene lontano da $1. Fai un respiro. Fai qualcos'altro."
+  },
+  "backToSite": {
+    "message": "← Torna a $1"
+  },
+  "why": {
+    "message": "Perché"
+  },
+  "quoteTeam": {
+    "message": "Reels è stato creato da un team di centinaia di persone con stipendi da $$400k. Slowth è stato creato da un solo sviluppatore in un fine settimana."
+  },
+  "quoteBillions": {
+    "message": "Hanno speso miliardi per farti continuare a scorrere. Noi abbiamo creato una piccola estensione locale per aiutarti a smettere."
+  },
+  "quoteBug": {
+    "message": "Il feed infinito è un bug. Ecco la soluzione."
+  },
+  "best": {
+    "message": "record"
+  },
+  "gameLabel": {
+    "message": "Minigioco di volo"
+  },
+  "gameHelp": {
+    "message": "Tocca o premi spazio per battere le ali"
+  },
+  "back": {
+    "message": "← Indietro"
+  },
+  "signature": {
+    "message": "Slowth · rallenta, respira, crea"
+  },
+  "playHint": {
+    "message": "🦥 tocca per giocare a Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Non colpire i rami"
+  },
+  "newBest": {
+    "message": "Nuovo record! Tocca per volare ancora"
+  },
+  "flyAgain": {
+    "message": "Tocca per volare ancora"
+  },
+  "tapStart": {
+    "message": "Tocca per iniziare"
+  },
+  "gameOver": {
+    "message": "Partita finita"
+  },
+  "feedTitle": {
+    "message": "Il feed infinito è bloccato"
+  },
+  "feedSubtitle": {
+    "message": "Slowth ti tiene lontano dal feed infinito. Fai un respiro. Fai qualcos'altro."
+  },
+  "backHome": {
+    "message": "Torna alla home"
+  },
+  "dismiss": {
+    "message": "Chiudi"
+  },
+  "storiesTime": {
+    "message": "Hai già speso $1 nelle storie. Fai un respiro."
+  },
+  "enableSafari": {
+    "message": "Attiva in Safari"
+  },
+  "openSettings": {
+    "message": "Apri Impostazioni"
+  },
+  "strictMode": {
+    "message": "Modalità rigorosa"
+  },
+  "off": {
+    "message": "Disattivato"
+  },
+  "blockShorts": {
+    "message": "Blocca Shorts"
+  },
+  "blockReels": {
+    "message": "Blocca Reels"
+  },
+  "blockFeeds": {
+    "message": "Blocca Reels e feed"
+  },
+  "blockFeed": {
+    "message": "Blocca Reels e feed"
+  },
+  "blockExplore": {
+    "message": "Blocca Esplora e tendenze"
+  },
+  "blockSite": {
+    "message": "Blocca il sito"
+  },
+  "updating": {
+    "message": "Aggiornamento…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blocca il feed infinito"
+  },
+  "infiniteFeedHelp": {
+    "message": "Limita lo scorrimento infinito. Su Instagram include anche Esplora e le Storie."
+  },
+  "settingsSaveFailed": {
+    "message": "Impossibile salvare"
+  },
+  "strictConfirmTitle": {
+    "message": "Attivare la modalità rigorosa?"
+  },
+  "enable": {
+    "message": "Attiva"
+  },
+  "strictEnableConfirm": {
+    "message": "Per 24 ore non puoi disattivare le restrizioni attive. Puoi aggiungere restrizioni, ma non attivare il blocco di interi siti."
+  },
+  "cancel": {
+    "message": "Annulla"
+  }
+}

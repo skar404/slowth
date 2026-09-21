@@ -5,7 +5,15 @@ enum DebugMode {
     static let requiredVersionTapCount = 15
 
     static var isEnabled: Bool {
-        AppGroup.defaults.bool(forKey: storageKey)
+        resolve(stored: AppGroup.defaults.bool(forKey: storageKey))
+    }
+
+    static func resolve(stored: Bool) -> Bool {
+        #if DEBUG
+        return stored
+        #else
+        return false
+        #endif
     }
 }
 

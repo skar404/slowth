@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "ప్రతి సైట్ నియంత్రణలతో Safariలో YouTube Shorts, Reels, TikTok, దృష్టి మరల్చే ఫీడ్‌లను బ్లాక్ చేయండి."
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram, Facebook Reels, Xలో ఎక్స్‌ప్లోర్, ట్రెండ్‌లను బ్లాక్ చేయండి. TikTok‌ను పూర్తిగా బ్లాక్ చేయండి. కఠిన మోడ్‌తో సెట్టింగ్‌లను 24 గంటలు లాక్ చేయండి."
+  },
+  "stepSettings": {
+    "message": "మీ పరికరంలో సెట్టింగ్‌లను తెరవండి"
+  },
+  "stepExtensions": {
+    "message": "యాప్‌లు → Safari → ఎక్స్‌టెన్షన్‌లకు వెళ్లండి"
+  },
+  "stepEnable": {
+    "message": "Slowth‌ను ఆన్ చేసి అన్ని వెబ్‌సైట్‌లలో అనుమతించండి"
+  },
+  "onboardingDone": {
+    "message": "ఆన్ చేశాను"
+  },
+  "blocking": {
+    "message": "బ్లాకింగ్"
+  },
+  "strictHelp": {
+    "message": "24 గంటల పాటు అమలులో ఉన్న పరిమితులను ఆఫ్ చేయలేరు. మరిన్ని పరిమితులను జోడించవచ్చు, కానీ మొత్తం సైట్‌ను బ్లాక్ చేసే ఎంపికను ఆన్ చేయలేరు."
+  },
+  "updates": {
+    "message": "అప్‌డేట్‌లు"
+  },
+  "updateNow": {
+    "message": "ఇప్పుడే అప్‌డేట్ చేయి"
+  },
+  "loading": {
+    "message": "లోడ్ అవుతోంది…"
+  },
+  "guide": {
+    "message": "మార్గదర్శిని"
+  },
+  "howToUse": {
+    "message": "Slowth‌ను ఎలా వాడాలి"
+  },
+  "modesExplained": {
+    "message": "కఠిన మోడ్, ప్రతి సైట్ మోడ్‌ల వివరణ"
+  },
+  "strictGuideTitle": {
+    "message": "కఠిన మోడ్ ఏం చేస్తుంది"
+  },
+  "strictGuide": {
+    "message": "24 గంటల పాటు అమలులో ఉన్న పరిమితులను ఆఫ్ చేయలేరు. మరిన్ని పరిమితులను జోడించవచ్చు, కానీ మొత్తం సైట్‌ను బ్లాక్ చేసే ఎంపికను ఆన్ చేయలేరు. పునఃప్రారంభించినా లేదా యాప్‌ను బలవంతంగా మూసివేసినా టైమర్ కొనసాగుతుంది."
+  },
+  "strictAdvice": {
+    "message": "సంకల్పం ఒక్కటే సరిపోనప్పుడు ఆన్ చేయండి. చిన్న గుర్తుచూపు మాత్రమే కావాలంటే ఆఫ్‌లో ఉంచండి."
+  },
+  "howBlockingWorks": {
+    "message": "బ్లాకింగ్ ఎలా పనిచేస్తుంది"
+  },
+  "modeOffHelp": {
+    "message": "సైట్ మామూలుగా లోడ్ అవుతుంది. Slowth ఏమీ చేయదు."
+  },
+  "siteSpecific": {
+    "message": "సైట్‌కు అనుగుణంగా బ్లాక్"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels లేదా Xలో ఎక్స్‌ప్లోర్, ట్రెండ్‌లను బ్లాక్ చేస్తుంది. సైట్‌లో మిగతా భాగం పనిచేస్తుంది."
+  },
+  "addFeed": {
+    "message": "ఫీడ్ బ్లాకింగ్‌నూ జోడించు"
+  },
+  "modeFeedHelp": {
+    "message": "కొన్ని స్క్రీన్‌ల తర్వాత అంతులేని హోమ్ ఫీడ్‌నూ ఆపుతుంది. Instagramలో ఎక్స్‌ప్లోర్, Stories, ఇతర Reels భాగాలు కూడా ఉంటాయి."
+  },
+  "modeAllHelp": {
+    "message": "సైట్ బదులుగా ఒక సరళమైన బ్లాక్ పేజీ కనిపిస్తుంది."
+  },
+  "leaveFeedback": {
+    "message": "అభిప్రాయం ఇవ్వు"
+  },
+  "showIntro": {
+    "message": "పరిచయాన్ని మళ్లీ చూపించు"
+  },
+  "rulesNever": {
+    "message": "నియమాలు: ఇంకా పొందలేదు"
+  },
+  "rulesNow": {
+    "message": "నియమాలు: ఇప్పుడే"
+  },
+  "rulesRelative": {
+    "message": "నియమాలు: $1"
+  },
+  "strictUntil": {
+    "message": "కఠిన మోడ్ $1 వరకు అమల్లో ఉంటుంది"
+  },
+  "openSafariSettings": {
+    "message": "Safari సెట్టింగ్‌లను తెరువు"
+  },
+  "rulesCurrent": {
+    "message": "నియమాలు: తాజాగా ఉన్నాయి"
+  },
+  "rulesFailed": {
+    "message": "నియమాలను అప్‌డేట్ చేయలేకపోయాం. మళ్లీ ప్రయత్నించండి."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth బ్లాక్ చేసింది"
+  },
+  "thisSite": {
+    "message": "ఈ సైట్"
+  },
+  "blockedTitle": {
+    "message": "$1 బ్లాక్ చేయబడింది"
+  },
+  "blockedTabTitle": {
+    "message": "బ్లాక్ చేయబడింది: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth మిమ్మల్ని $1 నుంచి దూరంగా ఉంచుతోంది. ఊపిరి తీసుకోండి. వేరే పని చేయండి."
+  },
+  "backToSite": {
+    "message": "← $1కు తిరిగి వెళ్లు"
+  },
+  "why": {
+    "message": "ఎందుకు"
+  },
+  "quoteTeam": {
+    "message": "ఏటా 400,000 డాలర్ల జీతం పొందే వందలాది మంది Reels‌ను రూపొందించారు. ఒక డెవలపర్ ఒక వారాంతంలో Slowth‌ను రూపొందించారు."
+  },
+  "quoteBillions": {
+    "message": "మీరు స్క్రోల్ చేస్తూనే ఉండాలని వారు బిలియన్లు ఖర్చు చేశారు. మీరు ఆగడానికి సహాయపడే చిన్న స్థానిక ఎక్స్‌టెన్షన్‌ను మేం రూపొందించాం."
+  },
+  "quoteBug": {
+    "message": "అంతులేని ఫీడ్ ఒక లోపం. ఇదిగో పరిష్కారం."
+  },
+  "best": {
+    "message": "అత్యుత్తమం"
+  },
+  "gameLabel": {
+    "message": "చిన్న ఎగిరే ఆట"
+  },
+  "gameHelp": {
+    "message": "ఎగరడానికి తాకండి లేదా స్పేస్ నొక్కండి"
+  },
+  "back": {
+    "message": "← వెనక్కి"
+  },
+  "signature": {
+    "message": "Slowth · నెమ్మదించండి, ఊపిరి తీసుకోండి, సృష్టించండి"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap ఆడటానికి తాకండి →"
+  },
+  "avoidBranches": {
+    "message": "కొమ్మలకు తగలవద్దు"
+  },
+  "newBest": {
+    "message": "కొత్త రికార్డు! మళ్లీ ఎగరడానికి తాకండి"
+  },
+  "flyAgain": {
+    "message": "మళ్లీ ఎగరడానికి తాకండి"
+  },
+  "tapStart": {
+    "message": "ప్రారంభించడానికి తాకండి"
+  },
+  "gameOver": {
+    "message": "ఆట ముగిసింది"
+  },
+  "feedTitle": {
+    "message": "అంతులేని ఫీడ్ బ్లాక్ చేయబడింది"
+  },
+  "feedSubtitle": {
+    "message": "Slowth మిమ్మల్ని అంతులేని ఫీడ్ నుంచి దూరంగా ఉంచుతోంది. ఊపిరి తీసుకోండి. వేరే పని చేయండి."
+  },
+  "backHome": {
+    "message": "హోమ్‌కు తిరిగి వెళ్లు"
+  },
+  "dismiss": {
+    "message": "మూసివేయి"
+  },
+  "storiesTime": {
+    "message": "మీరు ఇప్పటికే Storiesలో $1 గడిపారు. ఊపిరి తీసుకోండి."
+  },
+  "enableSafari": {
+    "message": "Safariలో ఆన్ చేయి"
+  },
+  "openSettings": {
+    "message": "సెట్టింగ్‌లను తెరువు"
+  },
+  "strictMode": {
+    "message": "కఠిన మోడ్"
+  },
+  "off": {
+    "message": "ఆఫ్"
+  },
+  "blockShorts": {
+    "message": "Shorts‌ను బ్లాక్ చేయి"
+  },
+  "blockReels": {
+    "message": "Reels‌ను బ్లాక్ చేయి"
+  },
+  "blockFeeds": {
+    "message": "Reels, ఫీడ్‌లను బ్లాక్ చేయి"
+  },
+  "blockFeed": {
+    "message": "Reels, ఫీడ్‌ను బ్లాక్ చేయి"
+  },
+  "blockExplore": {
+    "message": "ఎక్స్‌ప్లోర్, ట్రెండ్‌లను బ్లాక్ చేయి"
+  },
+  "blockSite": {
+    "message": "సైట్‌ను బ్లాక్ చేయి"
+  },
+  "updating": {
+    "message": "అప్‌డేట్ అవుతోంది…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "te"
+  },
+  "blockInfiniteFeed": {
+    "message": "అంతులేని ఫీడ్‌ను బ్లాక్ చేయండి"
+  },
+  "infiniteFeedHelp": {
+    "message": "ఫీడ్ స్క్రోలింగ్‌ను పరిమితం చేస్తుంది. Instagramలో Explore మరియు Stories కూడా ఉంటాయి."
+  },
+  "settingsSaveFailed": {
+    "message": "సేవ్ చేయలేకపోయాం"
+  },
+  "strictConfirmTitle": {
+    "message": "కఠిన మోడ్‌ను ప్రారంభించాలా?"
+  },
+  "enable": {
+    "message": "ప్రారంభించు"
+  },
+  "strictEnableConfirm": {
+    "message": "24 గంటల పాటు అమలులో ఉన్న పరిమితులను ఆఫ్ చేయలేరు. మరిన్ని పరిమితులను జోడించవచ్చు, కానీ మొత్తం సైట్‌ను బ్లాక్ చేసే ఎంపికను ఆన్ చేయలేరు."
+  },
+  "cancel": {
+    "message": "రద్దు చేయి"
+  }
+}

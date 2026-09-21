@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "Chặn YouTube Shorts, Reels, TikTok và các bảng tin gây xao nhãng trong Safari với tùy chỉnh cho từng trang."
+  },
+  "tagline": {
+    "message": "Chặn YouTube Shorts, Instagram và Facebook Reels, cùng Khám phá và xu hướng trên X. Chặn toàn bộ TikTok. Khóa cài đặt bằng chế độ nghiêm ngặt trong 24 giờ."
+  },
+  "stepSettings": {
+    "message": "Mở Cài đặt trên thiết bị"
+  },
+  "stepExtensions": {
+    "message": "Vào Ứng dụng → Safari → Tiện ích"
+  },
+  "stepEnable": {
+    "message": "Bật Slowth và cho phép trên mọi trang web"
+  },
+  "onboardingDone": {
+    "message": "Tôi đã bật"
+  },
+  "blocking": {
+    "message": "Chặn"
+  },
+  "strictHelp": {
+    "message": "Trong 24 giờ, bạn không thể tắt các hạn chế đã bật. Bạn có thể thêm hạn chế, nhưng không thể bật tính năng chặn toàn bộ trang web."
+  },
+  "updates": {
+    "message": "Cập nhật"
+  },
+  "updateNow": {
+    "message": "Cập nhật ngay"
+  },
+  "loading": {
+    "message": "Đang tải…"
+  },
+  "guide": {
+    "message": "Hướng dẫn"
+  },
+  "howToUse": {
+    "message": "Cách dùng Slowth"
+  },
+  "modesExplained": {
+    "message": "Giải thích chế độ nghiêm ngặt và chế độ từng trang"
+  },
+  "strictGuideTitle": {
+    "message": "Chế độ nghiêm ngặt làm gì"
+  },
+  "strictGuide": {
+    "message": "Trong 24 giờ, bạn không thể tắt các hạn chế đã bật. Bạn có thể thêm hạn chế, nhưng không thể bật tính năng chặn toàn bộ trang web. Bộ đếm giờ vẫn tiếp tục sau khi khởi động lại hoặc buộc đóng ứng dụng."
+  },
+  "strictAdvice": {
+    "message": "Bật khi ý chí thôi chưa đủ. Để tắt nếu bạn chỉ muốn một lời nhắc nhẹ nhàng."
+  },
+  "howBlockingWorks": {
+    "message": "Cách chặn hoạt động"
+  },
+  "modeOffHelp": {
+    "message": "Trang tải như bình thường. Slowth không làm gì."
+  },
+  "siteSpecific": {
+    "message": "Chặn theo từng trang"
+  },
+  "modeShortsHelp": {
+    "message": "Chặn YouTube Shorts, Instagram/Facebook Reels hoặc Khám phá và xu hướng trên X. Phần còn lại của trang vẫn hoạt động."
+  },
+  "addFeed": {
+    "message": "Chặn thêm bảng tin"
+  },
+  "modeFeedHelp": {
+    "message": "Dừng bảng tin trang chủ vô tận sau vài màn hình. Với Instagram, còn bao gồm Khám phá, Stories và các khu vực Reels khác."
+  },
+  "modeAllHelp": {
+    "message": "Một trang chặn thân thiện sẽ hiện ra thay cho trang web."
+  },
+  "leaveFeedback": {
+    "message": "Để lại phản hồi"
+  },
+  "showIntro": {
+    "message": "Xem lại phần giới thiệu"
+  },
+  "rulesNever": {
+    "message": "Quy tắc: chưa từng tải"
+  },
+  "rulesNow": {
+    "message": "Quy tắc: vừa xong"
+  },
+  "rulesRelative": {
+    "message": "Quy tắc: $1"
+  },
+  "strictUntil": {
+    "message": "Chế độ nghiêm ngặt hoạt động đến $1"
+  },
+  "openSafariSettings": {
+    "message": "Mở Cài đặt Safari"
+  },
+  "rulesCurrent": {
+    "message": "Quy tắc: mới nhất"
+  },
+  "rulesFailed": {
+    "message": "Không thể cập nhật quy tắc. Vui lòng thử lại."
+  },
+  "blockedPageTitle": {
+    "message": "Bị chặn bởi Slowth"
+  },
+  "thisSite": {
+    "message": "trang này"
+  },
+  "blockedTitle": {
+    "message": "$1 đã bị chặn"
+  },
+  "blockedTabTitle": {
+    "message": "Đã chặn: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth giúp bạn tránh xa $1. Hít thở một chút. Làm việc khác nhé."
+  },
+  "backToSite": {
+    "message": "← Quay lại $1"
+  },
+  "why": {
+    "message": "Tại sao"
+  },
+  "quoteTeam": {
+    "message": "Reels được xây dựng bởi hàng trăm người nhận lương 400.000 đô la mỗi năm. Slowth được một nhà phát triển làm trong một cuối tuần."
+  },
+  "quoteBillions": {
+    "message": "Họ chi hàng tỷ để bạn tiếp tục cuộn. Chúng tôi tạo một tiện ích nhỏ chạy cục bộ để giúp bạn dừng lại."
+  },
+  "quoteBug": {
+    "message": "Bảng tin vô tận là một lỗi. Đây là cách sửa."
+  },
+  "best": {
+    "message": "kỷ lục"
+  },
+  "gameLabel": {
+    "message": "Trò chơi bay nhỏ"
+  },
+  "gameHelp": {
+    "message": "Chạm hoặc nhấn phím cách để bay"
+  },
+  "back": {
+    "message": "← Quay lại"
+  },
+  "signature": {
+    "message": "Slowth · chậm lại, hít thở, sáng tạo"
+  },
+  "playHint": {
+    "message": "🦥 chạm để chơi Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Đừng va vào cành cây"
+  },
+  "newBest": {
+    "message": "Kỷ lục mới! Chạm để bay lại"
+  },
+  "flyAgain": {
+    "message": "Chạm để bay lại"
+  },
+  "tapStart": {
+    "message": "Chạm để bắt đầu"
+  },
+  "gameOver": {
+    "message": "Kết thúc trò chơi"
+  },
+  "feedTitle": {
+    "message": "Bảng tin vô tận đã bị chặn"
+  },
+  "feedSubtitle": {
+    "message": "Slowth giúp bạn tránh xa bảng tin vô tận. Hít thở một chút. Làm việc khác nhé."
+  },
+  "backHome": {
+    "message": "Về trang chủ"
+  },
+  "dismiss": {
+    "message": "Đóng"
+  },
+  "storiesTime": {
+    "message": "Bạn đã dành $1 cho Stories. Hít thở một chút nhé."
+  },
+  "enableSafari": {
+    "message": "Bật trong Safari"
+  },
+  "openSettings": {
+    "message": "Mở Cài đặt"
+  },
+  "strictMode": {
+    "message": "Chế độ nghiêm ngặt"
+  },
+  "off": {
+    "message": "Tắt"
+  },
+  "blockShorts": {
+    "message": "Chặn Shorts"
+  },
+  "blockReels": {
+    "message": "Chặn Reels"
+  },
+  "blockFeeds": {
+    "message": "Chặn Reels và các bảng tin"
+  },
+  "blockFeed": {
+    "message": "Chặn Reels và bảng tin"
+  },
+  "blockExplore": {
+    "message": "Chặn Khám phá và xu hướng"
+  },
+  "blockSite": {
+    "message": "Chặn trang web"
+  },
+  "updating": {
+    "message": "Đang cập nhật…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "vi"
+  },
+  "blockInfiniteFeed": {
+    "message": "Chặn bảng tin vô tận"
+  },
+  "infiniteFeedHelp": {
+    "message": "Giới hạn cuộn bảng tin. Trên Instagram, bao gồm cả Khám phá và Tin."
+  },
+  "settingsSaveFailed": {
+    "message": "Không thể lưu"
+  },
+  "strictConfirmTitle": {
+    "message": "Bật chế độ nghiêm ngặt?"
+  },
+  "enable": {
+    "message": "Bật"
+  },
+  "strictEnableConfirm": {
+    "message": "Trong 24 giờ, bạn không thể tắt các hạn chế đã bật. Bạn có thể thêm hạn chế, nhưng không thể bật tính năng chặn toàn bộ trang web."
+  },
+  "cancel": {
+    "message": "Hủy"
+  }
+}

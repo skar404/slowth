@@ -1,3 +1,4 @@
+#if DEBUG
 import CoreGraphics
 import Foundation
 import ImageIO
@@ -163,3 +164,4 @@ enum DebugCaptureWriter {
         return formatter
     }()
 }
+#endif

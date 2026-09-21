@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokir YouTube Shorts, Reels, TikTok, dan feed pengalih perhatian di Safari dengan kontrol per situs."
+  },
+  "locale": {
+    "message": "id"
+  },
+  "tagline": {
+    "message": "Blokir YouTube Shorts, Instagram dan Facebook Reels, serta Jelajahi dan tren di X. Blokir TikTok sepenuhnya. Kunci pengaturan dengan mode ketat selama 24 jam."
+  },
+  "stepSettings": {
+    "message": "Buka Pengaturan di perangkat Anda"
+  },
+  "stepExtensions": {
+    "message": "Buka App → Safari → Ekstensi"
+  },
+  "stepEnable": {
+    "message": "Aktifkan Slowth dan izinkan di semua situs web"
+  },
+  "onboardingDone": {
+    "message": "Sudah saya aktifkan"
+  },
+  "blocking": {
+    "message": "Pemblokiran"
+  },
+  "strictHelp": {
+    "message": "Selama 24 jam, pembatasan yang aktif tidak dapat dinonaktifkan. Anda dapat menambah pembatasan, tetapi tidak dapat mengaktifkan pemblokiran seluruh situs."
+  },
+  "updates": {
+    "message": "Pembaruan"
+  },
+  "updateNow": {
+    "message": "Perbarui sekarang"
+  },
+  "loading": {
+    "message": "Memuat…"
+  },
+  "guide": {
+    "message": "Panduan"
+  },
+  "howToUse": {
+    "message": "Cara menggunakan Slowth"
+  },
+  "modesExplained": {
+    "message": "Penjelasan mode ketat dan mode per situs"
+  },
+  "strictGuideTitle": {
+    "message": "Fungsi mode ketat"
+  },
+  "strictGuide": {
+    "message": "Selama 24 jam, pembatasan yang aktif tidak dapat dinonaktifkan. Anda dapat menambah pembatasan, tetapi tidak dapat mengaktifkan pemblokiran seluruh situs. Pengatur waktu tetap berjalan setelah perangkat dimulai ulang atau aplikasi ditutup paksa."
+  },
+  "strictAdvice": {
+    "message": "Aktifkan saat tekad saja tidak cukup. Biarkan mati jika hanya ingin pengingat ringan."
+  },
+  "howBlockingWorks": {
+    "message": "Cara kerja pemblokiran"
+  },
+  "modeOffHelp": {
+    "message": "Situs dimuat seperti biasa. Slowth tidak melakukan apa pun."
+  },
+  "siteSpecific": {
+    "message": "Blokir khusus situs"
+  },
+  "modeShortsHelp": {
+    "message": "Memblokir YouTube Shorts, Instagram/Facebook Reels, atau Jelajahi dan tren di X. Bagian situs lainnya tetap berfungsi."
+  },
+  "addFeed": {
+    "message": "Tambahkan pemblokiran feed"
+  },
+  "modeFeedHelp": {
+    "message": "Juga menghentikan feed beranda tanpa akhir setelah beberapa layar. Di Instagram juga mencakup Jelajahi, Cerita, dan lebih banyak area Reels."
+  },
+  "modeAllHelp": {
+    "message": "Saat mengunjungi situs, halaman pemblokiran yang ramah ditampilkan sebagai gantinya."
+  },
+  "leaveFeedback": {
+    "message": "Beri masukan"
+  },
+  "showIntro": {
+    "message": "Tampilkan pengantar lagi"
+  },
+  "rulesNever": {
+    "message": "Aturan: belum pernah diambil"
+  },
+  "rulesNow": {
+    "message": "Aturan: baru saja"
+  },
+  "rulesRelative": {
+    "message": "Aturan: $1"
+  },
+  "strictUntil": {
+    "message": "Mode ketat aktif hingga $1"
+  },
+  "openSafariSettings": {
+    "message": "Buka Pengaturan Safari"
+  },
+  "rulesCurrent": {
+    "message": "Aturan: terbaru"
+  },
+  "rulesFailed": {
+    "message": "Aturan: tidak dapat diperbarui. Coba lagi."
+  },
+  "blockedPageTitle": {
+    "message": "Diblokir oleh Slowth"
+  },
+  "thisSite": {
+    "message": "situs ini"
+  },
+  "blockedTitle": {
+    "message": "$1 diblokir"
+  },
+  "blockedTabTitle": {
+    "message": "Diblokir: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth menjauhkan Anda dari $1. Tarik napas. Lakukan hal lain."
+  },
+  "backToSite": {
+    "message": "← Kembali ke $1"
+  },
+  "why": {
+    "message": "Mengapa"
+  },
+  "quoteTeam": {
+    "message": "Reels dibuat oleh tim berisi ratusan orang bergaji $$400k. Slowth dibuat oleh satu pengembang selama akhir pekan."
+  },
+  "quoteBillions": {
+    "message": "Mereka menghabiskan miliaran agar Anda terus menggulir. Kami membuat ekstensi lokal kecil agar Anda berhenti."
+  },
+  "quoteBug": {
+    "message": "Feed tanpa akhir adalah bug. Inilah perbaikannya."
+  },
+  "best": {
+    "message": "terbaik"
+  },
+  "gameLabel": {
+    "message": "Gim terbang mini"
+  },
+  "gameHelp": {
+    "message": "Ketuk atau tekan spasi untuk mengepak"
+  },
+  "back": {
+    "message": "← Kembali"
+  },
+  "signature": {
+    "message": "Slowth · pelan-pelan, bernapas, berkarya"
+  },
+  "playHint": {
+    "message": "🦥 ketuk untuk bermain Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Jangan menabrak dahan"
+  },
+  "newBest": {
+    "message": "Rekor baru! Ketuk untuk terbang lagi"
+  },
+  "flyAgain": {
+    "message": "Ketuk untuk terbang lagi"
+  },
+  "tapStart": {
+    "message": "Ketuk untuk mulai"
+  },
+  "gameOver": {
+    "message": "Permainan berakhir"
+  },
+  "feedTitle": {
+    "message": "Feed tanpa akhir diblokir"
+  },
+  "feedSubtitle": {
+    "message": "Slowth menjauhkan Anda dari feed tanpa akhir. Tarik napas. Lakukan hal lain."
+  },
+  "backHome": {
+    "message": "Kembali ke beranda"
+  },
+  "dismiss": {
+    "message": "Tutup"
+  },
+  "storiesTime": {
+    "message": "Anda sudah menghabiskan $1 untuk cerita. Tarik napas."
+  },
+  "enableSafari": {
+    "message": "Aktifkan di Safari"
+  },
+  "openSettings": {
+    "message": "Buka Pengaturan"
+  },
+  "strictMode": {
+    "message": "Mode ketat"
+  },
+  "off": {
+    "message": "Mati"
+  },
+  "blockShorts": {
+    "message": "Blokir Shorts"
+  },
+  "blockReels": {
+    "message": "Blokir Reels"
+  },
+  "blockFeeds": {
+    "message": "Blokir Reels dan feed"
+  },
+  "blockFeed": {
+    "message": "Blokir Reels dan feed"
+  },
+  "blockExplore": {
+    "message": "Blokir Jelajahi dan tren"
+  },
+  "blockSite": {
+    "message": "Blokir situs"
+  },
+  "updating": {
+    "message": "Memperbarui…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokir feed tanpa akhir"
+  },
+  "infiniteFeedHelp": {
+    "message": "Membatasi gulir tanpa akhir. Di Instagram juga mencakup Jelajahi dan Cerita."
+  },
+  "settingsSaveFailed": {
+    "message": "Tidak dapat menyimpan"
+  },
+  "strictConfirmTitle": {
+    "message": "Aktifkan mode ketat?"
+  },
+  "enable": {
+    "message": "Aktifkan"
+  },
+  "strictEnableConfirm": {
+    "message": "Selama 24 jam, pembatasan yang aktif tidak dapat dinonaktifkan. Anda dapat menambah pembatasan, tetapi tidak dapat mengaktifkan pemblokiran seluruh situs."
+  },
+  "cancel": {
+    "message": "Batal"
+  }
+}

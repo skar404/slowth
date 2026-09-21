@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "प्रत्येक साइटच्या नियंत्रणासह Safari मध्ये YouTube Shorts, Reels, TikTok आणि लक्ष विचलित करणारे फीड ब्लॉक करा."
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram व Facebook Reels आणि X वरील एक्सप्लोर व ट्रेंड ब्लॉक करा. संपूर्ण TikTok ब्लॉक करा. कडक मोडने सेटिंग्ज २४ तास लॉक करा."
+  },
+  "stepSettings": {
+    "message": "डिव्हाइसच्या सेटिंग्ज उघडा"
+  },
+  "stepExtensions": {
+    "message": "ॲप → Safari → एक्सटेंशन येथे जा"
+  },
+  "stepEnable": {
+    "message": "Slowth सुरू करा आणि सर्व वेबसाइटवर परवानगी द्या"
+  },
+  "onboardingDone": {
+    "message": "मी सुरू केले आहे"
+  },
+  "blocking": {
+    "message": "ब्लॉकिंग"
+  },
+  "strictHelp": {
+    "message": "24 तास सुरू असलेले निर्बंध बंद करता येणार नाहीत. तुम्ही आणखी निर्बंध जोडू शकता, पण संपूर्ण साइट ब्लॉक करणे सुरू करू शकत नाही."
+  },
+  "updates": {
+    "message": "अपडेट"
+  },
+  "updateNow": {
+    "message": "आत्ता अपडेट करा"
+  },
+  "loading": {
+    "message": "लोड होत आहे…"
+  },
+  "guide": {
+    "message": "मार्गदर्शक"
+  },
+  "howToUse": {
+    "message": "Slowth कसे वापरावे"
+  },
+  "modesExplained": {
+    "message": "कडक मोड व प्रत्येक साइटच्या मोडची माहिती"
+  },
+  "strictGuideTitle": {
+    "message": "कडक मोड काय करतो"
+  },
+  "strictGuide": {
+    "message": "24 तास सुरू असलेले निर्बंध बंद करता येणार नाहीत. तुम्ही आणखी निर्बंध जोडू शकता, पण संपूर्ण साइट ब्लॉक करणे सुरू करू शकत नाही. रीस्टार्ट केल्यानंतर किंवा अॅप सक्तीने बंद केल्यानंतरही टाइमर सुरू राहतो."
+  },
+  "strictAdvice": {
+    "message": "केवळ इच्छाशक्ती पुरेशी नसताना सुरू करा. सौम्य आठवण हवी असेल तर बंद ठेवा."
+  },
+  "howBlockingWorks": {
+    "message": "ब्लॉकिंग कसे काम करते"
+  },
+  "modeOffHelp": {
+    "message": "साइट नेहमीप्रमाणे उघडते. Slowth काहीही करत नाही."
+  },
+  "siteSpecific": {
+    "message": "साइटनुसार ब्लॉक"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels किंवा X वरील एक्सप्लोर व ट्रेंड ब्लॉक करते. साइटचा बाकी भाग चालू राहतो."
+  },
+  "addFeed": {
+    "message": "फीड ब्लॉकिंगही जोडा"
+  },
+  "modeFeedHelp": {
+    "message": "काही स्क्रीननंतर अखंड होम फीडही थांबवते. Instagram वर एक्सप्लोर, Stories आणि Reels चे इतर भागही समाविष्ट आहेत."
+  },
+  "modeAllHelp": {
+    "message": "साइटला भेट दिल्यावर त्याऐवजी एक साधे ब्लॉक पान दिसते."
+  },
+  "leaveFeedback": {
+    "message": "अभिप्राय द्या"
+  },
+  "showIntro": {
+    "message": "परिचय पुन्हा दाखवा"
+  },
+  "rulesNever": {
+    "message": "नियम: अजून मिळवलेले नाहीत"
+  },
+  "rulesNow": {
+    "message": "नियम: आत्ताच"
+  },
+  "rulesRelative": {
+    "message": "नियम: $1"
+  },
+  "strictUntil": {
+    "message": "कडक मोड $1 पर्यंत सक्रिय आहे"
+  },
+  "openSafariSettings": {
+    "message": "Safari सेटिंग्ज उघडा"
+  },
+  "rulesCurrent": {
+    "message": "नियम: अद्ययावत आहेत"
+  },
+  "rulesFailed": {
+    "message": "नियम अपडेट करता आले नाहीत. पुन्हा प्रयत्न करा."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ने ब्लॉक केले"
+  },
+  "thisSite": {
+    "message": "ही साइट"
+  },
+  "blockedTitle": {
+    "message": "$1 ब्लॉक केले आहे"
+  },
+  "blockedTabTitle": {
+    "message": "ब्लॉक केले आहे: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth तुम्हाला $1 पासून दूर ठेवत आहे. श्वास घ्या. काहीतरी वेगळे करा."
+  },
+  "backToSite": {
+    "message": "← $1 वर परत जा"
+  },
+  "why": {
+    "message": "का"
+  },
+  "quoteTeam": {
+    "message": "वर्षाला ४ लाख डॉलर पगार मिळणाऱ्या शेकडो लोकांनी Reels तयार केले. एका डेव्हलपरने एका शनिवार-रविवारी Slowth तयार केले."
+  },
+  "quoteBillions": {
+    "message": "तुम्ही स्क्रोल करत राहावे म्हणून त्यांनी अब्जावधी खर्च केले. तुम्हाला थांबायला मदत करणारे छोटे स्थानिक एक्सटेंशन आम्ही तयार केले."
+  },
+  "quoteBug": {
+    "message": "अखंड फीड ही एक त्रुटी आहे. हा तिचा उपाय आहे."
+  },
+  "best": {
+    "message": "सर्वोत्तम"
+  },
+  "gameLabel": {
+    "message": "छोटा उडण्याचा खेळ"
+  },
+  "gameHelp": {
+    "message": "उडण्यासाठी टॅप करा किंवा स्पेस दाबा"
+  },
+  "back": {
+    "message": "← मागे"
+  },
+  "signature": {
+    "message": "Slowth · सावकाश व्हा, श्वास घ्या, काहीतरी घडवा"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap खेळण्यासाठी टॅप करा →"
+  },
+  "avoidBranches": {
+    "message": "फांद्यांना धडकू नका"
+  },
+  "newBest": {
+    "message": "नवा विक्रम! पुन्हा उडण्यासाठी टॅप करा"
+  },
+  "flyAgain": {
+    "message": "पुन्हा उडण्यासाठी टॅप करा"
+  },
+  "tapStart": {
+    "message": "सुरू करण्यासाठी टॅप करा"
+  },
+  "gameOver": {
+    "message": "खेळ संपला"
+  },
+  "feedTitle": {
+    "message": "अखंड फीड ब्लॉक केला आहे"
+  },
+  "feedSubtitle": {
+    "message": "Slowth तुम्हाला अखंड फीडपासून दूर ठेवत आहे. श्वास घ्या. काहीतरी वेगळे करा."
+  },
+  "backHome": {
+    "message": "होमवर परत जा"
+  },
+  "dismiss": {
+    "message": "बंद करा"
+  },
+  "storiesTime": {
+    "message": "तुम्ही आधीच Stories वर $1 घालवला आहे. श्वास घ्या."
+  },
+  "enableSafari": {
+    "message": "Safari मध्ये सुरू करा"
+  },
+  "openSettings": {
+    "message": "सेटिंग्ज उघडा"
+  },
+  "strictMode": {
+    "message": "कडक मोड"
+  },
+  "off": {
+    "message": "बंद"
+  },
+  "blockShorts": {
+    "message": "Shorts ब्लॉक करा"
+  },
+  "blockReels": {
+    "message": "Reels ब्लॉक करा"
+  },
+  "blockFeeds": {
+    "message": "Reels व फीड ब्लॉक करा"
+  },
+  "blockFeed": {
+    "message": "Reels व फीड ब्लॉक करा"
+  },
+  "blockExplore": {
+    "message": "एक्सप्लोर व ट्रेंड ब्लॉक करा"
+  },
+  "blockSite": {
+    "message": "साइट ब्लॉक करा"
+  },
+  "updating": {
+    "message": "अपडेट होत आहे…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "mr"
+  },
+  "blockInfiniteFeed": {
+    "message": "अमर्याद फीड ब्लॉक करा"
+  },
+  "infiniteFeedHelp": {
+    "message": "अमर्याद फीड स्क्रोल करणे मर्यादित करते. Instagram वर Explore आणि Stories देखील समाविष्ट आहेत."
+  },
+  "settingsSaveFailed": {
+    "message": "जतन करता आले नाही"
+  },
+  "strictConfirmTitle": {
+    "message": "कडक मोड सुरू करायचा?"
+  },
+  "enable": {
+    "message": "सुरू करा"
+  },
+  "strictEnableConfirm": {
+    "message": "24 तास सुरू असलेले निर्बंध बंद करता येणार नाहीत. तुम्ही आणखी निर्बंध जोडू शकता, पण संपूर्ण साइट ब्लॉक करणे सुरू करू शकत नाही."
+  },
+  "cancel": {
+    "message": "रद्द करा"
+  }
+}

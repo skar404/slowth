@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "在 Safari 封鎖 YouTube Shorts、Reels、TikTok 與容易分心的動態，並可分別設定各網站。"
+  },
+  "locale": {
+    "message": "zh-Hant"
+  },
+  "tagline": {
+    "message": "封鎖 YouTube Shorts、Instagram 和 Facebook Reels，以及 X 的探索與趨勢。完全封鎖 TikTok。使用嚴格模式鎖定設定 24 小時。"
+  },
+  "stepSettings": {
+    "message": "開啟裝置上的「設定」"
+  },
+  "stepExtensions": {
+    "message": "前往「App」→「Safari」→「延伸功能」"
+  },
+  "stepEnable": {
+    "message": "開啟 Slowth，並允許在所有網站上執行"
+  },
+  "onboardingDone": {
+    "message": "我已啟用"
+  },
+  "blocking": {
+    "message": "封鎖"
+  },
+  "strictHelp": {
+    "message": "24 小時內無法關閉已啟用的限制。你可以新增限制，但無法啟用整個網站的封鎖。"
+  },
+  "updates": {
+    "message": "更新"
+  },
+  "updateNow": {
+    "message": "立即更新"
+  },
+  "loading": {
+    "message": "載入中…"
+  },
+  "guide": {
+    "message": "指南"
+  },
+  "howToUse": {
+    "message": "如何使用 Slowth"
+  },
+  "modesExplained": {
+    "message": "嚴格模式與各網站模式說明"
+  },
+  "strictGuideTitle": {
+    "message": "嚴格模式的作用"
+  },
+  "strictGuide": {
+    "message": "24 小時內無法關閉已啟用的限制。你可以新增限制，但無法啟用整個網站的封鎖。 重新啟動或強制結束後，計時器仍會繼續。"
+  },
+  "strictAdvice": {
+    "message": "當意志力不夠時，請開啟此功能。如果只需要溫和提醒，保持關閉即可。"
+  },
+  "howBlockingWorks": {
+    "message": "封鎖如何運作"
+  },
+  "modeOffHelp": {
+    "message": "網站照常載入，Slowth 不執行任何操作。"
+  },
+  "siteSpecific": {
+    "message": "特定網站內容封鎖"
+  },
+  "modeShortsHelp": {
+    "message": "封鎖 YouTube Shorts、Instagram/Facebook Reels，或 X 的探索與趨勢。網站的其他部分仍可正常運作。"
+  },
+  "addFeed": {
+    "message": "加入動態封鎖"
+  },
+  "modeFeedHelp": {
+    "message": "瀏覽幾個畫面後，也會停止首頁的無限動態。在 Instagram 還涵蓋探索、限時動態與更多 Reels 區域。"
+  },
+  "modeAllHelp": {
+    "message": "造訪網站時，會改為顯示友善的封鎖頁面。"
+  },
+  "leaveFeedback": {
+    "message": "留下意見"
+  },
+  "showIntro": {
+    "message": "再次顯示介紹"
+  },
+  "rulesNever": {
+    "message": "規則：尚未取得"
+  },
+  "rulesNow": {
+    "message": "規則：剛剛"
+  },
+  "rulesRelative": {
+    "message": "規則：$1"
+  },
+  "strictUntil": {
+    "message": "嚴格模式啟用至 $1"
+  },
+  "openSafariSettings": {
+    "message": "開啟 Safari 設定"
+  },
+  "rulesCurrent": {
+    "message": "規則：已是最新"
+  },
+  "rulesFailed": {
+    "message": "規則：無法更新，請再試一次。"
+  },
+  "blockedPageTitle": {
+    "message": "已由 Slowth 封鎖"
+  },
+  "thisSite": {
+    "message": "此網站"
+  },
+  "blockedTitle": {
+    "message": "$1 已封鎖"
+  },
+  "blockedTabTitle": {
+    "message": "已封鎖：$1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth 正幫你遠離 $1。深呼吸，做點別的事。"
+  },
+  "backToSite": {
+    "message": "← 返回 $1"
+  },
+  "why": {
+    "message": "為什麼"
+  },
+  "quoteTeam": {
+    "message": "Reels 由數百名薪資達 $$400k 的人員組成的團隊打造。Slowth 則是一位開發者利用週末完成的。"
+  },
+  "quoteBillions": {
+    "message": "他們花了數十億讓你不停滑動。我們打造一個小小的本機延伸功能，幫你停下來。"
+  },
+  "quoteBug": {
+    "message": "無限動態是個錯誤。這就是修正方法。"
+  },
+  "best": {
+    "message": "最佳紀錄"
+  },
+  "gameLabel": {
+    "message": "飛行小遊戲"
+  },
+  "gameHelp": {
+    "message": "點一下或按空白鍵拍動翅膀"
+  },
+  "back": {
+    "message": "← 返回"
+  },
+  "signature": {
+    "message": "Slowth · 慢下來，深呼吸，動手創造"
+  },
+  "playHint": {
+    "message": "🦥 點一下玩 Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "別撞到樹枝"
+  },
+  "newBest": {
+    "message": "新紀錄！點一下再次飛行"
+  },
+  "flyAgain": {
+    "message": "點一下再次飛行"
+  },
+  "tapStart": {
+    "message": "點一下開始"
+  },
+  "gameOver": {
+    "message": "遊戲結束"
+  },
+  "feedTitle": {
+    "message": "無限動態已封鎖"
+  },
+  "feedSubtitle": {
+    "message": "Slowth 正幫你遠離無限動態。深呼吸，做點別的事。"
+  },
+  "backHome": {
+    "message": "返回首頁"
+  },
+  "dismiss": {
+    "message": "關閉"
+  },
+  "storiesTime": {
+    "message": "你已經花了 $1 看限時動態。深呼吸。"
+  },
+  "enableSafari": {
+    "message": "在 Safari 中啟用"
+  },
+  "openSettings": {
+    "message": "開啟設定"
+  },
+  "strictMode": {
+    "message": "嚴格模式"
+  },
+  "off": {
+    "message": "關閉"
+  },
+  "blockShorts": {
+    "message": "封鎖 Shorts"
+  },
+  "blockReels": {
+    "message": "封鎖 Reels"
+  },
+  "blockFeeds": {
+    "message": "封鎖 Reels 與動態消息"
+  },
+  "blockFeed": {
+    "message": "封鎖 Reels 與動態"
+  },
+  "blockExplore": {
+    "message": "封鎖探索與趨勢"
+  },
+  "blockSite": {
+    "message": "封鎖網站"
+  },
+  "updating": {
+    "message": "更新中…"
+  },
+  "blockInfiniteFeed": {
+    "message": "封鎖無限動態消息"
+  },
+  "infiniteFeedHelp": {
+    "message": "限制無限捲動。在 Instagram 上也包含探索和限時動態。"
+  },
+  "settingsSaveFailed": {
+    "message": "無法儲存"
+  },
+  "strictConfirmTitle": {
+    "message": "啟用嚴格模式？"
+  },
+  "enable": {
+    "message": "啟用"
+  },
+  "strictEnableConfirm": {
+    "message": "24 小時內無法關閉已啟用的限制。你可以新增限制，但無法啟用整個網站的封鎖。"
+  },
+  "cancel": {
+    "message": "取消"
+  }
+}

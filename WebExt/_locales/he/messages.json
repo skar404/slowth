@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "חסימת ⁦YouTube Shorts⁩, ⁦Reels⁩, ⁦TikTok⁩ ופידים מסיחי דעת ב־⁦Safari⁩, עם שליטה לכל אתר."
+  },
+  "locale": {
+    "message": "he"
+  },
+  "tagline": {
+    "message": "חסימת ⁦YouTube Shorts⁩, ⁦Instagram⁩ ו־⁦Facebook Reels⁩, וגם גילוי וטרנדים ב־⁦X⁩. חסימת ⁦TikTok⁩ במלואו. נעילת ההגדרות במצב קפדני ל־24 שעות."
+  },
+  "stepSettings": {
+    "message": "יש לפתוח את ההגדרות במכשיר"
+  },
+  "stepExtensions": {
+    "message": "מעבר אל יישומים ← ⁦Safari⁩ ← הרחבות"
+  },
+  "stepEnable": {
+    "message": "יש להפעיל את ⁦Slowth⁩ ולאפשר לו לפעול בכל האתרים"
+  },
+  "onboardingDone": {
+    "message": "הפעלתי"
+  },
+  "blocking": {
+    "message": "חסימה"
+  },
+  "strictHelp": {
+    "message": "במשך 24 שעות לא ניתן לבטל הגבלות פעילות. אפשר להוסיף הגבלות, אך אי אפשר להפעיל חסימה של אתר שלם."
+  },
+  "updates": {
+    "message": "עדכונים"
+  },
+  "updateNow": {
+    "message": "עדכון עכשיו"
+  },
+  "loading": {
+    "message": "טוען…"
+  },
+  "guide": {
+    "message": "מדריך"
+  },
+  "howToUse": {
+    "message": "איך להשתמש ב־⁦Slowth⁩"
+  },
+  "modesExplained": {
+    "message": "הסבר על מצב קפדני ומצבים לכל אתר"
+  },
+  "strictGuideTitle": {
+    "message": "מה מצב קפדני עושה"
+  },
+  "strictGuide": {
+    "message": "במשך 24 שעות לא ניתן לבטל הגבלות פעילות. אפשר להוסיף הגבלות, אך אי אפשר להפעיל חסימה של אתר שלם. הטיימר ממשיך לפעול לאחר הפעלה מחדש או סגירה כפויה."
+  },
+  "strictAdvice": {
+    "message": "כדאי להפעיל כשכוח הרצון לבדו לא מספיק. אפשר להשאיר כבוי אם רוצים רק תזכורת עדינה."
+  },
+  "howBlockingWorks": {
+    "message": "איך החסימה עובדת"
+  },
+  "modeOffHelp": {
+    "message": "האתר נטען כרגיל. ⁦Slowth⁩ לא עושה דבר."
+  },
+  "siteSpecific": {
+    "message": "חסימה מותאמת לאתר"
+  },
+  "modeShortsHelp": {
+    "message": "חוסם ⁦YouTube Shorts⁩, ⁦Instagram⁩/⁦Facebook Reels⁩, או גילוי וטרנדים ב־⁦X⁩. שאר האתר ממשיך לעבוד."
+  },
+  "addFeed": {
+    "message": "הוספת חסימת פיד"
+  },
+  "modeFeedHelp": {
+    "message": "עוצר גם את הפיד האינסופי בדף הבית אחרי כמה מסכים. ב־⁦Instagram⁩ הוא כולל גם גילוי, סטוריז ואזורים נוספים של ⁦Reels⁩."
+  },
+  "modeAllHelp": {
+    "message": "בביקור באתר מופיע במקומו דף חסימה ידידותי."
+  },
+  "leaveFeedback": {
+    "message": "השארת משוב"
+  },
+  "showIntro": {
+    "message": "הצגת ההקדמה שוב"
+  },
+  "rulesNever": {
+    "message": "כללים: טרם הורדו"
+  },
+  "rulesNow": {
+    "message": "כללים: ממש עכשיו"
+  },
+  "rulesRelative": {
+    "message": "כללים: ⁨$1⁩"
+  },
+  "strictUntil": {
+    "message": "מצב קפדני פעיל עד ⁨$1⁩"
+  },
+  "openSafariSettings": {
+    "message": "פתיחת הגדרות ⁦Safari⁩"
+  },
+  "rulesCurrent": {
+    "message": "כללים: מעודכנים"
+  },
+  "rulesFailed": {
+    "message": "כללים: העדכון נכשל. יש לנסות שוב."
+  },
+  "blockedPageTitle": {
+    "message": "נחסם על ידי ⁦Slowth⁩"
+  },
+  "thisSite": {
+    "message": "האתר הזה"
+  },
+  "blockedTitle": {
+    "message": "⁨$1⁩ חסום"
+  },
+  "blockedTabTitle": {
+    "message": "חסום: ⁨$1⁩"
+  },
+  "blockedSubtitle": {
+    "message": "⁦Slowth⁩ עוזר לך להתרחק מ־⁨$1⁩. כדאי לנשום רגע. לעשות משהו אחר."
+  },
+  "backToSite": {
+    "message": "→ חזרה אל ⁨$1⁩"
+  },
+  "why": {
+    "message": "למה"
+  },
+  "quoteTeam": {
+    "message": "⁦Reels⁩ נבנה על ידי צוות של מאות אנשים עם משכורות של ⁦$$400k⁩. ⁦Slowth⁩ נבנה על ידי מפתח אחד בסוף שבוע."
+  },
+  "quoteBillions": {
+    "message": "הם הוציאו מיליארדים כדי שתמשיך הגלילה. אנחנו בנינו הרחבה מקומית קטנה כדי לעזור לעצור."
+  },
+  "quoteBug": {
+    "message": "הפיד האינסופי הוא באג. הנה התיקון."
+  },
+  "best": {
+    "message": "שיא"
+  },
+  "gameLabel": {
+    "message": "משחק תעופה קטן"
+  },
+  "gameHelp": {
+    "message": "יש להקיש או ללחוץ על רווח כדי לנפנף בכנפיים"
+  },
+  "back": {
+    "message": "→ חזרה"
+  },
+  "signature": {
+    "message": "⁦Slowth⁩ · להאט, לנשום, ליצור"
+  },
+  "playHint": {
+    "message": "🦥 הקשה למשחק ב־⁦Slow Flap⁩ ←"
+  },
+  "avoidBranches": {
+    "message": "לא לפגוע בענפים"
+  },
+  "newBest": {
+    "message": "שיא חדש! הקשה כדי לעוף שוב"
+  },
+  "flyAgain": {
+    "message": "הקשה כדי לעוף שוב"
+  },
+  "tapStart": {
+    "message": "הקשה כדי להתחיל"
+  },
+  "gameOver": {
+    "message": "המשחק נגמר"
+  },
+  "feedTitle": {
+    "message": "הפיד האינסופי חסום"
+  },
+  "feedSubtitle": {
+    "message": "⁦Slowth⁩ עוזר לך להתרחק מהפיד האינסופי. כדאי לנשום רגע. לעשות משהו אחר."
+  },
+  "backHome": {
+    "message": "חזרה לדף הבית"
+  },
+  "dismiss": {
+    "message": "סגירה"
+  },
+  "storiesTime": {
+    "message": "כבר עברו ⁨$1⁩ בצפייה בסטוריז. כדאי לנשום רגע."
+  },
+  "enableSafari": {
+    "message": "הפעלה ב־⁦Safari⁩"
+  },
+  "openSettings": {
+    "message": "פתיחת הגדרות"
+  },
+  "strictMode": {
+    "message": "מצב קפדני"
+  },
+  "off": {
+    "message": "כבוי"
+  },
+  "blockShorts": {
+    "message": "חסימת ⁦Shorts⁩"
+  },
+  "blockReels": {
+    "message": "חסימת ⁦Reels⁩"
+  },
+  "blockFeeds": {
+    "message": "חסימת ⁦Reels⁩ ופידים"
+  },
+  "blockFeed": {
+    "message": "חסימת ⁦Reels⁩ והפיד"
+  },
+  "blockExplore": {
+    "message": "חסימת גילוי וטרנדים"
+  },
+  "blockSite": {
+    "message": "חסימת האתר"
+  },
+  "updating": {
+    "message": "מעדכן…"
+  },
+  "blockInfiniteFeed": {
+    "message": "חסימת הפיד האינסופי"
+  },
+  "infiniteFeedHelp": {
+    "message": "מגביל גלילה אינסופית. ב-Instagram כולל גם גילוי וסטוריז."
+  },
+  "settingsSaveFailed": {
+    "message": "השמירה נכשלה"
+  },
+  "strictConfirmTitle": {
+    "message": "להפעיל מצב קפדני?"
+  },
+  "enable": {
+    "message": "הפעלה"
+  },
+  "strictEnableConfirm": {
+    "message": "במשך 24 שעות לא ניתן לבטל הגבלות פעילות. אפשר להוסיף הגבלות, אך אי אפשר להפעיל חסימה של אתר שלם."
+  },
+  "cancel": {
+    "message": "ביטול"
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "บล็อก YouTube Shorts, Reels, TikTok และฟีดที่ทำให้เสียสมาธิใน Safari ด้วยการควบคุมแต่ละเว็บไซต์"
+  },
+  "tagline": {
+    "message": "บล็อก YouTube Shorts, Instagram และ Facebook Reels รวมถึงสำรวจและเทรนด์บน X บล็อก TikTok ทั้งหมด ล็อกการตั้งค่าด้วยโหมดเข้มงวด 24 ชั่วโมง"
+  },
+  "stepSettings": {
+    "message": "เปิดการตั้งค่าบนอุปกรณ์"
+  },
+  "stepExtensions": {
+    "message": "ไปที่แอป → Safari → ส่วนขยาย"
+  },
+  "stepEnable": {
+    "message": "เปิด Slowth และอนุญาตในทุกเว็บไซต์"
+  },
+  "onboardingDone": {
+    "message": "เปิดใช้แล้ว"
+  },
+  "blocking": {
+    "message": "การบล็อก"
+  },
+  "strictHelp": {
+    "message": "ไม่สามารถปิดข้อจำกัดที่เปิดไว้ได้เป็นเวลา 24 ชั่วโมง คุณเพิ่มข้อจำกัดได้ แต่ไม่สามารถเปิดการบล็อกทั้งเว็บไซต์ได้"
+  },
+  "updates": {
+    "message": "การอัปเดต"
+  },
+  "updateNow": {
+    "message": "อัปเดตตอนนี้"
+  },
+  "loading": {
+    "message": "กำลังโหลด…"
+  },
+  "guide": {
+    "message": "คู่มือ"
+  },
+  "howToUse": {
+    "message": "วิธีใช้ Slowth"
+  },
+  "modesExplained": {
+    "message": "คำอธิบายโหมดเข้มงวดและโหมดแต่ละเว็บไซต์"
+  },
+  "strictGuideTitle": {
+    "message": "โหมดเข้มงวดทำอะไร"
+  },
+  "strictGuide": {
+    "message": "ไม่สามารถปิดข้อจำกัดที่เปิดไว้ได้เป็นเวลา 24 ชั่วโมง คุณเพิ่มข้อจำกัดได้ แต่ไม่สามารถเปิดการบล็อกทั้งเว็บไซต์ได้ ตัวจับเวลาจะทำงานต่อหลังจากรีสตาร์ทหรือบังคับปิดแอป"
+  },
+  "strictAdvice": {
+    "message": "เปิดเมื่อความตั้งใจเพียงอย่างเดียวไม่พอ ปิดไว้หากต้องการเพียงคำเตือนเบา ๆ"
+  },
+  "howBlockingWorks": {
+    "message": "การบล็อกทำงานอย่างไร"
+  },
+  "modeOffHelp": {
+    "message": "เว็บไซต์โหลดตามปกติ Slowth ไม่ทำอะไรเลย"
+  },
+  "siteSpecific": {
+    "message": "บล็อกเฉพาะส่วนของเว็บไซต์"
+  },
+  "modeShortsHelp": {
+    "message": "บล็อก YouTube Shorts, Instagram/Facebook Reels หรือสำรวจและเทรนด์บน X ส่วนอื่นของเว็บไซต์ยังใช้ได้"
+  },
+  "addFeed": {
+    "message": "เพิ่มการบล็อกฟีด"
+  },
+  "modeFeedHelp": {
+    "message": "หยุดฟีดหน้าแรกที่ไม่มีที่สิ้นสุดหลังเลื่อนเพียงไม่กี่หน้าจอ Instagram ยังครอบคลุมสำรวจ, Stories และส่วนอื่นที่มี Reels"
+  },
+  "modeAllHelp": {
+    "message": "เมื่อเข้าเว็บไซต์ จะแสดงหน้าบล็อกที่เป็นมิตรแทน"
+  },
+  "leaveFeedback": {
+    "message": "แสดงความคิดเห็น"
+  },
+  "showIntro": {
+    "message": "แสดงคำแนะนำอีกครั้ง"
+  },
+  "rulesNever": {
+    "message": "กฎ: ยังไม่เคยดาวน์โหลด"
+  },
+  "rulesNow": {
+    "message": "กฎ: เมื่อสักครู่"
+  },
+  "rulesRelative": {
+    "message": "กฎ: $1"
+  },
+  "strictUntil": {
+    "message": "โหมดเข้มงวดทำงานจนถึง $1"
+  },
+  "openSafariSettings": {
+    "message": "เปิดการตั้งค่า Safari"
+  },
+  "rulesCurrent": {
+    "message": "กฎ: เป็นเวอร์ชันล่าสุด"
+  },
+  "rulesFailed": {
+    "message": "อัปเดตกฎไม่ได้ โปรดลองอีกครั้ง"
+  },
+  "blockedPageTitle": {
+    "message": "ถูกบล็อกโดย Slowth"
+  },
+  "thisSite": {
+    "message": "เว็บไซต์นี้"
+  },
+  "blockedTitle": {
+    "message": "$1 ถูกบล็อก"
+  },
+  "blockedTabTitle": {
+    "message": "ถูกบล็อก: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth ช่วยให้คุณห่างจาก $1 หายใจสักนิด แล้วไปทำอย่างอื่น"
+  },
+  "backToSite": {
+    "message": "← กลับไปที่ $1"
+  },
+  "why": {
+    "message": "ทำไม"
+  },
+  "quoteTeam": {
+    "message": "Reels สร้างโดยทีมงานหลายร้อยคนที่ได้เงินเดือนปีละ 400,000 ดอลลาร์ ส่วน Slowth สร้างโดยผู้พัฒนาคนเดียวในสุดสัปดาห์เดียว"
+  },
+  "quoteBillions": {
+    "message": "พวกเขาใช้เงินหลายพันล้านเพื่อให้คุณเลื่อนต่อ เราสร้างส่วนขยายเล็ก ๆ ที่ทำงานบนเครื่องเพื่อช่วยให้คุณหยุด"
+  },
+  "quoteBug": {
+    "message": "ฟีดที่ไม่มีที่สิ้นสุดคือบั๊ก นี่คือวิธีแก้"
+  },
+  "best": {
+    "message": "สถิติสูงสุด"
+  },
+  "gameLabel": {
+    "message": "มินิเกมบิน"
+  },
+  "gameHelp": {
+    "message": "แตะหรือกดสเปซเพื่อบิน"
+  },
+  "back": {
+    "message": "← กลับ"
+  },
+  "signature": {
+    "message": "Slowth · ช้าลง หายใจ สร้างสรรค์"
+  },
+  "playHint": {
+    "message": "🦥 แตะเพื่อเล่น Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "อย่าชนกิ่งไม้"
+  },
+  "newBest": {
+    "message": "สถิติใหม่! แตะเพื่อบินอีกครั้ง"
+  },
+  "flyAgain": {
+    "message": "แตะเพื่อบินอีกครั้ง"
+  },
+  "tapStart": {
+    "message": "แตะเพื่อเริ่ม"
+  },
+  "gameOver": {
+    "message": "จบเกม"
+  },
+  "feedTitle": {
+    "message": "ฟีดที่ไม่มีที่สิ้นสุดถูกบล็อก"
+  },
+  "feedSubtitle": {
+    "message": "Slowth ช่วยให้คุณห่างจากฟีดที่ไม่มีที่สิ้นสุด หายใจสักนิด แล้วไปทำอย่างอื่น"
+  },
+  "backHome": {
+    "message": "กลับหน้าแรก"
+  },
+  "dismiss": {
+    "message": "ปิด"
+  },
+  "storiesTime": {
+    "message": "คุณใช้เวลากับ Stories ไปแล้ว $1 หายใจสักนิด"
+  },
+  "enableSafari": {
+    "message": "เปิดใช้ใน Safari"
+  },
+  "openSettings": {
+    "message": "เปิดการตั้งค่า"
+  },
+  "strictMode": {
+    "message": "โหมดเข้มงวด"
+  },
+  "off": {
+    "message": "ปิด"
+  },
+  "blockShorts": {
+    "message": "บล็อก Shorts"
+  },
+  "blockReels": {
+    "message": "บล็อก Reels"
+  },
+  "blockFeeds": {
+    "message": "บล็อก Reels และฟีดต่าง ๆ"
+  },
+  "blockFeed": {
+    "message": "บล็อก Reels และฟีด"
+  },
+  "blockExplore": {
+    "message": "บล็อกสำรวจและเทรนด์"
+  },
+  "blockSite": {
+    "message": "บล็อกเว็บไซต์"
+  },
+  "updating": {
+    "message": "กำลังอัปเดต…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "th"
+  },
+  "blockInfiniteFeed": {
+    "message": "บล็อกฟีดไม่รู้จบ"
+  },
+  "infiniteFeedHelp": {
+    "message": "จำกัดการเลื่อนฟีดไม่รู้จบ ใน Instagram รวมถึง Explore และ Stories ด้วย"
+  },
+  "settingsSaveFailed": {
+    "message": "บันทึกไม่ได้"
+  },
+  "strictConfirmTitle": {
+    "message": "เปิดโหมดเข้มงวดหรือไม่?"
+  },
+  "enable": {
+    "message": "เปิด"
+  },
+  "strictEnableConfirm": {
+    "message": "ไม่สามารถปิดข้อจำกัดที่เปิดไว้ได้เป็นเวลา 24 ชั่วโมง คุณเพิ่มข้อจำกัดได้ แต่ไม่สามารถเปิดการบล็อกทั้งเว็บไซต์ได้"
+  },
+  "cancel": {
+    "message": "ยกเลิก"
+  }
+}

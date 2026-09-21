@@ -1,25 +1,105 @@
 import Foundation
-#if canImport(FamilyControls)
+#if os(iOS) && canImport(FamilyControls)
 import FamilyControls
 #endif
 
-// Per-site blocking modes. The settings UI exists in TWO parallel implementations
-// that BOTH enumerate these modes — when you add/rename/remove a mode, update both:
-//   • Swift host apps: this enum + `defaultState` below + `modeLabel()` and the
-//     `sites` arrays in Shared/ContentView_iOS.swift and Shared/ContentView_macOS.swift.
-//   • JS Safari popup: WebExt/config.js (MODES, SITE_AVAILABLE_MODES, DEFAULT_TOGGLES)
-//     and the label map in WebExt/app.js, plus enforcement in WebExt/background.js and
-//     WebExt/content/common.js.
-// Raw values are the wire format shared with JS — keep them identical to config.js.
-enum SiteMode: String, Codable, CaseIterable {
-    case off
-    case shorts
-    case feed
-    case all
+// Keys are shared with WebExt/config.js. Legacy modes are read only during migration.
+enum SiteFeature: String, CaseIterable {
+    case shorts, feed, all
+
+    static func available(for site: String) -> [SiteFeature] {
+        switch site {
+        case "instagram", "facebook": return [.shorts, .feed, .all]
+        case "youtube", "x": return [.shorts, .all]
+        case "tiktok": return [.all]
+        default: return []
+        }
+    }
+
+    func label(for site: String) -> String {
+        switch self {
+        case .all: return AppLocalization.string("Block site")
+        case .feed: return AppLocalization.string("Block Infinite Feed")
+        case .shorts:
+            switch site {
+            case "youtube": return AppLocalization.string("Block Shorts")
+            case "x": return AppLocalization.string("Block Explore & trends")
+            default: return AppLocalization.string("Block Reels")
+            }
+        }
+    }
+}
+
+// Form can flatten nested ForEach rows. Scope control identity to both the site
+// and feature so repeated features (especially "all") never reuse another site's row.
+struct SiteBlockingControl: Identifiable {
+    let site: String
+    let feature: SiteFeature
+
+    var id: String { "safari.\(site).\(feature.rawValue)" }
+
+    static func controls(for site: String) -> [Self] {
+        let features = SiteFeature.available(for: site)
+        return features.sorted { ($0 == .all ? 0 : 1) < ($1 == .all ? 0 : 1) }
+            .map { Self(site: site, feature: $0) }
+    }
+}
+
+struct SiteBlockingSettings: Codable, Equatable {
+    var shorts = false
+    var feed = false
+    var all = false
+
+    subscript(feature: SiteFeature) -> Bool {
+        get {
+            switch feature {
+            case .shorts: return shorts
+            case .feed: return feed
+            case .all: return all
+            }
+        }
+        set {
+            switch feature {
+            case .shorts: shorts = newValue
+            case .feed: feed = newValue
+            case .all: all = newValue
+            }
+        }
+    }
+
+    var dictionary: [String: Bool] { ["shorts": shorts, "feed": feed, "all": all] }
+
+    static func defaults(for site: String) -> Self {
+        Self(shorts: site != "tiktok", feed: ["instagram", "facebook"].contains(site), all: site == "tiktok")
+    }
+
+    static func migrated(_ raw: Any?, site: String) -> Self {
+        if let flags = raw as? [String: Bool] {
+            var settings = defaults(for: site)
+            for feature in SiteFeature.available(for: site) {
+                if let value = flags[feature.rawValue] { settings[feature] = value }
+            }
+            return settings
+        }
+        let mode: String
+        if let value = raw as? String { mode = value }
+        else if let enabled = raw as? Bool { mode = enabled ? (site == "tiktok" ? "all" : "shorts") : "off" }
+        else { return defaults(for: site) }
+        switch mode {
+        case "off": return Self()
+        case "shorts": return Self(shorts: site != "tiktok")
+        case "feed": return Self(shorts: site != "tiktok", feed: ["instagram", "facebook"].contains(site))
+        case "all":
+            var settings = defaults(for: site)
+            settings.all = true
+            return settings
+        default: return defaults(for: site)
+        }
+    }
 }
 
 struct SharedState: Codable, Equatable {
-    var toggles: [String: SiteMode]
+    var toggles: [String: SiteBlockingSettings]
     var strictModeUntil: Date?
     var rulesFetchedAt: Date?
     var onboardingDone: Bool
@@ -45,13 +125,7 @@ struct SharedState: Codable, Equatable {
     static var defaultState: SharedState {
         // ⚠️ Mirrors WebExt/config.js DEFAULT_TOGGLES — keep both in sync.
         SharedState(
-            toggles: [
-                "youtube":   .shorts,
-                "instagram": .feed,
-                "tiktok":    .all,
-                "facebook":  .feed,
-                "x":         .shorts
-            ],
+            toggles: Dictionary(uniqueKeysWithValues: supportedSites.map { ($0, SiteBlockingSettings.defaults(for: $0)) }),
             strictModeUntil: nil,
             rulesFetchedAt: nil,
             onboardingDone: false,
@@ -147,7 +221,8 @@ struct RealtimeShieldDiagnostics: Codable, Equatable {
 }
 
 enum SharedStoreKey {
-    static let toggles = "toggles"
+    static let toggles = "toggles" // Legacy modes, retained for migration.
+    static let siteBlocking = "siteBlockingV2"
     static let strictModeUntil = "strictModeUntil"
     static let rules = "rules"
     static let rulesEtag = "rulesEtag"
@@ -192,20 +267,14 @@ enum SharedStore {
     private static var d: UserDefaults { AppGroup.defaults }
 
     static func snapshot() -> SharedState {
-        let raw = d.object(forKey: SharedStoreKey.toggles)
-        var toggles = SharedState.defaultState.toggles
-        if let dict = raw as? [String: String] {
-            for site in SharedState.supportedSites {
-                if let v = dict[site], let mode = SiteMode(rawValue: v) {
-                    toggles[site] = mode
-                }
-            }
-        } else if let bools = raw as? [String: Bool] {
-            for site in SharedState.supportedSites {
-                if let on = bools[site] {
-                    toggles[site] = on ? (site == "tiktok" ? .all : .shorts) : .off
-                }
-            }
+        let stored = d.dictionary(forKey: SharedStoreKey.siteBlocking)
+        let legacy = d.dictionary(forKey: SharedStoreKey.toggles) ?? [:]
+        let toggles = Dictionary(uniqueKeysWithValues: SharedState.supportedSites.map { site in
+            (site, SiteBlockingSettings.migrated(stored?[site] ?? legacy[site], site: site))
+        })
+        // Representation-only migration is safe during Strict mode: effective blocking is unchanged.
+        if stored == nil {
+            d.set(toggles.mapValues { $0.dictionary }, forKey: SharedStoreKey.siteBlocking)
         }
 
         var until: Date? = nil
@@ -303,13 +372,18 @@ enum SharedStore {
         )
     }
 
-    static func setToggle(site: String, mode: SiteMode) throws -> SharedState {
+    static func setToggle(site: String, feature: SiteFeature, enabled: Bool) throws -> SharedState {
         var state = snapshot()
-        if state.isStrictModeActive { throw SharedStoreError.strictModeActive }
-        guard SharedState.supportedSites.contains(site) else { throw SharedStoreError.invalidValue }
-        state.toggles[site] = mode
-        let dict = state.toggles.mapValues { $0.rawValue }
-        d.set(dict, forKey: SharedStoreKey.toggles)
+        guard SiteFeature.available(for: site).contains(feature),
+              var settings = state.toggles[site] else { throw SharedStoreError.invalidValue }
+        // Strict mode permits strengthening an existing policy, but never
+        // permits weakening it or enabling whole-site blocking.
+        if state.isStrictModeActive && (!enabled || feature == .all) {
+            throw SharedStoreError.strictModeActive
+        }
+        settings[feature] = enabled
+        state.toggles[site] = settings
+        d.set(state.toggles.mapValues { $0.dictionary }, forKey: SharedStoreKey.siteBlocking)
         return state
     }
 
@@ -366,15 +440,19 @@ enum SharedStore {
 
     // Local debug escape hatches. Keep these separate from the production
     // setters so Strict mode cannot be weakened through normal app flows.
+    #if DEBUG
     static func resetStrictModeForDebug() {
         guard DebugMode.isEnabled else { return }
         d.removeObject(forKey: SharedStoreKey.strictModeUntil)
     }
+    #endif
 
+    #if DEBUG
     static func resetTipsDisplayForDebug() {
         guard DebugMode.isEnabled else { return }
         d.set(false, forKey: SharedStoreKey.supportCardDismissed)
     }
+    #endif
 
     static func blockedAppsData() -> Data? {
         d.data(forKey: SharedStoreKey.blockedAppsData)
@@ -395,7 +473,7 @@ enum SharedStore {
     }
 
     static func hasValidYouTubeSelection() -> Bool {
-        #if canImport(FamilyControls)
+        #if os(iOS) && canImport(FamilyControls)
         guard let data = youtubeSelectionData(),
               let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
             return false
@@ -412,7 +490,11 @@ enum SharedStore {
     // strict mode is active (it changes what's blocked), so gate it the same
     // disable-direction way as setRealtimeShieldEnabled/setStrictMode(false).
     static func setYouTubeSelectionData(_ data: Data?) throws {
-        if snapshot().isStrictModeActive { throw SharedStoreError.strictModeActive }
+        // Strict mode permits the initial binding (which only adds
+        // protection), but freezes an already selected app in place.
+        if snapshot().isStrictModeActive && hasValidYouTubeSelection() {
+            throw SharedStoreError.strictModeActive
+        }
         if let data = data {
             d.set(data, forKey: SharedStoreKey.youtubeSelectionData)
         } else {
@@ -435,7 +517,7 @@ enum SharedStore {
     }
 
     static func hasValidInstagramSelection() -> Bool {
-        #if canImport(FamilyControls)
+        #if os(iOS) && canImport(FamilyControls)
         guard let data = instagramSelectionData(),
               let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
             return false
@@ -449,7 +531,10 @@ enum SharedStore {
     }
 
     static func setInstagramSelectionData(_ data: Data?) throws {
-        if snapshot().isStrictModeActive { throw SharedStoreError.strictModeActive }
+        // Strict mode permits the initial binding, but not replacing it.
+        if snapshot().isStrictModeActive && hasValidInstagramSelection() {
+            throw SharedStoreError.strictModeActive
+        }
         if let data = data {
             d.set(data, forKey: SharedStoreKey.instagramSelectionData)
         } else {
@@ -494,12 +579,16 @@ enum SharedStore {
     // Soft mode is a deliberate weakening: while Slowth is foregrounded,
     // YouTube remains unshielded; after Slowth leaves the foreground (or
     // ReplayKit stops), YouTube gets a one-second usage threshold before its
-    // shield returns. Strict mode may lock an existing choice in place, but it
-    // must never allow soft mode to be turned on. Turning it off strengthens
-    // protection and is therefore allowed.
-    static func setSoftYouTubeBlockingEnabled(_ enabled: Bool) throws -> SharedState {
+    // shield returns. Strict mode normally blocks enabling soft mode; the
+    // initial app binding may explicitly authorize that one-time setup.
+    static func setSoftYouTubeBlockingEnabled(
+        _ enabled: Bool,
+        allowInitialStrictActivation: Bool = false
+    ) throws -> SharedState {
         let state = snapshot()
-        if state.isStrictModeActive && enabled { throw SharedStoreError.strictModeActive }
+        if state.isStrictModeActive && enabled && !allowInitialStrictActivation {
+            throw SharedStoreError.strictModeActive
+        }
         if enabled && !state.realtimeYouTubeBlockingEnabled {
             throw SharedStoreError.invalidValue
         }

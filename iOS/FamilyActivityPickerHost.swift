@@ -38,14 +38,14 @@ struct FamilyActivityPickerWrapper: View {
     var body: some View {
         NavigationStack {
             FamilyActivityPicker(selection: $selection)
-                .navigationTitle("Block apps")
+                .navigationTitle(String(localized: "Block apps"))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { onCancel?() }
+                        Button(String(localized: "Cancel")) { onCancel?() }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") { onDone?(selection) }
+                        Button(String(localized: "Done")) { onDone?(selection) }
                     }
                 }
         }

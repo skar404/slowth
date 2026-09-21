@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blochează YouTube Shorts, Reels, TikTok și fluxurile care distrag în Safari, cu control pentru fiecare site."
+  },
+  "locale": {
+    "message": "ro"
+  },
+  "tagline": {
+    "message": "Blochează YouTube Shorts, Instagram și Facebook Reels, plus Explorare și tendințe pe X. Blochează complet TikTok. Blochează configurările cu modul strict timp de 24 de ore."
+  },
+  "stepSettings": {
+    "message": "Deschide Configurări pe dispozitiv"
+  },
+  "stepExtensions": {
+    "message": "Accesează Aplicații → Safari → Extensii"
+  },
+  "stepEnable": {
+    "message": "Activează Slowth și permite-l pe toate site-urile"
+  },
+  "onboardingDone": {
+    "message": "Am activat"
+  },
+  "blocking": {
+    "message": "Blocare"
+  },
+  "strictHelp": {
+    "message": "Timp de 24 de ore, restricțiile active nu pot fi dezactivate. Poți adăuga restricții, dar nu poți activa blocarea unui site întreg."
+  },
+  "updates": {
+    "message": "Actualizări"
+  },
+  "updateNow": {
+    "message": "Actualizează acum"
+  },
+  "loading": {
+    "message": "Se încarcă…"
+  },
+  "guide": {
+    "message": "Ghid"
+  },
+  "howToUse": {
+    "message": "Cum folosești Slowth"
+  },
+  "modesExplained": {
+    "message": "Explicații despre modul strict și modurile pentru site-uri"
+  },
+  "strictGuideTitle": {
+    "message": "Ce face modul strict"
+  },
+  "strictGuide": {
+    "message": "Timp de 24 de ore, restricțiile active nu pot fi dezactivate. Poți adăuga restricții, dar nu poți activa blocarea unui site întreg. Cronometrul continuă după repornire sau închidere forțată."
+  },
+  "strictAdvice": {
+    "message": "Activează-l când voința nu este suficientă. Lasă-l oprit dacă vrei doar un mic imbold."
+  },
+  "howBlockingWorks": {
+    "message": "Cum funcționează blocarea"
+  },
+  "modeOffHelp": {
+    "message": "Site-ul se încarcă normal. Slowth nu face nimic."
+  },
+  "siteSpecific": {
+    "message": "Blocare specifică site-ului"
+  },
+  "modeShortsHelp": {
+    "message": "Blochează YouTube Shorts, Instagram/Facebook Reels sau Explorare și tendințe pe X. Restul site-ului funcționează în continuare."
+  },
+  "addFeed": {
+    "message": "Adaugă blocarea fluxului"
+  },
+  "modeFeedHelp": {
+    "message": "Oprește și fluxul principal infinit după câteva ecrane. Pe Instagram include și Explorare, povești și alte secțiuni Reels."
+  },
+  "modeAllHelp": {
+    "message": "La vizitarea site-ului apare o pagină prietenoasă de blocare."
+  },
+  "leaveFeedback": {
+    "message": "Lasă feedback"
+  },
+  "showIntro": {
+    "message": "Arată din nou introducerea"
+  },
+  "rulesNever": {
+    "message": "Reguli: niciodată descărcate"
+  },
+  "rulesNow": {
+    "message": "Reguli: chiar acum"
+  },
+  "rulesRelative": {
+    "message": "Reguli: $1"
+  },
+  "strictUntil": {
+    "message": "Mod strict activ până la $1"
+  },
+  "openSafariSettings": {
+    "message": "Deschide configurările Safari"
+  },
+  "rulesCurrent": {
+    "message": "Reguli: actualizate"
+  },
+  "rulesFailed": {
+    "message": "Reguli: actualizarea nu a reușit. Încearcă din nou."
+  },
+  "blockedPageTitle": {
+    "message": "Blocat de Slowth"
+  },
+  "thisSite": {
+    "message": "acest site"
+  },
+  "blockedTitle": {
+    "message": "$1 este blocat"
+  },
+  "blockedTabTitle": {
+    "message": "Blocat: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth te ține departe de $1. Respiră. Fă altceva."
+  },
+  "backToSite": {
+    "message": "← Înapoi la $1"
+  },
+  "why": {
+    "message": "De ce"
+  },
+  "quoteTeam": {
+    "message": "Reels a fost creat de o echipă de sute de persoane cu salarii de $$400k. Slowth a fost creat de un singur dezvoltator într-un weekend."
+  },
+  "quoteBillions": {
+    "message": "Au cheltuit miliarde ca să continui să derulezi. Noi am creat o mică extensie locală ca să te oprești."
+  },
+  "quoteBug": {
+    "message": "Fluxul infinit este o eroare. Iată remediul."
+  },
+  "best": {
+    "message": "record"
+  },
+  "gameLabel": {
+    "message": "Minijoc de zbor"
+  },
+  "gameHelp": {
+    "message": "Atinge sau apasă spațiu pentru a bate din aripi"
+  },
+  "back": {
+    "message": "← Înapoi"
+  },
+  "signature": {
+    "message": "Slowth · încetinește, respiră, creează"
+  },
+  "playHint": {
+    "message": "🦥 atinge pentru a juca Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Nu lovi crengile"
+  },
+  "newBest": {
+    "message": "Record nou! Atinge pentru a zbura din nou"
+  },
+  "flyAgain": {
+    "message": "Atinge pentru a zbura din nou"
+  },
+  "tapStart": {
+    "message": "Atinge pentru a începe"
+  },
+  "gameOver": {
+    "message": "Joc încheiat"
+  },
+  "feedTitle": {
+    "message": "Fluxul infinit este blocat"
+  },
+  "feedSubtitle": {
+    "message": "Slowth te ține departe de fluxul infinit. Respiră. Fă altceva."
+  },
+  "backHome": {
+    "message": "Înapoi la pagina principală"
+  },
+  "dismiss": {
+    "message": "Închide"
+  },
+  "storiesTime": {
+    "message": "Ai petrecut deja $1 cu poveștile. Respiră."
+  },
+  "enableSafari": {
+    "message": "Activează în Safari"
+  },
+  "openSettings": {
+    "message": "Deschide Configurări"
+  },
+  "strictMode": {
+    "message": "Mod strict"
+  },
+  "off": {
+    "message": "Oprit"
+  },
+  "blockShorts": {
+    "message": "Blochează Shorts"
+  },
+  "blockReels": {
+    "message": "Blochează Reels"
+  },
+  "blockFeeds": {
+    "message": "Blochează Reels și fluxurile"
+  },
+  "blockFeed": {
+    "message": "Blochează Reels și fluxul"
+  },
+  "blockExplore": {
+    "message": "Blochează Explorare și tendințe"
+  },
+  "blockSite": {
+    "message": "Blochează site-ul"
+  },
+  "updating": {
+    "message": "Se actualizează…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blochează fluxul infinit"
+  },
+  "infiniteFeedHelp": {
+    "message": "Limitează derularea infinită. Pe Instagram include și Explorează și Povești."
+  },
+  "settingsSaveFailed": {
+    "message": "Nu s-a putut salva"
+  },
+  "strictConfirmTitle": {
+    "message": "Activezi modul strict?"
+  },
+  "enable": {
+    "message": "Activează"
+  },
+  "strictEnableConfirm": {
+    "message": "Timp de 24 de ore, restricțiile active nu pot fi dezactivate. Poți adăuga restricții, dar nu poți activa blocarea unui site întreg."
+  },
+  "cancel": {
+    "message": "Anulează"
+  }
+}

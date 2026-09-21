@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "დაბლოკეთ YouTube Shorts, Reels, TikTok და ყურადღების გამფანტავი ლენტები Safari-ში."
+  },
+  "locale": {
+    "message": "ka"
+  },
+  "tagline": {
+    "message": "დაბლოკეთ YouTube Shorts, Instagram და Facebook Reels, X-ის აღმოჩენა და ტრენდები. TikTok სრულად დაბლოკეთ. მკაცრი რეჟიმით პარამეტრები 24 საათით ჩაკეტეთ."
+  },
+  "stepSettings": {
+    "message": "გახსენით მოწყობილობის პარამეტრები"
+  },
+  "stepExtensions": {
+    "message": "გადადით: აპები → Safari → გაფართოებები"
+  },
+  "stepEnable": {
+    "message": "ჩართეთ Slowth და დაუშვით ყველა ვებსაიტზე"
+  },
+  "onboardingDone": {
+    "message": "უკვე ჩავრთე"
+  },
+  "blocking": {
+    "message": "დაბლოკვა"
+  },
+  "strictHelp": {
+    "message": "24 საათის განმავლობაში ჩართული შეზღუდვების გამორთვა შეუძლებელია. შეგიძლიათ შეზღუდვების დამატება, მაგრამ ვერ ჩართავთ მთელი საიტის დაბლოკვას."
+  },
+  "updates": {
+    "message": "განახლებები"
+  },
+  "updateNow": {
+    "message": "ახლავე განახლება"
+  },
+  "loading": {
+    "message": "იტვირთება…"
+  },
+  "guide": {
+    "message": "გზამკვლევი"
+  },
+  "howToUse": {
+    "message": "როგორ გამოვიყენოთ Slowth"
+  },
+  "modesExplained": {
+    "message": "მკაცრი რეჟიმისა და საიტების რეჟიმების ახსნა"
+  },
+  "strictGuideTitle": {
+    "message": "რას აკეთებს მკაცრი რეჟიმი"
+  },
+  "strictGuide": {
+    "message": "24 საათის განმავლობაში ჩართული შეზღუდვების გამორთვა შეუძლებელია. შეგიძლიათ შეზღუდვების დამატება, მაგრამ ვერ ჩართავთ მთელი საიტის დაბლოკვას. ტაიმერი მუშაობას აგრძელებს გადატვირთვისა და იძულებითი დახურვის შემდეგაც."
+  },
+  "strictAdvice": {
+    "message": "ჩართეთ, როცა მხოლოდ ნებისყოფა არ კმარა. გამორთული დატოვეთ, თუ მსუბუქი შეხსენება გჭირდებათ."
+  },
+  "howBlockingWorks": {
+    "message": "როგორ მუშაობს დაბლოკვა"
+  },
+  "modeOffHelp": {
+    "message": "საიტი ჩვეულებრივ იტვირთება. Slowth არაფერს აკეთებს."
+  },
+  "siteSpecific": {
+    "message": "საიტზე მორგებული დაბლოკვა"
+  },
+  "modeShortsHelp": {
+    "message": "ბლოკავს YouTube Shorts-ს, Instagram/Facebook Reels-ს ან X-ის აღმოჩენასა და ტრენდებს. საიტის დანარჩენი ნაწილი მუშაობას აგრძელებს."
+  },
+  "addFeed": {
+    "message": "ლენტის დაბლოკვის დამატება"
+  },
+  "modeFeedHelp": {
+    "message": "რამდენიმე ეკრანის შემდეგ მთავარ უსასრულო ლენტასაც აჩერებს. Instagram-ზე დამატებით მოიცავს აღმოჩენას, ისტორიებსა და Reels-ის სხვა სექციებს."
+  },
+  "modeAllHelp": {
+    "message": "საიტის ნაცვლად გამოჩნდება მეგობრული დაბლოკვის გვერდი."
+  },
+  "leaveFeedback": {
+    "message": "გამოხმაურების დატოვება"
+  },
+  "showIntro": {
+    "message": "შესავლის ხელახლა ჩვენება"
+  },
+  "rulesNever": {
+    "message": "წესები: ჯერ არ ჩამოტვირთულა"
+  },
+  "rulesNow": {
+    "message": "წესები: ახლახან"
+  },
+  "rulesRelative": {
+    "message": "წესები: $1"
+  },
+  "strictUntil": {
+    "message": "მკაცრი რეჟიმი აქტიურია $1-მდე"
+  },
+  "openSafariSettings": {
+    "message": "Safari-ის პარამეტრების გახსნა"
+  },
+  "rulesCurrent": {
+    "message": "წესები: განახლებულია"
+  },
+  "rulesFailed": {
+    "message": "წესები: განახლება ვერ მოხერხდა. სცადეთ ხელახლა."
+  },
+  "blockedPageTitle": {
+    "message": "დაბლოკილია Slowth-ის მიერ"
+  },
+  "thisSite": {
+    "message": "ეს საიტი"
+  },
+  "blockedTitle": {
+    "message": "$1 დაბლოკილია"
+  },
+  "blockedTabTitle": {
+    "message": "დაბლოკილია: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth გეხმარებათ $1-ს მოსწყდეთ. ჩაისუნთქეთ. სხვა რამ გააკეთეთ."
+  },
+  "backToSite": {
+    "message": "← დაბრუნება $1-ზე"
+  },
+  "why": {
+    "message": "რატომ"
+  },
+  "quoteTeam": {
+    "message": "Reels შექმნა ასობით ადამიანის გუნდმა, რომელთა ხელფასი $$400k იყო. Slowth კი ერთმა დეველოპერმა შაბათ-კვირას შექმნა."
+  },
+  "quoteBillions": {
+    "message": "მათ მილიარდები დახარჯეს, რომ სქროლვა გაგეგრძელებინათ. ჩვენ პატარა ადგილობრივი გაფართოება შევქმენით, რომ გაჩერებაში დაგეხმაროთ."
+  },
+  "quoteBug": {
+    "message": "უსასრულო ლენტა შეცდომაა. აი მისი გამოსწორება."
+  },
+  "best": {
+    "message": "რეკორდი"
+  },
+  "gameLabel": {
+    "message": "ფრენის მინი-თამაში"
+  },
+  "gameHelp": {
+    "message": "ფრთების ასაქნევად შეეხეთ ეკრანს ან დააჭირეთ გამოტოვების ღილაკს"
+  },
+  "back": {
+    "message": "← უკან"
+  },
+  "signature": {
+    "message": "Slowth · შეანელე, ისუნთქე, შექმენი"
+  },
+  "playHint": {
+    "message": "🦥 შეეხეთ Slow Flap-ის სათამაშოდ →"
+  },
+  "avoidBranches": {
+    "message": "ტოტებს არ დაეჯახოთ"
+  },
+  "newBest": {
+    "message": "ახალი რეკორდი! შეეხეთ კვლავ საფრენად"
+  },
+  "flyAgain": {
+    "message": "შეეხეთ კვლავ საფრენად"
+  },
+  "tapStart": {
+    "message": "შეეხეთ დასაწყებად"
+  },
+  "gameOver": {
+    "message": "თამაში დასრულდა"
+  },
+  "feedTitle": {
+    "message": "უსასრულო ლენტა დაბლოკილია"
+  },
+  "feedSubtitle": {
+    "message": "Slowth გეხმარებათ უსასრულო ლენტას მოსწყდეთ. ჩაისუნთქეთ. სხვა რამ გააკეთეთ."
+  },
+  "backHome": {
+    "message": "მთავარ გვერდზე დაბრუნება"
+  },
+  "dismiss": {
+    "message": "დახურვა"
+  },
+  "storiesTime": {
+    "message": "ისტორიებზე უკვე $1 დახარჯეთ. ჩაისუნთქეთ."
+  },
+  "enableSafari": {
+    "message": "Safari-ში ჩართვა"
+  },
+  "openSettings": {
+    "message": "პარამეტრების გახსნა"
+  },
+  "strictMode": {
+    "message": "მკაცრი რეჟიმი"
+  },
+  "off": {
+    "message": "გამორთული"
+  },
+  "blockShorts": {
+    "message": "Shorts-ის დაბლოკვა"
+  },
+  "blockReels": {
+    "message": "Reels-ის დაბლოკვა"
+  },
+  "blockFeeds": {
+    "message": "Reels-ისა და ლენტების დაბლოკვა"
+  },
+  "blockFeed": {
+    "message": "Reels-ისა და ლენტის დაბლოკვა"
+  },
+  "blockExplore": {
+    "message": "აღმოჩენისა და ტრენდების დაბლოკვა"
+  },
+  "blockSite": {
+    "message": "საიტის დაბლოკვა"
+  },
+  "updating": {
+    "message": "ახლდება…"
+  },
+  "blockInfiniteFeed": {
+    "message": "უსასრულო არხის დაბლოკვა"
+  },
+  "infiniteFeedHelp": {
+    "message": "ზღუდავს უსასრულო გადახვევას. Instagram-ზე ასევე მოიცავს Explore-სა და Stories-ს."
+  },
+  "settingsSaveFailed": {
+    "message": "შენახვა ვერ მოხერხდა"
+  },
+  "strictConfirmTitle": {
+    "message": "ჩაირთოს მკაცრი რეჟიმი?"
+  },
+  "enable": {
+    "message": "ჩართვა"
+  },
+  "strictEnableConfirm": {
+    "message": "24 საათის განმავლობაში ჩართული შეზღუდვების გამორთვა შეუძლებელია. შეგიძლიათ შეზღუდვების დამატება, მაგრამ ვერ ჩართავთ მთელი საიტის დაბლოკვას."
+  },
+  "cancel": {
+    "message": "გაუქმება"
+  }
+}

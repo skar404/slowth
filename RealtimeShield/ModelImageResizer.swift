@@ -264,6 +264,7 @@ final class ModelImageResizer {
     }
 }
 
+#if os(iOS)
 enum RealtimeShieldMemory {
     static var availableMB: Double {
         Double(os_proc_available_memory()) / 1_048_576
@@ -283,3 +284,4 @@ enum RealtimeShieldMemory {
         return Double(info.phys_footprint) / 1_048_576
     }
 }
+#endif

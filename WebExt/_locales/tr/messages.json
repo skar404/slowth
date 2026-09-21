@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safari'de YouTube Shorts, Reels, TikTok ve dikkat dağıtan akışları siteye özel kontrollerle engelleyin."
+  },
+  "locale": {
+    "message": "tr"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram ve Facebook Reels ile X'teki Keşfet ve gündemi engelleyin. TikTok'u tamamen engelleyin. Katı modla ayarlarınızı 24 saat kilitleyin."
+  },
+  "stepSettings": {
+    "message": "Cihazınızda Ayarlar'ı açın"
+  },
+  "stepExtensions": {
+    "message": "Uygulamalar → Safari → Uzantılar yolunu izleyin"
+  },
+  "stepEnable": {
+    "message": "Slowth'u açın ve tüm web sitelerinde izin verin"
+  },
+  "onboardingDone": {
+    "message": "Etkinleştirdim"
+  },
+  "blocking": {
+    "message": "Engelleme"
+  },
+  "strictHelp": {
+    "message": "Etkin kısıtlamalar 24 saat boyunca kapatılamaz. Yeni kısıtlamalar ekleyebilirsiniz, ancak sitenin tamamını engellemeyi etkinleştiremezsiniz."
+  },
+  "updates": {
+    "message": "Güncellemeler"
+  },
+  "updateNow": {
+    "message": "Şimdi güncelle"
+  },
+  "loading": {
+    "message": "Yükleniyor…"
+  },
+  "guide": {
+    "message": "Kılavuz"
+  },
+  "howToUse": {
+    "message": "Slowth nasıl kullanılır"
+  },
+  "modesExplained": {
+    "message": "Katı mod ve site modları hakkında"
+  },
+  "strictGuideTitle": {
+    "message": "Katı mod ne yapar"
+  },
+  "strictGuide": {
+    "message": "Etkin kısıtlamalar 24 saat boyunca kapatılamaz. Yeni kısıtlamalar ekleyebilirsiniz, ancak sitenin tamamını engellemeyi etkinleştiremezsiniz. Sayaç, yeniden başlatma ve zorla kapatma sonrasında devam eder."
+  },
+  "strictAdvice": {
+    "message": "İrade tek başına yetmediğinde açın. Yalnızca hafif bir hatırlatma istiyorsanız kapalı bırakın."
+  },
+  "howBlockingWorks": {
+    "message": "Engelleme nasıl çalışır"
+  },
+  "modeOffHelp": {
+    "message": "Site normal şekilde yüklenir. Slowth hiçbir şey yapmaz."
+  },
+  "siteSpecific": {
+    "message": "Siteye özel engelleme"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels veya X Keşfet ve gündemini engeller. Sitenin geri kalanı çalışır."
+  },
+  "addFeed": {
+    "message": "Akış engellemesi ekle"
+  },
+  "modeFeedHelp": {
+    "message": "Birkaç ekrandan sonra sonsuz ana akışı da durdurur. Instagram'da ayrıca Keşfet, Hikâyeler ve daha fazla Reels alanını kapsar."
+  },
+  "modeAllHelp": {
+    "message": "Site yerine dostça bir engelleme sayfası gösterilir."
+  },
+  "leaveFeedback": {
+    "message": "Geri bildirim bırak"
+  },
+  "showIntro": {
+    "message": "Tanıtımı yeniden göster"
+  },
+  "rulesNever": {
+    "message": "Kurallar: henüz alınmadı"
+  },
+  "rulesNow": {
+    "message": "Kurallar: az önce"
+  },
+  "rulesRelative": {
+    "message": "Kurallar: $1"
+  },
+  "strictUntil": {
+    "message": "Katı mod bitişi: $1"
+  },
+  "openSafariSettings": {
+    "message": "Safari Ayarları'nı aç"
+  },
+  "rulesCurrent": {
+    "message": "Kurallar: güncel"
+  },
+  "rulesFailed": {
+    "message": "Kurallar: güncellenemedi. Yeniden deneyin."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth tarafından engellendi"
+  },
+  "thisSite": {
+    "message": "bu site"
+  },
+  "blockedTitle": {
+    "message": "$1 engellendi"
+  },
+  "blockedTabTitle": {
+    "message": "Engellendi: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth sizi $1 sitesinden uzak tutuyor. Nefes alın. Başka bir şey yapın."
+  },
+  "backToSite": {
+    "message": "← $1 sitesine dön"
+  },
+  "why": {
+    "message": "Neden"
+  },
+  "quoteTeam": {
+    "message": "Reels, $$400k maaş alan yüzlerce kişilik bir ekip tarafından yapıldı. Slowth'u tek bir geliştirici bir hafta sonunda yaptı."
+  },
+  "quoteBillions": {
+    "message": "Kaydırmaya devam etmeniz için milyarlar harcadılar. Biz durmanıza yardımcı olacak küçük bir yerel uzantı yaptık."
+  },
+  "quoteBug": {
+    "message": "Sonsuz akış bir hata. İşte çözümü."
+  },
+  "best": {
+    "message": "rekor"
+  },
+  "gameLabel": {
+    "message": "Mini uçuş oyunu"
+  },
+  "gameHelp": {
+    "message": "Kanat çırpmak için dokunun veya boşluk tuşuna basın"
+  },
+  "back": {
+    "message": "← Geri"
+  },
+  "signature": {
+    "message": "Slowth · yavaşla, nefes al, üret"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap oynamak için dokun →"
+  },
+  "avoidBranches": {
+    "message": "Dallara çarpmayın"
+  },
+  "newBest": {
+    "message": "Yeni rekor! Yeniden uçmak için dokunun"
+  },
+  "flyAgain": {
+    "message": "Yeniden uçmak için dokunun"
+  },
+  "tapStart": {
+    "message": "Başlamak için dokunun"
+  },
+  "gameOver": {
+    "message": "Oyun bitti"
+  },
+  "feedTitle": {
+    "message": "Sonsuz akış engellendi"
+  },
+  "feedSubtitle": {
+    "message": "Slowth sizi sonsuz akıştan uzak tutuyor. Nefes alın. Başka bir şey yapın."
+  },
+  "backHome": {
+    "message": "Ana sayfaya dön"
+  },
+  "dismiss": {
+    "message": "Kapat"
+  },
+  "storiesTime": {
+    "message": "Hikâyelere zaten $1 harcadınız. Nefes alın."
+  },
+  "enableSafari": {
+    "message": "Safari'de etkinleştir"
+  },
+  "openSettings": {
+    "message": "Ayarlar'ı aç"
+  },
+  "strictMode": {
+    "message": "Katı mod"
+  },
+  "off": {
+    "message": "Kapalı"
+  },
+  "blockShorts": {
+    "message": "Shorts'u engelle"
+  },
+  "blockReels": {
+    "message": "Reels'ı engelle"
+  },
+  "blockFeeds": {
+    "message": "Reels ve akışları engelle"
+  },
+  "blockFeed": {
+    "message": "Reels ve akışı engelle"
+  },
+  "blockExplore": {
+    "message": "Keşfet ve gündemi engelle"
+  },
+  "blockSite": {
+    "message": "Siteyi engelle"
+  },
+  "updating": {
+    "message": "Güncelleniyor…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Sonsuz akışı engelle"
+  },
+  "infiniteFeedHelp": {
+    "message": "Sonsuz kaydırmayı sınırlar. Instagram'da Keşfet ve Hikâyeler de dahildir."
+  },
+  "settingsSaveFailed": {
+    "message": "Kaydedilemedi"
+  },
+  "strictConfirmTitle": {
+    "message": "Katı mod etkinleştirilsin mi?"
+  },
+  "enable": {
+    "message": "Etkinleştir"
+  },
+  "strictEnableConfirm": {
+    "message": "Etkin kısıtlamalar 24 saat boyunca kapatılamaz. Yeni kısıtlamalar ekleyebilirsiniz, ancak sitenin tamamını engellemeyi etkinleştiremezsiniz."
+  },
+  "cancel": {
+    "message": "İptal"
+  }
+}

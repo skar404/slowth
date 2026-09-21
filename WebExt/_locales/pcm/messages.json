@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Block YouTube Shorts, Reels, TikTok and feeds wey dey distract you for Safari, with control for each website."
+  },
+  "locale": {
+    "message": "pcm"
+  },
+  "tagline": {
+    "message": "Block YouTube Shorts, Instagram and Facebook Reels, plus Explore and trends for X. Block TikTok completely. Lock your settings with Strict mode for 24 hours."
+  },
+  "stepSettings": {
+    "message": "Open Settings for your device"
+  },
+  "stepExtensions": {
+    "message": "Go Apps → Safari → Extensions"
+  },
+  "stepEnable": {
+    "message": "Turn on Slowth and allow am for every website"
+  },
+  "onboardingDone": {
+    "message": "I don turn am on"
+  },
+  "blocking": {
+    "message": "Blocking"
+  },
+  "strictHelp": {
+    "message": "For 24 hours, you no fit turn off restrictions wey don dey on. You fit add more restrictions, but you no fit turn on blocking for the whole site."
+  },
+  "updates": {
+    "message": "Updates"
+  },
+  "updateNow": {
+    "message": "Update now"
+  },
+  "loading": {
+    "message": "E dey load…"
+  },
+  "guide": {
+    "message": "Guide"
+  },
+  "howToUse": {
+    "message": "How to use Slowth"
+  },
+  "modesExplained": {
+    "message": "Explanation of Strict mode and modes for each website"
+  },
+  "strictGuideTitle": {
+    "message": "Wetin Strict mode dey do"
+  },
+  "strictGuide": {
+    "message": "For 24 hours, you no fit turn off restrictions wey don dey on. You fit add more restrictions, but you no fit turn on blocking for the whole site. The timer go still continue if you restart or force the app to close."
+  },
+  "strictAdvice": {
+    "message": "Turn am on when willpower alone no enough. Leave am off if na just small reminder you want."
+  },
+  "howBlockingWorks": {
+    "message": "How blocking dey work"
+  },
+  "modeOffHelp": {
+    "message": "Website dey load normally. Slowth no dey do anything."
+  },
+  "siteSpecific": {
+    "message": "Blocking for each website"
+  },
+  "modeShortsHelp": {
+    "message": "E dey block YouTube Shorts, Instagram/Facebook Reels, or Explore and trends for X. The rest of the website still dey work."
+  },
+  "addFeed": {
+    "message": "Add feed blocking"
+  },
+  "modeFeedHelp": {
+    "message": "E also dey stop endless home feed after some screens. For Instagram, e also cover Explore, Stories and more Reels areas."
+  },
+  "modeAllHelp": {
+    "message": "When you visit the website, friendly blocked page go show instead."
+  },
+  "leaveFeedback": {
+    "message": "Leave feedback"
+  },
+  "showIntro": {
+    "message": "Show introduction again"
+  },
+  "rulesNever": {
+    "message": "Rules: we never fetch am"
+  },
+  "rulesNow": {
+    "message": "Rules: just now"
+  },
+  "rulesRelative": {
+    "message": "Rules: $1"
+  },
+  "strictUntil": {
+    "message": "Strict mode dey on until $1"
+  },
+  "openSafariSettings": {
+    "message": "Open Safari Settings"
+  },
+  "rulesCurrent": {
+    "message": "Rules: dem dey up to date"
+  },
+  "rulesFailed": {
+    "message": "Rules: we no fit update am. Try again."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth don block am"
+  },
+  "thisSite": {
+    "message": "this website"
+  },
+  "blockedTitle": {
+    "message": "$1 dey blocked"
+  },
+  "blockedTabTitle": {
+    "message": "E dey blocked: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth dey keep you away from $1. Breathe small. Do another thing."
+  },
+  "backToSite": {
+    "message": "← Go back to $1"
+  },
+  "why": {
+    "message": "Why"
+  },
+  "quoteTeam": {
+    "message": "Na team of hundreds of people wey dey collect $$400k salary build Reels. Na one developer build Slowth for one weekend."
+  },
+  "quoteBillions": {
+    "message": "Dem spend billions so you go keep scrolling. We build small local extension to help you stop."
+  },
+  "quoteBug": {
+    "message": "Endless feed na bug. See the fix here."
+  },
+  "best": {
+    "message": "best"
+  },
+  "gameLabel": {
+    "message": "Small flying game"
+  },
+  "gameHelp": {
+    "message": "Tap or press space to flap"
+  },
+  "back": {
+    "message": "← Go back"
+  },
+  "signature": {
+    "message": "Slowth · slow down, breathe, build"
+  },
+  "playHint": {
+    "message": "🦥 tap to play Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "No hit the branches"
+  },
+  "newBest": {
+    "message": "New record! Tap to fly again"
+  },
+  "flyAgain": {
+    "message": "Tap to fly again"
+  },
+  "tapStart": {
+    "message": "Tap to start"
+  },
+  "gameOver": {
+    "message": "Game don end"
+  },
+  "feedTitle": {
+    "message": "Endless feed dey blocked"
+  },
+  "feedSubtitle": {
+    "message": "Slowth dey keep you away from endless feed. Breathe small. Do another thing."
+  },
+  "backHome": {
+    "message": "Go back home"
+  },
+  "dismiss": {
+    "message": "Close am"
+  },
+  "storiesTime": {
+    "message": "You don already spend $1 on stories. Breathe small."
+  },
+  "enableSafari": {
+    "message": "Turn am on for Safari"
+  },
+  "openSettings": {
+    "message": "Open Settings"
+  },
+  "strictMode": {
+    "message": "Strict mode"
+  },
+  "off": {
+    "message": "Off"
+  },
+  "blockShorts": {
+    "message": "Block Shorts"
+  },
+  "blockReels": {
+    "message": "Block Reels"
+  },
+  "blockFeeds": {
+    "message": "Block Reels and feeds"
+  },
+  "blockFeed": {
+    "message": "Block Reels and feed"
+  },
+  "blockExplore": {
+    "message": "Block Explore and trends"
+  },
+  "blockSite": {
+    "message": "Block website"
+  },
+  "updating": {
+    "message": "E dey update…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Block feed wey no dey end"
+  },
+  "infiniteFeedHelp": {
+    "message": "E dey limit scrolling. For Instagram, e include Explore and Stories too."
+  },
+  "settingsSaveFailed": {
+    "message": "We no fit save am"
+  },
+  "strictConfirmTitle": {
+    "message": "Make Strict mode start?"
+  },
+  "enable": {
+    "message": "Turn on"
+  },
+  "strictEnableConfirm": {
+    "message": "For 24 hours, you no fit turn off restrictions wey don dey on. You fit add more restrictions, but you no fit turn on blocking for the whole site."
+  },
+  "cancel": {
+    "message": "Cancel am"
+  }
+}

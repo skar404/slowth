@@ -1,10 +1,239 @@
 {
   "extensionName": {
-    "message": "Slowth",
-    "description": "Name of the extension shown in Safari."
+    "message": "Slowth"
   },
   "extensionDescription": {
-    "message": "Block YouTube Shorts, Instagram/Facebook Reels, X Explore and trends; block TikTok. Per-site control with remote rules.",
-    "description": "Description of the extension."
+    "message": "Block YouTube Shorts, Reels, TikTok, and distracting feeds in Safari with per-site controls."
+  },
+  "locale": {
+    "message": "en"
+  },
+  "tagline": {
+    "message": "Block YouTube Shorts, Instagram and Facebook Reels, plus Explore and trends on X. Block TikTok entirely. Lock your settings with Strict mode for 24 hours."
+  },
+  "stepSettings": {
+    "message": "Open Settings on your device"
+  },
+  "stepExtensions": {
+    "message": "Go to Apps → Safari → Extensions"
+  },
+  "stepEnable": {
+    "message": "Turn on Slowth and allow it on every website"
+  },
+  "onboardingDone": {
+    "message": "I've enabled it"
+  },
+  "blocking": {
+    "message": "Blocking"
+  },
+  "strictHelp": {
+    "message": "For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."
+  },
+  "strictEnableConfirm": {
+    "message": "For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."
+  },
+  "strictConfirmTitle": {
+    "message": "Enable Strict mode?"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "enable": {
+    "message": "Enable"
+  },
+  "updates": {
+    "message": "Updates"
+  },
+  "updateNow": {
+    "message": "Update now"
+  },
+  "loading": {
+    "message": "Loading…"
+  },
+  "guide": {
+    "message": "Guide"
+  },
+  "howToUse": {
+    "message": "How to use Slowth"
+  },
+  "modesExplained": {
+    "message": "Strict mode and per-site modes explained"
+  },
+  "strictGuideTitle": {
+    "message": "What Strict mode does"
+  },
+  "strictGuide": {
+    "message": "For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking. The timer survives restarts and force-quits."
+  },
+  "strictAdvice": {
+    "message": "Turn it on when willpower alone isn't enough. Leave it off if you just want a soft nudge."
+  },
+  "howBlockingWorks": {
+    "message": "How blocking works"
+  },
+  "modeOffHelp": {
+    "message": "The site loads as usual. Slowth does nothing."
+  },
+  "siteSpecific": {
+    "message": "Site-specific block"
+  },
+  "modeShortsHelp": {
+    "message": "Blocks YouTube Shorts, Instagram/Facebook Reels, or X Explore and trends. The rest of the site keeps working."
+  },
+  "addFeed": {
+    "message": "Add feed blocking"
+  },
+  "modeFeedHelp": {
+    "message": "Also stops the endless home feed after a few screens. Instagram additionally covers Explore, Stories, and more Reels surfaces."
+  },
+  "modeAllHelp": {
+    "message": "Visiting the site shows a friendly blocked page instead."
+  },
+  "leaveFeedback": {
+    "message": "Leave feedback"
+  },
+  "showIntro": {
+    "message": "Show intro again"
+  },
+  "rulesNever": {
+    "message": "Rules: never fetched"
+  },
+  "rulesNow": {
+    "message": "Rules: just now"
+  },
+  "rulesRelative": {
+    "message": "Rules: $1"
+  },
+  "strictUntil": {
+    "message": "Strict mode active until $1"
+  },
+  "openSafariSettings": {
+    "message": "Open Safari Settings"
+  },
+  "rulesCurrent": {
+    "message": "Rules: up to date"
+  },
+  "rulesFailed": {
+    "message": "Rules: could not update. Please try again."
+  },
+  "blockedPageTitle": {
+    "message": "Blocked by Slowth"
+  },
+  "thisSite": {
+    "message": "this site"
+  },
+  "blockedTitle": {
+    "message": "$1 is blocked"
+  },
+  "blockedTabTitle": {
+    "message": "Blocked: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth is keeping you off $1. Take a breath. Do something else."
+  },
+  "backToSite": {
+    "message": "← Back to $1"
+  },
+  "why": {
+    "message": "Why"
+  },
+  "quoteTeam": {
+    "message": "Reels was built by a team of hundreds of people making $$400k salaries. Slowth was built by one dev over a weekend."
+  },
+  "quoteBillions": {
+    "message": "They spent billions to keep you scrolling. We built a small local extension to make you stop."
+  },
+  "quoteBug": {
+    "message": "The infinite feed is a bug. Here's the fix."
+  },
+  "best": {
+    "message": "best"
+  },
+  "gameLabel": {
+    "message": "Mini flap game"
+  },
+  "gameHelp": {
+    "message": "Tap or press space to flap"
+  },
+  "back": {
+    "message": "← Back"
+  },
+  "signature": {
+    "message": "Slowth · slow down, breathe, build"
+  },
+  "playHint": {
+    "message": "🦥 tap to play Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Don't hit the branches"
+  },
+  "newBest": {
+    "message": "New best! Tap to fly again"
+  },
+  "flyAgain": {
+    "message": "Tap to fly again"
+  },
+  "tapStart": {
+    "message": "Tap to start"
+  },
+  "gameOver": {
+    "message": "Game over"
+  },
+  "feedTitle": {
+    "message": "The infinite feed is blocked"
+  },
+  "feedSubtitle": {
+    "message": "Slowth is keeping you off the infinite feed. Take a breath. Do something else."
+  },
+  "backHome": {
+    "message": "Back to home"
+  },
+  "dismiss": {
+    "message": "Dismiss"
+  },
+  "storiesTime": {
+    "message": "You've already burned $1 on stories. Take a breath."
+  },
+  "enableSafari": {
+    "message": "Enable in Safari"
+  },
+  "openSettings": {
+    "message": "Open Settings"
+  },
+  "strictMode": {
+    "message": "Strict mode"
+  },
+  "off": {
+    "message": "Off"
+  },
+  "blockShorts": {
+    "message": "Block Shorts"
+  },
+  "blockReels": {
+    "message": "Block Reels"
+  },
+  "blockFeeds": {
+    "message": "Block Reels + feeds"
+  },
+  "blockFeed": {
+    "message": "Block Reels + feed"
+  },
+  "blockExplore": {
+    "message": "Block Explore & trends"
+  },
+  "blockSite": {
+    "message": "Block site"
+  },
+  "updating": {
+    "message": "Updating…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Block Infinite Feed"
+  },
+  "infiniteFeedHelp": {
+    "message": "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Could not save"
   }
 }

@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Блакіруйце YouTube Shorts, Reels, TikTok і стужкі, што адцягваюць увагу, у Safari з наладамі для кожнага сайта."
+  },
+  "locale": {
+    "message": "be"
+  },
+  "tagline": {
+    "message": "Блакіруйце YouTube Shorts, Instagram і Facebook Reels, «Агляд» і трэнды ў X. Блакіруйце TikTok цалкам. Зафіксуйце налады строгім рэжымам на 24 гадзіны."
+  },
+  "stepSettings": {
+    "message": "Адкрыйце налады прылады"
+  },
+  "stepExtensions": {
+    "message": "Перайдзіце ў «Праграмы» → Safari → «Пашырэнні»"
+  },
+  "stepEnable": {
+    "message": "Уключыце Slowth і дазвольце працу на ўсіх сайтах"
+  },
+  "onboardingDone": {
+    "message": "Ужо ўключана"
+  },
+  "blocking": {
+    "message": "Блакіроўка"
+  },
+  "strictHelp": {
+    "message": "На працягу 24 гадзін уключаныя абмежаванні нельга адключыць. Можна дадаваць абмежаванні, але нельга ўключыць блакіроўку ўсяго сайта."
+  },
+  "updates": {
+    "message": "Абнаўленні"
+  },
+  "updateNow": {
+    "message": "Абнавіць зараз"
+  },
+  "loading": {
+    "message": "Загрузка…"
+  },
+  "guide": {
+    "message": "Дапаможнік"
+  },
+  "howToUse": {
+    "message": "Як карыстацца Slowth"
+  },
+  "modesExplained": {
+    "message": "Пра строгі рэжым і рэжымы сайтаў"
+  },
+  "strictGuideTitle": {
+    "message": "Што робіць строгі рэжым"
+  },
+  "strictGuide": {
+    "message": "На працягу 24 гадзін уключаныя абмежаванні нельга адключыць. Можна дадаваць абмежаванні, але нельга ўключыць блакіроўку ўсяго сайта. Таймер працягвае працаваць пасля перазапуску і прымусовага закрыцця."
+  },
+  "strictAdvice": {
+    "message": "Уключайце, калі адной сілы волі недастаткова. Пакіньце выключаным, калі патрэбны толькі мяккі напамін."
+  },
+  "howBlockingWorks": {
+    "message": "Як працуе блакіроўка"
+  },
+  "modeOffHelp": {
+    "message": "Сайт загружаецца як звычайна. Slowth нічога не робіць."
+  },
+  "siteSpecific": {
+    "message": "Блакіроўка змесціва сайта"
+  },
+  "modeShortsHelp": {
+    "message": "Блакіруе YouTube Shorts, Instagram/Facebook Reels, «Агляд» і трэнды ў X. Астатняя частка сайта працягвае працаваць."
+  },
+  "addFeed": {
+    "message": "Дадаць блакіроўку стужкі"
+  },
+  "modeFeedHelp": {
+    "message": "Таксама спыняе бясконцую галоўную стужку праз некалькі экранаў. У Instagram ахоплівае «Цікавае», гісторыі і дадатковыя раздзелы Reels."
+  },
+  "modeAllHelp": {
+    "message": "Замест сайта паказваецца прыязная старонка блакіроўкі."
+  },
+  "leaveFeedback": {
+    "message": "Пакінуць водгук"
+  },
+  "showIntro": {
+    "message": "Паказаць уводзіны зноў"
+  },
+  "rulesNever": {
+    "message": "Правілы: яшчэ не загружаныя"
+  },
+  "rulesNow": {
+    "message": "Правілы: толькі што"
+  },
+  "rulesRelative": {
+    "message": "Правілы: $1"
+  },
+  "strictUntil": {
+    "message": "Строгі рэжым дзейнічае да $1"
+  },
+  "openSafariSettings": {
+    "message": "Адкрыць налады Safari"
+  },
+  "rulesCurrent": {
+    "message": "Правілы: актуальныя"
+  },
+  "rulesFailed": {
+    "message": "Правілы: не ўдалося абнавіць. Паспрабуйце зноў."
+  },
+  "blockedPageTitle": {
+    "message": "Заблакіравана Slowth"
+  },
+  "thisSite": {
+    "message": "гэты сайт"
+  },
+  "blockedTitle": {
+    "message": "$1 заблакіраваны"
+  },
+  "blockedTabTitle": {
+    "message": "Заблакіравана: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth дапамагае вам адпачыць ад $1. Удыхніце. Займіцеся чымсьці іншым."
+  },
+  "backToSite": {
+    "message": "← Вярнуцца да $1"
+  },
+  "why": {
+    "message": "Чаму"
+  },
+  "quoteTeam": {
+    "message": "Reels стварыла каманда з сотняў людзей з заробкамі па $$400k. Slowth зрабіў адзін распрацоўшчык за выхадныя."
+  },
+  "quoteBillions": {
+    "message": "Яны выдаткавалі мільярды, каб вы працягвалі гартаць. Мы стварылі невялікае лакальнае пашырэнне, каб дапамагчы спыніцца."
+  },
+  "quoteBug": {
+    "message": "Бясконцая стужка — гэта памылка. Вось выпраўленне."
+  },
+  "best": {
+    "message": "рэкорд"
+  },
+  "gameLabel": {
+    "message": "Міні-гульня з палётам"
+  },
+  "gameHelp": {
+    "message": "Націсніце на экран або прабел, каб узмахнуць крыламі"
+  },
+  "back": {
+    "message": "← Назад"
+  },
+  "signature": {
+    "message": "Slowth · запаволься, удыхні, ствары"
+  },
+  "playHint": {
+    "message": "🦥 націсніце, каб згуляць у Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Не ўразайцеся ў галіны"
+  },
+  "newBest": {
+    "message": "Новы рэкорд! Націсніце, каб паляцець зноў"
+  },
+  "flyAgain": {
+    "message": "Націсніце, каб паляцець зноў"
+  },
+  "tapStart": {
+    "message": "Націсніце, каб пачаць"
+  },
+  "gameOver": {
+    "message": "Гульня скончана"
+  },
+  "feedTitle": {
+    "message": "Бясконцая стужка заблакіраваная"
+  },
+  "feedSubtitle": {
+    "message": "Slowth дапамагае вам адпачыць ад бясконцай стужкі. Удыхніце. Займіцеся чымсьці іншым."
+  },
+  "backHome": {
+    "message": "На галоўную"
+  },
+  "dismiss": {
+    "message": "Закрыць"
+  },
+  "storiesTime": {
+    "message": "Вы ўжо выдаткавалі $1 на гісторыі. Удыхніце."
+  },
+  "enableSafari": {
+    "message": "Уключыць у Safari"
+  },
+  "openSettings": {
+    "message": "Адкрыць налады"
+  },
+  "strictMode": {
+    "message": "Строгі рэжым"
+  },
+  "off": {
+    "message": "Выкл."
+  },
+  "blockShorts": {
+    "message": "Блакіраваць Shorts"
+  },
+  "blockReels": {
+    "message": "Блакіраваць Reels"
+  },
+  "blockFeeds": {
+    "message": "Блакіраваць Reels і стужкі"
+  },
+  "blockFeed": {
+    "message": "Блакіраваць Reels і стужку"
+  },
+  "blockExplore": {
+    "message": "Блакіраваць «Агляд» і трэнды"
+  },
+  "blockSite": {
+    "message": "Блакіраваць сайт"
+  },
+  "updating": {
+    "message": "Абнаўленне…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Блакіраваць бясконцую стужку"
+  },
+  "infiniteFeedHelp": {
+    "message": "Абмяжоўвае бясконцую пракрутку. У Instagram таксама ахоплівае Explore і Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Не ўдалося захаваць"
+  },
+  "strictConfirmTitle": {
+    "message": "Уключыць строгі рэжым?"
+  },
+  "enable": {
+    "message": "Уключыць"
+  },
+  "strictEnableConfirm": {
+    "message": "На працягу 24 гадзін уключаныя абмежаванні нельга адключыць. Можна дадаваць абмежаванні, але нельга ўключыць блакіроўку ўсяго сайта."
+  },
+  "cancel": {
+    "message": "Скасаваць"
+  }
+}

@@ -34,11 +34,12 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     private static var currentConfiguration: ShieldConfiguration {
         let state = SharedStore.snapshot()
+        let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
         let broadcastActive = state.broadcastActive
         RTLog.shieldConfig.notice("configuration(shielding:): broadcastActive=\(broadcastActive, privacy: .public) — showing \(broadcastActive ? "detected" : "recordingOff", privacy: .public) variant")
         return broadcastActive
-            ? detectedConfiguration(state: state)
-            : recordingOffConfiguration(state: state)
+            ? detectedConfiguration(state: state, bundle: bundle)
+            : recordingOffConfiguration(state: state, bundle: bundle)
     }
 
     private static func recordInstagramShieldPresentation(for application: Application) {
@@ -57,10 +58,10 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         #endif
     }
 
-    private static func recordingOffConfiguration(state: SharedState) -> ShieldConfiguration {
+    private static func recordingOffConfiguration(state: SharedState, bundle: Bundle) -> ShieldConfiguration {
         let openAppButton: ShieldConfiguration.Label?
         if #available(iOS 26.5, *) {
-            openAppButton = ShieldConfiguration.Label(text: "Open Slowth", color: .white)
+            openAppButton = ShieldConfiguration.Label(text: String(localized: "Open Slowth", bundle: bundle), color: .white)
         } else {
             openAppButton = nil
         }
@@ -68,10 +69,10 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             backgroundBlurStyle: .systemMaterialDark,
             backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
             icon: slowthAppIcon,
-            title: ShieldConfiguration.Label(text: "Blocked (Beta)", color: .white),
+            title: ShieldConfiguration.Label(text: String(localized: "Blocked", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
                 text: subtitleText(
-                    defaultText: "Open Slowth and start screen recording to unlock enabled apps. They stay open while you're not viewing selected blocked content.\n\nThis feature is still a work in progress; please let me know if you run into any issues.",
+                    defaultText: String(localized: "Open Slowth and start screen recording to unlock enabled apps. They stay open while you're not viewing selected blocked content.\n\nIf you notice any issues, please share your feedback.", bundle: bundle),
                     state: state,
                     variant: "recording off"
                 ),
@@ -82,24 +83,24 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         )
     }
 
-    private static func detectedConfiguration(state: SharedState) -> ShieldConfiguration {
+    private static func detectedConfiguration(state: SharedState, bundle: Bundle) -> ShieldConfiguration {
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterialDark,
             backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
             icon: slowthAppIcon,
-            title: ShieldConfiguration.Label(text: "Blocked content detected (Beta)", color: .white),
+            title: ShieldConfiguration.Label(text: String(localized: "Blocked content detected", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
                 text: subtitleText(
-                    defaultText: "Take a short break, then continue. Leave the blocked screen — Slowth will block it again if you stay there.\n\nThis feature is still a work in progress; please let me know if you run into any issues.",
+                    defaultText: String(localized: "Take a short break, then continue. Leave the blocked screen — Slowth will block it again if you stay there.\n\nIf you notice any issues, please share your feedback.", bundle: bundle),
                     state: state,
                     variant: "content detected"
                 ),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
-            primaryButtonLabel: ShieldConfiguration.Label(text: "Close app", color: .white),
+            primaryButtonLabel: ShieldConfiguration.Label(text: String(localized: "Close app", bundle: bundle), color: .white),
             primaryButtonBackgroundColor: UIColor(red: 0.90, green: 0.20, blue: 0.32, alpha: 1),
             secondaryButtonLabel: ShieldConfiguration.Label(
-                text: "Continue",
+                text: String(localized: "Continue", bundle: bundle),
                 color: UIColor.white.withAlphaComponent(0.85)
             )
         )

@@ -4,16 +4,17 @@ import ReplayKit
 import FamilyControls
 #endif
 
-// The hierarchical SurfaceDetector is the sole runtime classifier. It first
-// predicts the app, then app-specific content. Blocking scores are joint
-// probabilities: P(app) × P(content | app).
+// Cascade V6 is the Release classifier. Debug builds can compare other models.
+// Blocking scores are joint probabilities: P(app) × P(content | app).
 final class SampleHandler: RPBroadcastSampleHandler {
-    private var classifier: SurfaceClassifier?
+    private var classifier: (any SurfaceClassifying)?
     private var metadata: SurfaceModelMetadata?
-    private var lastInferenceTimestamp: CMTime?
+    private var lastInferenceTimestamp: Double?
+    private var timestampClock = CascadeTimestampClock()
     private var receivedVideoFrames = 0
     private var inferenceCount = 0
     private var lastPrediction: SurfacePrediction?
+    private var cascadeEvidenceBoundary = CascadeEvidenceBoundary()
     private var lastInferenceDurationMS: Double?
     private var inferenceDurationsMS: [Double] = []
     private var peakFootprintMB: Double = 0
@@ -33,14 +34,20 @@ final class SampleHandler: RPBroadcastSampleHandler {
     private var youtubeShortsVotes: [Bool] = []
     private var instagramReelsVotes: [Bool] = []
     private var instagramStoriesVotes: [Bool] = []
+    #if DEBUG
     private var youtubeShortsEvidence: [DebugCaptureFramePixels] = []
     private var instagramReelsEvidence: [DebugCaptureFramePixels] = []
     private var instagramStoriesEvidence: [DebugCaptureFramePixels] = []
+    #endif
     private var youtubeCandidateEvents = 0
     private var instagramCandidateEvents = 0
     private var instagramStoriesCandidateEvents = 0
+    private var recordingBackend: DebugModelBackend = DebugModelSettings.defaultBackend
+    #if DEBUG
     private var broadcastSessionID = UUID()
+    private var sessionCapture: SessionCapture?
 
+    #endif
     private static let unlockGraceSeconds: TimeInterval = 2
 
     override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
@@ -48,6 +55,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
         SoftYouTubeActivityMonitoring.stop()
         SharedStore.setBroadcastActive(true)
         resetSessionState()
+        // Freeze the choice before a delayed load or a retry after pause/failure.
+        recordingBackend = DebugModelSettings.resolve(
+            stored: AppGroup.defaults.string(forKey: DebugModelSettings.storageKey),
+            debugEnabled: DebugMode.isEnabled,
+            cascadeAvailable: DebugModelSettings.cascadeAvailable)
         let sharedState = SharedStore.snapshot()
         if sharedState.realtimeShieldEnabled {
             loadClassifier()
@@ -56,6 +68,13 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
         publishDiagnostics(force: true)
         prepareEnabledSurfacesForActiveBroadcast(sharedState)
+        #if DEBUG
+        if let interval = SessionCaptureSettings.interval,
+           let root = SessionCaptureSettings.rootDirectory {
+            sessionCapture = SessionCapture(root: root, sessionID: broadcastSessionID,
+                interval: interval, startedUptime: ProcessInfo.processInfo.systemUptime)
+        }
+        #endif
     }
 
     override func broadcastPaused() {
@@ -65,6 +84,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
         prepareEnabledSurfacesAfterBroadcastStops()
         publishDiagnostics(force: true)
         reshieldEnabledSurfaces()
+        #if DEBUG
+        sessionCapture?.pause()
+        #endif
     }
 
     override func broadcastResumed() {
@@ -74,12 +96,20 @@ final class SampleHandler: RPBroadcastSampleHandler {
         resetStreaks()
         resetLatchesForActiveBroadcast()
         lastInferenceTimestamp = nil
+        timestampClock = CascadeTimestampClock()
         let sharedState = SharedStore.snapshot()
         if sharedState.realtimeShieldEnabled && classifier == nil {
             loadClassifier()
         }
         publishDiagnostics(force: true)
         prepareEnabledSurfacesForActiveBroadcast(sharedState)
+        #if DEBUG
+        if SessionCaptureSettings.isEnabled {
+            sessionCapture?.resume()
+        } else {
+            sessionCapture?.finish(reason: "opted_out")
+        }
+        #endif
     }
 
     override func broadcastFinished() {
@@ -89,6 +119,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
         prepareEnabledSurfacesAfterBroadcastStops()
         publishDiagnostics(force: true)
         reshieldEnabledSurfaces()
+        #if DEBUG
+        sessionCapture?.finish(reason: "finished")
+        #endif
     }
 
     override func processSampleBuffer(
@@ -96,6 +129,12 @@ final class SampleHandler: RPBroadcastSampleHandler {
         with sampleBufferType: RPSampleBufferType
     ) {
         guard sampleBufferType == .video else { return }
+        #if DEBUG
+        var framePredictions: [String: Double]?
+        defer {
+            captureSessionFrame(sampleBuffer, predictions: framePredictions)
+        }
+        #endif
         let sharedState = SharedStore.snapshot()
         guard sharedState.realtimeShieldEnabled else { return }
 
@@ -113,15 +152,20 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
 
         let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        let observation = timestampClock.resolve(
+            pts: timestamp.isValid ? CMTimeGetSeconds(timestamp) : .nan,
+            uptime: ProcessInfo.processInfo.systemUptime)
         let interval = metadata?.inferenceIntervalSeconds ?? 0.25
-        if let previous = lastInferenceTimestamp,
-           timestamp.isValid,
-           previous.isValid,
-           CMTimeGetSeconds(CMTimeSubtract(timestamp, previous)) < interval {
+        let sampling = observation.reset ? CascadeSampling.sample(reset: true)
+            : CascadeSampling.decide(timestamp: observation.seconds, previous: lastInferenceTimestamp, interval: interval)
+        switch sampling {
+        case .skip:
             publishDiagnostics(force: false)
             return
+        case .sample(let reset):
+            if reset { resetStreaks() }
         }
-        lastInferenceTimestamp = timestamp
+        lastInferenceTimestamp = observation.seconds
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             failInference("sample has no pixel buffer", sharedState: sharedState)
@@ -130,7 +174,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
         let startedAt = CFAbsoluteTimeGetCurrent()
         do {
-            let prediction = try classifier.predict(pixelBuffer: pixelBuffer)
+            let enabledApps = CascadePolicy.enabledApps(
+                youtube: sharedState.realtimeYouTubeBlockingEnabled,
+                reels: sharedState.realtimeInstagramReelsBlockingEnabled,
+                stories: sharedState.realtimeInstagramStoriesBlockingEnabled)
+            let prediction = try classifier.predict(pixelBuffer: pixelBuffer, enabledApps: enabledApps)
             guard let youtubeThreshold = classifier.metadata.threshold(for: .youtubeShorts),
                   let instagramReelsThreshold = classifier.metadata.threshold(for: .instagramReels),
                   let instagramStoriesThreshold = classifier.metadata.threshold(
@@ -139,13 +187,32 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 throw SurfaceClassifierError.invalidMetadata
             }
             let durationMS = (CFAbsoluteTimeGetCurrent() - startedAt) * 1_000
+            if let routing = prediction.routing {
+                var boundary = cascadeEvidenceBoundary
+                if boundary.observe(app: routing.app, timestamp: observation.seconds,
+                                    maxGap: routing.maxEvidenceGapSeconds) {
+                    resetStreaks()
+                }
+                cascadeEvidenceBoundary = boundary
+                if routing.app != lastPrediction?.routing?.app || routing.reason != lastPrediction?.routing?.reason {
+                    RTLog.sampleHandler.debug("Cascade route=\(routing.app?.rawValue ?? "unknown", privacy: .public) reason=\(routing.reason, privacy: .public)")
+                }
+            }
             recordInference(prediction, durationMS: durationMS)
+            #if DEBUG
+            // Only this frame's actually executed heads; missing specialists stay absent.
+            framePredictions = Dictionary(uniqueKeysWithValues:
+                prediction.appProbabilities.map { ("app.\($0.key.rawValue)", $0.value) }
+                + prediction.youtubeContentProbabilities.map { ("youtube.\($0.key.rawValue)", $0.value) }
+                + prediction.instagramContentProbabilities.map { ("instagram.\($0.key.rawValue)", $0.value) })
 
+            #endif
             let youtubeVerdict = prediction.probability(for: .youtubeShorts) >= youtubeThreshold
             let instagramReelsVerdict = sharedState.realtimeInstagramReelsBlockingEnabled
                 && prediction.probability(for: .instagramReels) >= instagramReelsThreshold
             let instagramStoriesVerdict = sharedState.realtimeInstagramStoriesBlockingEnabled
                 && prediction.probability(for: .instagramStories) >= instagramStoriesThreshold
+            #if DEBUG
             recordDebugEvidence(
                 classifier: classifier,
                 prediction: prediction,
@@ -155,6 +222,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 observationWindowFrames: classifier.metadata.effectiveObservationWindowFrames,
                 capturedAt: now
             )
+            #endif
             updateCandidateStreaks(
                 youtubeVerdict: youtubeVerdict,
                 instagramReelsVerdict: instagramReelsVerdict,
@@ -185,8 +253,36 @@ final class SampleHandler: RPBroadcastSampleHandler {
         publishDiagnostics(force: classifierStatus == "failed")
     }
 
+    #if DEBUG
+    private func captureSessionFrame(_ sampleBuffer: CMSampleBuffer, predictions: [String: Double]?) {
+        guard let sessionCapture else { return }
+        guard SessionCaptureSettings.isEnabled else {
+            sessionCapture.finish(reason: "opted_out")
+            return
+        }
+        guard let pixels = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        let pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        let orientation = (CMGetAttachment(sampleBuffer, key: RPVideoSampleOrientationKey as CFString,
+                                            attachmentModeOut: nil) as? NSNumber)?.uint32Value
+        let frame = SessionCapture.Frame(ptsValue: pts.value, ptsTimescale: pts.timescale,
+            ptsEpoch: pts.epoch, ptsFlags: pts.flags.rawValue, orientation: orientation,
+            width: CVPixelBufferGetWidth(pixels), height: CVPixelBufferGetHeight(pixels),
+            modelVersion: metadata?.modelVersion, predictions: predictions)
+        // At most one full-size ReplayKit buffer is retained; no copy/JPEG work here.
+        sessionCapture.offer(frame, uptime: ProcessInfo.processInfo.systemUptime) {
+            try SessionJPEG.encode(pixels, orientation: orientation)
+        }
+    }
+
+    #endif
     private func resetSessionState() {
+        classifier = nil
+        metadata = nil
+        #if DEBUG
+        sessionCapture?.finish(reason: "finished")
+        sessionCapture = nil
         broadcastSessionID = UUID()
+        #endif
         resetStreaks()
         resetLatchesForActiveBroadcast()
         receivedVideoFrames = 0
@@ -196,21 +292,25 @@ final class SampleHandler: RPBroadcastSampleHandler {
         inferenceDurationsMS.removeAll(keepingCapacity: true)
         peakFootprintMB = 0
         lastInferenceTimestamp = nil
+        timestampClock = CascadeTimestampClock()
         youtubeCandidateEvents = 0
         instagramCandidateEvents = 0
         instagramStoriesCandidateEvents = 0
     }
 
     private func resetStreaks() {
+        cascadeEvidenceBoundary = CascadeEvidenceBoundary()
         youtubeShortsStreak = 0
         instagramReelsStreak = 0
         instagramStoriesStreak = 0
         youtubeShortsVotes.removeAll(keepingCapacity: true)
         instagramReelsVotes.removeAll(keepingCapacity: true)
         instagramStoriesVotes.removeAll(keepingCapacity: true)
+        #if DEBUG
         youtubeShortsEvidence.removeAll(keepingCapacity: true)
         instagramReelsEvidence.removeAll(keepingCapacity: true)
         instagramStoriesEvidence.removeAll(keepingCapacity: true)
+        #endif
     }
 
     private func resetLatchesForActiveBroadcast() {
@@ -288,13 +388,13 @@ final class SampleHandler: RPBroadcastSampleHandler {
         let previousYouTubeHits = youtubeShortsStreak
         let previousReelsHits = instagramReelsStreak
         let previousStoriesHits = instagramStoriesStreak
-        youtubeShortsStreak = appendVote(
+        youtubeShortsStreak = CascadeEvidenceBoundary.appendVote(
             youtubeVerdict, to: &youtubeShortsVotes, window: observationWindowFrames
         )
-        instagramReelsStreak = appendVote(
+        instagramReelsStreak = CascadeEvidenceBoundary.appendVote(
             instagramReelsVerdict, to: &instagramReelsVotes, window: observationWindowFrames
         )
-        instagramStoriesStreak = appendVote(
+        instagramStoriesStreak = CascadeEvidenceBoundary.appendVote(
             instagramStoriesVerdict, to: &instagramStoriesVotes, window: observationWindowFrames
         )
         if previousYouTubeHits < requiredHits && youtubeShortsStreak >= requiredHits {
@@ -311,16 +411,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
     }
 
-    private func appendVote(_ vote: Bool, to votes: inout [Bool], window: Int) -> Int {
-        votes.append(vote)
-        if votes.count > window {
-            votes.removeFirst(votes.count - window)
-        }
-        return votes.reduce(0) { $0 + ($1 ? 1 : 0) }
-    }
 
+    #if DEBUG
     private func recordDebugEvidence(
-        classifier: SurfaceClassifier,
+        classifier: any SurfaceClassifying,
         prediction: SurfacePrediction,
         youtubeVerdict: Bool,
         instagramReelsVerdict: Bool,
@@ -416,6 +510,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         ))
     }
 
+    #endif
     private func enforceYouTube(
         verdict: Bool,
         requiredHits: Int,
@@ -434,6 +529,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 youtubeShieldLatched = true
                 RTLog.sampleHandler.notice("YouTube Shorts detected — shielding youtube")
                 SharedStore.setLastYouTubeShortsDetectionAt(now)
+                #if DEBUG
                 if let threshold = metadata?.threshold(for: .youtubeShorts) {
                     queueDebugCapture(
                         kind: .youtubeShorts,
@@ -443,6 +539,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                         detectedAt: now
                     )
                 }
+                #endif
                 publishDiagnostics(force: true)
                 applyShield(surface: .youtube)
             }
@@ -479,6 +576,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 )
                 if detectedStories {
                     SharedStore.setLastInstagramStoriesDetectionAt(now)
+                    #if DEBUG
                     if let threshold = metadata?.threshold(for: .instagramStories) {
                         queueDebugCapture(
                             kind: .instagramStories,
@@ -488,8 +586,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
                             detectedAt: now
                         )
                     }
+                    #endif
                 } else {
                     SharedStore.setLastInstagramReelsDetectionAt(now)
+                    #if DEBUG
                     if let threshold = metadata?.threshold(for: .instagramReels) {
                         queueDebugCapture(
                             kind: .instagramReels,
@@ -499,6 +599,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                             detectedAt: now
                         )
                     }
+                    #endif
                 }
                 publishDiagnostics(force: true)
                 applyShield(surface: .instagram)
@@ -510,8 +611,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     private func loadClassifier() {
+        // Release the previous backend before allocating another model bundle.
+        classifier = nil
+        metadata = nil
         do {
-            let loaded = try SurfaceClassifier()
+            let loaded = try SurfaceClassifierFactory.make(backend: recordingBackend)
             classifier = loaded
             metadata = loaded.metadata
             classifierStatus = "ready"
@@ -558,7 +662,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
             lastHandledYouTubeUnlockAt = requestedAt
             youtubeShieldLatched = false
             youtubeShortsVotes.removeAll(keepingCapacity: true)
+            #if DEBUG
             youtubeShortsEvidence.removeAll(keepingCapacity: true)
+            #endif
             youtubeShortsStreak = 0
             youtubeGraceUntil = now.addingTimeInterval(Self.unlockGraceSeconds)
             ManagedSettingsApplier.clear(surface: .youtube)
@@ -573,8 +679,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
             instagramShieldLatched = false
             instagramReelsVotes.removeAll(keepingCapacity: true)
             instagramStoriesVotes.removeAll(keepingCapacity: true)
+            #if DEBUG
             instagramReelsEvidence.removeAll(keepingCapacity: true)
             instagramStoriesEvidence.removeAll(keepingCapacity: true)
+            #endif
             instagramReelsStreak = 0
             instagramStoriesStreak = 0
             instagramGraceUntil = now.addingTimeInterval(Self.unlockGraceSeconds)
@@ -671,6 +779,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
         if force || now.timeIntervalSince(lastTelemetryLog) >= 10 {
             lastTelemetryLog = now
+            if let timings = lastPrediction?.timings {
+                let specialistMS = timings.specialistMS.map { String($0) } ?? "not_run"
+                RTLog.sampleHandler.notice("cascade timings resizeMS=\(timings.resizeMS) routerMS=\(timings.routerMS) specialist=\(timings.specialist, privacy: .public) specialistMS=\(specialistMS, privacy: .public) totalMS=\(timings.totalMS)")
+            }
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.sortedKeys]
             if let data = try? encoder.encode(diagnostics),

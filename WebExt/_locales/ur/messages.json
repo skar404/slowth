@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "⁦Safari⁩ میں ⁦YouTube Shorts⁩، ⁦Reels⁩، ⁦TikTok⁩ اور توجہ بھٹکانے والی فیڈز بلاک کریں۔"
+  },
+  "locale": {
+    "message": "ur"
+  },
+  "tagline": {
+    "message": "⁦YouTube Shorts⁩، ⁦Instagram⁩ اور ⁦Facebook Reels⁩، اور ⁦X⁩ پر دریافت اور رجحانات بلاک کریں۔ ⁦TikTok⁩ مکمل بلاک کریں۔ سخت موڈ سے ترتیبات 24 گھنٹے کے لیے لاک کریں۔"
+  },
+  "stepSettings": {
+    "message": "اپنے آلے پر ترتیبات کھولیں"
+  },
+  "stepExtensions": {
+    "message": "ایپس ← ⁦Safari⁩ ← توسیعات پر جائیں"
+  },
+  "stepEnable": {
+    "message": "⁦Slowth⁩ فعال کریں اور تمام ویب سائٹس پر اجازت دیں"
+  },
+  "onboardingDone": {
+    "message": "میں نے فعال کر دیا"
+  },
+  "blocking": {
+    "message": "بلاکنگ"
+  },
+  "strictHelp": {
+    "message": "24 گھنٹے تک فعال پابندیاں بند نہیں کی جا سکتیں۔ آپ مزید پابندیاں شامل کر سکتے ہیں، لیکن پوری سائٹ کو بلاک کرنے کا اختیار فعال نہیں کر سکتے۔"
+  },
+  "updates": {
+    "message": "اپ ڈیٹس"
+  },
+  "updateNow": {
+    "message": "ابھی اپ ڈیٹ کریں"
+  },
+  "loading": {
+    "message": "لوڈ ہو رہا ہے…"
+  },
+  "guide": {
+    "message": "رہنما"
+  },
+  "howToUse": {
+    "message": "⁦Slowth⁩ کیسے استعمال کریں"
+  },
+  "modesExplained": {
+    "message": "سخت موڈ اور سائٹ کے الگ موڈز کی وضاحت"
+  },
+  "strictGuideTitle": {
+    "message": "سخت موڈ کیا کرتا ہے"
+  },
+  "strictGuide": {
+    "message": "24 گھنٹے تک فعال پابندیاں بند نہیں کی جا سکتیں۔ آپ مزید پابندیاں شامل کر سکتے ہیں، لیکن پوری سائٹ کو بلاک کرنے کا اختیار فعال نہیں کر سکتے۔ دوبارہ شروع کرنے یا ایپ کو زبردستی بند کرنے کے بعد بھی ٹائمر چلتا رہتا ہے۔"
+  },
+  "strictAdvice": {
+    "message": "جب قوتِ ارادی کافی نہ ہو تو اسے فعال کریں۔ صرف ہلکی یاددہانی چاہیے تو بند رکھیں۔"
+  },
+  "howBlockingWorks": {
+    "message": "بلاکنگ کیسے کام کرتی ہے"
+  },
+  "modeOffHelp": {
+    "message": "سائٹ معمول کے مطابق لوڈ ہوتی ہے۔ ⁦Slowth⁩ کچھ نہیں کرتا۔"
+  },
+  "siteSpecific": {
+    "message": "سائٹ کے مطابق بلاکنگ"
+  },
+  "modeShortsHelp": {
+    "message": "⁦YouTube Shorts⁩، ⁦Instagram⁩/⁦Facebook Reels⁩، یا ⁦X⁩ پر دریافت اور رجحانات بلاک کرتا ہے۔ باقی سائٹ کام کرتی رہتی ہے۔"
+  },
+  "addFeed": {
+    "message": "فیڈ بلاکنگ شامل کریں"
+  },
+  "modeFeedHelp": {
+    "message": "چند اسکرینوں کے بعد ہوم کی لامتناہی فیڈ بھی روک دیتا ہے۔ ⁦Instagram⁩ پر دریافت، اسٹوریز اور ⁦Reels⁩ کے مزید حصے بھی شامل ہیں۔"
+  },
+  "modeAllHelp": {
+    "message": "سائٹ کھولنے پر اس کی جگہ دوستانہ بلاک شدہ صفحہ نظر آتا ہے۔"
+  },
+  "leaveFeedback": {
+    "message": "رائے دیں"
+  },
+  "showIntro": {
+    "message": "تعارف دوبارہ دکھائیں"
+  },
+  "rulesNever": {
+    "message": "قواعد: ابھی تک حاصل نہیں ہوئے"
+  },
+  "rulesNow": {
+    "message": "قواعد: ابھی ابھی"
+  },
+  "rulesRelative": {
+    "message": "قواعد: ⁨$1⁩"
+  },
+  "strictUntil": {
+    "message": "سخت موڈ ⁨$1⁩ تک فعال ہے"
+  },
+  "openSafariSettings": {
+    "message": "⁦Safari⁩ کی ترتیبات کھولیں"
+  },
+  "rulesCurrent": {
+    "message": "قواعد: تازہ ترین ہیں"
+  },
+  "rulesFailed": {
+    "message": "قواعد: اپ ڈیٹ نہیں ہو سکے۔ دوبارہ کوشش کریں۔"
+  },
+  "blockedPageTitle": {
+    "message": "⁦Slowth⁩ نے بلاک کیا ہے"
+  },
+  "thisSite": {
+    "message": "یہ سائٹ"
+  },
+  "blockedTitle": {
+    "message": "⁨$1⁩ بلاک ہے"
+  },
+  "blockedTabTitle": {
+    "message": "بلاک ہے: ⁨$1⁩"
+  },
+  "blockedSubtitle": {
+    "message": "⁦Slowth⁩ آپ کو ⁨$1⁩ سے دور رکھ رہا ہے۔ سانس لیں۔ کچھ اور کریں۔"
+  },
+  "backToSite": {
+    "message": "→ ⁨$1⁩ پر واپس جائیں"
+  },
+  "why": {
+    "message": "کیوں"
+  },
+  "quoteTeam": {
+    "message": "⁦Reels⁩ سینکڑوں افراد کی ٹیم نے بنایا جن کی تنخواہیں ⁦$$400k⁩ تھیں۔ ⁦Slowth⁩ ایک ڈویلپر نے ایک ہفتے کے آخر میں بنایا۔"
+  },
+  "quoteBillions": {
+    "message": "انہوں نے آپ کو اسکرول کرواتے رہنے کے لیے اربوں خرچ کیے۔ ہم نے آپ کو رکنے میں مدد دینے کے لیے ایک چھوٹی مقامی توسیع بنائی۔"
+  },
+  "quoteBug": {
+    "message": "لامتناہی فیڈ ایک خرابی ہے۔ یہ اس کا حل ہے۔"
+  },
+  "best": {
+    "message": "بہترین"
+  },
+  "gameLabel": {
+    "message": "چھوٹا پرواز کا کھیل"
+  },
+  "gameHelp": {
+    "message": "پر پھڑپھڑانے کے لیے ٹیپ کریں یا اسپیس دبائیں"
+  },
+  "back": {
+    "message": "→ واپس"
+  },
+  "signature": {
+    "message": "⁦Slowth⁩ · آہستہ ہوں، سانس لیں، تخلیق کریں"
+  },
+  "playHint": {
+    "message": "🦥 ⁦Slow Flap⁩ کھیلنے کے لیے ٹیپ کریں ←"
+  },
+  "avoidBranches": {
+    "message": "شاخوں سے نہ ٹکرائیں"
+  },
+  "newBest": {
+    "message": "نیا ریکارڈ! دوبارہ اڑنے کے لیے ٹیپ کریں"
+  },
+  "flyAgain": {
+    "message": "دوبارہ اڑنے کے لیے ٹیپ کریں"
+  },
+  "tapStart": {
+    "message": "شروع کرنے کے لیے ٹیپ کریں"
+  },
+  "gameOver": {
+    "message": "کھیل ختم"
+  },
+  "feedTitle": {
+    "message": "لامتناہی فیڈ بلاک ہے"
+  },
+  "feedSubtitle": {
+    "message": "⁦Slowth⁩ آپ کو لامتناہی فیڈ سے دور رکھ رہا ہے۔ سانس لیں۔ کچھ اور کریں۔"
+  },
+  "backHome": {
+    "message": "ہوم پر واپس جائیں"
+  },
+  "dismiss": {
+    "message": "بند کریں"
+  },
+  "storiesTime": {
+    "message": "آپ اسٹوریز پر پہلے ہی ⁨$1⁩ گزار چکے ہیں۔ سانس لیں۔"
+  },
+  "enableSafari": {
+    "message": "⁦Safari⁩ میں فعال کریں"
+  },
+  "openSettings": {
+    "message": "ترتیبات کھولیں"
+  },
+  "strictMode": {
+    "message": "سخت موڈ"
+  },
+  "off": {
+    "message": "بند"
+  },
+  "blockShorts": {
+    "message": "⁦Shorts⁩ بلاک کریں"
+  },
+  "blockReels": {
+    "message": "⁦Reels⁩ بلاک کریں"
+  },
+  "blockFeeds": {
+    "message": "⁦Reels⁩ اور فیڈز بلاک کریں"
+  },
+  "blockFeed": {
+    "message": "⁦Reels⁩ اور فیڈ بلاک کریں"
+  },
+  "blockExplore": {
+    "message": "دریافت اور رجحانات بلاک کریں"
+  },
+  "blockSite": {
+    "message": "سائٹ بلاک کریں"
+  },
+  "updating": {
+    "message": "اپ ڈیٹ ہو رہا ہے…"
+  },
+  "blockInfiniteFeed": {
+    "message": "لامحدود فیڈ بلاک کریں"
+  },
+  "infiniteFeedHelp": {
+    "message": "لامحدود اسکرولنگ محدود کرتا ہے۔ Instagram پر Explore اور Stories بھی شامل ہیں۔"
+  },
+  "settingsSaveFailed": {
+    "message": "محفوظ نہیں ہو سکا"
+  },
+  "strictConfirmTitle": {
+    "message": "سخت موڈ فعال کریں؟"
+  },
+  "enable": {
+    "message": "فعال کریں"
+  },
+  "strictEnableConfirm": {
+    "message": "24 گھنٹے تک فعال پابندیاں بند نہیں کی جا سکتیں۔ آپ مزید پابندیاں شامل کر سکتے ہیں، لیکن پوری سائٹ کو بلاک کرنے کا اختیار فعال نہیں کر سکتے۔"
+  },
+  "cancel": {
+    "message": "منسوخ کریں"
+  }
+}

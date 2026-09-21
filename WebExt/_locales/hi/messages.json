@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "Safari में हर साइट के नियंत्रण से YouTube Shorts, Reels, TikTok और ध्यान भटकाने वाले फ़ीड ब्लॉक करें।"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram और Facebook Reels, तथा X पर एक्सप्लोर और ट्रेंड ब्लॉक करें। TikTok पूरी तरह ब्लॉक करें। सख्त मोड से सेटिंग्स 24 घंटे के लिए लॉक करें।"
+  },
+  "stepSettings": {
+    "message": "अपने डिवाइस की सेटिंग्स खोलें"
+  },
+  "stepExtensions": {
+    "message": "ऐप्स → Safari → एक्सटेंशन पर जाएँ"
+  },
+  "stepEnable": {
+    "message": "Slowth चालू करें और सभी वेबसाइटों पर अनुमति दें"
+  },
+  "onboardingDone": {
+    "message": "मैंने चालू कर दिया"
+  },
+  "blocking": {
+    "message": "ब्लॉकिंग"
+  },
+  "strictHelp": {
+    "message": "24 घंटे तक चालू प्रतिबंध बंद नहीं किए जा सकते। आप और प्रतिबंध जोड़ सकते हैं, लेकिन पूरी साइट को ब्लॉक करने का विकल्प चालू नहीं कर सकते।"
+  },
+  "updates": {
+    "message": "अपडेट"
+  },
+  "updateNow": {
+    "message": "अभी अपडेट करें"
+  },
+  "loading": {
+    "message": "लोड हो रहा है…"
+  },
+  "guide": {
+    "message": "गाइड"
+  },
+  "howToUse": {
+    "message": "Slowth का उपयोग कैसे करें"
+  },
+  "modesExplained": {
+    "message": "सख्त मोड और हर साइट के मोड की जानकारी"
+  },
+  "strictGuideTitle": {
+    "message": "सख्त मोड क्या करता है"
+  },
+  "strictGuide": {
+    "message": "24 घंटे तक चालू प्रतिबंध बंद नहीं किए जा सकते। आप और प्रतिबंध जोड़ सकते हैं, लेकिन पूरी साइट को ब्लॉक करने का विकल्प चालू नहीं कर सकते। रीस्टार्ट करने या ऐप को ज़बरदस्ती बंद करने के बाद भी टाइमर चलता रहता है।"
+  },
+  "strictAdvice": {
+    "message": "जब सिर्फ इच्छाशक्ति काफ़ी न हो, इसे चालू करें। केवल हल्का याद दिलाना चाहते हैं तो बंद रखें।"
+  },
+  "howBlockingWorks": {
+    "message": "ब्लॉकिंग कैसे काम करती है"
+  },
+  "modeOffHelp": {
+    "message": "साइट सामान्य रूप से खुलती है। Slowth कुछ नहीं करता।"
+  },
+  "siteSpecific": {
+    "message": "साइट के अनुसार ब्लॉक"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels या X पर एक्सप्लोर और ट्रेंड ब्लॉक करता है। साइट का बाकी हिस्सा चलता रहता है।"
+  },
+  "addFeed": {
+    "message": "फ़ीड ब्लॉकिंग भी जोड़ें"
+  },
+  "modeFeedHelp": {
+    "message": "कुछ स्क्रीन के बाद अंतहीन होम फ़ीड भी रोकता है। Instagram पर एक्सप्लोर, Stories और Reels के अन्य हिस्से भी शामिल हैं।"
+  },
+  "modeAllHelp": {
+    "message": "साइट की जगह एक सरल ब्लॉक पेज दिखता है।"
+  },
+  "leaveFeedback": {
+    "message": "प्रतिक्रिया दें"
+  },
+  "showIntro": {
+    "message": "परिचय फिर दिखाएँ"
+  },
+  "rulesNever": {
+    "message": "नियम: अभी तक नहीं मिले"
+  },
+  "rulesNow": {
+    "message": "नियम: अभी-अभी"
+  },
+  "rulesRelative": {
+    "message": "नियम: $1"
+  },
+  "strictUntil": {
+    "message": "सख्त मोड $1 तक सक्रिय है"
+  },
+  "openSafariSettings": {
+    "message": "Safari सेटिंग्स खोलें"
+  },
+  "rulesCurrent": {
+    "message": "नियम: अप टू डेट"
+  },
+  "rulesFailed": {
+    "message": "नियम अपडेट नहीं हो सके। कृपया फिर कोशिश करें।"
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ने ब्लॉक किया"
+  },
+  "thisSite": {
+    "message": "यह साइट"
+  },
+  "blockedTitle": {
+    "message": "$1 ब्लॉक है"
+  },
+  "blockedTabTitle": {
+    "message": "ब्लॉक है: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth आपको $1 से दूर रख रहा है। साँस लें। कुछ और करें।"
+  },
+  "backToSite": {
+    "message": "← $1 पर वापस जाएँ"
+  },
+  "why": {
+    "message": "क्यों"
+  },
+  "quoteTeam": {
+    "message": "Reels को सालाना 400,000 डॉलर कमाने वाले सैकड़ों लोगों की टीम ने बनाया। Slowth को एक डेवलपर ने एक सप्ताहांत में बनाया।"
+  },
+  "quoteBillions": {
+    "message": "उन्होंने आपको स्क्रॉल कराते रहने के लिए अरबों खर्च किए। हमने रुकने में मदद के लिए एक छोटा स्थानीय एक्सटेंशन बनाया।"
+  },
+  "quoteBug": {
+    "message": "अंतहीन फ़ीड एक बग है। यह उसका समाधान है।"
+  },
+  "best": {
+    "message": "सर्वश्रेष्ठ"
+  },
+  "gameLabel": {
+    "message": "छोटा उड़ान खेल"
+  },
+  "gameHelp": {
+    "message": "उड़ने के लिए टैप करें या स्पेस दबाएँ"
+  },
+  "back": {
+    "message": "← वापस"
+  },
+  "signature": {
+    "message": "Slowth · धीमे हों, साँस लें, कुछ बनाएँ"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap खेलने के लिए टैप करें →"
+  },
+  "avoidBranches": {
+    "message": "टहनियों से न टकराएँ"
+  },
+  "newBest": {
+    "message": "नया रिकॉर्ड! फिर उड़ने के लिए टैप करें"
+  },
+  "flyAgain": {
+    "message": "फिर उड़ने के लिए टैप करें"
+  },
+  "tapStart": {
+    "message": "शुरू करने के लिए टैप करें"
+  },
+  "gameOver": {
+    "message": "खेल खत्म"
+  },
+  "feedTitle": {
+    "message": "अंतहीन फ़ीड ब्लॉक है"
+  },
+  "feedSubtitle": {
+    "message": "Slowth आपको अंतहीन फ़ीड से दूर रख रहा है। साँस लें। कुछ और करें।"
+  },
+  "backHome": {
+    "message": "होम पर वापस जाएँ"
+  },
+  "dismiss": {
+    "message": "बंद करें"
+  },
+  "storiesTime": {
+    "message": "आप Stories पर पहले ही $1 बिता चुके हैं। साँस लें।"
+  },
+  "enableSafari": {
+    "message": "Safari में चालू करें"
+  },
+  "openSettings": {
+    "message": "सेटिंग्स खोलें"
+  },
+  "strictMode": {
+    "message": "सख्त मोड"
+  },
+  "off": {
+    "message": "बंद"
+  },
+  "blockShorts": {
+    "message": "Shorts ब्लॉक करें"
+  },
+  "blockReels": {
+    "message": "Reels ब्लॉक करें"
+  },
+  "blockFeeds": {
+    "message": "Reels और फ़ीड ब्लॉक करें"
+  },
+  "blockFeed": {
+    "message": "Reels और फ़ीड ब्लॉक करें"
+  },
+  "blockExplore": {
+    "message": "एक्सप्लोर और ट्रेंड ब्लॉक करें"
+  },
+  "blockSite": {
+    "message": "साइट ब्लॉक करें"
+  },
+  "updating": {
+    "message": "अपडेट हो रहा है…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "hi"
+  },
+  "blockInfiniteFeed": {
+    "message": "अनंत फ़ीड ब्लॉक करें"
+  },
+  "infiniteFeedHelp": {
+    "message": "अनंत फ़ीड स्क्रॉलिंग सीमित करती है। Instagram पर इसमें Explore और Stories भी शामिल हैं।"
+  },
+  "settingsSaveFailed": {
+    "message": "सहेजा नहीं जा सका"
+  },
+  "strictConfirmTitle": {
+    "message": "सख्त मोड चालू करें?"
+  },
+  "enable": {
+    "message": "चालू करें"
+  },
+  "strictEnableConfirm": {
+    "message": "24 घंटे तक चालू प्रतिबंध बंद नहीं किए जा सकते। आप और प्रतिबंध जोड़ सकते हैं, लेकिन पूरी साइट को ब्लॉक करने का विकल्प चालू नहीं कर सकते।"
+  },
+  "cancel": {
+    "message": "रद्द करें"
+  }
+}

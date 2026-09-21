@@ -75,41 +75,40 @@
     location.replace(url);
   }
 
-  // Reads the active mode published by applyState onto <html>. Overlays use this
-  // to fire only in "feed" mode (not plain "shorts").
-  function currentMode(site) {
-    return document.documentElement.getAttribute("data-unscroll-" + site + "-mode") || "off";
+  function featureEnabled(site, feature) {
+    return document.documentElement.getAttribute("data-unscroll-" + site + "-" + feature) === "true";
   }
 
   function siteContentScript(site, options) {
     const opts = options || {};
     const STYLE_ID = "unscroll-" + site + "-style";
-    let mode = "off";
+    let shortsEnabled = false;
     let compiledRedirects = [];
 
     function applyState(state) {
-      const toggles = (state && state.toggles) || ns.DEFAULT_TOGGLES;
-      const rules = (state && state.rules) || ns.DEFAULT_RULES;
-      mode = toggles[site] || "off";
-
-      // Publish the active mode so per-site overlays (facebook/instagram) can
-      // gate on the real mode instead of sniffing the injected hide-CSS.
-      document.documentElement.setAttribute("data-unscroll-" + site + "-mode", mode);
-
-      if (mode === "off") {
-        removeHideStyle(STYLE_ID);
-        compiledRedirects = [];
-        return;
+      if (!state) return;
+      const settings = ns.normalizeSiteSettings(site, state.toggles?.[site]);
+      const rules = state.rules || ns.DEFAULT_RULES;
+      shortsEnabled = settings.shorts && !settings.all;
+      for (const feature of ns.SITE_FEATURES[site]) {
+        document.documentElement.setAttribute("data-unscroll-" + site + "-" + feature,
+          String(settings[feature] && (feature === "all" || !settings.all)));
       }
-      if (mode === "all") {
+      if (settings.all) {
         removeHideStyle(STYLE_ID);
         compiledRedirects = [];
         blockEntireSite(site);
         return;
       }
+      // Feed overlays are independent; only Shorts/Reels/Explore use these rules.
+      if (!shortsEnabled) {
+        removeHideStyle(STYLE_ID);
+        compiledRedirects = [];
+        return;
+      }
 
       const r = rules[site] || {};
-      injectHideStyle(STYLE_ID, buildHideCss(r.hideSelectors));
+      injectHideStyle(STYLE_ID, buildHideCss(r.hideSelectors) + "\n" + (opts.css || ""));
       compiledRedirects = compileRedirects(r.redirects);
       maybeRedirect(compiledRedirects, site);
     }
@@ -117,7 +116,7 @@
     function watchSpaNav() {
       let lastUrl = location.href;
       const check = () => {
-        if (mode !== "shorts") return;
+        if (!shortsEnabled) return;
         if (location.href !== lastUrl) {
           lastUrl = location.href;
           maybeRedirect(compiledRedirects, site);
@@ -143,6 +142,12 @@
       }
     });
 
+    const refresh = () => sendMessage({ type: "get-state" }).then(applyState);
+    window.addEventListener("focus", refresh);
+    setInterval(() => {
+      if (document.visibilityState !== "hidden") refresh();
+    }, ns.STATE_CACHE_TTL_MS);
+
     sendMessage({ type: "get-state" }).then((state) => {
       applyState(state);
       watchSpaNav();
@@ -157,7 +162,7 @@
     compileRedirects,
     maybeRedirect,
     blockEntireSite,
-    currentMode,
+    featureEnabled,
     siteContentScript
   };
 })();

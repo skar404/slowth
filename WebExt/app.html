@@ -11,18 +11,18 @@
     <header><h1>Slowth</h1></header>
 
     <section id="onboarding" class="card hero-card hidden">
-      <div class="hero-tagline">
+      <div class="hero-tagline" data-i18n="tagline">
         Block YouTube Shorts, Instagram and Facebook Reels, plus Explore and trends on X. Block TikTok entirely. Lock your settings with Strict mode for 24 hours.
       </div>
-      <div class="card-title">Enable in Safari</div>
+      <div class="card-title" data-i18n="enableSafari">Enable in Safari</div>
       <ol class="steps-list">
-        <li>Open <b>Settings</b> on your device</li>
-        <li>Go to <b>Apps → Safari → Extensions</b></li>
-        <li>Turn on <b>Slowth</b> and allow it on every website</li>
+        <li data-i18n="stepSettings">Open Settings on your device</li>
+        <li data-i18n="stepExtensions">Go to Apps → Safari → Extensions</li>
+        <li data-i18n="stepEnable">Turn on Slowth and allow it on every website</li>
       </ol>
       <div class="card-actions">
-        <button id="open-settings-btn" class="btn-primary">Open Settings</button>
-        <button id="dismiss-onboarding-btn" class="btn-link">I've enabled it</button>
+        <button id="open-settings-btn" class="btn-primary" data-i18n="openSettings">Open Settings</button>
+        <button id="dismiss-onboarding-btn" class="btn-link" data-i18n="onboardingDone">I've enabled it</button>
       </div>
     </section>
 
@@ -31,71 +31,68 @@
     </div>
 
     <section class="group">
-      <div class="group-header">Blocking</div>
+      <div class="group-header" data-i18n="blocking">Blocking</div>
       <div class="rows" id="sites"></div>
+      <div class="group-footer" data-i18n="infiniteFeedHelp">Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories.</div>
     </section>
 
     <section class="group">
-      <div class="group-header">Strict mode</div>
+      <div class="group-header" data-i18n="strictMode">Strict mode</div>
       <div class="rows">
         <label class="row">
-          <span>Strict mode</span>
+          <span data-i18n="strictMode">Strict mode</span>
           <input type="checkbox" id="strict-toggle" role="switch">
         </label>
       </div>
-      <div class="group-footer">
-        Prevents disabling settings for 24 hours, even after restarting your device.
-      </div>
+      <div class="group-footer" data-i18n="strictHelp">For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.</div>
     </section>
 
     <section class="group">
-      <div class="group-header">Updates</div>
+      <div class="group-header" data-i18n="updates">Updates</div>
       <div class="rows">
         <button class="row-btn" id="refresh-btn">
-          <span class="row-btn-title">Update now</span>
-          <span class="row-btn-subtitle" id="rules-status">Loading…</span>
+          <span class="row-btn-title" data-i18n="updateNow">Update now</span>
+          <span class="row-btn-subtitle" id="rules-status" data-i18n="loading">Loading…</span>
         </button>
       </div>
     </section>
 
     <section class="group landing-only">
-      <div class="group-header">Guide</div>
+      <div class="group-header" data-i18n="guide">Guide</div>
       <div class="rows">
         <button class="row-btn" id="how-to-use-btn">
-          <span class="row-btn-title">How to use Slowth</span>
-          <span class="row-btn-subtitle">Strict mode and per-site modes explained</span>
+          <span class="row-btn-title" data-i18n="howToUse">How to use Slowth</span>
+          <span class="row-btn-subtitle" data-i18n="howBlockingWorks">How blocking works</span>
         </button>
       </div>
     </section>
 
     <section id="guide-cards" class="landing-only">
       <div class="card guide-card">
-        <div class="card-title">What Strict mode does</div>
-        <div class="guide-body">
-          Strict mode locks every toggle on this screen for 24 hours. The timer survives restarts and force-quits. Once it's on, you can't lower it — only wait it out, or delete and reinstall the app.
-        </div>
-        <div class="guide-body">
+        <div class="card-title" data-i18n="strictGuideTitle">What Strict mode does</div>
+        <div class="guide-body" data-i18n="strictGuide">For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking. The timer survives restarts and force-quits.</div>
+        <div class="guide-body" data-i18n="strictAdvice">
           Turn it on when willpower alone isn't enough. Leave it off if you just want a soft nudge.
         </div>
       </div>
 
       <div class="card guide-card">
-        <div class="card-title">How blocking works</div>
+        <div class="card-title" data-i18n="howBlockingWorks">How blocking works</div>
         <div class="guide-mode-row">
-          <span class="mode-pill mode-off">Off</span>
-          <span>The site loads as usual. Slowth does nothing.</span>
+          <span class="mode-pill mode-off" data-i18n="off">Off</span>
+          <span data-i18n="modeOffHelp">The site loads as usual. Slowth does nothing.</span>
         </div>
         <div class="guide-mode-row">
-          <span class="mode-pill mode-shorts">Site-specific block</span>
-          <span>Blocks YouTube Shorts, Instagram/Facebook Reels, or X Explore and trends. The rest of the site keeps working.</span>
+          <span class="mode-pill mode-shorts" data-i18n="siteSpecific">Site-specific block</span>
+          <span data-i18n="modeShortsHelp">Blocks YouTube Shorts, Instagram/Facebook Reels, or X Explore and trends. The rest of the site keeps working.</span>
         </div>
         <div class="guide-mode-row">
-          <span class="mode-pill mode-feed">Add feed blocking</span>
-          <span>Also stops the endless home feed after a few screens. Instagram additionally covers Explore, Stories, and more Reels surfaces.</span>
+          <span class="mode-pill mode-feed" data-i18n="blockInfiniteFeed">Block Infinite Feed</span>
+          <span data-i18n="infiniteFeedHelp">Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories.</span>
         </div>
         <div class="guide-mode-row">
-          <span class="mode-pill mode-all">Block site</span>
-          <span>Visiting the site shows a friendly blocked page instead.</span>
+          <span class="mode-pill mode-all" data-i18n="blockSite">Block site</span>
+          <span data-i18n="modeAllHelp">Visiting the site shows a friendly blocked page instead.</span>
         </div>
       </div>
     </section>
@@ -103,18 +100,30 @@
     <section class="group">
       <div class="rows">
         <a href="#" id="feedback-link" class="row-btn">
-          <span class="row-btn-title">Leave feedback</span>
+          <span class="row-btn-title" data-i18n="leaveFeedback">Leave feedback</span>
         </a>
       </div>
-      <div class="group-footer">Slowth v0.8.1</div>
+      <div class="group-footer">Slowth v0.9.3</div>
     </section>
 
-    <button id="show-intro-btn" class="btn-link intro-replay landing-only hidden">
+    <button id="show-intro-btn" class="btn-link intro-replay landing-only hidden" data-i18n="showIntro">
       Show intro again
     </button>
   </div>
 
+  <dialog id="strict-confirmation">
+    <form method="dialog" class="card strict-confirmation-card">
+      <div class="card-title" data-i18n="strictConfirmTitle">Enable Strict mode?</div>
+      <p data-i18n="strictEnableConfirm">For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.</p>
+      <div class="card-actions">
+        <button value="cancel" class="btn-link" data-i18n="cancel">Cancel</button>
+        <button value="enable" class="btn-primary" data-i18n="enable">Enable</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

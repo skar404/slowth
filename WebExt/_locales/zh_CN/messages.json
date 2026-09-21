@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "在 Safari 中按网站控制，屏蔽 YouTube Shorts、Reels、TikTok 和让人分心的信息流。"
+  },
+  "tagline": {
+    "message": "屏蔽 YouTube Shorts、Instagram 和 Facebook Reels，以及 X 的探索和趋势。完整屏蔽 TikTok。使用严格模式将设置锁定 24 小时。"
+  },
+  "stepSettings": {
+    "message": "打开设备上的设置"
+  },
+  "stepExtensions": {
+    "message": "前往 App → Safari → 扩展"
+  },
+  "stepEnable": {
+    "message": "启用 Slowth，并允许访问所有网站"
+  },
+  "onboardingDone": {
+    "message": "我已启用"
+  },
+  "blocking": {
+    "message": "屏蔽"
+  },
+  "strictHelp": {
+    "message": "24 小时内无法关闭已启用的限制。你可以添加限制，但无法启用整个网站的屏蔽。"
+  },
+  "updates": {
+    "message": "更新"
+  },
+  "updateNow": {
+    "message": "立即更新"
+  },
+  "loading": {
+    "message": "正在加载…"
+  },
+  "guide": {
+    "message": "指南"
+  },
+  "howToUse": {
+    "message": "如何使用 Slowth"
+  },
+  "modesExplained": {
+    "message": "严格模式和各网站模式说明"
+  },
+  "strictGuideTitle": {
+    "message": "严格模式的作用"
+  },
+  "strictGuide": {
+    "message": "24 小时内无法关闭已启用的限制。你可以添加限制，但无法启用整个网站的屏蔽。 重启或强制退出后，计时器仍会继续。"
+  },
+  "strictAdvice": {
+    "message": "当意志力不够时，可以启用它。如果只想要温和的提醒，就保持关闭。"
+  },
+  "howBlockingWorks": {
+    "message": "屏蔽的工作原理"
+  },
+  "modeOffHelp": {
+    "message": "网站正常加载，Slowth 不执行任何操作。"
+  },
+  "siteSpecific": {
+    "message": "按网站选择屏蔽内容"
+  },
+  "modeShortsHelp": {
+    "message": "屏蔽 YouTube Shorts、Instagram/Facebook Reels 或 X 的探索和趋势。网站的其他部分仍然可用。"
+  },
+  "addFeed": {
+    "message": "同时屏蔽信息流"
+  },
+  "modeFeedHelp": {
+    "message": "浏览几屏后，也会停止首页的无限信息流。Instagram 还涵盖探索、Stories 和其他 Reels 展示区域。"
+  },
+  "modeAllHelp": {
+    "message": "访问网站时，会显示友好的屏蔽页面。"
+  },
+  "leaveFeedback": {
+    "message": "留下反馈"
+  },
+  "showIntro": {
+    "message": "再次显示介绍"
+  },
+  "rulesNever": {
+    "message": "规则：尚未获取"
+  },
+  "rulesNow": {
+    "message": "规则：刚刚"
+  },
+  "rulesRelative": {
+    "message": "规则：$1"
+  },
+  "strictUntil": {
+    "message": "严格模式生效至 $1"
+  },
+  "openSafariSettings": {
+    "message": "打开 Safari 设置"
+  },
+  "rulesCurrent": {
+    "message": "规则：已是最新"
+  },
+  "rulesFailed": {
+    "message": "无法更新规则，请重试。"
+  },
+  "blockedPageTitle": {
+    "message": "已被 Slowth 屏蔽"
+  },
+  "thisSite": {
+    "message": "此网站"
+  },
+  "blockedTitle": {
+    "message": "$1 已被屏蔽"
+  },
+  "blockedTabTitle": {
+    "message": "已屏蔽：$1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth 正在帮你远离 $1。深呼吸，做点别的吧。"
+  },
+  "backToSite": {
+    "message": "← 返回 $1"
+  },
+  "why": {
+    "message": "为什么"
+  },
+  "quoteTeam": {
+    "message": "Reels 由数百名年薪 40 万美元的员工开发。Slowth 则由一名开发者用一个周末完成。"
+  },
+  "quoteBillions": {
+    "message": "他们花了数十亿，只为让你不停地刷。我们做了一个小小的本地扩展，帮你停下来。"
+  },
+  "quoteBug": {
+    "message": "无限信息流是个问题。这就是解决办法。"
+  },
+  "best": {
+    "message": "最高分"
+  },
+  "gameLabel": {
+    "message": "迷你飞行游戏"
+  },
+  "gameHelp": {
+    "message": "轻点或按空格键飞行"
+  },
+  "back": {
+    "message": "← 返回"
+  },
+  "signature": {
+    "message": "Slowth · 慢下来，深呼吸，去创造"
+  },
+  "playHint": {
+    "message": "🦥 轻点畅玩 Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "别撞到树枝"
+  },
+  "newBest": {
+    "message": "新纪录！轻点再次飞行"
+  },
+  "flyAgain": {
+    "message": "轻点再次飞行"
+  },
+  "tapStart": {
+    "message": "轻点开始"
+  },
+  "gameOver": {
+    "message": "游戏结束"
+  },
+  "feedTitle": {
+    "message": "无限信息流已被屏蔽"
+  },
+  "feedSubtitle": {
+    "message": "Slowth 正在帮你远离无限信息流。深呼吸，做点别的吧。"
+  },
+  "backHome": {
+    "message": "返回首页"
+  },
+  "dismiss": {
+    "message": "关闭"
+  },
+  "storiesTime": {
+    "message": "你已经在 Stories 上花了 $1。深呼吸吧。"
+  },
+  "enableSafari": {
+    "message": "在 Safari 中启用"
+  },
+  "openSettings": {
+    "message": "打开设置"
+  },
+  "strictMode": {
+    "message": "严格模式"
+  },
+  "off": {
+    "message": "关闭"
+  },
+  "blockShorts": {
+    "message": "屏蔽 Shorts"
+  },
+  "blockReels": {
+    "message": "屏蔽 Reels"
+  },
+  "blockFeeds": {
+    "message": "屏蔽 Reels 和各类信息流"
+  },
+  "blockFeed": {
+    "message": "屏蔽 Reels 和信息流"
+  },
+  "blockExplore": {
+    "message": "屏蔽探索和趋势"
+  },
+  "blockSite": {
+    "message": "屏蔽网站"
+  },
+  "updating": {
+    "message": "正在更新…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "zh-Hans"
+  },
+  "blockInfiniteFeed": {
+    "message": "屏蔽无限信息流"
+  },
+  "infiniteFeedHelp": {
+    "message": "限制无限滚动。在 Instagram 上还包括探索和快拍。"
+  },
+  "settingsSaveFailed": {
+    "message": "无法保存"
+  },
+  "strictConfirmTitle": {
+    "message": "启用严格模式？"
+  },
+  "enable": {
+    "message": "启用"
+  },
+  "strictEnableConfirm": {
+    "message": "24 小时内无法关闭已启用的限制。你可以添加限制，但无法启用整个网站的屏蔽。"
+  },
+  "cancel": {
+    "message": "取消"
+  }
+}

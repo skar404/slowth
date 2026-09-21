@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokkeer YouTube Shorts, Reels, TikTok en afleidende feeds in Safari met instellingen per website."
+  },
+  "locale": {
+    "message": "nl"
+  },
+  "tagline": {
+    "message": "Blokkeer YouTube Shorts, Instagram- en Facebook-Reels en Verkennen en trends op X. Blokkeer TikTok helemaal. Vergrendel je instellingen 24 uur met de strikte modus."
+  },
+  "stepSettings": {
+    "message": "Open Instellingen op je apparaat"
+  },
+  "stepExtensions": {
+    "message": "Ga naar Apps → Safari → Extensies"
+  },
+  "stepEnable": {
+    "message": "Zet Slowth aan en sta toegang toe op elke website"
+  },
+  "onboardingDone": {
+    "message": "Ik heb het ingeschakeld"
+  },
+  "blocking": {
+    "message": "Blokkeren"
+  },
+  "strictHelp": {
+    "message": "Ingeschakelde beperkingen kunnen 24 uur lang niet worden uitgeschakeld. Je kunt beperkingen toevoegen, maar het blokkeren van hele websites niet inschakelen."
+  },
+  "updates": {
+    "message": "Updates"
+  },
+  "updateNow": {
+    "message": "Werk nu bij"
+  },
+  "loading": {
+    "message": "Laden…"
+  },
+  "guide": {
+    "message": "Handleiding"
+  },
+  "howToUse": {
+    "message": "Slowth gebruiken"
+  },
+  "modesExplained": {
+    "message": "Uitleg over de strikte modus en modi per website"
+  },
+  "strictGuideTitle": {
+    "message": "Wat de strikte modus doet"
+  },
+  "strictGuide": {
+    "message": "Ingeschakelde beperkingen kunnen 24 uur lang niet worden uitgeschakeld. Je kunt beperkingen toevoegen, maar het blokkeren van hele websites niet inschakelen. De timer loopt door na opnieuw opstarten of geforceerd afsluiten."
+  },
+  "strictAdvice": {
+    "message": "Schakel dit in als wilskracht alleen niet genoeg is. Laat het uit als je alleen een zacht duwtje wilt."
+  },
+  "howBlockingWorks": {
+    "message": "Zo werkt blokkeren"
+  },
+  "modeOffHelp": {
+    "message": "De website laadt zoals gewoonlijk. Slowth doet niets."
+  },
+  "siteSpecific": {
+    "message": "Websitespecifiek blokkeren"
+  },
+  "modeShortsHelp": {
+    "message": "Blokkeert YouTube Shorts, Instagram/Facebook Reels of Verkennen en trends op X. De rest van de website blijft werken."
+  },
+  "addFeed": {
+    "message": "Voeg feedblokkering toe"
+  },
+  "modeFeedHelp": {
+    "message": "Stopt ook de eindeloze startfeed na enkele schermen. Op Instagram worden daarnaast Verkennen, verhalen en meer Reels-onderdelen geblokkeerd."
+  },
+  "modeAllHelp": {
+    "message": "Bij een bezoek aan de website verschijnt een vriendelijke blokkeerpagina."
+  },
+  "leaveFeedback": {
+    "message": "Geef feedback"
+  },
+  "showIntro": {
+    "message": "Toon introductie opnieuw"
+  },
+  "rulesNever": {
+    "message": "Regels: nog nooit opgehaald"
+  },
+  "rulesNow": {
+    "message": "Regels: zojuist"
+  },
+  "rulesRelative": {
+    "message": "Regels: $1"
+  },
+  "strictUntil": {
+    "message": "Strikte modus actief tot $1"
+  },
+  "openSafariSettings": {
+    "message": "Open Safari-instellingen"
+  },
+  "rulesCurrent": {
+    "message": "Regels: bijgewerkt"
+  },
+  "rulesFailed": {
+    "message": "Regels: bijwerken mislukt. Probeer het opnieuw."
+  },
+  "blockedPageTitle": {
+    "message": "Geblokkeerd door Slowth"
+  },
+  "thisSite": {
+    "message": "deze website"
+  },
+  "blockedTitle": {
+    "message": "$1 is geblokkeerd"
+  },
+  "blockedTabTitle": {
+    "message": "Geblokkeerd: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth houdt je weg van $1. Haal adem. Doe iets anders."
+  },
+  "backToSite": {
+    "message": "← Terug naar $1"
+  },
+  "why": {
+    "message": "Waarom"
+  },
+  "quoteTeam": {
+    "message": "Reels is gemaakt door een team van honderden mensen met salarissen van $$400k. Slowth is door één ontwikkelaar in een weekend gemaakt."
+  },
+  "quoteBillions": {
+    "message": "Ze gaven miljarden uit om je te laten doorscrollen. Wij maakten een kleine lokale extensie om je te laten stoppen."
+  },
+  "quoteBug": {
+    "message": "De eindeloze feed is een fout. Dit is de oplossing."
+  },
+  "best": {
+    "message": "record"
+  },
+  "gameLabel": {
+    "message": "Minivliegspel"
+  },
+  "gameHelp": {
+    "message": "Tik of druk op de spatiebalk om te fladderen"
+  },
+  "back": {
+    "message": "← Terug"
+  },
+  "signature": {
+    "message": "Slowth · vertraag, adem, maak"
+  },
+  "playHint": {
+    "message": "🦥 tik om Slow Flap te spelen →"
+  },
+  "avoidBranches": {
+    "message": "Raak de takken niet"
+  },
+  "newBest": {
+    "message": "Nieuw record! Tik om opnieuw te vliegen"
+  },
+  "flyAgain": {
+    "message": "Tik om opnieuw te vliegen"
+  },
+  "tapStart": {
+    "message": "Tik om te starten"
+  },
+  "gameOver": {
+    "message": "Spel afgelopen"
+  },
+  "feedTitle": {
+    "message": "De eindeloze feed is geblokkeerd"
+  },
+  "feedSubtitle": {
+    "message": "Slowth houdt je weg van de eindeloze feed. Haal adem. Doe iets anders."
+  },
+  "backHome": {
+    "message": "Terug naar de startpagina"
+  },
+  "dismiss": {
+    "message": "Sluiten"
+  },
+  "storiesTime": {
+    "message": "Je hebt al $1 aan verhalen besteed. Haal adem."
+  },
+  "enableSafari": {
+    "message": "Schakel in Safari in"
+  },
+  "openSettings": {
+    "message": "Open Instellingen"
+  },
+  "strictMode": {
+    "message": "Strikte modus"
+  },
+  "off": {
+    "message": "Uit"
+  },
+  "blockShorts": {
+    "message": "Shorts blokkeren"
+  },
+  "blockReels": {
+    "message": "Reels blokkeren"
+  },
+  "blockFeeds": {
+    "message": "Reels en feeds blokkeren"
+  },
+  "blockFeed": {
+    "message": "Reels en feed blokkeren"
+  },
+  "blockExplore": {
+    "message": "Verkennen en trends blokkeren"
+  },
+  "blockSite": {
+    "message": "Website blokkeren"
+  },
+  "updating": {
+    "message": "Bijwerken…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Oneindige feed blokkeren"
+  },
+  "infiniteFeedHelp": {
+    "message": "Beperkt eindeloos scrollen. Op Instagram vallen ook Ontdekken en Verhalen hieronder."
+  },
+  "settingsSaveFailed": {
+    "message": "Opslaan mislukt"
+  },
+  "strictConfirmTitle": {
+    "message": "Strikte modus inschakelen?"
+  },
+  "enable": {
+    "message": "Inschakelen"
+  },
+  "strictEnableConfirm": {
+    "message": "Ingeschakelde beperkingen kunnen 24 uur lang niet worden uitgeschakeld. Je kunt beperkingen toevoegen, maar het blokkeren van hele websites niet inschakelen."
+  },
+  "cancel": {
+    "message": "Annuleer"
+  }
+}

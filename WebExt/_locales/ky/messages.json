@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safari ичинде YouTube Shorts, Reels, TikTok жана алаксыткан түрмөктөрдү бөгөттөңүз."
+  },
+  "locale": {
+    "message": "ky"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram жана Facebook Reels, X ичиндеги Изилдөө жана тренддерди бөгөттөңүз. TikTok сайтын толугу менен бөгөттөңүз. Катуу режим менен жөндөөлөрдү 24 саатка кулпулаңыз."
+  },
+  "stepSettings": {
+    "message": "Түзмөгүңүздөгү Жөндөөлөрдү ачыңыз"
+  },
+  "stepExtensions": {
+    "message": "Колдонмолор → Safari → Кеңейтүүлөр бөлүмүнө өтүңүз"
+  },
+  "stepEnable": {
+    "message": "Slowth күйгүзүп, бардык веб-сайттарда иштөөгө уруксат бериңиз"
+  },
+  "onboardingDone": {
+    "message": "Күйгүздүм"
+  },
+  "blocking": {
+    "message": "Бөгөттөө"
+  },
+  "strictHelp": {
+    "message": "Күйгүзүлгөн чектөөлөрдү 24 саат бою өчүрүүгө болбойт. Кошумча чектөөлөрдү кошсоңуз болот, бирок бүтүндөй сайтты бөгөттөөнү күйгүзүүгө болбойт."
+  },
+  "updates": {
+    "message": "Жаңыртуулар"
+  },
+  "updateNow": {
+    "message": "Азыр жаңыртуу"
+  },
+  "loading": {
+    "message": "Жүктөлүүдө…"
+  },
+  "guide": {
+    "message": "Колдонмо"
+  },
+  "howToUse": {
+    "message": "Slowth кантип колдонулат"
+  },
+  "modesExplained": {
+    "message": "Катуу режим жана сайт режимдери жөнүндө"
+  },
+  "strictGuideTitle": {
+    "message": "Катуу режим эмне кылат"
+  },
+  "strictGuide": {
+    "message": "Күйгүзүлгөн чектөөлөрдү 24 саат бою өчүрүүгө болбойт. Кошумча чектөөлөрдү кошсоңуз болот, бирок бүтүндөй сайтты бөгөттөөнү күйгүзүүгө болбойт. Таймер кайра иштетүүдөн жана мажбурлап жабуудан кийин да иштей берет."
+  },
+  "strictAdvice": {
+    "message": "Эрк күчү жетишсиз болгондо күйгүзүңүз. Жумшак эскертүү гана керек болсо, өчүк калтырыңыз."
+  },
+  "howBlockingWorks": {
+    "message": "Бөгөттөө кантип иштейт"
+  },
+  "modeOffHelp": {
+    "message": "Сайт адаттагыдай жүктөлөт. Slowth эч нерсе кылбайт."
+  },
+  "siteSpecific": {
+    "message": "Сайтка жараша бөгөттөө"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels же X ичиндеги Изилдөө жана тренддерди бөгөттөйт. Сайттын калган бөлүгү иштей берет."
+  },
+  "addFeed": {
+    "message": "Түрмөктү бөгөттөөнү кошуу"
+  },
+  "modeFeedHelp": {
+    "message": "Бир нече экрандан кийин чексиз башкы түрмөктү да токтотот. Instagram ичинде Изилдөө, окуялар жана кошумча Reels бөлүмдөрүн камтыйт."
+  },
+  "modeAllHelp": {
+    "message": "Сайттын ордуна жагымдуу бөгөттөө барагы көрсөтүлөт."
+  },
+  "leaveFeedback": {
+    "message": "Пикир калтыруу"
+  },
+  "showIntro": {
+    "message": "Киришүүнү кайра көрсөтүү"
+  },
+  "rulesNever": {
+    "message": "Эрежелер: жүктөлө элек"
+  },
+  "rulesNow": {
+    "message": "Эрежелер: азыр эле"
+  },
+  "rulesRelative": {
+    "message": "Эрежелер: $1"
+  },
+  "strictUntil": {
+    "message": "Катуу режим $1 чейин иштейт"
+  },
+  "openSafariSettings": {
+    "message": "Safari жөндөөлөрүн ачуу"
+  },
+  "rulesCurrent": {
+    "message": "Эрежелер: жаңыртылган"
+  },
+  "rulesFailed": {
+    "message": "Эрежелер: жаңыртуу мүмкүн болгон жок. Кайра аракет кылыңыз."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth бөгөттөдү"
+  },
+  "thisSite": {
+    "message": "бул сайт"
+  },
+  "blockedTitle": {
+    "message": "$1 бөгөттөлдү"
+  },
+  "blockedTabTitle": {
+    "message": "Бөгөттөлдү: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth сизди $1 сайтынан алыстатат. Дем алыңыз. Башка иш менен алектениңиз."
+  },
+  "backToSite": {
+    "message": "← $1 сайтына кайтуу"
+  },
+  "why": {
+    "message": "Эмне үчүн"
+  },
+  "quoteTeam": {
+    "message": "Reels долбоорун $$400k айлык алган жүздөгөн адамдан турган топ жасаган. Slowth долбоорун бир иштеп чыгуучу дем алышта жасаган."
+  },
+  "quoteBillions": {
+    "message": "Алар сиз жылдыра беришиңиз үчүн миллиарддарды коротушту. Биз токтоого жардам берген чакан жергиликтүү кеңейтүү жасадык."
+  },
+  "quoteBug": {
+    "message": "Чексиз түрмөк — ката. Мына анын оңдоосу."
+  },
+  "best": {
+    "message": "рекорд"
+  },
+  "gameLabel": {
+    "message": "Чакан учуу оюну"
+  },
+  "gameHelp": {
+    "message": "Канат кагуу үчүн экранды же боштук баскычын басыңыз"
+  },
+  "back": {
+    "message": "← Артка"
+  },
+  "signature": {
+    "message": "Slowth · жайла, дем ал, жарат"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap ойноо үчүн басыңыз →"
+  },
+  "avoidBranches": {
+    "message": "Бутактарга урунбаңыз"
+  },
+  "newBest": {
+    "message": "Жаңы рекорд! Кайра учуу үчүн басыңыз"
+  },
+  "flyAgain": {
+    "message": "Кайра учуу үчүн басыңыз"
+  },
+  "tapStart": {
+    "message": "Баштоо үчүн басыңыз"
+  },
+  "gameOver": {
+    "message": "Оюн бүттү"
+  },
+  "feedTitle": {
+    "message": "Чексиз түрмөк бөгөттөлдү"
+  },
+  "feedSubtitle": {
+    "message": "Slowth сизди чексиз түрмөктөн алыстатат. Дем алыңыз. Башка иш менен алектениңиз."
+  },
+  "backHome": {
+    "message": "Башкы бетке кайтуу"
+  },
+  "dismiss": {
+    "message": "Жабуу"
+  },
+  "storiesTime": {
+    "message": "Окуяларга $1 коротуп койдуңуз. Дем алыңыз."
+  },
+  "enableSafari": {
+    "message": "Safari ичинде күйгүзүү"
+  },
+  "openSettings": {
+    "message": "Жөндөөлөрдү ачуу"
+  },
+  "strictMode": {
+    "message": "Катуу режим"
+  },
+  "off": {
+    "message": "Өчүк"
+  },
+  "blockShorts": {
+    "message": "Shorts видеолорун бөгөттөө"
+  },
+  "blockReels": {
+    "message": "Reels видеолорун бөгөттөө"
+  },
+  "blockFeeds": {
+    "message": "Reels жана түрмөктөрдү бөгөттөө"
+  },
+  "blockFeed": {
+    "message": "Reels жана түрмөктү бөгөттөө"
+  },
+  "blockExplore": {
+    "message": "Изилдөө жана тренддерди бөгөттөө"
+  },
+  "blockSite": {
+    "message": "Сайтты бөгөттөө"
+  },
+  "updating": {
+    "message": "Жаңыртылууда…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Чексиз түрмөктү бөгөттөө"
+  },
+  "infiniteFeedHelp": {
+    "message": "Чексиз сыдырууну чектейт. Instagram'да Explore жана Stories да камтылат."
+  },
+  "settingsSaveFailed": {
+    "message": "Сактоо мүмкүн болгон жок"
+  },
+  "strictConfirmTitle": {
+    "message": "Катуу режим күйгүзүлсүнбү?"
+  },
+  "enable": {
+    "message": "Күйгүзүү"
+  },
+  "strictEnableConfirm": {
+    "message": "Күйгүзүлгөн чектөөлөрдү 24 саат бою өчүрүүгө болбойт. Кошумча чектөөлөрдү кошсоңуз болот, бирок бүтүндөй сайтты бөгөттөөнү күйгүзүүгө болбойт."
+  },
+  "cancel": {
+    "message": "Жокко чыгаруу"
+  }
+}

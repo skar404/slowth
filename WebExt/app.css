@@ -62,7 +62,8 @@ header h1 {
   margin-bottom: 8px;
 }
 .card-body {
-  margin: 0 0 12px 18px;
+  margin: 0 0 12px;
+  margin-inline-start: 18px;
   padding: 0;
   font-size: 13px;
   line-height: 1.5;
@@ -145,7 +146,7 @@ header h1 {
   background: var(--card);
   color: var(--label);
   border: none;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   text-decoration: none;
 }
@@ -258,7 +259,7 @@ body:not(.landing) .landing-only { display: none !important; }
 }
 
 .guide-card {
-  border-left: 3px solid var(--tint);
+  border-inline-start: 3px solid var(--tint);
   padding: 14px 14px 12px 14px;
 }
 .guide-card .card-title {
@@ -310,4 +311,78 @@ body:not(.landing) .landing-only { display: none !important; }
   text-align: center;
   margin: 4px 0 4px 0;
   font-size: 13px;
+}
+
+dialog {
+  border: 0;
+  border-radius: 14px;
+  padding: 0;
+  max-width: min(92vw, 420px);
+  color: var(--label);
+  background: transparent;
+}
+dialog::backdrop { background: #0008; }
+.strict-confirmation-card { margin: 0; }
+
+/* Keep translated options fully visible in Safari's narrow popup. */
+.row { flex-wrap: wrap; gap: 8px; }
+.row select { max-width: 100%; min-width: 0; }
+.guide-mode-row { flex-wrap: wrap; }
+.mode-pill { white-space: normal; }
+@media (max-width: 480px) {
+  .row:has(select) { align-items: stretch; flex-direction: column; }
+  .row select { width: 100%; }
+}
+
+#sites.rows { background: transparent; overflow: visible; }
+.site-settings {
+  background: var(--card);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.site-settings + .site-settings { margin-top: 12px; }
+.site-heading { background: color-mix(in srgb, var(--tint) 8%, var(--card)); }
+.site-heading strong { font-weight: 600; }
+.site-action { color: var(--secondary); }
+.site-content { padding-inline-start: 24px; }
+.site-settings .row { flex-wrap: nowrap; }
+.site-settings .row > span { min-width: 0; overflow-wrap: anywhere; }
+.row input[role="switch"] {
+  appearance: none;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 26px;
+  border-radius: 16px;
+  background: var(--secondary);
+  position: relative;
+  cursor: pointer;
+  transform: none;
+}
+.row input[role="switch"]::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 2px;
+  inset-inline-start: 2px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px #0003;
+}
+.row input[role="switch"]:checked { background: var(--tint); }
+.row input[role="switch"]:checked::before { inset-inline-start: 18px; }
+.row input[role="switch"]:focus-visible { outline: 2px solid var(--tint); outline-offset: 3px; }
+
+/* Compact desktop popup; retain larger touch controls on iPhone and iPad. */
+@media (hover: hover) and (pointer: fine) {
+  .row, .row-btn { padding: 8px 12px; font-size: 13px; }
+  .site-settings + .site-settings { margin-top: 8px; }
+  .site-content { padding-inline-start: 20px; }
+  .row input[role="switch"] {
+    flex-basis: 32px;
+    width: 32px;
+    height: 20px;
+  }
+  .row input[role="switch"]::before { width: 16px; height: 16px; }
+  .row input[role="switch"]:checked::before { inset-inline-start: 14px; }
 }

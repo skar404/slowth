@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "Bloquea YouTube Shorts, Reels, TikTok y feeds que distraen en Safari, con controles por sitio."
+  },
+  "tagline": {
+    "message": "Bloquea YouTube Shorts, Instagram y Facebook Reels, además de Explorar y tendencias en X. Bloquea TikTok por completo. Bloquea tus ajustes con el modo estricto durante 24 horas."
+  },
+  "stepSettings": {
+    "message": "Abre Ajustes en tu dispositivo"
+  },
+  "stepExtensions": {
+    "message": "Ve a Apps → Safari → Extensiones"
+  },
+  "stepEnable": {
+    "message": "Activa Slowth y permite su uso en todos los sitios web"
+  },
+  "onboardingDone": {
+    "message": "Ya lo he activado"
+  },
+  "blocking": {
+    "message": "Bloqueo"
+  },
+  "strictHelp": {
+    "message": "Durante 24 horas no se pueden desactivar las restricciones activas. Puedes añadir restricciones, pero no activar el bloqueo de sitios completos."
+  },
+  "updates": {
+    "message": "Actualizaciones"
+  },
+  "updateNow": {
+    "message": "Actualizar ahora"
+  },
+  "loading": {
+    "message": "Cargando…"
+  },
+  "guide": {
+    "message": "Guía"
+  },
+  "howToUse": {
+    "message": "Cómo usar Slowth"
+  },
+  "modesExplained": {
+    "message": "Explicación del modo estricto y los modos por sitio"
+  },
+  "strictGuideTitle": {
+    "message": "Qué hace el modo estricto"
+  },
+  "strictGuide": {
+    "message": "Durante 24 horas no se pueden desactivar las restricciones activas. Puedes añadir restricciones, pero no activar el bloqueo de sitios completos. El temporizador continúa tras reiniciar o forzar el cierre."
+  },
+  "strictAdvice": {
+    "message": "Actívalo cuando la fuerza de voluntad no sea suficiente. Déjalo desactivado si solo quieres un pequeño recordatorio."
+  },
+  "howBlockingWorks": {
+    "message": "Cómo funciona el bloqueo"
+  },
+  "modeOffHelp": {
+    "message": "El sitio se carga como siempre. Slowth no hace nada."
+  },
+  "siteSpecific": {
+    "message": "Bloqueo según el sitio"
+  },
+  "modeShortsHelp": {
+    "message": "Bloquea YouTube Shorts, Instagram/Facebook Reels o Explorar y tendencias en X. El resto del sitio sigue funcionando."
+  },
+  "addFeed": {
+    "message": "Añadir bloqueo del feed"
+  },
+  "modeFeedHelp": {
+    "message": "También detiene el feed de inicio infinito después de unas pocas pantallas. En Instagram incluye además Explorar, Stories y otras secciones de Reels."
+  },
+  "modeAllHelp": {
+    "message": "Al visitar el sitio aparece una página de bloqueo amable en su lugar."
+  },
+  "leaveFeedback": {
+    "message": "Dejar comentarios"
+  },
+  "showIntro": {
+    "message": "Mostrar la introducción de nuevo"
+  },
+  "rulesNever": {
+    "message": "Reglas: nunca descargadas"
+  },
+  "rulesNow": {
+    "message": "Reglas: ahora mismo"
+  },
+  "rulesRelative": {
+    "message": "Reglas: $1"
+  },
+  "strictUntil": {
+    "message": "Modo estricto activo hasta $1"
+  },
+  "openSafariSettings": {
+    "message": "Abrir ajustes de Safari"
+  },
+  "rulesCurrent": {
+    "message": "Reglas: actualizadas"
+  },
+  "rulesFailed": {
+    "message": "No se pudieron actualizar las reglas. Inténtalo de nuevo."
+  },
+  "blockedPageTitle": {
+    "message": "Bloqueado por Slowth"
+  },
+  "thisSite": {
+    "message": "este sitio"
+  },
+  "blockedTitle": {
+    "message": "$1 está bloqueado"
+  },
+  "blockedTabTitle": {
+    "message": "Bloqueado: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth te mantiene lejos de $1. Respira. Haz otra cosa."
+  },
+  "backToSite": {
+    "message": "← Volver a $1"
+  },
+  "why": {
+    "message": "Por qué"
+  },
+  "quoteTeam": {
+    "message": "Reels lo creó un equipo de cientos de personas con sueldos de 400.000 dólares al año. Slowth lo creó un solo desarrollador en un fin de semana."
+  },
+  "quoteBillions": {
+    "message": "Gastaron miles de millones para que siguieras deslizando. Creamos una pequeña extensión local para ayudarte a parar."
+  },
+  "quoteBug": {
+    "message": "El feed infinito es un error. Aquí está la solución."
+  },
+  "best": {
+    "message": "récord"
+  },
+  "gameLabel": {
+    "message": "Minijuego de vuelo"
+  },
+  "gameHelp": {
+    "message": "Toca o pulsa espacio para volar"
+  },
+  "back": {
+    "message": "← Volver"
+  },
+  "signature": {
+    "message": "Slowth · baja el ritmo, respira, crea"
+  },
+  "playHint": {
+    "message": "🦥 toca para jugar a Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "No choques con las ramas"
+  },
+  "newBest": {
+    "message": "¡Nuevo récord! Toca para volver a volar"
+  },
+  "flyAgain": {
+    "message": "Toca para volver a volar"
+  },
+  "tapStart": {
+    "message": "Toca para empezar"
+  },
+  "gameOver": {
+    "message": "Fin de la partida"
+  },
+  "feedTitle": {
+    "message": "El feed infinito está bloqueado"
+  },
+  "feedSubtitle": {
+    "message": "Slowth te mantiene lejos del feed infinito. Respira. Haz otra cosa."
+  },
+  "backHome": {
+    "message": "Volver al inicio"
+  },
+  "dismiss": {
+    "message": "Cerrar"
+  },
+  "storiesTime": {
+    "message": "Ya has pasado $1 en Stories. Respira."
+  },
+  "enableSafari": {
+    "message": "Activar en Safari"
+  },
+  "openSettings": {
+    "message": "Abrir Ajustes"
+  },
+  "strictMode": {
+    "message": "Modo estricto"
+  },
+  "off": {
+    "message": "Desactivado"
+  },
+  "blockShorts": {
+    "message": "Bloquear Shorts"
+  },
+  "blockReels": {
+    "message": "Bloquear Reels"
+  },
+  "blockFeeds": {
+    "message": "Bloquear Reels y los feeds"
+  },
+  "blockFeed": {
+    "message": "Bloquear Reels y el feed"
+  },
+  "blockExplore": {
+    "message": "Bloquear Explorar y tendencias"
+  },
+  "blockSite": {
+    "message": "Bloquear sitio"
+  },
+  "updating": {
+    "message": "Actualizando…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "es"
+  },
+  "blockInfiniteFeed": {
+    "message": "Bloquear el feed infinito"
+  },
+  "infiniteFeedHelp": {
+    "message": "Limita el desplazamiento infinito. En Instagram también incluye Explorar e Historias."
+  },
+  "settingsSaveFailed": {
+    "message": "No se pudo guardar"
+  },
+  "strictConfirmTitle": {
+    "message": "¿Activar el modo estricto?"
+  },
+  "enable": {
+    "message": "Activar"
+  },
+  "strictEnableConfirm": {
+    "message": "Durante 24 horas no se pueden desactivar las restricciones activas. Puedes añadir restricciones, pero no activar el bloqueo de sitios completos."
+  },
+  "cancel": {
+    "message": "Cancelar"
+  }
+}

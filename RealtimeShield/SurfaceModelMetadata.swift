@@ -27,6 +27,10 @@ enum SurfaceClass: String, CaseIterable, Codable {
 }
 
 struct SurfaceModelMetadata: Decodable {
+    struct Qualification: Decodable {
+        let status: String
+        let reason: String?
+    }
     let modelVersion: String
     let appLabels: [String]
     let youtubeContentLabels: [String]
@@ -37,14 +41,49 @@ struct SurfaceModelMetadata: Decodable {
     let inferenceIntervalSeconds: Double
     let requiredConsecutiveHits: Int
     let observationWindowFrames: Int?
+    var experimental: Bool? = nil
+    var qualification: Qualification? = nil
+    var checkpointSHA256: String? = nil
+
+    func validateV12Creator(_ creator: [String: String]) throws {
+        let passed = qualification?.status == "passed" && qualification?.reason == nil && experimental == false
+        let failed = qualification?.status == "failed" && experimental == true
+            && !(qualification?.reason?.isEmpty ?? true)
+        guard modelVersion == "surface-hierarchical-v12-experimental",
+              passed || failed,
+              let digest = checkpointSHA256, digest.count == 64,
+              digest.allSatisfy({ "0123456789abcdef".contains($0) }),
+              creator["modelVersion"] == modelVersion,
+              creator["checkpointSHA256"] == digest,
+              creator["experimental"] == (experimental == true ? "true" : "false") else {
+            throw SurfaceClassifierError.invalidMetadata
+        }
+    }
+
+    func validateExperimentalCreator(_ creator: [String: String]) throws {
+        guard ["surface-hierarchical-v11-experimental",
+               "surface-hierarchical-v12-experimental",
+               "surface-hierarchical-v14-experimental",
+               "surface-hierarchical-v15-experimental"].contains(modelVersion),
+              experimental == true,
+              qualification?.status == "failed",
+              let reason = qualification?.reason, !reason.isEmpty,
+              let digest = checkpointSHA256, digest.count == 64,
+              digest.allSatisfy({ "0123456789abcdef".contains($0) }),
+              creator["modelVersion"] == modelVersion,
+              creator["checkpointSHA256"] == digest,
+              creator["experimental"] == "true" else {
+            throw SurfaceClassifierError.invalidMetadata
+        }
+    }
 
     var effectiveObservationWindowFrames: Int {
         observationWindowFrames ?? requiredConsecutiveHits
     }
 
-    static func load(bundle: Bundle = .main) throws -> SurfaceModelMetadata {
+    static func load(bundle: Bundle = .main, resourceName: String = "SurfaceDetectorMetadata") throws -> SurfaceModelMetadata {
         guard let url = bundle.url(
-            forResource: "SurfaceDetectorMetadata",
+            forResource: resourceName,
             withExtension: "json"
         ) else {
             throw SurfaceClassifierError.metadataMissing

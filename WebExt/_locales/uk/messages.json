@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Блокуйте YouTube Shorts, Reels, TikTok і відволікальні стрічки в Safari з налаштуваннями для кожного сайту."
+  },
+  "locale": {
+    "message": "uk"
+  },
+  "tagline": {
+    "message": "Блокуйте YouTube Shorts, Instagram і Facebook Reels, «Огляд» і тренди в X. Блокуйте TikTok повністю. Зафіксуйте налаштування суворим режимом на 24 години."
+  },
+  "stepSettings": {
+    "message": "Відкрийте Параметри на пристрої"
+  },
+  "stepExtensions": {
+    "message": "Перейдіть до «Програми» → Safari → «Розширення»"
+  },
+  "stepEnable": {
+    "message": "Увімкніть Slowth і дозвольте роботу на всіх вебсайтах"
+  },
+  "onboardingDone": {
+    "message": "Уже ввімкнено"
+  },
+  "blocking": {
+    "message": "Блокування"
+  },
+  "strictHelp": {
+    "message": "Протягом 24 годин увімкнені обмеження не можна вимкнути. Можна додавати обмеження, але не можна вмикати блокування всього сайту."
+  },
+  "updates": {
+    "message": "Оновлення"
+  },
+  "updateNow": {
+    "message": "Оновити зараз"
+  },
+  "loading": {
+    "message": "Завантаження…"
+  },
+  "guide": {
+    "message": "Посібник"
+  },
+  "howToUse": {
+    "message": "Як користуватися Slowth"
+  },
+  "modesExplained": {
+    "message": "Про суворий режим і режими сайтів"
+  },
+  "strictGuideTitle": {
+    "message": "Що робить суворий режим"
+  },
+  "strictGuide": {
+    "message": "Протягом 24 годин увімкнені обмеження не можна вимкнути. Можна додавати обмеження, але не можна вмикати блокування всього сайту. Таймер продовжує працювати після перезапуску та примусового закриття."
+  },
+  "strictAdvice": {
+    "message": "Увімкніть, коли самої сили волі замало. Залиште вимкненим, якщо потрібне лише м’яке нагадування."
+  },
+  "howBlockingWorks": {
+    "message": "Як працює блокування"
+  },
+  "modeOffHelp": {
+    "message": "Сайт завантажується як завжди. Slowth нічого не робить."
+  },
+  "siteSpecific": {
+    "message": "Блокування вмісту сайту"
+  },
+  "modeShortsHelp": {
+    "message": "Блокує YouTube Shorts, Instagram/Facebook Reels, «Огляд» і тренди в X. Решта сайту продовжує працювати."
+  },
+  "addFeed": {
+    "message": "Додати блокування стрічки"
+  },
+  "modeFeedHelp": {
+    "message": "Також зупиняє нескінченну головну стрічку після кількох екранів. В Instagram охоплює «Цікаве», історії та додаткові розділи Reels."
+  },
+  "modeAllHelp": {
+    "message": "Замість сайту з’являється дружня сторінка блокування."
+  },
+  "leaveFeedback": {
+    "message": "Залишити відгук"
+  },
+  "showIntro": {
+    "message": "Показати вступ знову"
+  },
+  "rulesNever": {
+    "message": "Правила: ще не завантажені"
+  },
+  "rulesNow": {
+    "message": "Правила: щойно"
+  },
+  "rulesRelative": {
+    "message": "Правила: $1"
+  },
+  "strictUntil": {
+    "message": "Суворий режим діє до $1"
+  },
+  "openSafariSettings": {
+    "message": "Відкрити параметри Safari"
+  },
+  "rulesCurrent": {
+    "message": "Правила: актуальні"
+  },
+  "rulesFailed": {
+    "message": "Правила: не вдалося оновити. Спробуйте знову."
+  },
+  "blockedPageTitle": {
+    "message": "Заблоковано Slowth"
+  },
+  "thisSite": {
+    "message": "цей сайт"
+  },
+  "blockedTitle": {
+    "message": "$1 заблоковано"
+  },
+  "blockedTabTitle": {
+    "message": "Заблоковано: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth допомагає вам відволіктися від $1. Вдихніть. Займіться чимось іншим."
+  },
+  "backToSite": {
+    "message": "← Повернутися до $1"
+  },
+  "why": {
+    "message": "Чому"
+  },
+  "quoteTeam": {
+    "message": "Reels створила команда із сотень людей із зарплатами по $$400k. Slowth зробив один розробник за вихідні."
+  },
+  "quoteBillions": {
+    "message": "Вони витратили мільярди, щоб ви продовжували гортати. Ми створили невелике локальне розширення, щоб допомогти зупинитися."
+  },
+  "quoteBug": {
+    "message": "Нескінченна стрічка — це помилка. Ось виправлення."
+  },
+  "best": {
+    "message": "рекорд"
+  },
+  "gameLabel": {
+    "message": "Мінігра з польотом"
+  },
+  "gameHelp": {
+    "message": "Торкніться екрана або натисніть пробіл, щоб змахнути крилами"
+  },
+  "back": {
+    "message": "← Назад"
+  },
+  "signature": {
+    "message": "Slowth · сповільнись, вдихни, створи"
+  },
+  "playHint": {
+    "message": "🦥 торкніться, щоб зіграти в Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Не врізайтеся в гілки"
+  },
+  "newBest": {
+    "message": "Новий рекорд! Торкніться, щоб полетіти знову"
+  },
+  "flyAgain": {
+    "message": "Торкніться, щоб полетіти знову"
+  },
+  "tapStart": {
+    "message": "Торкніться, щоб почати"
+  },
+  "gameOver": {
+    "message": "Гру завершено"
+  },
+  "feedTitle": {
+    "message": "Нескінченну стрічку заблоковано"
+  },
+  "feedSubtitle": {
+    "message": "Slowth допомагає вам відволіктися від нескінченної стрічки. Вдихніть. Займіться чимось іншим."
+  },
+  "backHome": {
+    "message": "На головну"
+  },
+  "dismiss": {
+    "message": "Закрити"
+  },
+  "storiesTime": {
+    "message": "Ви вже витратили $1 на історії. Вдихніть."
+  },
+  "enableSafari": {
+    "message": "Увімкнути в Safari"
+  },
+  "openSettings": {
+    "message": "Відкрити Параметри"
+  },
+  "strictMode": {
+    "message": "Суворий режим"
+  },
+  "off": {
+    "message": "Вимк."
+  },
+  "blockShorts": {
+    "message": "Блокувати Shorts"
+  },
+  "blockReels": {
+    "message": "Блокувати Reels"
+  },
+  "blockFeeds": {
+    "message": "Блокувати Reels і стрічки"
+  },
+  "blockFeed": {
+    "message": "Блокувати Reels і стрічку"
+  },
+  "blockExplore": {
+    "message": "Блокувати «Огляд» і тренди"
+  },
+  "blockSite": {
+    "message": "Блокувати сайт"
+  },
+  "updating": {
+    "message": "Оновлення…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Блокувати нескінченну стрічку"
+  },
+  "infiniteFeedHelp": {
+    "message": "Обмежує нескінченне прокручування. В Instagram також охоплює Explore та Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Не вдалося зберегти"
+  },
+  "strictConfirmTitle": {
+    "message": "Увімкнути суворий режим?"
+  },
+  "enable": {
+    "message": "Увімкнути"
+  },
+  "strictEnableConfirm": {
+    "message": "Протягом 24 годин увімкнені обмеження не можна вимкнути. Можна додавати обмеження, але не можна вмикати блокування всього сайту."
+  },
+  "cancel": {
+    "message": "Скасувати"
+  }
+}

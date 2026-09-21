@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokkold a YouTube Shorts, Reels, TikTok tartalmait és a zavaró hírfolyamokat a Safariban."
+  },
+  "locale": {
+    "message": "hu"
+  },
+  "tagline": {
+    "message": "Blokkold a YouTube Shorts, Instagram és Facebook Reels, valamint az X Felfedezés és trendek tartalmait. Blokkold teljesen a TikTokot. Zárold a beállításokat szigorú móddal 24 órára."
+  },
+  "stepSettings": {
+    "message": "Nyisd meg a Beállításokat az eszközödön"
+  },
+  "stepExtensions": {
+    "message": "Lépj az Appok → Safari → Bővítmények menübe"
+  },
+  "stepEnable": {
+    "message": "Kapcsold be a Slowthot, és engedélyezd minden webhelyen"
+  },
+  "onboardingDone": {
+    "message": "Bekapcsoltam"
+  },
+  "blocking": {
+    "message": "Blokkolás"
+  },
+  "strictHelp": {
+    "message": "A bekapcsolt korlátozásokat 24 órán át nem lehet kikapcsolni. További korlátozásokat bekapcsolhatsz, de teljes webhelyek blokkolását nem."
+  },
+  "updates": {
+    "message": "Frissítések"
+  },
+  "updateNow": {
+    "message": "Frissítés most"
+  },
+  "loading": {
+    "message": "Betöltés…"
+  },
+  "guide": {
+    "message": "Útmutató"
+  },
+  "howToUse": {
+    "message": "A Slowth használata"
+  },
+  "modesExplained": {
+    "message": "A szigorú mód és a webhelyenkénti módok bemutatása"
+  },
+  "strictGuideTitle": {
+    "message": "Mit csinál a szigorú mód"
+  },
+  "strictGuide": {
+    "message": "A bekapcsolt korlátozásokat 24 órán át nem lehet kikapcsolni. További korlátozásokat bekapcsolhatsz, de teljes webhelyek blokkolását nem. Az időzítő újraindítás és kényszerített bezárás után is folytatódik."
+  },
+  "strictAdvice": {
+    "message": "Kapcsold be, ha az akaraterő önmagában kevés. Hagyd kikapcsolva, ha csak enyhe ösztönzésre van szükséged."
+  },
+  "howBlockingWorks": {
+    "message": "Így működik a blokkolás"
+  },
+  "modeOffHelp": {
+    "message": "A webhely a megszokott módon töltődik be. A Slowth nem csinál semmit."
+  },
+  "siteSpecific": {
+    "message": "Webhelyre szabott blokkolás"
+  },
+  "modeShortsHelp": {
+    "message": "Blokkolja a YouTube Shorts, Instagram/Facebook Reels vagy az X Felfedezés és trendek tartalmait. A webhely többi része működik."
+  },
+  "addFeed": {
+    "message": "Hírfolyamblokkolás hozzáadása"
+  },
+  "modeFeedHelp": {
+    "message": "Néhány képernyő után a végtelen fő hírfolyamot is megállítja. Az Instagramon a Felfedezésre, a történetekre és további Reels-felületekre is kiterjed."
+  },
+  "modeAllHelp": {
+    "message": "A webhely helyett barátságos blokkolóoldal jelenik meg."
+  },
+  "leaveFeedback": {
+    "message": "Visszajelzés írása"
+  },
+  "showIntro": {
+    "message": "Bevezető újbóli megjelenítése"
+  },
+  "rulesNever": {
+    "message": "Szabályok: még nem lettek letöltve"
+  },
+  "rulesNow": {
+    "message": "Szabályok: éppen most"
+  },
+  "rulesRelative": {
+    "message": "Szabályok: $1"
+  },
+  "strictUntil": {
+    "message": "Szigorú mód vége: $1"
+  },
+  "openSafariSettings": {
+    "message": "Safari-beállítások megnyitása"
+  },
+  "rulesCurrent": {
+    "message": "Szabályok: naprakészek"
+  },
+  "rulesFailed": {
+    "message": "Szabályok: nem sikerült frissíteni. Próbáld újra."
+  },
+  "blockedPageTitle": {
+    "message": "A Slowth blokkolta"
+  },
+  "thisSite": {
+    "message": "ez a webhely"
+  },
+  "blockedTitle": {
+    "message": "$1 blokkolva"
+  },
+  "blockedTabTitle": {
+    "message": "Blokkolva: $1"
+  },
+  "blockedSubtitle": {
+    "message": "A Slowth távol tart ettől: $1. Vegyél levegőt. Csinálj valami mást."
+  },
+  "backToSite": {
+    "message": "← Vissza ide: $1"
+  },
+  "why": {
+    "message": "Miért"
+  },
+  "quoteTeam": {
+    "message": "A Reels több száz, $$400k fizetésű ember munkája. A Slowthot egy fejlesztő készítette egy hétvége alatt."
+  },
+  "quoteBillions": {
+    "message": "Milliárdokat költöttek arra, hogy tovább görgess. Mi készítettünk egy kis helyi bővítményt, hogy megállj."
+  },
+  "quoteBug": {
+    "message": "A végtelen hírfolyam egy hiba. Íme a javítás."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Repülős minijáték"
+  },
+  "gameHelp": {
+    "message": "Koppints vagy nyomj szóközt a szárnycsapáshoz"
+  },
+  "back": {
+    "message": "← Vissza"
+  },
+  "signature": {
+    "message": "Slowth · lassíts, lélegezz, alkoss"
+  },
+  "playHint": {
+    "message": "🦥 koppints a Slow Flap játékhoz →"
+  },
+  "avoidBranches": {
+    "message": "Kerüld el az ágakat"
+  },
+  "newBest": {
+    "message": "Új rekord! Koppints az újabb repüléshez"
+  },
+  "flyAgain": {
+    "message": "Koppints az újabb repüléshez"
+  },
+  "tapStart": {
+    "message": "Koppints az indításhoz"
+  },
+  "gameOver": {
+    "message": "Vége a játéknak"
+  },
+  "feedTitle": {
+    "message": "A végtelen hírfolyam blokkolva"
+  },
+  "feedSubtitle": {
+    "message": "A Slowth távol tart a végtelen hírfolyamtól. Vegyél levegőt. Csinálj valami mást."
+  },
+  "backHome": {
+    "message": "Vissza a kezdőlapra"
+  },
+  "dismiss": {
+    "message": "Bezárás"
+  },
+  "storiesTime": {
+    "message": "Már $1 telt el a történetekkel. Vegyél levegőt."
+  },
+  "enableSafari": {
+    "message": "Bekapcsolás a Safariban"
+  },
+  "openSettings": {
+    "message": "Beállítások megnyitása"
+  },
+  "strictMode": {
+    "message": "Szigorú mód"
+  },
+  "off": {
+    "message": "Ki"
+  },
+  "blockShorts": {
+    "message": "Shorts blokkolása"
+  },
+  "blockReels": {
+    "message": "Reels blokkolása"
+  },
+  "blockFeeds": {
+    "message": "Reels és hírfolyamok blokkolása"
+  },
+  "blockFeed": {
+    "message": "Reels és hírfolyam blokkolása"
+  },
+  "blockExplore": {
+    "message": "Felfedezés és trendek blokkolása"
+  },
+  "blockSite": {
+    "message": "Webhely blokkolása"
+  },
+  "updating": {
+    "message": "Frissítés…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Végtelen hírfolyam blokkolása"
+  },
+  "infiniteFeedHelp": {
+    "message": "Korlátozza a végtelen görgetést. Az Instagramon a Felfedezés és a Történetek is ide tartoznak."
+  },
+  "settingsSaveFailed": {
+    "message": "Nem sikerült menteni"
+  },
+  "strictConfirmTitle": {
+    "message": "Bekapcsolod a szigorú módot?"
+  },
+  "enable": {
+    "message": "Bekapcsolás"
+  },
+  "strictEnableConfirm": {
+    "message": "A bekapcsolt korlátozásokat 24 órán át nem lehet kikapcsolni. További korlátozásokat bekapcsolhatsz, de teljes webhelyek blokkolását nem."
+  },
+  "cancel": {
+    "message": "Mégse"
+  }
+}

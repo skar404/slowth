@@ -1,3 +1,4 @@
+#if DEBUG
 import Foundation
 
 enum DebugCaptureSettings {
@@ -198,3 +199,4 @@ enum DebugCaptureFileStore {
         }
     }
 }
+#endif

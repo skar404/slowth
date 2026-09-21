@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Блокируйте YouTube Shorts, Reels, TikTok и отвлекающие ленты в Safari с настройками для каждого сайта."
+  },
+  "locale": {
+    "message": "ru"
+  },
+  "tagline": {
+    "message": "Блокируйте YouTube Shorts, Instagram и Facebook Reels, «Обзор» и тренды в X. Блокируйте TikTok целиком. Зафиксируйте настройки строгим режимом на 24 часа."
+  },
+  "stepSettings": {
+    "message": "Откройте настройки устройства"
+  },
+  "stepExtensions": {
+    "message": "Откройте «Приложения» → Safari → «Расширения»"
+  },
+  "stepEnable": {
+    "message": "Включите Slowth и разрешите работу на всех сайтах"
+  },
+  "onboardingDone": {
+    "message": "Всё включено"
+  },
+  "blocking": {
+    "message": "Блокировка"
+  },
+  "strictHelp": {
+    "message": "В течение 24 часов включённые ограничения нельзя отключить. Можно добавлять ограничения, но нельзя включать блокировку сайта целиком."
+  },
+  "updates": {
+    "message": "Обновления"
+  },
+  "updateNow": {
+    "message": "Обновить сейчас"
+  },
+  "loading": {
+    "message": "Загрузка…"
+  },
+  "guide": {
+    "message": "Инструкция"
+  },
+  "howToUse": {
+    "message": "Как пользоваться Slowth"
+  },
+  "modesExplained": {
+    "message": "О строгом режиме и режимах сайтов"
+  },
+  "strictGuideTitle": {
+    "message": "Что делает строгий режим"
+  },
+  "strictGuide": {
+    "message": "В течение 24 часов включённые ограничения нельзя отключить. Можно добавлять ограничения, но нельзя включать блокировку сайта целиком. Таймер продолжает работать после перезапуска и принудительного закрытия."
+  },
+  "strictAdvice": {
+    "message": "Включайте, когда одной силы воли недостаточно. Оставьте выключенным, если нужно лишь мягкое напоминание."
+  },
+  "howBlockingWorks": {
+    "message": "Как работает блокировка"
+  },
+  "modeOffHelp": {
+    "message": "Сайт загружается как обычно. Slowth ничего не делает."
+  },
+  "siteSpecific": {
+    "message": "Блокировка контента сайта"
+  },
+  "modeShortsHelp": {
+    "message": "Блокирует YouTube Shorts, Instagram/Facebook Reels, «Обзор» и тренды в X. Остальные разделы сайта продолжают работать."
+  },
+  "addFeed": {
+    "message": "Добавить блокировку ленты"
+  },
+  "modeFeedHelp": {
+    "message": "Также останавливает бесконечную главную ленту через несколько экранов. В Instagram охватывает «Интересное», истории и дополнительные разделы Reels."
+  },
+  "modeAllHelp": {
+    "message": "Вместо сайта показывается дружелюбная страница блокировки."
+  },
+  "leaveFeedback": {
+    "message": "Оставить отзыв"
+  },
+  "showIntro": {
+    "message": "Показать введение снова"
+  },
+  "rulesNever": {
+    "message": "Правила: ещё не загружены"
+  },
+  "rulesNow": {
+    "message": "Правила: только что"
+  },
+  "rulesRelative": {
+    "message": "Правила: $1"
+  },
+  "strictUntil": {
+    "message": "Строгий режим действует до $1"
+  },
+  "openSafariSettings": {
+    "message": "Открыть настройки Safari"
+  },
+  "rulesCurrent": {
+    "message": "Правила: актуальны"
+  },
+  "rulesFailed": {
+    "message": "Правила: не удалось обновить. Повторите попытку."
+  },
+  "blockedPageTitle": {
+    "message": "Заблокировано Slowth"
+  },
+  "thisSite": {
+    "message": "этот сайт"
+  },
+  "blockedTitle": {
+    "message": "$1 заблокирован"
+  },
+  "blockedTabTitle": {
+    "message": "Заблокировано: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth помогает вам отвлечься от $1. Вдохните. Займитесь чем-нибудь другим."
+  },
+  "backToSite": {
+    "message": "← Вернуться на $1"
+  },
+  "why": {
+    "message": "Почему"
+  },
+  "quoteTeam": {
+    "message": "Reels создала команда из сотен людей с зарплатами по $$400k. Slowth сделал один разработчик за выходные."
+  },
+  "quoteBillions": {
+    "message": "Они потратили миллиарды, чтобы вы продолжали листать. Мы сделали небольшое локальное расширение, чтобы помочь остановиться."
+  },
+  "quoteBug": {
+    "message": "Бесконечная лента — это ошибка. Вот исправление."
+  },
+  "best": {
+    "message": "рекорд"
+  },
+  "gameLabel": {
+    "message": "Мини-игра с полётом"
+  },
+  "gameHelp": {
+    "message": "Нажмите на экран или пробел, чтобы взмахнуть крыльями"
+  },
+  "back": {
+    "message": "← Назад"
+  },
+  "signature": {
+    "message": "Slowth · замедлись, вдохни, создай"
+  },
+  "playHint": {
+    "message": "🦥 нажмите, чтобы сыграть в Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Не врезайтесь в ветки"
+  },
+  "newBest": {
+    "message": "Новый рекорд! Нажмите, чтобы полететь снова"
+  },
+  "flyAgain": {
+    "message": "Нажмите, чтобы полететь снова"
+  },
+  "tapStart": {
+    "message": "Нажмите, чтобы начать"
+  },
+  "gameOver": {
+    "message": "Игра окончена"
+  },
+  "feedTitle": {
+    "message": "Бесконечная лента заблокирована"
+  },
+  "feedSubtitle": {
+    "message": "Slowth помогает вам отвлечься от бесконечной ленты. Вдохните. Займитесь чем-нибудь другим."
+  },
+  "backHome": {
+    "message": "На главную"
+  },
+  "dismiss": {
+    "message": "Закрыть"
+  },
+  "storiesTime": {
+    "message": "Вы уже потратили $1 на истории. Вдохните."
+  },
+  "enableSafari": {
+    "message": "Включить в Safari"
+  },
+  "openSettings": {
+    "message": "Открыть настройки"
+  },
+  "strictMode": {
+    "message": "Строгий режим"
+  },
+  "off": {
+    "message": "Выкл."
+  },
+  "blockShorts": {
+    "message": "Блокировать Shorts"
+  },
+  "blockReels": {
+    "message": "Блокировать Reels"
+  },
+  "blockFeeds": {
+    "message": "Блокировать Reels и ленты"
+  },
+  "blockFeed": {
+    "message": "Блокировать Reels и ленту"
+  },
+  "blockExplore": {
+    "message": "Блокировать «Обзор» и тренды"
+  },
+  "blockSite": {
+    "message": "Блокировать сайт"
+  },
+  "updating": {
+    "message": "Обновление…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Блокировать Infinite Feed"
+  },
+  "infiniteFeedHelp": {
+    "message": "Infinite Feed ограничивает прокрутку. В Instagram также включает Explore и Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Не удалось сохранить"
+  },
+  "strictConfirmTitle": {
+    "message": "Включить строгий режим?"
+  },
+  "enable": {
+    "message": "Включить"
+  },
+  "strictEnableConfirm": {
+    "message": "В течение 24 часов включённые ограничения нельзя отключить. Можно добавлять ограничения, но нельзя включать блокировку сайта целиком."
+  },
+  "cancel": {
+    "message": "Отмена"
+  }
+}

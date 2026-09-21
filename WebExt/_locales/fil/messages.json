@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "I-block ang YouTube Shorts, Reels, TikTok, at mga nakakagambalang feed sa Safari."
+  },
+  "tagline": {
+    "message": "I-block ang YouTube Shorts, Instagram at Facebook Reels, at Explore at mga trend sa X. I-block ang buong TikTok. I-lock ang iyong mga setting nang 24 oras gamit ang mahigpit na mode."
+  },
+  "stepSettings": {
+    "message": "Buksan ang Settings sa iyong device"
+  },
+  "stepExtensions": {
+    "message": "Pumunta sa Apps → Safari → Extensions"
+  },
+  "stepEnable": {
+    "message": "I-on ang Slowth at payagan ito sa lahat ng website"
+  },
+  "onboardingDone": {
+    "message": "Na-on ko na"
+  },
+  "blocking": {
+    "message": "Pag-block"
+  },
+  "strictHelp": {
+    "message": "Hindi maaaring i-off ang mga aktibong paghihigpit sa loob ng 24 na oras. Maaari kang magdagdag ng mga paghihigpit, pero hindi i-on ang pag-block ng buong site."
+  },
+  "updates": {
+    "message": "Mga update"
+  },
+  "updateNow": {
+    "message": "I-update ngayon"
+  },
+  "loading": {
+    "message": "Naglo-load…"
+  },
+  "guide": {
+    "message": "Gabay"
+  },
+  "howToUse": {
+    "message": "Paano gamitin ang Slowth"
+  },
+  "modesExplained": {
+    "message": "Paliwanag sa mahigpit na mode at mga mode ng bawat site"
+  },
+  "strictGuideTitle": {
+    "message": "Ano ang ginagawa ng mahigpit na mode"
+  },
+  "strictGuide": {
+    "message": "Hindi maaaring i-off ang mga aktibong paghihigpit sa loob ng 24 na oras. Maaari kang magdagdag ng mga paghihigpit, pero hindi i-on ang pag-block ng buong site. Tuloy ang timer kahit mag-restart o puwersahang isara ang app."
+  },
+  "strictAdvice": {
+    "message": "I-on ito kapag hindi sapat ang pagpipigil sa sarili. Panatilihing naka-off kung banayad na paalala lang ang gusto mo."
+  },
+  "howBlockingWorks": {
+    "message": "Paano gumagana ang pag-block"
+  },
+  "modeOffHelp": {
+    "message": "Naglo-load ang site gaya ng dati. Walang ginagawa ang Slowth."
+  },
+  "siteSpecific": {
+    "message": "Pag-block ayon sa site"
+  },
+  "modeShortsHelp": {
+    "message": "Bina-block ang YouTube Shorts, Instagram/Facebook Reels, o Explore at mga trend sa X. Magagamit pa rin ang ibang bahagi ng site."
+  },
+  "addFeed": {
+    "message": "Idagdag ang pag-block ng feed"
+  },
+  "modeFeedHelp": {
+    "message": "Pinapahinto rin ang walang katapusang home feed pagkaraan ng ilang screen. Sa Instagram, kasama rin ang Explore, Stories, at iba pang bahagi na may Reels."
+  },
+  "modeAllHelp": {
+    "message": "Isang magiliw na pahina ng pag-block ang makikita sa halip na ang site."
+  },
+  "leaveFeedback": {
+    "message": "Magbigay ng feedback"
+  },
+  "showIntro": {
+    "message": "Ipakita muli ang pagpapakilala"
+  },
+  "rulesNever": {
+    "message": "Mga panuntunan: hindi pa nakuha"
+  },
+  "rulesNow": {
+    "message": "Mga panuntunan: ngayon lang"
+  },
+  "rulesRelative": {
+    "message": "Mga panuntunan: $1"
+  },
+  "strictUntil": {
+    "message": "Aktibo ang mahigpit na mode hanggang $1"
+  },
+  "openSafariSettings": {
+    "message": "Buksan ang Safari Settings"
+  },
+  "rulesCurrent": {
+    "message": "Mga panuntunan: napapanahon"
+  },
+  "rulesFailed": {
+    "message": "Hindi ma-update ang mga panuntunan. Subukan muli."
+  },
+  "blockedPageTitle": {
+    "message": "Na-block ng Slowth"
+  },
+  "thisSite": {
+    "message": "ang site na ito"
+  },
+  "blockedTitle": {
+    "message": "Naka-block ang $1"
+  },
+  "blockedTabTitle": {
+    "message": "Naka-block: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Inilalayo ka ng Slowth sa $1. Huminga muna. Gumawa ng ibang bagay."
+  },
+  "backToSite": {
+    "message": "← Bumalik sa $1"
+  },
+  "why": {
+    "message": "Bakit"
+  },
+  "quoteTeam": {
+    "message": "Ang Reels ay ginawa ng daan-daang tao na may taunang suweldong 400,000 dolyar. Ang Slowth ay ginawa ng isang developer sa isang weekend."
+  },
+  "quoteBillions": {
+    "message": "Gumastos sila ng bilyon-bilyon para patuloy kang mag-scroll. Gumawa kami ng maliit na lokal na extension para tulungan kang huminto."
+  },
+  "quoteBug": {
+    "message": "Ang walang katapusang feed ay isang bug. Narito ang ayos."
+  },
+  "best": {
+    "message": "pinakamataas"
+  },
+  "gameLabel": {
+    "message": "Munting larong paglipad"
+  },
+  "gameHelp": {
+    "message": "I-tap o pindutin ang space para lumipad"
+  },
+  "back": {
+    "message": "← Bumalik"
+  },
+  "signature": {
+    "message": "Slowth · magdahan-dahan, huminga, lumikha"
+  },
+  "playHint": {
+    "message": "🦥 i-tap para maglaro ng Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Iwasan ang mga sanga"
+  },
+  "newBest": {
+    "message": "Bagong rekord! I-tap para lumipad muli"
+  },
+  "flyAgain": {
+    "message": "I-tap para lumipad muli"
+  },
+  "tapStart": {
+    "message": "I-tap para magsimula"
+  },
+  "gameOver": {
+    "message": "Tapos na ang laro"
+  },
+  "feedTitle": {
+    "message": "Naka-block ang walang katapusang feed"
+  },
+  "feedSubtitle": {
+    "message": "Inilalayo ka ng Slowth sa walang katapusang feed. Huminga muna. Gumawa ng ibang bagay."
+  },
+  "backHome": {
+    "message": "Bumalik sa home"
+  },
+  "dismiss": {
+    "message": "Isara"
+  },
+  "storiesTime": {
+    "message": "Nakagugol ka na ng $1 sa Stories. Huminga muna."
+  },
+  "enableSafari": {
+    "message": "I-on sa Safari"
+  },
+  "openSettings": {
+    "message": "Buksan ang Settings"
+  },
+  "strictMode": {
+    "message": "Mahigpit na mode"
+  },
+  "off": {
+    "message": "Naka-off"
+  },
+  "blockShorts": {
+    "message": "I-block ang Shorts"
+  },
+  "blockReels": {
+    "message": "I-block ang Reels"
+  },
+  "blockFeeds": {
+    "message": "I-block ang Reels at mga feed"
+  },
+  "blockFeed": {
+    "message": "I-block ang Reels at feed"
+  },
+  "blockExplore": {
+    "message": "I-block ang Explore at mga trend"
+  },
+  "blockSite": {
+    "message": "I-block ang site"
+  },
+  "updating": {
+    "message": "Nag-a-update…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "fil"
+  },
+  "blockInfiniteFeed": {
+    "message": "I-block ang walang katapusang feed"
+  },
+  "infiniteFeedHelp": {
+    "message": "Nililimitahan ang pag-scroll. Sa Instagram, kasama rin ang Explore at Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Hindi ma-save"
+  },
+  "strictConfirmTitle": {
+    "message": "I-on ang mahigpit na mode?"
+  },
+  "enable": {
+    "message": "I-on"
+  },
+  "strictEnableConfirm": {
+    "message": "Hindi maaaring i-off ang mga aktibong paghihigpit sa loob ng 24 na oras. Maaari kang magdagdag ng mga paghihigpit, pero hindi i-on ang pag-block ng buong site."
+  },
+  "cancel": {
+    "message": "Kanselahin"
+  }
+}

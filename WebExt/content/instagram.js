@@ -1,4 +1,5 @@
 (function () {
+  const { t, locale } = globalThis.Unscroll.i18n;
   const ns = globalThis.Unscroll;
   const api = (typeof browser !== "undefined" ? browser : chrome);
   ns.content.siteContentScript("instagram");
@@ -25,7 +26,7 @@
   let storiesStartedAt = 0;
 
   function isFeedModeActive() {
-    return globalThis.Unscroll.content.currentMode("instagram") === "feed";
+    return globalThis.Unscroll.content.featureEnabled("instagram", "feed");
   }
 
   function isInfiniteFeedUrl() {
@@ -58,22 +59,12 @@
     return false;
   }
 
-  function fmtDuration(ms) {
-    const sec = Math.max(0, Math.floor(ms / 1000));
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    if (m === 0) return s + " seconds";
-    if (m < 60) return s ? m + " min " + s + " sec" : m + " minutes";
-    const h = Math.floor(m / 60);
-    return h + "h " + (m % 60) + "m";
-  }
 
   function buildLede() {
     if (isStoriesViewer() && storiesStartedAt) {
-      return "You've already burned " + fmtDuration(Date.now() - storiesStartedAt) +
-        " on stories. Take a breath.";
+      return t("storiesTime", globalThis.Unscroll.i18n.duration(Date.now() - storiesStartedAt));
     }
-    return "Slowth is keeping you off the infinite feed. Take a breath. Do something else.";
+    return t("feedSubtitle");
   }
 
   function ensureStyle() {
@@ -92,7 +83,7 @@
       "}",
       "#" + OVERLAY_ID + " *{box-sizing:border-box;}",
       "#" + OVERLAY_ID + " .uo-close{",
-      "position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;",
+      "position:absolute;top:18px;inset-inline-end:18px;width:36px;height:36px;border-radius:50%;",
       "background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);",
       "color:#fff;font-size:22px;line-height:1;cursor:pointer;",
       "appearance:none;display:grid;place-items:center;font-family:inherit;",
@@ -157,11 +148,17 @@
       (dismissable ? '<button class="uo-close" type="button" aria-label="Dismiss">\u00d7</button>' : '') +
       '<main class="uo-main">' +
         '<div class="uo-icon"><img alt="Slowth"></div>' +
-        '<h1><span class="host">infinite feed</span> is blocked</h1>' +
+        '<h1 class="host"></h1>' +
         '<p class="uo-lede"></p>' +
-        '<button class="uo-btn" type="button">Back to home</button>' +
+        '<button class="uo-btn" type="button"></button>' +
         '<div class="uo-signature">Slowth \u00b7 slow down, breathe, build</div>' +
       '</main>';
+    ns.i18n.setLocale(wrap);
+    wrap.querySelector("h1").textContent = t("feedTitle");
+    wrap.querySelector(".uo-btn").textContent = t("backHome");
+    wrap.querySelector(".uo-signature").textContent = t("signature");
+    const close = wrap.querySelector(".uo-close");
+    if (close) close.setAttribute("aria-label", t("dismiss"));
     wrap.querySelector("img").src = iconUrl;
     wrap.querySelector(".uo-lede").textContent = lede;
     root.appendChild(wrap);

@@ -1,0 +1,239 @@
+{
+  "extensionDescription": {
+    "message": "사이트별 설정으로 Safari에서 YouTube Shorts, Reels, TikTok과 주의를 분산시키는 피드를 차단하세요."
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram과 Facebook의 Reels, X의 탐색과 트렌드를 차단하세요. TikTok은 전체 차단하세요. 엄격 모드로 설정을 24시간 잠그세요."
+  },
+  "stepSettings": {
+    "message": "기기의 설정 열기"
+  },
+  "stepExtensions": {
+    "message": "앱 → Safari → 확장 프로그램으로 이동"
+  },
+  "stepEnable": {
+    "message": "Slowth를 켜고 모든 웹사이트에서 허용하기"
+  },
+  "onboardingDone": {
+    "message": "켰습니다"
+  },
+  "blocking": {
+    "message": "차단"
+  },
+  "strictHelp": {
+    "message": "24시간 동안 활성화된 제한을 끌 수 없습니다. 제한을 추가할 수는 있지만 사이트 전체 차단을 활성화할 수는 없습니다."
+  },
+  "updates": {
+    "message": "업데이트"
+  },
+  "updateNow": {
+    "message": "지금 업데이트"
+  },
+  "loading": {
+    "message": "불러오는 중…"
+  },
+  "guide": {
+    "message": "가이드"
+  },
+  "howToUse": {
+    "message": "Slowth 사용 방법"
+  },
+  "modesExplained": {
+    "message": "엄격 모드 및 사이트별 모드 설명"
+  },
+  "strictGuideTitle": {
+    "message": "엄격 모드가 하는 일"
+  },
+  "strictGuide": {
+    "message": "24시간 동안 활성화된 제한을 끌 수 없습니다. 제한을 추가할 수는 있지만 사이트 전체 차단을 활성화할 수는 없습니다. 다시 시작하거나 강제 종료해도 타이머는 계속됩니다."
+  },
+  "strictAdvice": {
+    "message": "의지만으로는 어려울 때 켜세요. 가벼운 알림만 원한다면 꺼 두세요."
+  },
+  "howBlockingWorks": {
+    "message": "차단의 작동 방식"
+  },
+  "modeOffHelp": {
+    "message": "사이트가 평소처럼 열립니다. Slowth는 아무 작업도 하지 않습니다."
+  },
+  "siteSpecific": {
+    "message": "사이트에 맞춘 차단"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels 또는 X의 탐색과 트렌드를 차단합니다. 사이트의 나머지 부분은 계속 사용할 수 있습니다."
+  },
+  "addFeed": {
+    "message": "피드 차단 추가"
+  },
+  "modeFeedHelp": {
+    "message": "홈의 끝없는 피드도 몇 화면 뒤에 멈춥니다. Instagram에서는 탐색, Stories, 기타 Reels 영역도 포함합니다."
+  },
+  "modeAllHelp": {
+    "message": "사이트 대신 편안한 차단 페이지가 표시됩니다."
+  },
+  "leaveFeedback": {
+    "message": "피드백 남기기"
+  },
+  "showIntro": {
+    "message": "소개 다시 보기"
+  },
+  "rulesNever": {
+    "message": "규칙: 아직 가져오지 않음"
+  },
+  "rulesNow": {
+    "message": "규칙: 방금"
+  },
+  "rulesRelative": {
+    "message": "규칙: $1"
+  },
+  "strictUntil": {
+    "message": "$1까지 엄격 모드 활성화"
+  },
+  "openSafariSettings": {
+    "message": "Safari 설정 열기"
+  },
+  "rulesCurrent": {
+    "message": "규칙: 최신 상태"
+  },
+  "rulesFailed": {
+    "message": "규칙을 업데이트할 수 없습니다. 다시 시도하세요."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth가 차단함"
+  },
+  "thisSite": {
+    "message": "이 사이트"
+  },
+  "blockedTitle": {
+    "message": "$1 차단됨"
+  },
+  "blockedTabTitle": {
+    "message": "차단됨: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth가 $1에서 잠시 벗어날 수 있도록 돕고 있어요. 숨을 고르고 다른 일을 해 보세요."
+  },
+  "backToSite": {
+    "message": "← $1로 돌아가기"
+  },
+  "why": {
+    "message": "이유"
+  },
+  "quoteTeam": {
+    "message": "Reels는 연봉 40만 달러를 받는 수백 명의 팀이 만들었습니다. Slowth는 개발자 한 명이 주말 동안 만들었습니다."
+  },
+  "quoteBillions": {
+    "message": "그들은 스크롤을 멈추지 못하게 하려고 수십억을 썼습니다. 우리는 멈출 수 있도록 작은 로컬 확장 프로그램을 만들었습니다."
+  },
+  "quoteBug": {
+    "message": "끝없는 피드는 버그입니다. 여기 해결책이 있습니다."
+  },
+  "best": {
+    "message": "최고 기록"
+  },
+  "gameLabel": {
+    "message": "미니 비행 게임"
+  },
+  "gameHelp": {
+    "message": "누르거나 스페이스 키를 눌러 날아오르세요"
+  },
+  "back": {
+    "message": "← 돌아가기"
+  },
+  "signature": {
+    "message": "Slowth · 천천히, 깊은 숨, 새로운 창작"
+  },
+  "playHint": {
+    "message": "🦥 눌러서 Slow Flap 플레이 →"
+  },
+  "avoidBranches": {
+    "message": "나뭇가지에 부딪히지 마세요"
+  },
+  "newBest": {
+    "message": "새 기록! 눌러서 다시 날아보세요"
+  },
+  "flyAgain": {
+    "message": "눌러서 다시 날아보세요"
+  },
+  "tapStart": {
+    "message": "눌러서 시작"
+  },
+  "gameOver": {
+    "message": "게임 종료"
+  },
+  "feedTitle": {
+    "message": "끝없는 피드가 차단되었습니다"
+  },
+  "feedSubtitle": {
+    "message": "Slowth가 끝없는 피드에서 잠시 벗어날 수 있도록 돕고 있어요. 숨을 고르고 다른 일을 해 보세요."
+  },
+  "backHome": {
+    "message": "홈으로 돌아가기"
+  },
+  "dismiss": {
+    "message": "닫기"
+  },
+  "storiesTime": {
+    "message": "Stories에 벌써 $1을 썼네요. 잠시 숨을 고르세요."
+  },
+  "enableSafari": {
+    "message": "Safari에서 켜기"
+  },
+  "openSettings": {
+    "message": "설정 열기"
+  },
+  "strictMode": {
+    "message": "엄격 모드"
+  },
+  "off": {
+    "message": "끄기"
+  },
+  "blockShorts": {
+    "message": "Shorts 차단"
+  },
+  "blockReels": {
+    "message": "Reels 차단"
+  },
+  "blockFeeds": {
+    "message": "Reels 및 여러 피드 차단"
+  },
+  "blockFeed": {
+    "message": "Reels 및 피드 차단"
+  },
+  "blockExplore": {
+    "message": "탐색 및 트렌드 차단"
+  },
+  "blockSite": {
+    "message": "사이트 차단"
+  },
+  "updating": {
+    "message": "업데이트 중…"
+  },
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "locale": {
+    "message": "ko"
+  },
+  "blockInfiniteFeed": {
+    "message": "무한 피드 차단"
+  },
+  "infiniteFeedHelp": {
+    "message": "무한 스크롤을 제한합니다. Instagram에서는 탐색과 스토리도 포함됩니다."
+  },
+  "settingsSaveFailed": {
+    "message": "저장할 수 없습니다"
+  },
+  "strictConfirmTitle": {
+    "message": "엄격 모드를 활성화할까요?"
+  },
+  "enable": {
+    "message": "활성화"
+  },
+  "strictEnableConfirm": {
+    "message": "24시간 동안 활성화된 제한을 끌 수 없습니다. 제한을 추가할 수는 있지만 사이트 전체 차단을 활성화할 수는 없습니다."
+  },
+  "cancel": {
+    "message": "취소"
+  }
+}

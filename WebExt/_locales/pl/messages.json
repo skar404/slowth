@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokuj YouTube Shorts, Reels, TikTok i rozpraszające kanały w Safari z ustawieniami dla każdej witryny."
+  },
+  "locale": {
+    "message": "pl"
+  },
+  "tagline": {
+    "message": "Blokuj YouTube Shorts, Instagram i Facebook Reels oraz Odkrywaj i trendy na X. Blokuj całego TikToka. Zablokuj ustawienia trybem ścisłym na 24 godziny."
+  },
+  "stepSettings": {
+    "message": "Otwórz Ustawienia na urządzeniu"
+  },
+  "stepExtensions": {
+    "message": "Przejdź do Aplikacje → Safari → Rozszerzenia"
+  },
+  "stepEnable": {
+    "message": "Włącz Slowth i zezwól na działanie we wszystkich witrynach"
+  },
+  "onboardingDone": {
+    "message": "Włączone"
+  },
+  "blocking": {
+    "message": "Blokowanie"
+  },
+  "strictHelp": {
+    "message": "Przez 24 godziny nie można wyłączyć aktywnych ograniczeń. Możesz dodawać ograniczenia, ale nie możesz włączyć blokowania całych witryn."
+  },
+  "updates": {
+    "message": "Aktualizacje"
+  },
+  "updateNow": {
+    "message": "Aktualizuj teraz"
+  },
+  "loading": {
+    "message": "Wczytywanie…"
+  },
+  "guide": {
+    "message": "Przewodnik"
+  },
+  "howToUse": {
+    "message": "Jak korzystać ze Slowth"
+  },
+  "modesExplained": {
+    "message": "Objaśnienie trybu ścisłego i trybów witryn"
+  },
+  "strictGuideTitle": {
+    "message": "Co robi tryb ścisły"
+  },
+  "strictGuide": {
+    "message": "Przez 24 godziny nie można wyłączyć aktywnych ograniczeń. Możesz dodawać ograniczenia, ale nie możesz włączyć blokowania całych witryn. Odliczanie trwa nadal po ponownym uruchomieniu lub wymuszonym zamknięciu."
+  },
+  "strictAdvice": {
+    "message": "Włącz go, gdy sama silna wola nie wystarcza. Pozostaw wyłączony, jeśli potrzebujesz tylko delikatnej zachęty."
+  },
+  "howBlockingWorks": {
+    "message": "Jak działa blokowanie"
+  },
+  "modeOffHelp": {
+    "message": "Witryna ładuje się jak zwykle. Slowth nic nie robi."
+  },
+  "siteSpecific": {
+    "message": "Blokowanie treści witryny"
+  },
+  "modeShortsHelp": {
+    "message": "Blokuje YouTube Shorts, Instagram/Facebook Reels lub Odkrywaj i trendy na X. Reszta witryny nadal działa."
+  },
+  "addFeed": {
+    "message": "Dodaj blokowanie kanału"
+  },
+  "modeFeedHelp": {
+    "message": "Zatrzymuje też nieskończony kanał główny po kilku ekranach. Na Instagramie obejmuje także Odkrywaj, relacje i więcej sekcji Reels."
+  },
+  "modeAllHelp": {
+    "message": "Zamiast witryny pojawia się przyjazna strona blokady."
+  },
+  "leaveFeedback": {
+    "message": "Zostaw opinię"
+  },
+  "showIntro": {
+    "message": "Pokaż wprowadzenie ponownie"
+  },
+  "rulesNever": {
+    "message": "Reguły: jeszcze nie pobrano"
+  },
+  "rulesNow": {
+    "message": "Reguły: przed chwilą"
+  },
+  "rulesRelative": {
+    "message": "Reguły: $1"
+  },
+  "strictUntil": {
+    "message": "Tryb ścisły aktywny do $1"
+  },
+  "openSafariSettings": {
+    "message": "Otwórz ustawienia Safari"
+  },
+  "rulesCurrent": {
+    "message": "Reguły: aktualne"
+  },
+  "rulesFailed": {
+    "message": "Reguły: nie udało się zaktualizować. Spróbuj ponownie."
+  },
+  "blockedPageTitle": {
+    "message": "Zablokowane przez Slowth"
+  },
+  "thisSite": {
+    "message": "ta witryna"
+  },
+  "blockedTitle": {
+    "message": "Zablokowano $1"
+  },
+  "blockedTabTitle": {
+    "message": "Zablokowane: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth pomaga Ci odpocząć od $1. Weź oddech. Zrób coś innego."
+  },
+  "backToSite": {
+    "message": "← Wróć do $1"
+  },
+  "why": {
+    "message": "Dlaczego"
+  },
+  "quoteTeam": {
+    "message": "Reels stworzył zespół setek osób zarabiających po $$400k. Slowth stworzył jeden programista przez weekend."
+  },
+  "quoteBillions": {
+    "message": "Wydali miliardy, żebyś dalej przewijał. My stworzyliśmy małe lokalne rozszerzenie, które pomaga przestać."
+  },
+  "quoteBug": {
+    "message": "Nieskończony kanał to błąd. Oto poprawka."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Minigra w latanie"
+  },
+  "gameHelp": {
+    "message": "Stuknij lub naciśnij spację, aby machnąć skrzydłami"
+  },
+  "back": {
+    "message": "← Wstecz"
+  },
+  "signature": {
+    "message": "Slowth · zwolnij, odetchnij, twórz"
+  },
+  "playHint": {
+    "message": "🦥 stuknij, aby zagrać w Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Nie uderzaj w gałęzie"
+  },
+  "newBest": {
+    "message": "Nowy rekord! Stuknij, aby znów polecieć"
+  },
+  "flyAgain": {
+    "message": "Stuknij, aby znów polecieć"
+  },
+  "tapStart": {
+    "message": "Stuknij, aby rozpocząć"
+  },
+  "gameOver": {
+    "message": "Koniec gry"
+  },
+  "feedTitle": {
+    "message": "Nieskończony kanał jest zablokowany"
+  },
+  "feedSubtitle": {
+    "message": "Slowth pomaga Ci odpocząć od nieskończonego kanału. Weź oddech. Zrób coś innego."
+  },
+  "backHome": {
+    "message": "Wróć na stronę główną"
+  },
+  "dismiss": {
+    "message": "Zamknij"
+  },
+  "storiesTime": {
+    "message": "Na relacje poszło już $1. Weź oddech."
+  },
+  "enableSafari": {
+    "message": "Włącz w Safari"
+  },
+  "openSettings": {
+    "message": "Otwórz Ustawienia"
+  },
+  "strictMode": {
+    "message": "Tryb ścisły"
+  },
+  "off": {
+    "message": "Wył."
+  },
+  "blockShorts": {
+    "message": "Blokuj Shorts"
+  },
+  "blockReels": {
+    "message": "Blokuj Reels"
+  },
+  "blockFeeds": {
+    "message": "Blokuj Reels i kanały"
+  },
+  "blockFeed": {
+    "message": "Blokuj Reels i kanał"
+  },
+  "blockExplore": {
+    "message": "Blokuj Odkrywaj i trendy"
+  },
+  "blockSite": {
+    "message": "Blokuj witrynę"
+  },
+  "updating": {
+    "message": "Aktualizowanie…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokuj nieskończony kanał"
+  },
+  "infiniteFeedHelp": {
+    "message": "Ogranicza nieskończone przewijanie. Na Instagramie obejmuje także Eksploruj i Relacje."
+  },
+  "settingsSaveFailed": {
+    "message": "Nie udało się zapisać"
+  },
+  "strictConfirmTitle": {
+    "message": "Włączyć tryb ścisły?"
+  },
+  "enable": {
+    "message": "Włącz"
+  },
+  "strictEnableConfirm": {
+    "message": "Przez 24 godziny nie można wyłączyć aktywnych ograniczeń. Możesz dodawać ograniczenia, ale nie możesz włączyć blokowania całych witryn."
+  },
+  "cancel": {
+    "message": "Anuluj"
+  }
+}

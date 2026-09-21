@@ -50,7 +50,7 @@ final class TipStore: ObservableObject {
             let fetched = try await Product.products(for: TipProductID.allCases.map(\.rawValue))
             products = TipProductID.allCases.compactMap { id in fetched.first { $0.id == id.rawValue } }
         } catch {
-            lastError = "Could not load support options. Check your connection and try again."
+            lastError = AppLocalization.string("Could not load support options. Check your connection and try again.")
         }
     }
 
@@ -70,12 +70,12 @@ final class TipStore: ObservableObject {
             case .userCancelled:
                 break
             case .pending:
-                lastError = "Purchase is pending approval (e.g. Ask to Buy)."
+                lastError = AppLocalization.string("Purchase is pending approval (e.g. Ask to Buy).")
             @unknown default:
                 break
             }
         } catch {
-            lastError = "Purchase failed. Please try again."
+            lastError = AppLocalization.string("Purchase failed. Please try again.")
         }
     }
 

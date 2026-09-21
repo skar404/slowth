@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Zuia YouTube Shorts, Reels, TikTok na milisho inayovuruga umakini katika Safari, kwa udhibiti wa kila tovuti."
+  },
+  "locale": {
+    "message": "sw"
+  },
+  "tagline": {
+    "message": "Zuia YouTube Shorts, Instagram na Facebook Reels, pamoja na Gundua na mitindo kwenye X. Zuia TikTok kabisa. Funga mipangilio kwa hali kali kwa saa 24."
+  },
+  "stepSettings": {
+    "message": "Fungua Mipangilio kwenye kifaa chako"
+  },
+  "stepExtensions": {
+    "message": "Nenda kwenye Programu → Safari → Viendelezi"
+  },
+  "stepEnable": {
+    "message": "Washa Slowth na uiruhusu kwenye tovuti zote"
+  },
+  "onboardingDone": {
+    "message": "Nimeiwasha"
+  },
+  "blocking": {
+    "message": "Uzuiaji"
+  },
+  "strictHelp": {
+    "message": "Kwa saa 24, vizuizi vilivyowashwa haviwezi kuzimwa. Unaweza kuongeza vizuizi, lakini huwezi kuwasha uzuiaji wa tovuti nzima."
+  },
+  "updates": {
+    "message": "Masasisho"
+  },
+  "updateNow": {
+    "message": "Sasisha sasa"
+  },
+  "loading": {
+    "message": "Inapakia…"
+  },
+  "guide": {
+    "message": "Mwongozo"
+  },
+  "howToUse": {
+    "message": "Jinsi ya kutumia Slowth"
+  },
+  "modesExplained": {
+    "message": "Maelezo ya hali kali na hali za kila tovuti"
+  },
+  "strictGuideTitle": {
+    "message": "Hali kali hufanya nini"
+  },
+  "strictGuide": {
+    "message": "Kwa saa 24, vizuizi vilivyowashwa haviwezi kuzimwa. Unaweza kuongeza vizuizi, lakini huwezi kuwasha uzuiaji wa tovuti nzima. Kipima muda kinaendelea baada ya kuwasha upya au kufunga programu kwa lazima."
+  },
+  "strictAdvice": {
+    "message": "Iwashe wakati nguvu ya kujizuia pekee haitoshi. Iache imezimwa ikiwa unataka ukumbusho mdogo tu."
+  },
+  "howBlockingWorks": {
+    "message": "Jinsi uzuiaji unavyofanya kazi"
+  },
+  "modeOffHelp": {
+    "message": "Tovuti hupakia kama kawaida. Slowth haifanyi chochote."
+  },
+  "siteSpecific": {
+    "message": "Uzuiaji maalumu wa tovuti"
+  },
+  "modeShortsHelp": {
+    "message": "Huzuia YouTube Shorts, Instagram/Facebook Reels au Gundua na mitindo kwenye X. Sehemu nyingine za tovuti zinaendelea kufanya kazi."
+  },
+  "addFeed": {
+    "message": "Ongeza uzuiaji wa mlisho"
+  },
+  "modeFeedHelp": {
+    "message": "Pia husimamisha mlisho wa nyumbani usioisha baada ya skrini chache. Kwenye Instagram inajumuisha pia Gundua, Hadithi na maeneo mengine ya Reels."
+  },
+  "modeAllHelp": {
+    "message": "Ukitembelea tovuti, ukurasa rafiki wa kuzuia huonekana badala yake."
+  },
+  "leaveFeedback": {
+    "message": "Toa maoni"
+  },
+  "showIntro": {
+    "message": "Onyesha utangulizi tena"
+  },
+  "rulesNever": {
+    "message": "Kanuni: bado hazijapakuliwa"
+  },
+  "rulesNow": {
+    "message": "Kanuni: sasa hivi"
+  },
+  "rulesRelative": {
+    "message": "Kanuni: $1"
+  },
+  "strictUntil": {
+    "message": "Hali kali inatumika hadi $1"
+  },
+  "openSafariSettings": {
+    "message": "Fungua Mipangilio ya Safari"
+  },
+  "rulesCurrent": {
+    "message": "Kanuni: zimesasishwa"
+  },
+  "rulesFailed": {
+    "message": "Kanuni: imeshindikana kusasisha. Jaribu tena."
+  },
+  "blockedPageTitle": {
+    "message": "Imezuiwa na Slowth"
+  },
+  "thisSite": {
+    "message": "tovuti hii"
+  },
+  "blockedTitle": {
+    "message": "$1 imezuiwa"
+  },
+  "blockedTabTitle": {
+    "message": "Imezuiwa: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth inakusaidia kujitenga na $1. Vuta pumzi. Fanya kitu kingine."
+  },
+  "backToSite": {
+    "message": "← Rudi kwenye $1"
+  },
+  "why": {
+    "message": "Kwa nini"
+  },
+  "quoteTeam": {
+    "message": "Reels ilitengenezwa na timu ya mamia ya watu wenye mishahara ya $$400k. Slowth ilitengenezwa na msanidi mmoja mwishoni mwa wiki."
+  },
+  "quoteBillions": {
+    "message": "Walitumia mabilioni ili uendelee kusogeza. Tulitengeneza kiendelezi kidogo cha ndani ya kifaa ili kukusaidia kuacha."
+  },
+  "quoteBug": {
+    "message": "Mlisho usioisha ni hitilafu. Hili ndilo suluhisho."
+  },
+  "best": {
+    "message": "bora"
+  },
+  "gameLabel": {
+    "message": "Mchezo mdogo wa kuruka"
+  },
+  "gameHelp": {
+    "message": "Gusa au bonyeza nafasi kupiga mabawa"
+  },
+  "back": {
+    "message": "← Rudi"
+  },
+  "signature": {
+    "message": "Slowth · punguza mwendo, pumua, unda"
+  },
+  "playHint": {
+    "message": "🦥 gusa kucheza Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Usigonge matawi"
+  },
+  "newBest": {
+    "message": "Rekodi mpya! Gusa kuruka tena"
+  },
+  "flyAgain": {
+    "message": "Gusa kuruka tena"
+  },
+  "tapStart": {
+    "message": "Gusa kuanza"
+  },
+  "gameOver": {
+    "message": "Mchezo umeisha"
+  },
+  "feedTitle": {
+    "message": "Mlisho usioisha umezuiwa"
+  },
+  "feedSubtitle": {
+    "message": "Slowth inakusaidia kujitenga na mlisho usioisha. Vuta pumzi. Fanya kitu kingine."
+  },
+  "backHome": {
+    "message": "Rudi nyumbani"
+  },
+  "dismiss": {
+    "message": "Funga"
+  },
+  "storiesTime": {
+    "message": "Tayari umetumia $1 kwenye hadithi. Vuta pumzi."
+  },
+  "enableSafari": {
+    "message": "Washa katika Safari"
+  },
+  "openSettings": {
+    "message": "Fungua Mipangilio"
+  },
+  "strictMode": {
+    "message": "Hali kali"
+  },
+  "off": {
+    "message": "Zima"
+  },
+  "blockShorts": {
+    "message": "Zuia Shorts"
+  },
+  "blockReels": {
+    "message": "Zuia Reels"
+  },
+  "blockFeeds": {
+    "message": "Zuia Reels na milisho"
+  },
+  "blockFeed": {
+    "message": "Zuia Reels na mlisho"
+  },
+  "blockExplore": {
+    "message": "Zuia Gundua na mitindo"
+  },
+  "blockSite": {
+    "message": "Zuia tovuti"
+  },
+  "updating": {
+    "message": "Inasasisha…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Zuia mlisho usioisha"
+  },
+  "infiniteFeedHelp": {
+    "message": "Hupunguza kusogeza bila mwisho. Kwenye Instagram pia inajumuisha Explore na Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Imeshindikana kuhifadhi"
+  },
+  "strictConfirmTitle": {
+    "message": "Washa hali kali?"
+  },
+  "enable": {
+    "message": "Washa"
+  },
+  "strictEnableConfirm": {
+    "message": "Kwa saa 24, vizuizi vilivyowashwa haviwezi kuzimwa. Unaweza kuongeza vizuizi, lakini huwezi kuwasha uzuiaji wa tovuti nzima."
+  },
+  "cancel": {
+    "message": "Ghairi"
+  }
+}

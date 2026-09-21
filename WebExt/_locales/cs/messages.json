@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokujte YouTube Shorts, Reels, TikTok a rušivé kanály v Safari s nastavením pro každý web."
+  },
+  "locale": {
+    "message": "cs"
+  },
+  "tagline": {
+    "message": "Blokujte YouTube Shorts, Instagram a Facebook Reels i Prozkoumat a trendy na X. Zablokujte celý TikTok. Zamkněte nastavení přísným režimem na 24 hodin."
+  },
+  "stepSettings": {
+    "message": "Otevřete Nastavení na zařízení"
+  },
+  "stepExtensions": {
+    "message": "Přejděte do Aplikace → Safari → Rozšíření"
+  },
+  "stepEnable": {
+    "message": "Zapněte Slowth a povolte ho na všech webech"
+  },
+  "onboardingDone": {
+    "message": "Je zapnuto"
+  },
+  "blocking": {
+    "message": "Blokování"
+  },
+  "strictHelp": {
+    "message": "Po dobu 24 hodin nelze vypnout zapnutá omezení. Můžete přidávat další omezení, ale nelze zapnout blokování celého webu."
+  },
+  "updates": {
+    "message": "Aktualizace"
+  },
+  "updateNow": {
+    "message": "Aktualizovat nyní"
+  },
+  "loading": {
+    "message": "Načítání…"
+  },
+  "guide": {
+    "message": "Průvodce"
+  },
+  "howToUse": {
+    "message": "Jak používat Slowth"
+  },
+  "modesExplained": {
+    "message": "Vysvětlení přísného režimu a režimů webů"
+  },
+  "strictGuideTitle": {
+    "message": "Co dělá přísný režim"
+  },
+  "strictGuide": {
+    "message": "Po dobu 24 hodin nelze vypnout zapnutá omezení. Můžete přidávat další omezení, ale nelze zapnout blokování celého webu. Časovač pokračuje i po restartu nebo vynuceném ukončení."
+  },
+  "strictAdvice": {
+    "message": "Zapněte ho, když samotná vůle nestačí. Nechte ho vypnutý, pokud chcete jen jemné připomenutí."
+  },
+  "howBlockingWorks": {
+    "message": "Jak funguje blokování"
+  },
+  "modeOffHelp": {
+    "message": "Web se načítá jako obvykle. Slowth nic nedělá."
+  },
+  "siteSpecific": {
+    "message": "Blokování podle webu"
+  },
+  "modeShortsHelp": {
+    "message": "Blokuje YouTube Shorts, Instagram/Facebook Reels nebo Prozkoumat a trendy na X. Zbytek webu funguje dál."
+  },
+  "addFeed": {
+    "message": "Přidat blokování kanálu"
+  },
+  "modeFeedHelp": {
+    "message": "Zastaví také nekonečný hlavní kanál po několika obrazovkách. Na Instagramu zahrnuje i Prozkoumat, příběhy a další sekce Reels."
+  },
+  "modeAllHelp": {
+    "message": "Místo webu se zobrazí přívětivá stránka blokování."
+  },
+  "leaveFeedback": {
+    "message": "Napsat zpětnou vazbu"
+  },
+  "showIntro": {
+    "message": "Znovu zobrazit úvod"
+  },
+  "rulesNever": {
+    "message": "Pravidla: dosud nenačtena"
+  },
+  "rulesNow": {
+    "message": "Pravidla: právě teď"
+  },
+  "rulesRelative": {
+    "message": "Pravidla: $1"
+  },
+  "strictUntil": {
+    "message": "Přísný režim aktivní do $1"
+  },
+  "openSafariSettings": {
+    "message": "Otevřít nastavení Safari"
+  },
+  "rulesCurrent": {
+    "message": "Pravidla: aktuální"
+  },
+  "rulesFailed": {
+    "message": "Pravidla: aktualizace se nezdařila. Zkuste to znovu."
+  },
+  "blockedPageTitle": {
+    "message": "Zablokováno aplikací Slowth"
+  },
+  "thisSite": {
+    "message": "tento web"
+  },
+  "blockedTitle": {
+    "message": "Web $1 je zablokován"
+  },
+  "blockedTabTitle": {
+    "message": "Zablokováno: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth vás drží dál od webu $1. Nadechněte se. Dělejte něco jiného."
+  },
+  "backToSite": {
+    "message": "← Zpět na $1"
+  },
+  "why": {
+    "message": "Proč"
+  },
+  "quoteTeam": {
+    "message": "Reels vytvořil tým stovek lidí s platy $$400k. Slowth vytvořil jeden vývojář za víkend."
+  },
+  "quoteBillions": {
+    "message": "Utratili miliardy, abyste dál posouvali obsah. My vytvořili malé místní rozšíření, které vám pomůže přestat."
+  },
+  "quoteBug": {
+    "message": "Nekonečný kanál je chyba. Tady je oprava."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Létací minihra"
+  },
+  "gameHelp": {
+    "message": "Klepněte nebo stiskněte mezerník a mávněte křídly"
+  },
+  "back": {
+    "message": "← Zpět"
+  },
+  "signature": {
+    "message": "Slowth · zpomalte, dýchejte, tvořte"
+  },
+  "playHint": {
+    "message": "🦥 klepněte a hrajte Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Nenarážejte do větví"
+  },
+  "newBest": {
+    "message": "Nový rekord! Klepněte a leťte znovu"
+  },
+  "flyAgain": {
+    "message": "Klepněte a leťte znovu"
+  },
+  "tapStart": {
+    "message": "Klepnutím začněte"
+  },
+  "gameOver": {
+    "message": "Konec hry"
+  },
+  "feedTitle": {
+    "message": "Nekonečný kanál je zablokován"
+  },
+  "feedSubtitle": {
+    "message": "Slowth vás drží dál od nekonečného kanálu. Nadechněte se. Dělejte něco jiného."
+  },
+  "backHome": {
+    "message": "Zpět na hlavní stránku"
+  },
+  "dismiss": {
+    "message": "Zavřít"
+  },
+  "storiesTime": {
+    "message": "Prohlížením příběhů už uběhlo $1. Nadechněte se."
+  },
+  "enableSafari": {
+    "message": "Zapnout v Safari"
+  },
+  "openSettings": {
+    "message": "Otevřít Nastavení"
+  },
+  "strictMode": {
+    "message": "Přísný režim"
+  },
+  "off": {
+    "message": "Vypnuto"
+  },
+  "blockShorts": {
+    "message": "Blokovat Shorts"
+  },
+  "blockReels": {
+    "message": "Blokovat Reels"
+  },
+  "blockFeeds": {
+    "message": "Blokovat Reels a kanály"
+  },
+  "blockFeed": {
+    "message": "Blokovat Reels a kanál"
+  },
+  "blockExplore": {
+    "message": "Blokovat Prozkoumat a trendy"
+  },
+  "blockSite": {
+    "message": "Blokovat web"
+  },
+  "updating": {
+    "message": "Aktualizace…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokovat nekonečný kanál"
+  },
+  "infiniteFeedHelp": {
+    "message": "Omezuje nekonečné posouvání. Na Instagramu zahrnuje také Prozkoumat a Příběhy."
+  },
+  "settingsSaveFailed": {
+    "message": "Uložení se nezdařilo"
+  },
+  "strictConfirmTitle": {
+    "message": "Zapnout přísný režim?"
+  },
+  "enable": {
+    "message": "Zapnout"
+  },
+  "strictEnableConfirm": {
+    "message": "Po dobu 24 hodin nelze vypnout zapnutá omezení. Můžete přidávat další omezení, ale nelze zapnout blokování celého webu."
+  },
+  "cancel": {
+    "message": "Zrušit"
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safari ішінде YouTube Shorts, Reels, TikTok және алаңдататын таспаларды әр сайтқа бөлек параметрмен бұғаттаңыз."
+  },
+  "locale": {
+    "message": "kk"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram мен Facebook Reels, X ішіндегі Шолу мен трендтерді бұғаттаңыз. TikTok сайтын толық бұғаттаңыз. Қатаң режиммен параметрлерді 24 сағатқа құлыптаңыз."
+  },
+  "stepSettings": {
+    "message": "Құрылғыңыздағы Параметрлерді ашыңыз"
+  },
+  "stepExtensions": {
+    "message": "Қолданбалар → Safari → Кеңейтімдер бөліміне өтіңіз"
+  },
+  "stepEnable": {
+    "message": "Slowth қосып, барлық веб-сайтта жұмыс істеуге рұқсат беріңіз"
+  },
+  "onboardingDone": {
+    "message": "Қостым"
+  },
+  "blocking": {
+    "message": "Бұғаттау"
+  },
+  "strictHelp": {
+    "message": "Қосылған шектеулерді 24 сағат бойы өшіру мүмкін емес. Қосымша шектеулер қосуға болады, бірақ бүкіл сайтты бұғаттауды қосуға болмайды."
+  },
+  "updates": {
+    "message": "Жаңартулар"
+  },
+  "updateNow": {
+    "message": "Қазір жаңарту"
+  },
+  "loading": {
+    "message": "Жүктелуде…"
+  },
+  "guide": {
+    "message": "Нұсқаулық"
+  },
+  "howToUse": {
+    "message": "Slowth қалай қолданылады"
+  },
+  "modesExplained": {
+    "message": "Қатаң режим және сайт режимдері туралы"
+  },
+  "strictGuideTitle": {
+    "message": "Қатаң режим не істейді"
+  },
+  "strictGuide": {
+    "message": "Қосылған шектеулерді 24 сағат бойы өшіру мүмкін емес. Қосымша шектеулер қосуға болады, бірақ бүкіл сайтты бұғаттауды қосуға болмайды. Таймер қайта іске қосқаннан және мәжбүрлі жапқаннан кейін де жұмыс істейді."
+  },
+  "strictAdvice": {
+    "message": "Ерік күші жеткіліксіз болғанда қосыңыз. Жеңіл еске салу ғана керек болса, өшірулі қалдырыңыз."
+  },
+  "howBlockingWorks": {
+    "message": "Бұғаттау қалай жұмыс істейді"
+  },
+  "modeOffHelp": {
+    "message": "Сайт әдеттегідей жүктеледі. Slowth ештеңе істемейді."
+  },
+  "siteSpecific": {
+    "message": "Сайтқа тән мазмұнды бұғаттау"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels немесе X ішіндегі Шолу мен трендтерді бұғаттайды. Сайттың қалған бөлігі жұмыс істейді."
+  },
+  "addFeed": {
+    "message": "Таспаны бұғаттауды қосу"
+  },
+  "modeFeedHelp": {
+    "message": "Бірнеше экраннан кейін шексіз басты таспаны да тоқтатады. Instagram ішінде Шолу, хикаялар және қосымша Reels бөлімдерін қамтиды."
+  },
+  "modeAllHelp": {
+    "message": "Сайттың орнына достық мәнердегі бұғаттау беті көрсетіледі."
+  },
+  "leaveFeedback": {
+    "message": "Пікір қалдыру"
+  },
+  "showIntro": {
+    "message": "Кіріспені қайта көрсету"
+  },
+  "rulesNever": {
+    "message": "Ережелер: әлі жүктелмеген"
+  },
+  "rulesNow": {
+    "message": "Ережелер: жаңа ғана"
+  },
+  "rulesRelative": {
+    "message": "Ережелер: $1"
+  },
+  "strictUntil": {
+    "message": "Қатаң режим $1 дейін белсенді"
+  },
+  "openSafariSettings": {
+    "message": "Safari параметрлерін ашу"
+  },
+  "rulesCurrent": {
+    "message": "Ережелер: жаңартылған"
+  },
+  "rulesFailed": {
+    "message": "Ережелер: жаңарту мүмкін болмады. Қайталап көріңіз."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth бұғаттады"
+  },
+  "thisSite": {
+    "message": "бұл сайт"
+  },
+  "blockedTitle": {
+    "message": "$1 бұғатталған"
+  },
+  "blockedTabTitle": {
+    "message": "Бұғатталған: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth сізді $1 сайтынан алыстатады. Дем алыңыз. Басқа іспен айналысыңыз."
+  },
+  "backToSite": {
+    "message": "← $1 сайтына оралу"
+  },
+  "why": {
+    "message": "Неліктен"
+  },
+  "quoteTeam": {
+    "message": "Reels жобасын $$400k жалақы алатын жүздеген адамнан тұратын топ жасады. Slowth жобасын бір әзірлеуші демалыс күндері жасады."
+  },
+  "quoteBillions": {
+    "message": "Олар сіз айналдыра беруіңіз үшін миллиардтар жұмсады. Біз тоқтауға көмектесетін шағын жергілікті кеңейтім жасадық."
+  },
+  "quoteBug": {
+    "message": "Шексіз таспа — қате. Міне, оны түзету жолы."
+  },
+  "best": {
+    "message": "рекорд"
+  },
+  "gameLabel": {
+    "message": "Шағын ұшу ойыны"
+  },
+  "gameHelp": {
+    "message": "Қанат қағу үшін экранды немесе бос орын пернесін басыңыз"
+  },
+  "back": {
+    "message": "← Артқа"
+  },
+  "signature": {
+    "message": "Slowth · баяула, дем ал, жаса"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap ойнау үшін басыңыз →"
+  },
+  "avoidBranches": {
+    "message": "Бұтақтарға соғылмаңыз"
+  },
+  "newBest": {
+    "message": "Жаңа рекорд! Қайта ұшу үшін басыңыз"
+  },
+  "flyAgain": {
+    "message": "Қайта ұшу үшін басыңыз"
+  },
+  "tapStart": {
+    "message": "Бастау үшін басыңыз"
+  },
+  "gameOver": {
+    "message": "Ойын аяқталды"
+  },
+  "feedTitle": {
+    "message": "Шексіз таспа бұғатталған"
+  },
+  "feedSubtitle": {
+    "message": "Slowth сізді шексіз таспадан алыстатады. Дем алыңыз. Басқа іспен айналысыңыз."
+  },
+  "backHome": {
+    "message": "Басты бетке оралу"
+  },
+  "dismiss": {
+    "message": "Жабу"
+  },
+  "storiesTime": {
+    "message": "Хикаяларға $1 жұмсап қойдыңыз. Дем алыңыз."
+  },
+  "enableSafari": {
+    "message": "Safari ішінде қосу"
+  },
+  "openSettings": {
+    "message": "Параметрлерді ашу"
+  },
+  "strictMode": {
+    "message": "Қатаң режим"
+  },
+  "off": {
+    "message": "Өшірулі"
+  },
+  "blockShorts": {
+    "message": "Shorts бейнелерін бұғаттау"
+  },
+  "blockReels": {
+    "message": "Reels бейнелерін бұғаттау"
+  },
+  "blockFeeds": {
+    "message": "Reels пен таспаларды бұғаттау"
+  },
+  "blockFeed": {
+    "message": "Reels пен таспаны бұғаттау"
+  },
+  "blockExplore": {
+    "message": "Шолу мен трендтерді бұғаттау"
+  },
+  "blockSite": {
+    "message": "Сайтты бұғаттау"
+  },
+  "updating": {
+    "message": "Жаңартылуда…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Шексіз таспаны бұғаттау"
+  },
+  "infiniteFeedHelp": {
+    "message": "Шексіз айналдыруды шектейді. Instagram-да Explore және Stories де қамтылады."
+  },
+  "settingsSaveFailed": {
+    "message": "Сақтау мүмкін болмады"
+  },
+  "strictConfirmTitle": {
+    "message": "Қатаң режим қосылсын ба?"
+  },
+  "enable": {
+    "message": "Қосу"
+  },
+  "strictEnableConfirm": {
+    "message": "Қосылған шектеулерді 24 сағат бойы өшіру мүмкін емес. Қосымша шектеулер қосуға болады, бірақ бүкіл сайтты бұғаттауды қосуға болмайды."
+  },
+  "cancel": {
+    "message": "Бас тарту"
+  }
+}
