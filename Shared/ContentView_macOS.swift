@@ -57,7 +57,7 @@ struct MacContentView: View {
                     HStack(spacing: 10) {
                         #if os(iOS)
                         HeroCard(
-                            title: AppLocalization.string("Real-time blocking"),
+                            title: AppLocalization.string("In-app blocking"),
                             subtitle: AppLocalization.string("Shorts, Reels & Stories"),
                             icon: "record.circle.fill",
                             gradient: [Color(red: 0.98, green: 0.24, blue: 0.34),
@@ -67,7 +67,7 @@ struct MacContentView: View {
                         #else
                         HeroCard(
                             title: AppLocalization.string("New on iOS"),
-                            subtitle: AppLocalization.string("Real-time blocking"),
+                            subtitle: AppLocalization.string("In-app blocking"),
                             icon: "iphone.gen3.radiowaves.left.and.right",
                             gradient: [Color(red: 0.98, green: 0.24, blue: 0.34),
                                        Color(red: 0.79, green: 0.12, blue: 0.45)],
@@ -304,7 +304,8 @@ struct MacContentView: View {
         .sheet(isPresented: $showRealtimeRecordingPrompt) {
             RealtimeRecordingPromptSheet(
                 preferredExtensionBundleID: state.broadcastExtensionBundleID,
-                isRecording: state.snapshot.broadcastActive
+                isRecording: state.snapshot.broadcastActive,
+                onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true }
             )
         }
         .sheet(isPresented: $showYouTubePicker) {
@@ -351,7 +352,7 @@ struct MacContentView: View {
                 get: { state.snapshot.realtimeShieldEnabled },
                 set: { state.setRealtimeShieldEnabled($0) }
             )) {
-                Text(AppLocalization.string("Real-time app blocking"))
+                Text(AppLocalization.string("In-app blocking"))
             }
             .disabled(disabledByStrict)
 
@@ -361,6 +362,7 @@ struct MacContentView: View {
                     isRecording: state.snapshot.broadcastActive,
                     guidance: realtimeRecordingGuidance
                 )
+                ScreenRecordingInfoCard(onLearnMore: { showRealtimeBlockingBeta = true })
             }
 
             if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
@@ -647,7 +649,7 @@ struct MacContentView: View {
 
     private var realtimeBlockingFeedbackURL: URL {
         Self.mailURL(
-            subject: AppLocalization.string("Slowth — Real-time blocking feedback"),
+            subject: AppLocalization.string("Slowth — In-app blocking feedback"),
             body: AppLocalization.string("""
             Tell me what happened:
 

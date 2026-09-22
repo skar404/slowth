@@ -171,11 +171,36 @@ struct RealtimeRecordingCard: View {
     }
 }
 
+struct ScreenRecordingInfoCard: View {
+    let onLearnMore: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label(String(localized: "Why screen recording?"), systemImage: "questionmark.circle.fill")
+                .font(.subheadline.weight(.semibold))
+            Text(String(localized: "Slowth uses iOS screen recording to recognize Shorts, Reels, and Stories. While active, it receives images of your current screen, including other apps."))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(ScreenRecordingCopy.privacyExplanation)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button(String(localized: "Screen access and blocking details"), action: onLearnMore)
+                .font(.caption.weight(.semibold))
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+}
+
 struct RealtimeRecordingPromptSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     let preferredExtensionBundleID: String
     let isRecording: Bool
+    var onLearnMore: () -> Void = {}
 
     var body: some View {
         NavigationStack {
@@ -187,7 +212,7 @@ struct RealtimeRecordingPromptSheet: View {
                 VStack(spacing: 8) {
                     Text(String(localized: "Start screen recording"))
                         .font(.title2.weight(.bold))
-                    Text(String(localized: "Tap the recording card below. Enabled apps unlock while Slowth monitors the selected content on your device."))
+                    Text(String(localized: "Tap the card below and confirm in the system prompt. Selected apps unlock while screen analysis runs. Detecting content you chose to block locks the entire app."))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
@@ -198,10 +223,12 @@ struct RealtimeRecordingPromptSheet: View {
                     guidance: String(localized: "Tap anywhere here to start.")
                 )
 
+                ScreenRecordingInfoCard(onLearnMore: onLearnMore)
+
                 Spacer(minLength: 0)
             }
             .padding(20)
-            .navigationTitle(String(localized: "Real-time blocking"))
+            .navigationTitle(String(localized: "In-app blocking"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -125,7 +125,8 @@ struct ContentView: View {
         .sheet(isPresented: $showRealtimeRecordingPrompt) {
             RealtimeRecordingPromptSheet(
                 preferredExtensionBundleID: state.broadcastExtensionBundleID,
-                isRecording: state.snapshot.broadcastActive
+                isRecording: state.snapshot.broadcastActive,
+                onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true }
             )
             .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
         }
@@ -191,7 +192,7 @@ struct ContentView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     HeroCard(
-                        title: String(localized: "Real-time blocking"),
+                        title: String(localized: "In-app blocking"),
                         subtitle: String(localized: "Shorts, Reels & Stories"),
                         icon: "record.circle.fill",
                         gradient: [Color(red: 0.98, green: 0.24, blue: 0.34),
@@ -310,7 +311,7 @@ struct ContentView: View {
                 get: { state.snapshot.realtimeShieldEnabled },
                 set: { state.setRealtimeShieldEnabled($0) }
             )) {
-                Text(String(localized: "Real-time app blocking"))
+                Text(String(localized: "In-app blocking"))
             }
             .disabled(disabledByStrict && state.snapshot.realtimeShieldEnabled)
 
@@ -320,6 +321,7 @@ struct ContentView: View {
                     isRecording: state.snapshot.broadcastActive,
                     guidance: realtimeRecordingGuidance
                 )
+                ScreenRecordingInfoCard(onLearnMore: { showRealtimeBlockingBeta = true })
             }
 
             if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
@@ -725,7 +727,7 @@ struct ContentView: View {
 
     private var realtimeBlockingFeedbackURL: URL {
         Self.mailURL(
-            subject: String(localized: "Slowth — Real-time blocking feedback"),
+            subject: String(localized: "Slowth — In-app blocking feedback"),
             body: String(localized: """
             Tell me what happened:
 

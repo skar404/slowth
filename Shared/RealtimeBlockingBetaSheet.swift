@@ -1,5 +1,16 @@
 import SwiftUI
 
+// Keep the recording card and the detailed explanation consistent.
+enum ScreenRecordingCopy {
+    static var privacyExplanation: String {
+        #if DEBUG
+        return AppLocalization.string("Screen images are analyzed on your device to recognize the content you chose to block. Audio is ignored.")
+        #else
+        return AppLocalization.string("Slowth does not save a screen recording. Screen images are analyzed temporarily in your device’s memory and are not saved to your device or uploaded. Audio is ignored.")
+        #endif
+    }
+}
+
 struct RealtimeBlockingBetaSheet: View {
     let feedbackURL: URL
 
@@ -20,23 +31,81 @@ struct RealtimeBlockingBetaSheet: View {
 
                     VStack(alignment: .leading, spacing: 16) {
                         RealtimeBetaInfoRow(
-                            icon: "gearshape.2.fill",
-                            tint: .indigo,
-                            title: AppLocalization.string("How it works"),
-                            detail: AppLocalization.string("On iPhone or iPad, choose YouTube or Instagram in Screen Time, then enable each content type you want to block. Enabled apps stay blocked until you start screen recording in Slowth.")
+                            icon: "iphone.gen3",
+                            tint: .orange,
+                            title: AppLocalization.string("Why screen recording?"),
+                            detail: AppLocalization.string("Slowth needs screen images to recognize Shorts, Reels, and Stories inside other apps. To receive these images, it uses the iOS screen recording feature. You start this access yourself through the system broadcast prompt.")
+                        )
+                        RealtimeBetaInfoRow(
+                            icon: "eye.fill",
+                            tint: .orange,
+                            title: AppLocalization.string("What Slowth can see"),
+                            detail: AppLocalization.string("While screen recording is active, Slowth receives images of your current screen, which can include other apps and sensitive information shown on screen. Choosing YouTube or Instagram sets which apps to block; it does not limit screen access to those apps.")
                         )
                         RealtimeBetaInfoRow(
                             icon: "hand.raised.fill",
                             tint: .blue,
-                            title: AppLocalization.string("Private by design"),
-                            detail: AppLocalization.string("Screen frames are analyzed entirely on your device and never uploaded. By default nothing is saved; confirmed frames are saved only after explicitly enabling hidden debug capture.")
+                            title: AppLocalization.string("What happens to screen images"),
+                            detail: ScreenRecordingCopy.privacyExplanation
+                        )
+                        RealtimeBetaInfoRow(
+                            icon: "gearshape.2.fill",
+                            tint: .indigo,
+                            title: AppLocalization.string("How blocking works"),
+                            detail: AppLocalization.string("Choose YouTube or Instagram in Screen Time, then enable the content types you want to block. Start screen recording to use the apps while detection runs. When Slowth detects selected content, Screen Time blocks the entire app, not just that video or story.")
                         )
                         RealtimeBetaInfoRow(
                             icon: "record.circle",
                             tint: .red,
-                            title: AppLocalization.string("Recording indicator"),
-                            detail: AppLocalization.string("iOS shows a red recording indicator while monitoring is active. This is required by the system.")
+                            title: AppLocalization.string("Stopping screen access"),
+                            detail: AppLocalization.string("iOS shows a recording indicator while screen access is active. To stop, return to Slowth and tap the active recording card, then confirm in the system prompt. Screen analysis stops, and apps with blocking enabled are blocked again. Soft YouTube mode can delay the YouTube block to let audio continue; Picture in Picture may still be blocked.")
                         )
+
+                        RealtimeBetaInfoRow(
+                            icon: "exclamationmark.circle",
+                            tint: .orange,
+                            title: AppLocalization.string("Detection can make mistakes"),
+                            detail: AppLocalization.string("Slowth may miss content or block a regular app screen by mistake. If this happens, you can report it using Send feedback below.")
+                        )
+                        RealtimeBetaInfoRow(
+                            icon: "safari",
+                            tint: .blue,
+                            title: AppLocalization.string("Prefer not to share your screen?"),
+                            detail: AppLocalization.string("Use Slowth’s Safari extension to block content on supported websites without screen recording. It works in Safari, not inside the YouTube or Instagram apps.")
+                        )
+
+                        DisclosureGroup {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text(AppLocalization.string("1. ReplayKit sends video frames to the broadcast extension. Audio is ignored."))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text(AppLocalization.string("2. Slowth analyzes one frame about every 0.25 seconds (around 4 analyses per second). Each frame is resized in memory to 192 × 384 pixels in RGB format for the Core ML model."))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text(AppLocalization.string("3. The cascade first identifies the app, then runs the relevant Shorts, Reels, or Stories detector. A block is confirmed after 3 positive results within a 5-analysis window, which helps avoid reacting to a single uncertain frame."))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text(AppLocalization.string("Slowth Cascade V6 is an on-device Core ML model trained to recognize supported app screens and content types."))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text(AppLocalization.string("4. Once detection is confirmed, Screen Time shows a blocking screen over the selected app. Slowth does not remove individual videos or stories from its feed."))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Link(destination: sourceCodeURL) {
+                                    Label(AppLocalization.string("View source on GitHub"), systemImage: "arrow.up.right.square")
+                                }
+                            }
+                            .padding(.top, 8)
+                        } label: {
+                            Label(AppLocalization.string("Technical details"), systemImage: "wrench.and.screwdriver.fill")
+                                .font(.headline)
+                        }
+                        .tint(.primary)
                     }
 
                     #if os(macOS)
@@ -49,7 +118,7 @@ struct RealtimeBlockingBetaSheet: View {
                 .frame(maxWidth: 720, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
-            .navigationTitle(AppLocalization.string("Real-time blocking"))
+            .navigationTitle(AppLocalization.string("In-app blocking"))
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
@@ -89,18 +158,14 @@ struct RealtimeBlockingBetaSheet: View {
     }
 
     private var introduction: String {
-        #if os(macOS)
-        return AppLocalization.string("Slowth for iOS now includes real-time blocking for YouTube Shorts, Instagram Reels, and Instagram Stories. Regular app screens remain available while monitoring is active.")
-        #else
-        return AppLocalization.string("Block YouTube Shorts, Instagram Reels, and Instagram Stories while keeping regular app screens available during an active screen recording. Soft YouTube mode works well for audio podcasts, but Picture in Picture may still be blocked when screen recording is off.")
-        #endif
+        AppLocalization.string("On iPhone and iPad, Slowth can detect YouTube Shorts, Instagram Reels, and Instagram Stories and block the app when your selected content appears. This uses screen access that you start and stop.")
     }
 
     private var headerTitle: String {
         #if os(macOS)
         return AppLocalization.string("New on iOS")
         #else
-        return AppLocalization.string("Real-time blocking")
+        return AppLocalization.string("In-app blocking")
         #endif
     }
 

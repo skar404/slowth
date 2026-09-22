@@ -20,8 +20,8 @@ enum DebugMode {
 enum FeatureFlags {
     static let tipsOverrideStorageKey = "featureFlags.tipsEnabled"
 
-    // Keep tips hidden until the related in-app purchases are approved.
-    private static let tipsEnabledInProduction = false
+    // Donations are available in production builds.
+    private static let tipsEnabledInProduction = true
 
     // Overrides are available only while the hidden debug mode is active.
     static var tipsEnabled: Bool {
