@@ -29,7 +29,7 @@ settings:
   base:
     SWIFT_VERSION: "5.9"
     MARKETING_VERSION: "0.9.4"
-    CURRENT_PROJECT_VERSION: 10
+    CURRENT_PROJECT_VERSION: 11
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
     ENABLE_HARDENED_RUNTIME: YES
@@ -53,7 +53,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
         PRODUCT_NAME: Slowth
-        CURRENT_PROJECT_VERSION: 10
+        CURRENT_PROJECT_VERSION: 11
         INFOPLIST_FILE: App/Info.plist
         CODE_SIGN_ENTITLEMENTS: App/Unscroll.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -116,7 +116,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Extension
         PRODUCT_NAME: UnscrollExtension
-        CURRENT_PROJECT_VERSION: 10
+        CURRENT_PROJECT_VERSION: 11
         INFOPLIST_FILE: Extension/Info.plist
         CODE_SIGN_ENTITLEMENTS: Extension/UnscrollExtension.entitlements
         SKIP_INSTALL: YES

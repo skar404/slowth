@@ -67,6 +67,12 @@ scripts/release.sh --gpg-key YOUR_GPG_FINGERPRINT --release-notes release-notes.
 # RELEASE_GPG_KEY can supply the explicit key instead of --gpg-key.
 ```
 
+Replacement builds of an existing marketing version use a unique build tag:
+
+```sh
+scripts/release.sh --tag v0.9.4-build11 --gpg-key YOUR_GPG_FINGERPRINT --release-notes release-notes-v0.9.4-build11.txt
+```
+
 The notes file must be nonempty. The key must be an explicit hexadecimal key ID
 or fingerprint (at least 16 characters); there is no default-key fallback. The
 script verifies both the commit and tag against that key's primary fingerprint.
@@ -130,8 +136,10 @@ selection. It runs in the logged-in macOS GUI session for the WebKit tests.
 Neither mode needs GPG or GitHub authentication.
 
 Outputs default to `release-output/v<version>-build<build>/`; `--output` must name
-a new directory. Outputs include both `.xcarchive.zip` files, the models tarball,
-`release-manifest.json`, and `SHA256SUMS`. Publication also creates
+a new directory. Outputs include local `.xcarchive.zip` validation files, the
+models tarball, `release-manifest.json`, and `SHA256SUMS`. Xcode archives are
+never release assets because they can contain signing metadata and
+developer-machine paths. Publication also creates
 `SHA256SUMS.asc`; the signed tag records the SHA-256 of `SHA256SUMS`. The manifest
 records the exact source tree, commit, build environment and asset/input hashes.
 An uncommitted local build has `commit: null` and records its base commit instead.
@@ -156,9 +164,10 @@ build. The manifest also includes a manual unpack command for trusted bundles.
 
 ### Publication and failures
 
-After both archives and all checks pass, the script creates and verifies the
+After both local archive validations and all checks pass, the script creates and verifies the
 GPG commit and tag, installs the commit on `main`, and pushes the exact commit and
-tag atomically. It uploads all assets to a draft GitHub Release, downloads and
+tag atomically. It uploads only the model bundle and verification metadata to a
+draft GitHub Release, downloads and
 checks each uploaded byte sequence, then publishes and verifies the asset list.
 Any failure stops subsequent operations. Local output and any already-created
 commit, tag or draft are retained for inspection. There is no automatic rollback,

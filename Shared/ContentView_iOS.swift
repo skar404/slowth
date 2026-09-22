@@ -794,13 +794,13 @@ private struct HeroCard: View {
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
             Image(systemName: icon)
-                .font(.system(size: 24, weight: .semibold))
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.white)
-                .frame(width: 36, height: 36)
+                .frame(width: 32, height: 32)
                 .background(.white.opacity(0.18), in: Circle())
-            Spacer(minLength: 12)
+            Spacer(minLength: 8)
             Text(title)
-                .font(.title2.bold())
+                .font(.title3.bold())
                 .foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)
             Text(subtitle)
@@ -808,14 +808,14 @@ private struct HeroCard: View {
                 .foregroundStyle(.white.opacity(0.9))
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(16)
-        .frame(width: 220, alignment: .leading)
-        .frame(minHeight: 180, alignment: .leading)
+        .padding(13)
+        .frame(width: 180, alignment: .leading)
+        .frame(minHeight: 145, alignment: .leading)
         .background(
             LinearGradient(colors: gradient, startPoint: .topLeading, endPoint: .bottomTrailing)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .shadow(color: gradient.last?.opacity(0.25) ?? .clear, radius: 8, y: 4)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: gradient.last?.opacity(0.25) ?? .clear, radius: 6, y: 3)
     }
 }
 

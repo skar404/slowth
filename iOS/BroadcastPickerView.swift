@@ -99,21 +99,21 @@ struct RealtimeRecordingCard: View {
     @State private var observedRecording: Bool?
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
             ZStack {
                 Circle()
                     .fill(statusColor.opacity(0.14))
-                    .frame(width: 38, height: 38)
+                    .frame(width: 32, height: 32)
                 Image(systemName: displayedRecording ? "record.circle.fill" : "lock.open.fill")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(statusColor)
             }
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(displayedRecording ? String(localized: "Screen recording is active") : String(localized: "Start screen recording"))
-                    .font(.headline)
+                    .font(.subheadline.weight(.semibold))
                 Text(displayedRecording ? String(localized: "Tap anywhere here to stop.") : guidance)
-                    .font(.caption)
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -121,17 +121,17 @@ struct RealtimeRecordingCard: View {
             Spacer(minLength: 8)
 
             Image(systemName: displayedRecording ? "stop.circle.fill" : "record.circle.fill")
-                .font(.system(size: 32, weight: .semibold))
+                .font(.system(size: 26, weight: .semibold))
                 .foregroundStyle(.red)
-                .frame(width: 44, height: 44)
+                .frame(width: 34, height: 34)
         }
-        .padding(12)
+        .padding(9)
         .background {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(statusColor.opacity(displayedRecording ? 0.18 : 0.08))
         }
         .overlay {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(
                     statusColor.opacity(displayedRecording ? 0.55 : 0.18),
                     lineWidth: displayedRecording ? 1.5 : 1
@@ -173,25 +173,45 @@ struct RealtimeRecordingCard: View {
 
 struct ScreenRecordingInfoCard: View {
     let onLearnMore: () -> Void
+    @AppStorage("screenRecordingInfoDismissed", store: AppGroup.defaults)
+    private var dismissed = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label(String(localized: "Why screen recording?"), systemImage: "questionmark.circle.fill")
-                .font(.subheadline.weight(.semibold))
-            Text(String(localized: "Slowth uses iOS screen recording to recognize Shorts, Reels, and Stories. While active, it receives images of your current screen, including other apps."))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(ScreenRecordingCopy.privacyExplanation)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Button(String(localized: "Screen access and blocking details"), action: onLearnMore)
-                .font(.caption.weight(.semibold))
+        Group {
+            if !dismissed {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Label(String(localized: "Why screen recording?"), systemImage: "questionmark.circle.fill")
+                            .font(.footnote.weight(.semibold))
+                        Spacer(minLength: 4)
+                        Button {
+                            dismissed = true
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.secondary)
+                                .frame(width: 28, height: 28)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(String(localized: "Done"))
+                    }
+                    Text(String(localized: "Slowth uses iOS screen recording to recognize Shorts, Reels, and Stories. While active, it receives images of your current screen, including other apps."))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(ScreenRecordingCopy.privacyExplanation)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Button(String(localized: "Screen access and blocking details"), action: onLearnMore)
+                        .font(.caption.weight(.semibold))
+                }
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
         }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 }
 

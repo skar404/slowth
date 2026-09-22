@@ -267,7 +267,7 @@ def prepare(source, root, bundle, spec):
 
 
 def archives(source, output, prefix, version, build, spec):
-    assets = []
+    """Build and validate local archives without making them release assets."""
     apps = []
     for platform, scheme in [('iOS', 'Unscroll (iOS)'), ('macOS', 'Unscroll')]:
         archive = output / f'{prefix}-{platform}.xcarchive'
@@ -290,13 +290,11 @@ def archives(source, output, prefix, version, build, spec):
         target = output / f'{prefix}-{platform}.xcarchive.zip'
         run('ditto', '-c', '-k', '--keepParent', '--norsrc', '--noextattr', archive, target)
         run('unzip', '-tq', target)
-        assets.append(target)
     run(sys.executable, 'scripts/verify_localization_bundles.py', *apps, cwd=source)
     run('bash', 'scripts/test_app_localization.sh', apps[1], cwd=source)
     webkit = output / 'webkit-localization'
     run('xcrun', 'swiftc', '-parse-as-library', '-o', webkit, 'scripts/verify_webkit_localization.swift', cwd=source)
     run(sys.executable, 'scripts/verify_webkit_localizations.py', webkit, output / 'webkit-results', cwd=source)
-    return assets
 
 
 def origin_repo(root):
@@ -354,6 +352,7 @@ def main():
     parser.add_argument('--gpg-key', default=os.environ.get('RELEASE_GPG_KEY'))
     parser.add_argument('--release-notes', type=Path)
     parser.add_argument('--model-bundle', type=Path)
+    parser.add_argument('--tag', help='Release tag (defaults to v<marketing-version>; use a build-specific tag for replacement builds)')
     parser.add_argument('--output', type=Path, help='New output directory (default: release-output/<tag>-build<N>)')
     args = parser.parse_args()
     require(not os.environ.get('PYTHONOPTIMIZE'), 'PYTHONOPTIMIZE would disable existing verification assertions')
@@ -371,7 +370,8 @@ def main():
         temp = Path(temporary)
         source, head, tree = snapshot(ROOT, temp)
         version, build, spec = versions(source)
-        tag = f'v{version}'
+        tag = args.tag or f'v{version}'
+        require(re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-build[0-9]+)?', tag), 'Release tag must be v<version> or v<version>-build<build>')
         repo = None
         if publish:
             repo = origin_repo(ROOT)
@@ -394,7 +394,10 @@ def main():
         model_bundle(source, bundle)
         # Read our own asset through the same strict importer used by rebuilds.
         install_models(source, ROOT, bundle)
-        assets = [bundle, *archives(source, output, prefix, version, build, spec)]
+        archives(source, output, prefix, version, build, spec)
+        # Xcode archives can expose signing metadata and developer-machine paths.
+        # Keep them for local validation only; never upload them publicly.
+        assets = [bundle]
         commit = head if tree == git('rev-parse', f'{head}^{{tree}}', capture=True).decode().strip() else None
         if publish:
             require(origin_repo(ROOT) == repo, 'origin changed during build')
