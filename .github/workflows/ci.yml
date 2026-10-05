@@ -30,8 +30,8 @@ jobs:
         with:
           node-version: '22.14.0'
       - name: Install verified build tools
-        run: bash scripts/ci_tools.sh
+        run: bash scripts/release_tools/install_tools.sh
       - name: Test release safety boundaries
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Check public source, versions and WebExtension
-        run: python3 scripts/ci_release.py check
+        run: python3 scripts/release.py check

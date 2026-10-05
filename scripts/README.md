@@ -57,124 +57,50 @@ checks a built iOS app and Broadcast extension for the intended models, exact
 metadata/weights and Photos permissions. Use `--configuration Debug` for the full
 test resource set.
 
-## Signed public releases
+## Releases
 
-`scripts/release.sh` publishes the current public working tree. It requires macOS,
-Xcode with signing/provisioning credentials, XcodeGen, Python 3.9+, Node.js, GnuPG,
-GitHub CLI authentication, and `Configs/Local.xcconfig`. Run it with the full Xcode
-selected (`DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` if needed).
-The normal invocation automatically publishes after all checks pass:
+Use **one entry point**: `python3 scripts/release.py`.
 
 ```sh
-scripts/release.sh --gpg-key YOUR_GPG_FINGERPRINT --release-notes release-notes.txt
-# RELEASE_GPG_KEY can supply the explicit key instead of --gpg-key.
+# Source checks (no models or Apple credentials).
+python3 scripts/release.py check
+
+# Prepare model assets locally; does not sign or publish.
+python3 scripts/release.py models --tag models-v10-1
+
+# Publish to GitHub from a signed, committed source already on main.
+# Use a new output directory if you prepared this tag locally before.
+python3 scripts/release.py models --tag models-v10-1 \
+  --output release-output/models-v10-1-publish \
+  --gpg-key YOUR_GPG_FINGERPRINT --publish
+
+# Run the iOS workflow with the published model asset.
+python3 scripts/release.py ci --model-release models-v10-1
+python3 scripts/release.py ci --model-release models-v10-1 --testflight
+
+# Local unsigned iOS archive and manifest, using a downloaded asset.
+python3 scripts/release.py build --model-bundle /path/to/Slowth-models.tar.gz \
+  --output /tmp/slowth-ios-validation
 ```
 
-Replacement builds of an existing marketing version use a unique build tag:
+`models --publish` checks the public snapshot and pinned model inputs, verifies
+the existing source commit's signature, signs checksums and a new model tag,
+pushes only that tag, uploads a draft, downloads and verifies every asset, then
+publishes. It generates release notes automatically; `--notes FILE` replaces them.
+It does not create commits, increase build numbers, or build/upload apps.
+An existing tag or output directory is never overwritten. The source commit must
+be signed by the explicitly selected key (`--gpg-key` or `RELEASE_GPG_KEY`).
 
-```sh
-scripts/release.sh --tag v0.9.4-build11 --gpg-key YOUR_GPG_FINGERPRINT --release-notes release-notes-v0.9.4-build11.txt
-```
+The only release assets are `Slowth-models.tar.gz`, `model-manifest.json`,
+`SHA256SUMS`, and `SHA256SUMS.asc`. Private exports, datasets, checkpoints, logs,
+Apple credentials and Xcode archives remain local. The model importer validates
+exact file names and pinned hashes before use. `--model-bundle FILE` on the
+`models` command lets a maintainer prepare a package without private exports.
 
-The notes file must be nonempty. The key must be an explicit hexadecimal key ID
-or fingerprint (at least 16 characters); there is no default-key fallback. The
-script verifies both the commit and tag against that key's primary fingerprint.
+The internal modules in `scripts/release_tools/` are shared by the CLI and CI;
+they are not separate entry points. The old shell wrapper and standalone CI
+scripts have been removed. Native language-switching and WebKit UI diagnostics
+remain separate utilities; the iOS pipeline does not claim to execute them.
 
-Before publication, set the marketing version consistently in `project.yml`,
-`WebExt/manifest.json`, and `WebExt/app.html`. Set **every** build override and the
-base `CURRENT_PROJECT_VERSION` to the same number, greater than the previous
-public build and any build already uploaded to App Store Connect. The script
-checks the prior public build but cannot discover unpublished App Store builds.
-It never changes version numbers automatically. Local checks/builds need no bump.
-
-The branch must be `main`, with HEAD equal to live `origin/main`, one matching
-GitHub fetch/push URL, and no existing release tag. This avoids accidentally
-pushing unaudited local ancestors. Existing public history is not rewritten.
-Keep the branch and staging area stable while a release runs.
-
-### Public snapshot and model inputs
-
-The script stages into a **temporary index**, leaving the real index unchanged
-until the verified release commit is installed. It includes the app directories,
-`Localization/`, `WebExt/`, `scripts/`, `tests/`, and the listed public root files.
-Python utilities and tests are allowed. Exact exceptions preserve the two public
-`Configs` templates and the four README images in `docs/`. Other top-level paths
-are excluded; unknown tracked files and private staged additions fail the check.
-Existing worktree deletions are included. The retired tracked
-`RealtimeShield/SurfaceDetector.mlpackage` and `SurfaceDetectorMetadata.json` are
-removed from the release tree but retained locally; they are no longer build
-inputs. No production model is committed.
-
-Both the staged changes and complete proposed tree are checked. Symlinks,
-submodules, model packages, checkpoint files, private directories, private-key
-blocks and absolute home-directory paths fail validation. JSON resources must
-parse. These are explicit path/content checks; review public source changes and
-release notes as usual. Arbitrary secrets disguised as application source cannot
-be identified by an allowlist alone.
-
-The five Cascade V10 packages are copied from the pinned local export, checked
-against fixed package SHA-256 identities and packed with public runtime metadata.
-The bundle contains only the exact expected files, with no training code,
-checkpoint files or full calibration metadata. Runtime metadata retains the
-candidate's existing qualification status; this workflow does not promote it.
-Missing Debug-only exports are optional in XcodeGen, so public checkouts can build
-Release with only this model asset. Debug model experiments still need local
-private exports. Local signing settings are copied only into the temporary build
-workspace.
-
-### Check or build without publishing
-
-```sh
-scripts/release.sh check
-scripts/release.sh build --output /tmp/slowth-release-build
-python3 -m unittest discover -s tests -p test_release.py -v
-```
-
-`check` validates the public snapshot, versions, model hashes, generated resources,
-Xcode project and all WebExtension Node tests. It creates temporary Git objects
-but no commit, tag, archives or remote changes. `build` additionally archives both
-platforms, checks signatures, actual bundle versions, iOS Release resources,
-every native/WebExtension locale, native language switching and real WebKit locale
-selection. It runs in the logged-in macOS GUI session for the WebKit tests.
-Neither mode needs GPG or GitHub authentication.
-
-Outputs default to `release-output/v<version>-build<build>/`; `--output` must name
-a new directory. Outputs include local `.xcarchive.zip` validation files, the
-models tarball, `release-manifest.json`, and `SHA256SUMS`. Xcode archives are
-never release assets because they can contain signing metadata and
-developer-machine paths. Publication also creates
-`SHA256SUMS.asc`; the signed tag records the SHA-256 of `SHA256SUMS`. The manifest
-records the exact source tree, commit, build environment and asset/input hashes.
-An uncommitted local build has `commit: null` and records its base commit instead.
-Archive signing and timestamps mean rebuilds are not byte-for-byte reproducible.
-
-### Rebuild a downloaded release
-
-Check out its signed tag, copy/edit `Configs/Local.xcconfig.example` as above,
-then download the release assets into the repository root (or use absolute paths):
-
-```sh
-git verify-tag v0.9.3
-gpg --verify SHA256SUMS.asc SHA256SUMS
-shasum -a 256 -c SHA256SUMS
-scripts/release.sh build --model-bundle Slowth-v0.9.3-build9-models.tar.gz
-```
-
-Use the release signer's verified GPG fingerprint. The bundle is unpacked only
-inside the temporary workspace. The importer rejects unexpected paths, links,
-duplicates, oversized entries, incomplete bundles and hash mismatches before any
-build. The manifest also includes a manual unpack command for trusted bundles.
-
-### Publication and failures
-
-After both local archive validations and all checks pass, the script creates and verifies the
-GPG commit and tag, installs the commit on `main`, and pushes the exact commit and
-tag atomically. It uploads only the model bundle and verification metadata to a
-draft GitHub Release, downloads and
-checks each uploaded byte sequence, then publishes and verifies the asset list.
-Any failure stops subsequent operations. Local output and any already-created
-commit, tag or draft are retained for inspection. There is no automatic rollback,
-force-push, tag replacement or overwrite on retry. If upload fails after push,
-inspect the existing tag and assets and repair the draft using `gh release upload`
-and `gh release edit` after verifying checksums; rerunning publication with the
-same tag intentionally fails.
+See [Build provenance and TestFlight](../docs/BUILD_TRUST.md) for setup, recovery,
+Apple secrets, and evidence verification.

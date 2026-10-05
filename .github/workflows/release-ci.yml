@@ -48,7 +48,7 @@ jobs:
         with:
           node-version: '22.14.0'
       - name: Install verified build tools
-        run: bash scripts/ci_tools.sh
+        run: bash scripts/release_tools/install_tools.sh
       - name: Test release safety boundaries
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Download model input (individual model hashes are checked before build)
@@ -61,10 +61,10 @@ jobs:
           [[ "$MODEL_ASSET" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz$ ]]
           gh release download "$MODEL_RELEASE" --repo "$GITHUB_REPOSITORY" \
             --pattern "$MODEL_ASSET" --output "$RUNNER_TEMP/Slowth-models.tar.gz"
-      - name: Validate unsigned iOS and macOS archives
+      - name: Validate unsigned iOS archive
         if: ${{ !inputs.testflight }}
         run: >-
-          python3 scripts/ci_release.py build
+          python3 scripts/release.py build
           --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
           --output "$RUNNER_TEMP/slowth-build"
       - name: Build, sign, verify and upload the exact iOS IPA
@@ -85,7 +85,7 @@ jobs:
           IOS_PROFILE_SHIELD_CONFIG_BASE64: ${{ secrets.IOS_PROFILE_SHIELD_CONFIG_BASE64 }}
           IOS_PROFILE_SHIELD_ACTION_BASE64: ${{ secrets.IOS_PROFILE_SHIELD_ACTION_BASE64 }}
         run: >-
-          python3 scripts/ci_release.py build --platform iOS --testflight
+          python3 scripts/release.py build --testflight
           --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
           --output "$RUNNER_TEMP/slowth-build"
       - name: Attest the exact uploaded IPA (only its digest is published)
@@ -126,6 +126,6 @@ jobs:
           if [[ "$TESTFLIGHT" == true ]]; then
             echo 'Verified IPA uploaded and processed by Apple. Select this same build for App Store review; do not rebuild it.' >> "$GITHUB_STEP_SUMMARY"
           else
-            echo 'Unsigned iOS/macOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Unsigned iOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
           fi
           echo 'Download build-evidence to verify the manifest and attestations. No IPA, archive, credentials or raw logs are published.' >> "$GITHUB_STEP_SUMMARY"

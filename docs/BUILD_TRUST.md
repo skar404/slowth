@@ -1,64 +1,97 @@
 # Build provenance and TestFlight
 
-Slowth's CI links a public source commit, pinned production model inputs, a build
-run, and (for TestFlight runs) the exact IPA sent to Apple. It does **not** prove
-that an App Store download is byte-for-byte identical to that IPA: Apple processes
-and thins downloads. A commit label displayed by the app is an identifier, not an
-independent cryptographic verification.
+Use `python3 scripts/release.py` for every release operation. Model publication
+and app uploads are separate commands; neither happens by default.
 
-## Workflows
+Slowth links a public source commit, pinned model inputs, a CI run, and the exact
+IPA uploaded to Apple. This is traceability, not a byte-for-byte comparison with
+an installed App Store app. Apple processes downloads; a displayed commit label
+is an identifier, not independent verification. Builds are not claimed to be
+hermetic or byte-for-byte reproducible.
 
-- **Source checks** runs on pull requests and main. It validates the public
-  snapshot, synchronized versions, generated runtime metadata, release automation
-  tests and WebExtension tests. It needs no models or Apple credentials.
-- **Release evidence and TestFlight** is manually dispatched on main. With
-  `testflight=false`, it validates unsigned Release archives for iOS and macOS.
-  With `testflight=true`, it signs, exports, checks and uploads one iOS IPA, then
-  waits up to 20 minutes for Apple processing to become `VALID`. It does not
-  distribute to tester groups, submit for review, or publish to the App Store.
+## Commands
 
-The workflows pin their actions by commit, Python 3.12.9, Node 22.14.0, XcodeGen
-2.46.0 (including its downloaded SHA-256), and Xcode 26.2 / 17C52. They use the
-`macos-26` hosted runner, whose image changes over time; its version is recorded
-in the manifest. If the pinned Xcode disappears, update and review the pin rather
-than falling back to the runner's default. These controls provide traceability,
-not a fully hermetic or byte-for-byte reproducible build.
+| Command | Result | Remote changes |
+| --- | --- | --- |
+| `check` | Validates public source, versions, runtime metadata and WebExtension tests | None |
+| `models --tag TAG` | Prepares model bundle, manifest, checksums and generated notes | None |
+| `models --tag TAG --gpg-key KEY --publish` | Signs and publishes a verified model release | Signed tag and GitHub Release |
+| `build --model-bundle FILE --output DIR` | Validates an unsigned iOS Release archive and creates a local manifest | None |
+| `ci --model-release TAG` | Dispatches unsigned iOS validation on main | GitHub Actions run |
+| `ci --model-release TAG --testflight` | Dispatches signed iOS build and Apple upload | Actions run and TestFlight build |
 
-Release archive checks include all host/extension version numbers and embedded
-build identities, expected model weights and runtime metadata, absence of Debug
-capture code and Photos permissions, and compiled native/WebExtension catalogs.
-The signed path also checks the exported IPA's identities, resources and code
-signature before uploading that exact file with `altool`. Existing native language
-switching and WebKit UI checks in `scripts/release.sh build` remain separate local
-release checks; the CI manifest does not claim to run them.
+`build --testflight` is reserved for the GitHub workflow, not local use.
+All output directories must be new. Local preparation can use modified public
+sources; its manifest has `commit: null` and records `source_tree` instead.
+Publishing and dispatching require the exact reviewed public snapshot already
+committed and pushed to main. The tool does not stage or commit source for you.
 
-## Initial setup
+## Publish model inputs
 
-1. Review and publish the source changes, including the two explicitly allowlisted
-   `.github/workflows/` files. The existing signed-public-release workflow remains
-   responsible for publishing public source snapshots and model assets. Do not
-   stage the private worktree wholesale.
-2. Supply a public production-model release asset. The current V10 code will reject
-   old V6 assets. Prepare just the approved model files locally:
+Commit and push the reviewed source first. Model publication verifies that the
+commit is signed by the explicitly chosen GPG key. Select that same trusted key
+with `--gpg-key` or `RELEASE_GPG_KEY`; there is no implicit default-key selection.
 
-   ```sh
-   python3 scripts/ci_release.py models --output release-output/ci-models-v10
-   ```
+```sh
+python3 scripts/release.py check
+python3 scripts/release.py models --tag models-v10-1 \
+  --gpg-key YOUR_GPG_FINGERPRINT --publish
+```
 
-   This creates `Slowth-models.tar.gz` and `SHA256SUMS`, validates all pinned package
-   hashes, and round-trips the safe importer. Review and attach these files to an
-   appropriate GitHub Release through the normal publication process. Do not
-   upload the private export directory. CI takes the release tag and exact asset
-   name as inputs; regardless of the chosen release, every model file must match
-   the identities pinned in the checked-out source.
-3. Create the GitHub environment **app-store**, restricted to main. Configure
-   required reviewers and prevent self-review where available. Keep Apple secrets
-   in this environment, not at repository scope. Protect main with reviews and
-   the **Source checks / check** required check; include workflow/script changes
-   in code review. The environment **ci-validation** needs no secrets.
-4. Add these environment variables and secrets through GitHub Settings →
-   Environments → app-store. Do not paste their values into source, issues or CI
-   inputs.
+This command:
+
+1. Checks the public snapshot and versions; verifies the source signature and
+   that main matches the live remote and the new model tag does not exist.
+2. Packages only the five pinned V10 Core ML packages and compact runtime
+   metadata. It round-trips the strict importer before signing anything.
+3. Creates `model-manifest.json`, `SHA256SUMS`, and generated release notes.
+   Optional `--notes FILE` supplies your own nonempty public notes.
+4. Signs the checksums and creates a signed tag on the existing source commit.
+   The tag records the hash of SHA256SUMS, binding it to the assets.
+5. Pushes only that tag, creates a draft GitHub Release, downloads all four
+   assets and verifies their bytes, then publishes it without marking it latest.
+
+No marketing version or build number change is needed for model publication.
+Reuse a model release across app releases until the pinned model content changes.
+Models retain their existing qualification; publication does not promote them.
+
+Output defaults to `release-output/<tag>`. To inspect a package before publishing:
+
+```sh
+python3 scripts/release.py models --tag models-v10-1
+# After review, select a new directory for the publication attempt:
+python3 scripts/release.py models --tag models-v10-1 \
+  --output release-output/models-v10-1-publish \
+  --gpg-key YOUR_GPG_FINGERPRINT --publish
+```
+
+`--model-bundle FILE` imports a previously downloaded model archive instead of
+private exports. The exact package hashes pinned in the checked-out source are
+always required. Old V6 assets cannot build the V10 source. Datasets, training
+sources, checkpoints, calibration inventories and credentials are not assets.
+Model releases contain exactly `Slowth-models.tar.gz`, `model-manifest.json`,
+`SHA256SUMS`, and `SHA256SUMS.asc`. Verify with the trusted signing key:
+
+```sh
+gpg --verify SHA256SUMS.asc SHA256SUMS
+shasum -a 256 -c SHA256SUMS
+```
+
+## GitHub Actions and Apple setup
+
+**Source checks** runs on pull requests and main and needs no Apple credentials
+or models. **Release evidence and TestFlight** runs manually on main or via the
+`ci` command. Validation and TestFlight paths both build iOS only.
+
+Actions are pinned by commit; tool versions are Python 3.12.9, Node 22.14.0,
+XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.2 / 17C52. The `macos-26`
+runner image can change; its version is recorded. A missing pinned Xcode fails
+the build instead of selecting another version.
+
+Create the `app-store` GitHub environment, restricted to main, with required
+reviewers where available. Put Apple secrets in that environment. Protect main
+with review and the `Source checks / check` required check. `ci-validation` needs
+no secrets. Configure these values in Settings → Environments → app-store:
 
 | Kind | Name | Value |
 | --- | --- | --- |
@@ -95,31 +128,42 @@ The signing keychain and profiles are installed temporarily and removed in a
 cancellation. Do not switch this workflow to a persistent self-hosted runner
 without reviewing cleanup and isolation.
 
-## Run a release
+## Run an iOS build
 
-1. Resolve all source-check failures. Increment every `CURRENT_PROJECT_VERSION`
-   for a new Apple upload, including replacement builds. Use one counter across
-   iOS and macOS. Keep the `year.month.index` marketing version synchronized with
-   the WebExtension and UI, and regenerate the Xcode project. CI does not bump
-   versions and disables Xcode's automatic renumbering during export.
-2. Publish the reviewed source on main. Run **Release evidence and TestFlight**
-   with `testflight=false` first, specifying the model release tag and filename.
-3. Run with `testflight=true` when the intended upload version/build is committed.
-   Before building, the workflow checks the App Store app's bundle ID and walks
-   **all pages** of uploaded builds for that app. The new integer build number
-   must exceed the maximum returned, across both platforms. Builds not yet visible
-   in this API remain the release operator's responsibility; avoid simultaneous
-   manual uploads. Workflow runs themselves are serialized.
-4. Test the processed build in TestFlight. In App Store Connect, select **that
-   same uploaded build** for App Store review. Do not rebuild after testing.
-5. Preserve the evidence files with the public release, and record which
-   `app_store_connect.build_id` was selected for the published App Store version.
-   The workflow records processing success, not an App Store publication claim.
+For a new Apple upload, increment every `CURRENT_PROJECT_VERSION` above all known
+uploaded builds, including replacement builds. Keep one monotonic counter across
+iOS/macOS and every extension. Keep marketing versions synchronized, regenerate
+with `xcodegen generate`, then commit and push. The tool never bumps versions or
+lets Xcode renumber an exported IPA automatically.
 
-The app footer displays `CI · <commit>` linking to the run when built by this
-workflow. Local builds without CI identity keep the usual version label. Both the
-app and its extensions contain the generated `BuildIdentity.json`; the build
-verifies its contents before export and again inside the IPA.
+```sh
+# First validate the published source and model inputs:
+python3 scripts/release.py ci --model-release models-v10-1
+
+# After configuring signing and selecting a fresh build number:
+python3 scripts/release.py ci --model-release models-v10-1 --testflight
+```
+
+The CLI checks published main, confirms that the model release is public, and
+validates its downloaded model bundle before dispatch. GitHub resolves main at
+dispatch time: check the actual run's commit before using its result. A successful
+dispatch only means the run was requested; inspect Actions for its final result.
+
+CI checks app/extension versions, embedded identities, model weights, resource
+metadata, absence of Debug capture code and Photos permissions, and all compiled
+localizations. The signed path checks the exported IPA and signature, uploads
+that exact file, and waits up to 20 minutes for Apple processing to become VALID.
+It checks all pages of prior builds and rejects reused/lower build numbers.
+Workflow uploads are serialized; avoid simultaneous manual Apple uploads.
+
+After testing in TestFlight, select that same uploaded build in App Store Connect
+for review; do not rebuild it. CI does not distribute to tester groups, submit
+for App Review, or publish the App Store version.
+
+The app footer displays `CI · <commit>` linking to its run. All app/extension
+bundles contain the generated BuildIdentity.json. Local builds do not claim a
+GitHub identity. Native language switching and WebKit UI checks are separate
+local diagnostic utilities and are not claimed by this pipeline.
 
 ## Verify the evidence
 
@@ -167,25 +211,25 @@ are not a substitute for retaining the evidence bundle.
 
 ## Failures and local validation
 
-If upload succeeds but Apple processing times out, inspect App Store Connect
-before retrying. An accepted upload consumes the build number even if a later
-attestation/upload-artifact step fails. Do not rerun the build with the same
-number or claim that a failed run published verified evidence. No manifest is
-published unless all required build/upload checks pass.
+If model publication fails after the tag was pushed, inspect that tag and any
+GitHub draft. Do not delete/rewrite tags or rerun blindly: existing tags and
+output directories are intentionally rejected. Verify the draft against the
+retained local signed assets before completing recovery; do not use `--clobber`
+to replace published files. Failures before tag push never publish a release.
+
+If Apple accepts an upload but processing or evidence publication fails, inspect
+App Store Connect before trying again. An accepted upload consumes its build
+number. Never retry that upload number or claim evidence from a failed run.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_*.py' -v
-python3 scripts/ci_release.py check
-python3 scripts/ci_release.py build \
-  --model-bundle release-output/ci-models-v10/Slowth-models.tar.gz \
-  --output /tmp/slowth-ci-validation
+python3 scripts/release.py check
+python3 scripts/release.py build \
+  --model-bundle /path/to/Slowth-models.tar.gz \
+  --output /tmp/slowth-ios-validation
 ```
 
-Output directories must be new. Local builds can use a modified public snapshot;
-their manifest uses `commit: null` when it differs from HEAD and never claims a
-GitHub run. Official CI requires the source tree to match the exact workflow
-commit. Local signing settings are not copied into this CI build path.
-
-References: [GitHub artifact attestations](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations),
-[Apple signing on GitHub runners](https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications),
-[choosing the App Store build](https://developer.apple.com/help/app-store-connect/manage-builds/choose-a-build-to-submit/).
+The old shell release wrapper and standalone CI scripts were replaced by this
+single CLI. Shared implementation is in `scripts/release_tools/`; do not invoke
+those modules directly. Local builds never copy personal signing settings into
+the unsigned build path.

@@ -10,7 +10,7 @@ import shutil
 import sys
 import tempfile
 
-import release
+from . import core as release
 
 ROOT = release.ROOT
 
@@ -91,14 +91,14 @@ def check_source(source):
     release.run('node', '--test', *sorted((source / 'WebExt/tests').glob('*.test.cjs')), cwd=source)
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode', choices=['check', 'models', 'build'])
+    parser.add_argument('mode', choices=['check', 'build'])
     parser.add_argument('--model-bundle', type=Path)
     parser.add_argument('--output', type=Path)
-    parser.add_argument('--platform', choices=['iOS', 'macOS', 'both'], default='both')
+    parser.add_argument('--platform', choices=['iOS'], default='iOS')
     parser.add_argument('--testflight', action='store_true')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     official = os.environ.get('GITHUB_ACTIONS') == 'true'
     release.require(not args.testflight or (args.mode == 'build' and args.platform == 'iOS' and official),
                     'TestFlight requires an official iOS-only CI build')
@@ -111,14 +111,6 @@ def main():
         if args.mode == 'check':
             check_source(source)
             return
-        if args.mode == 'models':
-            release.install_models(source, ROOT, None)
-            bundle = output / 'Slowth-models.tar.gz'
-            release.model_bundle(source, bundle)
-            release.install_models(source, ROOT, bundle)
-            release.checksums(output, [bundle])
-            print(f'Public model package verified: {bundle}')
-            return
         release.require(args.model_bundle is not None, '--model-bundle is required; no private fallback in CI')
         version, build, spec = release.versions(source)
         provenance = identity(source, head, tree, version, build, official)
@@ -126,7 +118,7 @@ def main():
         try:
             # Local developer credentials are never copied into the CI snapshot.
             if args.testflight:
-                import ci_signing
+                from . import signing as ci_signing
                 signing = ci_signing.Signing(output / 'signing')
                 signing.preflight(version, build)
                 signing.configure(source, spec)
@@ -175,7 +167,3 @@ def main():
         finally:
             if signing:
                 signing.cleanup()
-
-
-if __name__ == '__main__':
-    main()

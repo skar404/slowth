@@ -159,8 +159,8 @@ xcodebuild -project Unscroll.xcodeproj -scheme 'Debug - iOS' \
 ### Realtime Shield models
 
 For public Release archives, signed GitHub releases, and rebuilding with the
-separate production model asset, see [the release workflow](scripts/README.md#signed-public-releases).
-Run `scripts/release.sh check` to validate the public snapshot without publishing.
+separate production model asset, see [the release workflow](docs/BUILD_TRUST.md).
+Run `python3 scripts/release.py check` to validate the public snapshot without publishing.
 
 ML tooling, dependency files, tests, and private data live in
 [`data-model/`](data-model/README.md). Production Swift/Core ML resources remain

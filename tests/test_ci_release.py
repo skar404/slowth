@@ -10,9 +10,9 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-import ci_release
-import ci_signing
-import release
+from release_tools import build as ci_release
+from release_tools import signing as ci_signing
+from release_tools import core as release
 
 
 class EvidenceTests(unittest.TestCase):

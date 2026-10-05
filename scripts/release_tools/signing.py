@@ -14,7 +14,7 @@ import time
 import urllib.parse
 import urllib.request
 
-import release
+from . import core as release
 
 
 def required(name):
@@ -173,7 +173,7 @@ class Signing:
             f'DEVELOPMENT_TEAM = {self.team}\nBUNDLE_ID_PREFIX = {self.prefix}\n')
 
     def export(self, archive, output, version, build, provenance, source):
-        from ci_release import validate_bundles
+        from .build import validate_bundles
         options = self.directory / 'ExportOptions.plist'
         options.write_bytes(plistlib.dumps({
             'method': 'app-store-connect', 'destination': 'export', 'signingStyle': 'manual',

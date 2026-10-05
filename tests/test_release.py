@@ -1,5 +1,4 @@
 """Safety boundaries for release automation; no network, signing or Xcode required."""
-import importlib.util
 import io
 import json
 from pathlib import Path
@@ -10,9 +9,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SPEC = importlib.util.spec_from_file_location('release', Path(__file__).resolve().parents[1] / 'scripts/release.py')
-release = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(release)
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+from release_tools import core as release
 
 
 class SnapshotTests(unittest.TestCase):
@@ -177,44 +175,6 @@ class PreflightTests(unittest.TestCase):
             release.verify_signature(release.ROOT, 'commit', 'sha', 'PRIMARY')
             with self.assertRaisesRegex(RuntimeError, 'requested GPG key'):
                 release.verify_signature(release.ROOT, 'tag', 'tag', 'WRONG')
-
-    def test_build_failure_never_signs_or_pushes(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            index = root / 'index'
-            index.write_bytes(b'unchanged')
-            notes = root / 'notes.txt'
-            notes.write_text('Release notes')
-            calls = []
-
-            def fake_git(*args, **kwargs):
-                calls.append(args)
-                if args == ('rev-parse', '--show-toplevel'):
-                    return str(root).encode()
-                if args == ('rev-parse', '--path-format=absolute', '--git-path', 'index'):
-                    return str(index).encode()
-                if args == ('show', 'head:project.yml'):
-                    return b'CURRENT_PROJECT_VERSION: 1\n'
-                self.fail(f'Unexpected Git operation after failed build: {args}')
-
-            with patch.object(release, 'ROOT', root), \
-                 patch.object(release, 'git', side_effect=fake_git), \
-                 patch.object(release, 'run') as run, \
-                 patch.object(release, 'signing_key', return_value='PRIMARY'), \
-                 patch.object(release, 'snapshot', return_value=(root, 'head', 'tree')), \
-                 patch.object(release, 'versions', return_value=('1.0.0', '2', {})), \
-                 patch.object(release, 'origin_repo', return_value='owner/repo'), \
-                 patch.object(release, 'remote_preflight'), \
-                 patch.object(release, 'prepare'), \
-                 patch.object(release, 'model_bundle'), \
-                 patch.object(release, 'install_models'), \
-                 patch.object(release, 'archives', side_effect=RuntimeError('archive failed')), \
-                 patch.object(sys, 'argv', ['release.py', '--gpg-key', 'A' * 40, '--release-notes', str(notes)]):
-                with self.assertRaisesRegex(RuntimeError, 'archive failed'):
-                    release.main()
-                self.assertEqual(index.read_bytes(), b'unchanged')
-                self.assertFalse(any('commit-tree' in c or 'push' in c or 'tag' in c for c in calls))
-                self.assertFalse(any(c.args[:2] == ('gh', 'release') for c in run.call_args_list))
 
     def test_version_target_override_and_ui_mismatch(self):
         with tempfile.TemporaryDirectory() as tmp:
