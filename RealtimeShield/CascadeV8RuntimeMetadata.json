@@ -1,0 +1,97 @@
+{
+  "architecture": "cascade-spatial-v1",
+  "components": {
+    "facebook": {
+      "checkpoint_sha256": "9bd2dc845544d5eec423d556629595f6f55e7c5186669dd3c361fec48b690845",
+      "labels": [
+        "reels",
+        "stories",
+        "normal"
+      ],
+      "resource": "FacebookDetector"
+    },
+    "instagram": {
+      "checkpoint_sha256": "0dbb77640f4ed7dde046e3675f4a24521361feafe3adf88b135d9ff7c6492b5f",
+      "labels": [
+        "reels",
+        "stories",
+        "normal"
+      ],
+      "resource": "InstagramDetector"
+    },
+    "router": {
+      "checkpoint_sha256": "225113bdc6dc14225417986fba89c98b3f7e8a19e6fc91f8fa034de8ffbba144",
+      "labels": [
+        "youtube",
+        "instagram",
+        "other",
+        "facebook",
+        "x"
+      ],
+      "resource": "AppRouter"
+    },
+    "x": {
+      "checkpoint_sha256": "1c971f3cbb8c04e45621c761499b25ddd6759e49560bf23c4a99270418542600",
+      "labels": [
+        "reels",
+        "normal"
+      ],
+      "resource": "XDetector"
+    },
+    "youtube": {
+      "checkpoint_sha256": "6bd31c7a16efe8ff1003f008b945f70efaafb3bb8f2429367ce83f8bcfc7fa75",
+      "labels": [
+        "shorts",
+        "normal"
+      ],
+      "resource": "YouTubeDetector"
+    }
+  },
+  "compute_precision": "float32",
+  "contract": "v8",
+  "input": {
+    "color": "RGB",
+    "height": 384,
+    "scale": 0.00392156862745098,
+    "width": 192
+  },
+  "model_version": "cascade-v8-x-20260928",
+  "policy": {
+    "routing": {
+      "facebook": {
+        "confidence": 0.95,
+        "margin": 0.2
+      },
+      "instagram": {
+        "confidence": 0.95,
+        "margin": 0.2
+      },
+      "x": {
+        "confidence": 0.95,
+        "margin": 0.2
+      },
+      "youtube": {
+        "confidence": 0.7,
+        "margin": 0.2
+      }
+    },
+    "temporal": {
+      "interval_seconds": 0.25,
+      "max_gap_seconds": 1.25,
+      "required_hits": 3,
+      "window_frames": 5
+    },
+    "thresholds": {
+      "facebook_reels": 0.815354643852546,
+      "facebook_stories": 0.9998715708994531,
+      "instagram_reels": 0.14157587614381534,
+      "instagram_stories": 0.09823492424953466,
+      "x_reels": 0.025000327239255427,
+      "youtube_shorts": 0.02899733475642279
+    },
+    "version": 3
+  },
+  "schema_version": 1,
+  "status": "experimental",
+  "validation_status": "failed"
+}

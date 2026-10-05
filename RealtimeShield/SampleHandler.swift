@@ -4,7 +4,7 @@ import ReplayKit
 import FamilyControls
 #endif
 
-// Cascade V6 is the Release classifier. Debug builds can compare other models.
+// Cascade V8 is the Release classifier. Debug builds can compare other models.
 // Blocking scores are joint probabilities: P(app) × P(content | app).
 final class SampleHandler: RPBroadcastSampleHandler {
     private var classifier: (any SurfaceClassifying)?
@@ -24,24 +24,42 @@ final class SampleHandler: RPBroadcastSampleHandler {
     private var lastTelemetryLog = Date.distantPast
     private var youtubeShieldLatched = false
     private var instagramShieldLatched = false
+    private var facebookShieldLatched = false
+    private var xShieldLatched = false
     private var youtubeGraceUntil: Date?
     private var instagramGraceUntil: Date?
+    private var facebookGraceUntil: Date?
+    private var xGraceUntil: Date?
     private var lastHandledYouTubeUnlockAt: Date?
     private var lastHandledInstagramUnlockAt: Date?
+    private var lastHandledFacebookUnlockAt: Date?
+    private var lastHandledXUnlockAt: Date?
     private var youtubeShortsStreak = 0
     private var instagramReelsStreak = 0
+    private var facebookReelsStreak = 0
+    private var xReelsStreak = 0
     private var instagramStoriesStreak = 0
+    private var facebookStoriesStreak = 0
     private var youtubeShortsVotes: [Bool] = []
     private var instagramReelsVotes: [Bool] = []
+    private var facebookReelsVotes: [Bool] = []
+    private var xReelsVotes: [Bool] = []
     private var instagramStoriesVotes: [Bool] = []
+    private var facebookStoriesVotes: [Bool] = []
     #if DEBUG
     private var youtubeShortsEvidence: [DebugCaptureFramePixels] = []
     private var instagramReelsEvidence: [DebugCaptureFramePixels] = []
+    private var facebookReelsEvidence: [DebugCaptureFramePixels] = []
+    private var xReelsEvidence: [DebugCaptureFramePixels] = []
     private var instagramStoriesEvidence: [DebugCaptureFramePixels] = []
+    private var facebookStoriesEvidence: [DebugCaptureFramePixels] = []
     #endif
     private var youtubeCandidateEvents = 0
     private var instagramCandidateEvents = 0
+    private var facebookCandidateEvents = 0
+    private var xCandidateEvents = 0
     private var instagramStoriesCandidateEvents = 0
+    private var facebookStoriesCandidateEvents = 0
     private var recordingBackend: DebugModelBackend = DebugModelSettings.defaultBackend
     #if DEBUG
     private var broadcastSessionID = UUID()
@@ -72,7 +90,8 @@ final class SampleHandler: RPBroadcastSampleHandler {
         if let interval = SessionCaptureSettings.interval,
            let root = SessionCaptureSettings.rootDirectory {
             sessionCapture = SessionCapture(root: root, sessionID: broadcastSessionID,
-                interval: interval, startedUptime: ProcessInfo.processInfo.systemUptime)
+                interval: interval, startedUptime: ProcessInfo.processInfo.systemUptime,
+                limits: SessionCaptureSettings.captureLimits())
         }
         #endif
     }
@@ -177,7 +196,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
             let enabledApps = CascadePolicy.enabledApps(
                 youtube: sharedState.realtimeYouTubeBlockingEnabled,
                 reels: sharedState.realtimeInstagramReelsBlockingEnabled,
-                stories: sharedState.realtimeInstagramStoriesBlockingEnabled)
+                stories: sharedState.realtimeInstagramStoriesBlockingEnabled,
+                facebookReels: sharedState.realtimeFacebookReelsBlockingEnabled,
+                facebookStories: sharedState.realtimeFacebookStoriesBlockingEnabled,
+                xReels: sharedState.realtimeXReelsBlockingEnabled)
             let prediction = try classifier.predict(pixelBuffer: pixelBuffer, enabledApps: enabledApps)
             guard let youtubeThreshold = classifier.metadata.threshold(for: .youtubeShorts),
                   let instagramReelsThreshold = classifier.metadata.threshold(for: .instagramReels),
@@ -204,7 +226,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
             framePredictions = Dictionary(uniqueKeysWithValues:
                 prediction.appProbabilities.map { ("app.\($0.key.rawValue)", $0.value) }
                 + prediction.youtubeContentProbabilities.map { ("youtube.\($0.key.rawValue)", $0.value) }
-                + prediction.instagramContentProbabilities.map { ("instagram.\($0.key.rawValue)", $0.value) })
+                + prediction.instagramContentProbabilities.map { ("instagram.\($0.key.rawValue)", $0.value) }
+                + prediction.facebookContentProbabilities.map { ("facebook.\($0.key.rawValue)", $0.value) }
+                + prediction.xContentProbabilities.map { ("x.\($0.key.rawValue)", $0.value) })
 
             #endif
             let youtubeVerdict = prediction.probability(for: .youtubeShorts) >= youtubeThreshold
@@ -212,6 +236,12 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 && prediction.probability(for: .instagramReels) >= instagramReelsThreshold
             let instagramStoriesVerdict = sharedState.realtimeInstagramStoriesBlockingEnabled
                 && prediction.probability(for: .instagramStories) >= instagramStoriesThreshold
+            let facebookReelsVerdict = sharedState.realtimeFacebookReelsBlockingEnabled
+                && prediction.probability(for: .facebookReels) >= (classifier.metadata.threshold(for: .facebookReels) ?? .infinity)
+            let xReelsVerdict = sharedState.realtimeXReelsBlockingEnabled
+                && prediction.probability(for: .xReels) >= (classifier.metadata.threshold(for: .xReels) ?? .infinity)
+            let facebookStoriesVerdict = sharedState.realtimeFacebookStoriesBlockingEnabled
+                && prediction.probability(for: .facebookStories) >= (classifier.metadata.threshold(for: .facebookStories) ?? .infinity)
             #if DEBUG
             recordDebugEvidence(
                 classifier: classifier,
@@ -219,6 +249,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 youtubeVerdict: youtubeVerdict,
                 instagramReelsVerdict: instagramReelsVerdict,
                 instagramStoriesVerdict: instagramStoriesVerdict,
+                facebookReelsVerdict: facebookReelsVerdict,
+                xReelsVerdict: xReelsVerdict,
+                facebookStoriesVerdict: facebookStoriesVerdict,
                 observationWindowFrames: classifier.metadata.effectiveObservationWindowFrames,
                 capturedAt: now
             )
@@ -227,6 +260,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 youtubeVerdict: youtubeVerdict,
                 instagramReelsVerdict: instagramReelsVerdict,
                 instagramStoriesVerdict: instagramStoriesVerdict,
+                facebookReelsVerdict: facebookReelsVerdict,
+                xReelsVerdict: xReelsVerdict,
+                facebookStoriesVerdict: facebookStoriesVerdict,
                 requiredHits: classifier.metadata.requiredConsecutiveHits,
                 observationWindowFrames: classifier.metadata.effectiveObservationWindowFrames
             )
@@ -243,6 +279,14 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 sharedState: sharedState,
                 now: now
             )
+            enforceFacebook(
+                reelsVerdict: facebookReelsVerdict,
+                storiesVerdict: facebookStoriesVerdict,
+                requiredHits: classifier.metadata.requiredConsecutiveHits,
+                sharedState: sharedState,
+                now: now
+            )
+            enforceX(verdict: xReelsVerdict, requiredHits: classifier.metadata.requiredConsecutiveHits, sharedState: sharedState, now: now)
             classifierStatus = "ready"
             classifierError = nil
         } catch {
@@ -295,31 +339,49 @@ final class SampleHandler: RPBroadcastSampleHandler {
         timestampClock = CascadeTimestampClock()
         youtubeCandidateEvents = 0
         instagramCandidateEvents = 0
+        facebookCandidateEvents = 0
+        xCandidateEvents = 0
         instagramStoriesCandidateEvents = 0
+        facebookStoriesCandidateEvents = 0
     }
 
     private func resetStreaks() {
         cascadeEvidenceBoundary = CascadeEvidenceBoundary()
         youtubeShortsStreak = 0
         instagramReelsStreak = 0
+        facebookReelsStreak = 0
+        xReelsStreak = 0
         instagramStoriesStreak = 0
+        facebookStoriesStreak = 0
         youtubeShortsVotes.removeAll(keepingCapacity: true)
         instagramReelsVotes.removeAll(keepingCapacity: true)
+        facebookReelsVotes.removeAll(keepingCapacity: true)
+        xReelsVotes.removeAll(keepingCapacity: true)
         instagramStoriesVotes.removeAll(keepingCapacity: true)
+        facebookStoriesVotes.removeAll(keepingCapacity: true)
         #if DEBUG
         youtubeShortsEvidence.removeAll(keepingCapacity: true)
         instagramReelsEvidence.removeAll(keepingCapacity: true)
+        facebookReelsEvidence.removeAll(keepingCapacity: true)
+        xReelsEvidence.removeAll(keepingCapacity: true)
         instagramStoriesEvidence.removeAll(keepingCapacity: true)
+        facebookStoriesEvidence.removeAll(keepingCapacity: true)
         #endif
     }
 
     private func resetLatchesForActiveBroadcast() {
         youtubeShieldLatched = false
         instagramShieldLatched = false
+        facebookShieldLatched = false
+        xShieldLatched = false
         youtubeGraceUntil = nil
         instagramGraceUntil = nil
+        facebookGraceUntil = nil
+        xGraceUntil = nil
         lastHandledYouTubeUnlockAt = SharedStore.shieldUnlockRequestedAt(surface: .youtube)
         lastHandledInstagramUnlockAt = SharedStore.shieldUnlockRequestedAt(surface: .instagram)
+        lastHandledFacebookUnlockAt = SharedStore.shieldUnlockRequestedAt(surface: .facebook)
+        lastHandledXUnlockAt = SharedStore.shieldUnlockRequestedAt(surface: .x)
     }
 
     private func prepareEnabledSurfacesForActiveBroadcast(_ sharedState: SharedState) {
@@ -333,6 +395,16 @@ final class SampleHandler: RPBroadcastSampleHandler {
         } else {
             ManagedSettingsApplier.clear(surface: .instagram)
         }
+        if sharedState.realtimeFacebookBlockingEnabled {
+            (classifier == nil || metadata?.threshold(for: .facebookReels) == nil) ? applyShield(surface: .facebook) : ManagedSettingsApplier.clear(surface: .facebook)
+        } else {
+            ManagedSettingsApplier.clear(surface: .facebook)
+        }
+        if sharedState.realtimeXBlockingEnabled {
+            (classifier == nil || metadata?.threshold(for: .xReels) == nil) ? applyShield(surface: .x) : ManagedSettingsApplier.clear(surface: .x)
+        } else {
+            ManagedSettingsApplier.clear(surface: .x)
+        }
     }
 
     private func prepareEnabledSurfacesAfterBroadcastStops() {
@@ -344,6 +416,8 @@ final class SampleHandler: RPBroadcastSampleHandler {
         youtubeShieldLatched = sharedState.realtimeYouTubeBlockingEnabled
             && !shouldDeferYouTubeRestore
         instagramShieldLatched = sharedState.realtimeInstagramBlockingEnabled
+        facebookShieldLatched = sharedState.realtimeFacebookBlockingEnabled
+        xShieldLatched = sharedState.realtimeXBlockingEnabled
         if shouldDeferYouTubeRestore {
             if SharedStore.isSlowthAppForeground() {
                 SoftYouTubeActivityMonitoring.stop()
@@ -382,6 +456,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
         youtubeVerdict: Bool,
         instagramReelsVerdict: Bool,
         instagramStoriesVerdict: Bool,
+        facebookReelsVerdict: Bool,
+        xReelsVerdict: Bool,
+        facebookStoriesVerdict: Bool,
         requiredHits: Int,
         observationWindowFrames: Int
     ) {
@@ -409,6 +486,16 @@ final class SampleHandler: RPBroadcastSampleHandler {
             instagramStoriesCandidateEvents += 1
             RTLog.sampleHandler.notice("Surface candidate — instagram/stories")
         }
+        let previousFacebookReelsHits = facebookReelsStreak
+        let previousXReelsHits = xReelsStreak
+        let previousFacebookStoriesHits = facebookStoriesStreak
+        facebookReelsStreak = CascadeEvidenceBoundary.appendVote(facebookReelsVerdict, to: &facebookReelsVotes, window: observationWindowFrames)
+        xReelsStreak = CascadeEvidenceBoundary.appendVote(xReelsVerdict, to: &xReelsVotes, window: observationWindowFrames)
+        facebookStoriesStreak = CascadeEvidenceBoundary.appendVote(facebookStoriesVerdict, to: &facebookStoriesVotes, window: observationWindowFrames)
+        if previousFacebookReelsHits < requiredHits && facebookReelsStreak >= requiredHits { facebookCandidateEvents += 1 }
+        if previousXReelsHits < requiredHits && xReelsStreak >= requiredHits { xCandidateEvents += 1 }
+        if previousFacebookStoriesHits < requiredHits && facebookStoriesStreak >= requiredHits { facebookStoriesCandidateEvents += 1 }
+
     }
 
 
@@ -419,21 +506,30 @@ final class SampleHandler: RPBroadcastSampleHandler {
         youtubeVerdict: Bool,
         instagramReelsVerdict: Bool,
         instagramStoriesVerdict: Bool,
+        facebookReelsVerdict: Bool,
+        xReelsVerdict: Bool,
+        facebookStoriesVerdict: Bool,
         observationWindowFrames: Int,
         capturedAt: Date
     ) {
         guard DebugCaptureSettings.isEnabled else {
             youtubeShortsEvidence.removeAll(keepingCapacity: true)
             instagramReelsEvidence.removeAll(keepingCapacity: true)
+            facebookReelsEvidence.removeAll(keepingCapacity: true)
+            xReelsEvidence.removeAll(keepingCapacity: true)
             instagramStoriesEvidence.removeAll(keepingCapacity: true)
+            facebookStoriesEvidence.removeAll(keepingCapacity: true)
             return
         }
 
         let oldestInference = max(inferenceCount - observationWindowFrames + 1, 0)
         youtubeShortsEvidence.removeAll { $0.inferenceIndex < oldestInference }
         instagramReelsEvidence.removeAll { $0.inferenceIndex < oldestInference }
+        facebookReelsEvidence.removeAll { $0.inferenceIndex < oldestInference }
+        xReelsEvidence.removeAll { $0.inferenceIndex < oldestInference }
         instagramStoriesEvidence.removeAll { $0.inferenceIndex < oldestInference }
-        guard youtubeVerdict || instagramReelsVerdict || instagramStoriesVerdict else { return }
+        facebookStoriesEvidence.removeAll { $0.inferenceIndex < oldestInference }
+        guard youtubeVerdict || instagramReelsVerdict || instagramStoriesVerdict || facebookReelsVerdict || facebookStoriesVerdict || xReelsVerdict else { return }
 
         do {
             let image = try classifier.copyModelInputBGRA()
@@ -448,6 +544,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 "instagram_reels": prediction.instagramContentProbabilities[.reels] ?? 0,
                 "instagram_stories": prediction.instagramContentProbabilities[.stories] ?? 0,
                 "instagram_normal": prediction.instagramContentProbabilities[.normal] ?? 0,
+                "facebook_reels": prediction.facebookContentProbabilities[.reels] ?? 0,
+                "x_reels": prediction.xContentProbabilities[.reels] ?? 0,
+                "facebook_stories": prediction.facebookContentProbabilities[.stories] ?? 0,
+                "facebook_normal": prediction.facebookContentProbabilities[.normal] ?? 0,
+                "x_normal": prediction.xContentProbabilities[.normal] ?? 0,
             ]
             let jointProbabilities = Dictionary(
                 uniqueKeysWithValues: SurfaceClass.allCases.map { surface in
@@ -479,6 +580,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
             if instagramStoriesVerdict {
                 instagramStoriesEvidence.append(frame(for: .instagramStories))
             }
+            if facebookReelsVerdict { facebookReelsEvidence.append(frame(for: .facebookReels)) }
+            if xReelsVerdict { xReelsEvidence.append(frame(for: .xReels)) }
+            if facebookStoriesVerdict { facebookStoriesEvidence.append(frame(for: .facebookStories)) }
         } catch {
             DebugCaptureFileStore.setLastError(error.localizedDescription)
             RTLog.sampleHandler.error(
@@ -610,6 +714,100 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
     }
 
+    private func enforceFacebook(
+        reelsVerdict: Bool,
+        storiesVerdict: Bool,
+        requiredHits: Int,
+        sharedState: SharedState,
+        now: Date
+    ) {
+        guard recordingBackend.supportsFacebook, sharedState.realtimeFacebookBlockingEnabled else {
+            facebookShieldLatched = false
+            facebookReelsVotes.removeAll(keepingCapacity: true)
+            facebookStoriesVotes.removeAll(keepingCapacity: true)
+            facebookReelsStreak = 0
+            facebookStoriesStreak = 0
+            ManagedSettingsApplier.clear(surface: .facebook)
+            return
+        }
+        guard metadata?.threshold(for: .facebookReels) != nil,
+              metadata?.threshold(for: .facebookStories) != nil else {
+            facebookShieldLatched = true
+            applyShield(surface: .facebook)
+            return
+        }
+        let detectedReels = reelsVerdict && facebookReelsStreak >= requiredHits
+        let detectedStories = storiesVerdict && facebookStoriesStreak >= requiredHits
+        if !isWithinGrace(facebookGraceUntil, at: now) {
+            if !facebookShieldLatched && (detectedReels || detectedStories) {
+                facebookShieldLatched = true
+                let content = detectedStories ? "stories" : "reels"
+                RTLog.sampleHandler.notice(
+                    "Facebook \(content, privacy: .public) detected — shielding facebook"
+                )
+                if detectedStories {
+                    SharedStore.setLastFacebookStoriesDetectionAt(now)
+                    #if DEBUG
+                    if let threshold = metadata?.threshold(for: .facebookStories) {
+                        queueDebugCapture(
+                            kind: .facebookStories,
+                            evidence: facebookStoriesEvidence,
+                            threshold: threshold,
+                            requiredHits: requiredHits,
+                            detectedAt: now
+                        )
+                    }
+                    #endif
+                } else {
+                    SharedStore.setLastFacebookReelsDetectionAt(now)
+                    #if DEBUG
+                    if let threshold = metadata?.threshold(for: .facebookReels) {
+                        queueDebugCapture(
+                            kind: .facebookReels,
+                            evidence: facebookReelsEvidence,
+                            threshold: threshold,
+                            requiredHits: requiredHits,
+                            detectedAt: now
+                        )
+                    }
+                    #endif
+                }
+                publishDiagnostics(force: true)
+                applyShield(surface: .facebook)
+            }
+        }
+        if !facebookShieldLatched {
+            ManagedSettingsApplier.clear(surface: .facebook)
+        }
+    }
+
+    private func enforceX(verdict: Bool, requiredHits: Int, sharedState: SharedState, now: Date) {
+        guard recordingBackend.supportsX, sharedState.realtimeXBlockingEnabled else {
+            xShieldLatched = false
+            xReelsVotes.removeAll(keepingCapacity: true)
+            xReelsStreak = 0
+            ManagedSettingsApplier.clear(surface: .x)
+            return
+        }
+        guard let threshold = metadata?.threshold(for: .xReels) else {
+            xShieldLatched = true
+            applyShield(surface: .x)
+            return
+        }
+        if !isWithinGrace(xGraceUntil, at: now), !xShieldLatched,
+           verdict, xReelsStreak >= requiredHits {
+            xShieldLatched = true
+            SharedStore.setLastXReelsDetectionAt(now)
+            #if DEBUG
+            queueDebugCapture(kind: .xReels, evidence: xReelsEvidence, threshold: threshold,
+                              requiredHits: requiredHits, detectedAt: now)
+            #endif
+            publishDiagnostics(force: true)
+            applyShield(surface: .x)
+        }
+        if !xShieldLatched { ManagedSettingsApplier.clear(surface: .x) }
+    }
+
     private func loadClassifier() {
         // Release the previous backend before allocating another model bundle.
         classifier = nil
@@ -654,6 +852,14 @@ final class SampleHandler: RPBroadcastSampleHandler {
             instagramShieldLatched = true
             applyShield(surface: .instagram)
         }
+        if sharedState.realtimeFacebookBlockingEnabled {
+            facebookShieldLatched = true
+            applyShield(surface: .facebook)
+        }
+        if sharedState.realtimeXBlockingEnabled {
+            xShieldLatched = true
+            applyShield(surface: .x)
+        }
     }
 
     private func consumeUnlockRequests(at now: Date) {
@@ -688,6 +894,38 @@ final class SampleHandler: RPBroadcastSampleHandler {
             instagramGraceUntil = now.addingTimeInterval(Self.unlockGraceSeconds)
             ManagedSettingsApplier.clear(surface: .instagram)
             RTLog.sampleHandler.notice("Instagram shield released for navigation grace")
+        }
+
+        if sharedState.realtimeFacebookBlockingEnabled,
+           let requestedAt = SharedStore.shieldUnlockRequestedAt(surface: .facebook),
+           lastHandledFacebookUnlockAt.map({ requestedAt > $0 }) ?? true {
+            lastHandledFacebookUnlockAt = requestedAt
+            facebookShieldLatched = false
+            facebookReelsVotes.removeAll(keepingCapacity: true)
+            facebookStoriesVotes.removeAll(keepingCapacity: true)
+            #if DEBUG
+            facebookReelsEvidence.removeAll(keepingCapacity: true)
+            facebookStoriesEvidence.removeAll(keepingCapacity: true)
+            #endif
+            facebookReelsStreak = 0
+            facebookStoriesStreak = 0
+            facebookGraceUntil = now.addingTimeInterval(Self.unlockGraceSeconds)
+            ManagedSettingsApplier.clear(surface: .facebook)
+            RTLog.sampleHandler.notice("Facebook shield released for navigation grace")
+        }
+        if sharedState.realtimeXBlockingEnabled,
+           let requestedAt = SharedStore.shieldUnlockRequestedAt(surface: .x),
+           lastHandledXUnlockAt.map({ requestedAt > $0 }) ?? true {
+            lastHandledXUnlockAt = requestedAt
+            xShieldLatched = false
+            xReelsVotes.removeAll(keepingCapacity: true)
+            #if DEBUG
+            xReelsEvidence.removeAll(keepingCapacity: true)
+            #endif
+            xReelsStreak = 0
+            xGraceUntil = now.addingTimeInterval(Self.unlockGraceSeconds)
+            ManagedSettingsApplier.clear(surface: .x)
+            RTLog.sampleHandler.notice("X shield released for navigation grace")
         }
     }
 
@@ -732,6 +970,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
                         (content.rawValue, prediction.instagramContentProbabilities[content] ?? 0)
                     }
                 )
+            case .facebook:
+                return Dictionary(uniqueKeysWithValues: FacebookContent.allCases.map { ($0.rawValue, prediction.facebookContentProbabilities[$0] ?? 0) })
+            case .x:
+                return Dictionary(uniqueKeysWithValues: XContent.allCases.map { ($0.rawValue, prediction.xContentProbabilities[$0] ?? 0) })
             case .other:
                 return ["normal": 1]
             case nil:
@@ -773,7 +1015,17 @@ final class SampleHandler: RPBroadcastSampleHandler {
             availableMemoryMB: RealtimeShieldMemory.availableMB,
             currentFootprintMB: currentFootprint,
             peakFootprintMB: peakFootprintMB > 0 ? peakFootprintMB : nil,
-            updatedAt: now
+            updatedAt: now,
+            facebookReelsStreak: facebookReelsStreak,
+            xReelsStreak: xReelsStreak,
+            facebookStoriesStreak: facebookStoriesStreak,
+            facebookCandidateEvents: facebookCandidateEvents,
+            xCandidateEvents: xCandidateEvents,
+            facebookStoriesCandidateEvents: facebookStoriesCandidateEvents,
+            facebookShieldLatched: facebookShieldLatched,
+            xShieldLatched: xShieldLatched,
+            facebookGraceRemainingSeconds: facebookGraceUntil.map { max($0.timeIntervalSince(now), 0) },
+            xGraceRemainingSeconds: xGraceUntil.map { max($0.timeIntervalSince(now), 0) }
         )
         SharedStore.setRealtimeShieldDiagnostics(diagnostics)
 
@@ -806,6 +1058,16 @@ final class SampleHandler: RPBroadcastSampleHandler {
         } else {
             ManagedSettingsApplier.clear(surface: .instagram)
         }
+        if sharedState.realtimeFacebookBlockingEnabled {
+            applyShield(surface: .facebook)
+        } else {
+            ManagedSettingsApplier.clear(surface: .facebook)
+        }
+        if sharedState.realtimeXBlockingEnabled {
+            applyShield(surface: .x)
+        } else {
+            ManagedSettingsApplier.clear(surface: .x)
+        }
     }
 
     private func applyShield(surface: ManagedSettingsApplier.Surface) {
@@ -823,8 +1085,19 @@ final class SampleHandler: RPBroadcastSampleHandler {
             ManagedSettingsApplier.clear(surface: .instagram)
             return
         }
+        if surface == .facebook && (!recordingBackend.supportsFacebook || !sharedState.realtimeFacebookBlockingEnabled) {
+            ManagedSettingsApplier.clear(surface: .facebook)
+            return
+        }
+
+        if surface == .x && (!recordingBackend.supportsX || !sharedState.realtimeXBlockingEnabled) {
+            ManagedSettingsApplier.clear(surface: .x)
+            return
+        }
         let data = surface == .youtube
             ? SharedStore.youtubeSelectionData()
+            : surface == .x ? SharedStore.xSelectionData()
+            : surface == .facebook ? SharedStore.facebookSelectionData()
             : SharedStore.instagramSelectionData()
         guard let data,
               let selection = try? JSONDecoder().decode(

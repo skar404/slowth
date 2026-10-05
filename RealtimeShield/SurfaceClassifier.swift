@@ -39,6 +39,8 @@ struct SurfacePrediction {
     let appProbabilities: [SurfaceApp: Double]
     let youtubeContentProbabilities: [YouTubeContent: Double]
     let instagramContentProbabilities: [InstagramContent: Double]
+    var facebookContentProbabilities: [FacebookContent: Double] = [:]
+    var xContentProbabilities: [XContent: Double] = [:]
     var routing: SurfaceRouting? = nil
     var timings: SurfaceInferenceTimings? = nil
 
@@ -53,6 +55,10 @@ struct SurfacePrediction {
             return youtubeContentProbabilities.max(by: { $0.value < $1.value })?.key.rawValue
         case .instagram:
             return instagramContentProbabilities.max(by: { $0.value < $1.value })?.key.rawValue
+        case .facebook:
+            return facebookContentProbabilities.max(by: { $0.value < $1.value })?.key.rawValue
+        case .x:
+            return xContentProbabilities.max(by: { $0.value < $1.value })?.key.rawValue
         case .other:
             return "normal"
         case nil:
@@ -63,7 +69,14 @@ struct SurfacePrediction {
     var jointProbabilities: [SurfaceClass: Double] {
         let youtube = routing == nil || routing?.app == .youtube ? (appProbabilities[.youtube] ?? 0) : 0
         let instagram = routing == nil || routing?.app == .instagram ? (appProbabilities[.instagram] ?? 0) : 0
+        let facebook = routing?.app == .facebook ? (appProbabilities[.facebook] ?? 0) : 0
+        let x = routing?.app == .x ? (appProbabilities[.x] ?? 0) : 0
         return [
+            .xReels: x * (xContentProbabilities[.reels] ?? 0),
+            .xNormal: x * (xContentProbabilities[.normal] ?? 0),
+            .facebookReels: facebook * (facebookContentProbabilities[.reels] ?? 0),
+            .facebookStories: facebook * (facebookContentProbabilities[.stories] ?? 0),
+            .facebookNormal: facebook * (facebookContentProbabilities[.normal] ?? 0),
             .youtubeShorts: youtube * (youtubeContentProbabilities[.shorts] ?? 0),
             .youtubeNormal: youtube * (youtubeContentProbabilities[.normal] ?? 0),
             .instagramReels: instagram * (instagramContentProbabilities[.reels] ?? 0),
@@ -146,7 +159,7 @@ final class SurfaceClassifier: SurfaceClassifying {
               let instagramValues = outputs["instagramContentProbabilities"]! else {
             throw SurfaceClassifierError.invalidMetadata
         }
-        guard appValues.count == SurfaceApp.allCases.count else {
+        guard appValues.count == SurfaceApp.legacyCases.count else {
             throw SurfaceClassifierError.unexpectedOutputCount(
                 "appProbabilities",
                 appValues.count
@@ -166,7 +179,7 @@ final class SurfaceClassifier: SurfaceClassifying {
         }
         return SurfacePrediction(
             appProbabilities: Dictionary(
-                uniqueKeysWithValues: SurfaceApp.allCases.enumerated().map { index, app in
+                uniqueKeysWithValues: SurfaceApp.legacyCases.enumerated().map { index, app in
                     (app, appValues[index].doubleValue)
                 }
             ),

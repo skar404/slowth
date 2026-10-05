@@ -20,11 +20,11 @@ struct AppLocalizationTests {
             precondition(!AppLocalization.languageName(language).isEmpty)
             precondition(AppLocalization.locale.identifier == language)
             let bundle = AppLocalization.bundle(in: .main, preference: language)
-            precondition(AppLocalization.string("Help") == bundle.localizedString(forKey: "Help", value: nil, table: nil))
+            precondition(AppLocalization.string("Feedback & Support") == bundle.localizedString(forKey: "Feedback & Support", value: nil, table: nil))
             precondition(AppLocalization.string("Language") != "Language" || ["en", "pcm"].contains(language))
         }
         choose("en")
-        precondition(AppLocalization.string("Help") == "Help")
+        precondition(AppLocalization.string("Feedback & Support") == "Feedback & Support")
         precondition(AppLocalization.string("Server error (\(500))") == "Server error (500)")
         choose("ru")
         precondition(AppLocalization.string("Language") == "Язык")

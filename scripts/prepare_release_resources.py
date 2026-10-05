@@ -11,32 +11,36 @@ import plistlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'data-model/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json'
-SOURCE_SHA256 = 'ac60c10e4bc7f0091b51bd86195b5597ccb78e6c7af3a5b15911f70981cdf404'
-RUNTIME_SHA256 = 'b56dfc94cecd8f6165c3a94bc3781fb76cff98df87516a40bc09577887e4fcbd'
+SOURCE = ROOT / 'data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json'
+SOURCE_SHA256 = 'f7fd1ae118afadc139c3e95b4e5bc9eb86eb801da770e5bf2194190320a66760'
+RUNTIME_SHA256 = '41ee86e2d0410dd455297c31c8a839aa2d72fb2b39a9698060e0a412ae63896a'
 
 
 def resources(runtime_only=False):
     if runtime_only:
-        compact = (ROOT / 'RealtimeShield/CascadeV6RuntimeMetadata.json').read_bytes()
+        compact = (ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json').read_bytes()
     else:
         source = SOURCE.read_bytes()
         if hashlib.sha256(source).hexdigest() != SOURCE_SHA256:
-            raise ValueError('Frozen Cascade V6 metadata identity changed')
+            raise ValueError('Frozen Cascade V10 metadata identity changed')
         metadata = json.loads(source)
         # Keep policy, model identities and qualification; never publish training
         # inventory or developer filesystem paths in the app or model asset.
-        del metadata['calibration_inventory']
-        for component in metadata['components'].values():
-            component.pop('source_checkpoint', None)
-        compact = (json.dumps(metadata, sort_keys=True, separators=(',', ':')) + '\n').encode()
+        keys = ['schema_version', 'contract', 'model_version', 'architecture', 'input',
+                'policy', 'validation_status', 'compute_precision', 'status']
+        runtime = {key: metadata[key] for key in keys}
+        runtime['components'] = {
+            stage: {key: component[key] for key in ['resource', 'labels', 'checkpoint_sha256']}
+            for stage, component in metadata['components'].items()
+        }
+        compact = (json.dumps(runtime, sort_keys=True, indent=2) + '\n').encode()
     if hashlib.sha256(compact).hexdigest() != RUNTIME_SHA256:
         raise ValueError('Runtime metadata identity changed')
     info = plistlib.loads((ROOT / 'iOS/Info.plist').read_bytes())
     del info['NSPhotoLibraryAddUsageDescription']
     del info['NSPhotoLibraryUsageDescription']
     return {
-        ROOT / 'RealtimeShield/CascadeV6RuntimeMetadata.json': compact,
+        ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json': compact,
         ROOT / 'iOS/Info-Release.plist': plistlib.dumps(info, sort_keys=False),
     }
 

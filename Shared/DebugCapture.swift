@@ -19,6 +19,9 @@ enum DebugCaptureKind: String, Codable, CaseIterable {
     case youtubeShorts = "youtube_shorts"
     case instagramReels = "instagram_reels"
     case instagramStories = "instagram_stories"
+    case xReels = "x_reels"
+    case facebookReels = "facebook_reels"
+    case facebookStories = "facebook_stories"
 
     static let folderTitle = "Slowth — Triggers"
 
@@ -27,6 +30,9 @@ enum DebugCaptureKind: String, Codable, CaseIterable {
         case .youtubeShorts: return "YouTube Shorts"
         case .instagramReels: return "Instagram Reels"
         case .instagramStories: return "Instagram Stories"
+        case .xReels: return "X Reels"
+        case .facebookReels: return "Facebook Reels"
+        case .facebookStories: return "Facebook Stories"
         }
     }
 }

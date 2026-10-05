@@ -3,7 +3,7 @@ import Foundation
 import CryptoKit
 
 enum SessionUploadIdentity {
-    static let maximumBytes = 260 * 1024 * 1024
+    static let maximumBytes = 260 * 1024 * 1024 * 1024
     static func hash(_ file: URL) throws -> String {
         let handle = try FileHandle(forReadingFrom: file)
         defer { try? handle.close() }

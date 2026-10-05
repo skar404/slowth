@@ -97,6 +97,24 @@ enum SurfaceClassifierFactory {
             #else
             throw CascadeClassifierError.missing("V15 support in this build")
             #endif
+        case .cascadeV10:
+            #if CASCADE_MODEL && os(iOS)
+            return try CascadeClassifier(candidate: .v10)
+            #else
+            throw CascadeClassifierError.missing("Cascade V10 support in this build")
+            #endif
+        case .cascadeV8:
+            #if CASCADE_MODEL && os(iOS)
+            return try CascadeClassifier(candidate: .v8)
+            #else
+            throw CascadeClassifierError.missing("Cascade V8 support in this build")
+            #endif
+        case .cascadeV7:
+            #if CASCADE_MODEL && os(iOS)
+            return try CascadeClassifier(candidate: .v7)
+            #else
+            throw CascadeClassifierError.missing("Cascade V7 support in this build")
+            #endif
         case .cascadeV6:
             #if CASCADE_MODEL && os(iOS)
             return try CascadeClassifier(candidate: .v6)
@@ -105,7 +123,7 @@ enum SurfaceClassifierFactory {
             #endif
         }
         #else
-        return try CascadeClassifier(candidate: .v6)
+        return try CascadeClassifier(candidate: .v10)
         #endif
     }
 }

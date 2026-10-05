@@ -9,8 +9,8 @@ enum SiteFeature: String, CaseIterable {
 
     static func available(for site: String) -> [SiteFeature] {
         switch site {
-        case "instagram", "facebook": return [.shorts, .feed, .all]
-        case "youtube", "x": return [.shorts, .all]
+        case "youtube", "instagram", "facebook": return [.shorts, .feed, .all]
+        case "x": return [.shorts, .all]
         case "tiktok": return [.all]
         default: return []
         }
@@ -111,6 +111,14 @@ struct SharedState: Codable, Equatable {
     var realtimeInstagramReelsBlockingEnabled: Bool
     var realtimeInstagramStoriesBlockingEnabled: Bool
     var youtubeSelectionData: Data?
+    var realtimeFacebookReelsBlockingEnabled = false
+    var realtimeXReelsBlockingEnabled = false
+    var realtimeFacebookStoriesBlockingEnabled = false
+    var facebookSelectionData: Data?
+    var xSelectionData: Data?
+    var lastFacebookReelsDetectionAt: Date?
+    var lastXReelsDetectionAt: Date?
+    var lastFacebookStoriesDetectionAt: Date?
     var instagramSelectionData: Data?
     var broadcastActive: Bool
     var lastYouTubeShortsDetectionAt: Date?
@@ -156,6 +164,14 @@ struct SharedState: Codable, Equatable {
     var realtimeInstagramBlockingEnabled: Bool {
         realtimeInstagramReelsBlockingEnabled || realtimeInstagramStoriesBlockingEnabled
     }
+
+    var realtimeFacebookBlockingEnabled: Bool {
+        realtimeFacebookReelsBlockingEnabled || realtimeFacebookStoriesBlockingEnabled
+    }
+
+    var realtimeXBlockingEnabled: Bool {
+        realtimeXReelsBlockingEnabled
+    }
 }
 
 struct RealtimeShieldDiagnostics: Codable, Equatable {
@@ -187,6 +203,17 @@ struct RealtimeShieldDiagnostics: Codable, Equatable {
     var currentFootprintMB: Double?
     var peakFootprintMB: Double?
     var updatedAt: Date?
+    // Optional fields keep diagnostics written by older extensions decodable.
+    var facebookReelsStreak: Int? = nil
+    var xReelsStreak: Int? = nil
+    var facebookStoriesStreak: Int? = nil
+    var facebookCandidateEvents: Int? = nil
+    var xCandidateEvents: Int? = nil
+    var facebookStoriesCandidateEvents: Int? = nil
+    var facebookShieldLatched: Bool? = nil
+    var xShieldLatched: Bool? = nil
+    var facebookGraceRemainingSeconds: Double? = nil
+    var xGraceRemainingSeconds: Double? = nil
 
     static let empty = RealtimeShieldDiagnostics(
         modelStatus: "not started",
@@ -238,24 +265,36 @@ enum SharedStoreKey {
     static let softYouTubeMonitorGeneration = "softYouTubeMonitorGeneration"
     static let slowthAppForeground = "slowthAppForeground"
     static let realtimeInstagramReelsBlockingEnabled = "realtimeInstagramReelsBlockingEnabled"
+    static let realtimeFacebookReelsBlockingEnabled = "realtimeFacebookReelsBlockingEnabled"
+    static let realtimeXReelsBlockingEnabled = "realtimeXReelsBlockingEnabled"
     static let realtimeInstagramStoriesBlockingEnabled = "realtimeInstagramStoriesBlockingEnabled"
+    static let realtimeFacebookStoriesBlockingEnabled = "realtimeFacebookStoriesBlockingEnabled"
     static let youtubeSelectionData = "youtubeSelectionData"
     static let instagramSelectionData = "instagramSelectionData"
+    static let facebookSelectionData = "facebookSelectionData"
+    static let xSelectionData = "xSelectionData"
     static let broadcastActive = "broadcastActive"
     static let lastYouTubeShortsDetectionAt = "lastYouTubeShortsDetectionAt"
     static let lastInstagramReelsDetectionAt = "lastInstagramReelsDetectionAt"
+    static let lastFacebookReelsDetectionAt = "lastFacebookReelsDetectionAt"
+    static let lastXReelsDetectionAt = "lastXReelsDetectionAt"
     static let lastInstagramStoriesDetectionAt = "lastInstagramStoriesDetectionAt"
+    static let lastFacebookStoriesDetectionAt = "lastFacebookStoriesDetectionAt"
     static let lastInstagramShieldPresentedAt = "lastInstagramShieldPresentedAt"
     static let lastShieldActionInvokedAt = "lastShieldActionInvokedAt"
     static let realtimeRecordingPromptRequestedAt = "realtimeRecordingPromptRequestedAt"
     static let youtubeShieldUnlockRequestedAt = "youtubeShieldUnlockRequestedAt"
     static let instagramShieldUnlockRequestedAt = "instagramShieldUnlockRequestedAt"
+    static let facebookShieldUnlockRequestedAt = "facebookShieldUnlockRequestedAt"
+    static let xShieldUnlockRequestedAt = "xShieldUnlockRequestedAt"
     static let realtimeShieldDiagnostics = "realtimeShieldDiagnostics"
 }
 
 enum RealtimeShieldSurface: String {
     case youtube
     case instagram
+    case facebook
+    case x
 }
 
 enum SharedStoreError: Error {
@@ -331,6 +370,30 @@ enum SharedStore {
                 d.set(false, forKey: SharedStoreKey.realtimeInstagramStoriesBlockingEnabled)
             }
         }
+        let hasValidFacebookSelection = hasValidFacebookSelection()
+        let requestedFacebookReelsBlocking = d.bool(
+            forKey: SharedStoreKey.realtimeFacebookReelsBlockingEnabled
+        )
+        let requestedFacebookStoriesBlocking = d.bool(
+            forKey: SharedStoreKey.realtimeFacebookStoriesBlockingEnabled
+        )
+        let realtimeFacebookReelsBlockingEnabled = requestedFacebookReelsBlocking
+            && hasValidFacebookSelection
+        let realtimeFacebookStoriesBlockingEnabled = requestedFacebookStoriesBlocking
+            && hasValidFacebookSelection
+        if !hasValidFacebookSelection {
+            if requestedFacebookReelsBlocking {
+                d.set(false, forKey: SharedStoreKey.realtimeFacebookReelsBlockingEnabled)
+            }
+            if requestedFacebookStoriesBlocking {
+                d.set(false, forKey: SharedStoreKey.realtimeFacebookStoriesBlockingEnabled)
+            }
+        }
+        let hasValidXSelection = hasValidXSelection()
+        let requestedXReelsBlocking = d.bool(forKey: SharedStoreKey.realtimeXReelsBlockingEnabled)
+        let realtimeXReelsBlockingEnabled = requestedXReelsBlocking && hasValidXSelection
+        if !hasValidXSelection { d.set(false, forKey: SharedStoreKey.realtimeXReelsBlockingEnabled) }
+
         let broadcastActive = d.bool(forKey: SharedStoreKey.broadcastActive)
 
         func date(forKey key: String) -> Date? {
@@ -351,6 +414,14 @@ enum SharedStore {
             realtimeInstagramReelsBlockingEnabled: realtimeInstagramReelsBlockingEnabled,
             realtimeInstagramStoriesBlockingEnabled: realtimeInstagramStoriesBlockingEnabled,
             youtubeSelectionData: d.data(forKey: SharedStoreKey.youtubeSelectionData),
+            realtimeFacebookReelsBlockingEnabled: realtimeFacebookReelsBlockingEnabled,
+            realtimeXReelsBlockingEnabled: realtimeXReelsBlockingEnabled,
+            realtimeFacebookStoriesBlockingEnabled: realtimeFacebookStoriesBlockingEnabled,
+            facebookSelectionData: d.data(forKey: SharedStoreKey.facebookSelectionData),
+            xSelectionData: d.data(forKey: SharedStoreKey.xSelectionData),
+            lastFacebookReelsDetectionAt: date(forKey: SharedStoreKey.lastFacebookReelsDetectionAt),
+            lastXReelsDetectionAt: date(forKey: SharedStoreKey.lastXReelsDetectionAt),
+            lastFacebookStoriesDetectionAt: date(forKey: SharedStoreKey.lastFacebookStoriesDetectionAt),
             instagramSelectionData: d.data(forKey: SharedStoreKey.instagramSelectionData),
             broadcastActive: broadcastActive,
             lastYouTubeShortsDetectionAt: date(forKey: SharedStoreKey.lastYouTubeShortsDetectionAt),
@@ -516,9 +587,45 @@ enum SharedStore {
         d.data(forKey: SharedStoreKey.instagramSelectionData)
     }
 
+    static func facebookSelectionData() -> Data? {
+        d.data(forKey: SharedStoreKey.facebookSelectionData)
+    }
+
+    static func xSelectionData() -> Data? {
+        d.data(forKey: SharedStoreKey.xSelectionData)
+    }
+
     static func hasValidInstagramSelection() -> Bool {
         #if os(iOS) && canImport(FamilyControls)
         guard let data = instagramSelectionData(),
+              let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
+            return false
+        }
+        return selection.applicationTokens.count == 1
+            && selection.categoryTokens.isEmpty
+            && selection.webDomainTokens.isEmpty
+        #else
+        return false
+        #endif
+    }
+
+    static func hasValidFacebookSelection() -> Bool {
+        #if os(iOS) && canImport(FamilyControls)
+        guard let data = facebookSelectionData(),
+              let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
+            return false
+        }
+        return selection.applicationTokens.count == 1
+            && selection.categoryTokens.isEmpty
+            && selection.webDomainTokens.isEmpty
+        #else
+        return false
+        #endif
+    }
+
+    static func hasValidXSelection() -> Bool {
+        #if os(iOS) && canImport(FamilyControls)
+        guard let data = xSelectionData(),
               let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
             return false
         }
@@ -542,11 +649,48 @@ enum SharedStore {
         }
     }
 
+    static func setFacebookSelectionData(_ data: Data?) throws {
+        // Strict mode permits the initial binding, but not replacing it.
+        if snapshot().isStrictModeActive && hasValidFacebookSelection() {
+            throw SharedStoreError.strictModeActive
+        }
+        if let data = data {
+            d.set(data, forKey: SharedStoreKey.facebookSelectionData)
+        } else {
+            d.removeObject(forKey: SharedStoreKey.facebookSelectionData)
+        }
+    }
+
+    static func setXSelectionData(_ data: Data?) throws {
+        // Strict mode permits the initial binding, but not replacing it.
+        if snapshot().isStrictModeActive && hasValidXSelection() {
+            throw SharedStoreError.strictModeActive
+        }
+        if let data = data {
+            d.set(data, forKey: SharedStoreKey.xSelectionData)
+        } else {
+            d.removeObject(forKey: SharedStoreKey.xSelectionData)
+        }
+    }
+
     static func clearInstagramSelection() throws {
         if snapshot().isStrictModeActive { throw SharedStoreError.strictModeActive }
         d.removeObject(forKey: SharedStoreKey.instagramSelectionData)
         d.set(false, forKey: SharedStoreKey.realtimeInstagramReelsBlockingEnabled)
         d.set(false, forKey: SharedStoreKey.realtimeInstagramStoriesBlockingEnabled)
+    }
+
+    static func clearFacebookSelection() throws {
+        if snapshot().isStrictModeActive { throw SharedStoreError.strictModeActive }
+        d.removeObject(forKey: SharedStoreKey.facebookSelectionData)
+        d.set(false, forKey: SharedStoreKey.realtimeFacebookReelsBlockingEnabled)
+        d.set(false, forKey: SharedStoreKey.realtimeFacebookStoriesBlockingEnabled)
+    }
+
+    static func clearXSelection() throws {
+        if snapshot().isStrictModeActive { throw SharedStoreError.strictModeActive }
+        d.removeObject(forKey: SharedStoreKey.xSelectionData)
+        d.set(false, forKey: SharedStoreKey.realtimeXReelsBlockingEnabled)
     }
 
     // Enabling stricter blocking is never blocked by strict mode (mirrors
@@ -609,12 +753,39 @@ enum SharedStore {
         return state
     }
 
+    static func setRealtimeFacebookReelsBlockingEnabled(_ enabled: Bool) throws -> SharedState {
+        var state = snapshot()
+        if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
+        if enabled && !hasValidFacebookSelection() { throw SharedStoreError.invalidValue }
+        state.realtimeFacebookReelsBlockingEnabled = enabled
+        d.set(enabled, forKey: SharedStoreKey.realtimeFacebookReelsBlockingEnabled)
+        return state
+    }
+
+    static func setRealtimeXReelsBlockingEnabled(_ enabled: Bool) throws -> SharedState {
+        var state = snapshot()
+        if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
+        if enabled && !hasValidXSelection() { throw SharedStoreError.invalidValue }
+        state.realtimeXReelsBlockingEnabled = enabled
+        d.set(enabled, forKey: SharedStoreKey.realtimeXReelsBlockingEnabled)
+        return state
+    }
+
     static func setRealtimeInstagramStoriesBlockingEnabled(_ enabled: Bool) throws -> SharedState {
         var state = snapshot()
         if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
         if enabled && !hasValidInstagramSelection() { throw SharedStoreError.invalidValue }
         state.realtimeInstagramStoriesBlockingEnabled = enabled
         d.set(enabled, forKey: SharedStoreKey.realtimeInstagramStoriesBlockingEnabled)
+        return state
+    }
+
+    static func setRealtimeFacebookStoriesBlockingEnabled(_ enabled: Bool) throws -> SharedState {
+        var state = snapshot()
+        if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
+        if enabled && !hasValidFacebookSelection() { throw SharedStoreError.invalidValue }
+        state.realtimeFacebookStoriesBlockingEnabled = enabled
+        d.set(enabled, forKey: SharedStoreKey.realtimeFacebookStoriesBlockingEnabled)
         return state
     }
 
@@ -680,8 +851,20 @@ enum SharedStore {
         d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastInstagramReelsDetectionAt)
     }
 
+    static func setLastFacebookReelsDetectionAt(_ date: Date) {
+        d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastFacebookReelsDetectionAt)
+    }
+
+    static func setLastXReelsDetectionAt(_ date: Date) {
+        d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastXReelsDetectionAt)
+    }
+
     static func setLastInstagramStoriesDetectionAt(_ date: Date) {
         d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastInstagramStoriesDetectionAt)
+    }
+
+    static func setLastFacebookStoriesDetectionAt(_ date: Date) {
+        d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastFacebookStoriesDetectionAt)
     }
 
     static func setLastInstagramShieldPresentedAt(_ date: Date) {
@@ -715,6 +898,8 @@ enum SharedStore {
     static func requestShieldUnlock(surface: RealtimeShieldSurface, at date: Date = Date()) {
         let key = surface == .youtube
             ? SharedStoreKey.youtubeShieldUnlockRequestedAt
+            : surface == .x ? SharedStoreKey.xShieldUnlockRequestedAt
+            : surface == .facebook ? SharedStoreKey.facebookShieldUnlockRequestedAt
             : SharedStoreKey.instagramShieldUnlockRequestedAt
         d.set(date.timeIntervalSince1970, forKey: key)
     }
@@ -722,6 +907,8 @@ enum SharedStore {
     static func shieldUnlockRequestedAt(surface: RealtimeShieldSurface) -> Date? {
         let key = surface == .youtube
             ? SharedStoreKey.youtubeShieldUnlockRequestedAt
+            : surface == .x ? SharedStoreKey.xShieldUnlockRequestedAt
+            : surface == .facebook ? SharedStoreKey.facebookShieldUnlockRequestedAt
             : SharedStoreKey.instagramShieldUnlockRequestedAt
         guard let seconds = d.object(forKey: key) as? Double else { return nil }
         return Date(timeIntervalSince1970: seconds)

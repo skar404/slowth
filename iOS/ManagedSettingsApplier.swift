@@ -6,15 +6,14 @@ import FamilyControls
 import ManagedSettings
 #endif
 
-// Two independent named stores — one per app the user picked into the
-// "Choose YouTube app" / "Choose Instagram app" slots — so each can be
-// shielded/unshielded independently based on which content classifier fired.
-// ApplicationTokens are opaque (no bundle-ID introspection), which is why
-// there are two separate slots/stores instead of one combined selection.
+// Independent named stores for each selected app. Application tokens are
+// opaque, so each app has its own picker and shield.
 enum ManagedSettingsApplier {
     enum Surface: String, CaseIterable {
         case youtube
         case instagram
+        case facebook
+        case x
 
         var storeName: String { "RealtimeShield.\(rawValue)" }
     }
@@ -22,7 +21,9 @@ enum ManagedSettingsApplier {
     #if canImport(ManagedSettings)
     private static var stores: [Surface: ManagedSettingsStore] = [
         .youtube: ManagedSettingsStore(named: ManagedSettingsStore.Name(Surface.youtube.storeName)),
-        .instagram: ManagedSettingsStore(named: ManagedSettingsStore.Name(Surface.instagram.storeName))
+        .instagram: ManagedSettingsStore(named: ManagedSettingsStore.Name(Surface.instagram.storeName)),
+        .x: ManagedSettingsStore(named: ManagedSettingsStore.Name(Surface.x.storeName)),
+        .facebook: ManagedSettingsStore(named: ManagedSettingsStore.Name(Surface.facebook.storeName))
     ]
     #endif
 

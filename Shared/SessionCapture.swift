@@ -5,8 +5,8 @@ import Foundation
 final class SessionCapture {
     struct Limits {
         var duration: Double = 15 * 60
-        var sessionBytes = 250 * 1_024 * 1_024
-        var totalBytes = 1_024 * 1_024 * 1_024
+        // nil allows capture until the duration or free-space limit is reached.
+        var totalBytes: Int? = nil
         var minimumFreeBytes: Int64 = 256 * 1_024 * 1_024
     }
     struct Frame: Codable {
@@ -115,11 +115,7 @@ final class SessionCapture {
                 frame.filename = String(format: "frame_%06d.jpg", self.manifest.frames.count + 1)
                 let data = try jpeg()
                 let budget = self.manifest.jpegBytes + data.count + Self.manifestReserve
-                if budget > self.limits.sessionBytes {
-                    self.stopOnWorker(reason: "session_disk_limit")
-                    return
-                }
-                if self.existingBytes + budget > self.limits.totalBytes {
+                if let totalBytes = self.limits.totalBytes, self.existingBytes + budget > totalBytes {
                     self.stopOnWorker(reason: "total_disk_limit")
                     return
                 }

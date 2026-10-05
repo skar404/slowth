@@ -21,6 +21,21 @@ Strict mode, supported features, independent Reels/feed combinations, whole-site
 priority, live CSS/overlay removal, Stories, background redirects, cache upgrades,
 native messaging failures, and localized popup switches.
 
+YouTube tests cover the independent default-off feed switch, four-window-height
+home threshold on desktop/mobile URLs, query parameters, live setting changes,
+SPA/back/forward/restored visits, scroll lock cleanup, the home reset action,
+Shorts independence, and whole-site priority.
+
+Manual YouTube verification in Safari on iPhone and Mac: enable Infinite Feed
+with Shorts both on and off; scroll `/` (also `/?app=desktop`) four window heights.
+Verify the localized overlay prevents background scrolling and “Back to home”
+opens `/` at the top. Search, subscriptions, channels and ordinary videos must
+remain available. Navigate away and back, restore a scrolled tab, and change the
+switch from both the host app and extension. Confirm disabling the switch removes
+the overlay and restores scrolling, and Strict mode allows enabling but prevents
+disabling the switch. A whole-site block takes precedence and preserves both
+content choices. Physical Safari checks are separate from the Node fixtures.
+
 Manual Safari verification: test Instagram and Facebook with each Reels/Infinite
 Feed combination; open direct Reels links, scroll the home feed, and view Instagram
 Stories. Infinite Feed retains the existing thresholds (including continuous

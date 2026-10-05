@@ -8,7 +8,7 @@
 
   // Wire keys and migration mirror Shared/SharedStore.swift.
   ns.SITE_FEATURES = {
-    youtube: ["shorts", "all"],
+    youtube: ["shorts", "feed", "all"],
     instagram: ["shorts", "feed", "all"],
     tiktok: ["all"],
     facebook: ["shorts", "feed", "all"],

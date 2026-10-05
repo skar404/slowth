@@ -75,6 +75,8 @@ final class ShieldActionExtension: ShieldActionDelegate {
         ManagedSettingsApplier.Surface.allCases.compactMap { surface in
             let data = surface == .youtube
                 ? SharedStore.youtubeSelectionData()
+                : surface == .x ? SharedStore.xSelectionData()
+                : surface == .facebook ? SharedStore.facebookSelectionData()
                 : SharedStore.instagramSelectionData()
             guard let data,
                   let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {

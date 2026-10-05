@@ -1,0 +1,131 @@
+name: Release evidence and TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      model_release:
+        description: Existing release tag containing the pinned production model asset
+        required: true
+        type: string
+      model_asset:
+        description: Exact model asset filename (no wildcard)
+        required: true
+        default: Slowth-models.tar.gz
+        type: string
+      testflight:
+        description: Sign and upload iOS to TestFlight (main only; requires app-store secrets)
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+# Serialize uploads across revisions so two runs cannot consume the same build.
+concurrency:
+  group: release-evidence
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: macos-26
+    timeout-minutes: 90
+    environment: ${{ inputs.testflight && 'app-store' || 'ci-validation' }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12.9'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install verified build tools
+        run: bash scripts/ci_tools.sh
+      - name: Test release safety boundaries
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Download model input (individual model hashes are checked before build)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODEL_RELEASE: ${{ inputs.model_release }}
+          MODEL_ASSET: ${{ inputs.model_asset }}
+        run: |
+          [[ "$MODEL_RELEASE" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]
+          [[ "$MODEL_ASSET" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz$ ]]
+          gh release download "$MODEL_RELEASE" --repo "$GITHUB_REPOSITORY" \
+            --pattern "$MODEL_ASSET" --output "$RUNNER_TEMP/Slowth-models.tar.gz"
+      - name: Validate unsigned iOS and macOS archives
+        if: ${{ !inputs.testflight }}
+        run: >-
+          python3 scripts/ci_release.py build
+          --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
+          --output "$RUNNER_TEMP/slowth-build"
+      - name: Build, sign, verify and upload the exact iOS IPA
+        if: inputs.testflight
+        env:
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          BUNDLE_ID_PREFIX: ${{ vars.BUNDLE_ID_PREFIX }}
+          ASC_APP_ID: ${{ vars.ASC_APP_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          APPLE_CERTIFICATE_P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          IOS_PROFILE_APP_BASE64: ${{ secrets.IOS_PROFILE_APP_BASE64 }}
+          IOS_PROFILE_SAFARI_BASE64: ${{ secrets.IOS_PROFILE_SAFARI_BASE64 }}
+          IOS_PROFILE_BROADCAST_BASE64: ${{ secrets.IOS_PROFILE_BROADCAST_BASE64 }}
+          IOS_PROFILE_DEVICE_ACTIVITY_BASE64: ${{ secrets.IOS_PROFILE_DEVICE_ACTIVITY_BASE64 }}
+          IOS_PROFILE_SHIELD_CONFIG_BASE64: ${{ secrets.IOS_PROFILE_SHIELD_CONFIG_BASE64 }}
+          IOS_PROFILE_SHIELD_ACTION_BASE64: ${{ secrets.IOS_PROFILE_SHIELD_ACTION_BASE64 }}
+        run: >-
+          python3 scripts/ci_release.py build --platform iOS --testflight
+          --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
+          --output "$RUNNER_TEMP/slowth-build"
+      - name: Attest the exact uploaded IPA (only its digest is published)
+        if: inputs.testflight
+        id: ipa-attestation
+        uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
+        with:
+          subject-path: ${{ runner.temp }}/slowth-build/export/*.ipa
+      - name: Attest the public build manifest
+        id: manifest-attestation
+        uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
+        with:
+          subject-path: ${{ runner.temp }}/slowth-build/public/build-manifest.json
+      - name: Collect offline verification bundles
+        env:
+          MANIFEST_ATTESTATION: ${{ steps.manifest-attestation.outputs.bundle-path }}
+          IPA_ATTESTATION: ${{ steps.ipa-attestation.outputs.bundle-path }}
+        run: |
+          cp "$MANIFEST_ATTESTATION" "$RUNNER_TEMP/slowth-build/public/manifest-attestation.jsonl"
+          if [[ -n "$IPA_ATTESTATION" ]]; then
+            cp "$IPA_ATTESTATION" "$RUNNER_TEMP/slowth-build/public/ipa-attestation.jsonl"
+          fi
+      - name: Publish only verification metadata
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: build-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/slowth-build/public/build-manifest.json
+            ${{ runner.temp }}/slowth-build/public/SHA256SUMS
+            ${{ runner.temp }}/slowth-build/public/manifest-attestation.jsonl
+            ${{ runner.temp }}/slowth-build/public/ipa-attestation.jsonl
+          if-no-files-found: error
+          retention-days: 90
+      - name: Explain this result
+        env:
+          TESTFLIGHT: ${{ inputs.testflight }}
+        run: |
+          if [[ "$TESTFLIGHT" == true ]]; then
+            echo 'Verified IPA uploaded and processed by Apple. Select this same build for App Store review; do not rebuild it.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Unsigned iOS/macOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo 'Download build-evidence to verify the manifest and attestations. No IPA, archive, credentials or raw logs are published.' >> "$GITHUB_STEP_SUMMARY"

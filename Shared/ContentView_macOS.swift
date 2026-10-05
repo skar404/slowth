@@ -46,8 +46,12 @@ struct MacContentView: View {
     @State private var isAuthorizingFamilyControls = false
     @State private var showYouTubePicker = false
     @State private var showInstagramPicker = false
+    @State private var showFacebookPicker = false
+    @State private var showXPicker = false
     @State private var youtubeSelection = FamilyActivitySelection()
     @State private var instagramSelection = FamilyActivitySelection()
+    @State private var facebookSelection = FamilyActivitySelection()
+    @State private var xSelection = FamilyActivitySelection()
     #endif
 
     var body: some View {
@@ -235,6 +239,7 @@ struct MacContentView: View {
             #endif
 
             Section {
+                Link(AppLocalization.string("Rate Slowth"), destination: AppReviewCoordinator.reviewURL)
                 Link(AppLocalization.string("Send feedback"), destination: feedbackURL)
                 if FeatureFlags.tipsEnabled {
                     Button {
@@ -259,7 +264,7 @@ struct MacContentView: View {
                 .accessibilityIdentifier("app.language")
                 #endif
             } header: {
-                Text(AppLocalization.string("Help"))
+                Text(AppLocalization.string("Feedback & Support"))
             } footer: {
                 #if DEBUG
                 Button(action: appVersionTapped) {
@@ -271,10 +276,16 @@ struct MacContentView: View {
                 #else
                 Text(appVersion)
                 #endif
+                if let evidence = BuildProvenance.current {
+                    Link(destination: evidence.runURL) {
+                        Text(verbatim: "CI · \(evidence.shortCommit)")
+                    }
+                }
             }
         }
         .formStyle(.grouped)
         .navigationTitle("Slowth")
+        .appReviewPrompt(hasEnabledBlocking: state.hasEnabledBlockingForReview, isReady: isReadyForReview)
         .alert(AppLocalization.string("Heads up"),
                isPresented: Binding(
                 get: { state.lastError != nil },
@@ -290,7 +301,7 @@ struct MacContentView: View {
             Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."))
         }
         .sheet(isPresented: $showAbout) {
-            AboutSheet()
+            HowItWorksSheet(feedbackURL: feedbackURL)
         }
         .sheet(isPresented: $showSupportSheet) {
             SupportSheet(tipStore: tipStore)
@@ -328,6 +339,27 @@ struct MacContentView: View {
                 onCancel: { showInstagramPicker = false }
             )
         }
+        .sheet(isPresented: $showFacebookPicker) {
+            FamilyActivityPickerWrapper(
+                selection: facebookSelection,
+                onDone: { selection in
+                    state.saveFacebookSelection(selection)
+                    showFacebookPicker = false
+                },
+                onCancel: { showFacebookPicker = false }
+            )
+        }
+
+        .sheet(isPresented: $showXPicker) {
+            FamilyActivityPickerWrapper(
+                selection: xSelection,
+                onDone: { selection in
+                    state.saveXSelection(selection)
+                    showXPicker = false
+                },
+                onCancel: { showXPicker = false }
+            )
+        }
         .onAppear(perform: presentRealtimeRecordingPromptIfRequested)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
             presentRealtimeRecordingPromptIfRequested()
@@ -336,6 +368,20 @@ struct MacContentView: View {
     }
 
     private var disabledByStrict: Bool { state.snapshot.isStrictModeActive }
+
+    private var isReadyForReview: Bool {
+        guard state.lastError == nil, !state.refreshing,
+              !showAbout, !showSupportSheet, !showRealtimeBlockingBeta,
+              !showStrictModeConfirmation else { return false }
+        #if os(iOS)
+        guard !showRealtimeRecordingPrompt else { return false }
+        #endif
+        #if os(iOS) && canImport(FamilyControls)
+        guard !isAuthorizingFamilyControls, !showYouTubePicker, !showInstagramPicker,
+              !showFacebookPicker, !showXPicker else { return false }
+        #endif
+        return true
+    }
 
     #if os(iOS) && canImport(FamilyControls)
     private func presentRealtimeRecordingPromptIfRequested() {
@@ -443,6 +489,59 @@ struct MacContentView: View {
                 ))
                 .disabled((disabledByStrict && state.snapshot.realtimeInstagramStoriesBlockingEnabled) || !state.hasInstagramSelection)
 
+                if state.facebookModelSelected || state.snapshot.realtimeFacebookBlockingEnabled {
+                    Button {
+                        facebookSelection = decodedSelection(state.snapshot.facebookSelectionData)
+                        showFacebookPicker = true
+                    } label: {
+                        HStack {
+                            Text(AppLocalization.string("Choose Facebook app"))
+                            Spacer()
+                            if state.hasFacebookSelection {
+                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                            }
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(disabledByStrict && state.hasFacebookSelection)
+
+                    Toggle(AppLocalization.string("Block Facebook Reels"), isOn: Binding(
+                        get: { state.snapshot.realtimeFacebookReelsBlockingEnabled },
+                        set: { state.setRealtimeFacebookReelsBlockingEnabled($0) }
+                    ))
+                    .disabled((disabledByStrict && state.snapshot.realtimeFacebookReelsBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookReelsBlockingEnabled))
+
+                    Toggle(AppLocalization.string("Block Facebook Stories"), isOn: Binding(
+                        get: { state.snapshot.realtimeFacebookStoriesBlockingEnabled },
+                        set: { state.setRealtimeFacebookStoriesBlockingEnabled($0) }
+                    ))
+                    .disabled((disabledByStrict && state.snapshot.realtimeFacebookStoriesBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookStoriesBlockingEnabled))
+                }
+
+                if state.xModelSelected || state.snapshot.realtimeXBlockingEnabled {
+                    Button {
+                        xSelection = decodedSelection(state.snapshot.xSelectionData)
+                        showXPicker = true
+                    } label: {
+                        HStack {
+                            Text(AppLocalization.string("Choose X app"))
+                            Spacer()
+                            if state.hasXSelection {
+                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                            }
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(disabledByStrict && state.hasXSelection)
+
+                    Toggle(AppLocalization.string("Block X Reels"), isOn: Binding(
+                        get: { state.snapshot.realtimeXReelsBlockingEnabled },
+                        set: { state.setRealtimeXReelsBlockingEnabled($0) }
+                    ))
+                    .disabled((disabledByStrict && state.snapshot.realtimeXReelsBlockingEnabled) || !state.hasXSelection || (!state.xModelSelected && !state.snapshot.realtimeXReelsBlockingEnabled))
+
+                }
+
                 #if DEBUG
                 if debugModeEnabled {
                     VStack(alignment: .leading, spacing: 3) {
@@ -457,6 +556,9 @@ struct MacContentView: View {
                         DebugStatusRow(label: "YouTube app", value: state.hasYouTubeSelection ? "picked" : "not picked")
                         DebugStatusRow(label: "Instagram Reels", value: state.snapshot.realtimeInstagramReelsBlockingEnabled ? "blocked" : "allowed")
                         DebugStatusRow(label: "Instagram Stories", value: state.snapshot.realtimeInstagramStoriesBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "Facebook Reels", value: state.snapshot.realtimeFacebookReelsBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "Facebook Stories", value: state.snapshot.realtimeFacebookStoriesBlockingEnabled ? "blocked" : "allowed")
+                        DebugStatusRow(label: "Facebook candidates", value: "Reels \(state.snapshot.realtimeShieldDiagnostics.facebookCandidateEvents ?? 0) · Stories \(state.snapshot.realtimeShieldDiagnostics.facebookStoriesCandidateEvents ?? 0)")
                         DebugStatusRow(label: "Instagram app", value: state.hasInstagramSelection ? "picked" : "not picked")
                         DebugStatusRow(label: "Surface model", value: modelStatusText(state.snapshot.realtimeShieldDiagnostics))
                         DebugStatusRow(label: "Prediction", value: predictionText(state.snapshot.realtimeShieldDiagnostics))
@@ -488,7 +590,12 @@ struct MacContentView: View {
         } header: {
             Text(AppLocalization.string("Block content in apps"))
         } footer: {
-            Text(AppLocalization.string("Choose YouTube or Instagram, then enable the content you want to block. Enabled apps stay blocked unless you're recording your screen. Optional soft YouTube mode works well for audio podcasts, but Picture in Picture may still be blocked when recording is off. Pick one app icon per service, not a category or \"All Apps\"."))
+            VStack(alignment: .leading, spacing: 8) {
+                Text(InAppBlockingCopy.setup)
+                Text(AppLocalization.string("Apps with blocking enabled stay blocked when screen recording is off. Soft YouTube mode can delay blocking."))
+                Text(AppLocalization.string("Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
+                Text(AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything."))
+            }
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }
@@ -502,7 +609,11 @@ struct MacContentView: View {
             && state.snapshot.realtimeYouTubeBlockingEnabled
         let instagramReady = state.hasInstagramSelection
             && state.snapshot.realtimeInstagramBlockingEnabled
-        if !youtubeReady && !instagramReady {
+        let facebookReady = state.hasFacebookSelection
+            && state.snapshot.realtimeFacebookBlockingEnabled
+        let xReady = state.hasXSelection
+            && state.snapshot.realtimeXBlockingEnabled
+        if !youtubeReady && !instagramReady && !facebookReady && !xReady {
             return AppLocalization.string("Choose an app and enable at least one blocking option below.")
         }
         return AppLocalization.string("Tap the red button to start screen recording.")
@@ -557,18 +668,25 @@ struct MacContentView: View {
     private var debugSection: some View {
         Section {
             Toggle("Debug mode", isOn: $debugModeEnabled)
+                .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
+                .onChange(of: debugModeEnabled) { _ in
+                    #if os(iOS) && canImport(FamilyControls)
+                    state.refreshFacebookModelSelection()
+                    #endif
+                }
             #if os(iOS)
             DebugSessionCaptureControls()
             if DebugModelSettings.cascadeAvailable {
                 Picker("Model for next recording", selection: Binding(
                     get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
-                    set: { debugModelBackend = $0 }
+                    set: { debugModelBackend = $0; state.refreshFacebookModelSelection() }
                 )) {
                     ForEach(DebugModelBackend.allCases, id: \.rawValue) { backend in
                         Text(backend.title).tag(backend.rawValue)
                     }
                 }
-                Text("Stop screen recording, choose a model, then start recording again. Turning Debug mode off selects Cascade V6 for the next recording. V14 is experimental and unqualified: validation quality gates failed. V15 and Cascade V6 are experimental and unqualified: validation quality gates failed. V15 CoreML parity failed on validation (Stories threshold and temporal trace mismatch). Cascade V6 CoreML parity passed; device qualification is still pending.")
+                .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
+                Text("Stop screen recording, choose a model, then start recording again. Turning Debug mode off selects Cascade V10 for the next recording. V14 is experimental and unqualified: validation quality gates failed. V15 and Cascade V6 are experimental and unqualified: validation quality gates failed. V15 CoreML parity failed on validation (Stories threshold and temporal trace mismatch). Cascade V6 CoreML parity passed; device qualification is still pending. Cascade V7 adds Facebook Reels and Stories. Cascade V8 adds X short videos. Cascade V10 is the default and uses the expanded candidate pool; validation quality gates failed and device qualification is pending.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
@@ -577,6 +695,8 @@ struct MacContentView: View {
                     .foregroundStyle(.secondary)
             }
             #endif
+            DebugAppReviewControls(hasEnabledBlocking: state.hasEnabledBlockingForReview,
+                                   isReady: isReadyForReview)
             Toggle("Tips", isOn: $tipsFeatureEnabled)
             Button("Reset Strict mode") {
                 state.resetStrictModeForDebug()
@@ -680,51 +800,6 @@ struct MacContentView: View {
     }
 }
 
-private struct AboutSheet: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 10) {
-                Image(systemName: "sparkles")
-                    .font(.title2)
-                    .foregroundStyle(.tint)
-                Text(AppLocalization.string("How Slowth works"))
-                    .font(.title3.weight(.semibold))
-                Spacer()
-            }
-
-            VStack(alignment: .leading, spacing: 12) {
-                InfoRow(icon: "eye.slash.fill",
-                        title: AppLocalization.string("Hide distracting surfaces"),
-                        detail: AppLocalization.string("Slowth blocks YouTube Shorts, Instagram and Facebook Reels, plus Explore and trends on X while leaving the rest of each site available."))
-                InfoRow(icon: "shield.lefthalf.filled",
-                        title: AppLocalization.string("Block whole sites"),
-                        detail: AppLocalization.string("TikTok is replaced with a friendly blocked page. You can opt any site into full block too."))
-                InfoRow(icon: "slider.horizontal.3",
-                        title: AppLocalization.string("Per-site control"),
-                        detail: AppLocalization.string("Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
-                InfoRow(icon: "lock.fill",
-                        title: AppLocalization.string("Strict mode (24 h)"),
-                        detail: AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking. The timer survives restarts and force-quits."))
-                InfoRow(icon: "arrow.triangle.2.circlepath",
-                        title: AppLocalization.string("Self-updating rules"),
-                        detail: AppLocalization.string("Safari checks a remote rules file for selector and redirect fixes. Strict mode pauses rule changes until its lock expires."))
-            }
-
-            HStack {
-                Spacer()
-                Button(AppLocalization.string("Done")) { dismiss() }
-                    .keyboardShortcut(.defaultAction)
-            }
-        }
-        .padding(20)
-        #if os(macOS)
-        .frame(width: 520)
-        #endif
-    }
-}
-
 private struct HeroCard: View {
     let title: String
     let subtitle: String
@@ -823,28 +898,6 @@ private struct DebugStatusRow: View {
     }
 }
 #endif
-
-private struct InfoRow: View {
-    let icon: String
-    let title: String
-    let detail: String
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: icon)
-                .font(.body)
-                .foregroundStyle(.tint)
-                .frame(width: 22, alignment: .center)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title).fontWeight(.semibold)
-                Text(detail)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-    }
-}
 
 private struct SupportSheet: View {
     @ObservedObject var tipStore: TipStore

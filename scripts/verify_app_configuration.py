@@ -17,16 +17,27 @@ def sha(path):
 def verify(app, configuration):
     release = configuration == 'Release'
     aliases = EXPORTS / 'v15-v6-app-20260920-154340/ios-resources'
-    cascade = {name: aliases / (name + '.mlpackage')
-               for name in ('AppRouterV6', 'YouTubeDetectorV6', 'InstagramDetectorV6')}
+    current = EXPORTS / 'cascade-v10-study-20260929-1356/diverse/ios-resources'
+    cascade = {name + 'V10': current / (name + 'V10.mlpackage')
+               for name in ('AppRouter', 'YouTubeDetector', 'InstagramDetector', 'FacebookDetector', 'XDetector')}
     alternatives = {
         'SurfaceDetectorV14': EXPORTS / 'v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage',
         'SurfaceDetectorV15': EXPORTS / 'v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage',
     }
-    metadata = ({'CascadeV6RuntimeMetadata': ROOT / 'RealtimeShield/CascadeV6RuntimeMetadata.json'}
-                if release else {'CascadeV6Metadata': aliases / 'CascadeV6Metadata.json',
+    metadata = ({'CascadeV10RuntimeMetadata': ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json'}
+                if release else {'CascadeV10Metadata': current / 'CascadeV10Metadata.json',
                     **{name + 'Metadata': p.with_name(name + 'Metadata.json')
                        for name, p in alternatives.items()}})
+    if not release:
+        for version, directory, names in (
+            ('V6', aliases, ('AppRouter', 'YouTubeDetector', 'InstagramDetector')),
+            ('V7', EXPORTS / 'cascade-v7-facebook-20260928-114500/ios-resources',
+             ('AppRouter', 'YouTubeDetector', 'InstagramDetector', 'FacebookDetector')),
+            ('V8', EXPORTS / 'cascade-v8-x-20260928/ios-resources',
+             ('AppRouter', 'YouTubeDetector', 'InstagramDetector', 'FacebookDetector', 'XDetector')),
+        ):
+            alternatives.update({name + version: directory / (name + version + '.mlpackage') for name in names})
+            metadata['Cascade' + version + 'Metadata'] = directory / ('Cascade' + version + 'Metadata.json')
     for bundle in [app, app / 'PlugIns/UnscrollBroadcastIOS.appex']:
         models = {} if release and bundle == app else cascade | ({} if release else alternatives)
         expected_metadata = {} if release and bundle == app else metadata
@@ -42,7 +53,8 @@ def verify(app, configuration):
             executable = plistlib.loads((bundle / 'Info.plist').read_bytes())['CFBundleExecutable']
             binary = (bundle / executable).read_bytes()
             for marker in (b'DebugSessionCaptureControls', b'DebugCapturePhotoLibrary', b'SessionUploader',
-                           b'SessionCaptureArchive', b'DebugCaptureWriter', b'resetStrictModeForDebug'):
+                           b'SessionCaptureArchive', b'DebugCaptureWriter', b'resetStrictModeForDebug',
+                           b'DebugAppReviewControls', b'prepareEligibleHistoryForDebug'):
                 assert marker not in binary, (bundle, marker)
         print(f'{bundle.name}: {len(models)} compiled models, {len(expected_metadata)} metadata files')
     info = plistlib.loads((app / 'Info.plist').read_bytes())

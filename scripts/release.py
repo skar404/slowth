@@ -22,6 +22,8 @@ PUBLIC_DIRS = {
     'scripts', 'tests',
 }
 PUBLIC_FILES = {
+    '.github/workflows/ci.yml', '.github/workflows/release-ci.yml',
+    'docs/BUILD_TRUST.md',
     'project.yml', 'README.md', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
     'Configs/Slowth.storekit', 'docs/icon.png', 'docs/showcase-00.jpg',
@@ -35,14 +37,16 @@ PRIVATE_PARTS = {
 # Retired tracked artifacts are removed from the release tree, kept on disk.
 RETIRED = ('RealtimeShield/SurfaceDetector.mlpackage/',
            'RealtimeShield/SurfaceDetectorMetadata.json')
-MODEL_DIR = 'data-model/exports/v15-v6-app-20260920-154340/ios-resources'
+MODEL_DIR = 'data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources'
 MODEL_HASHES = {
-    'AppRouterV6': '6701a2b056a75cb0d54690658c7e9bfb5ed2823eacae3e50fb0dc7cea8f40728',
-    'YouTubeDetectorV6': '83ccc751b04944c3a2561a00d5c0ecd2e6409a57bf5787e6a2b63ac151d87125',
-    'InstagramDetectorV6': 'a28cc67c39930d440620727adb09016877db828f20fb757a230f88c0db459cd8',
+    'AppRouterV10': '275be8a74dcb00f2382071fc5fde6b8ff110878f8b56e66dd0a25c63c11651d5',
+    'YouTubeDetectorV10': '10daf9a48edddba4a480e0376648563094f2196621bf10eb93731cf8c4bd755e',
+    'InstagramDetectorV10': '64a05d722c785cc62bb4420e6aa1ff14dcc751a30e35b6edbcc93eb396c8b09a',
+    'FacebookDetectorV10': '807e5f31e091db26c8285e92e04f7ebc9cf224db1d25be4d72dbcf8306136c8d',
+    'XDetectorV10': 'eec050ecc6ba357eac0f430cd2f76ca3c9765bd8130304ef81d8a1a86f6e3b99',
 }
-RUNTIME = 'RealtimeShield/CascadeV6RuntimeMetadata.json'
-RUNTIME_HASH = 'b56dfc94cecd8f6165c3a94bc3781fb76cff98df87516a40bc09577887e4fcbd'
+RUNTIME = 'RealtimeShield/CascadeV10RuntimeMetadata.json'
+RUNTIME_HASH = '41ee86e2d0410dd455297c31c8a839aa2d72fb2b39a9698060e0a412ae63896a'
 PACKAGE_FILES = {'Manifest.json', 'Data/com.apple.CoreML/model.mlmodel',
                  'Data/com.apple.CoreML/weights/weight.bin'}
 
@@ -252,7 +256,8 @@ def prepare(source, root, bundle, spec):
     run(sys.executable, 'scripts/prepare_release_resources.py', '--check', '--runtime-only', cwd=source)
     config = root / 'Configs/Local.xcconfig'
     require(config.is_file() and not config.is_symlink(), 'Configure Configs/Local.xcconfig before building')
-    shutil.copyfile(config, source / 'Configs/Local.xcconfig')
+    if config.resolve() != (source / 'Configs/Local.xcconfig').resolve():
+        shutil.copyfile(config, source / 'Configs/Local.xcconfig')
     run('xcodegen', 'generate', cwd=source)
     # Check generated project settings without invoking provisioning/network access.
     pbx = plistlib.loads(run('plutil', '-convert', 'xml1', '-o', '-',
@@ -269,7 +274,7 @@ def prepare(source, root, bundle, spec):
 def archives(source, output, prefix, version, build, spec):
     """Build and validate local archives without making them release assets."""
     apps = []
-    for platform, scheme in [('iOS', 'Unscroll (iOS)'), ('macOS', 'Unscroll')]:
+    for platform, scheme in [('iOS', 'Relise - iOS'), ('macOS', 'Release - macOS')]:
         archive = output / f'{prefix}-{platform}.xcarchive'
         run('xcodebuild', '-quiet', '-project', 'Unscroll.xcodeproj', '-scheme', scheme,
             '-configuration', 'Release', '-destination', f'generic/platform={platform}',

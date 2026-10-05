@@ -1,5 +1,8 @@
 # App utilities
 
+GitHub Actions checks, build attestations and the optional TestFlight upload are
+documented in [Build provenance and TestFlight](../docs/BUILD_TRUST.md).
+
 Run these macOS utilities from the **repository root**. ML tooling has moved to
 [`data-model/tools`](../data-model/tools/README.md); Python modules use `tools.*`
 from `data-model`, not `scripts.*`.
@@ -43,7 +46,7 @@ from the repository root, never from `data-model`.
 
 ## Release resources
 
-`python3 scripts/prepare_release_resources.py` derives the compact Cascade V6
+`python3 scripts/prepare_release_resources.py` derives the compact Cascade V10
 metadata and `iOS/Info-Release.plist`. It verifies the frozen export hash, drops
 the training-frame calibration inventory and local checkpoint paths, and removes Debug Photos permissions.
 Use `--check` to verify the generated files without writing. When selecting a new
@@ -109,7 +112,7 @@ parse. These are explicit path/content checks; review public source changes and
 release notes as usual. Arbitrary secrets disguised as application source cannot
 be identified by an allowlist alone.
 
-The three Cascade V6 packages are copied from the pinned local export, checked
+The five Cascade V10 packages are copied from the pinned local export, checked
 against fixed package SHA-256 identities and packed with public runtime metadata.
 The bundle contains only the exact expected files, with no training code,
 checkpoint files or full calibration metadata. Runtime metadata retains the

@@ -4,6 +4,10 @@ enum SurfaceApp: String, CaseIterable, Codable {
     case youtube
     case instagram
     case other
+    case facebook
+    case x
+
+    static let legacyCases: [SurfaceApp] = [.youtube, .instagram, .other]
 }
 
 enum YouTubeContent: String, CaseIterable, Codable {
@@ -17,6 +21,14 @@ enum InstagramContent: String, CaseIterable, Codable {
     case normal
 }
 
+enum FacebookContent: String, CaseIterable, Codable {
+    case reels, stories, normal
+}
+
+enum XContent: String, CaseIterable, Codable {
+    case reels, normal
+}
+
 enum SurfaceClass: String, CaseIterable, Codable {
     case youtubeShorts = "youtube_shorts"
     case youtubeNormal = "youtube_normal"
@@ -24,6 +36,11 @@ enum SurfaceClass: String, CaseIterable, Codable {
     case instagramStories = "instagram_stories"
     case instagramNormal = "instagram_normal"
     case otherApp = "other_app"
+    case facebookReels = "facebook_reels"
+    case facebookStories = "facebook_stories"
+    case facebookNormal = "facebook_normal"
+    case xReels = "x_reels"
+    case xNormal = "x_normal"
 }
 
 struct SurfaceModelMetadata: Decodable {
@@ -92,7 +109,7 @@ struct SurfaceModelMetadata: Decodable {
             SurfaceModelMetadata.self,
             from: Data(contentsOf: url)
         )
-        guard metadata.appLabels == SurfaceApp.allCases.map(\.rawValue),
+        guard metadata.appLabels == SurfaceApp.legacyCases.map(\.rawValue),
               metadata.youtubeContentLabels == YouTubeContent.allCases.map(\.rawValue),
               metadata.instagramContentLabels == InstagramContent.allCases.map(\.rawValue),
               metadata.inputWidth > 0,

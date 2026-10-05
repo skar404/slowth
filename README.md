@@ -94,6 +94,34 @@ languages. The choice survives relaunch; **System default** follows macOS's
 per-app language preference. This setting does not change Safari's popup language
 or the iOS app language.
 
+### App Store reviews
+
+The host app makes at most one automatic StoreKit review request per local
+installation: after seven full days, openings on three distinct dates, and an
+enabled blocking setting. It waits for an active main screen with no app dialogs
+or pending authorization. The attempt is saved before calling StoreKit, even if
+Apple does not display the prompt; app updates and interface changes do not reset
+it. Debug, Simulator and TestFlight builds do not consume the attempt. Direct
+download macOS builds do not request reviews automatically. “Rate Slowth” in Help
+always opens the App Store review page. These preferences are local and may reset
+after reinstalling the app.
+
+In Debug builds, unlock Debug with 15 taps on the version and find **App Store
+review**. **Show system review prompt now** calls StoreKit directly without
+checking dates or blocking settings and without changing the attempt flag.
+The iOS debug path uses `AppStore.requestReview(in:)` with the unique active key
+window scene and refuses the call without one. The panel shows the OS/build,
+receipt filename and request API. This diagnostic path does not change the
+automatic production request. Beta iOS can suppress review prompts even in a
+development run; see the [Apple Developer Forums report](https://developer.apple.com/forums/thread/821981).
+**Prepare review test (7 days / 3 dates)** seeds eligible local history;
+**Test one-time review request** uses the real eligibility check and saves the
+attempt before calling StoreKit and reports the specific reason if ineligible.
+A second test must make no request. **Reset
+review history** clears only the review dates and attempt flag. The panel also
+shows dates, blocking/readiness conditions and the saved flag. These explicit
+test actions are compiled out of Release and TestFlight.
+
 ## Build
 
 Requires Xcode 26+ and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
@@ -111,11 +139,20 @@ open Unscroll.xcodeproj
 
 CLI builds:
 
+Xcode schemes: `Debug - macOS`, `Release - macOS`, `Debug - iOS`, and
+`Relise - iOS` (Release configuration). The macOS Release scheme uses Release for
+every action, including Run and Archive, and excludes the debug interface.
+The Debug schemes use the local StoreKit configuration for purchase testing;
+the Release schemes use the real StoreKit environment.
+
 ```sh
-xcodebuild -project Unscroll.xcodeproj -scheme 'Unscroll' \
+xcodebuild -project Unscroll.xcodeproj -scheme 'Debug - macOS' \
   -configuration Debug -destination 'platform=macOS' build
 
-xcodebuild -project Unscroll.xcodeproj -scheme 'Unscroll (iOS)' \
+xcodebuild -project Unscroll.xcodeproj -scheme 'Release - macOS' \
+  -configuration Release -destination 'platform=macOS' build
+
+xcodebuild -project Unscroll.xcodeproj -scheme 'Debug - iOS' \
   -configuration Debug -destination 'generic/platform=iOS Simulator' build
 ```
 
@@ -142,8 +179,9 @@ uv run --locked python -m tools.realtime_dataset validate dataset/manifest.csv
 uv run --locked python -m tools.screenshot_labeler
 ```
 
-`SurfaceDetector` remains the production classifier; the cascade is experimental.
-The following are optional candidate commands, not relocation steps. Training
+Cascade V10 (expanded candidate pool) is the current iOS default, with experimental qualification.
+For a new cascade, follow the [complete training-to-app pipeline](data-model/docs/cascade-model-pipeline.md).
+The following `SurfaceDetector` commands are for legacy single-model experiments. Training
 requires every class in both train and validation; final evaluation requires
 every class in test:
 
@@ -203,15 +241,19 @@ dataset may reject legacy v2 artifacts. Do not bypass provenance guards.
 
 #### Experimental independent cascade training
 
-An independent router plus YouTube/Instagram specialists can be trained in
+An independent router plus YouTube/Instagram/Facebook/X specialists can be trained in
 parallel on Apple Silicon using `uv run --locked python -m tools.cascade_ml train`
 from `data-model`. A companion
 `benchmark` command compares one, two and three concurrent MPS jobs using a
-shared resized-image cache. See [cascade training](data-model/docs/cascade-training.md) for
-commands, resource controls and the remaining promotion checks. These outputs
-are experimental candidates. Cascade V6 is the default. Debug builds also bundle
-V14/V15 and the complete calibration metadata for comparison in the hidden Debug
-menu. Release builds contain only Cascade V6, once in the Broadcast extension,
+shared resized-image cache. Use `--contract v8` for all five networks. See the
+[complete pipeline](data-model/docs/cascade-model-pipeline.md) for training, calibration,
+Core ML export, parity and app integration, and [cascade training](data-model/docs/cascade-training.md)
+for resource controls and benchmarks. These outputs
+are experimental candidates. Cascade V10 is the default and supports X short-video blocking. Choose X separately
+and enable Block X Reels; ordinary X screens are negative examples. Facebook
+Reels and Stories retain their separate controls. Debug builds retain V14/V15/V6/V7/V8
+and full calibration metadata for comparison. Release builds contain the five
+Cascade V10 models once in the Broadcast extension,
 with compact metadata preserving the exact policy, model identities and qualification.
 Training exports remain unchanged. These candidates remain unqualified; changing
 the default does not change their validation results.

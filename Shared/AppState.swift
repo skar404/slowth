@@ -101,6 +101,23 @@ final class AppState: ObservableObject {
         snapshot.toggles[site]?[feature] ?? false
     }
 
+    var hasEnabledBlockingForReview: Bool {
+        let safariEnabled = SharedState.supportedSites.contains { site in
+            SiteFeature.available(for: site).contains { snapshot.toggles[site]?[$0] == true }
+        }
+        if safariEnabled { return true }
+        #if os(iOS) && canImport(FamilyControls)
+        guard snapshot.realtimeShieldEnabled,
+              FamilyControlsAuth.isAuthorized(AuthorizationCenter.shared.authorizationStatus) else { return false }
+        return (hasYouTubeSelection && snapshot.realtimeYouTubeBlockingEnabled)
+            || (hasInstagramSelection && snapshot.realtimeInstagramBlockingEnabled)
+            || (hasFacebookSelection && facebookModelSelected && snapshot.realtimeFacebookBlockingEnabled)
+            || (hasXSelection && xModelSelected && snapshot.realtimeXBlockingEnabled)
+        #else
+        return false
+        #endif
+    }
+
     func setSetting(_ feature: SiteFeature, enabled: Bool, for site: String) {
         do {
             _ = try SharedStore.setToggle(site: site, feature: feature, enabled: enabled)
@@ -158,6 +175,34 @@ final class AppState: ObservableObject {
     #if os(iOS) && canImport(FamilyControls)
     var hasYouTubeSelection: Bool { SharedStore.hasValidYouTubeSelection() }
     var hasInstagramSelection: Bool { SharedStore.hasValidInstagramSelection() }
+    var hasFacebookSelection: Bool { SharedStore.hasValidFacebookSelection() }
+    var hasXSelection: Bool { SharedStore.hasValidXSelection() }
+    var facebookModelSelected: Bool {
+        #if DEBUG
+        return DebugModelSettings.resolve(stored: AppGroup.defaults.string(forKey: DebugModelSettings.storageKey),
+            debugEnabled: DebugMode.isEnabled, cascadeAvailable: DebugModelSettings.cascadeAvailable).supportsFacebook
+        #else
+        return DebugModelSettings.defaultBackend.supportsFacebook
+        #endif
+    }
+
+    var xModelSelected: Bool {
+        #if DEBUG
+        return DebugModelSettings.resolve(stored: AppGroup.defaults.string(forKey: DebugModelSettings.storageKey),
+            debugEnabled: DebugMode.isEnabled, cascadeAvailable: DebugModelSettings.cascadeAvailable).supportsX
+        #else
+        return DebugModelSettings.defaultBackend.supportsX
+        #endif
+    }
+
+    func refreshFacebookModelSelection() {
+        reload()
+        // The backend is frozen during a recording. Apply a new selection at rest.
+        guard !snapshot.broadcastActive else { return }
+        if !facebookModelSelected { ManagedSettingsApplier.clear(surface: .facebook) }
+        if !xModelSelected { ManagedSettingsApplier.clear(surface: .x) }
+        enforceRealtimeShieldAtRest()
+    }
 
     func requestFamilyControlsAuthorization() async -> Bool {
         let granted = await FamilyControlsAuth.requestAuthorization()
@@ -285,6 +330,95 @@ final class AppState: ObservableObject {
         }
     }
 
+    func saveFacebookSelection(_ selection: FamilyActivitySelection) {
+        if selection.applicationTokens.isEmpty,
+           selection.categoryTokens.isEmpty,
+           selection.webDomainTokens.isEmpty {
+            do {
+                try SharedStore.clearFacebookSelection()
+                RTLog.appState.notice(
+                    "saveFacebookSelection: selection cleared; disabling Facebook blocking"
+                )
+                ManagedSettingsApplier.clear(surface: .facebook)
+                reload()
+            } catch SharedStoreError.strictModeActive {
+                lastError = AppLocalization.string("Strict mode is active")
+                reload()
+            } catch {
+                lastError = AppLocalization.string("Could not clear the Facebook app")
+            }
+            return
+        }
+
+        guard validatedForSingleApp(
+            selection,
+            appName: "Facebook",
+            blockedContent: AppLocalization.string("Reels or Stories")
+        ) else { return }
+        guard let data = try? JSONEncoder().encode(selection) else { return }
+        let isFirstSelection = !SharedStore.hasValidFacebookSelection()
+        do {
+            try SharedStore.setFacebookSelectionData(data)
+            // Clearing a binding makes the next valid selection a first selection again.
+            if isFirstSelection && facebookModelSelected {
+                _ = try SharedStore.setRealtimeFacebookReelsBlockingEnabled(true)
+                _ = try SharedStore.setRealtimeFacebookStoriesBlockingEnabled(true)
+                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            }
+            RTLog.appState.notice("saveFacebookSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
+            reload()
+            enforceRealtimeShieldAtRest()
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+    }
+
+    func saveXSelection(_ selection: FamilyActivitySelection) {
+        if selection.applicationTokens.isEmpty,
+           selection.categoryTokens.isEmpty,
+           selection.webDomainTokens.isEmpty {
+            do {
+                try SharedStore.clearXSelection()
+                RTLog.appState.notice(
+                    "saveXSelection: selection cleared; disabling X blocking"
+                )
+                ManagedSettingsApplier.clear(surface: .x)
+                reload()
+            } catch SharedStoreError.strictModeActive {
+                lastError = AppLocalization.string("Strict mode is active")
+                reload()
+            } catch {
+                lastError = AppLocalization.string("Could not clear the X app")
+            }
+            return
+        }
+
+        guard validatedForSingleApp(
+            selection,
+            appName: "X",
+            blockedContent: AppLocalization.string("Reels")
+        ) else { return }
+        guard let data = try? JSONEncoder().encode(selection) else { return }
+        let isFirstSelection = !SharedStore.hasValidXSelection()
+        do {
+            try SharedStore.setXSelectionData(data)
+            // Clearing a binding makes the next valid selection a first selection again.
+            if isFirstSelection && xModelSelected {
+                _ = try SharedStore.setRealtimeXReelsBlockingEnabled(true)
+                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            }
+            RTLog.appState.notice("saveXSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
+            reload()
+            enforceRealtimeShieldAtRest()
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+    }
+
     func setRealtimeShieldEnabled(_ enabled: Bool) {
         do {
             _ = try SharedStore.setRealtimeShieldEnabled(enabled)
@@ -301,6 +435,8 @@ final class AppState: ObservableObject {
                 SoftYouTubeActivityMonitoring.stop()
                 ManagedSettingsApplier.clear(surface: .youtube)
                 ManagedSettingsApplier.clear(surface: .instagram)
+                ManagedSettingsApplier.clear(surface: .facebook)
+                ManagedSettingsApplier.clear(surface: .x)
             }
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode is active")
@@ -381,6 +517,60 @@ final class AppState: ObservableObject {
         }
     }
 
+    func setRealtimeFacebookReelsBlockingEnabled(_ enabled: Bool) {
+        guard !enabled || facebookModelSelected else {
+            lastError = AppLocalization.string("Select Cascade V7 before enabling Facebook blocking.")
+            return
+        }
+        do {
+            _ = try SharedStore.setRealtimeFacebookReelsBlockingEnabled(enabled)
+            RTLog.appState.notice(
+                "setRealtimeFacebookReelsBlockingEnabled(\(enabled, privacy: .public))"
+            )
+            reload()
+            if enabled {
+                enforceRealtimeShieldAtRest()
+            } else {
+                clearFacebookShieldIfDisabled()
+            }
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+            reload()
+        } catch SharedStoreError.invalidValue {
+            lastError = AppLocalization.string("Choose the Facebook app before enabling Reels blocking.")
+            reload()
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+    }
+
+    func setRealtimeXReelsBlockingEnabled(_ enabled: Bool) {
+        guard !enabled || xModelSelected else {
+            lastError = AppLocalization.string("Select Cascade V8 or V10 before enabling X blocking.")
+            return
+        }
+        do {
+            _ = try SharedStore.setRealtimeXReelsBlockingEnabled(enabled)
+            RTLog.appState.notice(
+                "setRealtimeXReelsBlockingEnabled(\(enabled, privacy: .public))"
+            )
+            reload()
+            if enabled {
+                enforceRealtimeShieldAtRest()
+            } else {
+                clearXShieldIfDisabled()
+            }
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+            reload()
+        } catch SharedStoreError.invalidValue {
+            lastError = AppLocalization.string("Choose the X app before enabling Reels blocking.")
+            reload()
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+    }
+
     func setRealtimeInstagramStoriesBlockingEnabled(_ enabled: Bool) {
         do {
             _ = try SharedStore.setRealtimeInstagramStoriesBlockingEnabled(enabled)
@@ -404,9 +594,48 @@ final class AppState: ObservableObject {
         }
     }
 
+    func setRealtimeFacebookStoriesBlockingEnabled(_ enabled: Bool) {
+        guard !enabled || facebookModelSelected else {
+            lastError = AppLocalization.string("Select Cascade V7 before enabling Facebook blocking.")
+            return
+        }
+        do {
+            _ = try SharedStore.setRealtimeFacebookStoriesBlockingEnabled(enabled)
+            RTLog.appState.notice(
+                "setRealtimeFacebookStoriesBlockingEnabled(\(enabled, privacy: .public))"
+            )
+            reload()
+            if enabled {
+                enforceRealtimeShieldAtRest()
+            } else {
+                clearFacebookShieldIfDisabled()
+            }
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+            reload()
+        } catch SharedStoreError.invalidValue {
+            lastError = AppLocalization.string("Choose the Facebook app before enabling Stories blocking.")
+            reload()
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+    }
+
     private func clearInstagramShieldIfDisabled() {
         if !snapshot.realtimeInstagramBlockingEnabled {
             ManagedSettingsApplier.clear(surface: .instagram)
+        }
+    }
+
+    private func clearFacebookShieldIfDisabled() {
+        if !snapshot.realtimeFacebookBlockingEnabled {
+            ManagedSettingsApplier.clear(surface: .facebook)
+        }
+    }
+
+    private func clearXShieldIfDisabled() {
+        if !snapshot.realtimeXBlockingEnabled {
+            ManagedSettingsApplier.clear(surface: .x)
         }
     }
 
@@ -439,6 +668,21 @@ final class AppState: ObservableObject {
             ManagedSettingsApplier.apply(surface: .instagram, selection: selection)
         } else {
             ManagedSettingsApplier.clear(surface: .instagram)
+        }
+        if facebookModelSelected, snapshot.realtimeFacebookBlockingEnabled,
+           let data = snapshot.facebookSelectionData,
+           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
+            ManagedSettingsApplier.apply(surface: .facebook, selection: selection)
+        } else {
+            ManagedSettingsApplier.clear(surface: .facebook)
+        }
+
+        if xModelSelected, snapshot.realtimeXBlockingEnabled,
+           let data = snapshot.xSelectionData,
+           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
+            ManagedSettingsApplier.apply(surface: .x, selection: selection)
+        } else {
+            ManagedSettingsApplier.clear(surface: .x)
         }
     }
 

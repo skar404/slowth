@@ -94,6 +94,7 @@
         document.documentElement.setAttribute("data-unscroll-" + site + "-" + feature,
           String(settings[feature] && (feature === "all" || !settings.all)));
       }
+      if (opts.onStateApplied) opts.onStateApplied();
       if (settings.all) {
         removeHideStyle(STYLE_ID);
         compiledRedirects = [];
@@ -144,6 +145,7 @@
 
     const refresh = () => sendMessage({ type: "get-state" }).then(applyState);
     window.addEventListener("focus", refresh);
+    window.addEventListener("pageshow", refresh);
     setInterval(() => {
       if (document.visibilityState !== "hidden") refresh();
     }, ns.STATE_CACHE_TTL_MS);

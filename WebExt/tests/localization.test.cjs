@@ -190,10 +190,13 @@ for (const namespace of ['browser', 'chrome']) {
       assert.ok(elements.get('onboarding').classes.has('hidden'));
       assert.equal(translated.find(el => el.dataset.i18n === 'strictMode').textContent, messages.strictMode.message);
       const switches = elements.get('sites').querySelectorAll('input');
-      assert.equal(switches.length, 11);
+      assert.equal(switches.length, 12);
       assert.equal(switches[0].dataset.feature, 'all');
       assert.equal(switches[0].checked, false);
       assert.equal(switches[1].checked, true);
+      const youtubeFeed = switches.find(input => input.dataset.site === 'youtube' && input.dataset.feature === 'feed');
+      assert.equal(youtubeFeed.checked, false);
+      assert.equal(youtubeFeed.disabled, false);
       const labels = elements.get('sites').querySelectorAll('span');
       assert.equal(elements.get('sites').querySelectorAll('strong')[0].textContent, 'YouTube');
       assert.ok(labels.some(label => label.textContent === messages.blockShorts.message));
@@ -201,7 +204,10 @@ for (const namespace of ['browser', 'chrome']) {
       assert.ok(elements.get('rules-status').textContent.startsWith(messages.rulesRelative.message.split('$1')[0]));
       state.strictModeUntil = Date.now() / 1000 + 3600;
       await context.__unscrollRefresh();
-      assert.ok(switches.every(input => input.disabled));
+      for (const input of switches) {
+        assert.equal(input.disabled, input.dataset.feature === 'all' || input.checked);
+      }
+      assert.equal(youtubeFeed.disabled, false, 'Strict mode permits strengthening the policy');
       assert.ok(elements.get('strict-toggle').disabled);
       assert.ok(elements.get('strict-banner-text').textContent.startsWith(messages.strictUntil.message.split('$1')[0]));
     });
@@ -260,7 +266,7 @@ test('extension CSS and overlays use logical direction without changing host dir
   for (const file of ['app.css', 'blocked.css']) {
     assert.doesNotMatch(read(file), /(?:text-align\s*:\s*(?:left|right)|(?:margin|padding|border)-(?:left|right)\s*:|^\s*(?:left|right)\s*:)/m, file);
   }
-  for (const file of ['content/instagram.js', 'content/facebook.js']) {
+  for (const file of ['content/instagram.js', 'content/facebook.js', 'content/youtube.js']) {
     assert.match(read(file), /ns\.i18n\.setLocale\(wrap\)/);
     assert.doesNotMatch(read(file), /(?:document\.documentElement|root)\.(?:dir|lang)\s*=/);
   }

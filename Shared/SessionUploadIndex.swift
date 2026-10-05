@@ -63,9 +63,10 @@ struct SessionUploadReceipt: Decodable {
 }
 
 enum SessionUploadError: LocalizedError {
-    case http(Int), receipt, permission, busy, size
+    case http(Int), receipt, permission, busy, size, serverURL
     var errorDescription: String? {
         switch self {
+        case .serverURL: return "Enter the labeler’s HTTPS address in Labeler connection, without a username, password, query or fragment."
         case .http(409): return "This recording UUID already has a different snapshot on the server. Nothing was overwritten. Review it in the labeler; do not change the UUID to bypass this conflict."
         case .http(401): return "Authentication failed. Configure the private labeler credential again."
         case .http(let status): return "Upload was not accepted (HTTP \(status)). Retry manually."

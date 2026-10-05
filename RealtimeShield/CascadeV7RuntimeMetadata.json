@@ -1,0 +1,83 @@
+{
+  "architecture": "cascade-spatial-v1",
+  "components": {
+    "facebook": {
+      "checkpoint_sha256": "2eefca4ec008b6a587362c1901295f63964b52426a51d7ecda8241eadba0d519",
+      "labels": [
+        "reels",
+        "stories",
+        "normal"
+      ],
+      "resource": "FacebookDetector"
+    },
+    "instagram": {
+      "checkpoint_sha256": "d0caf6364e2ef8d5285edd5a8ba8eb1dca332fc467a99e37bc24114fc8565ecf",
+      "labels": [
+        "reels",
+        "stories",
+        "normal"
+      ],
+      "resource": "InstagramDetector"
+    },
+    "router": {
+      "checkpoint_sha256": "8b799122d2c8260cb37f20f9705a10b4d5e460f802273ab1aafd8b70273b8351",
+      "labels": [
+        "youtube",
+        "instagram",
+        "other",
+        "facebook"
+      ],
+      "resource": "AppRouter"
+    },
+    "youtube": {
+      "checkpoint_sha256": "45c8c0b1c2c629bdca35a0c9184c98cdb6fc6e0ce2eabcee6f365792ee83e4e7",
+      "labels": [
+        "shorts",
+        "normal"
+      ],
+      "resource": "YouTubeDetector"
+    }
+  },
+  "compute_precision": "float32",
+  "contract": "v7",
+  "input": {
+    "color": "RGB",
+    "height": 384,
+    "scale": 0.00392156862745098,
+    "width": 192
+  },
+  "model_version": "cascade-v7-facebook-20260928-114500",
+  "policy": {
+    "routing": {
+      "facebook": {
+        "confidence": 0.5,
+        "margin": 0.1
+      },
+      "instagram": {
+        "confidence": 0.95,
+        "margin": 0.2
+      },
+      "youtube": {
+        "confidence": 0.95,
+        "margin": 0.2
+      }
+    },
+    "temporal": {
+      "interval_seconds": 0.25,
+      "max_gap_seconds": 1.25,
+      "required_hits": 3,
+      "window_frames": 5
+    },
+    "thresholds": {
+      "facebook_reels": 0.3270526188986499,
+      "facebook_stories": 0.6773880501108824,
+      "instagram_reels": 0.0525164429564029,
+      "instagram_stories": 0.1534639671444893,
+      "youtube_shorts": 0.12778455623159868
+    },
+    "version": 2
+  },
+  "schema_version": 1,
+  "status": "experimental",
+  "validation_status": "failed"
+}

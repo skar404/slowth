@@ -21,9 +21,16 @@ struct CascadePolicy: Decodable {
     let thresholds: [String: Double]
     let temporal: Temporal
 
+    var appLabels: [SurfaceApp] { version == 3 ? SurfaceApp.allCases : version == 2 ? SurfaceApp.legacyCases + [.facebook] : SurfaceApp.legacyCases }
+
     func validate() throws {
-        guard version == 1, Set(routing.keys) == ["youtube", "instagram"],
-              Set(thresholds.keys) == ["youtube_shorts", "instagram_reels", "instagram_stories"],
+        var apps: Set<String> = version >= 2 ? ["youtube", "instagram", "facebook"] : ["youtube", "instagram"]
+        var targets: Set<String> = version >= 2
+            ? ["youtube_shorts", "instagram_reels", "instagram_stories", "facebook_reels", "facebook_stories"]
+            : ["youtube_shorts", "instagram_reels", "instagram_stories"]
+        if version == 3 { apps.insert("x"); targets.insert("x_reels") }
+        guard [1, 2, 3].contains(version), Set(routing.keys) == apps,
+              Set(thresholds.keys) == targets,
               routing.values.allSatisfy({
                   $0.confidence.isFinite && (0...1).contains($0.confidence)
                     && $0.margin.isFinite && (0...1).contains($0.margin)
@@ -36,12 +43,12 @@ struct CascadePolicy: Decodable {
     }
 
     func route(_ values: [Double]) throws -> SurfaceRouting {
-        try Self.validateProbabilities(values, count: 3)
+        try Self.validateProbabilities(values, count: appLabels.count)
         var winner = 0
         for index in 1..<values.count where values[index] > values[winner] { winner = index }
         let gap = temporal.maxGapSeconds
         guard winner != 2 else { return SurfaceRouting(app: nil, reason: "other", maxEvidenceGapSeconds: gap) }
-        let app: SurfaceApp = winner == 0 ? .youtube : .instagram
+        let app = appLabels[winner]
         guard let cutoff = routing[app.rawValue] else { throw CascadeClassifierError.invalid("routing") }
         let second = values.enumerated().filter { $0.offset != winner }.map(\.element).max() ?? 0
         if values[winner] < cutoff.confidence {
@@ -53,22 +60,26 @@ struct CascadePolicy: Decodable {
         return SurfaceRouting(app: app, reason: "accepted", maxEvidenceGapSeconds: gap)
     }
 
-    static func enabledApps(youtube: Bool, reels: Bool, stories: Bool) -> Set<SurfaceApp> {
+    static func enabledApps(youtube: Bool, reels: Bool, stories: Bool, facebookReels: Bool = false, facebookStories: Bool = false, xReels: Bool = false) -> Set<SurfaceApp> {
         var apps: Set<SurfaceApp> = []
         if youtube { apps.insert(.youtube) }
         if reels || stories { apps.insert(.instagram) }
+        if facebookReels || facebookStories { apps.insert(.facebook) }
+        if xReels { apps.insert(.x) }
         return apps
     }
 
     func predict(enabledApps: Set<SurfaceApp>, run: (String) throws -> [Double]) throws -> SurfacePrediction {
         let app = try run("router")
-        try Self.validateProbabilities(app, count: 3)
+        try Self.validateProbabilities(app, count: appLabels.count)
         var routing = try route(app)
         if let accepted = routing.app, !enabledApps.contains(accepted) {
             routing = SurfaceRouting(app: nil, reason: "disabled", maxEvidenceGapSeconds: routing.maxEvidenceGapSeconds)
         }
         var youtube: [YouTubeContent: Double] = [:]
         var instagram: [InstagramContent: Double] = [:]
+        var facebook: [FacebookContent: Double] = [:]
+        var x: [XContent: Double] = [:]
         switch routing.app {
         case .youtube:
             let values = try run("youtube")
@@ -78,11 +89,19 @@ struct CascadePolicy: Decodable {
             let values = try run("instagram")
             try Self.validateProbabilities(values, count: 3)
             instagram = Dictionary(uniqueKeysWithValues: InstagramContent.allCases.enumerated().map { ($0.element, values[$0.offset]) })
+        case .facebook:
+            let values = try run("facebook")
+            try Self.validateProbabilities(values, count: 3)
+            facebook = Dictionary(uniqueKeysWithValues: FacebookContent.allCases.enumerated().map { ($0.element, values[$0.offset]) })
+        case .x:
+            let values = try run("x")
+            try Self.validateProbabilities(values, count: 2)
+            x = Dictionary(uniqueKeysWithValues: XContent.allCases.enumerated().map { ($0.element, values[$0.offset]) })
         default: break
         }
         return SurfacePrediction(
-            appProbabilities: Dictionary(uniqueKeysWithValues: SurfaceApp.allCases.enumerated().map { ($0.element, app[$0.offset]) }),
-            youtubeContentProbabilities: youtube, instagramContentProbabilities: instagram, routing: routing)
+            appProbabilities: Dictionary(uniqueKeysWithValues: appLabels.enumerated().map { ($0.element, app[$0.offset]) }),
+            youtubeContentProbabilities: youtube, instagramContentProbabilities: instagram, facebookContentProbabilities: facebook, xContentProbabilities: x, routing: routing)
     }
 
     static func validateProbabilities(_ values: [Double], count: Int) throws {
@@ -106,10 +125,28 @@ enum CascadeClassifierError: LocalizedError {
 
 /// Explicit identities and bundle names for frozen experimental candidates.
 enum CascadeCandidate {
-    case v3, v4, v5, v6
+    case v3, v4, v5, v6, v7, v8, v10
 
     var metadataResource: String {
         switch self {
+        case .v10:
+            #if DEBUG
+            return "CascadeV10Metadata"
+            #else
+            return "CascadeV10RuntimeMetadata"
+            #endif
+        case .v8:
+            #if DEBUG
+            return "CascadeV8Metadata"
+            #else
+            return "CascadeV8RuntimeMetadata"
+            #endif
+        case .v7:
+            #if DEBUG
+            return "CascadeV7Metadata"
+            #else
+            return "CascadeV7RuntimeMetadata"
+            #endif
         case .v3: return "CascadeMetadata"
         case .v4: return "CascadeV4Metadata"
         case .v5: return "CascadeV5Metadata"
@@ -123,6 +160,9 @@ enum CascadeCandidate {
     }
     var modelVersion: String {
         switch self {
+        case .v10: return "cascade-v10-balanced-20260929-140403-diverse"
+        case .v8: return "cascade-v8-x-20260928"
+        case .v7: return "cascade-v7-facebook-20260928-114500"
         case .v3: return "cascade-v3-updated-20260914-100247"
         case .v4: return "cascade-v4-20260919"
         case .v5: return "cascade-v5-20260920-1018"
@@ -131,6 +171,24 @@ enum CascadeCandidate {
     }
     var metadataSHA256: String {
         switch self {
+        case .v10:
+            #if DEBUG
+            return "f7fd1ae118afadc139c3e95b4e5bc9eb86eb801da770e5bf2194190320a66760"
+            #else
+            return "41ee86e2d0410dd455297c31c8a839aa2d72fb2b39a9698060e0a412ae63896a"
+            #endif
+        case .v8:
+            #if DEBUG
+            return "14d08357cc7bedc7f93fff18e380800ee30e06e279aed50f276efbb9df325977"
+            #else
+            return "861bc15a5c51cd477f1a044f2922ab30a8af4cfd77b4c9d5b638ec5d676aa1c8"
+            #endif
+        case .v7:
+            #if DEBUG
+            return "a18028d31e1ebc71a87a35ad48aea4c7740ff2a23a954c6a1059d6c5ac796c79"
+            #else
+            return "386758bcf18a12f2ee2336986875029816ef21f1dce892c506e7b9fa746273f6"
+            #endif
         case .v3: return CascadeModelMetadata.debugMetadataSHA256
         case .v4: return "19e58b295b39a3fbf5fedca00bc80a176b6ecc6b4a62a6ed5cafde34c4ec59e9"
         case .v5: return "5e83dfb960b19f5b0e3cd26d4bb6a4403432d2a56d24340e96f4d6c5c3c26291"
@@ -145,6 +203,9 @@ enum CascadeCandidate {
     }
     func resource(_ base: String) -> String {
         switch self {
+        case .v10: return base + "V10"
+        case .v8: return base + "V8"
+        case .v7: return base + "V7"
         case .v3: return base
         case .v4: return base + "V4"
         case .v5: return base + "V5"
@@ -160,6 +221,7 @@ struct CascadeModelMetadata: Decodable {
         let labels: [String]
         let checkpointSha256: String
     }
+    let contract: String?
     let schemaVersion: Int
     let modelVersion: String
     let architecture: String
@@ -193,15 +255,22 @@ struct CascadeModelMetadata: Decodable {
     }
 
     func validate() throws {
-        let expected = ["router": SurfaceApp.allCases.map(\.rawValue),
+        var expected = ["router": policy.appLabels.map(\.rawValue),
                         "youtube": YouTubeContent.allCases.map(\.rawValue),
                         "instagram": InstagramContent.allCases.map(\.rawValue)]
+        if policy.version >= 2 { expected["facebook"] = FacebookContent.allCases.map(\.rawValue) }
+        if policy.version == 3 { expected["x"] = XContent.allCases.map(\.rawValue) }
+        guard (policy.version == 1 && (contract == nil || contract == "v1")) || (policy.version == 2 && contract == "v7") || (policy.version == 3 && contract == "v8") else {
+            throw CascadeClassifierError.invalid("contract")
+        }
         guard !modelVersion.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               schemaVersion == 1, architecture == "cascade-spatial-v1", computePrecision == "float32",
               (validationStatus == "passed" ||
                 ([CascadeCandidate.v3.modelVersion, CascadeCandidate.v4.modelVersion, CascadeCandidate.v5.modelVersion,
                   CascadeCandidate.v6.modelVersion].contains(modelVersion) &&
-                 status == "candidate_unverified" && validationStatus == "failed")),
+                 status == "candidate_unverified" && validationStatus == "failed") ||
+                ([CascadeCandidate.v7.modelVersion, CascadeCandidate.v8.modelVersion, CascadeCandidate.v10.modelVersion].contains(modelVersion) && status == "experimental"
+                 && validationStatus == "failed")),
               input.width == 192, input.height == 384,
               input.color == "RGB", abs(input.scale - 1 / 255.0) < 1e-12,
               Set(components.keys) == Set(expected.keys),
@@ -209,6 +278,8 @@ struct CascadeModelMetadata: Decodable {
               components["router"]?.resource == "AppRouter",
               components["youtube"]?.resource == "YouTubeDetector",
               components["instagram"]?.resource == "InstagramDetector",
+              (policy.version == 1 || components["facebook"]?.resource == "FacebookDetector"),
+              (policy.version != 3 || components["x"]?.resource == "XDetector"),
               components.values.allSatisfy({
                   $0.checkpointSha256.range(of: "^[0-9a-f]{64}$", options: .regularExpression) != nil
               }) else {
@@ -227,7 +298,7 @@ struct CascadeModelMetadata: Decodable {
     }
 
     var surfaceMetadata: SurfaceModelMetadata {
-        SurfaceModelMetadata(modelVersion: modelVersion, appLabels: SurfaceApp.allCases.map(\.rawValue),
+        SurfaceModelMetadata(modelVersion: modelVersion, appLabels: policy.appLabels.map(\.rawValue),
             youtubeContentLabels: YouTubeContent.allCases.map(\.rawValue),
             instagramContentLabels: InstagramContent.allCases.map(\.rawValue),
             inputWidth: input.width, inputHeight: input.height, confidenceThresholds: policy.thresholds,

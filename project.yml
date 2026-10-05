@@ -28,8 +28,8 @@ fileGroups:
 settings:
   base:
     SWIFT_VERSION: "5.9"
-    MARKETING_VERSION: "0.9.4"
-    CURRENT_PROJECT_VERSION: 11
+    MARKETING_VERSION: "2026.8.2"
+    CURRENT_PROJECT_VERSION: 13
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
     ENABLE_HARDENED_RUNTIME: YES
@@ -53,7 +53,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
         PRODUCT_NAME: Slowth
-        CURRENT_PROJECT_VERSION: 11
+        CURRENT_PROJECT_VERSION: 13
         INFOPLIST_FILE: App/Info.plist
         CODE_SIGN_ENTITLEMENTS: App/Unscroll.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -76,9 +76,12 @@ targets:
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
+          - "AppReviewCoordinator.swift"
+          - "AppReviewPrompt.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
           - "RealtimeBlockingBetaSheet.swift"
+          - "HowItWorksSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
       - path: WebExt/manifest.json
@@ -116,7 +119,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Extension
         PRODUCT_NAME: UnscrollExtension
-        CURRENT_PROJECT_VERSION: 11
+        CURRENT_PROJECT_VERSION: 13
         INFOPLIST_FILE: Extension/Info.plist
         CODE_SIGN_ENTITLEMENTS: Extension/UnscrollExtension.entitlements
         SKIP_INSTALL: YES
@@ -137,14 +140,49 @@ targets:
         # iOS compiles both ContentView_iOS.swift and ContentView_macOS.swift —
         # the iOS UI is default, macOS-style is a "Compact" alternative selected
         # at runtime via @AppStorage("uiMode").
+      # Cascade V10 diverse is the default; qualification remains experimental.
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
+        optional: true # Full training metadata is only used in Debug.
+      # Retain V8 for explicit Debug comparisons.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json
+        optional: true # Full training metadata is only used in Debug.
+      # Retain V7 for explicit Debug comparisons.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json
+        optional: true # Private experimental exports can be absent.
       # Frozen experimental V15 / V6: quality failed; V15 validation CoreML parity failed.
       - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage
         optional: true # Debug-only exports are absent in public release checkouts.
       - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage
+        optional: true # Legacy Debug candidate; not required for Release.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage
+        optional: true # Legacy Debug candidate; not required for Release.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage
+        optional: true # Legacy Debug candidate; not required for Release.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
       - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage
@@ -197,15 +235,50 @@ targets:
           - "UnscrollBroadcast.entitlements"
           - "SurfaceDetector.mlpackage"
           - "SurfaceDetectorMetadata.json"
-      # Release uses Cascade V6 only; Debug also bundles V14/V15 and full calibration metadata.
+      # Release uses Cascade V10 with compact metadata; Debug retains legacy candidates.
+      # Cascade V10 diverse is the default; qualification remains experimental.
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
+      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
+        optional: true # Full training metadata is only used in Debug.
+      # Retain V8 for explicit Debug comparisons.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json
+        optional: true # Full training metadata is only used in Debug.
+      # Retain V7 for explicit Debug comparisons.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage
+        optional: true # Legacy Debug model.
+      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json
+        optional: true # Private experimental exports can be absent.
       # Frozen experimental V15 / V6: quality failed; V15 validation CoreML parity failed.
       - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage
         optional: true # Debug-only exports are absent in public release checkouts.
       - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage
+        optional: true # Legacy Debug candidate; not required for Release.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage
+        optional: true # Legacy Debug candidate; not required for Release.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage
+        optional: true # Legacy Debug candidate; not required for Release.
       - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
       - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage
@@ -218,17 +291,20 @@ targets:
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
+          - "AppReviewCoordinator.swift"
+          - "AppReviewPrompt.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
           - "RealtimeBlockingBetaSheet.swift"
+          - "HowItWorksSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
     settings:
       configs:
         Debug:
-          EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) CascadeV6RuntimeMetadata.json"
+          EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) CascadeV6RuntimeMetadata.json CascadeV7RuntimeMetadata.json CascadeV8RuntimeMetadata.json CascadeV10RuntimeMetadata.json"
         Release:
-          EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) SurfaceDetectorV14.mlpackage SurfaceDetectorV14Metadata.json SurfaceDetectorV15.mlpackage SurfaceDetectorV15Metadata.json CascadeV6Metadata.json"
+          EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) SurfaceDetectorV14.mlpackage SurfaceDetectorV14Metadata.json SurfaceDetectorV15.mlpackage SurfaceDetectorV15Metadata.json CascadeV6Metadata.json AppRouterV6.mlpackage YouTubeDetectorV6.mlpackage InstagramDetectorV6.mlpackage CascadeV6RuntimeMetadata.json CascadeV7Metadata.json CascadeV7RuntimeMetadata.json AppRouterV7.mlpackage YouTubeDetectorV7.mlpackage InstagramDetectorV7.mlpackage FacebookDetectorV7.mlpackage CascadeV8Metadata.json CascadeV8RuntimeMetadata.json AppRouterV8.mlpackage YouTubeDetectorV8.mlpackage InstagramDetectorV8.mlpackage FacebookDetectorV8.mlpackage XDetectorV8.mlpackage CascadeV10Metadata.json"
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Broadcast
         PRODUCT_NAME: UnscrollBroadcastIOS
@@ -286,9 +362,12 @@ targets:
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
+          - "AppReviewCoordinator.swift"
+          - "AppReviewPrompt.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
           - "RealtimeBlockingBetaSheet.swift"
+          - "HowItWorksSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
     settings:
@@ -316,9 +395,12 @@ targets:
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
+          - "AppReviewCoordinator.swift"
+          - "AppReviewPrompt.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
           - "RealtimeBlockingBetaSheet.swift"
+          - "HowItWorksSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
     settings:
@@ -342,9 +424,12 @@ targets:
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
+          - "AppReviewCoordinator.swift"
+          - "AppReviewPrompt.swift"
           - "ContentView_iOS.swift"
           - "ContentView_macOS.swift"
           - "RealtimeBlockingBetaSheet.swift"
+          - "HowItWorksSheet.swift"
           - "AppState.swift"
           - "TipStore.swift"
       - path: WebExt/manifest.json
@@ -388,17 +473,61 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
 
 schemes:
-  Unscroll:
+  Debug - macOS:
     build:
       targets:
         Unscroll: all
     run:
       config: Debug
       storeKitConfiguration: Configs/Slowth.storekit
-  Unscroll (iOS):
+    test:
+      config: Debug
+    profile:
+      config: Debug
+    analyze:
+      config: Debug
+    archive:
+      config: Debug
+  Release - macOS:
+    build:
+      targets:
+        Unscroll: all
+    run:
+      config: Release
+    test:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Release
+    archive:
+      config: Release
+  Debug - iOS:
     build:
       targets:
         UnscrollIOS: all
     run:
       config: Debug
       storeKitConfiguration: Configs/Slowth.storekit
+    test:
+      config: Debug
+    profile:
+      config: Debug
+    analyze:
+      config: Debug
+    archive:
+      config: Debug
+  Relise - iOS:
+    build:
+      targets:
+        UnscrollIOS: all
+    run:
+      config: Release
+    test:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Release
+    archive:
+      config: Release
