@@ -84,7 +84,7 @@ or models. **Release evidence and TestFlight** runs manually on main or via the
 `ci` command. Validation and TestFlight paths both build iOS only.
 
 Actions are pinned by commit; tool versions are Python 3.12.9, Node 22.14.0,
-XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.2 / 17C52. The `macos-26`
+XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.6 / 17F113. The `macos-26`
 runner image can change; its version is recorded. A missing pinned Xcode fails
 the build instead of selecting another version.
 

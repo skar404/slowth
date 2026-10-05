@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub runner images move; fail rather than silently selecting another Xcode.
-test "$(xcodebuild -version)" = $'Xcode 26.2\nBuild version 17C52'
+test "$(xcodebuild -version)" = $'Xcode 26.6\nBuild version 17F113'
 tool_dir="${RUNNER_TEMP:?}/slowth-tools"
 mkdir -p "$tool_dir"
 curl --fail --location --silent --show-error --retry 3 \
