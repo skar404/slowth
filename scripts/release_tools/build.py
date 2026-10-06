@@ -96,16 +96,18 @@ def main(argv=None):
     parser.add_argument('mode', choices=['check', 'build'])
     parser.add_argument('--model-bundle', type=Path)
     parser.add_argument('--output', type=Path)
-    parser.add_argument('--platform', choices=['iOS'], default='iOS')
+    parser.add_argument('--platform', choices=['iOS', 'macOS', 'both'], default='both')
     parser.add_argument('--testflight', action='store_true')
     args = parser.parse_args(argv)
     official = os.environ.get('GITHUB_ACTIONS') == 'true'
-    release.require(not args.testflight or (args.mode == 'build' and args.platform == 'iOS' and official),
-                    'TestFlight requires an official iOS-only CI build')
+    release.require(not args.testflight or (args.mode == 'build' and args.platform in ('iOS', 'both') and official),
+                    'TestFlight requires an official CI build including iOS')
     if args.mode != 'check':
         release.require(args.output is not None, '--output is required')
         output = args.output.resolve()
         output.mkdir(parents=True, exist_ok=False)
+        public = output / 'public'
+        public.mkdir()
     with tempfile.TemporaryDirectory(prefix='slowth-ci-') as temp:
         source, head, tree = release.snapshot(ROOT, Path(temp))
         if args.mode == 'check':
@@ -115,9 +117,15 @@ def main(argv=None):
         version, build, spec = release.versions(source)
         provenance = identity(source, head, tree, version, build, official)
         signing = None
+        mac_signing = None
         try:
             # Local developer credentials are never copied into the CI snapshot.
             if args.testflight:
+                if args.platform == 'both':
+                    from .macos import MacSigning
+                    mac_signing = MacSigning(output / 'macos-signing')
+                    mac_signing.preflight()
+                    mac_signing.configure(source, spec)
                 from . import signing as ci_signing
                 signing = ci_signing.Signing(output / 'signing')
                 signing.preflight(version, build)
@@ -127,12 +135,15 @@ def main(argv=None):
             # Reuse model import, generated resource, version and Node-test checks.
             release.prepare(source, source, args.model_bundle.resolve(), spec)
             generate_project(source, spec)
-            platforms = ['iOS', 'macOS'] if args.platform == 'both' else [args.platform]
+            platforms = ['macOS', 'iOS'] if args.platform == 'both' else [args.platform]
             records = {}
+            archives = {}
             for platform in platforms:
+                signed = (signing if platform == 'iOS' else mac_signing) is not None
                 archive, bundles = build_archive(source, output, platform, version, build, provenance,
-                                                 signed=signing is not None)
-                records[platform] = {'code_signed': signing is not None, 'bundles': bundles}
+                                                 signed=signed)
+                archives[platform] = archive
+                records[platform] = {'code_signed': signed, 'bundles': bundles}
             manifest = {
                 **provenance, 'kind': 'testflight-upload' if signing else 'unsigned-validation',
                 'tools': {name: release.run(*cmd, capture=True).decode().strip() for name, cmd in {
@@ -151,19 +162,27 @@ def main(argv=None):
                                'Remote rules can change independently of the app. '
                                'Native language switching and WebKit UI tests are not run by this workflow.',
             }
+            if mac_signing:
+                manifest['macos'] = mac_signing.export_notarize(archives['macOS'], output, version, build, provenance)
+                records['macOS']['bundles'] = manifest['macos'].pop('bundles')
+                manifest['checks'] += ['developer-id-signature', 'universal-macos', 'apple-notarization', 'stapled-ticket', 'gatekeeper']
             if signing:
-                ipa = signing.export(archive, output, version, build, provenance, source)
+                ipa = signing.export(archives['iOS'], output, version, build, provenance, source)
                 manifest['ipa'] = {'name': ipa.name, 'sha256': release.sha(ipa)}
                 # altool sends exactly this export, without rebuilding or exporting again.
                 manifest['app_store_connect'] = signing.upload(ipa, build)
+                shutil.copyfile(ipa, public / 'Unscroll.ipa')
+                release.require(release.sha(public / 'Unscroll.ipa') == manifest['ipa']['sha256'], 'Retained IPA differs')
                 manifest['checks'] += ['code-signature', 'exported-ipa', 'app-store-processing']
-            public = output / 'public'
-            public.mkdir()
             path = public / 'build-manifest.json'
             write_json(path, manifest)
             release.check_contents(path.name, path.read_bytes())
-            release.checksums(public, [path])
+            release.checksums(public, sorted(public.iterdir()))
             print(f'Public evidence: {public}')
         finally:
-            if signing:
-                signing.cleanup()
+            try:
+                if signing:
+                    signing.cleanup()
+            finally:
+                if mac_signing:
+                    mac_signing.cleanup()

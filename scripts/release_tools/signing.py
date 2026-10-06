@@ -138,39 +138,47 @@ class Signing:
         data = {name: required(secret) for name, secret in profile_secrets.items()}
         identifiers = {name: target['settings']['base']['PRODUCT_BUNDLE_IDENTIFIER'].replace(
             '$(BUNDLE_ID_PREFIX)', self.prefix) for name, target in targets.items()}
-        cert = self.directory / 'distribution.p12'
-        cert.write_bytes(base64.b64decode(required('APPLE_CERTIFICATE_P12_BASE64'), validate=True))
-        password = secrets.token_urlsafe(32)
-        self.original_keychains = quiet('security', 'list-keychains', '-d', 'user').decode()
-        quiet('security', 'create-keychain', '-p', password, self.keychain)
-        quiet('security', 'set-keychain-settings', '-lut', '21600', self.keychain)
-        quiet('security', 'unlock-keychain', '-p', password, self.keychain)
-        quiet('security', 'import', cert, '-P', required('APPLE_CERTIFICATE_PASSWORD'),
-              '-t', 'cert', '-f', 'pkcs12', '-k', self.keychain, '-T', '/usr/bin/codesign', '-T', '/usr/bin/security')
-        quiet('security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:',
-              '-k', password, self.keychain)
-        import shlex
-        quiet('security', 'list-keychains', '-d', 'user', '-s', self.keychain,
-              *shlex.split(self.original_keychains))
+        self.install_certificate('APPLE_CERTIFICATE_P12_BASE64', 'APPLE_CERTIFICATE_PASSWORD')
         for name, bundle_id in identifiers.items():
             temporary = self.directory / f'{name}.mobileprovision'
             temporary.write_bytes(base64.b64decode(data[name], validate=True))
             profile = plistlib.loads(quiet('security', 'cms', '-D', '-i', temporary))
             validate_profile(profile, bundle_id, self.team)
-            uuid = profile['UUID']
-            for folder in ['Library/MobileDevice/Provisioning Profiles',
-                           'Library/Developer/Xcode/UserData/Provisioning Profiles']:
-                target = Path.home() / folder / f'{uuid}.mobileprovision'
-                target.parent.mkdir(parents=True, exist_ok=True)
-                release.require(not target.exists(), 'Refusing to overwrite an installed profile')
-                self.profiles.append(target)
-                shutil.copyfile(temporary, target)
+            uuid = self.install_profile(temporary, profile)
             self.profile_map[bundle_id] = uuid
             settings = targets[name]['settings']['base']
             settings.update(CODE_SIGN_STYLE='Manual', CODE_SIGN_IDENTITY='Apple Distribution',
                             PROVISIONING_PROFILE_SPECIFIER=uuid, DEVELOPMENT_TEAM=self.team)
         (source / 'Configs/Local.xcconfig').write_text(
             f'DEVELOPMENT_TEAM = {self.team}\nBUNDLE_ID_PREFIX = {self.prefix}\n')
+
+    def install_certificate(self, certificate_secret, password_secret):
+        cert = self.directory / 'distribution.p12'
+        cert.write_bytes(base64.b64decode(required(certificate_secret), validate=True))
+        password = secrets.token_urlsafe(32)
+        self.original_keychains = quiet('security', 'list-keychains', '-d', 'user').decode()
+        quiet('security', 'create-keychain', '-p', password, self.keychain)
+        quiet('security', 'set-keychain-settings', '-lut', '21600', self.keychain)
+        quiet('security', 'unlock-keychain', '-p', password, self.keychain)
+        quiet('security', 'import', cert, '-P', required(password_secret),
+              '-t', 'cert', '-f', 'pkcs12', '-k', self.keychain, '-T', '/usr/bin/codesign', '-T', '/usr/bin/security')
+        quiet('security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:',
+              '-k', password, self.keychain)
+        import shlex
+        quiet('security', 'list-keychains', '-d', 'user', '-s', self.keychain,
+              *shlex.split(self.original_keychains))
+
+    def install_profile(self, temporary, profile):
+        uuid = profile['UUID']
+        release.require(re.fullmatch(r'[A-Fa-f0-9-]{36}', uuid), 'Invalid profile UUID')
+        for folder in ['Library/MobileDevice/Provisioning Profiles',
+                       'Library/Developer/Xcode/UserData/Provisioning Profiles']:
+            target = Path.home() / folder / f'{uuid}{temporary.suffix}'
+            target.parent.mkdir(parents=True, exist_ok=True)
+            release.require(not target.exists(), 'Refusing to overwrite an installed profile')
+            self.profiles.append(target)
+            shutil.copyfile(temporary, target)
+        return uuid
 
     def export(self, archive, output, version, build, provenance, source):
         from .build import validate_bundles

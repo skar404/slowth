@@ -1,4 +1,4 @@
-name: Release evidence and TestFlight
+name: iOS and macOS release builds
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
         default: Slowth-models.tar.gz
         type: string
       testflight:
-        description: Sign and upload iOS to TestFlight (main only; requires app-store secrets)
+        description: Sign both apps, notarize macOS and upload iOS to TestFlight
         default: false
         type: boolean
 
@@ -61,13 +61,13 @@ jobs:
           [[ "$MODEL_ASSET" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz$ ]]
           gh release download "$MODEL_RELEASE" --repo "$GITHUB_REPOSITORY" \
             --pattern "$MODEL_ASSET" --output "$RUNNER_TEMP/Slowth-models.tar.gz"
-      - name: Validate unsigned iOS archive
+      - name: Validate unsigned iOS and macOS archives
         if: ${{ !inputs.testflight }}
         run: >-
           python3 scripts/release.py build
           --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
           --output "$RUNNER_TEMP/slowth-build"
-      - name: Build, sign, verify and upload the exact iOS IPA
+      - name: Build both apps, notarize macOS and upload the exact iOS IPA
         if: inputs.testflight
         env:
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
@@ -78,6 +78,10 @@ jobs:
           ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
           APPLE_CERTIFICATE_P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_PROFILE_APP_BASE64: ${{ secrets.MACOS_PROFILE_APP_BASE64 }}
+          MACOS_PROFILE_SAFARI_BASE64: ${{ secrets.MACOS_PROFILE_SAFARI_BASE64 }}
           IOS_PROFILE_APP_BASE64: ${{ secrets.IOS_PROFILE_APP_BASE64 }}
           IOS_PROFILE_SAFARI_BASE64: ${{ secrets.IOS_PROFILE_SAFARI_BASE64 }}
           IOS_PROFILE_BROADCAST_BASE64: ${{ secrets.IOS_PROFILE_BROADCAST_BASE64 }}
@@ -88,12 +92,18 @@ jobs:
           python3 scripts/release.py build --testflight
           --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
           --output "$RUNNER_TEMP/slowth-build"
-      - name: Attest the exact uploaded IPA (only its digest is published)
+      - name: Attest the exact uploaded IPA
         if: inputs.testflight
         id: ipa-attestation
         uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
         with:
-          subject-path: ${{ runner.temp }}/slowth-build/export/*.ipa
+          subject-path: ${{ runner.temp }}/slowth-build/public/Unscroll.ipa
+      - name: Attest the notarized macOS download
+        if: inputs.testflight
+        id: macos-attestation
+        uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
+        with:
+          subject-path: ${{ runner.temp }}/slowth-build/public/Slowth-macOS.zip
       - name: Attest the public build manifest
         id: manifest-attestation
         uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
@@ -103,12 +113,16 @@ jobs:
         env:
           MANIFEST_ATTESTATION: ${{ steps.manifest-attestation.outputs.bundle-path }}
           IPA_ATTESTATION: ${{ steps.ipa-attestation.outputs.bundle-path }}
+          MACOS_ATTESTATION: ${{ steps.macos-attestation.outputs.bundle-path }}
         run: |
           cp "$MANIFEST_ATTESTATION" "$RUNNER_TEMP/slowth-build/public/manifest-attestation.jsonl"
           if [[ -n "$IPA_ATTESTATION" ]]; then
             cp "$IPA_ATTESTATION" "$RUNNER_TEMP/slowth-build/public/ipa-attestation.jsonl"
           fi
-      - name: Publish only verification metadata
+          if [[ -n "$MACOS_ATTESTATION" ]]; then
+            cp "$MACOS_ATTESTATION" "$RUNNER_TEMP/slowth-build/public/macos-attestation.jsonl"
+          fi
+      - name: Retain the allowlisted release artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: build-evidence-${{ github.run_id }}-${{ github.run_attempt }}
@@ -117,6 +131,9 @@ jobs:
             ${{ runner.temp }}/slowth-build/public/SHA256SUMS
             ${{ runner.temp }}/slowth-build/public/manifest-attestation.jsonl
             ${{ runner.temp }}/slowth-build/public/ipa-attestation.jsonl
+            ${{ runner.temp }}/slowth-build/public/macos-attestation.jsonl
+            ${{ runner.temp }}/slowth-build/public/Unscroll.ipa
+            ${{ runner.temp }}/slowth-build/public/Slowth-macOS.zip
           if-no-files-found: error
           retention-days: 90
       - name: Explain this result
@@ -126,6 +143,6 @@ jobs:
           if [[ "$TESTFLIGHT" == true ]]; then
             echo 'Verified IPA uploaded and processed by Apple. Select this same build for App Store review; do not rebuild it.' >> "$GITHUB_STEP_SUMMARY"
           else
-            echo 'Unsigned iOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Unsigned iOS and macOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
           fi
-          echo 'Download build-evidence to verify the manifest and attestations. No IPA, archive, credentials or raw logs are published.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Download build-evidence for the manifest and attestations; signed runs also retain the exact uploaded IPA and notarized Mac ZIP. Use release.py version to create a GitHub Release explicitly.' >> "$GITHUB_STEP_SUMMARY"

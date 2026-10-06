@@ -62,45 +62,53 @@ test resource set.
 Use **one entry point**: `python3 scripts/release.py`.
 
 ```sh
-# Source checks (no models or Apple credentials).
 python3 scripts/release.py check
 
-# Prepare model assets locally; does not sign or publish.
-python3 scripts/release.py models --tag models-v10-1
-
-# Publish to GitHub from a signed, committed source already on main.
-# Use a new output directory if you prepared this tag locally before.
-python3 scripts/release.py models --tag models-v10-1 \
-  --output release-output/models-v10-1-publish \
-  --gpg-key YOUR_GPG_FINGERPRINT --publish
-
-# Run the iOS workflow with the published model asset.
+# Validate both platforms without signing or uploading.
 python3 scripts/release.py ci --model-release models-v10-1
+
+# Build both apps: notarized Mac download + exact iOS IPA uploaded to TestFlight.
+# Increment every build number, regenerate, sign the commit and push main first.
 python3 scripts/release.py ci --model-release models-v10-1 --testflight
 
-# Local unsigned iOS archive and manifest, using a downloaded asset.
+# Create one GitHub Release for the app version from that successful run.
+# RUN_ID is printed by GitHub Actions; this command never rebuilds or uploads to Apple.
+python3 scripts/release.py version --run RUN_ID --model-release models-v10-1 \
+  --gpg-key YOUR_GPG_FINGERPRINT --publish
+
+# Local unsigned builds (both by default; --platform iOS or macOS selects one).
 python3 scripts/release.py build --model-bundle /path/to/Slowth-models.tar.gz \
-  --output /tmp/slowth-ios-validation
+  --output /tmp/slowth-validation
 ```
 
-`models --publish` checks the public snapshot and pinned model inputs, verifies
-the existing source commit's signature, signs checksums and a new model tag,
-pushes only that tag, uploads a draft, downloads and verifies every asset, then
-publishes. It generates release notes automatically; `--notes FILE` replaces them.
-It does not create commits, increase build numbers, or build/upload apps.
-An existing tag or output directory is never overwritten. The source commit must
-be signed by the explicitly selected key (`--gpg-key` or `RELEASE_GPG_KEY`).
+Ordinary CI runs never create a GitHub Release. `version --publish` creates
+`v<MARKETING_VERSION>` only when explicitly requested. It verifies the successful
+run, source commit, build identity, three GitHub attestations and model inputs;
+then signs checksums and the version tag, uploads a draft, downloads every asset
+and checks its bytes before publishing. The existing source commit must be signed
+with the explicitly selected GPG key. Existing tags are never overwritten.
 
-The only release assets are `Slowth-models.tar.gz`, `model-manifest.json`,
-`SHA256SUMS`, and `SHA256SUMS.asc`. Private exports, datasets, checkpoints, logs,
-Apple credentials and Xcode archives remain local. The model importer validates
-exact file names and pinned hashes before use. `--model-bundle FILE` on the
-`models` command lets a maintainer prepare a package without private exports.
+Assets: the exact `Unscroll.ipa` sent to TestFlight, `Slowth-macOS.zip` containing
+the Developer ID-signed and notarized universal Mac app, `Slowth-models.tar.gz`,
+`build-manifest.json`, three attestation bundles, `SHA256SUMS`, and `SHA256SUMS.asc`.
+The IPA is for verification; install iOS through TestFlight/App Store. The Mac ZIP
+is intended for installation: extract it and move Slowth.app to Applications.
 
-The internal modules in `scripts/release_tools/` are shared by the CLI and CI;
-they are not separate entry points. The old shell wrapper and standalone CI
-scripts have been removed. Native language-switching and WebKit UI diagnostics
-remain separate utilities; the iOS pipeline does not claim to execute them.
+Omit `--publish` to prepare and inspect the assets and generated notes locally.
+Use a new `--output` directory for the subsequent publication attempt. `--notes`
+can supply custom public notes. The source must still match published main and
+the successful CI run; no source modifications are silently included.
+
+Models stay out of Git. Reuse `--model-release v2026.8.2` after publishing that
+version, or an existing `models-*` release while bootstrapping. When the pinned
+models change, `models --tag models-NEW --gpg-key KEY --publish` remains an explicit
+input-publication utility; it never runs automatically. `models --tag TAG` only
+prepares local assets, and `--model-bundle FILE` imports an existing model package.
+
+Private exports, datasets, checkpoints, credentials, debug symbols, raw logs and
+Xcode archives are not release assets. Shared implementation lives in
+`scripts/release_tools/`; these are not separate entry points. Native UI diagnostics
+remain separate utilities.
 
 See [Build provenance and TestFlight](../docs/BUILD_TRUST.md) for setup, recovery,
 Apple secrets, and evidence verification.

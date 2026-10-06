@@ -1,7 +1,7 @@
 # Build provenance and TestFlight
 
-Use `python3 scripts/release.py` for every release operation. Model publication
-and app uploads are separate commands; neither happens by default.
+Use `python3 scripts/release.py` for every release operation. Builds, Apple uploads and version publication are explicit commands. Ordinary CI
+runs do not create GitHub Releases.
 
 Slowth links a public source commit, pinned model inputs, a CI run, and the exact
 IPA uploaded to Apple. This is traceability, not a byte-for-byte comparison with
@@ -16,15 +16,61 @@ hermetic or byte-for-byte reproducible.
 | `check` | Validates public source, versions, runtime metadata and WebExtension tests | None |
 | `models --tag TAG` | Prepares model bundle, manifest, checksums and generated notes | None |
 | `models --tag TAG --gpg-key KEY --publish` | Signs and publishes a verified model release | Signed tag and GitHub Release |
-| `build --model-bundle FILE --output DIR` | Validates an unsigned iOS Release archive and creates a local manifest | None |
-| `ci --model-release TAG` | Dispatches unsigned iOS validation on main | GitHub Actions run |
-| `ci --model-release TAG --testflight` | Dispatches signed iOS build and Apple upload | Actions run and TestFlight build |
+| `build --model-bundle FILE --output DIR` | Validates unsigned iOS and macOS Release archives and creates a local manifest | None |
+| `ci --model-release TAG` | Dispatches unsigned iOS/macOS validation on main | GitHub Actions run |
+| `ci --model-release TAG --testflight` | Builds both platforms, notarizes macOS and uploads iOS to Apple | Actions run and TestFlight build |
+| `version --run ID --model-release TAG --gpg-key KEY --publish` | Publishes verified artifacts from an existing successful run | Signed app-version tag and GitHub Release |
 
 `build --testflight` is reserved for the GitHub workflow, not local use.
 All output directories must be new. Local preparation can use modified public
 sources; its manifest has `commit: null` and records `source_tree` instead.
 Publishing and dispatching require the exact reviewed public snapshot already
 committed and pushed to main. The tool does not stage or commit source for you.
+
+## Publish an app version
+
+The release flow is **update version/build → sign and push main → run CI → publish
+that successful run**. Keep the same main commit until publication completes.
+`version` rejects a run from another commit; the version tag points exactly to
+the source embedded in the apps. A tag is created only after all build artifacts
+exist and have been verified, so failed CI does not leave an empty version release.
+
+```sh
+python3 scripts/release.py ci --model-release models-v10-1 --testflight
+# Wait for the entire run to succeed, then use its numeric ID:
+python3 scripts/release.py version --run RUN_ID --model-release models-v10-1 \
+  --gpg-key YOUR_GPG_FINGERPRINT --publish
+```
+
+The tag is derived from `MARKETING_VERSION`, e.g. `v2026.8.2`. There is one immutable
+release per marketing version. Replacement TestFlight builds do not create new
+GitHub releases. Once that version tag exists, publish the next marketing version
+instead of replacing its assets. The script never changes versions or rebuilds.
+
+For inspection, omit `--publish`. Assets and generated notes go to
+`release-output/v<version>`; choose a new `--output DIR` when publishing afterwards.
+`--notes FILE` supplies custom public notes. Publication requires the current
+public source to match the signed commit already on main, a successful release
+workflow for that commit, the matching run attempt, exact artifact hashes,
+GitHub-hosted provenance for the manifest and both binaries, notarization accepted
+by Apple, and VALID iOS processing. It signs checksums and the version tag, uploads
+a draft, downloads and verifies every asset, then publishes it as latest.
+
+Version releases contain exactly these nine assets (plus GitHub's source archives):
+
+- `Unscroll.ipa`: the exact App Store-signed file sent to TestFlight. For verification;
+  install through TestFlight or the App Store, not by opening this IPA.
+- `Slowth-macOS.zip`: universal Apple Silicon/Intel app, Developer ID-signed,
+  notarized, with a stapled ticket. Extract and move Slowth.app to Applications.
+- `Slowth-models.tar.gz`: the exact input archive used by CI.
+- `build-manifest.json`: source, version/build, binary hashes and Apple results.
+- `manifest-attestation.jsonl`, `ipa-attestation.jsonl`, `macos-attestation.jsonl`.
+- `SHA256SUMS` and `SHA256SUMS.asc`: all seven preceding files and their GPG signature.
+
+An app-version release can supply models to future runs, e.g.
+`ci --model-release v2026.8.2 --testflight`. Existing model releases remain valid
+inputs. Creating a standalone model release is an explicit bootstrap operation,
+never a side effect of a normal app build.
 
 ## Publish model inputs
 
@@ -80,8 +126,8 @@ shasum -a 256 -c SHA256SUMS
 ## GitHub Actions and Apple setup
 
 **Source checks** runs on pull requests and main and needs no Apple credentials
-or models. **Release evidence and TestFlight** runs manually on main or via the
-`ci` command. Validation and TestFlight paths both build iOS only.
+or models. **iOS and macOS release builds** runs manually on main or via the
+`ci` command. Both paths build iOS and macOS. The signed path also notarizes the Mac app. macOS is distributed directly, not uploaded to the Mac App Store by this workflow.
 
 Actions are pinned by commit; tool versions are Python 3.12.9, Node 22.14.0,
 XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.6 / 17F113. The `macos-26`
@@ -103,6 +149,10 @@ no secrets. Configure these values in Settings → Environments → app-store:
 | Secret | `ASC_KEY_P8_BASE64` | Base64 of the API key's `.p8` file |
 | Secret | `APPLE_CERTIFICATE_P12_BASE64` | Base64 of an Apple Distribution certificate **with its private key** |
 | Secret | `APPLE_CERTIFICATE_PASSWORD` | Nonempty password protecting that `.p12` |
+| Secret | `MACOS_CERTIFICATE_P12_BASE64` | Base64 Developer ID Application certificate with its private key |
+| Secret | `MACOS_CERTIFICATE_PASSWORD` | Nonempty password protecting that `.p12` |
+| Secret | `MACOS_PROFILE_APP_BASE64` | Base64 Developer ID (`MAC_APP_DIRECT`) profile for the Mac host |
+| Secret | `MACOS_PROFILE_SAFARI_BASE64` | Base64 Developer ID profile for the Mac Safari extension |
 | Secret | `IOS_PROFILE_APP_BASE64` | Base64 App Store profile for `<prefix>.ios` |
 | Secret | `IOS_PROFILE_SAFARI_BASE64` | Base64 App Store profile for `<prefix>.ios.Extension` |
 | Secret | `IOS_PROFILE_BROADCAST_BASE64` | Base64 App Store profile for `<prefix>.ios.Broadcast` |
@@ -128,7 +178,14 @@ The signing keychain and profiles are installed temporarily and removed in a
 cancellation. Do not switch this workflow to a persistent self-hosted runner
 without reviewing cleanup and isolation.
 
-## Run an iOS build
+The Mac profiles must authorize the same shared App Group as the existing app.
+The CI builds a universal binary, exports with Developer ID, submits it using
+`notarytool` and the same team API key, requires `Accepted`, staples and validates
+the ticket, and checks Gatekeeper before packaging. Apple Distribution used for
+iOS cannot substitute for Developer ID. Mac notarization completes before the
+new IPA is uploaded. Profiles and keychains are temporary for both platforms.
+
+## Run a build
 
 For a new Apple upload, increment every `CURRENT_PROJECT_VERSION` above all known
 uploaded builds, including replacement builds. Keep one monotonic counter across
@@ -168,9 +225,10 @@ local diagnostic utilities and are not claimed by this pipeline.
 ## Verify the evidence
 
 Download the `build-evidence-<run>-<attempt>` artifact from the public run. It
-contains only the manifest, checksums and attestation bundles. No app archive,
-IPA, debug symbols, provisioning profile, raw build log or training input is an
-uploaded artifact. Public Actions console logs still show ordinary build output.
+contains the manifest, checksums and attestation bundles; successful signed runs
+also retain the exact IPA and final notarized Mac ZIP. No Xcode archive, debug
+symbols, standalone provisioning profile, raw build log or training input is an
+uploaded artifact. The distribution apps contain their required embedded profiles. Public Actions console logs still show ordinary build output.
 
 ```sh
 shasum -a 256 -c SHA256SUMS
@@ -197,21 +255,21 @@ gh attestation verify /path/to/Slowth.ipa --repo skar404/slowth \
   --bundle ipa-attestation.jsonl
 ```
 
-The CI runner's IPA is intentionally not retained publicly. A user without that
-IPA can verify the manifest's provenance, but cannot independently hash the
-uploaded binary. Attestations establish what the workflow produced, not the
+The retained IPA lets users independently hash the file uploaded to Apple.
+For the Mac ZIP, use the same verification command with `Slowth-macOS.zip` and
+`macos-attestation.jsonl`. Verify the GPG signature before trusting release checksums.
+Attestations establish what the workflow produced, not the
 absence of malicious source or a match to the post-processing App Store binary.
 Review of the workflow and source remains necessary. Runtime rule updates are a
 separate input and are not covered by an app binary's provenance.
 
-Actions artifacts expire after 90 days. For permanent public verification, copy
-the four allowlisted evidence files to the corresponding GitHub Release after
-review. Attestation APIs and public workflow logs provide additional context but
+Actions artifacts expire after 90 days. `version --publish` preserves the
+allowlisted artifacts in the app-version GitHub Release after verification. Attestation APIs and public workflow logs provide additional context but
 are not a substitute for retaining the evidence bundle.
 
 ## Failures and local validation
 
-If model publication fails after the tag was pushed, inspect that tag and any
+If model or version publication fails after the tag was pushed, inspect that tag and any
 GitHub draft. Do not delete/rewrite tags or rerun blindly: existing tags and
 output directories are intentionally rejected. Verify the draft against the
 retained local signed assets before completing recovery; do not use `--clobber`

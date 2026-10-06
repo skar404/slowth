@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One entry point for source checks, model releases and iOS builds."""
+"""One entry point for source checks, iOS/macOS builds and signed version releases."""
 import argparse
 import os
 from pathlib import Path
@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tarfile
 
-from release_tools import build, core, models
+from release_tools import build, core, models, version
 
 
 def parser():
@@ -21,13 +21,21 @@ def parser():
     package.add_argument('--gpg-key', default=os.environ.get('RELEASE_GPG_KEY'), help='Explicit signing key; required with --publish')
     package.add_argument('--notes', type=Path, help='Optional public notes; otherwise generated from the model manifest')
     package.add_argument('--publish', action='store_true', help='Sign, push the model tag, verify draft assets and publish')
-    archive = commands.add_parser('build', help='Build and validate an iOS Release archive')
+    archive = commands.add_parser('build', help='Build and validate iOS/macOS Release archives')
     archive.add_argument('--model-bundle', type=Path, required=True)
     archive.add_argument('--output', type=Path, required=True, help='New output directory')
+    archive.add_argument('--platform', choices=['iOS', 'macOS', 'both'], default='both')
     archive.add_argument('--testflight', action='store_true', help='CI only: sign, upload to Apple and wait for processing')
-    remote = commands.add_parser('ci', help='Dispatch the iOS workflow on published main')
-    remote.add_argument('--model-release', required=True, help='Published model release tag')
+    remote = commands.add_parser('ci', help='Dispatch the iOS/macOS workflow on published main')
+    remote.add_argument('--model-release', required=True, help='Published app or model release containing Slowth-models.tar.gz')
     remote.add_argument('--testflight', action='store_true', help='Upload to TestFlight; otherwise unsigned validation')
+    promote = commands.add_parser('version', help='Prepare a version release from a successful CI run; never rebuild')
+    promote.add_argument('--run', required=True, help='Successful release-ci workflow run ID')
+    promote.add_argument('--model-release', required=True, help='Release containing the exact CI model input')
+    promote.add_argument('--output', type=Path, help='New directory; default: release-output/v<version>')
+    promote.add_argument('--notes', type=Path, help='Optional public release notes')
+    promote.add_argument('--gpg-key', default=os.environ.get('RELEASE_GPG_KEY'))
+    promote.add_argument('--publish', action='store_true', help='Sign the version tag and checksums, verify draft assets, publish')
     return cli
 
 
@@ -42,7 +50,8 @@ def main(argv=None):
     if args.command == 'check':
         build.main(['check'])
     elif args.command == 'build':
-        flags = ['build', '--model-bundle', str(args.model_bundle), '--output', str(args.output)]
+        flags = ['build', '--model-bundle', str(args.model_bundle), '--output', str(args.output),
+                 '--platform', args.platform]
         if args.testflight:
             flags.append('--testflight')
         build.main(flags)
@@ -50,6 +59,8 @@ def main(argv=None):
         models.prepare(args)
     elif args.command == 'ci':
         models.dispatch(args.model_release, args.testflight)
+    elif args.command == 'version':
+        version.prepare(args)
 
 
 if __name__ == '__main__':

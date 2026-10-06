@@ -130,7 +130,8 @@ def prepare(args):
 
 
 def dispatch(tag, testflight):
-    model_tag(tag)
+    from .version import release_tag
+    release_tag(tag)
     with tempfile.TemporaryDirectory(prefix='slowth-ci-dispatch-') as temp:
         root = Path(temp)
         source, head, tree = core.snapshot(core.ROOT, root)
