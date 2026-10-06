@@ -20,7 +20,7 @@ PUBLIC_DIRS = {
 }
 PUBLIC_FILES = {
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
-    'docs/BUILD_TRUST.md',
+    'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',
     'project.yml', 'README.md', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
     'Configs/Slowth.storekit', 'docs/icon.png', 'docs/showcase-00.jpg',

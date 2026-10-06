@@ -2,6 +2,7 @@
 import SwiftUI
 import StoreKit
 import UIKit
+import Darwin
 #if canImport(FamilyControls)
 import FamilyControls
 #endif
@@ -20,13 +21,32 @@ private let sites: [SiteSpec] = [
 ]
 
 private extension View {
+    @ViewBuilder
+    func observeDuoCapability(_ isDuo: Binding<Bool>) -> some View {
+        #if canImport(SwiftUI, _version: 8.0.85)
+        if #available(iOS 27.1, *) {
+            self.onHingeChange { _, context in
+                isDuo.wrappedValue = context.hinge != nil && UIDevice.current.userInterfaceIdiom == .phone
+            }
+        } else {
+            self
+        }
+        #else
+        self
+        #endif
+    }
+
     // iPhone-style bottom-sheet detents only make sense in a compact-width
     // context. On full-screen iPad (regular width) they force an
     // undersized, bottom-anchored sheet instead of the platform's normal
     // centered form-sheet — so only apply them when the size class is compact.
     @ViewBuilder
     func compactSheetDetents(isCompact: Bool) -> some View {
-        if isCompact {
+        if #available(iOS 27.1, *) {
+            // Let the system move and resize presentations across Duo displays
+            // and reserved regions, including while a sheet is already open.
+            self
+        } else if isCompact {
             self.presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         } else {
@@ -43,9 +63,14 @@ struct ContentView: View {
     @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
     #endif
     @AppStorage("uiMode") private var uiMode: String = "ios"
+    @AppStorage("contributionCardDismissed") private var contributionCardDismissed = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var isDuo = false
+    private var isPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
     @State private var showSafariHelp = false
     @State private var showAbout = false
+    @State private var showContribution = false
     @State private var showSupportSheet = false
     @State private var showRealtimeBlockingBeta = false
     @State private var showRealtimeRecordingPrompt = false
@@ -72,27 +97,16 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                heroSection
-                if state.snapshot.isStrictModeActive {
-                    strictBannerSection
-                }
-                #if canImport(FamilyControls)
-                realtimeShieldSection
-                #endif
-                sitesSection
-                strictModeSection
-                updatesSection
-                #if DEBUG
-                if debugModeEnabled {
-                    debugSection
-                }
-                #endif
-                helpSection
+            GeometryReader { geometry in
+                settingsLayout(in: geometry.size)
             }
             .navigationTitle("Slowth")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                if isDuo { duoToolbar }
+            }
         }
+        .observeDuoCapability($isDuo)
         .appReviewPrompt(hasEnabledBlocking: state.hasEnabledBlockingForReview, isReady: isReadyForReview)
         .alert(String(localized: "Heads up"),
                isPresented: Binding(
@@ -115,6 +129,23 @@ struct ContentView: View {
         .sheet(isPresented: $showAbout) {
             HowItWorksSheet(feedbackURL: feedbackURL)
                 .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
+        }
+        .sheet(isPresented: $showContribution) {
+            NavigationStack {
+                ScrollView {
+                    contributionContent
+                        .frame(maxWidth: 560, alignment: .leading)
+                        .padding(24)
+                        .frame(maxWidth: .infinity)
+                }
+                .navigationTitle("Help improve Slowth")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { showContribution = false }
+                    }
+                }
+            }
         }
         .sheet(isPresented: $showSupportSheet) {
             SupportSheet(tipStore: tipStore)
@@ -203,11 +234,148 @@ struct ContentView: View {
         #endif
     }
 
+    @ToolbarContentBuilder
+    private var duoToolbar: some ToolbarContent {
+        #if canImport(SwiftUI, _version: 8.0.85)
+        if #available(iOS 27.1, *), isDuo {
+            ToolbarItem(placement: .bottomBar) {
+                Button {
+                    showStrictModeConfirmation = true
+                } label: {
+                    Label(
+                        state.snapshot.isStrictModeActive ? String(localized: "Locked") : String(localized: "Strict"),
+                        systemImage: state.snapshot.isStrictModeActive ? "lock.fill" : "lock.open"
+                    )
+                }
+                .disabled(disabledByStrict)
+                .accessibilityIdentifier("duo.strict")
+            }
+            #if canImport(FamilyControls)
+            ToolbarItem(placement: .bottomBar) {
+                RecordingToolbarButton(preferredExtensionBundleID: state.broadcastExtensionBundleID)
+            }
+            .axisBehavior(.verticalPreferred)
+            #endif
+        }
+        #else
+        // The enclosing isDuo condition is always false with an older SDK.
+        ToolbarItem(placement: .bottomBar) { EmptyView() }
+        #endif
+    }
+
+    @ViewBuilder
+    private func settingsLayout(in size: CGSize) -> some View {
+        if isPad {
+            Group {
+                if horizontalSizeClass == .regular,
+                   !dynamicTypeSize.isAccessibilitySize,
+                   size.width >= 900 {
+                    HStack(alignment: .top, spacing: 16) {
+                        settingsPane(title: String(localized: "In-app blocking"), icon: "shield.lefthalf.filled") {
+                            settingsForm(includeSites: false)
+                        }
+                        .frame(maxWidth: .infinity)
+                        settingsPane(title: "Safari", icon: "safari") {
+                            Form { sitesSection }
+                                .accessibilityIdentifier("safariSettingsForm")
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                    .frame(maxWidth: 1160)
+                    .padding(.horizontal, 16)
+                } else {
+                    settingsForm(includeSites: true)
+                        .scrollContentBackground(.hidden)
+                        .frame(maxWidth: 680)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(uiColor: .systemGroupedBackground))
+        } else {
+            // Use the current window, never the device model or main screen. Keep
+            // tall/narrow windows and accessibility text in one scrollable form.
+            // SwiftUI 8.0.85 ships ArrangementView in the iOS 27.1 SDK. Xcode
+            // 27.0 uses the same Swift compiler, so a compiler check is insufficient.
+            #if canImport(SwiftUI, _version: 8.0.85)
+            if #available(iOS 27.1, *),
+               horizontalSizeClass == .regular,
+               !dynamicTypeSize.isAccessibilitySize,
+               size.width >= 720, size.width > size.height {
+                ArrangementView {
+                    settingsPane(title: String(localized: "In-app blocking"), icon: "shield.lefthalf.filled") {
+                        settingsForm(includeSites: false)
+                    }
+                } secondary: {
+                    settingsPane(title: "Safari", icon: "safari") {
+                        Form {
+                            sitesSection
+                        }
+                        .accessibilityIdentifier("safariSettingsForm")
+                    }
+                }
+                // Allow either axis around a fold, so neither pane is suppressed.
+                // Each section has exactly one owner; do not infer visibility from
+                // splitArrangementAxis, which describes layout, not visibility.
+                .arrangementViewStyle(.split)
+                .background(Color(uiColor: .systemGroupedBackground))
+            } else {
+                settingsForm(includeSites: true)
+            }
+            #else
+            // Keep older Xcode/SDK builds working; Duo layouts require Xcode 27.1.
+            settingsForm(includeSites: true)
+            #endif
+        }
+    }
+
+    private func settingsPane<Content: View>(
+        title: String, icon: String, @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: 0) {
+            Label(title, systemImage: icon)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
+            content()
+                .scrollContentBackground(.hidden)
+        }
+        .padding(.horizontal, 8)
+    }
+
+    private func settingsForm(includeSites: Bool) -> some View {
+        Form {
+            heroSection
+            if state.snapshot.isStrictModeActive {
+                strictBannerSection
+            }
+            #if canImport(FamilyControls)
+            realtimeShieldSection
+            #endif
+            if includeSites {
+                sitesSection
+            }
+            if !isDuo {
+                strictModeSection
+            }
+            updatesSection
+            #if DEBUG
+            if debugModeEnabled {
+                debugSection
+            }
+            #endif
+            helpSection
+        }
+        .accessibilityIdentifier("mainSettingsForm")
+    }
+
     private var disabledByStrict: Bool { state.snapshot.isStrictModeActive }
 
     private var isReadyForReview: Bool {
         guard state.lastError == nil, !state.refreshing,
-              !showSafariHelp, !showAbout, !showSupportSheet, !showRealtimeBlockingBeta,
+              !showSafariHelp, !showAbout, !showContribution, !showSupportSheet, !showRealtimeBlockingBeta,
               !showRealtimeRecordingPrompt, !showStrictModeConfirmation else { return false }
         #if canImport(FamilyControls)
         guard !isAuthorizingFamilyControls, !showYouTubePicker, !showInstagramPicker,
@@ -228,6 +396,18 @@ struct ContentView: View {
         Section {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
+                    if !contributionCardDismissed {
+                        HeroCard(
+                            title: String(localized: "Help improve"),
+                            subtitle: String(localized: "In-app blocking"),
+                            icon: "heart.text.clipboard",
+                            gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
+                                       Color(red: 0.08, green: 0.43, blue: 0.49)],
+                            action: { showContribution = true },
+                            onDismiss: { contributionCardDismissed = true }
+                        )
+                        .accessibilityIdentifier("contribution.card")
+                    }
                     HeroCard(
                         title: String(localized: "In-app blocking"),
                         subtitle: String(localized: "Shorts, Reels & Stories"),
@@ -252,21 +432,23 @@ struct ContentView: View {
                                    Color(red: 0.14, green: 0.45, blue: 0.84)],
                         action: { showSafariHelp = true }
                     )
-                    HeroCard(
-                        title: state.snapshot.isStrictModeActive ? String(localized: "Locked") : String(localized: "Strict"),
-                        subtitle: state.snapshot.isStrictModeActive
-                            ? String(localized: "24 h lock active")
-                            : String(localized: "Lock for 24 hours"),
-                        icon: state.snapshot.isStrictModeActive ? "lock.fill" : "lock.open.fill",
-                        gradient: state.snapshot.isStrictModeActive
-                            ? [Color(red: 0.95, green: 0.31, blue: 0.27),
-                               Color(red: 0.78, green: 0.18, blue: 0.34)]
-                            : [Color(red: 0.97, green: 0.61, blue: 0.20),
-                               Color(red: 0.93, green: 0.39, blue: 0.18)],
-                        action: state.snapshot.isStrictModeActive
-                            ? nil
-                            : { showStrictModeConfirmation = true }
-                    )
+                    if !isDuo {
+                        HeroCard(
+                            title: state.snapshot.isStrictModeActive ? String(localized: "Locked") : String(localized: "Strict"),
+                            subtitle: state.snapshot.isStrictModeActive
+                                ? String(localized: "24 h lock active")
+                                : String(localized: "Lock for 24 hours"),
+                            icon: state.snapshot.isStrictModeActive ? "lock.fill" : "lock.open.fill",
+                            gradient: state.snapshot.isStrictModeActive
+                                ? [Color(red: 0.95, green: 0.31, blue: 0.27),
+                                   Color(red: 0.78, green: 0.18, blue: 0.34)]
+                                : [Color(red: 0.97, green: 0.61, blue: 0.20),
+                                   Color(red: 0.93, green: 0.39, blue: 0.18)],
+                            action: state.snapshot.isStrictModeActive
+                                ? nil
+                                : { showStrictModeConfirmation = true }
+                        )
+                    }
                     if FeatureFlags.tipsEnabled && !state.snapshot.supportCardDismissed {
                         HeroCard(
                             title: String(localized: "Support"),
@@ -307,8 +489,8 @@ struct ContentView: View {
     }
 
     private var sitesSection: some View {
-        Section {
-            ForEach(sites) { site in
+        ForEach(sites) { site in
+            Section {
                 ForEach(SiteBlockingControl.controls(for: site.id)) { control in
                     Toggle(isOn: bindingForSite(control.site, feature: control.feature)) {
                         if control.feature == .all {
@@ -333,11 +515,15 @@ struct ContentView: View {
                                       (control.feature != .all && state.setting(.all, for: control.site)))
                         .accessibilityIdentifier(control.id)
                 }
+            } header: {
+                if site.id == sites.first?.id {
+                    Text(String(localized: "Safari extension settings"))
+                }
+            } footer: {
+                if site.id == sites.last?.id {
+                    Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
+                }
             }
-        } header: {
-            Text(String(localized: "Safari extension settings"))
-        } footer: {
-            Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
         }
     }
 
@@ -648,6 +834,72 @@ struct ContentView: View {
         }
     }
 
+    private var contributionContent: some View {
+            VStack(alignment: .leading, spacing: 16) {
+                Label {
+                    Text(String(localized: "Help improve in-app blocking"))
+                        .font(.title3.weight(.semibold))
+                } icon: {
+                    Image(systemName: "heart.text.clipboard")
+                        .foregroundStyle(.tint)
+                }
+
+                Text(String(localized: "I need short screen recordings of Instagram, Facebook and other social apps to improve Slowth’s in-app blocking."))
+
+                Text(String(localized: "Social apps look different across devices, languages and app versions. Your recordings will help me train Slowth to recognize what should be blocked and avoid blocking regular content."))
+
+                Text(String(localized: "Just record yourself using the app as usual. No explanations or labels needed — I’ll review and label the footage myself to train and test the blocking model."))
+
+                Text(String(localized: "Please leave out private messages, notifications and personal information."))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Link(destination: contributionURL) {
+                        Label("Email me to help", systemImage: "envelope")
+                            .font(.subheadline.weight(.semibold))
+                            .frame(maxWidth: .infinity, minHeight: 32)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .accessibilityIdentifier("contribution.email")
+
+                    Text(String(localized: "You can email me before recording. The draft includes your device model, iOS and Slowth versions — you can remove them before sending."))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .font(.subheadline)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.vertical, 10)
+    }
+
+    private var contributionURL: URL {
+        Self.mailURL(
+            subject: String(localized: "Help improve Slowth"),
+            body: String(localized: """
+            Hi Denis! I’d like to help improve Slowth’s in-app blocking by sharing screen recordings.
+
+            Device details (you can remove these before sending):
+            Device: \(UIDevice.current.model) (\(deviceModelIdentifier))
+            System: \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)
+            Slowth: \(appVersion)
+            """)
+        )
+    }
+
+    private var deviceModelIdentifier: String {
+        #if targetEnvironment(simulator)
+        if let model = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] {
+            return "\(model), Simulator"
+        }
+        #endif
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        return withUnsafeBytes(of: &systemInfo.machine) { bytes in
+            String(decoding: bytes.prefix { $0 != 0 }, as: UTF8.self)
+        }
+    }
+
     private var helpSection: some View {
         Section {
             Link(destination: AppReviewCoordinator.reviewURL) {
@@ -658,12 +910,14 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            Link(destination: feedbackURL) {
-                HStack {
-                    Text(String(localized: "Send feedback"))
-                    Spacer()
-                    Image(systemName: "envelope")
-                        .foregroundStyle(.secondary)
+            if !isDuo {
+                Link(destination: feedbackURL) {
+                    HStack {
+                        Text(String(localized: "Send feedback"))
+                        Spacer()
+                        Image(systemName: "envelope")
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
             if FeatureFlags.tipsEnabled {
@@ -881,6 +1135,7 @@ struct ContentView: View {
 }
 
 private struct HeroCard: View {
+    @ScaledMetric(relativeTo: .title3) private var cardWidth = 180.0
     let title: String
     let subtitle: String
     let icon: String
@@ -909,6 +1164,7 @@ private struct HeroCard: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(String(localized: "Hide card"))
             }
         }
     }
@@ -931,7 +1187,7 @@ private struct HeroCard: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(13)
-        .frame(width: 180, alignment: .leading)
+        .frame(width: cardWidth, alignment: .leading)
         .frame(minHeight: 145, alignment: .leading)
         .background(
             LinearGradient(colors: gradient, startPoint: .topLeading, endPoint: .bottomTrailing)

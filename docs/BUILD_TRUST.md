@@ -163,7 +163,7 @@ signed path also notarizes the Mac app. The same Mac archive receives a separate
 App Store export for macOS TestFlight.
 
 Actions are pinned by commit; tool versions are Python 3.12.9, Node 22.14.0,
-XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.6 / 17F113. The `macos-26`
+XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 27.1 / 27A9269. The `xcode-27` preview
 runner image can change; its version is recorded. A missing pinned Xcode fails
 the build instead of selecting another version.
 

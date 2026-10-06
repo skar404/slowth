@@ -92,6 +92,37 @@ struct BroadcastPickerView: UIViewRepresentable {
     }
 }
 
+/// Compact ReplayKit control for the system toolbar on Duo. The actual tap
+/// stays with RPSystemBroadcastPickerView, including its start/stop confirmation.
+struct RecordingToolbarButton: View {
+    let preferredExtensionBundleID: String
+    @State private var isRecording = SharedStore.snapshot().broadcastActive
+
+    var body: some View {
+        Image(systemName: isRecording ? "stop.circle.fill" : "record.circle")
+            .font(.title2)
+            .foregroundStyle(.red)
+            .frame(width: 44, height: 44)
+            .accessibilityHidden(true)
+            .overlay {
+                BroadcastPickerView(
+                    preferredExtensionBundleID: preferredExtensionBundleID,
+                    showsSystemControl: false,
+                    accessibilityLabel: isRecording
+                        ? String(localized: "Stop screen recording")
+                        : String(localized: "Start screen recording")
+                )
+                .accessibilityIdentifier("duo.recording")
+            }
+            .task {
+                while !Task.isCancelled {
+                    isRecording = SharedStore.snapshot().broadcastActive
+                    try? await Task.sleep(nanoseconds: 500_000_000)
+                }
+            }
+    }
+}
+
 struct RealtimeRecordingCard: View {
     let preferredExtensionBundleID: String
     let isRecording: Bool
@@ -224,30 +255,32 @@ struct RealtimeRecordingPromptSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                Image(systemName: "record.circle.fill")
-                    .font(.system(size: 52, weight: .semibold))
-                    .foregroundStyle(.red)
+            ScrollView {
+                VStack(spacing: 20) {
+                    Image(systemName: "record.circle.fill")
+                        .font(.system(size: 52, weight: .semibold))
+                        .foregroundStyle(.red)
 
-                VStack(spacing: 8) {
-                    Text(String(localized: "Start screen recording"))
-                        .font(.title2.weight(.bold))
-                    Text(String(localized: "Tap the card below and confirm in the system prompt. Selected apps unlock while screen analysis runs. Detecting content you chose to block locks the entire app."))
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
+                    VStack(spacing: 8) {
+                        Text(String(localized: "Start screen recording"))
+                            .font(.title2.weight(.bold))
+                        Text(String(localized: "Tap the card below and confirm in the system prompt. Selected apps unlock while screen analysis runs. Detecting content you chose to block locks the entire app."))
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    RealtimeRecordingCard(
+                        preferredExtensionBundleID: preferredExtensionBundleID,
+                        isRecording: isRecording,
+                        guidance: String(localized: "Tap anywhere here to start.")
+                    )
+
+                    ScreenRecordingInfoCard(onLearnMore: onLearnMore)
                 }
-
-                RealtimeRecordingCard(
-                    preferredExtensionBundleID: preferredExtensionBundleID,
-                    isRecording: isRecording,
-                    guidance: String(localized: "Tap anywhere here to start.")
-                )
-
-                ScreenRecordingInfoCard(onLearnMore: onLearnMore)
-
-                Spacer(minLength: 0)
+                .frame(maxWidth: 560)
+                .frame(maxWidth: .infinity)
+                .padding(20)
             }
-            .padding(20)
             .navigationTitle(String(localized: "In-app blocking"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
