@@ -155,7 +155,7 @@ class Signing:
         (source / 'Configs/Local.xcconfig').write_text(
             f'DEVELOPMENT_TEAM = {self.team}\nBUNDLE_ID_PREFIX = {self.prefix}\n')
 
-    def install_certificate(self, certificate_secret, password_secret):
+    def install_certificate(self, certificate_secret, password_secret, trusted_tools=()):
         cert = self.directory / 'distribution.p12'
         cert.write_bytes(base64.b64decode(required(certificate_secret), validate=True))
         password = secrets.token_urlsafe(32)
@@ -164,7 +164,8 @@ class Signing:
         quiet('security', 'set-keychain-settings', '-lut', '21600', self.keychain)
         quiet('security', 'unlock-keychain', '-p', password, self.keychain)
         quiet('security', 'import', cert, '-P', required(password_secret),
-              '-t', 'cert', '-f', 'pkcs12', '-k', self.keychain, '-T', '/usr/bin/codesign', '-T', '/usr/bin/security')
+              '-t', 'cert', '-f', 'pkcs12', '-k', self.keychain, '-T', '/usr/bin/codesign', '-T', '/usr/bin/security',
+              *(value for tool in trusted_tools for value in ('-T', tool)))
         quiet('security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:',
               '-k', password, self.keychain)
         import shlex

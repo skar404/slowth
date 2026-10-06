@@ -166,6 +166,16 @@ class MacProfileTests(unittest.TestCase):
 
 
 class MacStoreProfileTests(unittest.TestCase):
+    def test_installer_uses_only_one_valid_identity_for_the_expected_team(self):
+        from release_tools.macos_store import installer_identity
+        listing = '  1) ' + 'A'*40 + ' "3rd Party Mac Developer Installer: Maintainer (ABCDEFGHIJ)"\n  1 valid identities found\n'
+        self.assertEqual(installer_identity(listing, 'ABCDEFGHIJ'), 'A'*40)
+        for bad in ('0 valid identities found', listing.replace('ABCDEFGHIJ', 'OTHERTEAMX'),
+                    listing.replace('3rd Party Mac Developer Installer', 'Developer ID Installer'),
+                    listing + listing):
+            with self.subTest(listing=bad), self.assertRaises(RuntimeError):
+                installer_identity(bad, 'ABCDEFGHIJ')
+
     def test_rejects_developer_id_development_wrong_platform_and_expired_profiles(self):
         from release_tools.macos_store import validate_profile
         from copy import deepcopy

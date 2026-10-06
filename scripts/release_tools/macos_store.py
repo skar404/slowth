@@ -2,9 +2,18 @@
 import base64
 from datetime import datetime, timezone
 import plistlib
+import re
 
 from . import core
 from .signing import Signing, quiet, required
+
+
+def installer_identity(identities, team):
+    matches = re.findall(r'^\s*\d+\)\s+([A-Fa-f0-9]{40})\s+"(?:3rd Party Mac Developer Installer|Mac Installer Distribution): '
+                         r'[^"\r\n]+ \(([A-Z0-9]{10})\)"\s*$', identities, re.MULTILINE)
+    fingerprints = [fingerprint.upper() for fingerprint, owner in matches if owner == team]
+    core.require(len(fingerprints) == 1, 'Expected one valid Mac Installer identity for the configured team')
+    return fingerprints[0]
 
 
 def validate_profile(profile, bundle_id, team, group):
@@ -28,7 +37,10 @@ class MacStoreSigning(Signing):
         core.require(set(targets) == set(mapping), 'Mac App Store profile mapping differs')
         # The iOS signing keychain already supplies the Apple Distribution identity.
         # Add an installer identity in a nested keychain; unwind in reverse order.
-        self.install_certificate('MACOS_INSTALLER_P12_BASE64', 'MACOS_INSTALLER_PASSWORD')
+        self.install_certificate('MACOS_INSTALLER_P12_BASE64', 'MACOS_INSTALLER_PASSWORD',
+                                 trusted_tools=('/usr/bin/productbuild', '/usr/bin/productsign'))
+        self.installer_certificate = installer_identity(
+            quiet('security', 'find-identity', '-v', '-p', 'basic', self.keychain).decode(), self.team)
         for name, secret in mapping.items():
             bundle_id = targets[name]['settings']['base']['PRODUCT_BUNDLE_IDENTIFIER'].replace('$(BUNDLE_ID_PREFIX)', self.prefix)
             temporary = self.directory / f'{name}.provisionprofile'
@@ -45,7 +57,7 @@ class MacStoreSigning(Signing):
         options.write_bytes(plistlib.dumps({
             'method': 'app-store-connect', 'destination': 'export', 'signingStyle': 'manual',
             'teamID': self.team, 'signingCertificate': 'Apple Distribution',
-            'installerSigningCertificate': 'Mac Installer Distribution',
+            'installerSigningCertificate': self.installer_certificate,
             'provisioningProfiles': self.profile_map, 'manageAppVersionAndBuildNumber': False,
             'testFlightInternalTestingOnly': False, 'uploadSymbols': True,
         }))
