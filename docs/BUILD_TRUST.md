@@ -1,7 +1,8 @@
 # Build provenance and TestFlight
 
-Use `python3 scripts/release.py` for every release operation. Builds, Apple uploads and version publication are explicit commands. Ordinary CI
-runs do not create GitHub Releases.
+Use `python3 scripts/release.py` for every release operation. A new signed app-version
+tag starts the build, TestFlight uploads and GitHub Release automatically. Ordinary
+main pushes and manual build-only CI runs do not create GitHub Releases.
 
 Slowth links a public source commit, pinned model inputs, a CI run, and the exact
 IPA uploaded to Apple. This is traceability, not a byte-for-byte comparison with
@@ -19,7 +20,7 @@ hermetic or byte-for-byte reproducible.
 | `build --model-bundle FILE --output DIR` | Validates unsigned iOS and macOS Release archives and creates a local manifest | None |
 | `ci --model-release TAG` | Dispatches unsigned iOS/macOS validation on main | GitHub Actions run |
 | `ci --model-release TAG --testflight` | Builds both platforms, notarizes macOS and uploads both platforms to Apple | Actions run and TestFlight build |
-| `version --run ID --model-release TAG --gpg-key KEY --publish` | Publishes verified artifacts from an existing successful run | Signed app-version tag and GitHub Release |
+| `tag --gpg-key KEY` | Signs and pushes the current app-version tag; CI builds, verifies and publishes | Signed tag, TestFlight uploads and GitHub Release |
 
 `build --testflight` is reserved for the GitHub workflow, not local use.
 All output directories must be new. Local preparation can use modified public
@@ -29,32 +30,58 @@ committed and pushed to main. The tool does not stage or commit source for you.
 
 ## Publish an app version
 
-The release flow is **update version/build → sign and push main → run CI → publish
-that successful run**. Keep the same main commit until publication completes.
-`version` rejects a run from another commit; the version tag points exactly to
-the source embedded in the apps. A tag is created only after all build artifacts
-exist and have been verified, so failed CI does not leave an empty version release.
+The release flow is **update version/build → sign and push main → push a signed
+version tag → automatic build/upload/verification/publication**.
+
+Before tagging, choose a new marketing version (`year.month.index`) and a shared
+build number greater than every previously uploaded build. Synchronize the version
+in project.yml, WebExt/manifest.json and WebExt/app.html; regenerate with
+`xcodegen generate`. Sign the reviewed source commit with the configured release
+key and push it to main. The CLI never changes versions automatically.
 
 ```sh
-python3 scripts/release.py ci --model-release models-v10-1 --testflight
-# Wait for the entire run to succeed, then use its numeric ID:
-python3 scripts/release.py version --run RUN_ID --model-release models-v10-1 \
-  --gpg-key YOUR_GPG_FINGERPRINT --publish
+python3 scripts/release.py check
+python3 scripts/release.py tag --gpg-key 68BEAF78936945EC66B7C5273E8FD639DD4791CC
 ```
 
-The tag is derived from `MARKETING_VERSION`, e.g. `v2026.8.2`. There is one immutable
-release per marketing version. Replacement TestFlight builds do not create new
-GitHub releases. Once that version tag exists, publish the next marketing version
-instead of replacing its assets. The script never changes versions or rebuilds.
+Or create an annotated, GPG-signed `v<MARKETING_VERSION>` tag using that same key
+and push it explicitly. Lightweight/unsigned tags and tags for a different version,
+source commit or signer are rejected. `models-*` tags do not trigger app builds.
+There is one immutable GitHub Release per marketing version. Existing tags and
+releases, including older manually published releases, are never overwritten.
 
-For inspection, omit `--publish`. Assets and generated notes go to
-`release-output/v<version>`; choose a new `--output DIR` when publishing afterwards.
-`--notes FILE` supplies custom public notes. Publication requires the current
-public source to match the signed commit already on main, a successful release
-workflow for that commit, the matching run attempt, exact artifact hashes,
-GitHub-hosted provenance for the manifest and all three artifacts, notarization accepted
-by Apple, and VALID processing for both platforms. It signs checksums and the version tag, uploads
-a draft, downloads and verifies every asset, then publishes it as latest.
+`release-tag.yml` verifies the tag and commit against the checked-in public key,
+then dispatches `release-ci.yml` on main with the version tag as input.
+[GitHub permits workflow_dispatch using GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+The protected main workflow verifies the tag again before the Apple environment
+is accessible. The tag must match its exact GITHUB_SHA, so moving main between tag
+push and dispatch stops the run instead of building the wrong source. Attestations
+still identify `refs/heads/main` and the tag's exact commit. The `app-store`
+environment remains restricted to main; Apple credentials are never exposed to
+the tag dispatcher or publication job.
+
+Automatic inputs are `MODEL_RELEASE` and `MODEL_SHA256` in
+`scripts/release_tools/automatic.py`, plus the individual model pins in core.py.
+The build job signs/notarizes both apps, waits for both Apple platforms to be VALID
+and retains evidence. A separate publication job checks that successful build job,
+exact source/version/build/attempt, model archive hash and all four attestations.
+It attests checksums, uploads a draft, downloads every asset and compares the bytes
+before making the release public. A failed build creates no GitHub Release.
+
+The local GPG key signs the source commit/tag. **CI never receives the private
+GPG key**: new automatic releases use a GitHub keyless checksum attestation instead
+of `SHA256SUMS.asc`. Older release and model checksum signatures are unchanged.
+The expected primary fingerprint is
+`68BEAF78936945EC66B7C5273E8FD639DD4791CC`; the public key is checked in at
+`scripts/release_tools/release-signing-key.asc`. Verify its fingerprint through a
+trusted channel before importing it.
+
+Do not run `ci --testflight` before tagging that version: the automatic tag run
+needs an unused upload build number. Build-only TestFlight runs remain useful for
+replacement/testing builds without creating another GitHub Release. The old
+`version --publish` command is disabled to prevent a second upload triggered by
+its tag. `version` without `--publish` remains available for local inspection of
+legacy main-run evidence.
 
 Version releases contain exactly these eleven assets (plus GitHub's source archives):
 
@@ -68,7 +95,8 @@ Version releases contain exactly these eleven assets (plus GitHub's source archi
 - `build-manifest.json`: source, version/build, binary hashes and Apple results.
 - `manifest-attestation.jsonl`, `ipa-attestation.jsonl`, `macos-attestation.jsonl`,
   `macos-store-attestation.jsonl`.
-- `SHA256SUMS` and `SHA256SUMS.asc`: all nine preceding files and their GPG signature.
+- `SHA256SUMS` and `checksums-attestation.jsonl`: hashes of the nine preceding files
+  and a GitHub provenance signature for the checksum file.
 
 An app-version release can supply models to future runs, e.g.
 `ci --model-release v2026.8.2 --testflight`. Existing model releases remain valid
@@ -129,8 +157,10 @@ shasum -a 256 -c SHA256SUMS
 ## GitHub Actions and Apple setup
 
 **Source checks** runs on pull requests and main and needs no Apple credentials
-or models. **iOS and macOS release builds** runs manually on main or via the
-`ci` command. Both paths build iOS and macOS. The signed path also notarizes the Mac app. The same Mac archive also receives a separate App Store export for macOS TestFlight.
+or models. **iOS and macOS release builds** runs on main after a signed version-tag
+dispatch, or manually via the `ci` command. Both paths build iOS and macOS. The
+signed path also notarizes the Mac app. The same Mac archive receives a separate
+App Store export for macOS TestFlight.
 
 Actions are pinned by commit; tool versions are Python 3.12.9, Node 22.14.0,
 XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.6 / 17F113. The `macos-26`
@@ -275,23 +305,39 @@ gh attestation verify /path/to/Slowth.ipa --repo skar404/slowth \
 The retained IPA lets users independently hash the file uploaded to Apple.
 For the Mac ZIP, use the same verification command with `Slowth-macOS.zip` and
 `macos-attestation.jsonl`; for the TestFlight PKG, use `Slowth-macOS-TestFlight.pkg`
-and `macos-store-attestation.jsonl`. Verify the GPG signature before trusting release checksums.
+and `macos-store-attestation.jsonl`. For automatic version releases, first verify
+`SHA256SUMS` with the same command and `--bundle checksums-attestation.jsonl`, using
+the expected signed tag's commit as `--source-digest`; then run the checksum check.
+Verify that the tag and commit carry the trusted GPG signature:
+
+```sh
+gpg --import scripts/release_tools/release-signing-key.asc
+git verify-tag vYOUR_VERSION
+git verify-commit 'vYOUR_VERSION^{commit}'
+# Check the reported fingerprint against the trusted release key above.
+```
+
+For older releases/model releases with `SHA256SUMS.asc`, verify that GPG signature
+before trusting the checksum file.
 Attestations establish what the workflow produced, not the
 absence of malicious source or a match to the post-processing App Store binary.
 Review of the workflow and source remains necessary. Runtime rule updates are a
 separate input and are not covered by an app binary's provenance.
 
-Actions artifacts expire after 90 days. `version --publish` preserves the
+Actions artifacts expire after 90 days. Tag-driven publication preserves the
 allowlisted artifacts in the app-version GitHub Release after verification. Attestation APIs and public workflow logs provide additional context but
 are not a substitute for retaining the evidence bundle.
 
 ## Failures and local validation
 
-If model or version publication fails after the tag was pushed, inspect that tag and any
-GitHub draft. Do not delete/rewrite tags or rerun blindly: existing tags and
-output directories are intentionally rejected. Verify the draft against the
-retained local signed assets before completing recovery; do not use `--clobber`
-to replace published files. Failures before tag push never publish a release.
+If publication fails after a tag was pushed, inspect that tag and any draft.
+Never delete/rewrite the tag or use `--clobber` to replace assets. If only the
+publication job failed and no draft exists, use **Re-run failed jobs**: it validates
+and reuses evidence from the successful build attempt, without re-uploading to
+Apple. If a draft exists, inspect and verify its assets before manual recovery;
+automation deliberately refuses to overwrite a draft. Do not use **Re-run all jobs**
+after Apple accepted a build. A build-stage failure can require a new version tag
+and an increased build number; inspect Apple before deciding how to recover.
 
 If Apple accepts an upload but processing or evidence publication fails, inspect
 App Store Connect before trying again. An accepted upload consumes its build

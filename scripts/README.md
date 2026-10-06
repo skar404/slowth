@@ -71,34 +71,45 @@ python3 scripts/release.py ci --model-release models-v10-1
 # Increment every build number, regenerate, sign the commit and push main first.
 python3 scripts/release.py ci --model-release models-v10-1 --testflight
 
-# Create one GitHub Release for the app version from that successful run.
-# RUN_ID is printed by GitHub Actions; this command never rebuilds or uploads to Apple.
-python3 scripts/release.py version --run RUN_ID --model-release models-v10-1 \
-  --gpg-key YOUR_GPG_FINGERPRINT --publish
+# Publish a NEW app version: update marketing version + shared build number first,
+# regenerate, sign the source commit and push main, then:
+python3 scripts/release.py tag --gpg-key YOUR_GPG_FINGERPRINT
+# Or push an annotated tag signed with that key: git tag -s ...; git push origin ...
+# CI builds both platforms, uploads to TestFlight and publishes the verified assets.
 
 # Local unsigned builds (both by default; --platform iOS or macOS selects one).
 python3 scripts/release.py build --model-bundle /path/to/Slowth-models.tar.gz \
   --output /tmp/slowth-validation
 ```
 
-Ordinary CI runs never create a GitHub Release. `version --publish` creates
-`v<MARKETING_VERSION>` only when explicitly requested. It verifies the successful
-run, source commit, build identity, four GitHub attestations and model inputs;
-then signs checksums and the version tag, uploads a draft, downloads every asset
-and checks its bytes before publishing. The existing source commit must be signed
-with the explicitly selected GPG key. Existing tags are never overwritten.
+A push of a **new signed `v<MARKETING_VERSION>` tag** starts automatic publication.
+The tag must point to the current signed main commit and match the app version.
+`release-tag.yml` verifies it and dispatches `release-ci.yml` on main. The protected
+workflow rechecks the same commit/tag before accessing Apple credentials, builds
+both apps, waits for both TestFlight uploads to process, verifies provenance and
+publishes a GitHub Release only after downloading and checking its draft assets.
+If main moves before dispatch, the run stops; it never substitutes another commit.
 
-Assets: the exact `Unscroll.ipa` sent to TestFlight, `Slowth-macOS.zip` containing
-the Developer ID-signed and notarized universal Mac app, `Slowth-macOS-TestFlight.pkg`
-(the separate App Store package), `Slowth-models.tar.gz`,
-`build-manifest.json`, four attestation bundles, `SHA256SUMS`, and `SHA256SUMS.asc`.
-The IPA and TestFlight PKG are for verification; install these through TestFlight/App Store. The Mac ZIP
-is intended for installation: extract it and move Slowth.app to Applications.
+Ordinary main pushes and `ci` commands do not create releases. Do not run
+`ci --testflight` first for a version you intend to release by tag: the tag run
+builds and uploads, so it needs a fresh build number. Existing tags/releases are
+never overwritten. The former `version --publish` flow is disabled to prevent
+creating a tag that uploads the same build twice; `version` without `--publish`
+remains a legacy local evidence-inspection command.
 
-Omit `--publish` to prepare and inspect the assets and generated notes locally.
-Use a new `--output` directory for the subsequent publication attempt. `--notes`
-can supply custom public notes. The source must still match published main and
-the successful CI run; no source modifications are silently included.
+Automatic releases contain eleven assets: the exact `Unscroll.ipa` and
+`Slowth-macOS-TestFlight.pkg` sent to Apple, the notarized universal
+`Slowth-macOS.zip`, `Slowth-models.tar.gz`, `build-manifest.json`, four build
+attestation bundles, `SHA256SUMS`, and `checksums-attestation.jsonl`.
+The tag/commit use your local GPG key. CI uses GitHub keyless attestations for
+artifacts/checksums; it never receives your private GPG key. Older releases and
+model releases keep their existing `SHA256SUMS.asc` signatures.
+
+The IPA and TestFlight PKG are for verification; install through TestFlight/App Store.
+Extract the Mac ZIP and move Slowth.app to Applications for direct installation.
+Automatic model input is pinned by release name and archive SHA-256 in
+`scripts/release_tools/automatic.py`; individual model pins are checked too.
+Update those reviewed pins together when switching models.
 
 Models stay out of Git. Reuse `--model-release v2026.8.2` after publishing that
 version, or an existing `models-*` release while bootstrapping. When the pinned

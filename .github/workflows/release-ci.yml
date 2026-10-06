@@ -16,6 +16,10 @@ on:
         description: Sign both apps, notarize macOS and upload both to TestFlight
         default: false
         type: boolean
+      release_tag:
+        description: Signed version tag to publish after success (empty for build-only runs)
+        default: ''
+        type: string
 
 permissions:
   contents: read
@@ -26,7 +30,26 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  preflight:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate tag before accessing Apple environment
+        if: inputs.release_tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          TESTFLIGHT: ${{ inputs.testflight }}
+          MODEL_RELEASE: ${{ inputs.model_release }}
+          MODEL_ASSET: ${{ inputs.model_asset }}
+        run: python3 scripts/release.py automation check --tag "$RELEASE_TAG"
   build:
+    needs: preflight
     if: github.ref == 'refs/heads/main'
     runs-on: macos-26
     timeout-minutes: 90
@@ -61,6 +84,17 @@ jobs:
           [[ "$MODEL_ASSET" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*\.tar\.gz$ ]]
           gh release download "$MODEL_RELEASE" --repo "$GITHUB_REPOSITORY" \
             --pattern "$MODEL_ASSET" --output "$RUNNER_TEMP/Slowth-models.tar.gz"
+      - name: Verify the pinned tag-release model archive
+        if: inputs.release_tag != ''
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from release_tools import automatic, core
+          core.require(core.sha(Path(os.environ['RUNNER_TEMP']) / 'Slowth-models.tar.gz') == automatic.MODEL_SHA256,
+                       'Tag-release model archive differs from its pinned checksum')
+          PY
       - name: Validate unsigned iOS and macOS archives
         if: ${{ !inputs.testflight }}
         run: >-
@@ -161,4 +195,37 @@ jobs:
           else
             echo 'Unsigned iOS and macOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
           fi
-          echo 'Download build-evidence for the manifest and attestations; signed runs also retain the exact uploaded IPA/PKG and notarized Mac ZIP. Use release.py version to create a GitHub Release explicitly.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Download build-evidence for the manifest and attestations; signed runs retain the exact uploaded IPA/PKG and notarized Mac ZIP. Version-tag runs publish a verified GitHub Release in the next job.' >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    needs: build
+    if: inputs.release_tag != '' && inputs.testflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      actions: read
+      attestations: write
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify successful build evidence and prepare exact release assets
+        run: python3 scripts/release.py automation prepare --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/slowth-release"
+      - name: Attest all release checksums without a private GPG key
+        id: checksums
+        uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
+        with:
+          subject-path: ${{ runner.temp }}/slowth-release/SHA256SUMS
+      - name: Verify draft downloads and publish the version release
+        env:
+          CHECKSUMS_ATTESTATION: ${{ steps.checksums.outputs.bundle-path }}
+        run: |
+          cp "$CHECKSUMS_ATTESTATION" "$RUNNER_TEMP/slowth-release/checksums-attestation.jsonl"
+          python3 scripts/release.py automation publish --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/slowth-release"
+          echo "Published https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG" >> "$GITHUB_STEP_SUMMARY"

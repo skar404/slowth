@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tarfile
 
-from release_tools import build, core, models, version
+from release_tools import automatic, build, core, models, version
 
 
 def parser():
@@ -29,13 +29,19 @@ def parser():
     remote = commands.add_parser('ci', help='Dispatch the iOS/macOS workflow on published main')
     remote.add_argument('--model-release', required=True, help='Published app or model release containing Slowth-models.tar.gz')
     remote.add_argument('--testflight', action='store_true', help='Upload to TestFlight; otherwise unsigned validation')
-    promote = commands.add_parser('version', help='Prepare a version release from a successful CI run; never rebuild')
+    tag = commands.add_parser('tag', help='Sign and push the current version tag; CI builds and publishes automatically')
+    tag.add_argument('--gpg-key', default=os.environ.get('RELEASE_GPG_KEY'), help='Explicit local signing key')
+    auto = commands.add_parser('automation', help='Internal tag-workflow stages; no local Apple upload')
+    auto.add_argument('stage', choices=['dispatch', 'check', 'prepare', 'publish'])
+    auto.add_argument('--tag', required=True)
+    auto.add_argument('--output', type=Path)
+    promote = commands.add_parser('version', help='Inspect legacy main-run evidence locally; publish new versions with tag')
     promote.add_argument('--run', required=True, help='Successful release-ci workflow run ID')
     promote.add_argument('--model-release', required=True, help='Release containing the exact CI model input')
     promote.add_argument('--output', type=Path, help='New directory; default: release-output/v<version>')
     promote.add_argument('--notes', type=Path, help='Optional public release notes')
     promote.add_argument('--gpg-key', default=os.environ.get('RELEASE_GPG_KEY'))
-    promote.add_argument('--publish', action='store_true', help='Sign the version tag and checksums, verify draft assets, publish')
+    promote.add_argument('--publish', action='store_true', help='Removed: use tag for automatic publication')
     return cli
 
 
@@ -61,6 +67,14 @@ def main(argv=None):
         models.dispatch(args.model_release, args.testflight)
     elif args.command == 'version':
         version.prepare(args)
+    elif args.command == 'tag':
+        automatic.tag(args)
+    elif args.command == 'automation':
+        if args.stage in ('prepare', 'publish'):
+            core.require(args.output is not None, '--output required')
+            getattr(automatic, args.stage)(args.tag, args.output.resolve())
+        else:
+            getattr(automatic, args.stage)(args.tag)
 
 
 if __name__ == '__main__':

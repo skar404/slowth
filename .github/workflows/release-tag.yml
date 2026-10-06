@@ -1,0 +1,27 @@
+name: Release from signed version tag
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  dispatch:
+    if: github.event.created && !github.event.deleted
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify the signed tag and dispatch the protected main workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python3 scripts/release.py automation dispatch --tag "$RELEASE_TAG"
+      - name: Link to the build workflow
+        run: echo "Build and publication continue at https://github.com/$GITHUB_REPOSITORY/actions/workflows/release-ci.yml" >> "$GITHUB_STEP_SUMMARY"

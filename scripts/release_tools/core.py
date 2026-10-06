@@ -19,7 +19,7 @@ PUBLIC_DIRS = {
     'scripts', 'tests',
 }
 PUBLIC_FILES = {
-    '.github/workflows/ci.yml', '.github/workflows/release-ci.yml',
+    '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     'docs/BUILD_TRUST.md',
     'project.yml', 'README.md', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
@@ -83,7 +83,7 @@ def public_path(name):
 
 
 def check_contents(name, data):
-    require(not re.search(rb'-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----', data),
+    require(not re.search(rb'-----BEGIN (?:(?:[A-Z ]+ )?PRIVATE KEY|PGP (?:PRIVATE|SECRET) KEY BLOCK)-----', data),
             f'Private key in {name}')
     require(not re.search(rb'/(?:Users|home)/[A-Za-z0-9_.-]+/', data),
             f'Local user path in {name}')

@@ -90,6 +90,8 @@ def publish(output, repo, tag, head, tree, fingerprint):
 
 
 def prepare(args):
+    core.require(not args.publish, 'Version publication now starts with release.py tag; do not upload to Apple first. '
+                 'Legacy version preparation remains available without --publish.')
     core.require(re.fullmatch(r'[1-9]\d*', args.run), '--run must be a numeric workflow run ID')
     release_tag(args.model_release)
     core.require(not args.publish or args.gpg_key, '--publish requires --gpg-key or RELEASE_GPG_KEY')

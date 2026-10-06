@@ -151,7 +151,8 @@ class BundleTests(unittest.TestCase):
 
 class PreflightTests(unittest.TestCase):
     def test_reject_private_material_and_bad_json(self):
-        for data in [b'-----BEGIN ' + b'PRIVATE KEY-----', b'/Users/' + b'alice/private/checkpoint.pt']:
+        for data in [b'-----BEGIN ' + b'PRIVATE KEY-----', b'-----BEGIN PGP ' + b'PRIVATE KEY BLOCK-----',
+                     b'/Users/' + b'alice/private/checkpoint.pt']:
             with self.assertRaises(RuntimeError):
                 release.check_contents('file.txt', data)
         with self.assertRaises(ValueError):
