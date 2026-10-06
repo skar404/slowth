@@ -58,16 +58,19 @@ def verify_tag(tag, *, tip=True):
     if os.environ.get('GITHUB_ACTIONS') == 'true':
         core.require(os.environ.get('GITHUB_REPOSITORY') == repo and os.environ.get('GITHUB_SHA') == head,
                      'Actions repository/source differs')
+    # checkout can create a lightweight local tag when resolving a tag-push SHA.
+    # Fetch the remote tag object into a separate namespace without rewriting tags.
+    tag_ref = f'refs/tags/{tag}'
+    ref = f'refs/slowth/verified-tags/{tag}'
     core.git('fetch', '--no-tags', 'origin', 'refs/heads/main:refs/remotes/origin/main',
-             f'refs/tags/{tag}:refs/tags/{tag}')
-    ref = f'refs/tags/{tag}'
+             f'{tag_ref}:{ref}')
     core.require(core.git('cat-file', '-t', ref, capture=True).strip() == b'tag',
                  'An annotated, GPG-signed tag is required')
     core.require(core.git('rev-parse', f'{ref}^{{commit}}', capture=True).decode().strip() == head,
                  'Tag must point to this exact commit; main moved before dispatch')
     obj = core.git('rev-parse', ref, capture=True).decode().strip()
-    remote = core.git('ls-remote', '--refs', 'origin', ref, capture=True).decode().splitlines()
-    core.require(remote == [f'{obj}\t{ref}'], 'Remote tag changed')
+    remote = core.git('ls-remote', '--refs', 'origin', tag_ref, capture=True).decode().splitlines()
+    core.require(remote == [f'{obj}\t{tag_ref}'], 'Remote tag changed')
     if tip:
         core.require(core.git('rev-parse', 'origin/main', capture=True).decode().strip() == head,
                      'Release tag must point to the current main commit')

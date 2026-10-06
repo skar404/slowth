@@ -331,6 +331,13 @@ are not a substitute for retaining the evidence bundle.
 ## Failures and local validation
 
 If publication fails after a tag was pushed, inspect that tag and any draft.
+If only the tag dispatcher failed before a build was dispatched, and the signed
+tag still points to current main, dispatch `release-ci.yml` on main with
+`release_tag` set to that existing tag, `testflight=true`, and the pinned model
+release/asset inputs. Its preflight revalidates the exact tag and source. This
+recovers the unchanged version without deleting or rewriting its tag. First
+confirm there is no running build and no Apple upload for that attempt.
+
 Never delete/rewrite the tag or use `--clobber` to replace assets. If only the
 publication job failed and no draft exists, use **Re-run failed jobs**: it validates
 and reuses evidence from the successful build attempt, without re-uploading to

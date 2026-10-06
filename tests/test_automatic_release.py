@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -19,9 +20,9 @@ class TagTests(unittest.TestCase):
                marketing='2026.8.3', signature_failure=False):
         def git(*args, **kwargs):
             return {('rev-parse', 'HEAD'): b'head',
-                    ('cat-file', '-t', 'refs/tags/v2026.8.3'): object_type,
-                    ('rev-parse', 'refs/tags/v2026.8.3^{commit}'): commit,
-                    ('rev-parse', 'refs/tags/v2026.8.3'): b'object',
+                    ('cat-file', '-t', 'refs/slowth/verified-tags/v2026.8.3'): object_type,
+                    ('rev-parse', 'refs/slowth/verified-tags/v2026.8.3^{commit}'): commit,
+                    ('rev-parse', 'refs/slowth/verified-tags/v2026.8.3'): b'object',
                     ('ls-remote', '--refs', 'origin', 'refs/tags/v2026.8.3'): remote,
                     ('rev-parse', 'origin/main'): tip}.get(args, b'')
         with patch.dict(os.environ, {'GITHUB_ACTIONS': 'false'}), \
@@ -37,6 +38,35 @@ class TagTests(unittest.TestCase):
 
     def test_matching_signed_tag_and_commit(self):
         self.assertEqual(self.verify(), ('owner/repo', 'head', '2026.8.3', '18'))
+
+    def test_checkout_lightweight_tag_does_not_hide_remote_annotated_object(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, runner = Path(temp) / 'origin', Path(temp) / 'runner'
+            source.mkdir()
+            def git(root, *args):
+                return subprocess.check_output(['git', '-C', str(root), *args], stderr=subprocess.DEVNULL)
+            git(source, 'init', '-b', 'main')
+            git(source, 'config', 'user.name', 'Fixture')
+            git(source, 'config', 'user.email', 'fixture@example.invalid')
+            git(source, 'config', 'commit.gpgsign', 'false')
+            (source / 'file').write_text('source')
+            git(source, 'add', 'file')
+            git(source, 'commit', '-m', 'fixture')
+            git(source, '-c', 'tag.gpgsign=false', 'tag', '-a', 'v2026.8.3', '-m', 'fixture')
+            git(source, 'clone', '--no-tags', str(source), str(runner))
+            git(runner, '-c', 'tag.gpgsign=false', 'tag', 'v2026.8.3')
+            head = git(runner, 'rev-parse', 'HEAD').decode().strip()
+            with patch.dict(os.environ, {'GITHUB_ACTIONS': 'false'}), \
+                 patch.object(core, 'ROOT', runner), \
+                 patch.object(core, 'git', side_effect=lambda *args, **kwargs: git(runner, *args)), \
+                 patch.object(core, 'origin_repo', return_value='owner/repo'), \
+                 patch.object(automatic, 'public_keyring', return_value=nullcontext()), \
+                 patch.object(core, 'verify_signature') as verify, \
+                 patch.object(automatic, 'source_version', return_value=('2026.8.3', '18')):
+                self.assertEqual(automatic.verify_tag('v2026.8.3')[1], head)
+            self.assertEqual(git(runner, 'cat-file', '-t', 'refs/tags/v2026.8.3').strip(), b'commit')
+            self.assertEqual(git(runner, 'cat-file', '-t', 'refs/slowth/verified-tags/v2026.8.3').strip(), b'tag')
+            self.assertEqual(verify.call_args_list[0].args[2], 'refs/slowth/verified-tags/v2026.8.3')
 
     def test_lightweight_tag_wrong_commit_moved_main_and_wrong_version(self):
         for change in ({'object_type': b'commit'}, {'commit': b'other'}, {'tip': b'other'},
