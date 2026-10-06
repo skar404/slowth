@@ -67,7 +67,7 @@ python3 scripts/release.py check
 # Validate both platforms without signing or uploading.
 python3 scripts/release.py ci --model-release models-v10-1
 
-# Build both apps: notarized Mac download + exact iOS IPA uploaded to TestFlight.
+# Build both apps: notarized Mac ZIP + iOS IPA and macOS PKG uploaded to TestFlight.
 # Increment every build number, regenerate, sign the commit and push main first.
 python3 scripts/release.py ci --model-release models-v10-1 --testflight
 
@@ -83,15 +83,16 @@ python3 scripts/release.py build --model-bundle /path/to/Slowth-models.tar.gz \
 
 Ordinary CI runs never create a GitHub Release. `version --publish` creates
 `v<MARKETING_VERSION>` only when explicitly requested. It verifies the successful
-run, source commit, build identity, three GitHub attestations and model inputs;
+run, source commit, build identity, four GitHub attestations and model inputs;
 then signs checksums and the version tag, uploads a draft, downloads every asset
 and checks its bytes before publishing. The existing source commit must be signed
 with the explicitly selected GPG key. Existing tags are never overwritten.
 
 Assets: the exact `Unscroll.ipa` sent to TestFlight, `Slowth-macOS.zip` containing
-the Developer ID-signed and notarized universal Mac app, `Slowth-models.tar.gz`,
-`build-manifest.json`, three attestation bundles, `SHA256SUMS`, and `SHA256SUMS.asc`.
-The IPA is for verification; install iOS through TestFlight/App Store. The Mac ZIP
+the Developer ID-signed and notarized universal Mac app, `Slowth-macOS-TestFlight.pkg`
+(the separate App Store package), `Slowth-models.tar.gz`,
+`build-manifest.json`, four attestation bundles, `SHA256SUMS`, and `SHA256SUMS.asc`.
+The IPA and TestFlight PKG are for verification; install these through TestFlight/App Store. The Mac ZIP
 is intended for installation: extract it and move Slowth.app to Applications.
 
 Omit `--publish` to prepare and inspect the assets and generated notes locally.

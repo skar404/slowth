@@ -31,7 +31,11 @@ class EvidenceTests(unittest.TestCase):
             'macos': {'name': 'Slowth-macOS.zip', 'sha256': core.sha(self.output / 'Slowth-macOS.zip'),
                       'notarization_status': 'Accepted'},
             'app_store_connect': {'build_number': '15', 'build_id': 'apple-build', 'processing_state': 'VALID',
-                                  'app_store_published': False},
+                                  'app_store_published': False, 'platform': 'IOS', 'marketing_version': '2026.8.2'},
+            'macos_app_store_connect': {'build_number': '15', 'build_id': 'mac-build', 'processing_state': 'VALID',
+                                         'app_store_published': False, 'platform': 'MAC_OS', 'marketing_version': '2026.8.2'},
+            'macos_testflight': {'name': 'Slowth-macOS-TestFlight.pkg',
+                                'sha256': core.sha(self.output / 'Slowth-macOS-TestFlight.pkg')},
         }
 
     def verify(self):
@@ -58,6 +62,14 @@ class EvidenceTests(unittest.TestCase):
         (self.output / 'private.p12').write_text('not an allowed asset')
         with self.assertRaisesRegex(RuntimeError, 'asset list'): self.verify()
 
+    def test_mac_testflight_cannot_claim_ios_processing_result(self):
+        self.manifest['macos_app_store_connect'] = self.manifest['app_store_connect']
+        with self.assertRaisesRegex(RuntimeError, 'MAC_OS'): self.verify()
+
+    def test_changed_mac_testflight_package_is_rejected(self):
+        (self.output / 'Slowth-macOS-TestFlight.pkg').write_bytes(b'changed package')
+        with self.assertRaisesRegex(RuntimeError, 'Artifact differs'): self.verify()
+
     def test_unnotarized_mac_is_not_publishable(self):
         self.manifest['macos']['notarization_status'] = 'In Progress'
         with self.assertRaisesRegex(RuntimeError, 'notarized'): self.verify()
@@ -67,10 +79,10 @@ class EvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'untrusted'): self.verify()
             self.assertEqual(run.call_count, 1)
 
-    def test_all_three_subjects_require_source_and_hosted_runner(self):
+    def test_all_four_subjects_require_source_and_hosted_runner(self):
         with patch.object(core, 'run') as run:
             self.verify()
-        self.assertEqual(run.call_count, 3)
+        self.assertEqual(run.call_count, 4)
         for call in run.call_args_list:
             args = call.args
             self.assertIn('--deny-self-hosted-runners', args)
@@ -151,6 +163,26 @@ class MacProfileTests(unittest.TestCase):
     def test_distribution_profile_accepted(self):
         with patch.object(macos, 'required', return_value='com.example'):
             macos.validate_profile(self.profile(), 'com.example.app', 'TEAM')
+
+
+class MacStoreProfileTests(unittest.TestCase):
+    def test_rejects_developer_id_development_wrong_platform_and_expired_profiles(self):
+        from release_tools.macos_store import validate_profile
+        from copy import deepcopy
+        good = {'Platform': ['OSX'], 'TeamIdentifier': ['TEAM'],
+                'ExpirationDate': datetime.now() + timedelta(days=1),
+                'Entitlements': {'com.apple.application-identifier': 'TEAM.com.example.app',
+                                 'com.apple.security.application-groups': ['group.com.example.shared']}}
+        validate_profile(good, 'com.example.app', 'TEAM', 'group.com.example.shared')
+        for change in ('developer-id', 'development', 'platform', 'expired', 'group'):
+            profile = deepcopy(good)
+            if change == 'developer-id': profile['ProvisionsAllDevices'] = True
+            if change == 'development': profile['ProvisionedDevices'] = ['device']
+            if change == 'platform': profile['Platform'] = ['iOS']
+            if change == 'expired': profile['ExpirationDate'] = datetime(2020, 1, 1)
+            if change == 'group': profile['Entitlements']['com.apple.security.application-groups'] = []
+            with self.subTest(change=change), self.assertRaises(RuntimeError):
+                validate_profile(profile, 'com.example.app', 'TEAM', 'group.com.example.shared')
 
 
 if __name__ == '__main__':

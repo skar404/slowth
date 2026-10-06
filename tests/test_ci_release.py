@@ -15,6 +15,13 @@ from release_tools import signing as ci_signing
 from release_tools import core as release
 
 
+def apple_page(platform='IOS', state='VALID', version='2026.8.2', build='13'):
+    return {'data': [{'id': 'apple-build-id', 'attributes': {'processingState': state, 'version': build},
+                      'relationships': {'preReleaseVersion': {'data': {'id': 'prerelease'}}}}],
+            'included': [{'type': 'preReleaseVersions', 'id': 'prerelease',
+                          'attributes': {'platform': platform, 'version': version}}]}
+
+
 class EvidenceTests(unittest.TestCase):
     def test_ci_refuses_modified_tree_and_wrong_workflow_revision(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -133,9 +140,10 @@ class SigningTests(unittest.TestCase):
             signer = ci_signing.Signing(Path(temp) / 'signing')
             signer.key_id, signer.issuer, signer.app_id = 'key', 'issuer', '123'
             signer.previous_build = 12
+            signer.version = '2026.8.2'
             ipa = Path(temp) / 'app.ipa'
             ipa.write_bytes(b'exact-export')
-            pages = [{'data': []}, {'data': [{'id': 'apple-build-id', 'attributes': {'processingState': 'VALID'}}]}]
+            pages = [{'data': []}, apple_page()]
             with patch.object(ci_signing, 'quiet', return_value=b'--api-key <string>') as upload, \
                  patch.object(signer, 'api', side_effect=pages), \
                  patch.object(ci_signing.time, 'sleep'):
@@ -145,10 +153,32 @@ class SigningTests(unittest.TestCase):
                 self.assertIn('--api-key', upload.call_args.args)
                 self.assertEqual(result['build_id'], 'apple-build-id')
                 self.assertFalse(result['app_store_published'])
-            with patch.object(ci_signing, 'quiet', return_value=b''), patch.object(signer, 'api', return_value={
-                'data': [{'id': 'apple-build-id', 'attributes': {'processingState': 'INVALID'}}]}):
+            with patch.object(ci_signing, 'quiet', return_value=b''), patch.object(signer, 'api', return_value=apple_page(state='INVALID')):
                 with self.assertRaisesRegex(RuntimeError, 'Apple rejected'):
                     signer.upload(ipa, '13')
+            signer.cleanup()
+
+    def test_macos_processing_never_accepts_same_number_ios_build(self):
+        from urllib.parse import parse_qs, urlsplit
+        from release_tools.macos_store import MacStoreSigning
+        with tempfile.TemporaryDirectory() as temp:
+            signer = MacStoreSigning(Path(temp) / 'signing')
+            signer.key_id, signer.issuer, signer.app_id = 'key', 'issuer', '123'
+            signer.previous_build, signer.version = 12, '2026.8.2'
+            package = Path(temp) / 'app.pkg'
+            package.write_bytes(b'package')
+            with patch.object(ci_signing, 'quiet', return_value=b''), \
+                 patch.object(signer, 'api', return_value=apple_page()) as api:
+                with self.assertRaisesRegex(RuntimeError, 'different platform'):
+                    signer.upload(package, '13')
+                query = parse_qs(urlsplit(api.call_args.args[0]).query)
+                self.assertEqual(query['filter[preReleaseVersion.platform]'], ['MAC_OS'])
+                self.assertEqual(query['filter[preReleaseVersion.version]'], ['2026.8.2'])
+            with patch.object(ci_signing, 'quiet', return_value=b'') as transport, \
+                 patch.object(signer, 'api', return_value=apple_page(platform='MAC_OS')):
+                result = signer.upload(package, '13')
+                self.assertEqual(result['platform'], 'MAC_OS')
+                self.assertIn('osx', transport.call_args.args)
             signer.cleanup()
 
     def test_modified_ipa_is_rejected_after_transport(self):
@@ -163,7 +193,7 @@ class SigningTests(unittest.TestCase):
                 return b''
             with patch.object(ci_signing, 'quiet', side_effect=transport), \
                  patch.object(signer, 'api') as api:
-                with self.assertRaisesRegex(RuntimeError, 'IPA changed'):
+                with self.assertRaisesRegex(RuntimeError, 'Artifact changed'):
                     signer.upload(ipa, '13')
                 api.assert_not_called()
             signer.cleanup()

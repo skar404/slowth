@@ -18,7 +18,7 @@ hermetic or byte-for-byte reproducible.
 | `models --tag TAG --gpg-key KEY --publish` | Signs and publishes a verified model release | Signed tag and GitHub Release |
 | `build --model-bundle FILE --output DIR` | Validates unsigned iOS and macOS Release archives and creates a local manifest | None |
 | `ci --model-release TAG` | Dispatches unsigned iOS/macOS validation on main | GitHub Actions run |
-| `ci --model-release TAG --testflight` | Builds both platforms, notarizes macOS and uploads iOS to Apple | Actions run and TestFlight build |
+| `ci --model-release TAG --testflight` | Builds both platforms, notarizes macOS and uploads both platforms to Apple | Actions run and TestFlight build |
 | `version --run ID --model-release TAG --gpg-key KEY --publish` | Publishes verified artifacts from an existing successful run | Signed app-version tag and GitHub Release |
 
 `build --testflight` is reserved for the GitHub workflow, not local use.
@@ -52,20 +52,23 @@ For inspection, omit `--publish`. Assets and generated notes go to
 `--notes FILE` supplies custom public notes. Publication requires the current
 public source to match the signed commit already on main, a successful release
 workflow for that commit, the matching run attempt, exact artifact hashes,
-GitHub-hosted provenance for the manifest and both binaries, notarization accepted
-by Apple, and VALID iOS processing. It signs checksums and the version tag, uploads
+GitHub-hosted provenance for the manifest and all three artifacts, notarization accepted
+by Apple, and VALID processing for both platforms. It signs checksums and the version tag, uploads
 a draft, downloads and verifies every asset, then publishes it as latest.
 
-Version releases contain exactly these nine assets (plus GitHub's source archives):
+Version releases contain exactly these eleven assets (plus GitHub's source archives):
 
 - `Unscroll.ipa`: the exact App Store-signed file sent to TestFlight. For verification;
   install through TestFlight or the App Store, not by opening this IPA.
 - `Slowth-macOS.zip`: universal Apple Silicon/Intel app, Developer ID-signed,
   notarized, with a stapled ticket. Extract and move Slowth.app to Applications.
+- `Slowth-macOS-TestFlight.pkg`: the exact Mac App Store-signed package sent to Apple;
+  retained for verification. Use TestFlight to install this build or the ZIP for direct distribution.
 - `Slowth-models.tar.gz`: the exact input archive used by CI.
 - `build-manifest.json`: source, version/build, binary hashes and Apple results.
-- `manifest-attestation.jsonl`, `ipa-attestation.jsonl`, `macos-attestation.jsonl`.
-- `SHA256SUMS` and `SHA256SUMS.asc`: all seven preceding files and their GPG signature.
+- `manifest-attestation.jsonl`, `ipa-attestation.jsonl`, `macos-attestation.jsonl`,
+  `macos-store-attestation.jsonl`.
+- `SHA256SUMS` and `SHA256SUMS.asc`: all nine preceding files and their GPG signature.
 
 An app-version release can supply models to future runs, e.g.
 `ci --model-release v2026.8.2 --testflight`. Existing model releases remain valid
@@ -127,7 +130,7 @@ shasum -a 256 -c SHA256SUMS
 
 **Source checks** runs on pull requests and main and needs no Apple credentials
 or models. **iOS and macOS release builds** runs manually on main or via the
-`ci` command. Both paths build iOS and macOS. The signed path also notarizes the Mac app. macOS is distributed directly, not uploaded to the Mac App Store by this workflow.
+`ci` command. Both paths build iOS and macOS. The signed path also notarizes the Mac app. The same Mac archive also receives a separate App Store export for macOS TestFlight.
 
 Actions are pinned by commit; tool versions are Python 3.12.9, Node 22.14.0,
 XcodeGen 2.46.0 (download SHA-256 checked), and Xcode 26.6 / 17F113. The `macos-26`
@@ -153,6 +156,10 @@ no secrets. Configure these values in Settings → Environments → app-store:
 | Secret | `MACOS_CERTIFICATE_PASSWORD` | Nonempty password protecting that `.p12` |
 | Secret | `MACOS_PROFILE_APP_BASE64` | Base64 Developer ID (`MAC_APP_DIRECT`) profile for the Mac host |
 | Secret | `MACOS_PROFILE_SAFARI_BASE64` | Base64 Developer ID profile for the Mac Safari extension |
+| Secret | `MACOS_INSTALLER_P12_BASE64` | Base64 Mac Installer Distribution certificate with its private key |
+| Secret | `MACOS_INSTALLER_PASSWORD` | Nonempty password protecting the installer `.p12` |
+| Secret | `MACOS_STORE_PROFILE_APP_BASE64` | Base64 Mac App Store (`MAC_APP_STORE`) profile for the Mac host |
+| Secret | `MACOS_STORE_PROFILE_SAFARI_BASE64` | Base64 Mac App Store profile for the Safari extension |
 | Secret | `IOS_PROFILE_APP_BASE64` | Base64 App Store profile for `<prefix>.ios` |
 | Secret | `IOS_PROFILE_SAFARI_BASE64` | Base64 App Store profile for `<prefix>.ios.Extension` |
 | Secret | `IOS_PROFILE_BROADCAST_BASE64` | Base64 App Store profile for `<prefix>.ios.Broadcast` |
@@ -183,7 +190,12 @@ The CI builds a universal binary, exports with Developer ID, submits it using
 `notarytool` and the same team API key, requires `Accepted`, staples and validates
 the ticket, and checks Gatekeeper before packaging. Apple Distribution used for
 iOS cannot substitute for Developer ID. Mac notarization completes before the
-new IPA is uploaded. Profiles and keychains are temporary for both platforms.
+uploads. For macOS TestFlight, Xcode exports that same archive again with Apple
+Distribution, the two Mac App Store profiles and Mac Installer Distribution.
+The script expands the resulting PKG and verifies both bundle versions, embedded
+identities/profiles, entitlements, universal architectures and signatures before
+uploading. Developer ID ZIP and TestFlight PKG have different signatures and hashes.
+Profiles and keychains are temporary for all distribution paths.
 
 ## Run a build
 
@@ -209,7 +221,11 @@ dispatch only means the run was requested; inspect Actions for its final result.
 CI checks app/extension versions, embedded identities, model weights, resource
 metadata, absence of Debug capture code and Photos permissions, and all compiled
 localizations. The signed path checks the exported IPA and signature, uploads
-that exact file, and waits up to 20 minutes for Apple processing to become VALID.
+the exact IPA and Mac PKG, and waits up to 20 minutes per platform for Apple
+processing to become VALID. Both global build-number preflights run before either
+upload. Polls filter and independently check the platform, marketing version and
+build number: an accepted iOS build cannot stand in for the Mac build with the
+same number.
 It checks all pages of prior builds and rejects reused/lower build numbers.
 Workflow uploads are serialized; avoid simultaneous manual Apple uploads.
 
@@ -226,7 +242,7 @@ local diagnostic utilities and are not claimed by this pipeline.
 
 Download the `build-evidence-<run>-<attempt>` artifact from the public run. It
 contains the manifest, checksums and attestation bundles; successful signed runs
-also retain the exact IPA and final notarized Mac ZIP. No Xcode archive, debug
+also retain the exact IPA, Mac TestFlight PKG and final notarized Mac ZIP. No Xcode archive, debug
 symbols, standalone provisioning profile, raw build log or training input is an
 uploaded artifact. The distribution apps contain their required embedded profiles. Public Actions console logs still show ordinary build output.
 
@@ -243,8 +259,9 @@ Compare the manifest's `commit`, `source_tree`, `run_url`, version and build wit
 the expected reviewed release and the app's version. Require the attestation's
 source revision to match that expected commit. A valid attestation for some other
 revision is not evidence for your chosen release. `kind=unsigned-validation`
-means no Apple upload; `kind=testflight-upload` includes the IPA's SHA-256 and
-Apple's processed build ID. The IPA also receives its own provenance attestation;
+means no Apple upload; `kind=testflight-upload` includes the IPA/PKG hashes and separate
+Apple processing results in `app_store_connect` (IOS) and `macos_app_store_connect`
+(MAC_OS). `macos_testflight` describes the uploaded PKG; `macos` describes the ZIP. The IPA also receives its own provenance attestation;
 the release operator can verify a retained copy with:
 
 ```sh
@@ -257,7 +274,8 @@ gh attestation verify /path/to/Slowth.ipa --repo skar404/slowth \
 
 The retained IPA lets users independently hash the file uploaded to Apple.
 For the Mac ZIP, use the same verification command with `Slowth-macOS.zip` and
-`macos-attestation.jsonl`. Verify the GPG signature before trusting release checksums.
+`macos-attestation.jsonl`; for the TestFlight PKG, use `Slowth-macOS-TestFlight.pkg`
+and `macos-store-attestation.jsonl`. Verify the GPG signature before trusting release checksums.
 Attestations establish what the workflow produced, not the
 absence of malicious source or a match to the post-processing App Store binary.
 Review of the workflow and source remains necessary. Runtime rule updates are a
@@ -277,7 +295,8 @@ to replace published files. Failures before tag push never publish a release.
 
 If Apple accepts an upload but processing or evidence publication fails, inspect
 App Store Connect before trying again. An accepted upload consumes its build
-number. Never retry that upload number or claim evidence from a failed run.
+number. A second-platform failure can leave only one platform processed; inspect
+both platform records and never present partial success as a complete release. Never retry that upload number or claim evidence from a failed run.
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_*.py' -v

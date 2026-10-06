@@ -66,6 +66,8 @@ def validate_profile(profile, bundle_id, team):
 
 
 class Signing:
+    platform = 'IOS'
+
     def __init__(self, directory):
         self.directory = directory
         directory.mkdir(mode=0o700)
@@ -93,6 +95,7 @@ class Signing:
             return json.load(response)
 
     def preflight(self, version, build):
+        self.version = version
         release.require(os.environ.get('GITHUB_REF') == 'refs/heads/main',
                         'TestFlight uploads run only from main')
         self.team = required('APPLE_TEAM_ID')
@@ -211,24 +214,37 @@ class Signing:
         help_text = quiet('xcrun', 'altool', '--help')
         auth = (['--api-key', self.key_id, '--api-issuer', self.issuer]
                 if b'--api-key <' in help_text else
-                ['--type', 'ios', '--apiKey', self.key_id, '--apiIssuer', self.issuer])
+                ['--type', 'osx' if self.platform == 'MAC_OS' else 'ios',
+                 '--apiKey', self.key_id, '--apiIssuer', self.issuer])
         quiet('xcrun', 'altool', '--upload-app', '-f', ipa, *auth,
               env=dict(os.environ, API_PRIVATE_KEYS_DIR=str(self.directory)))
-        release.require(release.sha(ipa) == before, 'IPA changed during upload')
+        release.require(release.sha(ipa) == before, 'Artifact changed during upload')
         path = '/v1/builds?' + urllib.parse.urlencode({'filter[app]': self.app_id,
-                                                     'filter[version]': build, 'limit': 200})
+                                                     'filter[version]': build,
+                                                     'filter[preReleaseVersion.platform]': self.platform,
+                                                     'filter[preReleaseVersion.version]': self.version,
+                                                     'include': 'preReleaseVersion', 'limit': 200})
         for _ in range(40):
-            builds = self.api(path)['data']
+            page = self.api(path)
+            builds = page['data']
             release.require(len(builds) <= 1, 'Ambiguous App Store build number')
             if builds:
                 item = builds[0]
+                prerelease_id = item['relationships']['preReleaseVersion']['data']['id']
+                versions = [v for v in page.get('included', [])
+                            if v['type'] == 'preReleaseVersions' and v['id'] == prerelease_id]
+                release.require(len(versions) == 1 and versions[0]['attributes']['platform'] == self.platform
+                                and versions[0]['attributes']['version'] == self.version
+                                and item['attributes']['version'] == build,
+                                'Apple returned a different platform, version or build')
                 state = item['attributes']['processingState']
                 release.require(state not in ('FAILED', 'INVALID'), 'Apple rejected the uploaded build')
                 if state == 'VALID':
                     return {'app_id': self.app_id, 'build_id': item['id'], 'processing_state': state,
                             'build_number': build, 'previous_max_build': self.previous_build,
+                            'platform': self.platform, 'marketing_version': self.version,
                             'status': 'processed-for-testflight', 'app_store_published': False}
-            print('Waiting for App Store Connect processing...', flush=True)
+            print(f'Waiting for App Store Connect {self.platform} processing...', flush=True)
             time.sleep(30)
         raise RuntimeError('Apple processing timed out; inspect App Store Connect before another upload')
 

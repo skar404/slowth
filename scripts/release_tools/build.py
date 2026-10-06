@@ -118,6 +118,7 @@ def main(argv=None):
         provenance = identity(source, head, tree, version, build, official)
         signing = None
         mac_signing = None
+        mac_store_signing = None
         try:
             # Local developer credentials are never copied into the CI snapshot.
             if args.testflight:
@@ -130,6 +131,12 @@ def main(argv=None):
                 signing = ci_signing.Signing(output / 'signing')
                 signing.preflight(version, build)
                 signing.configure(source, spec)
+                if args.platform == 'both':
+                    from .macos_store import MacStoreSigning
+                    mac_store_signing = MacStoreSigning(output / 'macos-store-signing')
+                    # Check both platforms' prior builds before either upload consumes this number.
+                    mac_store_signing.preflight(version, build)
+                    mac_store_signing.configure(source, spec)
             else:
                 shutil.copyfile(source / 'Configs/Local.xcconfig.example', source / 'Configs/Local.xcconfig')
             # Reuse model import, generated resource, version and Node-test checks.
@@ -169,6 +176,15 @@ def main(argv=None):
             if signing:
                 ipa = signing.export(archives['iOS'], output, version, build, provenance, source)
                 manifest['ipa'] = {'name': ipa.name, 'sha256': release.sha(ipa)}
+                if mac_store_signing:
+                    package, mac_bundles = mac_store_signing.export(archives['macOS'], output, version, build, provenance)
+                    package_path = public / 'Slowth-macOS-TestFlight.pkg'
+                    shutil.copyfile(package, package_path)
+                    manifest['macos_testflight'] = {'name': package_path.name, 'sha256': release.sha(package),
+                                                  'distribution': 'app-store-connect', 'bundles': mac_bundles}
+                    release.require(release.sha(package_path) == manifest['macos_testflight']['sha256'], 'Retained Mac package differs')
+                    manifest['macos_app_store_connect'] = mac_store_signing.upload(package, build)
+                    manifest['checks'] += ['mac-app-store-package', 'mac-app-store-processing']
                 # altool sends exactly this export, without rebuilding or exporting again.
                 manifest['app_store_connect'] = signing.upload(ipa, build)
                 shutil.copyfile(ipa, public / 'Unscroll.ipa')
@@ -181,8 +197,12 @@ def main(argv=None):
             print(f'Public evidence: {public}')
         finally:
             try:
-                if signing:
-                    signing.cleanup()
+                if mac_store_signing:
+                    mac_store_signing.cleanup()
             finally:
-                if mac_signing:
-                    mac_signing.cleanup()
+                try:
+                    if signing:
+                        signing.cleanup()
+                finally:
+                    if mac_signing:
+                        mac_signing.cleanup()

@@ -7,7 +7,8 @@ import tempfile
 from . import core, models
 
 EVIDENCE = {'build-manifest.json', 'SHA256SUMS', 'manifest-attestation.jsonl',
-            'ipa-attestation.jsonl', 'macos-attestation.jsonl', 'Unscroll.ipa', 'Slowth-macOS.zip'}
+            'ipa-attestation.jsonl', 'macos-attestation.jsonl', 'Unscroll.ipa', 'Slowth-macOS.zip',
+            'Slowth-macOS-TestFlight.pkg', 'macos-store-attestation.jsonl'}
 ASSETS = EVIDENCE | {models.ASSET, 'SHA256SUMS.asc'}
 
 
@@ -34,15 +35,20 @@ def validate_evidence(output, repo, run_id, attempt, head, tree, version, build)
                 'run_url': f'https://github.com/{repo}/actions/runs/{run_id}/attempts/{attempt}',
                 'model_packages': core.MODEL_HASHES, 'runtime_metadata_sha256': core.RUNTIME_HASH}
     core.require(all(manifest.get(k) == v for k, v in expected.items()), 'CI manifest identity or model pins differ')
-    apple = manifest['app_store_connect']
-    core.require(apple['processing_state'] == 'VALID' and apple['build_number'] == build
-                 and apple['app_store_published'] is False and apple['build_id'], 'Apple build is not processed')
+    for platform, key in [('IOS', 'app_store_connect'), ('MAC_OS', 'macos_app_store_connect')]:
+        apple = manifest[key]
+        core.require(apple['processing_state'] == 'VALID' and apple['build_number'] == build
+                     and apple['platform'] == platform and apple['marketing_version'] == version
+                     and apple['app_store_published'] is False and apple['build_id'],
+                     f'Apple {platform} build is not processed or its identity differs')
     core.require(manifest['platforms']['iOS']['code_signed'] is True
                  and manifest['platforms']['macOS']['code_signed'] is True
                  and manifest['macos']['notarization_status'] == 'Accepted', 'Both platforms must be distribution signed; macOS must be notarized')
-    for name, record in [('Unscroll.ipa', manifest['ipa']), ('Slowth-macOS.zip', manifest['macos'])]:
+    for name, record in [('Unscroll.ipa', manifest['ipa']), ('Slowth-macOS.zip', manifest['macos']),
+                         ('Slowth-macOS-TestFlight.pkg', manifest['macos_testflight'])]:
         core.require(record['name'] == name and core.sha(output / name) == record['sha256'], f'Artifact differs: {name}')
-    for name, attestation in [('build-manifest.json', 'manifest'), ('Unscroll.ipa', 'ipa'), ('Slowth-macOS.zip', 'macos')]:
+    for name, attestation in [('build-manifest.json', 'manifest'), ('Unscroll.ipa', 'ipa'), ('Slowth-macOS.zip', 'macos'),
+                              ('Slowth-macOS-TestFlight.pkg', 'macos-store')]:
         core.run('gh', 'attestation', 'verify', output / name, '--repo', repo,
                  '--signer-workflow', f'{repo}/.github/workflows/release-ci.yml',
                  '--source-digest', head, '--source-ref', 'refs/heads/main', '--deny-self-hosted-runners',
@@ -119,6 +125,7 @@ def prepare(args):
                  '- iOS: `Unscroll.ipa` is the exact signed file uploaded to TestFlight, included for verification. '
                  'Install through TestFlight or the App Store; this App Store-signed IPA is not a direct installation package. '
                  'Requires iOS/iPadOS 16 or later. App Store publication is a separate step.\n'
+                 '- macOS TestFlight: `Slowth-macOS-TestFlight.pkg` is the separate App Store-signed package uploaded to Apple, retained for verification. Use the ZIP for direct installation.\n'
                  '- Pinned Core ML model inputs, build manifest, GitHub attestations and GPG-signed SHA-256 checksums.\n\n'
                  'Verify the checksum signature with the trusted release key, then run `shasum -a 256 -c SHA256SUMS`. '
                  'See docs/BUILD_TRUST.md at this tag for attestation verification. '
