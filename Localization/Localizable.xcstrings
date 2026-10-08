@@ -57891,287 +57891,6 @@
         }
       }
     },
-    "Email me to help": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "راسلني للمساعدة"
-          }
-        },
-        "ar-EG": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ابعتلي إيميل وساعد"
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Напісаць і дапамагчы"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "সাহায্য করতে ইমেইল করুন"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Napište mi a pomozte"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skriv en mail og hjælp"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Per E-Mail helfen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Email me to help"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Escríbeme para ayudar"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mag-email para tumulong"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "M’écrire pour aider"
-          }
-        },
-        "ha": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Turo mini imel don taimakawa"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "כתבו לי כדי לעזור"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "मदद के लिए ईमेल करें"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Írj e-mailt, és segíts"
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Գրեք ինձ՝ օգնելու համար"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kirim email untuk membantu"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scrivimi per aiutare"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "メールで協力する"
-          }
-        },
-        "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "მომწერეთ დასახმარებლად"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Көмектесу үшін хат жазыңыз"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이메일로 참여하기"
-          }
-        },
-        "ky": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жардам берүү үчүн кат жазыңыз"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Parašykite ir padėkite"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "मदतीसाठी ईमेल करा"
-          }
-        },
-        "ne": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "मद्दत गर्न इमेल गर्नुहोस्"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mail me om te helpen"
-          }
-        },
-        "pa-Arab": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مدد لئی ای میل کرو"
-          }
-        },
-        "pcm": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Email me to help"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Napisz, aby pomóc"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Me envie um e-mail"
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envie-me um e-mail"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scrie-mi pentru a ajuta"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Написать и помочь"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mejla mig för att hjälpa"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nitumie barua pepe kusaidia"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "உதவ மின்னஞ்சல் அனுப்புங்கள்"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "సహాయం కోసం ఇమెయిల్ చేయండి"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ส่งอีเมลเพื่อช่วย"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yardım için e-posta gönder"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Написати й допомогти"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مدد کے لیے ای میل کریں"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gửi email để giúp đỡ"
-          }
-        },
-        "yue": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "寄電郵幫手"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "发邮件参与"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "寄信參與"
-          }
-        }
-      }
-    },
     "Help improve": {
       "extractionState": "manual",
       "localizations": {
@@ -59015,287 +58734,6 @@
         }
       }
     },
-    "Hi Denis! I’d like to help improve Slowth’s in-app blocking by sharing screen recordings.\n\nDevice details (you can remove these before sending):\nDevice: %@ (%@)\nSystem: %@ %@\nSlowth: %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مرحبًا دينيس! أود مشاركة تسجيلات للشاشة للمساعدة في تحسين الحظر داخل التطبيقات في Slowth.\n\nتفاصيل الجهاز (يمكنك حذفها قبل الإرسال):\nالجهاز: ⁨%@⁩ (⁨%@⁩)\nالنظام: ⁨%@⁩ ⁨%@⁩\nSlowth: ⁨%@⁩"
-          }
-        },
-        "ar-EG": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "أهلًا دينيس! حابب أشارك تسجيلات شاشة عشان أساعد في تحسين الحظر جوّه التطبيقات في Slowth.\n\nبيانات الجهاز (تقدر تمسحها قبل الإرسال):\nالجهاز: ⁨%@⁩ (⁨%@⁩)\nالنظام: ⁨%@⁩ ⁨%@⁩\nSlowth: ⁨%@⁩"
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Прывітанне, Дзяніс! Хачу дапамагчы палепшыць блакіроўку ў праграмах Slowth і падзяліцца запісамі экрана.\n\nДаныя прылады (можна выдаліць перад адпраўкай):\nПрылада: %@ (%@)\nСістэма: %@ %@\nSlowth: %@"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "হ্যালো Denis! স্ক্রিন রেকর্ডিং শেয়ার করে Slowth-এর অ্যাপের ভেতরে ব্লকিং উন্নত করতে সাহায্য করতে চাই।\n\nডিভাইসের তথ্য (পাঠানোর আগে মুছে দিতে পারেন):\nডিভাইস: %@ (%@)\nসিস্টেম: %@ %@\nSlowth: %@"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ahoj Denisi! Chci sdílet záznamy obrazovky a pomoci vylepšit blokování v aplikacích ve Slowth.\n\nÚdaje o zařízení (lze odstranit před odesláním):\nZařízení: %@ (%@)\nSystém: %@ %@\nSlowth: %@"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hej Denis! Jeg vil gerne dele skærmoptagelser for at hjælpe med at forbedre Slowths blokering i apps.\n\nEnhedsoplysninger (kan fjernes før afsendelse):\nEnhed: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hallo Denis! Ich möchte mit Bildschirmaufnahmen helfen, die In-App-Blockierung von Slowth zu verbessern.\n\nGerätedaten (können vor dem Senden entfernt werden):\nGerät: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hi Denis! I’d like to help improve Slowth’s in-app blocking by sharing screen recordings.\n\nDevice details (you can remove these before sending):\nDevice: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Hola, Denis! Me gustaría compartir grabaciones de pantalla para ayudar a mejorar el bloqueo en apps de Slowth.\n\nDatos del dispositivo (puedes borrarlos antes de enviar):\nDispositivo: %@ (%@)\nSistema: %@ %@\nSlowth: %@"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hi Denis! Gusto kong magbahagi ng mga screen recording para makatulong na pahusayin ang pag-block sa mga app ng Slowth.\n\nDetalye ng device (puwedeng alisin bago ipadala):\nDevice: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bonjour Denis ! J’aimerais partager des captures vidéo pour aider à améliorer le blocage dans les apps de Slowth.\n\nInformations sur l’appareil (à supprimer si vous le souhaitez) :\nAppareil : %@ (%@)\nSystème : %@ %@\nSlowth : %@"
-          }
-        },
-        "ha": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sannu Denis! Ina son raba bidiyon allo domin taimakawa wajen inganta toshewa cikin manhajoji na Slowth.\n\nBayanan na’ura (za ka iya cire su kafin aikawa):\nNa’ura: %@ (%@)\nTsari: %@ %@\nSlowth: %@"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "היי דניס! אשמח לשתף הקלטות מסך כדי לעזור לשפר את החסימה בתוך אפליקציות ב-Slowth.\n\nפרטי המכשיר (אפשר למחוק לפני השליחה):\nמכשיר: ⁨%@⁩ (⁨%@⁩)\nמערכת: ⁨%@⁩ ⁨%@⁩\nSlowth: ⁨%@⁩"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "नमस्ते Denis! मैं स्क्रीन रिकॉर्डिंग साझा करके Slowth की ऐप के अंदर ब्लॉकिंग बेहतर बनाने में मदद करना चाहता हूँ।\n\nडिवाइस की जानकारी (भेजने से पहले हटा सकते हैं):\nडिवाइस: %@ (%@)\nसिस्टम: %@ %@\nSlowth: %@"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Szia Denis! Képernyőfelvételekkel szeretnék segíteni a Slowth appokon belüli blokkolásának fejlesztésében.\n\nEszközadatok (küldés előtt törölhetők):\nEszköz: %@ (%@)\nRendszer: %@ %@\nSlowth: %@"
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Բարև, Դենիս։ Ցանկանում եմ կիսվել էկրանի ձայնագրություններով՝ օգնելու բարելավել Slowth-ի արգելափակումը հավելվածներում։\n\nՍարքի տվյալներ (կարող եք հեռացնել ուղարկելուց առաջ)․\nՍարք՝ %@ (%@)\nՀամակարգ՝ %@ %@\nSlowth՝ %@"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Halo Denis! Saya ingin berbagi rekaman layar untuk membantu meningkatkan pemblokiran dalam aplikasi di Slowth.\n\nDetail perangkat (boleh dihapus sebelum mengirim):\nPerangkat: %@ (%@)\nSistem: %@ %@\nSlowth: %@"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ciao Denis! Vorrei condividere registrazioni dello schermo per aiutare a migliorare il blocco nelle app di Slowth.\n\nDati del dispositivo (puoi rimuoverli prima dell’invio):\nDispositivo: %@ (%@)\nSistema: %@ %@\nSlowth: %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Denisさん、こんにちは！画面録画を共有して、Slowthのアプリ内ブロックの改善に協力したいです。\n\n端末情報（送信前に削除できます）：\n端末：%@（%@）\nシステム：%@ %@\nSlowth：%@"
-          }
-        },
-        "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "გამარჯობა, დენის! მსურს ეკრანის ჩანაწერების გაზიარებით დაგეხმაროთ Slowth-ის აპებში დაბლოკვის გაუმჯობესებაში.\n\nმოწყობილობის მონაცემები (გაგზავნამდე შეგიძლიათ წაშალოთ):\nმოწყობილობა: %@ (%@)\nსისტემა: %@ %@\nSlowth: %@"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сәлем, Денис! Экран жазбаларымен бөлісіп, Slowth-тың қолданбалардағы бұғаттауын жақсартуға көмектескім келеді.\n\nҚұрылғы деректері (жіберер алдында өшіруге болады):\nҚұрылғы: %@ (%@)\nЖүйе: %@ %@\nSlowth: %@"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "안녕하세요, Denis! 화면 녹화를 공유해 Slowth의 앱 내 차단 개선에 참여하고 싶습니다.\n\n기기 정보(보내기 전에 삭제할 수 있습니다):\n기기: %@ (%@)\n시스템: %@ %@\nSlowth: %@"
-          }
-        },
-        "ky": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Салам, Денис! Экран жазууларын бөлүшүп, Slowth’тун колдонмолордогу бөгөттөөсүн жакшыртууга жардам бергим келет.\n\nТүзмөк маалыматы (жөнөтөрдөн мурун өчүрсөңүз болот):\nТүзмөк: %@ (%@)\nСистема: %@ %@\nSlowth: %@"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sveikas, Denis! Norėčiau pasidalinti ekrano įrašais ir padėti tobulinti Slowth blokavimą programose.\n\nĮrenginio duomenys (galite pašalinti prieš siųsdami):\nĮrenginys: %@ (%@)\nSistema: %@ %@\nSlowth: %@"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "नमस्कार Denis! स्क्रीन रेकॉर्डिंग शेअर करून Slowth चे ॲपमधील ब्लॉकिंग सुधारण्यात मदत करायची आहे.\n\nडिव्हाइसची माहिती (पाठवण्यापूर्वी काढू शकता):\nडिव्हाइस: %@ (%@)\nसिस्टम: %@ %@\nSlowth: %@"
-          }
-        },
-        "ne": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "नमस्ते Denis! स्क्रिन रेकर्डिङ साझा गरेर Slowth को एपभित्रको रोकथाम सुधार गर्न मद्दत गर्न चाहन्छु।\n\nउपकरणको विवरण (पठाउनुअघि हटाउन सक्नुहुन्छ):\nउपकरण: %@ (%@)\nप्रणाली: %@ %@\nSlowth: %@"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoi Denis! Ik wil graag schermopnamen delen om het blokkeren in apps van Slowth te verbeteren.\n\nApparaatgegevens (kun je vóór het versturen verwijderen):\nApparaat: %@ (%@)\nSysteem: %@ %@\nSlowth: %@"
-          }
-        },
-        "pa-Arab": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "سلام ڈینس! میں سکرین ریکارڈنگاں سانجھیاں کرکے Slowth دی ایپاں اندر بلاکنگ بہتر بناؤن وچ مدد کرنا چاہنا واں۔\n\nڈیوائس دی تفصیل (بھیجن توں پہلاں مٹا سکدے او):\nڈیوائس: ⁨%@⁩ (⁨%@⁩)\nسسٹم: ⁨%@⁩ ⁨%@⁩\nSlowth: ⁨%@⁩"
-          }
-        },
-        "pcm": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hi Denis! I wan share screen recordings to help make Slowth blocking inside apps better.\n\nDevice details (you fit remove them before you send):\nDevice: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cześć Denis! Chcę udostępnić nagrania ekranu, aby pomóc ulepszyć blokowanie w aplikacjach w Slowth.\n\nDane urządzenia (można usunąć przed wysłaniem):\nUrządzenie: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oi, Denis! Gostaria de compartilhar gravações de tela para ajudar a melhorar o bloqueio em apps do Slowth.\n\nDados do dispositivo (você pode remover antes de enviar):\nDispositivo: %@ (%@)\nSistema: %@ %@\nSlowth: %@"
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Olá, Denis! Gostaria de partilhar gravações do ecrã para ajudar a melhorar o bloqueio em apps do Slowth.\n\nDados do dispositivo (pode remover antes de enviar):\nDispositivo: %@ (%@)\nSistema: %@ %@\nSlowth: %@"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salut, Denis! Aș vrea să trimit înregistrări ale ecranului pentru a ajuta la îmbunătățirea blocării în aplicații din Slowth.\n\nDetalii despre dispozitiv (le poți elimina înainte de trimitere):\nDispozitiv: %@ (%@)\nSistem: %@ %@\nSlowth: %@"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Привет, Денис! Хочу помочь улучшить блокировку в приложениях Slowth и поделиться записями экрана.\n\nДанные устройства (можно удалить перед отправкой):\nУстройство: %@ (%@)\nСистема: %@ %@\nSlowth: %@"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hej Denis! Jag vill dela skärminspelningar för att hjälpa till att förbättra Slowths blockering i appar.\n\nEnhetsinformation (kan tas bort innan du skickar):\nEnhet: %@ (%@)\nSystem: %@ %@\nSlowth: %@"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Habari Denis! Ningependa kushiriki rekodi za skrini ili kusaidia kuboresha uzuiaji ndani ya programu wa Slowth.\n\nTaarifa za kifaa (unaweza kuziondoa kabla ya kutuma):\nKifaa: %@ (%@)\nMfumo: %@ %@\nSlowth: %@"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "வணக்கம் Denis! திரைப் பதிவுகளைப் பகிர்ந்து Slowth-இன் செயலிகளுக்குள் தடுக்கும் அம்சத்தை மேம்படுத்த உதவ விரும்புகிறேன்.\n\nசாதன விவரங்கள் (அனுப்பும் முன் நீக்கலாம்):\nசாதனம்: %@ (%@)\nஅமைப்பு: %@ %@\nSlowth: %@"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "నమస్తే Denis! స్క్రీన్ రికార్డింగ్‌లను పంచుకుని Slowth యాప్‌లలో బ్లాకింగ్ మెరుగుదలకు సహాయపడాలనుకుంటున్నాను.\n\nపరికరం వివరాలు (పంపే ముందు తీసివేయవచ్చు):\nపరికరం: %@ (%@)\nసిస్టమ్: %@ %@\nSlowth: %@"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "สวัสดี Denis! ฉันอยากแชร์วิดีโอบันทึกหน้าจอเพื่อช่วยปรับปรุงการบล็อกในแอปของ Slowth\n\nข้อมูลอุปกรณ์ (ลบออกก่อนส่งได้):\nอุปกรณ์: %@ (%@)\nระบบ: %@ %@\nSlowth: %@"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merhaba Denis! Ekran kayıtları paylaşarak Slowth’un uygulama içi engellemesini geliştirmeye yardımcı olmak istiyorum.\n\nCihaz bilgileri (göndermeden önce silebilirsin):\nCihaz: %@ (%@)\nSistem: %@ %@\nSlowth: %@"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Привіт, Денисе! Хочу допомогти покращити блокування в застосунках Slowth і поділитися записами екрана.\n\nДані пристрою (можна видалити перед надсиланням):\nПристрій: %@ (%@)\nСистема: %@ %@\nSlowth: %@"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "سلام ڈینس! میں اسکرین ریکارڈنگز شیئر کر کے Slowth کی ایپس کے اندر بلاکنگ بہتر بنانے میں مدد کرنا چاہتا ہوں۔\n\nآلے کی تفصیلات (بھیجنے سے پہلے حذف کر سکتے ہیں):\nآلہ: ⁨%@⁩ (⁨%@⁩)\nسسٹم: ⁨%@⁩ ⁨%@⁩\nSlowth: ⁨%@⁩"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chào Denis! Tôi muốn chia sẻ bản ghi màn hình để giúp cải thiện tính năng chặn trong ứng dụng của Slowth.\n\nThông tin thiết bị (có thể xóa trước khi gửi):\nThiết bị: %@ (%@)\nHệ thống: %@ %@\nSlowth: %@"
-          }
-        },
-        "yue": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "你好，Denis！我想分享螢幕錄影，幫手改善 Slowth 嘅 App 內封鎖功能。\n\n裝置資料（可以喺寄出前刪除）：\n裝置：%@（%@）\n系統：%@ %@\nSlowth：%@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "你好，Denis！我想分享录屏，帮助改进 Slowth 的应用内屏蔽功能。\n\n设备信息（可以在发送前删除）：\n设备：%@（%@）\n系统：%@ %@\nSlowth：%@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "你好，Denis！我想分享螢幕錄影，協助改善 Slowth 的 App 內封鎖功能。\n\n裝置資訊（可以在寄出前刪除）：\n裝置：%@（%@）\n系統：%@ %@\nSlowth：%@"
-          }
-        }
-      }
-    },
     "Hide card": {
       "extractionState": "manual",
       "localizations": {
@@ -59573,568 +59011,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "隱藏卡片"
-          }
-        }
-      }
-    },
-    "I need short screen recordings of Instagram, Facebook and other social apps to improve Slowth’s in-app blocking.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "أحتاج إلى تسجيلات قصيرة للشاشة من Instagram وFacebook وتطبيقات اجتماعية أخرى لتحسين الحظر داخل التطبيقات في Slowth."
-          }
-        },
-        "ar-EG": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "محتاج تسجيلات شاشة قصيرة من Instagram وFacebook وتطبيقات تواصل تانية عشان أحسّن الحظر جوّه التطبيقات في Slowth."
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мне патрэбныя кароткія запісы экрана Instagram, Facebook і іншых сацсетак, каб палепшыць блакіроўку ў праграмах Slowth."
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth-এর অ্যাপের ভেতরে ব্লকিং উন্নত করতে Instagram, Facebook ও অন্যান্য সোশ্যাল অ্যাপের ছোট স্ক্রিন রেকর্ডিং দরকার।"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Potřebuji krátké záznamy obrazovky Instagramu, Facebooku a dalších sociálních aplikací, abych vylepšil blokování v aplikacích ve Slowth."
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jeg har brug for korte skærmoptagelser af Instagram, Facebook og andre sociale apps for at forbedre Slowths blokering i apps."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ich suche kurze Bildschirmaufnahmen von Instagram, Facebook und anderen sozialen Apps, um die In-App-Blockierung von Slowth zu verbessern."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I need short screen recordings of Instagram, Facebook and other social apps to improve Slowth’s in-app blocking."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Necesito grabaciones cortas de pantalla de Instagram, Facebook y otras redes sociales para mejorar el bloqueo en apps de Slowth."
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kailangan ko ng maiikling screen recording ng Instagram, Facebook at iba pang social app para mapahusay ang pag-block sa loob ng mga app ng Slowth."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je recherche de courtes captures vidéo d’Instagram, de Facebook et d’autres réseaux sociaux pour améliorer le blocage dans les apps de Slowth."
-          }
-        },
-        "ha": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ina buƙatar gajerun bidiyon allo na Instagram, Facebook da sauran manhajojin sada zumunta domin inganta toshewa cikin manhajoji na Slowth."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "אני צריך הקלטות מסך קצרות של Instagram, Facebook ואפליקציות חברתיות אחרות כדי לשפר את החסימה בתוך אפליקציות ב-Slowth."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth की ऐप के अंदर ब्लॉकिंग बेहतर बनाने के लिए मुझे Instagram, Facebook और दूसरे सोशल ऐप की छोटी स्क्रीन रिकॉर्डिंग चाहिए।"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rövid képernyőfelvételeket keresek az Instagramról, a Facebookról és más közösségi appokról a Slowth appokon belüli blokkolásának javításához."
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ինձ պետք են Instagram-ի, Facebook-ի և այլ սոցիալական հավելվածների էկրանի կարճ ձայնագրություններ՝ Slowth-ի՝ հավելվածներում արգելափակումը բարելավելու համար։"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saya membutuhkan rekaman layar singkat dari Instagram, Facebook, dan aplikasi sosial lainnya untuk meningkatkan pemblokiran dalam aplikasi di Slowth."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerco brevi registrazioni dello schermo di Instagram, Facebook e altri social per migliorare il blocco nelle app di Slowth."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowthのアプリ内ブロックを改善するため、Instagram、FacebookなどのSNSアプリの短い画面録画を募集しています。"
-          }
-        },
-        "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "მჭირდება Instagram-ის, Facebook-ისა და სხვა სოციალური აპების ეკრანის მოკლე ჩანაწერები, რათა გავაუმჯობესო Slowth-ის დაბლოკვა აპებში."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth-тың қолданбалардағы бұғаттауын жақсарту үшін Instagram, Facebook және басқа әлеуметтік желілердің қысқа экран жазбалары қажет."
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth의 앱 내 차단을 개선하기 위해 Instagram, Facebook 등 소셜 앱의 짧은 화면 녹화가 필요합니다."
-          }
-        },
-        "ky": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth’тун колдонмолордогу бөгөттөөсүн жакшыртуу үчүн Instagram, Facebook жана башка социалдык тармактардын кыска экран жазуулары керек."
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Man reikia trumpų Instagram, Facebook ir kitų socialinių programų ekrano įrašų, kad patobulinčiau Slowth blokavimą programose."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth चे ॲपमधील ब्लॉकिंग सुधारण्यासाठी मला Instagram, Facebook आणि इतर सोशल ॲप्सची छोटी स्क्रीन रेकॉर्डिंग हवी आहेत."
-          }
-        },
-        "ne": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth को एपभित्रको रोकथाम सुधार गर्न मलाई Instagram, Facebook र अन्य सामाजिक एपका छोटा स्क्रिन रेकर्डिङहरू चाहिन्छ।"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ik zoek korte schermopnamen van Instagram, Facebook en andere sociale apps om het blokkeren in apps van Slowth te verbeteren."
-          }
-        },
-        "pa-Arab": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth دی ایپاں اندر بلاکنگ بہتر بناؤن لئی مینوں Instagram، Facebook تے ہور سوشل ایپاں دیاں چھوٹیاں سکرین ریکارڈنگاں چاہیدیاں نیں۔"
-          }
-        },
-        "pcm": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I need short screen recordings of Instagram, Facebook and other social apps to make Slowth blocking inside apps better."
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Potrzebuję krótkich nagrań ekranu z Instagrama, Facebooka i innych aplikacji społecznościowych, aby ulepszyć blokowanie w aplikacjach w Slowth."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Preciso de gravações curtas da tela do Instagram, Facebook e de outras redes sociais para melhorar o bloqueio em apps do Slowth."
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Preciso de gravações curtas do ecrã do Instagram, Facebook e de outras redes sociais para melhorar o bloqueio em apps do Slowth."
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Am nevoie de înregistrări scurte ale ecranului din Instagram, Facebook și alte aplicații sociale pentru a îmbunătăți blocarea în aplicații din Slowth."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мне нужны короткие записи экрана Instagram, Facebook и других соцсетей, чтобы улучшить блокировку в приложениях Slowth."
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jag behöver korta skärminspelningar av Instagram, Facebook och andra sociala appar för att förbättra Slowths blockering i appar."
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nahitaji rekodi fupi za skrini za Instagram, Facebook na programu nyingine za kijamii ili kuboresha uzuiaji ndani ya programu wa Slowth."
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth-இன் செயலிகளுக்குள் தடுக்கும் அம்சத்தை மேம்படுத்த Instagram, Facebook மற்றும் பிற சமூகச் செயலிகளின் குறுகிய திரைப் பதிவுகள் தேவை."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth యాప్‌లలో బ్లాకింగ్‌ను మెరుగుపరచడానికి Instagram, Facebook, ఇతర సోషల్ యాప్‌ల చిన్న స్క్రీన్ రికార్డింగ్‌లు కావాలి."
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ผมต้องการวิดีโอบันทึกหน้าจอสั้น ๆ ของ Instagram, Facebook และแอปโซเชียลอื่น ๆ เพื่อปรับปรุงการบล็อกในแอปของ Slowth"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth’un uygulama içi engellemesini geliştirmek için Instagram, Facebook ve diğer sosyal uygulamaların kısa ekran kayıtlarına ihtiyacım var."
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мені потрібні короткі записи екрана Instagram, Facebook та інших соцмереж, щоб покращити блокування в застосунках Slowth."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slowth کی ایپس کے اندر بلاکنگ بہتر بنانے کے لیے مجھے Instagram، Facebook اور دوسری سوشل ایپس کی مختصر اسکرین ریکارڈنگز درکار ہیں۔"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tôi cần các bản ghi màn hình ngắn của Instagram, Facebook và những ứng dụng mạng xã hội khác để cải thiện tính năng chặn trong ứng dụng của Slowth."
-          }
-        },
-        "yue": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我需要 Instagram、Facebook 同其他社交 App 嘅短螢幕錄影，用嚟改善 Slowth 嘅 App 內封鎖功能。"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我需要 Instagram、Facebook 等社交应用的简短录屏，以改进 Slowth 的应用内屏蔽功能。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我需要 Instagram、Facebook 等社群 App 的簡短螢幕錄影，以改善 Slowth 的 App 內封鎖功能。"
-          }
-        }
-      }
-    },
-    "Just record yourself using the app as usual. No explanations or labels needed — I’ll review and label the footage myself to train and test the blocking model.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "سجّل الشاشة أثناء استخدام التطبيق كالمعتاد. لا حاجة إلى شرح أو تصنيف — سأراجع التسجيلات وأصنّفها بنفسي لتدريب نموذج الحظر واختباره."
-          }
-        },
-        "ar-EG": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "سجّل الشاشة وإنت بتستخدم التطبيق كالمعتاد. مش محتاج تشرح أو تصنّف حاجة — أنا هراجع التسجيلات وأصنّفها بنفسي عشان أدرّب نموذج الحظر وأختبره."
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проста запішыце, як звычайна карыстаецеся праграмай. Тлумачэнні і разметка не патрэбныя — я сам прагляджу і размечу запіс для навучання і праверкі мадэлі блакіроўкі."
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "শুধু স্বাভাবিকভাবে অ্যাপ ব্যবহারের সময় স্ক্রিন রেকর্ড করুন। ব্যাখ্যা বা লেবেল দেওয়ার দরকার নেই — ব্লকিং মডেলকে প্রশিক্ষণ ও পরীক্ষা করার জন্য আমি নিজেই রেকর্ডিং দেখে লেবেল দেব।"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stačí zaznamenat běžné používání aplikace. Vysvětlování ani označování není potřeba — záznamy sám prohlédnu a označím pro trénování a testování modelu blokování."
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optag bare, hvordan du bruger appen som normalt. Ingen forklaringer eller mærkater er nødvendige — jeg gennemgår og mærker selv optagelserne for at træne og teste blokeringsmodellen."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nimm einfach auf, wie du die App wie gewohnt nutzt. Erklärungen oder Markierungen sind nicht nötig — ich sichte und beschrifte das Material selbst, um das Blockierungsmodell zu trainieren und zu testen."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Just record yourself using the app as usual. No explanations or labels needed — I’ll review and label the footage myself to train and test the blocking model."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solo graba cómo usas la app normalmente. No hacen falta explicaciones ni etiquetas: yo revisaré y etiquetaré las grabaciones para entrenar y probar el modelo de bloqueo."
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I-record lang ang normal mong paggamit ng app. Hindi kailangan ng paliwanag o mga label — ako mismo ang susuri at maglalagay ng label para sanayin at subukan ang modelo ng pag-block."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filmez simplement votre utilisation habituelle de l’app. Aucune explication ni annotation nécessaire : je regarderai et annoterai les vidéos pour entraîner et tester le modèle de blocage."
-          }
-        },
-        "ha": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ka ɗauki bidiyon allo kawai yayin amfani da manhajar kamar yadda ka saba. Ba sai ka yi bayani ko sanya alamomi ba — ni zan duba bidiyon in sanya alamomi domin horarwa da gwajin samfurin toshewa."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "פשוט הקליטו את המסך בזמן שימוש רגיל באפליקציה. אין צורך בהסברים או בתוויות — אצפה בהקלטות ואתייג אותן בעצמי כדי לאמן ולבדוק את מודל החסימה."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "बस ऐप का रोज़ की तरह इस्तेमाल करते हुए स्क्रीन रिकॉर्ड करें। समझाने या लेबल लगाने की ज़रूरत नहीं — ब्लॉकिंग मॉडल को प्रशिक्षित करने और परखने के लिए रिकॉर्डिंग मैं खुद देखूँगा और लेबल लगाऊँगा।"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Csak vedd fel, ahogy a megszokott módon használod az appot. Nem kell magyarázat vagy címkézés — én nézem át és címkézem a felvételeket a blokkolási modell tanításához és teszteléséhez."
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Պարզապես ձայնագրեք էկրանը՝ հավելվածն օգտագործելով սովորականի պես։ Բացատրություններ կամ նշումներ պետք չեն․ ես ինքս կնայեմ և կնշագրեմ նյութը՝ արգելափակման մոդելն ուսուցանելու և ստուգելու համար։"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cukup rekam saat Anda menggunakan aplikasi seperti biasa. Tidak perlu penjelasan atau label — saya sendiri yang akan meninjau dan memberi label pada rekaman untuk melatih serta menguji model pemblokiran."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra semplicemente come usi di solito l’app. Non servono spiegazioni o etichette: esaminerò e annoterò io le registrazioni per addestrare e testare il modello di blocco."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "普段どおりにアプリを使う様子を録画するだけで大丈夫です。説明やラベル付けは不要です。私が録画を確認してラベルを付け、ブロックモデルの学習とテストに使います。"
-          }
-        },
-        "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "უბრალოდ ჩაიწერეთ ეკრანი აპის ჩვეულებრივად გამოყენებისას. ახსნა ან მონიშვნა საჭირო არ არის — ჩანაწერებს თავად გადავხედავ და მოვნიშნავ დაბლოკვის მოდელის სწავლებისა და შემოწმებისთვის."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қолданбаны әдеттегідей пайдаланып, экранды жазыңыз. Түсіндіру не белгілеу қажет емес — бұғаттау моделін үйрету және тексеру үшін жазбаларды өзім қарап, белгілеймін."
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "평소처럼 앱을 사용하는 모습을 녹화해 주세요. 설명이나 라벨은 필요 없습니다. 제가 직접 영상을 검토하고 라벨을 붙여 차단 모델의 학습과 테스트에 사용하겠습니다."
-          }
-        },
-        "ky": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Колдонмону адаттагыдай колдонуп, экранды жазыңыз. Түшүндүрүү же белгилөө керек эмес — бөгөттөө моделин үйрөтүү жана текшерүү үчүн жазууларды өзүм карап, белгилейм."
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiesiog įrašykite, kaip įprastai naudojatės programa. Paaiškinimų ar žymų nereikia — pats peržiūrėsiu ir sužymėsiu įrašus blokavimo modeliui mokyti ir tikrinti."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "फक्त नेहमीप्रमाणे ॲप वापरताना स्क्रीन रेकॉर्ड करा. स्पष्टीकरण किंवा लेबले देण्याची गरज नाही — ब्लॉकिंग मॉडेलचे प्रशिक्षण आणि चाचणीसाठी मी स्वतः रेकॉर्डिंग पाहून लेबले लावेन."
-          }
-        },
-        "ne": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "सधैँझैँ एप चलाउँदा स्क्रिन रेकर्ड गर्नुहोस्। व्याख्या वा लेबल चाहिँदैन — रोकथाम मोडेललाई तालिम दिन र परीक्षण गर्न म आफैँ रेकर्डिङ हेरेर लेबल लगाउनेछु।"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neem gewoon op hoe je de app normaal gebruikt. Uitleg of labels zijn niet nodig: ik bekijk en label de beelden zelf om het blokkeermodel te trainen en te testen."
-          }
-        },
-        "pa-Arab": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بس ایپ نوں روز وانگ ورتدیاں سکرین ریکارڈ کرو۔ سمجھاؤن یا لیبل لاؤن دی لوڑ نئیں — بلاکنگ ماڈل دی تربیت تے جانچ لئی میں آپ ریکارڈنگاں ویکھ کے لیبل لاواں گا۔"
-          }
-        },
-        "pcm": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Just record your screen as you dey use the app normally. You no need explain or put labels — na me go watch and label the recordings to train and test the blocking model."
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Po prostu nagraj, jak zwykle korzystasz z aplikacji. Nie musisz nic wyjaśniać ani oznaczać — sam przejrzę i opiszę nagrania, aby wytrenować i przetestować model blokowania."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Basta gravar como você usa o app normalmente. Não precisa explicar nem marcar nada: eu mesmo vou analisar e rotular as gravações para treinar e testar o modelo de bloqueio."
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Basta gravar como utiliza habitualmente a app. Não precisa de explicar nem identificar nada: eu próprio analisarei e anotarei as gravações para treinar e testar o modelo de bloqueio."
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Înregistrează pur și simplu cum folosești aplicația în mod normal. Nu sunt necesare explicații sau etichete — voi analiza și eticheta eu înregistrările pentru a antrena și testa modelul de blocare."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Просто запишите, как обычно пользуетесь приложением. Пояснения и разметка не нужны — я сам просмотрю и размечу запись для обучения и проверки модели блокировки."
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spela bara in när du använder appen som vanligt. Du behöver inte förklara eller märka något — jag granskar och märker materialet själv för att träna och testa blockeringsmodellen."
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rekodi tu skrini unapotumia programu kama kawaida. Huhitaji kutoa maelezo au kuweka lebo — nitakagua na kuweka lebo mwenyewe ili kufundisha na kujaribu modeli ya uzuiaji."
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "வழக்கம்போல் செயலியைப் பயன்படுத்தும்போது திரையைப் பதிவு செய்தால் போதும். விளக்கங்களோ குறியீடுகளோ தேவையில்லை — தடுப்பு மாதிரிக்குப் பயிற்சி அளித்துச் சோதிக்க நானே பதிவுகளைப் பார்த்துக் குறியிடுவேன்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "మీరు మామూలుగా యాప్ వాడుతున్నప్పుడు స్క్రీన్ రికార్డ్ చేస్తే చాలు. వివరణలు లేదా లేబుల్‌లు అవసరం లేదు — బ్లాకింగ్ మోడల్‌కు శిక్షణ ఇచ్చి పరీక్షించడానికి నేనే రికార్డింగ్‌లను చూసి లేబుల్‌లు పెడతాను."
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "แค่บันทึกหน้าจอขณะใช้แอปตามปกติ ไม่ต้องอธิบายหรือติดป้ายกำกับ ผมจะดูและติดป้ายกำกับวิดีโอเองเพื่อฝึกและทดสอบโมเดลการบล็อก"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uygulamayı her zamanki gibi kullanırken ekranı kaydetmen yeterli. Açıklama veya etiket gerekmez; engelleme modelini eğitmek ve test etmek için kayıtları kendim inceleyip etiketleyeceğim."
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Просто запишіть, як зазвичай користуєтеся застосунком. Пояснення й розмітка не потрібні — я сам перегляну та розмічу запис для навчання й перевірки моделі блокування."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بس ایپ کو معمول کے مطابق استعمال کرتے ہوئے اسکرین ریکارڈ کریں۔ وضاحت یا لیبل لگانے کی ضرورت نہیں — بلاکنگ ماڈل کی تربیت اور جانچ کے لیے میں خود ریکارڈنگز دیکھوں گا اور لیبل لگاؤں گا۔"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chỉ cần ghi lại cách bạn dùng ứng dụng như bình thường. Không cần giải thích hay gắn nhãn — tôi sẽ tự xem và gắn nhãn bản ghi để huấn luyện và kiểm tra mô hình chặn."
-          }
-        },
-        "yue": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "只要錄低你平時用 App 嘅過程就得，唔使解釋或者加標籤。我會自己睇同標註影片，用嚟訓練同測試封鎖模型。"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "只需录下你平时使用应用的过程，无需解释或标注。我会亲自查看并标注录像，用于训练和测试屏蔽模型。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "只需錄下你平常使用 App 的過程，不需要解釋或標註。我會親自查看並標註影片，用來訓練和測試封鎖模型。"
           }
         }
       }
@@ -60420,6 +59296,568 @@
         }
       }
     },
+    "Share screen recordings of short-form feeds and everyday app use to help improve recognition.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "شارك تسجيلات شاشة لموجزات المحتوى القصير والاستخدام اليومي للتطبيقات للمساعدة في تحسين التعرّف."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "شارك تسجيلات شاشة لخلاصات المحتوى القصير واستخدامك اليومي للتطبيقات علشان تساعد في تحسين التعرّف."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Падзяліцеся запісамі экрана з кароткімі стужкамі і звычайным выкарыстаннем праграм, каб палепшыць распазнаванне."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "শনাক্তকরণ উন্নত করতে ছোট কনটেন্টের ফিড এবং দৈনন্দিন অ্যাপ ব্যবহারের স্ক্রিন রেকর্ডিং শেয়ার করুন।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sdílejte záznamy obrazovky s krátkým obsahem ve feedech a běžným používáním aplikací, abyste pomohli zlepšit rozpoznávání."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Del skærmoptagelser af feeds med kort indhold og almindelig brug af apps for at forbedre genkendelsen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teile Bildschirmaufnahmen von Feeds mit kurzen Inhalten und der alltäglichen App-Nutzung, um die Erkennung zu verbessern."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share screen recordings of short-form feeds and everyday app use to help improve recognition."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparte grabaciones de pantalla de feeds de contenido breve y del uso cotidiano de las apps para mejorar el reconocimiento."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magbahagi ng mga screen recording ng mga feed ng maiikling content at karaniwang paggamit ng app para mapahusay ang pagkilala."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez des enregistrements d’écran de fils de contenus courts et de l’utilisation quotidienne des apps pour améliorer la reconnaissance."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raba rikodin allo na jerin gajerun abubuwa da amfani da manhajoji na yau da kullum don taimakawa inganta ganewa."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שתפו הקלטות מסך של פידים עם תוכן קצר ושל שימוש יומיומי באפליקציות כדי לעזור לשפר את הזיהוי."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहचान बेहतर बनाने के लिए छोटे कंटेंट की फ़ीड और ऐप के रोज़मर्रा के इस्तेमाल की स्क्रीन रिकॉर्डिंग साझा करें।"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ossz meg képernyőfelvételeket rövid tartalmak hírfolyamairól és a mindennapi alkalmazáshasználatról a felismerés javításához."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Կիսվեք կարճ բովանդակության հոսքերի և հավելվածների առօրյա օգտագործման էկրանի ձայնագրություններով՝ ճանաչումը բարելավելու համար։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bagikan rekaman layar feed konten singkat dan penggunaan aplikasi sehari-hari untuk membantu meningkatkan pengenalan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condividi registrazioni dello schermo di feed con contenuti brevi e dell’uso quotidiano delle app per migliorare il riconoscimento."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "認識精度の向上のため、短いコンテンツのフィードや普段のアプリ使用の画面録画を共有してください。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ამოცნობის გასაუმჯობესებლად გააზიარეთ მოკლე კონტენტის ლენტებისა და აპების ყოველდღიური გამოყენების ეკრანის ჩანაწერები."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тануды жақсарту үшін қысқа контент таспалары мен қолданбаларды күнделікті пайдаланудың экран жазбаларын бөлісіңіз."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인식 정확도를 높일 수 있도록 짧은 콘텐츠 피드와 일상적인 앱 사용 화면 녹화를 공유해 주세요."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таанууну жакшыртуу үчүн кыска контент тасмаларынын жана колдонмолорду күнүмдүк колдонуунун экран жаздырууларын бөлүшүңүз."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasidalykite trumpo turinio srautų ir kasdienio programėlių naudojimo ekrano įrašais, kad padėtumėte pagerinti atpažinimą."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ओळख सुधारण्यासाठी लहान आशयाच्या फीड आणि अ‍ॅपच्या दैनंदिन वापराची स्क्रीन रेकॉर्डिंग शेअर करा."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहिचान सुधार्न छोटो सामग्रीका फिड र दैनिक एप प्रयोगका स्क्रिन रेकर्डिङ साझा गर्नुहोस्।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deel schermopnamen van feeds met korte content en dagelijks appgebruik om de herkenning te verbeteren."
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پچھان نوں بہتر بناؤن لئی مختصر مواد دیاں فیڈاں تے ایپاں دی روزمرہ ورتوں دیاں سکرین ریکارڈنگاں سانجھیاں کرو۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share screen recordings of short-content feeds and how you dey use apps every day to help make recognition better."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Udostępnij nagrania ekranu z kanałami krótkich treści i codziennym korzystaniem z aplikacji, aby poprawić rozpoznawanie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartilhe gravações de tela de feeds de conteúdo curto e do uso cotidiano de apps para ajudar a melhorar o reconhecimento."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partilhe gravações do ecrã de feeds de conteúdos curtos e da utilização diária de apps para ajudar a melhorar o reconhecimento."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distribuie înregistrări de ecran cu fluxuri de conținut scurt și utilizarea obișnuită a aplicațiilor pentru a îmbunătăți recunoașterea."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поделитесь записями экрана с короткими лентами и обычным использованием приложений, чтобы улучшить распознавание."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dela skärminspelningar av flöden med kort innehåll och vardaglig appanvändning för att förbättra igenkänningen."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shiriki rekodi za skrini za milisho ya maudhui mafupi na matumizi ya kila siku ya programu ili kusaidia kuboresha utambuzi."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "அடையாளம் காணுதலை மேம்படுத்த, குறுகிய உள்ளடக்க ஊட்டங்கள் மற்றும் அன்றாடச் செயலிப் பயன்பாட்டின் திரைப் பதிவுகளைப் பகிரவும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "గుర్తింపును మెరుగుపరచడంలో సహాయపడటానికి చిన్న కంటెంట్ ఫీడ్‌లు మరియు రోజువారీ యాప్ వినియోగపు స్క్రీన్ రికార్డింగ్‌లను పంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แชร์วิดีโอบันทึกหน้าจอฟีดเนื้อหาสั้นและการใช้แอปตามปกติเพื่อช่วยปรับปรุงการจดจำ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanımayı iyileştirmek için kısa içerik akışlarının ve günlük uygulama kullanımının ekran kayıtlarını paylaşın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поділіться записами екрана з короткими стрічками та звичайним використанням застосунків, щоб покращити розпізнавання."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "شناخت بہتر بنانے کے لیے مختصر مواد کی فیڈز اور ایپس کے روزمرہ استعمال کی اسکرین ریکارڈنگز شیئر کریں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chia sẻ bản ghi màn hình các bảng tin nội dung ngắn và việc sử dụng ứng dụng hằng ngày để cải thiện khả năng nhận diện."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享短內容動態同日常使用 App 嘅螢幕錄影，幫手改善辨識能力。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享短内容信息流和日常使用应用的屏幕录制，帮助改进识别效果。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享短內容動態和日常使用 App 的螢幕錄影，協助改善辨識效果。"
+          }
+        }
+      }
+    },
+    "Upload test cases": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رفع حالات اختبار"
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ارفع حالات اختبار"
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загрузіць тэставыя прыклады"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পরীক্ষার নমুনা আপলোড করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nahrát testovací příklady"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upload testeksempler"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testbeispiele hochladen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upload test cases"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subir casos de prueba"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mag-upload ng mga test case"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer des cas de test"
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loda misalan gwaji"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "העלאת מקרי בדיקה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "टेस्ट केस अपलोड करें"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tesztesetek feltöltése"
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Վերբեռնել փորձարկման օրինակներ"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unggah kasus uji"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carica casi di test"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テストケースをアップロード"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "სატესტო მაგალითების ატვირთვა"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сынақ мысалдарын жүктеп салу"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "테스트 사례 업로드"
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сыноо мисалдарын жүктөө"
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Įkelti bandymo pavyzdžius"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "चाचणी उदाहरणे अपलोड करा"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "परीक्षणका उदाहरणहरू अपलोड गर्नुहोस्"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testgevallen uploaden"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ٹیسٹ دیاں مثالاں اپ لوڈ کرو"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upload test cases"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prześlij przypadki testowe"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar casos de teste"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregar casos de teste"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Încarcă exemple de test"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загрузить кейсы"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ladda upp testfall"
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pakia mifano ya majaribio"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சோதனை எடுத்துக்காட்டுகளைப் பதிவேற்றவும்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "పరీక్ష ఉదాహరణలను అప్‌లోడ్ చేయండి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "อัปโหลดกรณีทดสอบ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test örnekleri yükle"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завантажити тестові приклади"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ٹیسٹ کی مثالیں اپ لوڈ کریں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tải lên ca kiểm thử"
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上載測試案例"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上传测试案例"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上傳測試案例"
+          }
+        }
+      }
+    },
     "Social apps look different across devices, languages and app versions. Your recordings will help me train Slowth to recognize what should be blocked and avoid blocking regular content.": {
       "extractionState": "manual",
       "localizations": {
@@ -60701,283 +60139,283 @@
         }
       }
     },
-    "You can email me before recording. The draft includes your device model, iOS and Slowth versions — you can remove them before sending.": {
+    "Just record yourself using the app as usual. No explanations or labels needed — I’ll review and label the footage myself to train and test the blocking model.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يمكنك مراسلتي قبل التسجيل. تتضمن المسودة طراز جهازك وإصداري iOS وSlowth، ويمكنك حذفها قبل الإرسال."
+            "value": "سجّل الشاشة أثناء استخدام التطبيق كالمعتاد. لا حاجة إلى شرح أو تصنيف — سأراجع التسجيلات وأصنّفها بنفسي لتدريب نموذج الحظر واختباره."
           }
         },
         "ar-EG": {
           "stringUnit": {
             "state": "translated",
-            "value": "ممكن تبعتلي قبل ما تسجّل. مسودة الإيميل فيها موديل جهازك وإصدارات iOS وSlowth، وتقدر تمسحهم قبل الإرسال."
+            "value": "سجّل الشاشة وإنت بتستخدم التطبيق كالمعتاد. مش محتاج تشرح أو تصنّف حاجة — أنا هراجع التسجيلات وأصنّفها بنفسي عشان أدرّب نموذج الحظر وأختبره."
           }
         },
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Можна напісаць мне да запісу. Чарнавік змяшчае мадэль прылады, версіі iOS і Slowth — іх можна выдаліць перад адпраўкай."
+            "value": "Проста запішыце, як звычайна карыстаецеся праграмай. Тлумачэнні і разметка не патрэбныя — я сам прагляджу і размечу запіс для навучання і праверкі мадэлі блакіроўкі."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "রেকর্ড করার আগেও আমাকে ইমেইল করতে পারেন। খসড়ায় ডিভাইসের মডেল, iOS ও Slowth-এর সংস্করণ থাকে; পাঠানোর আগে এগুলো মুছে দিতে পারেন।"
+            "value": "শুধু স্বাভাবিকভাবে অ্যাপ ব্যবহারের সময় স্ক্রিন রেকর্ড করুন। ব্যাখ্যা বা লেবেল দেওয়ার দরকার নেই — ব্লকিং মডেলকে প্রশিক্ষণ ও পরীক্ষা করার জন্য আমি নিজেই রেকর্ডিং দেখে লেবেল দেব।"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Můžete mi napsat ještě před nahráváním. Koncept obsahuje model zařízení a verze iOS a Slowth. Před odesláním je můžete odstranit."
+            "value": "Stačí zaznamenat běžné používání aplikace. Vysvětlování ani označování není potřeba — záznamy sám prohlédnu a označím pro trénování a testování modelu blokování."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du kan skrive til mig før optagelsen. Kladden indeholder din enhedsmodel samt iOS- og Slowth-versionerne. Du kan fjerne dem, før du sender."
+            "value": "Optag bare, hvordan du bruger appen som normalt. Ingen forklaringer eller mærkater er nødvendige — jeg gennemgår og mærker selv optagelserne for at træne og teste blokeringsmodellen."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du kannst mir schon vor der Aufnahme schreiben. Der Entwurf enthält dein Gerätemodell sowie die iOS- und Slowth-Version — du kannst diese Angaben vor dem Senden entfernen."
+            "value": "Nimm einfach auf, wie du die App wie gewohnt nutzt. Erklärungen oder Markierungen sind nicht nötig — ich sichte und beschrifte das Material selbst, um das Blockierungsmodell zu trainieren und zu testen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can email me before recording. The draft includes your device model, iOS and Slowth versions — you can remove them before sending."
+            "value": "Just record yourself using the app as usual. No explanations or labels needed — I’ll review and label the footage myself to train and test the blocking model."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puedes escribirme antes de grabar. El borrador incluye el modelo de tu dispositivo y las versiones de iOS y Slowth; puedes borrarlos antes de enviarlo."
+            "value": "Solo graba cómo usas la app normalmente. No hacen falta explicaciones ni etiquetas: yo revisaré y etiquetaré las grabaciones para entrenar y probar el modelo de bloqueo."
           }
         },
         "fil": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puwede kang mag-email bago mag-record. Kasama sa draft ang modelo ng device at mga bersyon ng iOS at Slowth; puwede mong alisin ang mga ito bago ipadala."
+            "value": "I-record lang ang normal mong paggamit ng app. Hindi kailangan ng paliwanag o mga label — ako mismo ang susuri at maglalagay ng label para sanayin at subukan ang modelo ng pag-block."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous pouvez m’écrire avant d’enregistrer. Le brouillon inclut le modèle de votre appareil et les versions d’iOS et de Slowth. Vous pouvez les supprimer avant l’envoi."
+            "value": "Filmez simplement votre utilisation habituelle de l’app. Aucune explication ni annotation nécessaire : je regarderai et annoterai les vidéos pour entraîner et tester le modèle de blocage."
           }
         },
         "ha": {
           "stringUnit": {
             "state": "translated",
-            "value": "Za ka iya turo mini imel kafin ɗaukar bidiyo. Daftarin ya ƙunshi samfurin na’urarka da sigogin iOS da Slowth; za ka iya cire su kafin aikawa."
+            "value": "Ka ɗauki bidiyon allo kawai yayin amfani da manhajar kamar yadda ka saba. Ba sai ka yi bayani ko sanya alamomi ba — ni zan duba bidiyon in sanya alamomi domin horarwa da gwajin samfurin toshewa."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "אפשר לכתוב לי לפני ההקלטה. הטיוטה כוללת את דגם המכשיר ואת גרסאות iOS ו-Slowth. אפשר למחוק אותם לפני השליחה."
+            "value": "פשוט הקליטו את המסך בזמן שימוש רגיל באפליקציה. אין צורך בהסברים או בתוויות — אצפה בהקלטות ואתייג אותן בעצמי כדי לאמן ולבדוק את מודל החסימה."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "रिकॉर्डिंग से पहले भी मुझे ईमेल कर सकते हैं। ड्राफ़्ट में डिवाइस मॉडल और iOS व Slowth के संस्करण शामिल हैं; भेजने से पहले इन्हें हटा सकते हैं।"
+            "value": "बस ऐप का रोज़ की तरह इस्तेमाल करते हुए स्क्रीन रिकॉर्ड करें। समझाने या लेबल लगाने की ज़रूरत नहीं — ब्लॉकिंग मॉडल को प्रशिक्षित करने और परखने के लिए रिकॉर्डिंग मैं खुद देखूँगा और लेबल लगाऊँगा।"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Már a felvétel előtt is írhatsz. A piszkozat tartalmazza az eszköz modelljét, valamint az iOS és a Slowth verzióját. Ezeket küldés előtt törölheted."
+            "value": "Csak vedd fel, ahogy a megszokott módon használod az appot. Nem kell magyarázat vagy címkézés — én nézem át és címkézem a felvételeket a blokkolási modell tanításához és teszteléséhez."
           }
         },
         "hy": {
           "stringUnit": {
             "state": "translated",
-            "value": "Կարող եք գրել մինչև ձայնագրելը։ Սևագիրը ներառում է սարքի մոդելը, iOS-ի և Slowth-ի տարբերակները․ կարող եք հեռացնել դրանք ուղարկելուց առաջ։"
+            "value": "Պարզապես ձայնագրեք էկրանը՝ հավելվածն օգտագործելով սովորականի պես։ Բացատրություններ կամ նշումներ պետք չեն․ ես ինքս կնայեմ և կնշագրեմ նյութը՝ արգելափակման մոդելն ուսուցանելու և ստուգելու համար։"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anda boleh mengirim email sebelum merekam. Draf berisi model perangkat serta versi iOS dan Slowth; Anda dapat menghapusnya sebelum mengirim."
+            "value": "Cukup rekam saat Anda menggunakan aplikasi seperti biasa. Tidak perlu penjelasan atau label — saya sendiri yang akan meninjau dan memberi label pada rekaman untuk melatih serta menguji model pemblokiran."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puoi scrivermi prima di registrare. La bozza include il modello del dispositivo e le versioni di iOS e Slowth: puoi rimuoverli prima dell’invio."
+            "value": "Registra semplicemente come usi di solito l’app. Non servono spiegazioni o etichette: esaminerò e annoterò io le registrazioni per addestrare e testare il modello di blocco."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "録画する前にメールで相談できます。下書きには端末のモデル、iOSとSlowthのバージョンが含まれます。送信前に削除できます。"
+            "value": "普段どおりにアプリを使う様子を録画するだけで大丈夫です。説明やラベル付けは不要です。私が録画を確認してラベルを付け、ブロックモデルの学習とテストに使います。"
           }
         },
         "ka": {
           "stringUnit": {
             "state": "translated",
-            "value": "შეგიძლიათ ჩაწერამდე მომწეროთ. მონახაზი შეიცავს მოწყობილობის მოდელს, iOS-ისა და Slowth-ის ვერსიებს — გაგზავნამდე მათი წაშლა შეგიძლიათ."
+            "value": "უბრალოდ ჩაიწერეთ ეკრანი აპის ჩვეულებრივად გამოყენებისას. ახსნა ან მონიშვნა საჭირო არ არის — ჩანაწერებს თავად გადავხედავ და მოვნიშნავ დაბლოკვის მოდელის სწავლებისა და შემოწმებისთვის."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Жазбаны жасамай тұрып та маған хат жаза аласыз. Хат үлгісіне құрылғы моделі, iOS және Slowth нұсқалары қосылған — оларды жіберер алдында өшіруге болады."
+            "value": "Қолданбаны әдеттегідей пайдаланып, экранды жазыңыз. Түсіндіру не белгілеу қажет емес — бұғаттау моделін үйрету және тексеру үшін жазбаларды өзім қарап, белгілеймін."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "녹화 전에 이메일을 보내셔도 됩니다. 초안에는 기기 모델과 iOS 및 Slowth 버전이 포함되며, 보내기 전에 삭제할 수 있습니다."
+            "value": "평소처럼 앱을 사용하는 모습을 녹화해 주세요. 설명이나 라벨은 필요 없습니다. 제가 직접 영상을 검토하고 라벨을 붙여 차단 모델의 학습과 테스트에 사용하겠습니다."
           }
         },
         "ky": {
           "stringUnit": {
             "state": "translated",
-            "value": "Жаздыруудан мурун эле мага кат жазсаңыз болот. Каттын долбоорунда түзмөктүн модели, iOS жана Slowth версиялары бар — жөнөтөрдөн мурун өчүрсөңүз болот."
+            "value": "Колдонмону адаттагыдай колдонуп, экранды жазыңыз. Түшүндүрүү же белгилөө керек эмес — бөгөттөө моделин үйрөтүү жана текшерүү үчүн жазууларды өзүм карап, белгилейм."
           }
         },
         "lt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Galite parašyti dar prieš įrašydami. Laiško juodraštyje pateikiamas įrenginio modelis, iOS ir Slowth versijos — prieš siųsdami galite juos pašalinti."
+            "value": "Tiesiog įrašykite, kaip įprastai naudojatės programa. Paaiškinimų ar žymų nereikia — pats peržiūrėsiu ir sužymėsiu įrašus blokavimo modeliui mokyti ir tikrinti."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "रेकॉर्ड करण्यापूर्वीही मला ईमेल करू शकता. मसुद्यात डिव्हाइसचे मॉडेल आणि iOS व Slowth च्या आवृत्त्या आहेत; पाठवण्यापूर्वी त्या काढू शकता."
+            "value": "फक्त नेहमीप्रमाणे ॲप वापरताना स्क्रीन रेकॉर्ड करा. स्पष्टीकरण किंवा लेबले देण्याची गरज नाही — ब्लॉकिंग मॉडेलचे प्रशिक्षण आणि चाचणीसाठी मी स्वतः रेकॉर्डिंग पाहून लेबले लावेन."
           }
         },
         "ne": {
           "stringUnit": {
             "state": "translated",
-            "value": "रेकर्ड गर्नुअघि पनि मलाई इमेल गर्न सक्नुहुन्छ। मस्यौदामा उपकरणको मोडेल, iOS र Slowth का संस्करण छन्; पठाउनुअघि हटाउन सक्नुहुन्छ।"
+            "value": "सधैँझैँ एप चलाउँदा स्क्रिन रेकर्ड गर्नुहोस्। व्याख्या वा लेबल चाहिँदैन — रोकथाम मोडेललाई तालिम दिन र परीक्षण गर्न म आफैँ रेकर्डिङ हेरेर लेबल लगाउनेछु।"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je kunt me al vóór het opnemen mailen. Het concept bevat je apparaatmodel en de versies van iOS en Slowth. Je kunt deze vóór het versturen verwijderen."
+            "value": "Neem gewoon op hoe je de app normaal gebruikt. Uitleg of labels zijn niet nodig: ik bekijk en label de beelden zelf om het blokkeermodel te trainen en te testen."
           }
         },
         "pa-Arab": {
           "stringUnit": {
             "state": "translated",
-            "value": "تسی ریکارڈنگ توں پہلاں وی مینوں ای میل کر سکدے او۔ ڈرافٹ وچ تہاڈی ڈیوائس دا ماڈل تے iOS تے Slowth دے ورژن نیں؛ بھیجن توں پہلاں ایہہ مٹا سکدے او۔"
+            "value": "بس ایپ نوں روز وانگ ورتدیاں سکرین ریکارڈ کرو۔ سمجھاؤن یا لیبل لاؤن دی لوڑ نئیں — بلاکنگ ماڈل دی تربیت تے جانچ لئی میں آپ ریکارڈنگاں ویکھ کے لیبل لاواں گا۔"
           }
         },
         "pcm": {
           "stringUnit": {
             "state": "translated",
-            "value": "You fit email me before you record. The draft get your device model, iOS and Slowth versions; you fit remove them before you send am."
+            "value": "Just record your screen as you dey use the app normally. You no need explain or put labels — na me go watch and label the recordings to train and test the blocking model."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Możesz napisać przed nagraniem. Szkic zawiera model urządzenia oraz wersje iOS i Slowth. Możesz je usunąć przed wysłaniem."
+            "value": "Po prostu nagraj, jak zwykle korzystasz z aplikacji. Nie musisz nic wyjaśniać ani oznaczać — sam przejrzę i opiszę nagrania, aby wytrenować i przetestować model blokowania."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você pode me escrever antes de gravar. O rascunho inclui o modelo do dispositivo e as versões do iOS e do Slowth. Você pode remover esses dados antes de enviar."
+            "value": "Basta gravar como você usa o app normalmente. Não precisa explicar nem marcar nada: eu mesmo vou analisar e rotular as gravações para treinar e testar o modelo de bloqueio."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pode escrever-me antes de gravar. O rascunho inclui o modelo do dispositivo e as versões do iOS e do Slowth. Pode remover estes dados antes de enviar."
+            "value": "Basta gravar como utiliza habitualmente a app. Não precisa de explicar nem identificar nada: eu próprio analisarei e anotarei as gravações para treinar e testar o modelo de bloqueio."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Îmi poți scrie înainte de înregistrare. Ciorna include modelul dispozitivului și versiunile iOS și Slowth. Le poți elimina înainte de trimitere."
+            "value": "Înregistrează pur și simplu cum folosești aplicația în mod normal. Nu sunt necesare explicații sau etichete — voi analiza și eticheta eu înregistrările pentru a antrena și testa modelul de blocare."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Можно написать мне до записи. В черновик добавлены модель устройства, версии iOS и Slowth — их можно удалить перед отправкой."
+            "value": "Просто запишите, как обычно пользуетесь приложением. Пояснения и разметка не нужны — я сам просмотрю и размечу запись для обучения и проверки модели блокировки."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du kan mejla innan du spelar in. Utkastet innehåller din enhetsmodell samt iOS- och Slowth-versionerna. Du kan ta bort dem innan du skickar."
+            "value": "Spela bara in när du använder appen som vanligt. Du behöver inte förklara eller märka något — jag granskar och märker materialet själv för att träna och testa blockeringsmodellen."
           }
         },
         "sw": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unaweza kuniandikia kabla ya kurekodi. Rasimu ina modeli ya kifaa chako na matoleo ya iOS na Slowth; unaweza kuviondoa kabla ya kutuma."
+            "value": "Rekodi tu skrini unapotumia programu kama kawaida. Huhitaji kutoa maelezo au kuweka lebo — nitakagua na kuweka lebo mwenyewe ili kufundisha na kujaribu modeli ya uzuiaji."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "பதிவு செய்வதற்கு முன்பே எனக்கு மின்னஞ்சல் அனுப்பலாம். வரைவில் சாதன மாடல், iOS மற்றும் Slowth பதிப்புகள் உள்ளன; அனுப்பும் முன் அவற்றை நீக்கலாம்."
+            "value": "வழக்கம்போல் செயலியைப் பயன்படுத்தும்போது திரையைப் பதிவு செய்தால் போதும். விளக்கங்களோ குறியீடுகளோ தேவையில்லை — தடுப்பு மாதிரிக்குப் பயிற்சி அளித்துச் சோதிக்க நானே பதிவுகளைப் பார்த்துக் குறியிடுவேன்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "రికార్డ్ చేయకముందే నాకు ఇమెయిల్ చేయవచ్చు. డ్రాఫ్ట్‌లో పరికరం మోడల్, iOS, Slowth వెర్షన్‌లు ఉంటాయి; పంపే ముందు వాటిని తీసివేయవచ్చు."
+            "value": "మీరు మామూలుగా యాప్ వాడుతున్నప్పుడు స్క్రీన్ రికార్డ్ చేస్తే చాలు. వివరణలు లేదా లేబుల్‌లు అవసరం లేదు — బ్లాకింగ్ మోడల్‌కు శిక్షణ ఇచ్చి పరీక్షించడానికి నేనే రికార్డింగ్‌లను చూసి లేబుల్‌లు పెడతాను."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "คุณส่งอีเมลมาหาผมก่อนบันทึกได้ อีเมลฉบับร่างมีรุ่นอุปกรณ์และเวอร์ชัน iOS กับ Slowth ซึ่งคุณลบออกก่อนส่งได้"
+            "value": "แค่บันทึกหน้าจอขณะใช้แอปตามปกติ ไม่ต้องอธิบายหรือติดป้ายกำกับ ผมจะดูและติดป้ายกำกับวิดีโอเองเพื่อฝึกและทดสอบโมเดลการบล็อก"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kayıt yapmadan önce bana yazabilirsin. Taslakta cihaz modelin, iOS ve Slowth sürümleri bulunur; göndermeden önce bunları silebilirsin."
+            "value": "Uygulamayı her zamanki gibi kullanırken ekranı kaydetmen yeterli. Açıklama veya etiket gerekmez; engelleme modelini eğitmek ve test etmek için kayıtları kendim inceleyip etiketleyeceğim."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Можна написати мені до запису. Чернетка містить модель пристрою, версії iOS і Slowth — їх можна видалити перед надсиланням."
+            "value": "Просто запишіть, як зазвичай користуєтеся застосунком. Пояснення й розмітка не потрібні — я сам перегляну та розмічу запис для навчання й перевірки моделі блокування."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آپ ریکارڈنگ سے پہلے بھی مجھے ای میل کر سکتے ہیں۔ مسودے میں آپ کے آلے کا ماڈل اور iOS اور Slowth کے ورژنز شامل ہیں؛ بھیجنے سے پہلے انہیں حذف کر سکتے ہیں۔"
+            "value": "بس ایپ کو معمول کے مطابق استعمال کرتے ہوئے اسکرین ریکارڈ کریں۔ وضاحت یا لیبل لگانے کی ضرورت نہیں — بلاکنگ ماڈل کی تربیت اور جانچ کے لیے میں خود ریکارڈنگز دیکھوں گا اور لیبل لگاؤں گا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bạn có thể gửi email trước khi ghi hình. Bản nháp có mẫu thiết bị, phiên bản iOS và Slowth; bạn có thể xóa chúng trước khi gửi."
+            "value": "Chỉ cần ghi lại cách bạn dùng ứng dụng như bình thường. Không cần giải thích hay gắn nhãn — tôi sẽ tự xem và gắn nhãn bản ghi để huấn luyện và kiểm tra mô hình chặn."
           }
         },
         "yue": {
           "stringUnit": {
             "state": "translated",
-            "value": "錄影之前都可以先寄電郵畀我。草稿會包含裝置型號、iOS 同 Slowth 版本，你可以喺寄出前刪除。"
+            "value": "只要錄低你平時用 App 嘅過程就得，唔使解釋或者加標籤。我會自己睇同標註影片，用嚟訓練同測試封鎖模型。"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "录屏前也可以先给我发邮件。草稿会包含设备型号、iOS 和 Slowth 版本，你可以在发送前删除。"
+            "value": "只需录下你平时使用应用的过程，无需解释或标注。我会亲自查看并标注录像，用于训练和测试屏蔽模型。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "錄影前也可以先寄信給我。草稿會包含裝置型號、iOS 和 Slowth 版本，你可以在寄出前刪除。"
+            "value": "只需錄下你平常使用 App 的過程，不需要解釋或標註。我會親自查看並標註影片，用來訓練和測試封鎖模型。"
           }
         }
       }

@@ -63,7 +63,6 @@ struct ContentView: View {
     @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
     #endif
     @AppStorage("uiMode") private var uiMode: String = "ios"
-    @AppStorage("contributionCardDismissed") private var contributionCardDismissed = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isDuo = false
@@ -396,18 +395,15 @@ struct ContentView: View {
         Section {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    if !contributionCardDismissed {
-                        HeroCard(
-                            title: String(localized: "Help improve"),
-                            subtitle: String(localized: "In-app blocking"),
-                            icon: "heart.text.clipboard",
-                            gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
-                                       Color(red: 0.08, green: 0.43, blue: 0.49)],
-                            action: { showContribution = true },
-                            onDismiss: { contributionCardDismissed = true }
-                        )
-                        .accessibilityIdentifier("contribution.card")
-                    }
+                    HeroCard(
+                        title: String(localized: "Help improve"),
+                        subtitle: String(localized: "In-app blocking"),
+                        icon: "heart.text.clipboard",
+                        gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
+                                   Color(red: 0.08, green: 0.43, blue: 0.49)],
+                        action: { showContribution = true }
+                    )
+                    .accessibilityIdentifier("contribution.card")
                     HeroCard(
                         title: String(localized: "In-app blocking"),
                         subtitle: String(localized: "Shorts, Reels & Stories"),
@@ -844,7 +840,7 @@ struct ContentView: View {
                         .foregroundStyle(.tint)
                 }
 
-                Text(String(localized: "I need short screen recordings of Instagram, Facebook and other social apps to improve Slowth’s in-app blocking."))
+                Text(String(localized: "Share screen recordings of short-form feeds and everyday app use to help improve recognition."))
 
                 Text(String(localized: "Social apps look different across devices, languages and app versions. Your recordings will help me train Slowth to recognize what should be blocked and avoid blocking regular content."))
 
@@ -854,50 +850,17 @@ struct ContentView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Link(destination: contributionURL) {
-                        Label("Email me to help", systemImage: "envelope")
-                            .font(.subheadline.weight(.semibold))
-                            .frame(maxWidth: .infinity, minHeight: 32)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .accessibilityIdentifier("contribution.email")
-
-                    Text(String(localized: "You can email me before recording. The draft includes your device model, iOS and Slowth versions — you can remove them before sending."))
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                Link(destination: AppLocalization.contributionUploadURL()) {
+                    Label("Upload test cases", systemImage: "square.and.arrow.up")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 32)
                 }
+                .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("contribution.upload")
             }
             .font(.subheadline)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.vertical, 10)
-    }
-
-    private var contributionURL: URL {
-        Self.mailURL(
-            subject: String(localized: "Help improve Slowth"),
-            body: String(localized: """
-            Hi Denis! I’d like to help improve Slowth’s in-app blocking by sharing screen recordings.
-
-            Device details (you can remove these before sending):
-            Device: \(UIDevice.current.model) (\(deviceModelIdentifier))
-            System: \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)
-            Slowth: \(appVersion)
-            """)
-        )
-    }
-
-    private var deviceModelIdentifier: String {
-        #if targetEnvironment(simulator)
-        if let model = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] {
-            return "\(model), Simulator"
-        }
-        #endif
-        var systemInfo = utsname()
-        uname(&systemInfo)
-        return withUnsafeBytes(of: &systemInfo.machine) { bytes in
-            String(decoding: bytes.prefix { $0 != 0 }, as: UTF8.self)
-        }
     }
 
     private var helpSection: some View {

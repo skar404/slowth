@@ -30,6 +30,12 @@ enum AppLocalization {
         return resources.preferredLocalizations.first(where: { $0 != "Base" }) ?? "en"
     }
 
+    static func contributionUploadURL(language: String = language(in: .main, preference: preference)) -> URL {
+        var components = URLComponents(string: "https://malina.page/slowth/test-cases/")!
+        components.queryItems = [URLQueryItem(name: "lang", value: language.isEmpty ? "en" : language)]
+        return components.url!
+    }
+
     static var locale: Locale {
         Locale(identifier: language(in: .main, preference: preference))
     }
