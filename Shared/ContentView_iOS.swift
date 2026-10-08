@@ -396,8 +396,8 @@ struct ContentView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     HeroCard(
-                        title: "👉👈 " + String(localized: "Help improve"),
-                        subtitle: String(localized: "In-app blocking"),
+                        title: String(localized: "Help improve"),
+                        subtitle: String(localized: "In-app blocking") + " 👉👈",
                         icon: "heart.text.clipboard",
                         gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
                                    Color(red: 0.08, green: 0.43, blue: 0.49)],
