@@ -10,12 +10,12 @@ struct DebugSessionCaptureControls: View {
     @State private var showSessions = false
 
     var body: some View {
-        Toggle("Save whole-session screenshots", isOn: $enabled)
-        Picker("Screenshot interval (next broadcast)", selection: $interval) {
+        Toggle("Save session screenshots", isOn: $enabled)
+        Picker("Interval (next recording)", selection: $interval) {
             Text("1 second").tag(1.0)
             Text("0.5 seconds").tag(0.5)
         }
-        Picker("Storage for all sessions (next broadcast)", selection: $storageLimit) {
+        Picker("Storage limit (next recording)", selection: $storageLimit) {
             ForEach(SessionCaptureSettings.StorageLimit.allCases, id: \.rawValue) { limit in
                 if limit == .unlimited {
                     Text("No limit").tag(limit.rawValue)
@@ -24,11 +24,7 @@ struct DebugSessionCaptureControls: View {
                 }
             }
         }
-        Text("Opt-in for your next manually started ReplayKit broadcast only. Saves all visible screens, including private information, locally as full-resolution JPEGs. No audio, video file, Photos or automatic upload. Turning this off stops collection; restart broadcasting to re-enable.")
-            .font(.caption).foregroundStyle(.secondary)
-        Text("The storage limit includes all saved sessions and applies to the next broadcast. Capture stops when the selected limit is reached; existing sessions are kept. No limit removes the storage cap. Capture still stops after 15 minutes or when disk space is low. Busy frames are dropped, not queued. Experimental: device memory/performance not qualified.")
-            .font(.caption).foregroundStyle(.secondary)
-        Button("Local screenshot sessions / Share ZIP") { showSessions = true }
+        Button("Screenshot sessions") { showSessions = true }
             .sheet(isPresented: $showSessions) { DebugSessionList() }
     }
 }

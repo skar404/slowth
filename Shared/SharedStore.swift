@@ -458,6 +458,17 @@ enum SharedStore {
         return state
     }
 
+    static var pausesAllowedInStrictMode: Bool {
+        d.object(forKey: "strictModeAllowsPauses") as? Bool ?? true
+    }
+
+    static func setPausesAllowedInStrictMode(_ allowed: Bool) throws {
+        if snapshot().isStrictModeActive && allowed && !pausesAllowedInStrictMode {
+            throw SharedStoreError.strictModeActive
+        }
+        d.set(allowed, forKey: "strictModeAllowsPauses")
+    }
+
     static func setStrictMode(_ enabled: Bool) throws -> SharedState {
         var state = snapshot()
         if state.isStrictModeActive && !enabled {
@@ -695,6 +706,22 @@ enum SharedStore {
 
     // Enabling stricter blocking is never blocked by strict mode (mirrors
     // setStrictMode's own asymmetry) — only turning it back off is.
+    #if os(iOS) && canImport(FamilyControls)
+    // This is effective authorization state, not a user switch. Revoking system
+    // permission must turn protection off even while a strict lock is stored.
+    static func syncRealtimeShieldAuthorization(_ status: AuthorizationStatus) {
+        var authorized = status == .approved
+        if #available(iOS 26.4, *), status == .approvedWithDataAccess {
+            authorized = true
+        }
+        d.set(authorized, forKey: SharedStoreKey.realtimeShieldEnabled)
+        if !authorized {
+            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
+            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
+        }
+    }
+    #endif
+
     static func setRealtimeShieldEnabled(_ enabled: Bool) throws -> SharedState {
         var state = snapshot()
         if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
@@ -877,19 +904,31 @@ enum SharedStore {
         d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastShieldActionInvokedAt)
     }
 
-    static func requestRealtimeRecordingPrompt(at date: Date = Date()) {
+    static func requestRealtimeRecordingPrompt(at date: Date = Date(), target: String? = nil) {
         let defaults = d
+        if let target {
+            defaults.set(target, forKey: "realtimeRecordingPromptTarget")
+        } else {
+            defaults.removeObject(forKey: "realtimeRecordingPromptTarget")
+        }
         defaults.set(date.timeIntervalSince1970,
                      forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()
     }
 
     static func consumeRealtimeRecordingPromptRequest() -> Bool {
+        var target: String?
+        return consumeRealtimeRecordingPromptRequest(target: &target)
+    }
+
+    static func consumeRealtimeRecordingPromptRequest(target: inout String?) -> Bool {
         let defaults = d
         defaults.synchronize()
         guard defaults.double(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt) > 0 else {
             return false
         }
+        target = defaults.string(forKey: "realtimeRecordingPromptTarget")
+        defaults.removeObject(forKey: "realtimeRecordingPromptTarget")
         defaults.removeObject(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()
         return true

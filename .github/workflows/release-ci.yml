@@ -72,6 +72,10 @@ jobs:
           node-version: '22.14.0'
       - name: Install verified build tools
         run: bash scripts/release_tools/install_tools.sh
+      - name: Test durable pause policy
+        run: |
+          xcrun swiftc -DPAUSE_TESTS iOS/Pause/IOSPauseLedger.swift tests/IOSPauses/LedgerTests.swift -o "$RUNNER_TEMP/pause-tests"
+          "$RUNNER_TEMP/pause-tests"
       - name: Test release safety boundaries
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Download model input (individual model hashes are checked before build)
@@ -120,6 +124,7 @@ jobs:
           MACOS_INSTALLER_PASSWORD: ${{ secrets.MACOS_INSTALLER_PASSWORD }}
           MACOS_STORE_PROFILE_APP_BASE64: ${{ secrets.MACOS_STORE_PROFILE_APP_BASE64 }}
           MACOS_STORE_PROFILE_SAFARI_BASE64: ${{ secrets.MACOS_STORE_PROFILE_SAFARI_BASE64 }}
+          IOS_PROFILE_PAUSE_ACTIVITY_BASE64: ${{ secrets.IOS_PROFILE_PAUSE_ACTIVITY_BASE64 }}
           IOS_PROFILE_APP_BASE64: ${{ secrets.IOS_PROFILE_APP_BASE64 }}
           IOS_PROFILE_SAFARI_BASE64: ${{ secrets.IOS_PROFILE_SAFARI_BASE64 }}
           IOS_PROFILE_BROADCAST_BASE64: ${{ secrets.IOS_PROFILE_BROADCAST_BASE64 }}

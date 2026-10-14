@@ -29,6 +29,17 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
     private func handle(payload: [String: Any]) -> [String: Any] {
         let action = (payload["action"] as? String) ?? ""
 
+        #if os(iOS)
+        if action == "activatePause" || action == "cancelPausePreparation" {
+            do {
+                guard let id = payload["id"] as? String else { return ["ok": false] }
+                if action == "activatePause" { try IOSPauseCoordinator.acknowledgeSafari(id) }
+                else { try IOSPauseCoordinator.cancelSafariPreparation(id) }
+                return ["ok": true, "state": stateDict()]
+            } catch { return ["ok": false, "reason": String(describing: error)] }
+        }
+        #endif
+
         switch action {
         case "getState":
             return ["ok": true, "state": stateDict()]
@@ -106,6 +117,9 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         if let etag = SharedStore.rulesEtag() {
             dict["rulesEtag"] = etag
         }
+        #if os(iOS)
+        dict["pause"] = IOSPauseCoordinator.safariState() ?? [:]
+        #endif
         return dict
     }
 }

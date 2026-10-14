@@ -542,50 +542,6 @@ struct MacContentView: View {
 
                 }
 
-                #if DEBUG
-                if debugModeEnabled {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text("Debug status")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                        DebugStatusRow(label: "Feature", value: state.snapshot.realtimeShieldEnabled ? "on" : "off")
-                        DebugStatusRow(label: "Recording", value: state.snapshot.broadcastActive ? "active" : "inactive")
-                        DebugStatusRow(label: "YouTube Shorts", value: state.snapshot.realtimeYouTubeBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "YouTube soft mode", value: state.snapshot.softYouTubeBlockingEnabled ? "on" : "off")
-                        DebugStatusRow(label: "YouTube restore", value: state.snapshot.youtubeShieldRestoreDeferred ? "waiting for 1s usage" : "normal")
-                        DebugStatusRow(label: "YouTube app", value: state.hasYouTubeSelection ? "picked" : "not picked")
-                        DebugStatusRow(label: "Instagram Reels", value: state.snapshot.realtimeInstagramReelsBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Instagram Stories", value: state.snapshot.realtimeInstagramStoriesBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Facebook Reels", value: state.snapshot.realtimeFacebookReelsBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Facebook Stories", value: state.snapshot.realtimeFacebookStoriesBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Facebook candidates", value: "Reels \(state.snapshot.realtimeShieldDiagnostics.facebookCandidateEvents ?? 0) · Stories \(state.snapshot.realtimeShieldDiagnostics.facebookStoriesCandidateEvents ?? 0)")
-                        DebugStatusRow(label: "Instagram app", value: state.hasInstagramSelection ? "picked" : "not picked")
-                        DebugStatusRow(label: "Surface model", value: modelStatusText(state.snapshot.realtimeShieldDiagnostics))
-                        DebugStatusRow(label: "Prediction", value: predictionText(state.snapshot.realtimeShieldDiagnostics))
-                        DebugStatusRow(label: "YouTube app p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.appProbabilities, key: "youtube"))
-                        DebugStatusRow(label: "Instagram app p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.appProbabilities, key: "instagram"))
-                        DebugStatusRow(label: "Shorts joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "youtube_shorts"))
-                        DebugStatusRow(label: "Reels joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "instagram_reels"))
-                        DebugStatusRow(label: "Stories joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "instagram_stories"))
-                        DebugStatusRow(label: "Video frames", value: "\(state.snapshot.realtimeShieldDiagnostics.receivedVideoFrames)")
-                        DebugStatusRow(label: "Inferences", value: "\(state.snapshot.realtimeShieldDiagnostics.inferenceCount)")
-                        DebugStatusRow(label: "Inference", value: formatted(state.snapshot.realtimeShieldDiagnostics.lastInferenceDurationMS, digits: 1, suffix: " ms"))
-                        DebugStatusRow(label: "Inference p95", value: formatted(state.snapshot.realtimeShieldDiagnostics.inferenceP95MS, digits: 1, suffix: " ms"))
-                        DebugStatusRow(label: "Candidates", value: "Shorts \(state.snapshot.realtimeShieldDiagnostics.youtubeCandidateEvents) · Reels \(state.snapshot.realtimeShieldDiagnostics.instagramCandidateEvents) · Stories \(state.snapshot.realtimeShieldDiagnostics.instagramStoriesCandidateEvents)")
-                        DebugStatusRow(label: "Memory footprint", value: footprintText(state.snapshot.realtimeShieldDiagnostics))
-                        DebugStatusRow(label: "Available memory", value: formatted(state.snapshot.realtimeShieldDiagnostics.availableMemoryMB, digits: 1, suffix: " MB"))
-                        if let error = state.snapshot.realtimeShieldDiagnostics.lastClassifierError {
-                            DebugStatusRow(label: "Model error", value: error)
-                        }
-                        DebugStatusRow(label: "Last YouTube Shorts", value: relativeOrNever(state.snapshot.lastYouTubeShortsDetectionAt))
-                        DebugStatusRow(label: "Last Instagram Reels", value: relativeOrNever(state.snapshot.lastInstagramReelsDetectionAt))
-                        DebugStatusRow(label: "Last Instagram Stories", value: relativeOrNever(state.snapshot.lastInstagramStoriesDetectionAt))
-                        DebugStatusRow(label: "Last Instagram shield", value: relativeOrNever(state.snapshot.lastInstagramShieldPresentedAt))
-                        DebugStatusRow(label: "Last shield tap", value: relativeOrNever(state.snapshot.lastShieldActionInvokedAt))
-                    }
-                    .padding(.vertical, 2)
-                }
-                #endif
             }
         } header: {
             Text(AppLocalization.string("Block content in apps"))
@@ -619,36 +575,6 @@ struct MacContentView: View {
         return AppLocalization.string("Tap the red button to start screen recording.")
     }
 
-    private func relativeOrNever(_ date: Date?) -> String {
-        guard let date else { return "never" }
-        return Self.relativeFormatter.localizedString(for: date, relativeTo: Date())
-    }
-
-    private func modelStatusText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
-        guard let version = diagnostics.modelVersion else { return diagnostics.modelStatus }
-        return "\(diagnostics.modelStatus) · \(version)"
-    }
-
-    private func predictionText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
-        guard let app = diagnostics.lastApp else { return "—" }
-        return "\(app) / \(diagnostics.lastContent ?? "—")"
-    }
-
-    private func probabilityText(_ probabilities: [String: Double]?, key: String) -> String {
-        formatted(probabilities?[key], digits: 3)
-    }
-
-    private func formatted(_ value: Double?, digits: Int, suffix: String = "") -> String {
-        guard let value else { return "—" }
-        return String(format: "%.*f%@", digits, value, suffix)
-    }
-
-    private func footprintText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
-        let current = formatted(diagnostics.currentFootprintMB, digits: 1, suffix: " MB")
-        let peak = formatted(diagnostics.peakFootprintMB, digits: 1, suffix: " MB")
-        return "\(current) · peak \(peak)"
-    }
-
     private func decodedSelection(_ data: Data?) -> FamilyActivitySelection {
         guard let data, let decoded = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
             return FamilyActivitySelection()
@@ -676,8 +602,9 @@ struct MacContentView: View {
                 }
             #if os(iOS)
             DebugSessionCaptureControls()
+            DebugSavedLeavesControl()
             if DebugModelSettings.cascadeAvailable {
-                Picker("Model for next recording", selection: Binding(
+                Picker("Model (next recording)", selection: Binding(
                     get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
                     set: { debugModelBackend = $0; state.refreshFacebookModelSelection() }
                 )) {
@@ -686,13 +613,6 @@ struct MacContentView: View {
                     }
                 }
                 .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
-                Text("Stop screen recording, choose a model, then start recording again. Turning Debug mode off selects Cascade V10 for the next recording. V14 is experimental and unqualified: validation quality gates failed. V15 and Cascade V6 are experimental and unqualified: validation quality gates failed. V15 CoreML parity failed on validation (Stories threshold and temporal trace mismatch). Cascade V6 CoreML parity passed; device qualification is still pending. Cascade V7 adds Facebook Reels and Stories. Cascade V8 adds X short videos. Cascade V10 is the default and uses the expanded candidate pool; validation quality gates failed and device qualification is pending.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else {
-                Text("Model selection is unavailable in this build.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             #endif
             DebugAppReviewControls(hasEnabledBlocking: state.hasEnabledBlockingForReview,
@@ -708,10 +628,6 @@ struct MacContentView: View {
             .disabled(!state.snapshot.supportCardDismissed)
         } header: {
             Text("Debug")
-        } footer: {
-            Text("Feature overrides and reset actions affect only this device.")
-                .font(.callout)
-                .foregroundStyle(.secondary)
         }
     }
 
@@ -882,22 +798,6 @@ private struct HeroCard: View {
         .shadow(color: gradient.last?.opacity(0.25) ?? .clear, radius: 4, y: 2)
     }
 }
-
-#if DEBUG && os(iOS) && canImport(FamilyControls)
-private struct DebugStatusRow: View {
-    let label: String
-    let value: String
-
-    var body: some View {
-        HStack {
-            Text(label).foregroundStyle(.secondary)
-            Spacer()
-            Text(value)
-        }
-        .font(.caption2)
-    }
-}
-#endif
 
 private struct SupportSheet: View {
     @ObservedObject var tipStore: TipStore

@@ -29,6 +29,7 @@ enum ManagedSettingsApplier {
 
     static func apply(surface: Surface, selection: FamilyActivitySelection?) {
         #if canImport(ManagedSettings) && canImport(FamilyControls)
+        if IOSPauseCoordinator.intercept(target: surface.rawValue, requested: selection) { return }
         guard let store = stores[surface] else { return }
         if let selection = selection {
             store.shield.applications = selection.applicationTokens.isEmpty

@@ -15,13 +15,14 @@ import tarfile
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_DIRS = {
     'App', 'Extension', 'ExtensionIOS', 'DeviceActivityIOS', 'iOS', 'Localization',
-    'RealtimeShield', 'Shared', 'ShieldActionIOS', 'ShieldConfigIOS', 'WebExt',
+    'PauseActivityIOS', 'RealtimeShield', 'Shared', 'ShieldActionIOS', 'ShieldConfigIOS', 'WebExt',
     'scripts', 'tests',
 }
 PUBLIC_FILES = {
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',
     'project.yml', 'README.md', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
+    'AGENTS.md', 'APP_STORE_LOCALIZATION.md',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
     'Configs/Slowth.storekit', 'docs/icon.png', 'docs/showcase-00.jpg',
     'docs/showcase-01.jpg', 'docs/showcase-02.jpg',
@@ -265,7 +266,8 @@ def prepare(source, root, bundle, spec):
         for key, expected in [('MARKETING_VERSION', version), ('CURRENT_PROJECT_VERSION', build)]:
             if key in settings:
                 require(str(settings[key]) == expected, f'Generated project {key} differs')
-    run('node', '--test', *sorted((source / 'WebExt/tests').glob('*.test.cjs')), cwd=source)
+    run('node', '--test', *sorted((source / 'WebExt/tests').glob('*.test.cjs')),
+        *sorted((source / 'tests/IOSPauses').glob('*.test.cjs')), cwd=source)
 
 
 def origin_repo(root):

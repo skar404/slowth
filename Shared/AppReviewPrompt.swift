@@ -66,41 +66,26 @@ extension View {
 struct DebugAppReviewControls: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) private var requestReview
-    @State private var status = AppReviewCoordinator.shared.debugStatus()
     @State private var result: String?
     let hasEnabledBlocking: Bool
     let isReady: Bool
 
     var body: some View {
         Group {
-            Text("App Store review")
-                .font(.headline)
-            row("Operating system", value: ProcessInfo.processInfo.operatingSystemVersionString)
-            row("Receipt", value: Bundle.main.appStoreReceiptURL?.lastPathComponent ?? "None")
-            row("Request API", value: requestAPI)
-            row("Presentation window", value: systemReviewRequest == nil ? "No unique active key window" : "Available")
-            row("First tracked opening", value: dateText(status.firstOpenedAt))
-            row("Seven-day threshold", value: dateText(status.eligibleAfter))
-            row("Opening dates", value: "\(status.activeDays) / 3")
-            row("Request attempted", value: status.attempted ? "Yes" : "No")
-            row("Blocking enabled", value: hasEnabledBlocking ? "Yes" : "No")
-            row("Screen ready", value: isReady && scenePhase == .active ? "Yes" : "No")
-
-            Button("Show system review prompt now") {
+            Button("Show review prompt") {
                 guard let invoke = systemReviewRequest else {
                     result = "No StoreKit call: no unique foreground-active key window. Return to the app and retry. The attempt flag was not changed."
                     return
                 }
-                result = "\(requestAPI) called. Opening history, blocking settings and attempt flag were not changed. Apple does not report whether the prompt appeared."
+                result = nil
                 invoke()
             }
             .disabled(!isReady || scenePhase != .active)
-            Button("Prepare review test (7 days / 3 dates)") {
+            Button("Prepare review test") {
                 AppReviewCoordinator.shared.prepareEligibleHistoryForDebug()
-                refresh()
                 result = "Review history prepared; the attempt flag is cleared. Blocking settings still apply."
             }
-            Button("Test one-time review request") {
+            Button("Test one-time review") {
                 guard let invoke = systemReviewRequest else {
                     result = "No StoreKit call: no unique foreground-active key window. The attempt flag was not changed."
                     return
@@ -110,9 +95,8 @@ struct DebugAppReviewControls: View {
                 let ready = isReady && scenePhase == .active
                 let claimed = coordinator.claimRequest(at: now,
                     hasEnabledBlocking: hasEnabledBlocking, isReady: ready)
-                refresh()
                 if claimed {
-                    result = "\(requestAPI) called; attempt saved. Apple does not report whether the prompt appeared."
+                    result = nil
                     invoke()
                 } else {
                     let reason = coordinator.requestBlocker(at: now,
@@ -123,36 +107,17 @@ struct DebugAppReviewControls: View {
             .disabled(!isReady || scenePhase != .active)
             Button("Reset review history") {
                 AppReviewCoordinator.shared.resetForDebug()
-                refresh()
                 result = "Review dates and attempt flag cleared."
             }
-            if let result {
-                Text(verbatim: result)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-            }
-            Text("Show system review prompt now calls StoreKit without changing the attempt flag. To test the one-time rules, prepare history, test once, then test again to confirm no second request. Reset clears only local review preferences. Automatic requests stay off in Debug; TestFlight does not show the system prompt.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text("If the request is called but no window appears on beta iOS, repeat the test on a stable OS. Beta builds have been reported to suppress review prompts. A saved attempt confirms the API call, not presentation.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
         }
-        .onAppear(perform: refresh)
-        .onChange(of: scenePhase) { _ in refresh() }
-    }
-
-    private func refresh() {
-        status = AppReviewCoordinator.shared.debugStatus()
-    }
-
-    private var requestAPI: String {
-        #if os(iOS)
-        return "AppStore.requestReview(in:)"
-        #else
-        return "SwiftUI requestReview"
-        #endif
+        .alert("Review test", isPresented: Binding(
+            get: { result != nil },
+            set: { if !$0 { result = nil } }
+        )) {
+            Button("OK", role: .cancel) { result = nil }
+        } message: {
+            Text(verbatim: result ?? "")
+        }
     }
 
     /// Resolve an explicit presentation scene for the iOS debug test. Refuse an
@@ -168,17 +133,5 @@ struct DebugAppReviewControls: View {
         #endif
     }
 
-    private func dateText(_ date: Date?) -> String {
-        date?.formatted(date: .abbreviated, time: .shortened) ?? "Not tracked"
-    }
-
-    private func row(_ title: String, value: String) -> some View {
-        HStack {
-            Text(verbatim: title).foregroundStyle(.secondary)
-            Spacer()
-            Text(verbatim: value).multilineTextAlignment(.trailing)
-        }
-        .font(.caption)
-    }
 }
 #endif

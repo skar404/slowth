@@ -1,0 +1,1403 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Edit saved leaves": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit saved leaves"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить накопленные листики"
+          }
+        }
+      }
+    },
+    "Could not update saved leaves": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not update saved leaves"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось изменить накопленные листики"
+          }
+        }
+      }
+    },
+    "Switch app": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch app"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сменить приложение"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App wechseln"
+          }
+        }
+      }
+    },
+    "The timer continues. No extra leaf is used.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The timer continues. No extra leaf is used."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таймер продолжит отсчёт. Дополнительный листочек не расходуется."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Timer läuft weiter. Es wird kein zusätzliches Blatt verbraucht."
+          }
+        }
+      }
+    },
+    "Could not switch the paused app. Check the current pause and try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not switch the paused app. Check the current pause and try again."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сменить приложение. Проверьте текущую паузу и попробуйте снова."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App konnte nicht gewechselt werden. Prüfe die aktuelle Pause und versuche es erneut."
+          }
+        }
+      }
+    },
+    "Pause duration": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause duration"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Длительность паузы"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausendauer"
+          }
+        }
+      }
+    },
+    "%lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld мин"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Min."
+          }
+        }
+      }
+    },
+    "Pause for 1 minute": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause for 1 minute"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пауза на 1 минуту"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Minute pausieren"
+          }
+        }
+      }
+    },
+    "Pause for 5 minutes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause for 5 minutes"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пауза на 5 минут"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 Minuten pausieren"
+          }
+        }
+      }
+    },
+    "Could not save pause duration": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save pause duration"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить длительность паузы"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausendauer konnte nicht gespeichert werden"
+          }
+        }
+      }
+    },
+    "Applies to new pauses in apps and Safari.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies to new pauses in apps and Safari."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Применяется к новым паузам в приложениях и Safari."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gilt für neue Pausen in Apps und Safari."
+          }
+        }
+      }
+    },
+    "Experimental: 3 pauses per day. Change their duration in Settings.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimental: 3 pauses per day. Change their duration in Settings."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эксперимент: 3 паузы в день. Длительность можно изменить в настройках."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experiment: 3 Pausen pro Tag. Die Dauer lässt sich in den Einstellungen ändern."
+          }
+        }
+      }
+    },
+    "Saved leaves": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved leaves"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Накоплено листочков"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesammelte Blätter"
+          }
+        }
+      }
+    },
+    "Unused leaves are saved after each day as a reward.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unused leaves are saved after each day as a reward."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Неиспользованные листочки сохраняются после каждого дня как награда."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungenutzte Blätter werden nach jedem Tag als Belohnung gesammelt."
+          }
+        }
+      }
+    },
+    "Slowth analyzes your screen, including other apps, on this device. Audio is ignored.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analyzes your screen, including other apps, on this device. Audio is ignored."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth анализирует экран, включая другие приложения, на вашем устройстве. Звук не используется."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analysiert deinen Bildschirm einschließlich anderer Apps auf diesem Gerät. Audio wird ignoriert."
+          }
+        }
+      }
+    },
+    "Choose how to continue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose how to continue"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как продолжить?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie möchtest du fortfahren?"
+          }
+        }
+      }
+    },
+    "Allow pauses in Strict mode": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow pauses in Strict mode"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешать паузы в строгом режиме"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausen im strikten Modus erlauben"
+          }
+        }
+      }
+    },
+    "Reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurücksetzen"
+          }
+        }
+      }
+    },
+    "Reset selection": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset selection"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить выбор"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswahl zurücksetzen"
+          }
+        }
+      }
+    },
+    "Enable app protection": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable app protection"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включить защиту приложений"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Schutz aktivieren"
+          }
+        }
+      }
+    },
+    "Screen recording helps detect and block short videos.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Screen recording helps detect and block short videos."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись экрана помогает распознавать и блокировать короткие видео."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Bildschirmaufnahme hilft, Kurzvideos zu erkennen und zu blockieren."
+          }
+        }
+      }
+    },
+    "Experimental: 3 daily pauses of 3 minutes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimental: 3 daily pauses of 3 minutes."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эксперимент: три паузы по 3 минуты в день."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experiment: täglich 3 Pausen à 3 Minuten."
+          }
+        }
+      }
+    },
+    "Could not reset pauses. Try again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not reset pauses. Try again."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сбросить паузы. Попробуйте ещё раз."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausen konnten nicht zurückgesetzt werden. Bitte erneut versuchen."
+          }
+        }
+      }
+    },
+    "Reset pauses": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset pauses"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить паузы"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausen zurücksetzen"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "comment": "iOS/iPadOS settings tab.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen"
+          }
+        }
+      }
+    },
+    "Apps": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приложения"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps"
+          }
+        }
+      }
+    },
+    "Apps / Safari": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps / Safari"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приложения / Safari"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps / Safari"
+          }
+        }
+      }
+    },
+    "More": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ещё"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weitere Aktionen"
+          }
+        }
+      }
+    },
+    "Check extension access in Safari Settings": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check extension access in Safari Settings"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверьте доступ расширения в настройках Safari"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prüfe die Zugriffsrechte der Erweiterung in den Safari-Einstellungen"
+          }
+        }
+      }
+    },
+    "Whole-site blocking takes priority": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whole-site blocking takes priority"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Блокировка всего сайта имеет приоритет"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Sperre der gesamten Website hat Vorrang"
+          }
+        }
+      }
+    },
+    "Choose an app": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an app"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите приложение"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App auswählen"
+          }
+        }
+      }
+    },
+    "Screen recording is off": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Screen recording is off"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись экрана выключена"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bildschirmaufnahme ist ausgeschaltet"
+          }
+        }
+      }
+    },
+    "Whole website": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whole website"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сайт целиком"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganze Website"
+          }
+        }
+      }
+    },
+    "Infinite feed": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infinite feed"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бесконечная лента"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Endloser Feed"
+          }
+        }
+      }
+    },
+    "Explore & trends": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore & trends"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обзор и тренды"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entdecken & Trends"
+          }
+        }
+      }
+    },
+    "Stories": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stories"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Истории"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storys"
+          }
+        }
+      }
+    },
+    "Short videos": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short videos"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Короткие видео"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurzvideos"
+          }
+        }
+      }
+    },
+    "Soft mode": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soft mode"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мягкий режим"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sanfter Modus"
+          }
+        }
+      }
+    },
+    "App selected": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App selected"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приложение выбрано"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App ausgewählt"
+          }
+        }
+      }
+    },
+    "Strict mode": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strict mode"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Строгий режим"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strenger Modus"
+          }
+        }
+      }
+    },
+    "Recording active": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording active"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись активна"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahme aktiv"
+          }
+        }
+      }
+    },
+    "Recording off": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording off"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись выключена"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahme aus"
+          }
+        }
+      }
+    },
+    "App protection": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App protection"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Блокировка в приложениях"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps schützen"
+          }
+        }
+      }
+    },
+    "Allow Screen Time": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Screen Time"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешить «Экранное время»"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bildschirmzeit erlauben"
+          }
+        }
+      }
+    },
+    "Check Safari extension": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check Safari extension"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверить расширение Safari"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-Erweiterung prüfen"
+          }
+        }
+      }
+    },
+    "Expanded": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expanded"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Развёрнуто"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgeklappt"
+          }
+        }
+      }
+    },
+    "Collapsed": {
+      "comment": "iOS/iPadOS interface only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapsed"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свёрнуто"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingeklappt"
+          }
+        }
+      }
+    },
+    "Enabled restrictions are locked for 24 hours.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enabled restrictions are locked for 24 hours."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включённые ограничения нельзя снять в течение 24 часов."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Einschränkungen sind für 24 Stunden gesperrt."
+          }
+        }
+      }
+    },
+    "Pauses today": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauses today"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Паузы сегодня"
+          }
+        }
+      }
+    },
+    "%lld of 3 remaining": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of 3 remaining"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Осталось %lld из 3"
+          }
+        }
+      }
+    },
+    "Pause for": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause for"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пауза для"
+          }
+        }
+      }
+    },
+    "Pause for 3 minutes": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause for 3 minutes"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пауза на 3 минуты"
+          }
+        }
+      }
+    },
+    "End pause": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End pause"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершить паузу"
+          }
+        }
+      }
+    },
+    "Time remaining": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time remaining"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Осталось времени"
+          }
+        }
+      }
+    },
+    "Waiting for Safari extension": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for Safari extension"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ожидаем подтверждения расширения Safari"
+          }
+        }
+      }
+    },
+    "Start screen recording to use app pauses": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start screen recording to use app pauses"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для паузы приложения сначала запустите запись экрана"
+          }
+        }
+      }
+    },
+    "Enable a restriction to use a pause": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable a restriction to use a pause"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для паузы включите ограничение нужного сервиса"
+          }
+        }
+      }
+    },
+    "Pause state is unavailable": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause state is unavailable"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать состояние паузы"
+          }
+        }
+      }
+    },
+    "Could not start pause. Check permissions and try again.": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start pause. Check permissions and try again."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось запустить паузу. Проверьте разрешения и попробуйте снова."
+          }
+        }
+      }
+    },
+    "Could not confirm pause completion": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not confirm pause completion"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось подтвердить завершение паузы"
+          }
+        }
+      }
+    },
+    "Experimental: apps and Safari share 3 pauses. iOS may delay restoring restrictions. Stopping recording ends an app pause.": {
+      "comment": "Experimental iOS pause interface. Debug only.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimental: apps and Safari share 3 pauses. iOS may delay restoring restrictions. Stopping recording ends an app pause."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эксперимент: 3 паузы общие для приложений и Safari. iOS может задержать возврат ограничений. Остановка записи завершает паузу приложения."
+          }
+        }
+      }
+    },
+    "Choose an app to pause": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an app to pause"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите приложение для паузы"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App für die Pause auswählen"
+          }
+        }
+      }
+    },
+    "Choose a website to pause": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a website to pause"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите сайт для паузы"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website für die Pause auswählen"
+          }
+        }
+      }
+    },
+    "Reset pause limit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset pause limit"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить лимит пауз"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausenlimit zurücksetzen"
+          }
+        }
+      }
+    },
+    "End the active pause before resetting its limit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End the active pause before resetting its limit"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершите активную паузу перед сбросом лимита"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Pause vor dem Zurücksetzen beenden"
+          }
+        }
+      }
+    },
+    "Experimental: apps and Safari share 3 pauses. Recording is not required. iOS may delay restoring restrictions.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimental: apps and Safari share 3 pauses. Recording is not required. iOS may delay restoring restrictions."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эксперимент: 3 паузы общие для приложений и Safari. Запись не требуется. iOS может задержать возврат ограничений."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimentell: Apps und Safari teilen sich 3 Pausen. Keine Aufnahme erforderlich. iOS kann Einschränkungen verzögert wiederherstellen."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -18,7 +18,7 @@ for argument in sys.argv[1:]:
     app = Path(argument)
     assert app.is_dir(), app
     bundles = [app, *app.rglob('*.appex')]
-    expected_count = 2 if (app / 'Contents').is_dir() else 6
+    expected_count = 2 if (app / 'Contents').is_dir() else 7
     assert len(bundles) == expected_count, (app, len(bundles))
     for bundle in bundles:
         resources = bundle / 'Contents/Resources' if (bundle / 'Contents').is_dir() else bundle

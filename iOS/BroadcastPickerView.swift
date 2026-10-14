@@ -123,50 +123,95 @@ struct RecordingToolbarButton: View {
     }
 }
 
+/// Shared appearance and copy for the main screen and the Shield handoff.
+struct AppRecordingCard: View {
+    let preferredExtensionBundleID: String
+    let isRecording: Bool
+    let onLearnMore: () -> Void
+
+    var body: some View {
+        RealtimeRecordingCard(
+            preferredExtensionBundleID: preferredExtensionBundleID,
+            isRecording: isRecording,
+            guidance: String(localized: "Screen recording helps detect and block short videos.", table: "Interface"),
+            embedded: true
+        )
+        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(alignment: .topTrailing) {
+            Button(action: onLearnMore) {
+                Image(systemName: "questionmark.circle")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .padding(6)
+            .accessibilityLabel(String(localized: "How it works"))
+            .accessibilityIdentifier("recording.help")
+        }
+    }
+}
+
 struct RealtimeRecordingCard: View {
     let preferredExtensionBundleID: String
     let isRecording: Bool
     let guidance: String
+    var prominent = false
+    var embedded = false
     @State private var observedRecording: Bool?
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: prominent ? 14 : 8) {
             ZStack {
                 Circle()
-                    .fill(statusColor.opacity(0.14))
-                    .frame(width: 32, height: 32)
-                Image(systemName: displayedRecording ? "record.circle.fill" : "lock.open.fill")
-                    .font(.system(size: 16, weight: .semibold))
+                    .fill(embedded ? Color.clear : statusColor.opacity(0.14))
+                    .frame(width: prominent ? 44 : 32, height: prominent ? 44 : 32)
+                Image(systemName: displayedRecording ? "stop.circle" : embedded ? "record.circle" : "lock.open.fill")
+                    .font(.system(size: prominent ? 22 : embedded ? 20 : 16, weight: .semibold))
                     .foregroundStyle(statusColor)
             }
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: prominent ? 8 : 2) {
                 Text(displayedRecording ? String(localized: "Screen recording is active") : String(localized: "Start screen recording"))
-                    .font(.subheadline.weight(.semibold))
+                    .font(embedded ? .body.weight(.bold) : prominent ? .title3.weight(.semibold) : .subheadline.weight(.semibold))
+                    .foregroundStyle(embedded ? statusColor : Color.primary)
+                if displayedRecording || !guidance.isEmpty {
                 Text(displayedRecording ? String(localized: "Tap anywhere here to stop.") : guidance)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                }
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: embedded ? 36 : 8)
 
+            if !embedded {
             Image(systemName: displayedRecording ? "stop.circle.fill" : "record.circle.fill")
                 .font(.system(size: 26, weight: .semibold))
                 .foregroundStyle(.red)
                 .frame(width: 34, height: 34)
+            }
         }
-        .padding(9)
+        .padding(prominent || embedded ? 20 : 9)
+        .frame(maxWidth: .infinity, minHeight: prominent ? 132 : embedded ? 80 : nil, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(statusColor.opacity(displayedRecording ? 0.18 : 0.08))
+            if embedded {
+                statusColor.opacity(0.14)
+            } else {
+                RoundedRectangle(cornerRadius: prominent ? 22 : 12, style: .continuous)
+                    .fill(statusColor.opacity(displayedRecording ? 0.18 : 0.08))
+            }
         }
         .overlay {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+            if !prominent && !embedded {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(
                     statusColor.opacity(displayedRecording ? 0.55 : 0.18),
                     lineWidth: displayedRecording ? 1.5 : 1
                 )
+            }
         }
         .overlay {
             BroadcastPickerView(
@@ -198,7 +243,13 @@ struct RealtimeRecordingCard: View {
     }
 
     private var statusColor: Color {
-        displayedRecording ? .red : .accentColor
+        if displayedRecording { return .red }
+        guard embedded else { return .accentColor }
+        return Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
+                : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
+        })
     }
 }
 
@@ -252,35 +303,40 @@ struct RealtimeRecordingPromptSheet: View {
     let preferredExtensionBundleID: String
     let isRecording: Bool
     var onLearnMore: () -> Void = {}
+    var pauseTarget: String? = nil
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
-                    Image(systemName: "record.circle.fill")
-                        .font(.system(size: 52, weight: .semibold))
-                        .foregroundStyle(.red)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(String(localized: "Choose how to continue", table: "Interface"))
+                        .font(.title2.bold())
+                        .accessibilityAddTraits(.isHeader)
 
-                    VStack(spacing: 8) {
-                        Text(String(localized: "Start screen recording"))
-                            .font(.title2.weight(.bold))
-                        Text(String(localized: "Tap the card below and confirm in the system prompt. Selected apps unlock while screen analysis runs. Detecting content you chose to block locks the entire app."))
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
+                    VStack(spacing: 12) {
+                        AppRecordingCard(
+                            preferredExtensionBundleID: preferredExtensionBundleID,
+                            isRecording: isRecording,
+                            onLearnMore: onLearnMore
+                        )
+                        if let pauseTarget {
+                            ShieldPauseButton(target: pauseTarget, onStarted: { dismiss() })
+                        }
                     }
 
-                    RealtimeRecordingCard(
-                        preferredExtensionBundleID: preferredExtensionBundleID,
-                        isRecording: isRecording,
-                        guidance: String(localized: "Tap anywhere here to start.")
-                    )
-
-                    ScreenRecordingInfoCard(onLearnMore: onLearnMore)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(String(localized: "Slowth analyzes your screen, including other apps, on this device. Audio is ignored.", table: "Interface"))
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(.horizontal, 4)
                 }
                 .frame(maxWidth: 560)
                 .frame(maxWidth: .infinity)
                 .padding(20)
             }
+            .background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle(String(localized: "In-app blocking"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -289,6 +345,11 @@ struct RealtimeRecordingPromptSheet: View {
                 }
             }
         }
+        .tint(Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
+                : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
+        }))
     }
 }
 #endif

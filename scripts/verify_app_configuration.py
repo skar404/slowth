@@ -54,12 +54,22 @@ def verify(app, configuration):
             binary = (bundle / executable).read_bytes()
             for marker in (b'DebugSessionCaptureControls', b'DebugCapturePhotoLibrary', b'SessionUploader',
                            b'SessionCaptureArchive', b'DebugCaptureWriter', b'resetStrictModeForDebug',
-                           b'DebugAppReviewControls', b'prepareEligibleHistoryForDebug'):
+                           b'DebugAppReviewControls', b'prepareEligibleHistoryForDebug',
+                           b'DebugSavedLeavesControl', b'resetPausesForDebug', b'setSavedLeavesForDebug'):
                 assert marker not in binary, (bundle, marker)
         print(f'{bundle.name}: {len(models)} compiled models, {len(expected_metadata)} metadata files')
     info = plistlib.loads((app / 'Info.plist').read_bytes())
     for key in ('NSPhotoLibraryUsageDescription', 'NSPhotoLibraryAddUsageDescription'):
         assert (key in info) == (not release), key
+    assert info.get('NSSupportsLiveActivities') is True, 'Missing Live Activity host support'
+    widget = app / 'PlugIns/UnscrollPauseActivity.appex'
+    widget_info = plistlib.loads((widget / 'Info.plist').read_bytes())
+    assert widget_info['NSExtension']['NSExtensionPointIdentifier'] == 'com.apple.widgetkit-extension'
+    safari = app / 'PlugIns/UnscrollExtension.appex'
+    manifest = json.loads((safari / 'manifest.json').read_text())
+    assert 'pause-background.js' in manifest['background']['scripts'], 'Missing Safari pause integration'
+    for filename in ('pause-policy.js', 'pause-background.js'):
+        assert (safari / filename).read_bytes() == (ROOT / 'iOS/WebPause' / filename).read_bytes(), filename
     assert not list(app.rglob('Info-Release.plist')), 'Info template copied as a resource'
     print(f'{configuration}: {sum(p.stat().st_size for p in app.rglob("*") if p.is_file()) / 1e6:.2f} MB')
 

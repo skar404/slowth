@@ -19,15 +19,29 @@ struct UnscrollApp: App {
                 .frame(minWidth: 340, idealWidth: 360, maxWidth: 420,
                        minHeight: 520, idealHeight: 600)
             #else
-            if uiMode == "mac" {
-                MacContentView()
+            #if DEBUG && targetEnvironment(simulator)
+            if #available(iOS 16.2, *), ProcessInfo.processInfo.arguments.contains("--preview-live-activity") {
+                PauseActivityPreviewScreen()
             } else {
-                ContentView()
+                iOSContent
             }
+            #else
+            iOSContent
+            #endif
             #endif
         }
         #if os(macOS)
         .windowResizability(.contentSize)
         #endif
     }
+
+    #if os(iOS)
+    @ViewBuilder private var iOSContent: some View {
+            if uiMode == "mac" {
+                MacContentView()
+            } else {
+                ContentView()
+            }
+    }
+    #endif
 }

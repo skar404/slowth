@@ -35,7 +35,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
         case .primaryButtonPressed:
             if !SharedStore.snapshot().broadcastActive {
                 if #available(iOS 26.5, *) {
-                    SharedStore.requestRealtimeRecordingPrompt(at: now)
+                    SharedStore.requestRealtimeRecordingPrompt(at: now, target: surface?.rawValue)
                     RTLog.shieldAction.notice("Open Slowth selected from recording-off shield")
                     completionHandler(.openParentalControlsApp)
                 } else {
@@ -56,7 +56,15 @@ final class ShieldActionExtension: ShieldActionDelegate {
             }
 
             RTLog.shieldAction.notice("Continue selected — releasing shield after one-second pause")
+            let pauseRevision = IOSPauseCoordinator.revision()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if AppGroup.defaults.bool(forKey: "pause.hasStarted") {
+                    _ = IOSPauseCoordinator.navigationUnlock(target: surface.rawValue, expectedRevision: pauseRevision) {
+                        SharedStore.requestShieldUnlock(surface: sharedSurface, at: Date())
+                    }
+                    completionHandler(.none)
+                    return
+                }
                 SharedStore.requestShieldUnlock(surface: sharedSurface, at: Date())
                 ManagedSettingsApplier.clear(surface: surface)
                 // Clearing the shield dismisses it. Returning .none keeps the

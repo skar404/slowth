@@ -128,7 +128,7 @@ class Signing:
     def configure(self, source, spec):
         targets = {name: target for name, target in spec['targets'].items() if target['platform'] == 'iOS'}
         # Separate secrets avoid exceeding GitHub's per-secret size limit when
-        # six provisioning profiles are encoded together.
+        # the provisioning profiles are encoded together.
         profile_secrets = {
             'UnscrollIOS': 'IOS_PROFILE_APP_BASE64',
             'UnscrollExtensionIOS': 'IOS_PROFILE_SAFARI_BASE64',
@@ -136,6 +136,7 @@ class Signing:
             'UnscrollDeviceActivityIOS': 'IOS_PROFILE_DEVICE_ACTIVITY_BASE64',
             'UnscrollShieldConfigIOS': 'IOS_PROFILE_SHIELD_CONFIG_BASE64',
             'UnscrollShieldActionIOS': 'IOS_PROFILE_SHIELD_ACTION_BASE64',
+            'UnscrollPauseActivityIOS': 'IOS_PROFILE_PAUSE_ACTIVITY_BASE64',
         }
         release.require(set(targets) == set(profile_secrets), 'Profile mapping must cover exactly the iOS targets')
         data = {name: required(secret) for name, secret in profile_secrets.items()}

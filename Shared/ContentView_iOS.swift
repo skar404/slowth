@@ -20,20 +20,31 @@ private let sites: [SiteSpec] = [
     .init(id: "x", label: "X")
 ]
 
+private enum SlowthAppearance {
+    static let background = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(white: 0.065, alpha: 1) : .systemGroupedBackground
+    })
+    static let card = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(white: 0.125, alpha: 1) : .secondarySystemGroupedBackground
+    })
+    static let sage = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
+            : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
+    })
+}
+
 private extension View {
     @ViewBuilder
-    func observeDuoCapability(_ isDuo: Binding<Bool>) -> some View {
-        #if canImport(SwiftUI, _version: 8.0.85)
-        if #available(iOS 27.1, *) {
-            self.onHingeChange { _, context in
-                isDuo.wrappedValue = context.hinge != nil && UIDevice.current.userInterfaceIdiom == .phone
-            }
+    func compactServiceSpacing() -> some View {
+        if #available(iOS 17.0, *) {
+            self.listSectionSpacing(.custom(10))
+                .contentMargins(.top, 8, for: .scrollContent)
         } else {
             self
         }
-        #else
-        self
-        #endif
     }
 
     // iPhone-style bottom-sheet detents only make sense in a compact-width
@@ -62,17 +73,16 @@ struct ContentView: View {
     #if DEBUG
     @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
     #endif
-    @AppStorage("uiMode") private var uiMode: String = "ios"
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var isDuo = false
-    private var isPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+    @State private var selectedSection = 0
+    @State private var expandedService: String?
     @State private var showSafariHelp = false
     @State private var showAbout = false
     @State private var showContribution = false
     @State private var showSupportSheet = false
     @State private var showRealtimeBlockingBeta = false
     @State private var showRealtimeRecordingPrompt = false
+    @State private var recordingPromptPauseTarget: String?
     @State private var showStrictModeConfirmation = false
     #if DEBUG
     @AppStorage(DebugMode.storageKey, store: AppGroup.defaults) private var debugModeEnabled = false
@@ -94,18 +104,33 @@ struct ContentView: View {
     @State private var xSelection = FamilyActivitySelection()
     #endif
 
-    var body: some View {
-        NavigationStack {
-            GeometryReader { geometry in
-                settingsLayout(in: geometry.size)
-            }
-            .navigationTitle("Slowth")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                if isDuo { duoToolbar }
-            }
+    init() {
+        #if DEBUG && targetEnvironment(simulator)
+        // Presentation-only screenshot arguments; never override settings or authorization.
+        let arguments = ProcessInfo.processInfo.arguments
+        _selectedSection = State(initialValue: arguments.contains("--preview-safari") ? 1 : 0)
+        if let index = arguments.firstIndex(of: "--preview-service"), arguments.indices.contains(index + 1) {
+            _expandedService = State(initialValue: arguments[index + 1])
         }
-        .observeDuoCapability($isDuo)
+        #endif
+    }
+
+    var body: some View {
+        TabView(selection: $selectedSection) {
+            sectionNavigation(0)
+                .tabItem { Label(String(localized: "Apps", table: "Interface"), systemImage: "square.grid.2x2") }
+                .tag(0)
+            sectionNavigation(1)
+                .tabItem { Label("Safari", systemImage: "safari") }
+                .tag(1)
+            sectionNavigation(2)
+                .tabItem { Label(String(localized: "Settings", table: "Interface"), systemImage: "gearshape") }
+                .tag(2)
+        }
+        .tint(SlowthAppearance.sage)
+        // Keep the native tab bar at the bottom on iPad too. Each page receives
+        // the actual window size class so its layout and sheets remain adaptive.
+        .environment(\.horizontalSizeClass, .compact)
         .appReviewPrompt(hasEnabledBlocking: state.hasEnabledBlockingForReview, isReady: isReadyForReview)
         .alert(String(localized: "Heads up"),
                isPresented: Binding(
@@ -161,7 +186,8 @@ struct ContentView: View {
             RealtimeRecordingPromptSheet(
                 preferredExtensionBundleID: state.broadcastExtensionBundleID,
                 isRecording: state.snapshot.broadcastActive,
-                onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true }
+                onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true },
+                pauseTarget: recordingPromptPauseTarget
             )
             .compactSheetDetents(isCompact: horizontalSizeClass == .compact)
         }
@@ -170,6 +196,7 @@ struct ContentView: View {
                 selection: youtubeSelection,
                 onDone: { selection in
                     state.saveYouTubeSelection(selection)
+                    expandedService = state.hasYouTubeSelection ? "apps.youtube" : nil
                     showYouTubePicker = false
                 },
                 onCancel: { showYouTubePicker = false }
@@ -180,6 +207,7 @@ struct ContentView: View {
                 selection: instagramSelection,
                 onDone: { selection in
                     state.saveInstagramSelection(selection)
+                    expandedService = state.hasInstagramSelection ? "apps.instagram" : nil
                     showInstagramPicker = false
                 },
                 onCancel: { showInstagramPicker = false }
@@ -190,6 +218,7 @@ struct ContentView: View {
                 selection: facebookSelection,
                 onDone: { selection in
                     state.saveFacebookSelection(selection)
+                    expandedService = state.hasFacebookSelection ? "apps.facebook" : nil
                     showFacebookPicker = false
                 },
                 onCancel: { showFacebookPicker = false }
@@ -201,10 +230,14 @@ struct ContentView: View {
                 selection: xSelection,
                 onDone: { selection in
                     state.saveXSelection(selection)
+                    expandedService = state.hasXSelection ? "apps.x" : nil
                     showXPicker = false
                 },
                 onCancel: { showXPicker = false }
             )
+        }
+        .onChange(of: familyControlsAuthorization.authorizationStatus) { _ in
+            state.refreshProtectionAuthorization()
         }
         .onAppear(perform: presentRealtimeRecordingPromptIfRequested)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
@@ -226,6 +259,10 @@ struct ContentView: View {
                 debugCaptureEnabled = false
             }
         }
+        .onChange(of: debugCaptureLibrary.lastError) { error in
+            guard debugModeEnabled, debugCaptureEnabled, let error else { return }
+            state.lastError = error
+        }
         .onChange(of: debugCaptureEnabled) { enabled in
             guard enabled else { return }
             debugCaptureLibrary.requestAccessAndImport()
@@ -233,141 +270,165 @@ struct ContentView: View {
         #endif
     }
 
+    private func sectionNavigation(_ section: Int) -> some View {
+        NavigationStack {
+            GeometryReader { geometry in
+                settingsLayout(in: geometry.size, section: section)
+            }
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                sectionToolbar(section)
+            }
+        }
+        .environment(\.horizontalSizeClass, horizontalSizeClass)
+    }
+
+    private func sectionTitle(_ section: Int) -> String {
+        section == 0 ? String(localized: "Apps", table: "Interface")
+            : section == 1 ? "Safari" : String(localized: "Settings", table: "Interface")
+    }
+
+    private func sectionLabel(_ section: Int) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: "leaf.fill").foregroundStyle(SlowthAppearance.sage)
+            Text(sectionTitle(section)).foregroundStyle(.primary)
+        }
+        .font(.headline)
+        .fixedSize(horizontal: true, vertical: false)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
+
     @ToolbarContentBuilder
-    private var duoToolbar: some ToolbarContent {
-        #if canImport(SwiftUI, _version: 8.0.85)
-        if #available(iOS 27.1, *), isDuo {
-            ToolbarItem(placement: .bottomBar) {
-                Button {
-                    showStrictModeConfirmation = true
-                } label: {
-                    Label(
-                        state.snapshot.isStrictModeActive ? String(localized: "Locked") : String(localized: "Strict"),
-                        systemImage: state.snapshot.isStrictModeActive ? "lock.fill" : "lock.open"
-                    )
-                }
-                .disabled(disabledByStrict)
-                .accessibilityIdentifier("duo.strict")
-            }
-            #if canImport(FamilyControls)
-            ToolbarItem(placement: .bottomBar) {
-                RecordingToolbarButton(preferredExtensionBundleID: state.broadcastExtensionBundleID)
-            }
-            .axisBehavior(.verticalPreferred)
-            #endif
-        }
-        #else
-        // The enclosing isDuo condition is always false with an older SDK.
-        ToolbarItem(placement: .bottomBar) { EmptyView() }
-        #endif
-    }
-
-    @ViewBuilder
-    private func settingsLayout(in size: CGSize) -> some View {
-        if isPad {
-            Group {
-                if horizontalSizeClass == .regular,
-                   !dynamicTypeSize.isAccessibilitySize,
-                   size.width >= 900 {
-                    HStack(alignment: .top, spacing: 16) {
-                        settingsPane(title: String(localized: "In-app blocking"), icon: "shield.lefthalf.filled") {
-                            settingsForm(includeSites: false)
-                        }
-                        .frame(maxWidth: .infinity)
-                        settingsPane(title: "Safari", icon: "safari") {
-                            Form { sitesSection }
-                                .accessibilityIdentifier("safariSettingsForm")
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                    .frame(maxWidth: 1160)
-                    .padding(.horizontal, 16)
-                } else {
-                    settingsForm(includeSites: true)
-                        .scrollContentBackground(.hidden)
-                        .frame(maxWidth: 680)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(uiColor: .systemGroupedBackground))
+    private func sectionToolbar(_ section: Int) -> some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .navigationBarLeading) { sectionLabel(section) }
+                .sharedBackgroundVisibility(.hidden)
         } else {
-            // Use the current window, never the device model or main screen. Keep
-            // tall/narrow windows and accessibility text in one scrollable form.
-            // SwiftUI 8.0.85 ships ArrangementView in the iOS 27.1 SDK. Xcode
-            // 27.0 uses the same Swift compiler, so a compiler check is insufficient.
-            #if canImport(SwiftUI, _version: 8.0.85)
-            if #available(iOS 27.1, *),
-               horizontalSizeClass == .regular,
-               !dynamicTypeSize.isAccessibilitySize,
-               size.width >= 720, size.width > size.height {
-                ArrangementView {
-                    settingsPane(title: String(localized: "In-app blocking"), icon: "shield.lefthalf.filled") {
-                        settingsForm(includeSites: false)
+            ToolbarItem(placement: .navigationBarLeading) { sectionLabel(section) }
+        }
+    }
+
+    private func settingsLayout(in size: CGSize, section: Int) -> some View {
+        VStack(spacing: 0) {
+            Form {
+                Group {
+                if section == 0 {
+                    #if canImport(FamilyControls)
+                    if FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
+                        realtimeShieldSection
+                    } else {
+                        screenTimeAccessSection
                     }
-                } secondary: {
-                    settingsPane(title: "Safari", icon: "safari") {
-                        Form {
-                            sitesSection
+                    #endif
+                } else if section == 1 {
+                    Section {
+                        Button { showSafariHelp = true } label: {
+                            Label(String(localized: "Check Safari extension", table: "Interface"), systemImage: "safari")
                         }
-                        .accessibilityIdentifier("safariSettingsForm")
+                    }
+                    sitesSection
+                    updatesSection
+                } else {
+                    heroSection
+                    strictModeSection
+                    PauseDurationSettings(strict: disabledByStrict)
+                    helpSection
+                    #if DEBUG
+                    if debugModeEnabled {
+                        debugSection
+                    }
+                    #endif
+                }
+                }
+                .listRowBackground(SlowthAppearance.card)
+            }
+            .scrollContentBackground(.hidden)
+            .compactServiceSpacing()
+            .environment(\.defaultMinListRowHeight, 48)
+            .accessibilityIdentifier(section == 0 ? "mainSettingsForm" : section == 1 ? "safariSettingsForm" : "appSettingsForm")
+        }
+        // The same navigation at every window width, including iPad Split View.
+        .frame(maxWidth: size.width >= 700 ? 680 : .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(SlowthAppearance.background)
+    }
+
+    private func serviceCard<Content: View>(
+        _ id: String, title: String, summary: String,
+        isConfigured: Bool = true, onChoose: (() -> Void)? = nil,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        Section {
+            Group {
+                if !isConfigured, let onChoose {
+                    Button(action: onChoose) {
+                        HStack {
+                            serviceLabel(id, title: title,
+                                         summary: String(localized: "Choose an app", table: "Interface"),
+                                         isConfigured: false)
+                            Spacer()
+                            Image(systemName: "plus.circle")
+                                .foregroundStyle(.secondary)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    DisclosureGroup(isExpanded: Binding(
+                        get: { expandedService == id },
+                        set: { expandedService = $0 ? id : nil }
+                    )) {
+                        content()
+                            #if canImport(FamilyControls)
+                            .disabled(id.hasPrefix("apps.") && !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus))
+                            #endif
+                    } label: {
+                        serviceLabel(id, title: title, summary: summary, isConfigured: true)
                     }
                 }
-                // Allow either axis around a fold, so neither pane is suppressed.
-                // Each section has exactly one owner; do not infer visibility from
-                // splitArrangementAxis, which describes layout, not visibility.
-                .arrangementViewStyle(.split)
-                .background(Color(uiColor: .systemGroupedBackground))
-            } else {
-                settingsForm(includeSites: true)
             }
-            #else
-            // Keep older Xcode/SDK builds working; Duo layouts require Xcode 27.1.
-            settingsForm(includeSites: true)
-            #endif
+            .padding(.vertical, 3)
+            .accessibilityIdentifier("service." + id)
         }
     }
 
-    private func settingsPane<Content: View>(
-        title: String, icon: String, @ViewBuilder content: () -> Content
-    ) -> some View {
-        VStack(spacing: 0) {
-            Label(title, systemImage: icon)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .padding(.bottom, 4)
-            content()
-                .scrollContentBackground(.hidden)
+    private func serviceLabel(_ id: String, title: String, summary: String, isConfigured: Bool) -> some View {
+        Label {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).foregroundStyle(isConfigured ? .primary : .secondary)
+                Text(summary)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        } icon: {
+            Image("Service-" + String(id.split(separator: ".").last ?? ""))
+                .resizable()
+                .renderingMode(.original)
+                .scaledToFit()
+                .frame(width: 34, height: 34)
+                .saturation(isConfigured ? 1 : 0)
+                .opacity(isConfigured ? 1 : 0.45)
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                .accessibilityHidden(true)
         }
-        .padding(.horizontal, 8)
     }
 
-    private func settingsForm(includeSites: Bool) -> some View {
-        Form {
-            heroSection
-            if state.snapshot.isStrictModeActive {
-                strictBannerSection
-            }
-            #if canImport(FamilyControls)
-            realtimeShieldSection
-            #endif
-            if includeSites {
-                sitesSection
-            }
-            if !isDuo {
-                strictModeSection
-            }
-            updatesSection
-            #if DEBUG
-            if debugModeEnabled {
-                debugSection
-            }
-            #endif
-            helpSection
+    private func siteFeatureTitle(_ feature: SiteFeature, site: String) -> String {
+        switch feature {
+        case .all: return String(localized: "Whole website", table: "Interface")
+        case .feed: return String(localized: "Infinite feed", table: "Interface")
+        case .shorts:
+            if site == "youtube" { return "Shorts" }
+            if site == "x" { return String(localized: "Explore & trends", table: "Interface") }
+            return "Reels"
         }
-        .accessibilityIdentifier("mainSettingsForm")
+    }
+
+    private func restrictionSummary(_ labels: [String]) -> String {
+        labels.isEmpty ? String(localized: "Off") : labels.joined(separator: " · ")
     }
 
     private var disabledByStrict: Bool { state.snapshot.isStrictModeActive }
@@ -385,364 +446,257 @@ struct ContentView: View {
 
     #if canImport(FamilyControls)
     private func presentRealtimeRecordingPromptIfRequested() {
-        guard SharedStore.consumeRealtimeRecordingPromptRequest() else { return }
+        var target: String?
+        guard SharedStore.consumeRealtimeRecordingPromptRequest(target: &target) else { return }
+        recordingPromptPauseTarget = target
         state.reload()
         showRealtimeRecordingPrompt = true
     }
     #endif
 
-    private var heroSection: some View {
-        Section {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    HeroCard(
-                        title: String(localized: "Help improve"),
-                        subtitle: String(localized: "In-app blocking") + " 👉👈",
-                        icon: "heart.text.clipboard",
-                        gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
-                                   Color(red: 0.08, green: 0.43, blue: 0.49)],
-                        action: { showContribution = true }
-                    )
-                    .accessibilityIdentifier("contribution.card")
-                    HeroCard(
-                        title: String(localized: "In-app blocking"),
-                        subtitle: String(localized: "Shorts, Reels & Stories"),
-                        icon: "record.circle.fill",
-                        gradient: [Color(red: 0.98, green: 0.24, blue: 0.34),
-                                   Color(red: 0.79, green: 0.12, blue: 0.45)],
-                        action: { showRealtimeBlockingBeta = true }
-                    )
-                    HeroCard(
-                        title: String(localized: "How it works"),
-                        subtitle: String(localized: "What Slowth does for you"),
-                        icon: "sparkles",
-                        gradient: [Color(red: 0.36, green: 0.46, blue: 0.95),
-                                   Color(red: 0.55, green: 0.32, blue: 0.86)],
-                        action: { showAbout = true }
-                    )
-                    HeroCard(
-                        title: "Safari",
-                        subtitle: String(localized: "Enable in extensions"),
-                        icon: "safari.fill",
-                        gradient: [Color(red: 0.21, green: 0.65, blue: 0.97),
-                                   Color(red: 0.14, green: 0.45, blue: 0.84)],
-                        action: { showSafariHelp = true }
-                    )
-                    if !isDuo {
-                        HeroCard(
-                            title: state.snapshot.isStrictModeActive ? String(localized: "Locked") : String(localized: "Strict"),
-                            subtitle: state.snapshot.isStrictModeActive
-                                ? String(localized: "24 h lock active")
-                                : String(localized: "Lock for 24 hours"),
-                            icon: state.snapshot.isStrictModeActive ? "lock.fill" : "lock.open.fill",
-                            gradient: state.snapshot.isStrictModeActive
-                                ? [Color(red: 0.95, green: 0.31, blue: 0.27),
-                                   Color(red: 0.78, green: 0.18, blue: 0.34)]
-                                : [Color(red: 0.97, green: 0.61, blue: 0.20),
-                                   Color(red: 0.93, green: 0.39, blue: 0.18)],
-                            action: state.snapshot.isStrictModeActive
-                                ? nil
-                                : { showStrictModeConfirmation = true }
-                        )
+    private var sitesSection: some View {
+        Group {
+            ForEach(sites) { site in
+                serviceCard("safari." + site.id, title: site.label, summary: safariSummary(site.id)) {
+                    ForEach(SiteBlockingControl.controls(for: site.id)) { control in
+                        Toggle(siteFeatureTitle(control.feature, site: control.site), isOn: bindingForSite(control.site, feature: control.feature))
+                            .disabled((disabledByStrict &&
+                                       (control.feature == .all || state.setting(control.feature, for: control.site))) ||
+                                      (control.feature != .all && state.setting(.all, for: control.site)))
+                            .accessibilityIdentifier(control.id)
                     }
-                    if FeatureFlags.tipsEnabled && !state.snapshot.supportCardDismissed {
-                        HeroCard(
-                            title: String(localized: "Support"),
-                            subtitle: String(localized: "Tip the developer"),
-                            icon: "heart.fill",
-                            gradient: [Color(red: 0.95, green: 0.42, blue: 0.55),
-                                       Color(red: 0.85, green: 0.20, blue: 0.45)],
-                            action: { showSupportSheet = true },
-                            onDismiss: { state.dismissSupportCard() }
-                        )
+                    if state.setting(.all, for: site.id) {
+                        Text(String(localized: "Whole-site blocking takes priority", table: "Interface"))
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                    if site.id == "instagram" {
+                        Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
+                            .font(.caption).foregroundStyle(.secondary)
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
             }
+        }
+    }
+
+    private func safariSummary(_ id: String) -> String {
+        if state.setting(.all, for: id) { return siteFeatureTitle(.all, site: id) }
+        return restrictionSummary(SiteBlockingControl.controls(for: id).compactMap {
+            $0.feature != .all && state.setting($0.feature, for: id) ? siteFeatureTitle($0.feature, site: id) : nil
+        })
+    }
+
+    #if canImport(FamilyControls)
+    private func chooseApplication(_ service: String) {
+        guard !isAuthorizingFamilyControls else { return }
+        Task { @MainActor in
+            if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
+                isAuthorizingFamilyControls = true
+                let authorized = await state.requestFamilyControlsAuthorization()
+                isAuthorizingFamilyControls = false
+                guard authorized else { return }
+            }
+            switch service {
+            case "youtube":
+                youtubeSelection = decodedSelection(state.snapshot.youtubeSelectionData)
+                showYouTubePicker = true
+            case "instagram":
+                instagramSelection = decodedSelection(state.snapshot.instagramSelectionData)
+                showInstagramPicker = true
+            case "facebook":
+                facebookSelection = decodedSelection(state.snapshot.facebookSelectionData)
+                showFacebookPicker = true
+            case "x":
+                xSelection = decodedSelection(state.snapshot.xSelectionData)
+                showXPicker = true
+            default: break
+            }
+        }
+    }
+
+    private var screenTimeAccessSection: some View {
+        Section {
+            Button {
+                Task { @MainActor in
+                    isAuthorizingFamilyControls = true
+                    _ = await state.requestFamilyControlsAuthorization()
+                    isAuthorizingFamilyControls = false
+                }
+            } label: {
+                HStack {
+                    Text(String(localized: "Allow Screen Time", table: "Interface"))
+                    Spacer()
+                    if isAuthorizingFamilyControls { ProgressView() }
+                }
+            }
+            .disabled(isAuthorizingFamilyControls)
+        }
+    }
+
+    @ViewBuilder
+    private var realtimeShieldSection: some View {
+        Section {
+            AppRecordingCard(
+                preferredExtensionBundleID: state.broadcastExtensionBundleID,
+                isRecording: state.snapshot.broadcastActive,
+                onLearnMore: { showRealtimeBlockingBeta = true }
+            )
+            .padding(.bottom, 20)
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
         }
-    }
-
-    private var strictBannerSection: some View {
-        Section {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Image(systemName: "lock.fill")
-                    .foregroundStyle(.orange)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(String(localized: "Strict mode active"))
-                        .font(.subheadline.weight(.semibold))
-                    if let until = state.snapshot.strictModeUntil {
-                        Text(String(localized: "Locked until \(L10n.dateTime(until))"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
+        if !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot) {
+            PausePanel(safari: false)
         }
-    }
+        Group {
+            Group {
+                serviceCard("apps.youtube", title: "YouTube", summary: appSummary("youtube"),
+                    isConfigured: state.hasYouTubeSelection, onChoose: { chooseApplication("youtube") }) {
+                    Toggle("Shorts", isOn: Binding(
+                        get: { state.snapshot.realtimeYouTubeBlockingEnabled },
+                        set: { state.setRealtimeYouTubeBlockingEnabled($0) }
+                    ))
+                    .disabled((disabledByStrict && state.snapshot.realtimeYouTubeBlockingEnabled) || !state.hasYouTubeSelection)
 
-    private var sitesSection: some View {
-        ForEach(sites) { site in
-            Section {
-                ForEach(SiteBlockingControl.controls(for: site.id)) { control in
-                    Toggle(isOn: bindingForSite(control.site, feature: control.feature)) {
-                        if control.feature == .all {
-                            Text(site.label).fontWeight(.semibold)
-                                + Text(verbatim: " — ")
-                                + Text(control.feature.label(for: control.site)).foregroundColor(.secondary)
-                        } else {
-                            Text(control.feature.label(for: control.site))
+                    Toggle(String(localized: "Soft mode", table: "Interface"), isOn: Binding(
+                        get: { state.snapshot.softYouTubeBlockingEnabled },
+                        set: { state.setSoftYouTubeBlockingEnabled($0) }
+                    ))
+                    .disabled(
+                        disabledByStrict && state.snapshot.softYouTubeBlockingEnabled
+                            || !state.hasYouTubeSelection
+                            || !state.snapshot.realtimeYouTubeBlockingEnabled
+                    )
+
+                    Text(String(localized: "Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Button(role: .destructive) {
+                        state.saveYouTubeSelection(FamilyActivitySelection())
+                        if !state.hasYouTubeSelection {
+                            state.setSoftYouTubeBlockingEnabled(false)
+                            expandedService = nil
                         }
+                    } label: {
+                        Text(String(localized: "Reset", table: "Interface"))
+                            .font(.body)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                     }
-                        .padding(.vertical, control.feature == .all ? 6 : 0)
-                        .padding(.leading, control.feature == .all ? 8 : 16)
-                        .padding(.trailing, 8)
-                        .background {
-                            if control.feature == .all {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color.accentColor.opacity(0.08))
-                            }
+                    .buttonStyle(.borderless)
+                    .disabled(disabledByStrict)
+                    .accessibilityIdentifier("service.youtube.reset")
+                }
+                serviceCard("apps.instagram", title: "Instagram", summary: appSummary("instagram"),
+                    isConfigured: state.hasInstagramSelection, onChoose: { chooseApplication("instagram") }) {
+                    Toggle("Reels", isOn: Binding(
+                        get: { state.snapshot.realtimeInstagramReelsBlockingEnabled },
+                        set: { state.setRealtimeInstagramReelsBlockingEnabled($0) }
+                    ))
+                    .disabled((disabledByStrict && state.snapshot.realtimeInstagramReelsBlockingEnabled) || !state.hasInstagramSelection)
+
+                    Toggle(String(localized: "Stories", table: "Interface"), isOn: Binding(
+                        get: { state.snapshot.realtimeInstagramStoriesBlockingEnabled },
+                        set: { state.setRealtimeInstagramStoriesBlockingEnabled($0) }
+                    ))
+                    .disabled((disabledByStrict && state.snapshot.realtimeInstagramStoriesBlockingEnabled) || !state.hasInstagramSelection)
+
+                    Button(role: .destructive) {
+                        state.saveInstagramSelection(FamilyActivitySelection())
+                        if !state.hasInstagramSelection {
+                            expandedService = nil
                         }
-                            .disabled((disabledByStrict &&
-                                       (control.feature == .all || state.setting(control.feature, for: control.site))) ||
-                                      (control.feature != .all && state.setting(.all, for: control.site)))
-                        .accessibilityIdentifier(control.id)
-                }
-            } header: {
-                if site.id == sites.first?.id {
-                    Text(String(localized: "Safari extension settings"))
-                }
-            } footer: {
-                if site.id == sites.last?.id {
-                    Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
-                }
-            }
-        }
-    }
-
-    #if canImport(FamilyControls)
-    private var realtimeShieldSection: some View {
-        Section {
-            Toggle(isOn: Binding(
-                get: { state.snapshot.realtimeShieldEnabled },
-                set: { state.setRealtimeShieldEnabled($0) }
-            )) {
-                Text(String(localized: "In-app blocking"))
-            }
-            .disabled(disabledByStrict && state.snapshot.realtimeShieldEnabled)
-
-            if state.snapshot.realtimeShieldEnabled {
-                RealtimeRecordingCard(
-                    preferredExtensionBundleID: state.broadcastExtensionBundleID,
-                    isRecording: state.snapshot.broadcastActive,
-                    guidance: realtimeRecordingGuidance
-                )
-                ScreenRecordingInfoCard(onLearnMore: { showRealtimeBlockingBeta = true })
-            }
-
-            if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
-                Button {
-                    Task {
-                        isAuthorizingFamilyControls = true
-                        _ = await state.requestFamilyControlsAuthorization()
-                        isAuthorizingFamilyControls = false
+                    } label: {
+                        Text(String(localized: "Reset", table: "Interface"))
+                            .font(.body)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                     }
-                } label: {
-                    HStack {
-                        Text(String(localized: "Allow Screen Time access"))
-                        Spacer()
-                        if isAuthorizingFamilyControls { ProgressView() }
-                    }
+                    .buttonStyle(.borderless)
+                    .disabled(disabledByStrict)
+                    .accessibilityIdentifier("service.instagram.reset")
                 }
-                .disabled(isAuthorizingFamilyControls)
-            } else {
-                Button {
-                    youtubeSelection = decodedSelection(state.snapshot.youtubeSelectionData)
-                    showYouTubePicker = true
-                } label: {
-                    HStack {
-                        Text(String(localized: "Choose YouTube app"))
-                        Spacer()
-                        if state.hasYouTubeSelection {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        }
-                    }
-                }
-                .disabled(disabledByStrict && state.hasYouTubeSelection)
-
-                Toggle(String(localized: "Block YouTube Shorts"), isOn: Binding(
-                    get: { state.snapshot.realtimeYouTubeBlockingEnabled },
-                    set: { state.setRealtimeYouTubeBlockingEnabled($0) }
-                ))
-                .disabled((disabledByStrict && state.snapshot.realtimeYouTubeBlockingEnabled) || !state.hasYouTubeSelection)
-
-                Toggle(String(localized: "Soft YouTube blocking"), isOn: Binding(
-                    get: { state.snapshot.softYouTubeBlockingEnabled },
-                    set: { state.setSoftYouTubeBlockingEnabled($0) }
-                ))
-                .disabled(
-                    disabledByStrict && state.snapshot.softYouTubeBlockingEnabled
-                        || !state.hasYouTubeSelection
-                        || !state.snapshot.realtimeYouTubeBlockingEnabled
-                )
-
-                Text(String(localized: "Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Button {
-                    instagramSelection = decodedSelection(state.snapshot.instagramSelectionData)
-                    showInstagramPicker = true
-                } label: {
-                    HStack {
-                        Text(String(localized: "Choose Instagram app"))
-                        Spacer()
-                        if state.hasInstagramSelection {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        }
-                    }
-                }
-                .disabled(disabledByStrict && state.hasInstagramSelection)
-
-                Toggle(String(localized: "Block Instagram Reels"), isOn: Binding(
-                    get: { state.snapshot.realtimeInstagramReelsBlockingEnabled },
-                    set: { state.setRealtimeInstagramReelsBlockingEnabled($0) }
-                ))
-                .disabled((disabledByStrict && state.snapshot.realtimeInstagramReelsBlockingEnabled) || !state.hasInstagramSelection)
-
-                Toggle(String(localized: "Block Instagram Stories"), isOn: Binding(
-                    get: { state.snapshot.realtimeInstagramStoriesBlockingEnabled },
-                    set: { state.setRealtimeInstagramStoriesBlockingEnabled($0) }
-                ))
-                .disabled((disabledByStrict && state.snapshot.realtimeInstagramStoriesBlockingEnabled) || !state.hasInstagramSelection)
-
                 if state.facebookModelSelected || state.snapshot.realtimeFacebookBlockingEnabled {
-                    Button {
-                        facebookSelection = decodedSelection(state.snapshot.facebookSelectionData)
-                        showFacebookPicker = true
-                    } label: {
-                        HStack {
-                            Text(String(localized: "Choose Facebook app"))
-                            Spacer()
-                            if state.hasFacebookSelection {
-                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                    serviceCard("apps.facebook", title: "Facebook", summary: appSummary("facebook"),
+                    isConfigured: state.hasFacebookSelection, onChoose: { chooseApplication("facebook") }) {
+                        Toggle("Reels", isOn: Binding(
+                            get: { state.snapshot.realtimeFacebookReelsBlockingEnabled },
+                            set: { state.setRealtimeFacebookReelsBlockingEnabled($0) }
+                        ))
+                        .disabled((disabledByStrict && state.snapshot.realtimeFacebookReelsBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookReelsBlockingEnabled))
+
+                        Toggle(String(localized: "Stories", table: "Interface"), isOn: Binding(
+                            get: { state.snapshot.realtimeFacebookStoriesBlockingEnabled },
+                            set: { state.setRealtimeFacebookStoriesBlockingEnabled($0) }
+                        ))
+                        .disabled((disabledByStrict && state.snapshot.realtimeFacebookStoriesBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookStoriesBlockingEnabled))
+
+                        Button(role: .destructive) {
+                            state.saveFacebookSelection(FamilyActivitySelection())
+                            if !state.hasFacebookSelection {
+                                expandedService = nil
                             }
+                        } label: {
+                            Text(String(localized: "Reset", table: "Interface"))
+                                .font(.body)
+                                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                         }
+                        .buttonStyle(.borderless)
+                        .disabled(disabledByStrict)
+                        .accessibilityIdentifier("service.facebook.reset")
                     }
-                    .disabled(disabledByStrict && state.hasFacebookSelection)
-
-                    Toggle(String(localized: "Block Facebook Reels"), isOn: Binding(
-                        get: { state.snapshot.realtimeFacebookReelsBlockingEnabled },
-                        set: { state.setRealtimeFacebookReelsBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeFacebookReelsBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookReelsBlockingEnabled))
-
-                    Toggle(String(localized: "Block Facebook Stories"), isOn: Binding(
-                        get: { state.snapshot.realtimeFacebookStoriesBlockingEnabled },
-                        set: { state.setRealtimeFacebookStoriesBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeFacebookStoriesBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookStoriesBlockingEnabled))
                 }
-
                 if state.xModelSelected || state.snapshot.realtimeXBlockingEnabled {
-                    Button {
-                        xSelection = decodedSelection(state.snapshot.xSelectionData)
-                        showXPicker = true
-                    } label: {
-                        HStack {
-                            Text(String(localized: "Choose X app"))
-                            Spacer()
-                            if state.hasXSelection {
-                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                    serviceCard("apps.x", title: "X", summary: appSummary("x"),
+                    isConfigured: state.hasXSelection, onChoose: { chooseApplication("x") }) {
+                        Toggle(String(localized: "Short videos", table: "Interface"), isOn: Binding(
+                            get: { state.snapshot.realtimeXReelsBlockingEnabled },
+                            set: { state.setRealtimeXReelsBlockingEnabled($0) }
+                        ))
+                        .disabled((disabledByStrict && state.snapshot.realtimeXReelsBlockingEnabled) || !state.hasXSelection || (!state.xModelSelected && !state.snapshot.realtimeXReelsBlockingEnabled))
+
+                        Button(role: .destructive) {
+                            state.saveXSelection(FamilyActivitySelection())
+                            if !state.hasXSelection {
+                                expandedService = nil
                             }
+                        } label: {
+                            Text(String(localized: "Reset", table: "Interface"))
+                                .font(.body)
+                                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                         }
+                        .buttonStyle(.borderless)
+                        .disabled(disabledByStrict)
+                        .accessibilityIdentifier("service.x.reset")
                     }
-                    .disabled(disabledByStrict && state.hasXSelection)
-
-                    Toggle(String(localized: "Block X Reels"), isOn: Binding(
-                        get: { state.snapshot.realtimeXReelsBlockingEnabled },
-                        set: { state.setRealtimeXReelsBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeXReelsBlockingEnabled) || !state.hasXSelection || (!state.xModelSelected && !state.snapshot.realtimeXReelsBlockingEnabled))
-
                 }
 
-                #if DEBUG
-                if debugModeEnabled {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text("Debug status")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                        DebugStatusRow(label: "Feature", value: state.snapshot.realtimeShieldEnabled ? "on" : "off")
-                        DebugStatusRow(label: "Recording", value: state.snapshot.broadcastActive ? "active" : "inactive")
-                        DebugStatusRow(label: "YouTube Shorts", value: state.snapshot.realtimeYouTubeBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "YouTube soft mode", value: state.snapshot.softYouTubeBlockingEnabled ? "on" : "off")
-                        DebugStatusRow(label: "YouTube restore", value: state.snapshot.youtubeShieldRestoreDeferred ? "waiting for 1s usage" : "normal")
-                        DebugStatusRow(label: "YouTube app", value: state.hasYouTubeSelection ? "picked" : "not picked")
-                        DebugStatusRow(label: "Instagram Reels", value: state.snapshot.realtimeInstagramReelsBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Instagram Stories", value: state.snapshot.realtimeInstagramStoriesBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Facebook Reels", value: state.snapshot.realtimeFacebookReelsBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Facebook Stories", value: state.snapshot.realtimeFacebookStoriesBlockingEnabled ? "blocked" : "allowed")
-                        DebugStatusRow(label: "Facebook candidates", value: "Reels \(state.snapshot.realtimeShieldDiagnostics.facebookCandidateEvents ?? 0) · Stories \(state.snapshot.realtimeShieldDiagnostics.facebookStoriesCandidateEvents ?? 0)")
-                        DebugStatusRow(label: "Instagram app", value: state.hasInstagramSelection ? "picked" : "not picked")
-                        DebugStatusRow(label: "Surface model", value: modelStatusText(state.snapshot.realtimeShieldDiagnostics))
-                        DebugStatusRow(label: "Prediction", value: predictionText(state.snapshot.realtimeShieldDiagnostics))
-                        DebugStatusRow(label: "YouTube app p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.appProbabilities, key: "youtube"))
-                        DebugStatusRow(label: "Instagram app p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.appProbabilities, key: "instagram"))
-                        DebugStatusRow(label: "Shorts joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "youtube_shorts"))
-                        DebugStatusRow(label: "Reels joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "instagram_reels"))
-                        DebugStatusRow(label: "Stories joint p", value: probabilityText(state.snapshot.realtimeShieldDiagnostics.jointProbabilities, key: "instagram_stories"))
-                        DebugStatusRow(label: "Video frames", value: "\(state.snapshot.realtimeShieldDiagnostics.receivedVideoFrames)")
-                        DebugStatusRow(label: "Inferences", value: "\(state.snapshot.realtimeShieldDiagnostics.inferenceCount)")
-                        DebugStatusRow(label: "Inference", value: formatted(state.snapshot.realtimeShieldDiagnostics.lastInferenceDurationMS, digits: 1, suffix: " ms"))
-                        DebugStatusRow(label: "Inference p95", value: formatted(state.snapshot.realtimeShieldDiagnostics.inferenceP95MS, digits: 1, suffix: " ms"))
-                        DebugStatusRow(label: "Candidates", value: "Shorts \(state.snapshot.realtimeShieldDiagnostics.youtubeCandidateEvents) · Reels \(state.snapshot.realtimeShieldDiagnostics.instagramCandidateEvents) · Stories \(state.snapshot.realtimeShieldDiagnostics.instagramStoriesCandidateEvents)")
-                        DebugStatusRow(label: "Memory footprint", value: footprintText(state.snapshot.realtimeShieldDiagnostics))
-                        DebugStatusRow(label: "Available memory", value: formatted(state.snapshot.realtimeShieldDiagnostics.availableMemoryMB, digits: 1, suffix: " MB"))
-                        if let error = state.snapshot.realtimeShieldDiagnostics.lastClassifierError {
-                            DebugStatusRow(label: "Model error", value: error)
-                        }
-                        DebugStatusRow(label: "Last YouTube Shorts", value: relativeOrNever(state.snapshot.lastYouTubeShortsDetectionAt))
-                        DebugStatusRow(label: "Last Instagram Reels", value: relativeOrNever(state.snapshot.lastInstagramReelsDetectionAt))
-                        DebugStatusRow(label: "Last Instagram Stories", value: relativeOrNever(state.snapshot.lastInstagramStoriesDetectionAt))
-                        DebugStatusRow(label: "Last Instagram shield", value: relativeOrNever(state.snapshot.lastInstagramShieldPresentedAt))
-                        DebugStatusRow(label: "Last shield tap", value: relativeOrNever(state.snapshot.lastShieldActionInvokedAt))
-                    }
-                    .padding(.vertical, 2)
-                }
-                #endif
-            }
-        } header: {
-            Text(String(localized: "Block content in apps"))
-        } footer: {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(InAppBlockingCopy.setup)
-                Text(AppLocalization.string("Apps with blocking enabled stay blocked when screen recording is off. Soft YouTube mode can delay blocking."))
-                Text(AppLocalization.string("Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
-                Text(AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything."))
             }
         }
     }
 
-    private var realtimeRecordingGuidance: String {
-        if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
-            return String(localized: "Allow Screen Time access below to finish setup.")
+    private func appSummary(_ id: String) -> String {
+        let selected: Bool
+        let labels: [String]
+        switch id {
+        case "youtube":
+            selected = state.hasYouTubeSelection
+            labels = [state.snapshot.realtimeYouTubeBlockingEnabled ? String(localized: "Shorts") : nil,
+                      state.snapshot.softYouTubeBlockingEnabled ? String(localized: "Soft YouTube blocking") : nil].compactMap { $0 }
+        case "instagram":
+            selected = state.hasInstagramSelection
+            labels = [state.snapshot.realtimeInstagramReelsBlockingEnabled ? String(localized: "Reels") : nil,
+                      state.snapshot.realtimeInstagramStoriesBlockingEnabled ? String(localized: "Stories") : nil].compactMap { $0 }
+        case "facebook":
+            selected = state.hasFacebookSelection
+            labels = [state.snapshot.realtimeFacebookReelsBlockingEnabled ? String(localized: "Reels") : nil,
+                      state.snapshot.realtimeFacebookStoriesBlockingEnabled ? String(localized: "Stories") : nil].compactMap { $0 }
+        default:
+            selected = state.hasXSelection
+            labels = state.snapshot.realtimeXReelsBlockingEnabled ? [String(localized: "Reels")] : []
         }
-        let youtubeReady = state.hasYouTubeSelection
-            && state.snapshot.realtimeYouTubeBlockingEnabled
-        let instagramReady = state.hasInstagramSelection
-            && state.snapshot.realtimeInstagramBlockingEnabled
-        let facebookReady = state.hasFacebookSelection
-            && state.snapshot.realtimeFacebookBlockingEnabled
-        let xReady = state.hasXSelection
-            && state.snapshot.realtimeXBlockingEnabled
-        if !youtubeReady && !instagramReady && !facebookReady && !xReady {
-            return String(localized: "Choose an app and enable at least one blocking option below.")
-        }
-        return String(localized: "Tap anywhere here to start.")
+        guard selected else { return String(localized: "Choose an app", table: "Interface") }
+        let summary = restrictionSummary(labels)
+        return state.snapshot.realtimeShieldEnabled || labels.isEmpty ? summary : String(localized: "Off") + " · " + summary
     }
 
     private func decodedSelection(_ data: Data?) -> FamilyActivitySelection {
@@ -752,35 +706,6 @@ struct ContentView: View {
         return decoded
     }
 
-    private func relativeOrNever(_ date: Date?) -> String {
-        guard let date else { return "never" }
-        return Self.relativeFormatter.localizedString(for: date, relativeTo: Date())
-    }
-
-    private func modelStatusText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
-        guard let version = diagnostics.modelVersion else { return diagnostics.modelStatus }
-        return "\(diagnostics.modelStatus) · \(version)"
-    }
-
-    private func predictionText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
-        guard let app = diagnostics.lastApp else { return "—" }
-        return "\(app) / \(diagnostics.lastContent ?? "—")"
-    }
-
-    private func probabilityText(_ probabilities: [String: Double]?, key: String) -> String {
-        formatted(probabilities?[key], digits: 3)
-    }
-
-    private func formatted(_ value: Double?, digits: Int, suffix: String = "") -> String {
-        guard let value else { return "—" }
-        return String(format: "%.*f%@", digits, value, suffix)
-    }
-
-    private func footprintText(_ diagnostics: RealtimeShieldDiagnostics) -> String {
-        let current = formatted(diagnostics.currentFootprintMB, digits: 1, suffix: " MB")
-        let peak = formatted(diagnostics.peakFootprintMB, digits: 1, suffix: " MB")
-        return "\(current) · peak \(peak)"
-    }
     #endif
 
     private var strictModeSection: some View {
@@ -792,11 +717,20 @@ struct ContentView: View {
                     else { state.setStrictMode(false) }
                 }
             )) {
-                Text(String(localized: "Strict mode (24 h lock)"))
+                Text(String(localized: "Strict mode", table: "Interface"))
             }
             .disabled(disabledByStrict)
+            Toggle(String(localized: "Allow pauses in Strict mode", table: "Interface"), isOn: Binding(
+                get: { SharedStore.pausesAllowedInStrictMode },
+                set: { state.setPausesAllowedInStrictMode($0) }
+            ))
+            .disabled(disabledByStrict && !SharedStore.pausesAllowedInStrictMode)
+            if let until = state.snapshot.strictModeUntil, disabledByStrict {
+                Text(String(localized: "Locked until \(L10n.dateTime(until))"))
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
         } footer: {
-            Text(String(localized: "For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."))
+            Text(String(localized: "Enabled restrictions are locked for 24 hours.", table: "Interface"))
         }
     }
 
@@ -863,6 +797,52 @@ struct ContentView: View {
             .padding(.vertical, 10)
     }
 
+    private var heroSection: some View {
+        Section {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    HeroCard(
+                        title: String(localized: "Help improve"),
+                        subtitle: String(localized: "In-app blocking") + " 👉👈",
+                        icon: "heart.text.clipboard",
+                        gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
+                                   Color(red: 0.08, green: 0.43, blue: 0.49)],
+                        action: { showContribution = true }
+                    )
+                    .accessibilityIdentifier("contribution.card")
+
+                    HeroCard(
+                        title: String(localized: "How it works"),
+                        subtitle: String(localized: "What Slowth does for you"),
+                        icon: "sparkles",
+                        gradient: [Color(red: 0.36, green: 0.46, blue: 0.95),
+                                   Color(red: 0.55, green: 0.32, blue: 0.86)],
+                        action: { showAbout = true }
+                    )
+                    if FeatureFlags.tipsEnabled {
+                        HeroCard(
+                            title: String(localized: "Support"),
+                            subtitle: String(localized: "Tip the developer"),
+                            icon: "heart.fill",
+                            gradient: [Color(red: 0.95, green: 0.42, blue: 0.55),
+                                       Color(red: 0.85, green: 0.20, blue: 0.45)],
+                            action: { showSupportSheet = true }
+                        )
+                        .accessibilityIdentifier("support.card")
+                    }
+
+
+
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+    }
+
     private var helpSection: some View {
         Section {
             Link(destination: AppReviewCoordinator.reviewURL) {
@@ -873,7 +853,7 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            if !isDuo {
+            Group {
                 Link(destination: feedbackURL) {
                     HStack {
                         Text(String(localized: "Send feedback"))
@@ -883,18 +863,7 @@ struct ContentView: View {
                     }
                 }
             }
-            if FeatureFlags.tipsEnabled {
-                Button {
-                    showSupportSheet = true
-                } label: {
-                    HStack {
-                        Text(String(localized: "Support"))
-                        Spacer()
-                        Image(systemName: "heart.fill")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
+
         } header: {
             Text(String(localized: "Feedback & Support"))
         } footer: {
@@ -926,7 +895,7 @@ struct ContentView: View {
                 }
             DebugSessionCaptureControls()
             if DebugModelSettings.cascadeAvailable {
-                Picker("Model for next recording", selection: Binding(
+                Picker("Model (next recording)", selection: Binding(
                     get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
                     set: { debugModelBackend = $0; state.refreshFacebookModelSelection() }
                 )) {
@@ -935,38 +904,16 @@ struct ContentView: View {
                     }
                 }
                 .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
-                Text("Stop screen recording, choose a model, then start recording again. Turning Debug mode off selects Cascade V10 for the next recording. V14 is experimental and unqualified: validation quality gates failed. V15 and Cascade V6 are experimental and unqualified: validation quality gates failed. V15 CoreML parity failed on validation (Stories threshold and temporal trace mismatch). Cascade V6 CoreML parity passed; device qualification is still pending. Cascade V7 adds Facebook Reels and Stories. Cascade V8 adds X short videos. Cascade V10 is the default and uses the expanded candidate pool; validation quality gates failed and device qualification is pending.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else {
-                Text("Model selection is unavailable in this build.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             Toggle("Save detection frames", isOn: $debugCaptureEnabled)
             if debugCaptureEnabled {
-                DebugStatusRow(
-                    label: "Photos access",
-                    value: debugCaptureLibrary.authorizationText
-                )
-                DebugStatusRow(
-                    label: "Pending captures",
-                    value: "\(debugCaptureLibrary.pendingEvents) · \(debugCapturePendingSize)"
-                )
-                DebugStatusRow(
-                    label: "Saved events",
-                    value: "\(debugCaptureLibrary.savedEvents)"
-                )
-                if let error = debugCaptureLibrary.lastError {
-                    DebugStatusRow(label: "Capture error", value: error)
-                }
                 if debugCaptureLibrary.authorizationStatus == .authorized
                     || debugCaptureLibrary.authorizationStatus == .limited {
                     Button {
                         debugCaptureLibrary.importPending()
                     } label: {
                         HStack {
-                            Text("Save pending frames to Photos")
+                            Text("Save frames to Photos")
                             Spacer()
                             if debugCaptureLibrary.isImporting { ProgressView() }
                         }
@@ -980,7 +927,7 @@ struct ContentView: View {
                         debugCaptureLibrary.requestAccessAndImport()
                     }
                 }
-                Button("Clear pending capture queue", role: .destructive) {
+                Button("Clear pending frames", role: .destructive) {
                     debugCaptureLibrary.clearPending()
                 }
                 .disabled(debugCaptureLibrary.pendingEvents == 0)
@@ -988,26 +935,19 @@ struct ContentView: View {
             DebugAppReviewControls(hasEnabledBlocking: state.hasEnabledBlockingForReview,
                                    isReady: isReadyForReview)
             Toggle("Tips", isOn: $tipsFeatureEnabled)
+            DebugSavedLeavesControl()
+            Button(String(localized: "Reset pauses", table: "Interface")) {
+                do { try IOSPauseCoordinator.resetPausesForDebug() }
+                catch { state.lastError = String(localized: "Could not reset pauses. Try again.", table: "Interface") }
+            }
             Button("Reset Strict mode") {
                 state.resetStrictModeForDebug()
             }
             .disabled(!state.snapshot.isStrictModeActive)
-            Button("Show Tips card again") {
-                state.resetTipsDisplayForDebug()
-            }
-            .disabled(!state.snapshot.supportCardDismissed)
+
         } header: {
             Text("Debug")
-        } footer: {
-            Text("Detection capture is off by default and local only. When enabled, three model-input frames from each confirmed 3-of-5 trigger are saved to Photos. Frames may contain private screen content. Albums are grouped in “Slowth — Triggers”.")
         }
-    }
-
-    private var debugCapturePendingSize: String {
-        ByteCountFormatter.string(
-            fromByteCount: debugCaptureLibrary.pendingBytes,
-            countStyle: .file
-        )
     }
 
     private func appVersionTapped() {
@@ -1222,22 +1162,6 @@ private struct SafariHelpSheet: View {
         }
     }
 }
-
-#if DEBUG && canImport(FamilyControls)
-private struct DebugStatusRow: View {
-    let label: String
-    let value: String
-
-    var body: some View {
-        HStack {
-            Text(label).foregroundStyle(.secondary)
-            Spacer()
-            Text(value)
-        }
-        .font(.caption2)
-    }
-}
-#endif
 
 private struct StepRow: View {
     let number: Int

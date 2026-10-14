@@ -38,6 +38,14 @@ struct FamilyActivityPickerWrapper: View {
     var body: some View {
         NavigationStack {
             FamilyActivityPicker(selection: $selection)
+                .safeAreaInset(edge: .top) {
+                    Text(AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything."))
+                        .font(.footnote)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.regularMaterial)
+                }
                 .navigationTitle(String(localized: "Block apps"))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

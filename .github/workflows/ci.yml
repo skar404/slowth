@@ -31,6 +31,10 @@ jobs:
           node-version: '22.14.0'
       - name: Install verified build tools
         run: bash scripts/release_tools/install_tools.sh
+      - name: Test durable pause policy
+        run: |
+          xcrun swiftc -DPAUSE_TESTS iOS/Pause/IOSPauseLedger.swift tests/IOSPauses/LedgerTests.swift -o "$RUNNER_TEMP/pause-tests"
+          "$RUNNER_TEMP/pause-tests"
       - name: Test release safety boundaries
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Check public source, versions and WebExtension

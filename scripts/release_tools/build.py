@@ -88,7 +88,8 @@ def build_archive(source, output, platform, version, build, provenance, signed):
 def check_source(source):
     release.versions(source)
     release.run(sys.executable, 'scripts/prepare_release_resources.py', '--check', '--runtime-only', cwd=source)
-    release.run('node', '--test', *sorted((source / 'WebExt/tests').glob('*.test.cjs')), cwd=source)
+    release.run('node', '--test', *sorted((source / 'WebExt/tests').glob('*.test.cjs')),
+                *sorted((source / 'tests/IOSPauses').glob('*.test.cjs')), cwd=source)
 
 
 def main(argv=None):

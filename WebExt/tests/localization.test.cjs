@@ -271,7 +271,7 @@ test('extension CSS and overlays use logical direction without changing host dir
     assert.doesNotMatch(read(file), /(?:document\.documentElement|root)\.(?:dir|lang)\s*=/);
   }
   const project = read('../project.yml');
-  assert.equal((project.match(/path: Localization/g) || []).length, 8);
+  assert.equal((project.match(/path: Localization/g) || []).length, 9);
   assert.equal((project.match(/path: WebExt\/_locales/g) || []).length, 2);
 });
 

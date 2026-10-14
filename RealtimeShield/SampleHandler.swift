@@ -101,6 +101,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         SharedStore.setBroadcastActive(false)
         resetStreaks()
         prepareEnabledSurfacesAfterBroadcastStops()
+        _ = try? IOSPauseCoordinator.snapshot()
         publishDiagnostics(force: true)
         reshieldEnabledSurfaces()
         #if DEBUG
@@ -136,6 +137,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         SharedStore.setBroadcastActive(false)
         resetStreaks()
         prepareEnabledSurfacesAfterBroadcastStops()
+        _ = try? IOSPauseCoordinator.snapshot()
         publishDiagnostics(force: true)
         reshieldEnabledSurfaces()
         #if DEBUG
@@ -864,6 +866,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     private func consumeUnlockRequests(at now: Date) {
         if let requestedAt = SharedStore.shieldUnlockRequestedAt(surface: .youtube),
+           IOSPauseCoordinator.acceptsNavigationUnlock(at: requestedAt),
            lastHandledYouTubeUnlockAt.map({ requestedAt > $0 }) ?? true {
             lastHandledYouTubeUnlockAt = requestedAt
             youtubeShieldLatched = false
@@ -880,6 +883,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         let sharedState = SharedStore.snapshot()
         if sharedState.realtimeInstagramBlockingEnabled,
            let requestedAt = SharedStore.shieldUnlockRequestedAt(surface: .instagram),
+           IOSPauseCoordinator.acceptsNavigationUnlock(at: requestedAt),
            lastHandledInstagramUnlockAt.map({ requestedAt > $0 }) ?? true {
             lastHandledInstagramUnlockAt = requestedAt
             instagramShieldLatched = false
@@ -898,6 +902,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
         if sharedState.realtimeFacebookBlockingEnabled,
            let requestedAt = SharedStore.shieldUnlockRequestedAt(surface: .facebook),
+           IOSPauseCoordinator.acceptsNavigationUnlock(at: requestedAt),
            lastHandledFacebookUnlockAt.map({ requestedAt > $0 }) ?? true {
             lastHandledFacebookUnlockAt = requestedAt
             facebookShieldLatched = false
@@ -915,6 +920,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
         if sharedState.realtimeXBlockingEnabled,
            let requestedAt = SharedStore.shieldUnlockRequestedAt(surface: .x),
+           IOSPauseCoordinator.acceptsNavigationUnlock(at: requestedAt),
            lastHandledXUnlockAt.map({ requestedAt > $0 }) ?? true {
             lastHandledXUnlockAt = requestedAt
             xShieldLatched = false

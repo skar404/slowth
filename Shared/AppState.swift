@@ -74,6 +74,7 @@ final class AppState: ObservableObject {
         }
         #if os(iOS) && canImport(FamilyControls)
         if UIApplication.shared.applicationState == .background {
+            SharedStore.syncRealtimeShieldAuthorization(AuthorizationCenter.shared.authorizationStatus)
             SharedStore.setSlowthAppForeground(false)
             armSoftYouTubeShieldAfterLeavingSlowth()
         } else {
@@ -134,6 +135,9 @@ final class AppState: ObservableObject {
     func setStrictMode(_ enabled: Bool) {
         do {
             _ = try SharedStore.setStrictMode(enabled)
+            #if os(iOS)
+            _ = try? IOSPauseCoordinator.snapshot()
+            #endif
             reload()
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode cannot be turned off until it expires")
@@ -207,7 +211,23 @@ final class AppState: ObservableObject {
     func requestFamilyControlsAuthorization() async -> Bool {
         let granted = await FamilyControlsAuth.requestAuthorization()
         RTLog.appState.notice("requestFamilyControlsAuthorization: granted=\(granted, privacy: .public)")
+        refreshProtectionAuthorization()
         return granted
+    }
+
+    func setPausesAllowedInStrictMode(_ allowed: Bool) {
+        do {
+            try SharedStore.setPausesAllowedInStrictMode(allowed)
+            // Reconcile immediately so forbidding pauses also ends an active one.
+            _ = try IOSPauseCoordinator.snapshot()
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+        reload()
+    }
+
+    func refreshProtectionAuthorization() {
+        restoreRealtimeShieldAfterAppActivation()
     }
 
     // Picking a whole category (or the picker's top-level "All Apps &
@@ -687,6 +707,16 @@ final class AppState: ObservableObject {
     }
 
     private func restoreRealtimeShieldAfterAppActivation() {
+        SharedStore.syncRealtimeShieldAuthorization(AuthorizationCenter.shared.authorizationStatus)
+        if !FamilyControlsAuth.isAuthorized {
+            SoftYouTubeActivityMonitoring.stop()
+            ManagedSettingsApplier.clear(surface: .youtube)
+            ManagedSettingsApplier.clear(surface: .instagram)
+            ManagedSettingsApplier.clear(surface: .facebook)
+            ManagedSettingsApplier.clear(surface: .x)
+        }
+        // Reconcile the durable pause before its presentation is refreshed.
+        _ = try? IOSPauseCoordinator.snapshot()
         // Slowth itself is the explicit soft-mode unlock window. Cancel any
         // pending usage event first so an older callback cannot reshield
         // YouTube while this app is in front.
