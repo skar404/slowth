@@ -20,6 +20,10 @@ on:
         description: Signed version tag to publish after success (empty for build-only runs)
         default: ''
         type: string
+      source_run:
+        description: Existing build run ID for publication recovery only (skips all builds and Apple uploads)
+        default: ''
+        type: string
 
 permissions:
   contents: read
@@ -31,7 +35,7 @@ concurrency:
 
 jobs:
   preflight:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && inputs.source_run == ''
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -50,7 +54,7 @@ jobs:
         run: python3 scripts/release.py automation check --tag "$RELEASE_TAG"
   build:
     needs: preflight
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && inputs.source_run == ''
     runs-on: xcode-27
     timeout-minutes: 90
     environment: ${{ inputs.testflight && 'app-store' || 'ci-validation' }}
@@ -203,7 +207,10 @@ jobs:
 
   publish:
     needs: build
-    if: inputs.release_tag != '' && inputs.testflight
+    if: >-
+      always() && !cancelled() && github.ref == 'refs/heads/main' &&
+      inputs.release_tag != '' && inputs.testflight &&
+      (needs.build.result == 'success' || inputs.source_run != '')
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -214,13 +221,14 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ inputs.release_tag }}
+      SOURCE_RUN: ${{ inputs.source_run }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
           persist-credentials: false
       - name: Verify successful build evidence and prepare exact release assets
-        run: python3 scripts/release.py automation prepare --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/slowth-release"
+        run: python3 scripts/release.py automation prepare --tag "$RELEASE_TAG" --source-run "$SOURCE_RUN" --output "$RUNNER_TEMP/slowth-release"
       - name: Attest all release checksums without a private GPG key
         id: checksums
         uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
@@ -231,5 +239,5 @@ jobs:
           CHECKSUMS_ATTESTATION: ${{ steps.checksums.outputs.bundle-path }}
         run: |
           cp "$CHECKSUMS_ATTESTATION" "$RUNNER_TEMP/slowth-release/checksums-attestation.jsonl"
-          python3 scripts/release.py automation publish --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/slowth-release"
+          python3 scripts/release.py automation publish --tag "$RELEASE_TAG" --source-run "$SOURCE_RUN" --output "$RUNNER_TEMP/slowth-release"
           echo "Published https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG" >> "$GITHUB_STEP_SUMMARY"

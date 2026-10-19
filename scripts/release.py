@@ -35,6 +35,7 @@ def parser():
     auto.add_argument('stage', choices=['dispatch', 'check', 'prepare', 'publish'])
     auto.add_argument('--tag', required=True)
     auto.add_argument('--output', type=Path)
+    auto.add_argument('--source-run', help='Recover publication from an existing successful build job; never rebuild')
     promote = commands.add_parser('version', help='Inspect legacy main-run evidence locally; publish new versions with tag')
     promote.add_argument('--run', required=True, help='Successful release-ci workflow run ID')
     promote.add_argument('--model-release', required=True, help='Release containing the exact CI model input')
@@ -72,8 +73,9 @@ def main(argv=None):
     elif args.command == 'automation':
         if args.stage in ('prepare', 'publish'):
             core.require(args.output is not None, '--output required')
-            getattr(automatic, args.stage)(args.tag, args.output.resolve())
+            getattr(automatic, args.stage)(args.tag, args.output.resolve(), source_run=args.source_run)
         else:
+            core.require(not args.source_run, '--source-run is only supported for prepare/publish')
             getattr(automatic, args.stage)(args.tag)
 
 

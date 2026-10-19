@@ -4,7 +4,6 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import tempfile
 
 from . import core, models, version
@@ -22,15 +21,18 @@ def app_tag(tag):
     return tag
 
 
-def source_version():
+def source_version(ref=None):
     """Early portable gate; the build also validates every expanded XcodeGen target."""
-    marketing = json.loads((core.ROOT / 'WebExt/manifest.json').read_text())['version']
-    spec = (core.ROOT / 'project.yml').read_text()
+    def read(name):
+        return (core.git('show', f'{ref}:{name}', capture=True).decode() if ref
+                else (core.ROOT / name).read_text())
+    marketing = json.loads(read('WebExt/manifest.json'))['version']
+    spec = read('project.yml')
     versions = re.findall(r'^\s+MARKETING_VERSION:\s*[\"\']?([\d.]+)[\"\']?\s*$', spec, re.M)
     builds = re.findall(r'^\s+CURRENT_PROJECT_VERSION:\s*[\"\']?(\d+)[\"\']?\s*$', spec, re.M)
     core.require(versions and set(versions) == {marketing} and builds and len(set(builds)) == 1,
                  'Source version/build settings differ')
-    core.require(f'Slowth v{marketing}</div>' in (core.ROOT / 'WebExt/app.html').read_text(),
+    core.require(f'Slowth v{marketing}</div>' in read('WebExt/app.html'),
                  'Visible version label differs')
     app_tag('v' + marketing)
     return marketing, builds[0]
@@ -52,7 +54,7 @@ def public_keyring():
                 os.environ['GNUPGHOME'] = previous
 
 
-def verify_tag(tag, *, tip=True):
+def verify_tag(tag, *, tip=True, historical=False):
     app_tag(tag)
     head = core.git('rev-parse', 'HEAD', capture=True).decode().strip()
     repo = core.origin_repo(core.ROOT)
@@ -67,8 +69,13 @@ def verify_tag(tag, *, tip=True):
              f'{tag_ref}:{ref}')
     core.require(core.git('cat-file', '-t', ref, capture=True).strip() == b'tag',
                  'An annotated, GPG-signed tag is required')
-    core.require(core.git('rev-parse', f'{ref}^{{commit}}', capture=True).decode().strip() == head,
-                 'Tag must point to this exact commit; main moved before dispatch')
+    tagged_head = core.git('rev-parse', f'{ref}^{{commit}}', capture=True).decode().strip()
+    if historical:
+        core.require(not tip, 'Historical publication cannot require the main tip')
+        core.git('merge-base', '--is-ancestor', tagged_head, head)
+        head = tagged_head
+    else:
+        core.require(tagged_head == head, 'Tag must point to this exact commit; main moved before dispatch')
     obj = core.git('rev-parse', ref, capture=True).decode().strip()
     remote = core.git('ls-remote', '--refs', 'origin', tag_ref, capture=True).decode().splitlines()
     core.require(remote == [f'{obj}\t{tag_ref}'], 'Remote tag changed')
@@ -81,7 +88,7 @@ def verify_tag(tag, *, tip=True):
     with public_keyring():
         core.verify_signature(core.ROOT, 'tag', ref, FINGERPRINT)
         core.verify_signature(core.ROOT, 'commit', head, FINGERPRINT)
-    marketing, build = source_version()
+    marketing, build = source_version(head) if historical else source_version()
     core.require(tag == f'v{marketing}', 'Tag does not match MARKETING_VERSION')
     return repo, head, marketing, build
 
@@ -159,29 +166,41 @@ def successful_build(repo, run_id, head):
     return attempt
 
 
-def prepare(tag, output):
-    run_id = run_context()
-    repo, head, marketing, build = verify_tag(tag, tip=False)
+def evidence_run(source_run):
+    current = run_context()
+    if source_run:
+        core.require(re.fullmatch(r'[1-9]\d*', source_run) and source_run != current,
+                     'Source run must identify an earlier build workflow')
+    return source_run or current
+
+
+def verify_model_archive(bundle, head):
+    """Use runtime pins from the signed app source, including the Swift consumer."""
+    with tempfile.TemporaryDirectory(prefix='slowth-model-verification-') as temp:
+        source = Path(temp)
+        for name in (core.RUNTIME, 'RealtimeShield/FlatClassifier.swift'):
+            dest = source / name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(core.git('show', f'{head}:{name}', capture=True))
+        core.install_models(source, core.ROOT, bundle)
+
+
+def prepare(tag, output, source_run=None):
+    run_id = evidence_run(source_run)
+    repo, head, marketing, build = verify_tag(tag, tip=False, historical=bool(source_run))
     absent_release(repo, tag)
     attempt = successful_build(repo, run_id, head)
     core.require(not output.exists(), 'Publication directory already exists')
     output.mkdir(parents=True)
     core.run('gh', 'run', 'download', run_id, '--repo', repo,
              '--name', f'build-evidence-{run_id}-{attempt}', '--dir', output)
-    tree = core.git('rev-parse', 'HEAD^{tree}', capture=True).decode().strip()
+    tree = core.git('rev-parse', f'{head}^{{tree}}', capture=True).decode().strip()
     manifest = version.validate_evidence(output, repo, run_id, attempt, head, tree, marketing, build)
     core.run('gh', 'release', 'download', MODEL_RELEASE, '--repo', repo, '--pattern', models.ASSET,
              '--output', output / models.ASSET)
     core.require(core.sha(output / models.ASSET) == manifest['model_bundle_sha256'] == MODEL_SHA256,
                  'Model archive differs from pinned CI input')
-    # Strict importer checks archive paths and individual model identities without changing the checkout.
-    with tempfile.TemporaryDirectory(prefix='slowth-model-verification-') as temp:
-        source = Path(temp)
-        for name in (core.RUNTIME, 'RealtimeShield/CascadePolicy.swift'):
-            dest = source / name
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(core.ROOT / name, dest)
-        core.install_models(source, core.ROOT, output / models.ASSET)
+    verify_model_archive(output / models.ASSET, head)
     notes = (f'Slowth {marketing} (build {build})\n\n'
              f'Signed source tag: `{tag}`. Commit: `{head}`. [Build and verification]({manifest["run_url"]}).\n\n'
              '- macOS: download `Slowth-macOS.zip`, extract and move Slowth.app to Applications. '
@@ -194,6 +213,11 @@ def prepare(tag, output):
              'Verify the signed Git tag and the GitHub attestation for SHA256SUMS, then check all file hashes. '
              'See docs/BUILD_TRUST.md at this tag. CI uses keyless GitHub signatures; there is no personal GPG checksum '
              'signature. Provenance is not proof of byte-for-byte equality with the App Store download.\n')
+    if source_run:
+        notes += (f'\nPublication recovered from the existing build artifacts; no app was rebuilt or uploaded. '
+                  f'Checksum provenance belongs to [this publication run]'
+                  f'(https://github.com/{repo}/actions/runs/{run_context()}); '
+                  'the four build attestations retain the original source commit.\n')
     core.check_contents('release-notes.md', notes.encode())
     (output / 'release-notes.md').write_text(notes)
     core.checksums(output, [output / name for name in sorted(ASSETS - {'SHA256SUMS', 'checksums-attestation.jsonl'})])
@@ -221,13 +245,16 @@ def publish_assets(output, repo, tag):
     print(f'Published {result["url"]}')
 
 
-def publish(tag, output):
-    run_context()
-    repo, head, _, _ = verify_tag(tag, tip=False)
+def publish(tag, output, source_run=None):
+    run_id = evidence_run(source_run)
+    repo, head, _, _ = verify_tag(tag, tip=False, historical=bool(source_run))
+    if source_run:
+        successful_build(repo, run_id, head)
     absent_release(repo, tag)
     core.run('gh', 'attestation', 'verify', output / 'SHA256SUMS', '--repo', repo,
              '--signer-workflow', f'{repo}/.github/workflows/release-ci.yml',
-             '--source-digest', head, '--source-ref', 'refs/heads/main', '--deny-self-hosted-runners',
+             '--source-digest', os.environ['GITHUB_SHA'] if source_run else head,
+             '--source-ref', 'refs/heads/main', '--deny-self-hosted-runners',
              '--bundle', output / 'checksums-attestation.jsonl')
     core.run('shasum', '-a', '256', '-c', 'SHA256SUMS', cwd=output)
     publish_assets(output, repo, tag)

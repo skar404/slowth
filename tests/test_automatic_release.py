@@ -125,6 +125,85 @@ class BuildEvidenceTests(unittest.TestCase):
                 automatic.successful_build('owner/repo', '123', 'head')
 
 
+class RecoveryTests(unittest.TestCase):
+    def test_source_run_requires_numeric_previous_run_on_main(self):
+        with patch.dict(os.environ, {'GITHUB_ACTIONS': 'true', 'GITHUB_REF': 'refs/heads/main',
+                                     'GITHUB_RUN_ID': '456'}):
+            self.assertEqual(automatic.evidence_run('123'), '123')
+            self.assertEqual(automatic.evidence_run(None), '456')
+            for value in ('456', '../123', '0', '-1'):
+                with self.subTest(value=value), self.assertRaises(RuntimeError):
+                    automatic.evidence_run(value)
+        with patch.dict(os.environ, {'GITHUB_ACTIONS': 'true', 'GITHUB_REF': 'refs/heads/other'}):
+            with self.assertRaises(RuntimeError): automatic.evidence_run('123')
+
+    def test_historical_tag_uses_signed_source_version_and_requires_ancestor(self):
+        calls = []
+        def git(*args, **kwargs):
+            calls.append(args)
+            return {('rev-parse', 'HEAD'): b'publisher',
+                    ('cat-file', '-t', 'refs/slowth/verified-tags/v2026.10.4'): b'tag',
+                    ('rev-parse', 'refs/slowth/verified-tags/v2026.10.4^{commit}'): b'app',
+                    ('rev-parse', 'refs/slowth/verified-tags/v2026.10.4'): b'object',
+                    ('ls-remote', '--refs', 'origin', 'refs/tags/v2026.10.4'):
+                        b'object\trefs/tags/v2026.10.4\n'}.get(args, b'')
+        with patch.dict(os.environ, {'GITHUB_ACTIONS': 'true', 'GITHUB_REPOSITORY': 'owner/repo',
+                                     'GITHUB_SHA': 'publisher'}), \
+             patch.object(core, 'git', side_effect=git), \
+             patch.object(core, 'origin_repo', return_value='owner/repo'), \
+             patch.object(automatic, 'public_keyring', return_value=nullcontext()), \
+             patch.object(core, 'verify_signature') as signature, \
+             patch.object(automatic, 'source_version', return_value=('2026.10.4', '24')) as version:
+            self.assertEqual(automatic.verify_tag('v2026.10.4', tip=False, historical=True),
+                             ('owner/repo', 'app', '2026.10.4', '24'))
+            version.assert_called_once_with('app')
+            self.assertIn(('merge-base', '--is-ancestor', 'app', 'publisher'), calls)
+            self.assertIn(('merge-base', '--is-ancestor', 'app', 'origin/main'), calls)
+            self.assertEqual(signature.call_args.args[2], 'app')
+            with patch.object(core, 'git', side_effect=RuntimeError('not ancestor')):
+                with self.assertRaises(RuntimeError):
+                    automatic.verify_tag('v2026.10.4', tip=False, historical=True)
+
+    def test_recovery_checksums_attest_publisher_not_original_app_commit(self):
+        with patch.dict(os.environ, {'GITHUB_SHA': 'publisher'}), \
+             patch.object(automatic, 'evidence_run', return_value='123'), \
+             patch.object(automatic, 'verify_tag', return_value=('owner/repo', 'app', '2026.10.4', '24')), \
+             patch.object(automatic, 'successful_build') as evidence, \
+             patch.object(automatic, 'absent_release'), patch.object(core, 'run') as run, \
+             patch.object(automatic, 'publish_assets'):
+            automatic.publish('v2026.10.4', Path('output'), source_run='123')
+            evidence.assert_called_once_with('owner/repo', '123', 'app')
+            args = run.call_args_list[0].args
+            self.assertEqual(args[args.index('--source-digest') + 1], 'publisher')
+
+    def test_flat_archive_verification_in_empty_workspace_keeps_swift_pin_check(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            package = root / core.MODEL_DIR / 'FlatDetector.mlpackage'
+            for name in core.PACKAGE_FILES:
+                path = package / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b'{}' if path.suffix == '.json' else b'model fixture')
+            runtime = core.ROOT / core.RUNTIME
+            (root / core.RUNTIME).parent.mkdir(parents=True, exist_ok=True)
+            (root / core.RUNTIME).write_bytes(runtime.read_bytes())
+            bundle = root / 'models.tar.gz'
+            core.model_bundle(root, bundle)
+            source = {core.RUNTIME: runtime.read_bytes(),
+                      'RealtimeShield/FlatClassifier.swift':
+                          (core.ROOT / 'RealtimeShield/FlatClassifier.swift').read_bytes()}
+            def git(*args, **kwargs):
+                self.assertEqual(args[0], 'show')
+                self.assertTrue(args[1].startswith('signed-source:'))
+                return source[args[1].split(':', 1)[1]]
+            with patch.object(core, 'MODEL_HASHES', {'FlatDetector': core.package_sha(package)}), \
+                 patch.object(core, 'git', side_effect=git):
+                automatic.verify_model_archive(bundle, 'signed-source')
+                source['RealtimeShield/FlatClassifier.swift'] = b'wrong runtime pin'
+                with self.assertRaisesRegex(RuntimeError, 'Swift runtime metadata pin differs'):
+                    automatic.verify_model_archive(bundle, 'signed-source')
+
+
 class PublicationTests(unittest.TestCase):
     def test_untrusted_checksums_never_create_release(self):
         with patch.object(automatic, 'run_context'), \

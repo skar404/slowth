@@ -308,6 +308,10 @@ For the Mac ZIP, use the same verification command with `Slowth-macOS.zip` and
 and `macos-store-attestation.jsonl`. For automatic version releases, first verify
 `SHA256SUMS` with the same command and `--bundle checksums-attestation.jsonl`, using
 the expected signed tag's commit as `--source-digest`; then run the checksum check.
+For publication recovery, the checksum attestation instead identifies the repair
+commit on main and the publication run linked in the release notes. Verify that
+reviewed workflow revision separately. The four original build attestations must
+still identify the signed app tag's commit, not the repair commit.
 Verify that the tag and commit carry the trusted GPG signature:
 
 ```sh
@@ -341,7 +345,27 @@ confirm there is no running build and no Apple upload for that attempt.
 Never delete/rewrite the tag or use `--clobber` to replace assets. If only the
 publication job failed and no draft exists, use **Re-run failed jobs**: it validates
 and reuses evidence from the successful build attempt, without re-uploading to
-Apple. If a draft exists, inspect and verify its assets before manual recovery;
+Apple. A retry uses the original workflow revision, so it cannot pick up a code
+fix committed later. After committing a publication fix to main, dispatch the
+workflow with `source_run` set to the original run ID:
+
+```sh
+gh workflow run release-ci.yml --ref main \
+  -f release_tag=v2026.10.4 -f source_run=39309095279 \
+  -f testflight=true -f model_release=models-flat-11-seed7-20261015 \
+  -f model_asset=Slowth-models.tar.gz
+```
+
+This mode skips preflight/build jobs and never accesses the Apple environment.
+It checks that the signed app commit is an ancestor of the publication revision
+and main, validates the original successful build job and retained evidence,
+then verifies the original source tree, model pins and all four build attestations.
+Runtime metadata and its Swift pin are read from the signed app commit. Current
+model pins must still match; recovery across changed model pins is rejected.
+Only the final checksum attestation is produced by the new publication revision.
+The original tag, app version, build number and Apple uploads remain unchanged.
+
+If a draft exists, inspect and verify its assets before manual recovery;
 automation deliberately refuses to overwrite a draft. Do not use **Re-run all jobs**
 after Apple accepted a build. A build-stage failure can require a new version tag
 and an increased build number; inspect Apple before deciding how to recover.
