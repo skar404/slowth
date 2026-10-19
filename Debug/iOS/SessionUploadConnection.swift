@@ -113,9 +113,21 @@ struct SessionUploadProgress: View {
     @ObservedObject var uploader: SessionUploader
 
     var body: some View {
+        SessionUploadProgressContent(batch: uploader.batchProgress,
+            isUploading: uploader.isUploading, transferProgress: uploader.transferProgress)
+    }
+}
+
+/// Render-only progress; no uploader, credentials, files or network are needed.
+struct SessionUploadProgressContent: View {
+    let batch: SessionUploader.BatchProgress?
+    let isUploading: Bool
+    let transferProgress: Double?
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if let batch = uploader.batchProgress {
-                let fraction = uploader.isUploading ? min(uploader.transferProgress ?? 0, 0.99) : 0
+            if let batch {
+                let fraction = isUploading ? min(transferProgress ?? 0, 0.99) : 0
                 ProgressView(value: Double(batch.completed) + fraction, total: Double(max(batch.total, 1)))
                 Text("Processed \(batch.completed) of \(batch.total) sessions")
                 Text("Uploaded: \(batch.sent) · Already sent: \(batch.skipped) · Failed: \(batch.failures.count)")
@@ -126,8 +138,8 @@ struct SessionUploadProgress: View {
                     }
                 }
             }
-            if uploader.isUploading {
-                if let fraction = uploader.transferProgress {
+            if isUploading {
+                if let fraction = transferProgress {
                     ProgressView(value: fraction) {
                         Text(fraction >= 1 ? "Waiting for server acceptance…" : "Current session: \(Int(fraction * 100))%")
                     }
@@ -178,5 +190,26 @@ struct SessionUploadPanel: View {
         }
     }
 }
+
+#Preview("Upload · preparing") {
+    SessionUploadProgressContent(batch: nil, isUploading: true, transferProgress: nil).padding()
+}
+#Preview("Upload · progress") {
+    SessionUploadProgressContent(batch: .init(total: 8, sent: 2, skipped: 1),
+        isUploading: true, transferProgress: 0.42).padding()
+}
+#Preview("Upload · awaiting receipt") {
+    SessionUploadProgressContent(batch: .init(total: 3, sent: 2),
+        isUploading: true, transferProgress: 1).padding()
+}
+#Preview("Upload · partial failure") {
+    SessionUploadProgressContent(batch: .init(total: 4, sent: 2, skipped: 1,
+        failures: ["Example session: server unavailable"]),
+        isUploading: false, transferProgress: nil).padding()
+}
+#Preview("Labeler connection") {
+    SessionUploadConnectionView().allowsHitTesting(false)
+}
+
 #endif
 #endif

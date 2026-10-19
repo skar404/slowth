@@ -138,10 +138,13 @@ class BundleTests(unittest.TestCase):
         if not (release.ROOT / release.MODEL_DIR).exists():
             self.skipTest('Private local model inputs are unavailable')
         (self.root / release.RUNTIME).write_bytes((release.ROOT / release.RUNTIME).read_bytes())
-        (self.root / 'RealtimeShield/CascadePolicy.swift').write_bytes((release.ROOT / 'RealtimeShield/CascadePolicy.swift').read_bytes())
+        (self.root / 'RealtimeShield/FlatClassifier.swift').write_bytes((release.ROOT / 'RealtimeShield/FlatClassifier.swift').read_bytes())
         release.install_models(self.root, release.ROOT, None)
         bundle = self.root / 'roundtrip.tar.gz'
         release.model_bundle(self.root, bundle)
+        second = self.root / 'different-name.tar.gz'
+        release.model_bundle(self.root, second)
+        self.assertEqual(bundle.read_bytes(), second.read_bytes())
         release.install_models(self.root, release.ROOT, bundle)
         weight = next((self.root / release.MODEL_DIR).rglob('weight.bin'))
         weight.write_bytes(b'corrupted')

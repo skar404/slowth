@@ -50,13 +50,13 @@ anything; you just lose the black hole.
 
 | Site | Independent content switches |
 |------|------------------------------|
-| YouTube | Shorts |
+| YouTube | Shorts; Infinite Feed (home feed, default off) |
 | Instagram | Reels; Infinite Feed (home feed, Explore, Stories and continuous reel scrolling) |
 | Facebook | Reels; Infinite Feed (home feed) |
 | X | Explore and trends together |
 | TikTok | Whole-site blocking only |
 
-Every site also has a **Block site** switch. Content switches default to on;
+Every site also has a **Block site** switch. Content switches default to on, except YouTube Infinite Feed;
 whole-site blocking defaults to off except for TikTok. Blocking a whole site
 disables its content controls without clearing their values. Existing users'
 mode/boolean settings migrate once with their effective restrictions intact,
@@ -74,7 +74,7 @@ Two UI surfaces on top of one shared store:
 - **Safari Web Extension popup** — talks to the extension's native handler
   over native messaging.
 
-The source of truth is **App Group `UserDefaults`**, shared by the host apps,
+Settings live in **App Group `UserDefaults`**, shared by the host apps,
 both Safari extensions, and the iOS real-time blocking helper extensions. The
 Safari extension uses independent `shorts`, `feed`, and `all` boolean flags
 per site, stored under `siteBlockingV2`. Here `shorts` means the site's targeted
@@ -85,6 +85,32 @@ Open visible tabs refresh at the existing 30-second cache interval and when
 focused; popup changes are broadcast immediately. Blocking rules are versioned, fetched with an ETag and a
 throttle, and checked on a 6h alarm; Strict mode prevents downloaded changes
 from being saved until the lock expires.
+
+### Native blocking architecture
+
+SwiftUI screens use `AppState` and `SharedStore`. iOS keeps its full interface and
+its Compact option, which reuses `MacContentView`. Debug sections live under `Debug/`.
+
+`iOS/Blocking/` separates pure `BlockingRules`, the SQLite ledger, coordinators,
+and system adapters. The ledger stores pause/rest state and revisions separately
+from preferences; the recorder tracks binding transitions in memory.
+`PauseTargetDisplay` shares product names across the host and helper extensions;
+consumers still choose localization tables and bundles.
+
+ReplayKit's `SampleHandler` owns clocks, locking, routing, grants and Shield writes.
+`SurfaceClassifierContracts` defines predictions and the classifier protocol;
+`SurfaceClassifierFactory` constructs the selected Debug backend and always uses
+Flat in Release; the handler freezes the selection at broadcast start.
+`SurfaceObservationState` stores six vote windows, hit counts and cumulative
+candidate counters. Observation/service resets retain counters; session reset
+clears them. Threshold decisions stay in `SampleHandler`, including YouTube's
+existing distinction from services that require a positive current verdict.
+Debug pixel evidence stays with the handler.
+
+Safari's popup sends RPC to its background script, which uses native messaging.
+Content scripts share overlay CSS, while each site keeps its DOM and navigation
+logic. iOS resource preparation adds Safari pause integration at build time.
+There is no native WKWebView landing page or host JavaScript bridge.
 
 ### macOS app language
 
@@ -179,7 +205,9 @@ uv run --locked python -m tools.realtime_dataset validate dataset/manifest.csv
 uv run --locked python -m tools.screenshot_labeler
 ```
 
-Cascade V10 (expanded candidate pool) is the current iOS default, with experimental qualification.
+Flat 11 seed 7 is the current iOS default and remains experimental; see [the model notes](docs/FLAT_MODEL.md).
+Release ships only Flat in the Broadcast extension and no models in the host app.
+Debug retains model selection and session/frame capture under `Debug/`.
 For a new cascade, follow the [complete training-to-app pipeline](data-model/docs/cascade-model-pipeline.md).
 The following `SurfaceDetector` commands are for legacy single-model experiments. Training
 requires every class in both train and validation; final evaluation requires

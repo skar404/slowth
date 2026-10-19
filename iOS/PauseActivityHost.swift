@@ -13,7 +13,7 @@ import UIKit
             return String(localized: "Live Activity unavailable. The pause still follows its own timer.", table: "PauseActivity")
         }
         guard !Activity<PauseActivityAttributes>.activities.contains(where: { $0.attributes.pauseID == id }) else { return nil }
-        let labels = ["youtube":"YouTube", "instagram":"Instagram", "facebook":"Facebook", "x":"X", "tiktok":"TikTok"]
+        let labels = ["youtube":"YouTube", "instagram":"Instagram", "facebook":"Facebook", "x":"X", "tiktok":"TikTok", "snapchat":"Snapchat"]
         do {
             _ = try Activity.request(attributes: PauseActivityAttributes(pauseID: id,
                 service: labels[lease.target] ?? lease.target, safari: lease.kind == "safari"),

@@ -1,6 +1,15 @@
 import Foundation
 #if os(iOS) && canImport(FamilyControls)
 import FamilyControls
+
+/// Shared by the host and extensions; do not put this policy on MainActor.
+enum IOSProtectionAuthorization {
+    static func approved(_ status: AuthorizationStatus) -> Bool {
+        if status == .approved { return true }
+        if #available(iOS 26.4, *), status == .approvedWithDataAccess { return true }
+        return false
+    }
+}
 #endif
 
 // Keys are shared with WebExt/config.js. Legacy modes are read only during migration.
@@ -255,7 +264,6 @@ enum SharedStoreKey {
     static let rulesEtag = "rulesEtag"
     static let rulesFetchedAt = "rulesFetchedAt"
     static let rulesLastAttemptAt = "rulesLastAttemptAt"
-    static let blockedAppsData = "blockedAppsData"
     static let onboardingDone = "onboardingDone"
     static let supportCardDismissed = "supportCardDismissed"
     static let realtimeShieldEnabled = "realtimeShieldEnabled"
@@ -283,10 +291,6 @@ enum SharedStoreKey {
     static let lastInstagramShieldPresentedAt = "lastInstagramShieldPresentedAt"
     static let lastShieldActionInvokedAt = "lastShieldActionInvokedAt"
     static let realtimeRecordingPromptRequestedAt = "realtimeRecordingPromptRequestedAt"
-    static let youtubeShieldUnlockRequestedAt = "youtubeShieldUnlockRequestedAt"
-    static let instagramShieldUnlockRequestedAt = "instagramShieldUnlockRequestedAt"
-    static let facebookShieldUnlockRequestedAt = "facebookShieldUnlockRequestedAt"
-    static let xShieldUnlockRequestedAt = "xShieldUnlockRequestedAt"
     static let realtimeShieldDiagnostics = "realtimeShieldDiagnostics"
 }
 
@@ -536,18 +540,6 @@ enum SharedStore {
     }
     #endif
 
-    static func blockedAppsData() -> Data? {
-        d.data(forKey: SharedStoreKey.blockedAppsData)
-    }
-
-    static func setBlockedAppsData(_ data: Data?) {
-        if let data = data {
-            d.set(data, forKey: SharedStoreKey.blockedAppsData)
-        } else {
-            d.removeObject(forKey: SharedStoreKey.blockedAppsData)
-        }
-    }
-
     // MARK: - Real-time (broadcast-gated) app blocking
 
     static func youtubeSelectionData() -> Data? {
@@ -710,10 +702,7 @@ enum SharedStore {
     // This is effective authorization state, not a user switch. Revoking system
     // permission must turn protection off even while a strict lock is stored.
     static func syncRealtimeShieldAuthorization(_ status: AuthorizationStatus) {
-        var authorized = status == .approved
-        if #available(iOS 26.4, *), status == .approvedWithDataAccess {
-            authorized = true
-        }
+        let authorized = IOSProtectionAuthorization.approved(status)
         d.set(authorized, forKey: SharedStoreKey.realtimeShieldEnabled)
         if !authorized {
             d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
@@ -756,6 +745,10 @@ enum SharedStore {
         _ enabled: Bool,
         allowInitialStrictActivation: Bool = false
     ) throws -> SharedState {
+        #if os(iOS)
+        return try BlockingSettings.setSoftYouTubeBlockingEnabled(enabled,
+            allowInitialStrictActivation: allowInitialStrictActivation)
+        #else
         let state = snapshot()
         if state.isStrictModeActive && enabled && !allowInitialStrictActivation {
             throw SharedStoreError.strictModeActive
@@ -769,6 +762,7 @@ enum SharedStore {
             d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
         }
         return snapshot()
+        #endif
     }
 
     static func setRealtimeInstagramReelsBlockingEnabled(_ enabled: Bool) throws -> SharedState {
@@ -932,25 +926,6 @@ enum SharedStore {
         defaults.removeObject(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()
         return true
-    }
-
-    static func requestShieldUnlock(surface: RealtimeShieldSurface, at date: Date = Date()) {
-        let key = surface == .youtube
-            ? SharedStoreKey.youtubeShieldUnlockRequestedAt
-            : surface == .x ? SharedStoreKey.xShieldUnlockRequestedAt
-            : surface == .facebook ? SharedStoreKey.facebookShieldUnlockRequestedAt
-            : SharedStoreKey.instagramShieldUnlockRequestedAt
-        d.set(date.timeIntervalSince1970, forKey: key)
-    }
-
-    static func shieldUnlockRequestedAt(surface: RealtimeShieldSurface) -> Date? {
-        let key = surface == .youtube
-            ? SharedStoreKey.youtubeShieldUnlockRequestedAt
-            : surface == .x ? SharedStoreKey.xShieldUnlockRequestedAt
-            : surface == .facebook ? SharedStoreKey.facebookShieldUnlockRequestedAt
-            : SharedStoreKey.instagramShieldUnlockRequestedAt
-        guard let seconds = d.object(forKey: key) as? Double else { return nil }
-        return Date(timeIntervalSince1970: seconds)
     }
 
     static func setRealtimeShieldDiagnostics(_ diagnostics: RealtimeShieldDiagnostics) {

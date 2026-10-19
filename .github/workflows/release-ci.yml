@@ -74,8 +74,7 @@ jobs:
         run: bash scripts/release_tools/install_tools.sh
       - name: Test durable pause policy
         run: |
-          xcrun swiftc -DPAUSE_TESTS iOS/Pause/IOSPauseLedger.swift tests/IOSPauses/LedgerTests.swift -o "$RUNNER_TEMP/pause-tests"
-          "$RUNNER_TEMP/pause-tests"
+          bash scripts/test_ios_blocking.sh
       - name: Test release safety boundaries
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Download model input (individual model hashes are checked before build)

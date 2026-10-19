@@ -19,10 +19,14 @@ struct PauseActivityWidget: Widget {
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label("Slowth", systemImage: "leaf.fill").foregroundStyle(sage)
+                    if context.state.choosingApp != true || context.isStale {
+                        Label("Slowth", systemImage: "leaf.fill").foregroundStyle(sage)
+                    }
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(context.state.service ?? context.attributes.service).font(.headline)
+                    if context.state.choosingApp != true || context.isStale {
+                        Text(context.state.service ?? context.attributes.service).font(.headline)
+                    }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     if context.isStale || context.state.phase == "ending" {

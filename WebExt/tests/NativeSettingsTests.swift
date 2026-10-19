@@ -15,12 +15,6 @@ struct NativeSettingsTests {
         func check(_ condition: @autoclosure () -> Bool, _ message: String) {
             precondition(condition(), message)
         }
-        // Separate Facebook requests must never release Instagram or YouTube.
-        let unlock = Date(timeIntervalSince1970: 12345)
-        SharedStore.requestShieldUnlock(surface: .facebook, at: unlock)
-        check(SharedStore.shieldUnlockRequestedAt(surface: .facebook) == unlock, "Facebook unlock persisted")
-        check(SharedStore.shieldUnlockRequestedAt(surface: .instagram) == nil, "Instagram unlock independent")
-        check(SharedStore.shieldUnlockRequestedAt(surface: .youtube) == nil, "YouTube unlock independent")
         defaults.set(true, forKey: SharedStoreKey.realtimeFacebookReelsBlockingEnabled)
         defaults.set(true, forKey: SharedStoreKey.realtimeFacebookStoriesBlockingEnabled)
         check(!SharedStore.snapshot().realtimeFacebookBlockingEnabled, "Missing selection disables stale Facebook flags")
@@ -30,10 +24,6 @@ struct NativeSettingsTests {
             _ = try SharedStore.setRealtimeFacebookStoriesBlockingEnabled(true)
             preconditionFailure("Facebook enabled without a valid selection")
         } catch SharedStoreError.invalidValue { }
-        check(SharedStore.shieldUnlockRequestedAt(surface: .x) == nil, "X unlock independent")
-        SharedStore.requestShieldUnlock(surface: .x, at: unlock.addingTimeInterval(1))
-        check(SharedStore.shieldUnlockRequestedAt(surface: .x) == unlock.addingTimeInterval(1), "X unlock persisted")
-        check(SharedStore.shieldUnlockRequestedAt(surface: .facebook) == unlock, "X unlock preserves Facebook request")
         defaults.set(true, forKey: SharedStoreKey.realtimeXReelsBlockingEnabled)
         check(!SharedStore.snapshot().realtimeXBlockingEnabled, "Invalid X binding disables blocking")
         check(!defaults.bool(forKey: SharedStoreKey.realtimeXReelsBlockingEnabled), "Stale X flag cleared")

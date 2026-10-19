@@ -15,10 +15,13 @@ struct PauseActivityCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Label("Slowth", systemImage: "leaf.fill").foregroundStyle(sage)
-                Spacer()
-                Text(service + (safari ? " · Safari" : "")).font(.headline)
+            if actionState?.choosingApp != true || stale || phase != "active" {
+                HStack {
+                    Label("Slowth", systemImage: "leaf.fill").foregroundStyle(sage)
+                    Spacer()
+                    Text(service + (safari ? " · Safari" : "")).font(.headline)
+                        .lineLimit(1).minimumScaleFactor(0.75)
+                }
             }
             if stale {
                 Text("Open Slowth to check the pause", tableName: "PauseActivity").font(.subheadline)
@@ -41,7 +44,8 @@ struct PauseActivityCard: View {
                 PauseActivityActions(id: pauseID, state: actionState)
             }
         }
-        .padding(16)
+        .padding(actionState?.choosingApp == true ? 12 : 16)
+        .dynamicTypeSize(...DynamicTypeSize.large)
         .foregroundStyle(.white)
     }
 }
@@ -70,9 +74,33 @@ struct PauseActivityPreviewScreen: View {
                 startedAt: start, expiresAt: start.addingTimeInterval(180), stale: stale,
                 pauseID: "preview-only", actionState: .init(phase: phase, startedAt: start,
                     expiresAt: start.addingTimeInterval(180), service: "Instagram", target: "instagram",
-                    switchTargets: ["youtube", "facebook", "x"], choosingApp: choosing ? true : nil))
+                    switchTargets: ["youtube", "facebook", "x", "tiktok", "snapchat"], choosingApp: choosing ? true : nil))
                 .background(Color(white: 0.10), in: RoundedRectangle(cornerRadius: 24))
         }
+    }
+}
+#endif
+
+#if DEBUG
+#Preview("Pause · active") {
+    if #available(iOS 16.2, *) {
+        PauseActivityCard(service: "YouTube", safari: false, phase: "active",
+            startedAt: .now, expiresAt: .now.addingTimeInterval(180), stale: false)
+            .background(Color.black).padding()
+    }
+}
+#Preview("Pause · Safari preparing") {
+    if #available(iOS 16.2, *) {
+        PauseActivityCard(service: "Instagram", safari: true, phase: "preparing",
+            startedAt: .now, expiresAt: .now.addingTimeInterval(180), stale: false)
+            .background(Color.black).padding()
+    }
+}
+#Preview("Pause · stale") {
+    if #available(iOS 16.2, *) {
+        PauseActivityCard(service: "YouTube", safari: false, phase: "active",
+            startedAt: .now, expiresAt: .now.addingTimeInterval(180), stale: true)
+            .background(Color.black).padding()
     }
 }
 #endif

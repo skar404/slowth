@@ -20,6 +20,7 @@ def verify(app, configuration):
     current = EXPORTS / 'cascade-v10-study-20260929-1356/diverse/ios-resources'
     cascade = {name + 'V10': current / (name + 'V10.mlpackage')
                for name in ('AppRouter', 'YouTubeDetector', 'InstagramDetector', 'FacebookDetector', 'XDetector')}
+    flat = {'FlatDetector': EXPORTS / 'flat-11-seed7-20261015/FlatDetector.mlpackage'}
     alternatives = {
         'SurfaceDetectorV14': EXPORTS / 'v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage',
         'SurfaceDetectorV15': EXPORTS / 'v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage',
@@ -38,8 +39,11 @@ def verify(app, configuration):
         ):
             alternatives.update({name + version: directory / (name + version + '.mlpackage') for name in names})
             metadata['Cascade' + version + 'Metadata'] = directory / ('Cascade' + version + 'Metadata.json')
+    metadata['FlatDetectorMetadata'] = ROOT / 'RealtimeShield/FlatDetectorMetadata.json'
+    if release:
+        metadata.pop('CascadeV10RuntimeMetadata')
     for bundle in [app, app / 'PlugIns/UnscrollBroadcastIOS.appex']:
-        models = {} if release and bundle == app else cascade | ({} if release else alternatives)
+        models = {} if release and bundle == app else flat | ({} if release else cascade | alternatives)
         expected_metadata = {} if release and bundle == app else metadata
         assert {p.stem for p in bundle.glob('*.mlmodelc')} == set(models), bundle
         assert {p.stem for p in bundle.glob('*Metadata.json')} == set(expected_metadata), bundle
@@ -55,7 +59,8 @@ def verify(app, configuration):
             for marker in (b'DebugSessionCaptureControls', b'DebugCapturePhotoLibrary', b'SessionUploader',
                            b'SessionCaptureArchive', b'DebugCaptureWriter', b'resetStrictModeForDebug',
                            b'DebugAppReviewControls', b'prepareEligibleHistoryForDebug',
-                           b'DebugSavedLeavesControl', b'resetPausesForDebug', b'setSavedLeavesForDebug'):
+                           b'DebugSavedLeavesControl', b'DebugIOSSection', b'DebugCompactSection',
+                           b'DebugCaptureLifecycle', b'DebugModelSettings', b'resetPausesForDebug', b'setSavedLeavesForDebug'):
                 assert marker not in binary, (bundle, marker)
         print(f'{bundle.name}: {len(models)} compiled models, {len(expected_metadata)} metadata files')
     info = plistlib.loads((app / 'Info.plist').read_bytes())

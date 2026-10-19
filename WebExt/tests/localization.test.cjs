@@ -174,7 +174,8 @@ function popupHarness(language, namespace) {
   };
   vm.runInContext(read('config.js'), context);
   vm.runInContext(read('i18n.js'), context);
-  vm.runInContext(read('app.js'), context);
+  // Expose refresh inside the fixture only; production has no WKWebView bridge.
+  vm.runInContext(read('app.js').replace('  refreshState();', '  globalThis.refreshPopup = refreshState; refreshState();'), context);
   return { context, elements, translated, calls, state };
 }
 
@@ -182,12 +183,12 @@ for (const namespace of ['browser', 'chrome']) {
   for (const language of [...languages, unsupportedLanguage]) {
     test(`${namespace}/${language}: popup localizes independent switches, status and strict lock`, async () => {
       const { context, elements, translated, calls, state } = popupHarness(language, namespace);
-      await context.__unscrollRefresh();
+      await context.refreshPopup();
       const messages = locales[language] || locales.en;
       assert.equal(context.document.documentElement.lang, messages.locale.message);
       assert.equal(context.document.documentElement.dir, direction(language));
       assert.ok(calls.some(call => call.action === 'getState'));
-      assert.ok(elements.get('onboarding').classes.has('hidden'));
+      assert.ok(!read('app.html').includes('id="onboarding"'));
       assert.equal(translated.find(el => el.dataset.i18n === 'strictMode').textContent, messages.strictMode.message);
       const switches = elements.get('sites').querySelectorAll('input');
       assert.equal(switches.length, 12);
@@ -203,7 +204,7 @@ for (const namespace of ['browser', 'chrome']) {
       assert.ok(labels.some(label => label.textContent === messages.blockInfiniteFeed.message));
       assert.ok(elements.get('rules-status').textContent.startsWith(messages.rulesRelative.message.split('$1')[0]));
       state.strictModeUntil = Date.now() / 1000 + 3600;
-      await context.__unscrollRefresh();
+      await context.refreshPopup();
       for (const input of switches) {
         assert.equal(input.disabled, input.dataset.feature === 'all' || input.checked);
       }
@@ -278,7 +279,7 @@ test('extension CSS and overlays use logical direction without changing host dir
 test('popup sends a feature write and restores the state after a rejected save', async () => {
   const { context, elements, state } = popupHarness('ru', 'browser');
   state.toggles.instagram = { shorts: false, feed: true, all: false };
-  await context.__unscrollRefresh();
+  await context.refreshPopup();
   const inputs = elements.get('sites').querySelectorAll('input');
   const reels = inputs.find(input => input.dataset.site === 'instagram' && input.dataset.feature === 'shorts');
   const feed = inputs.find(input => input.dataset.site === 'instagram' && input.dataset.feature === 'feed');
@@ -299,10 +300,10 @@ test('popup sends a feature write and restores the state after a rejected save',
 test('whole-site blocking disables content controls without changing their checks', async () => {
   const { context, elements, state } = popupHarness('en', 'browser');
   const flags = state.toggles.facebook = { shorts: false, feed: true, all: true };
-  await context.__unscrollRefresh();
+  await context.refreshPopup();
   const controls = elements.get('sites').querySelectorAll('input').filter(input => input.dataset.site === 'facebook');
   assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[true, false], [false, true], [true, true]]);
   flags.all = false;
-  await context.__unscrollRefresh();
+  await context.refreshPopup();
   assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[false, false], [false, false], [true, false]]);
 });

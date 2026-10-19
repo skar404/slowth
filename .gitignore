@@ -21,6 +21,7 @@ screenshot/
 screenshots-gen/
 screenshots-mac/
 screenshots-ipad/
+/marketing/
 
 # Private ML sources, training data, device logs, and local agent artifacts
 /data-model/

@@ -28,8 +28,8 @@ fileGroups:
 settings:
   base:
     SWIFT_VERSION: "5.9"
-    MARKETING_VERSION: "2026.10.3"
-    CURRENT_PROJECT_VERSION: 23
+    MARKETING_VERSION: "2026.10.4"
+    CURRENT_PROJECT_VERSION: 24
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
     ENABLE_HARDENED_RUNTIME: YES
@@ -40,12 +40,14 @@ targets:
     platform: macOS
     deploymentTarget: "13.0"
     sources:
+      - path: Debug/UI
       - path: Localization
         buildPhase: resources
       - path: App
         excludes:
           - "Info.plist"
           - "Unscroll.entitlements"
+      - path: Debug/Shared
       - path: Shared
         excludes:
           - "ContentView_iOS.swift"
@@ -53,7 +55,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
         PRODUCT_NAME: Slowth
-        CURRENT_PROJECT_VERSION: 23
+        CURRENT_PROJECT_VERSION: 24
         INFOPLIST_FILE: App/Info.plist
         CODE_SIGN_ENTITLEMENTS: App/Unscroll.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -73,6 +75,7 @@ targets:
         excludes:
           - "Info.plist"
           - "UnscrollExtension.entitlements"
+      - path: Debug/Shared
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
@@ -119,7 +122,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Extension
         PRODUCT_NAME: UnscrollExtension
-        CURRENT_PROJECT_VERSION: 23
+        CURRENT_PROJECT_VERSION: 24
         INFOPLIST_FILE: Extension/Info.plist
         CODE_SIGN_ENTITLEMENTS: Extension/UnscrollExtension.entitlements
         SKIP_INSTALL: YES
@@ -129,6 +132,8 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: Debug/UI
+      - path: Debug/iOS
       - path: Localization
         buildPhase: resources
       - path: iOS
@@ -137,16 +142,25 @@ targets:
           - "Info.plist"
           - "Info-Release.plist"
           - "Unscroll.entitlements"
+      - path: Debug/Shared
       - path: Shared
         # iOS compiles both ContentView_iOS.swift and ContentView_macOS.swift —
         # the iOS UI is default, macOS-style is a "Compact" alternative selected
         # at runtime via @AppStorage("uiMode").
-      # Cascade V10 diverse is the default; qualification remains experimental.
+      # Flat 11 seed 7 is the default; V10 remains a Debug alternative.
+      - path: RealtimeShield/FlatDetectorMetadata.json
+      - path: data-model/exports/flat-11-seed7-20261015/FlatDetector.mlpackage
+        optional: true
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
         optional: true # Full training metadata is only used in Debug.
       # Retain V8 for explicit Debug comparisons.
@@ -236,7 +250,10 @@ targets:
         excludes: ["Info.plist"]
       - path: iOS/Pause/PauseActivityAttributes.swift
       - path: iOS/PauseActivityCard.swift
+      - path: Shared/PauseTargetDisplay.swift
       - path: iOS/PauseActivityActions.swift
+      - path: iOS/Assets.xcassets
+        buildPhase: resources
       - path: iOS/PauseActivity.xcstrings
         buildPhase: resources
     settings:
@@ -254,6 +271,10 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: Debug/Broadcast
+      - path: iOS/Blocking
+        buildPhase: sources
+        excludes: ["README.md"]
       - path: iOS/Pause
         buildPhase: sources
       - path: Localization
@@ -265,12 +286,19 @@ targets:
           - "SurfaceDetector.mlpackage"
           - "SurfaceDetectorMetadata.json"
       # Release uses Cascade V10 with compact metadata; Debug retains legacy candidates.
-      # Cascade V10 diverse is the default; qualification remains experimental.
+      # Flat 11 seed 7 is the default; V10 remains a Debug alternative.
+      - path: data-model/exports/flat-11-seed7-20261015/FlatDetector.mlpackage
+        optional: true
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
+        optional: true # Debug rollback model.
       - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
         optional: true # Full training metadata is only used in Debug.
       # Retain V8 for explicit Debug comparisons.
@@ -315,8 +343,7 @@ targets:
       - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
         buildPhase: resources
-      - path: iOS/ManagedSettingsApplier.swift
-        buildPhase: sources
+      - path: Debug/Shared
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
@@ -333,7 +360,7 @@ targets:
         Debug:
           EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) CascadeV6RuntimeMetadata.json CascadeV7RuntimeMetadata.json CascadeV8RuntimeMetadata.json CascadeV10RuntimeMetadata.json"
         Release:
-          EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) SurfaceDetectorV14.mlpackage SurfaceDetectorV14Metadata.json SurfaceDetectorV15.mlpackage SurfaceDetectorV15Metadata.json CascadeV6Metadata.json AppRouterV6.mlpackage YouTubeDetectorV6.mlpackage InstagramDetectorV6.mlpackage CascadeV6RuntimeMetadata.json CascadeV7Metadata.json CascadeV7RuntimeMetadata.json AppRouterV7.mlpackage YouTubeDetectorV7.mlpackage InstagramDetectorV7.mlpackage FacebookDetectorV7.mlpackage CascadeV8Metadata.json CascadeV8RuntimeMetadata.json AppRouterV8.mlpackage YouTubeDetectorV8.mlpackage InstagramDetectorV8.mlpackage FacebookDetectorV8.mlpackage XDetectorV8.mlpackage CascadeV10Metadata.json"
+          EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) SurfaceDetectorV14.mlpackage SurfaceDetectorV14Metadata.json SurfaceDetectorV15.mlpackage SurfaceDetectorV15Metadata.json CascadeV6Metadata.json AppRouterV6.mlpackage YouTubeDetectorV6.mlpackage InstagramDetectorV6.mlpackage CascadeV6RuntimeMetadata.json CascadeV7Metadata.json CascadeV7RuntimeMetadata.json AppRouterV7.mlpackage YouTubeDetectorV7.mlpackage InstagramDetectorV7.mlpackage FacebookDetectorV7.mlpackage CascadeV8Metadata.json CascadeV8RuntimeMetadata.json AppRouterV8.mlpackage YouTubeDetectorV8.mlpackage InstagramDetectorV8.mlpackage FacebookDetectorV8.mlpackage XDetectorV8.mlpackage CascadeV10Metadata.json CascadeV10RuntimeMetadata.json AppRouterV10.mlpackage YouTubeDetectorV10.mlpackage InstagramDetectorV10.mlpackage FacebookDetectorV10.mlpackage XDetectorV10.mlpackage"
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Broadcast
         PRODUCT_NAME: UnscrollBroadcastIOS
@@ -348,6 +375,9 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: iOS/Blocking
+        buildPhase: sources
+        excludes: ["README.md"]
       - path: iOS/Pause
         buildPhase: sources
       - path: Localization
@@ -356,8 +386,6 @@ targets:
         excludes:
           - "Info.plist"
           - "UnscrollDeviceActivity.entitlements"
-      - path: iOS/ManagedSettingsApplier.swift
-        buildPhase: sources
       - path: Shared/AppGroup.swift
         buildPhase: sources
       - path: Shared/FeatureFlags.swift
@@ -368,7 +396,9 @@ targets:
         buildPhase: sources
       - path: Shared/AppLocalization.swift
         buildPhase: sources
-      - path: Shared/SoftYouTubeActivityMonitoring.swift
+      - path: Shared/PauseOnlyApps.swift
+        buildPhase: sources
+      - path: Shared/PauseTargetDisplay.swift
         buildPhase: sources
     settings:
       base:
@@ -384,12 +414,20 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: iOS/Blocking
+        buildPhase: sources
+        excludes: ["README.md"]
+      - path: iOS/Pause
+        buildPhase: sources
+      - path: iOS/Interface.xcstrings
+        buildPhase: resources
       - path: Localization
         buildPhase: resources
       - path: ShieldConfigIOS
         excludes:
           - "Info.plist"
           - "UnscrollShieldConfig.entitlements"
+      - path: Debug/Shared
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
@@ -415,6 +453,9 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: iOS/Blocking
+        buildPhase: sources
+        excludes: ["README.md"]
       - path: iOS/Pause
         buildPhase: sources
       - path: Localization
@@ -423,8 +464,7 @@ targets:
         excludes:
           - "Info.plist"
           - "UnscrollShieldAction.entitlements"
-      - path: iOS/ManagedSettingsApplier.swift
-        buildPhase: sources
+      - path: Debug/Shared
       - path: Shared
         excludes:
           - "UnscrollApp.swift"
@@ -450,12 +490,16 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: iOS/Blocking
+        buildPhase: sources
+        excludes: ["README.md"]
       - path: iOS/Pause
         buildPhase: sources
       - path: Localization
         buildPhase: resources
       - path: Extension/SafariWebExtensionHandler.swift
         buildPhase: sources
+      - path: Debug/Shared
       - path: Shared
         excludes:
           - "UnscrollApp.swift"

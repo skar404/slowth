@@ -36,11 +36,15 @@ def resources(runtime_only=False):
         compact = (json.dumps(runtime, sort_keys=True, indent=2) + '\n').encode()
     if hashlib.sha256(compact).hexdigest() != RUNTIME_SHA256:
         raise ValueError('Runtime metadata identity changed')
+    flat = (ROOT / 'RealtimeShield/FlatDetectorMetadata.json').read_bytes()
+    if hashlib.sha256(flat).hexdigest() != '5759a56cccb193afc60faaf6ae8ecbda2838059eb7318afe04df0e87f4b923c9':
+        raise ValueError('Flat runtime metadata identity changed')
     info = plistlib.loads((ROOT / 'iOS/Info.plist').read_bytes())
     del info['NSPhotoLibraryAddUsageDescription']
     del info['NSPhotoLibraryUsageDescription']
     return {
         ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json': compact,
+        ROOT / 'RealtimeShield/FlatDetectorMetadata.json': flat,
         ROOT / 'iOS/Info-Release.plist': plistlib.dumps(info, sort_keys=False),
     }
 

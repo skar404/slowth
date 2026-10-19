@@ -7,7 +7,7 @@ import Foundation
 /// A unique name on every arm prevents a delayed callback from an older app
 /// transition from applying the shield during a newer Slowth session.
 enum SoftYouTubeActivityMonitoring {
-    static let thresholdSeconds = 1
+    static let thresholdSeconds = BlockingRules.softUsageSeconds
 
     private static let activityPrefix = "softYouTubeRestore."
     private static let eventPrefix = "youtubeUsageThreshold."
@@ -17,12 +17,7 @@ enum SoftYouTubeActivityMonitoring {
     @discardableResult
     static func start() -> Bool {
         let state = SharedStore.snapshot()
-        guard state.realtimeShieldEnabled,
-              state.realtimeYouTubeBlockingEnabled,
-              state.softYouTubeBlockingEnabled,
-              state.youtubeShieldRestoreDeferred,
-              !state.broadcastActive,
-              !SharedStore.isSlowthAppForeground(),
+        guard BlockingRules.decide(BlockingCoordinator.softContext(state), .monitorEligibility).monitor == .start,
               let data = state.youtubeSelectionData,
               let selection = try? JSONDecoder().decode(
                   FamilyActivitySelection.self,

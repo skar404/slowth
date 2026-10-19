@@ -52,10 +52,6 @@ struct LocalizationCheck {
             navigation.continuation = continuation
             webView.load(URLRequest(url: URL(string: "\(page).html?host=youtube", relativeTo: context.baseURL)!))
         }
-        // Show the whole guide for layout review; locale resolution remains native WebKit.
-        if page == "app" {
-            _ = try await webView.evaluateJavaScript("document.body.classList.add('landing'); document.getElementById('onboarding').classList.remove('hidden')")
-        }
         let result = try await webView.evaluateJavaScript("""
         JSON.stringify({locale: browser.i18n.getMessage('locale'), ui: browser.i18n.getUILanguage(),
           lang: document.documentElement.lang, dir: document.documentElement.dir,

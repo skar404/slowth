@@ -124,3 +124,43 @@ remain separate utilities.
 
 See [Build provenance and TestFlight](../docs/BUILD_TRUST.md) for setup, recovery,
 Apple secrets, and evidence verification.
+
+## Native localization
+
+Run `python3 scripts/verify_localization_catalogs.py` before a build. The 46 locale
+identifiers in `Localization/Localizable.xcstrings` are required for every
+translatable entry in that catalog and in `iOS/Interface.xcstrings` and
+`iOS/PauseActivity.xcstrings`. Explicit `shouldTranslate: false` entries are exempt.
+The gate checks nonempty translated values, positional format arguments, and
+plural branches (including the mandatory `other` fallback).
+
+After building, run `python3 scripts/verify_localization_bundles.py PATH_TO_APP`.
+It checks `Localizable` in the host and every extension, `Interface` in the iOS
+host and Shield Configuration extension, and `PauseActivity` in the iOS host and
+Live Activity extension. Both `.strings` and `.stringsdict` values are compared
+with the source catalogs. Release builds run both gates automatically.
+
+Regression tests: `python3 -m unittest discover -s tests -p 'test_localization_catalogs.py'`.
+For scope, translation provenance and device QA, see
+[the iOS localization notes](../docs/IOS_LOCALIZATION.md).
+
+## Local refactoring checks
+
+Run `node --test WebExt/tests/*.test.cjs tests/IOSPauses/*.test.cjs`,
+`python3 -m pytest -q tests`, and `bash scripts/test_ios_blocking.sh` from the root.
+The blocking script covers both Debug and Release, including shared pause target names.
+Native preference checks are documented in `WebExt/tests/README.md`.
+
+The private app-runtime harness runs with
+`swift test --package-path data-model/tests/integration/swift` and the same command
+with `-c release`. Its source links follow the `Debug/` layout and include model
+contracts, factory and observation state. Missing optional private bundles produce
+explicit XCTest skips; supplied invalid bundles fail. `FLAT_BUNDLE` points to a
+compiled bundle for real Flat inference. Historical Cascade tests remain separate.
+The `data-model/` tree is ignored by Git, so local harness edits require separate
+preservation when transferring this workspace.
+
+After source membership changes, run `xcodegen generate` and build both platforms
+in both configurations. Verify iOS products with `verify_app_configuration.py`
+and native catalogs with `verify_localization_bundles.py`. Simulator/build checks
+do not qualify physical Screen Time/ReplayKit behavior or Safari smoke tests.

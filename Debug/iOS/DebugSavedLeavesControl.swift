@@ -42,4 +42,9 @@ struct DebugSavedLeavesControl: View {
     }
 }
 
+
+#Preview("Saved leaves control") {
+    Form { DebugSavedLeavesControl() }.allowsHitTesting(false)
+}
+
 #endif

@@ -6,34 +6,6 @@
   ns.i18n.setLocale(document.documentElement);
 
   const extensionAPI = globalThis.browser || globalThis.chrome;
-  const isExtensionPopup = !!extensionAPI?.runtime?.id;
-  const isNativeHost = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.unscroll);
-
-  const env = isNativeHost ? "native" : (isExtensionPopup ? "popup" : "unknown");
-
-  document.body.classList.toggle("landing", env === "native");
-
-  let pendingId = 0;
-  const pending = new Map();
-
-  globalThis.__unscrollResolve = function (id, payload) {
-    const cb = pending.get(id);
-    if (cb) { pending.delete(id); cb(payload); }
-  };
-
-  function callNative(action, payload) {
-    return new Promise((resolve) => {
-      const id = ++pendingId;
-      pending.set(id, resolve);
-      try {
-        window.webkit.messageHandlers.unscroll.postMessage({ id, action, payload: payload || {} });
-      } catch (_) {
-        pending.delete(id);
-        resolve({ ok: false, reason: "bridge_error" });
-      }
-    });
-  }
-
   function callExtension(action, payload) {
     const message = { type: "rpc", action, payload: payload || {} };
     // Safari exposes the promise-based browser namespace. Keep the callback
@@ -54,9 +26,7 @@
     });
   }
 
-  const api = isNativeHost
-    ? { call: callNative }
-    : { call: callExtension };
+  const api = { call: callExtension };
 
   const sitesEl = document.getElementById("sites");
   const statusEl = document.getElementById("rules-status");
@@ -66,12 +36,6 @@
   const strictBannerText = document.getElementById("strict-banner-text");
   const strictConfirmation = document.getElementById("strict-confirmation");
   const feedbackLink = document.getElementById("feedback-link");
-  const onboarding = document.getElementById("onboarding");
-  const openSettingsBtn = document.getElementById("open-settings-btn");
-  const dismissOnboardingBtn = document.getElementById("dismiss-onboarding-btn");
-  const howToUseBtn = document.getElementById("how-to-use-btn");
-  const showIntroBtn = document.getElementById("show-intro-btn");
-  const guideCardsEl = document.getElementById("guide-cards");
 
   feedbackLink.href = ns.FEEDBACK_MAILTO;
 
@@ -151,14 +115,6 @@
     }
     refreshBtn.disabled = strictActive;
 
-    const showOnboarding = (env !== "popup") && state && !state.onboardingDone;
-    onboarding.classList.toggle("hidden", !showOnboarding);
-
-    if (env === "native") {
-      openSettingsBtn.textContent = state?.platform === "macos" ? t("openSafariSettings") : t("openSettings");
-    }
-
-    showIntroBtn.classList.toggle("hidden", env !== "native" || !state?.onboardingDone);
   }
 
   async function refreshState() {
@@ -217,30 +173,6 @@
     setTimeout(() => { refreshBtn.disabled = (lastState?.strictModeUntil || 0) * 1000 > Date.now(); }, 800);
   });
 
-  openSettingsBtn.addEventListener("click", async () => {
-    await api.call("openExtensionSettings");
-  });
-
-  dismissOnboardingBtn.addEventListener("click", async () => {
-    const resp = await api.call("setOnboardingDone", { value: true });
-    if (resp && resp.state) applyState(resp.state);
-  });
-
-  howToUseBtn.addEventListener("click", () => {
-    if (guideCardsEl) guideCardsEl.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-
-  showIntroBtn.addEventListener("click", async () => {
-    const resp = await api.call("setOnboardingDone", { value: false });
-    if (resp && resp.state) applyState(resp.state);
-    if (onboarding) onboarding.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-
-  if (env === "popup") {
-    api.call("setOnboardingDone");
-  }
-
-  globalThis.__unscrollRefresh = refreshState;
-
+  api.call("setOnboardingDone");
   refreshState();
 })();

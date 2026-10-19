@@ -5,18 +5,27 @@ import Foundation
 import Photos
 
 final class DebugCapturePhotoLibrary: ObservableObject {
-    @Published private(set) var authorizationStatus = PHPhotoLibrary.authorizationStatus(
-        for: .readWrite
-    )
+    @Published private(set) var authorizationStatus: PHAuthorizationStatus
     @Published private(set) var pendingEvents = 0
     @Published private(set) var pendingBytes: Int64 = 0
-    @Published private(set) var savedEvents = AppGroup.defaults.integer(
-        forKey: DebugCaptureSettings.savedEventCountStorageKey
-    )
+    @Published private(set) var savedEvents: Int
     @Published private(set) var isImporting = false
-    @Published private(set) var lastError = AppGroup.defaults.string(
-        forKey: DebugCaptureSettings.lastErrorStorageKey
-    )
+    @Published private(set) var lastError: String?
+
+    init() {
+        authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        savedEvents = AppGroup.defaults.integer(forKey: DebugCaptureSettings.savedEventCountStorageKey)
+        lastError = AppGroup.defaults.string(forKey: DebugCaptureSettings.lastErrorStorageKey)
+    }
+
+    /// Used only by read-only Canvas fixtures; never requests Photos access.
+    init(previewAuthorization: PHAuthorizationStatus, pending: Int = 0, importing: Bool = false) {
+        authorizationStatus = previewAuthorization
+        savedEvents = 0
+        lastError = nil
+        pendingEvents = pending
+        isImporting = importing
+    }
 
     private let worker = DispatchQueue(
         label: "com.slowth.debug-capture.photo-import",

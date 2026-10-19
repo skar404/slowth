@@ -23,9 +23,9 @@ enum ForceRefreshOutcome {
 @MainActor
 final class AppState: ObservableObject {
 
-    @Published private(set) var snapshot: SharedState = SharedStore.snapshot()
-    @Published private(set) var rulesEtag: String? = SharedStore.rulesEtag()
-    @Published private(set) var rulesLastAttemptAt: Date? = SharedStore.rulesLastAttemptAt()
+    @Published private(set) var snapshot: SharedState
+    @Published private(set) var rulesEtag: String?
+    @Published private(set) var rulesLastAttemptAt: Date?
     @Published var lastError: String? = nil
     @Published var refreshing: Bool = false
     @Published var lastRefreshOutcome: ForceRefreshOutcome? = nil
@@ -34,7 +34,19 @@ final class AppState: ObservableObject {
     private var backgroundObserver: NSObjectProtocol?
     private var tickTimer: Timer?
 
+    #if DEBUG
+    /// Display fixtures only: no defaults, observers, timer or system protection.
+    init(previewSnapshot: SharedState) {
+        snapshot = previewSnapshot
+        rulesEtag = nil
+        rulesLastAttemptAt = nil
+    }
+    #endif
+
     init() {
+        snapshot = SharedStore.snapshot()
+        rulesEtag = SharedStore.rulesEtag()
+        rulesLastAttemptAt = SharedStore.rulesLastAttemptAt()
         #if os(iOS)
         ShieldLocalization.syncAppLanguage()
         let foregroundName = UIApplication.willEnterForegroundNotification
@@ -147,36 +159,36 @@ final class AppState: ObservableObject {
         }
     }
 
-    func dismissOnboarding() {
-        SharedStore.setOnboardingDone(true)
-        reload()
-    }
-
-    func showOnboardingAgain() {
-        SharedStore.setOnboardingDone(false)
-        reload()
-    }
-
     func dismissSupportCard() {
         SharedStore.setSupportCardDismissed(true)
         reload()
     }
 
-    #if DEBUG
-    func resetStrictModeForDebug() {
-        SharedStore.resetStrictModeForDebug()
-        reload()
-    }
-    #endif
-
-    #if DEBUG
-    func resetTipsDisplayForDebug() {
-        SharedStore.resetTipsDisplayForDebug()
-        reload()
-    }
-    #endif
-
     #if os(iOS) && canImport(FamilyControls)
+    func hasPauseOnlySelection(_ target: String) -> Bool { PauseOnlyApps.selection(target) != nil }
+
+    func savePauseOnlySelection(_ selection: FamilyActivitySelection, target: String) {
+        let previousSelection = PauseOnlyApps.data(target)
+        let empty = selection.applicationTokens.isEmpty && selection.categoryTokens.isEmpty && selection.webDomainTokens.isEmpty
+        guard empty || validatedForSingleApp(selection, appName: target == "tiktok" ? "TikTok" : "Snapchat",
+                                              blockedContent: "") else { return }
+        do {
+            try PauseOnlyApps.save(selection, target: target)
+            try IOSPauseCoordinator.selectionDidChange(target: target, previousSelection: previousSelection)
+            reload()
+            enforcePauseOnlyApps()
+            _ = try? IOSPauseCoordinator.snapshot()
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+        }
+    }
+
+    private func enforcePauseOnlyApps() {
+        BlockingCoordinator.enforcePauseOnlyApps()
+    }
+
     var hasYouTubeSelection: Bool { SharedStore.hasValidYouTubeSelection() }
     var hasInstagramSelection: Bool { SharedStore.hasValidInstagramSelection() }
     var hasFacebookSelection: Bool { SharedStore.hasValidFacebookSelection() }
@@ -186,7 +198,7 @@ final class AppState: ObservableObject {
         return DebugModelSettings.resolve(stored: AppGroup.defaults.string(forKey: DebugModelSettings.storageKey),
             debugEnabled: DebugMode.isEnabled, cascadeAvailable: DebugModelSettings.cascadeAvailable).supportsFacebook
         #else
-        return DebugModelSettings.defaultBackend.supportsFacebook
+        return ModelSettings.defaultBackend.supportsFacebook
         #endif
     }
 
@@ -195,7 +207,7 @@ final class AppState: ObservableObject {
         return DebugModelSettings.resolve(stored: AppGroup.defaults.string(forKey: DebugModelSettings.storageKey),
             debugEnabled: DebugMode.isEnabled, cascadeAvailable: DebugModelSettings.cascadeAvailable).supportsX
         #else
-        return DebugModelSettings.defaultBackend.supportsX
+        return ModelSettings.defaultBackend.supportsX
         #endif
     }
 
@@ -241,6 +253,15 @@ final class AppState: ObservableObject {
         appName: String,
         blockedContent: String
     ) -> Bool {
+        let target = appName.lowercased()
+        if IOSPauseCoordinator.apps.filter({ $0 != target }).contains(where: { other in
+            guard let data = IOSPauseCoordinator.selection(other, state: SharedStore.snapshot()),
+                  let bound = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else { return false }
+            return !selection.applicationTokens.isDisjoint(with: bound.applicationTokens)
+        }) {
+            lastError = String(localized: "This app is already selected for another service.", table: "Interface")
+            return false
+        }
         guard selection.categoryTokens.isEmpty else {
             lastError = AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything.")
             return false
@@ -259,11 +280,13 @@ final class AppState: ObservableObject {
     }
 
     func saveYouTubeSelection(_ selection: FamilyActivitySelection) {
+        let previousSelection = SharedStore.youtubeSelectionData()
         if selection.applicationTokens.isEmpty,
            selection.categoryTokens.isEmpty,
            selection.webDomainTokens.isEmpty {
             do {
                 try SharedStore.clearYouTubeSelection()
+                try IOSPauseCoordinator.selectionDidChange(target: "youtube", previousSelection: previousSelection)
                 SoftYouTubeActivityMonitoring.stop()
                 RTLog.appState.notice("saveYouTubeSelection: selection cleared; disabling YouTube Shorts blocking")
                 ManagedSettingsApplier.clear(surface: .youtube)
@@ -295,6 +318,7 @@ final class AppState: ObservableObject {
                 )
                 _ = try SharedStore.setRealtimeShieldEnabled(true)
             }
+            try IOSPauseCoordinator.selectionDidChange(target: "youtube", previousSelection: previousSelection)
             RTLog.appState.notice("saveYouTubeSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             restoreRealtimeShieldAfterAppActivation()
@@ -306,11 +330,13 @@ final class AppState: ObservableObject {
     }
 
     func saveInstagramSelection(_ selection: FamilyActivitySelection) {
+        let previousSelection = SharedStore.instagramSelectionData()
         if selection.applicationTokens.isEmpty,
            selection.categoryTokens.isEmpty,
            selection.webDomainTokens.isEmpty {
             do {
                 try SharedStore.clearInstagramSelection()
+                try IOSPauseCoordinator.selectionDidChange(target: "instagram", previousSelection: previousSelection)
                 RTLog.appState.notice(
                     "saveInstagramSelection: selection cleared; disabling Instagram blocking"
                 )
@@ -340,6 +366,7 @@ final class AppState: ObservableObject {
                 _ = try SharedStore.setRealtimeInstagramStoriesBlockingEnabled(true)
                 _ = try SharedStore.setRealtimeShieldEnabled(true)
             }
+            try IOSPauseCoordinator.selectionDidChange(target: "instagram", previousSelection: previousSelection)
             RTLog.appState.notice("saveInstagramSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()
@@ -351,11 +378,13 @@ final class AppState: ObservableObject {
     }
 
     func saveFacebookSelection(_ selection: FamilyActivitySelection) {
+        let previousSelection = SharedStore.facebookSelectionData()
         if selection.applicationTokens.isEmpty,
            selection.categoryTokens.isEmpty,
            selection.webDomainTokens.isEmpty {
             do {
                 try SharedStore.clearFacebookSelection()
+                try IOSPauseCoordinator.selectionDidChange(target: "facebook", previousSelection: previousSelection)
                 RTLog.appState.notice(
                     "saveFacebookSelection: selection cleared; disabling Facebook blocking"
                 )
@@ -385,6 +414,7 @@ final class AppState: ObservableObject {
                 _ = try SharedStore.setRealtimeFacebookStoriesBlockingEnabled(true)
                 _ = try SharedStore.setRealtimeShieldEnabled(true)
             }
+            try IOSPauseCoordinator.selectionDidChange(target: "facebook", previousSelection: previousSelection)
             RTLog.appState.notice("saveFacebookSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()
@@ -396,11 +426,13 @@ final class AppState: ObservableObject {
     }
 
     func saveXSelection(_ selection: FamilyActivitySelection) {
+        let previousSelection = SharedStore.xSelectionData()
         if selection.applicationTokens.isEmpty,
            selection.categoryTokens.isEmpty,
            selection.webDomainTokens.isEmpty {
             do {
                 try SharedStore.clearXSelection()
+                try IOSPauseCoordinator.selectionDidChange(target: "x", previousSelection: previousSelection)
                 RTLog.appState.notice(
                     "saveXSelection: selection cleared; disabling X blocking"
                 )
@@ -429,6 +461,7 @@ final class AppState: ObservableObject {
                 _ = try SharedStore.setRealtimeXReelsBlockingEnabled(true)
                 _ = try SharedStore.setRealtimeShieldEnabled(true)
             }
+            try IOSPauseCoordinator.selectionDidChange(target: "x", previousSelection: previousSelection)
             RTLog.appState.notice("saveXSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()
@@ -444,20 +477,9 @@ final class AppState: ObservableObject {
             _ = try SharedStore.setRealtimeShieldEnabled(enabled)
             RTLog.appState.notice("setRealtimeShieldEnabled(\(enabled, privacy: .public))")
             reload()
-            if enabled {
-                restoreRealtimeShieldAfterAppActivation()
-            } else {
-                // Turning the feature off must always clear any shield still
-                // in place — enforceRealtimeShieldAtRest() only ever APPLIES
-                // shields, it has no "definitely clear" path, so disabling
-                // wouldn't otherwise unshield an app that's currently blocked.
-                RTLog.appState.notice("setRealtimeShieldEnabled(false): clearing both surfaces")
-                SoftYouTubeActivityMonitoring.stop()
-                ManagedSettingsApplier.clear(surface: .youtube)
-                ManagedSettingsApplier.clear(surface: .instagram)
-                ManagedSettingsApplier.clear(surface: .facebook)
-                ManagedSettingsApplier.clear(surface: .x)
-            }
+            BlockingCoordinator.settingsChanged(.recordingProtection, enabled: enabled,
+                facebookSupported: facebookModelSelected, xSupported: xModelSelected)
+            reload()
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode is active")
             reload()
@@ -471,12 +493,9 @@ final class AppState: ObservableObject {
             _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(enabled)
             RTLog.appState.notice("setRealtimeYouTubeBlockingEnabled(\(enabled, privacy: .public))")
             reload()
-            if enabled {
-                restoreRealtimeShieldAfterAppActivation()
-            } else {
-                SoftYouTubeActivityMonitoring.stop()
-                ManagedSettingsApplier.clear(surface: .youtube)
-            }
+            BlockingCoordinator.settingsChanged(.youtube, enabled: enabled,
+                facebookSupported: facebookModelSelected, xSupported: xModelSelected)
+            reload()
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode is active")
             reload()
@@ -493,16 +512,9 @@ final class AppState: ObservableObject {
             _ = try SharedStore.setSoftYouTubeBlockingEnabled(enabled)
             RTLog.appState.notice("setSoftYouTubeBlockingEnabled(\(enabled, privacy: .public))")
             reload()
-            if enabled {
-                restoreRealtimeShieldAfterAppActivation()
-            } else {
-                // Disabling soft mode ends any pending grace immediately and
-                // returns to the normal shield-at-rest behavior.
-                SoftYouTubeActivityMonitoring.stop()
-                if !snapshot.broadcastActive {
-                    enforceRealtimeShieldAtRest()
-                }
-            }
+            BlockingCoordinator.settingsChanged(.softYouTube, enabled: enabled,
+                facebookSupported: facebookModelSelected, xSupported: xModelSelected)
+            reload()
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode is active")
             reload()
@@ -669,103 +681,17 @@ final class AppState: ObservableObject {
     // off) — the extension's own broadcastStarted/Finished lifecycle is the
     // primary enforcement, this just covers the gap before/between sessions.
     func enforceRealtimeShieldAtRest() {
-        guard snapshot.realtimeShieldEnabled, !snapshot.broadcastActive else { return }
-        RTLog.appState.notice("enforceRealtimeShieldAtRest: re-applying shields (feature on, no active broadcast)")
-        let keepYouTubeUnlockedInSlowth = snapshot.softYouTubeBlockingEnabled
-            && SharedStore.isSlowthAppForeground()
-        if snapshot.realtimeYouTubeBlockingEnabled,
-           !snapshot.youtubeShieldRestoreDeferred,
-           !keepYouTubeUnlockedInSlowth,
-           let data = snapshot.youtubeSelectionData,
-           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
-            ManagedSettingsApplier.apply(surface: .youtube, selection: selection)
-        } else {
-            ManagedSettingsApplier.clear(surface: .youtube)
-        }
-        if snapshot.realtimeInstagramBlockingEnabled,
-           let data = snapshot.instagramSelectionData,
-           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
-            ManagedSettingsApplier.apply(surface: .instagram, selection: selection)
-        } else {
-            ManagedSettingsApplier.clear(surface: .instagram)
-        }
-        if facebookModelSelected, snapshot.realtimeFacebookBlockingEnabled,
-           let data = snapshot.facebookSelectionData,
-           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
-            ManagedSettingsApplier.apply(surface: .facebook, selection: selection)
-        } else {
-            ManagedSettingsApplier.clear(surface: .facebook)
-        }
-
-        if xModelSelected, snapshot.realtimeXBlockingEnabled,
-           let data = snapshot.xSelectionData,
-           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
-            ManagedSettingsApplier.apply(surface: .x, selection: selection)
-        } else {
-            ManagedSettingsApplier.clear(surface: .x)
-        }
+        BlockingCoordinator.enforceAtRest(snapshot, facebookSupported: facebookModelSelected, xSupported: xModelSelected)
     }
 
     private func restoreRealtimeShieldAfterAppActivation() {
-        SharedStore.syncRealtimeShieldAuthorization(AuthorizationCenter.shared.authorizationStatus)
-        if !FamilyControlsAuth.isAuthorized {
-            SoftYouTubeActivityMonitoring.stop()
-            ManagedSettingsApplier.clear(surface: .youtube)
-            ManagedSettingsApplier.clear(surface: .instagram)
-            ManagedSettingsApplier.clear(surface: .facebook)
-            ManagedSettingsApplier.clear(surface: .x)
-        }
-        // Reconcile the durable pause before its presentation is refreshed.
-        _ = try? IOSPauseCoordinator.snapshot()
-        // Slowth itself is the explicit soft-mode unlock window. Cancel any
-        // pending usage event first so an older callback cannot reshield
-        // YouTube while this app is in front.
-        SharedStore.setSlowthAppForeground(true)
-        SoftYouTubeActivityMonitoring.stop()
+        BlockingCoordinator.hostOpened(facebookSupported: facebookModelSelected, xSupported: xModelSelected)
         reload()
-        guard !snapshot.broadcastActive else { return }
-
-        if snapshot.realtimeShieldEnabled,
-           snapshot.realtimeYouTubeBlockingEnabled,
-           snapshot.softYouTubeBlockingEnabled {
-            SharedStore.setYouTubeShieldRestoreDeferred(true)
-            reload()
-            ManagedSettingsApplier.clear(surface: .youtube)
-            RTLog.appState.notice(
-                "Slowth active — YouTube unshielded until 1s of use after leaving"
-            )
-        } else {
-            SharedStore.setYouTubeShieldRestoreDeferred(false)
-            reload()
-        }
-        enforceRealtimeShieldAtRest()
     }
 
     private func armSoftYouTubeShieldAfterLeavingSlowth() {
-        SharedStore.setSlowthAppForeground(false)
+        BlockingCoordinator.hostClosed(facebookSupported: facebookModelSelected, xSupported: xModelSelected)
         reload()
-        guard !snapshot.broadcastActive,
-              snapshot.realtimeShieldEnabled,
-              snapshot.realtimeYouTubeBlockingEnabled,
-              snapshot.softYouTubeBlockingEnabled else {
-            SoftYouTubeActivityMonitoring.stop()
-            return
-        }
-
-        SharedStore.setYouTubeShieldRestoreDeferred(true)
-        reload()
-        guard SoftYouTubeActivityMonitoring.start() else {
-            // Fail closed: if iOS refuses the one-second monitor, don't leave
-            // YouTube indefinitely available without recording.
-            SharedStore.setYouTubeShieldRestoreDeferred(false)
-            reload()
-            enforceRealtimeShieldAtRest()
-            RTLog.appState.error(
-                "Soft YouTube monitor failed to arm — applied shield immediately"
-            )
-            return
-        }
-        ManagedSettingsApplier.clear(surface: .youtube)
     }
     #endif
 

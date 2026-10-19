@@ -13,6 +13,11 @@ private final class ChromeHidingBroadcastPickerView: RPSystemBroadcastPickerView
     override func layoutSubviews() {
         super.layoutSubviews()
         hideSystemControlChromeIfNeeded()
+        if hidesSystemControlChrome {
+            // ReplayKit's default button is only icon-sized. Match the row's
+            // bounds without extending into the separate help or pause controls.
+            subviews.compactMap { $0 as? UIButton }.forEach { $0.frame = bounds }
+        }
     }
 
     override func didMoveToWindow() {
@@ -81,8 +86,11 @@ struct BroadcastPickerView: UIViewRepresentable {
         picker.tintColor = showsSystemControl ? .systemRed : .clear
         picker.backgroundColor = .clear
         picker.hidesSystemControlChrome = !showsSystemControl
-        picker.accessibilityLabel = accessibilityLabel
-        picker.accessibilityTraits = .button
+        picker.isAccessibilityElement = false
+        for button in picker.subviews.compactMap({ $0 as? UIButton }) {
+            button.accessibilityLabel = accessibilityLabel
+            button.accessibilityTraits = .button
+        }
         // Custom UIViewRepresentables don't automatically honor SwiftUI's
         // .disabled()/environment isEnabled — apply it manually so a
         // disabled BroadcastPickerView is actually untappable, not just
@@ -123,34 +131,56 @@ struct RecordingToolbarButton: View {
     }
 }
 
-/// Shared appearance and copy for the main screen and the Shield handoff.
+/// One shared outline; each child owns only its own controls and hit area.
+struct RecordingPauseCard<Content: View>: View {
+    @ViewBuilder let content: () -> Content
+
+    var body: some View {
+        VStack(spacing: 0, content: content)
+            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+}
+
+/// Shared recording row for the main screen and the Shield handoff.
+// Presentation-only fixture for local marketing captures. Never sets SharedStore,
+// Screen Time authorization, ReplayKit state, or the durable pause ledger.
+enum ScreenshotPresentation {
+    static var activeProtection: Bool {
+        #if DEBUG && targetEnvironment(simulator)
+        ProcessInfo.processInfo.arguments.contains("--screenshot-active-protection")
+        #else
+        false
+        #endif
+    }
+}
+
 struct AppRecordingCard: View {
     let preferredExtensionBundleID: String
     let isRecording: Bool
     let onLearnMore: () -> Void
 
     var body: some View {
-        RealtimeRecordingCard(
-            preferredExtensionBundleID: preferredExtensionBundleID,
-            isRecording: isRecording,
-            guidance: String(localized: "Screen recording helps detect and block short videos.", table: "Interface"),
-            embedded: true
-        )
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .overlay(alignment: .topTrailing) {
+        HStack(alignment: .top, spacing: 0) {
+            RealtimeRecordingCard(
+                preferredExtensionBundleID: preferredExtensionBundleID,
+                isRecording: isRecording,
+                guidance: String(localized: "Screen recording helps detect and block short videos.", table: "Interface"),
+                embedded: true
+            )
             Button(action: onLearnMore) {
                 Image(systemName: "questionmark.circle")
                     .font(.system(size: 20))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.black.opacity(0.65))
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .padding(6)
+            .padding(.top, 6)
+            .padding(.trailing, 6)
             .accessibilityLabel(String(localized: "How it works"))
             .accessibilityIdentifier("recording.help")
         }
+        .background(Color.white)
     }
 }
 
@@ -176,16 +206,17 @@ struct RealtimeRecordingCard: View {
             VStack(alignment: .leading, spacing: prominent ? 8 : 2) {
                 Text(displayedRecording ? String(localized: "Screen recording is active") : String(localized: "Start screen recording"))
                     .font(embedded ? .body.weight(.bold) : prominent ? .title3.weight(.semibold) : .subheadline.weight(.semibold))
-                    .foregroundStyle(embedded ? statusColor : Color.primary)
+                    .foregroundStyle(embedded ? Color.black : Color.primary)
+                    .fixedSize(horizontal: false, vertical: true)
                 if displayedRecording || !guidance.isEmpty {
                 Text(displayedRecording ? String(localized: "Tap anywhere here to stop.") : guidance)
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(embedded ? Color.black.opacity(0.65) : Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
-            Spacer(minLength: embedded ? 36 : 8)
+            Spacer(minLength: embedded ? 0 : 8)
 
             if !embedded {
             Image(systemName: displayedRecording ? "stop.circle.fill" : "record.circle.fill")
@@ -198,7 +229,7 @@ struct RealtimeRecordingCard: View {
         .frame(maxWidth: .infinity, minHeight: prominent ? 132 : embedded ? 80 : nil, alignment: .leading)
         .background {
             if embedded {
-                statusColor.opacity(0.14)
+                Color.white
             } else {
                 RoundedRectangle(cornerRadius: prominent ? 22 : 12, style: .continuous)
                     .fill(statusColor.opacity(displayedRecording ? 0.18 : 0.08))
@@ -213,6 +244,7 @@ struct RealtimeRecordingCard: View {
                 )
             }
         }
+        .accessibilityHidden(true)
         .overlay {
             BroadcastPickerView(
                 preferredExtensionBundleID: preferredExtensionBundleID,
@@ -224,6 +256,7 @@ struct RealtimeRecordingCard: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .task {
+            guard !ScreenshotPresentation.activeProtection else { return }
             while !Task.isCancelled {
                 let active = SharedStore.snapshot().broadcastActive
                 if observedRecording != active {
@@ -239,17 +272,13 @@ struct RealtimeRecordingCard: View {
     }
 
     private var displayedRecording: Bool {
-        observedRecording ?? isRecording
+        ScreenshotPresentation.activeProtection || (observedRecording ?? isRecording)
     }
 
     private var statusColor: Color {
         if displayedRecording { return .red }
         guard embedded else { return .accentColor }
-        return Color(uiColor: UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
-                : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
-        })
+        return .black
     }
 }
 
@@ -313,14 +342,15 @@ struct RealtimeRecordingPromptSheet: View {
                         .font(.title2.bold())
                         .accessibilityAddTraits(.isHeader)
 
-                    VStack(spacing: 12) {
+                    RecordingPauseCard {
                         AppRecordingCard(
                             preferredExtensionBundleID: preferredExtensionBundleID,
                             isRecording: isRecording,
                             onLearnMore: onLearnMore
                         )
                         if let pauseTarget {
-                            ShieldPauseButton(target: pauseTarget, onStarted: { dismiss() })
+                            Divider()
+                            PausePanel(safari: false, preferredTarget: pauseTarget, embedded: true)
                         }
                     }
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Public snapshot, model import, and signing safety boundaries."""
+import gzip
 import hashlib
 import io
 import json
@@ -14,13 +15,14 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_DIRS = {
-    'App', 'Extension', 'ExtensionIOS', 'DeviceActivityIOS', 'iOS', 'Localization',
+    'Debug', 'App', 'Extension', 'ExtensionIOS', 'DeviceActivityIOS', 'iOS', 'Localization',
     'PauseActivityIOS', 'RealtimeShield', 'Shared', 'ShieldActionIOS', 'ShieldConfigIOS', 'WebExt',
     'scripts', 'tests',
 }
 PUBLIC_FILES = {
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',
+    'docs/FLAT_MODEL.md', 'docs/IOS_LOCALIZATION.md',
     'project.yml', 'README.md', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
     'AGENTS.md', 'APP_STORE_LOCALIZATION.md',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
@@ -35,16 +37,10 @@ PRIVATE_PARTS = {
 # Retired tracked artifacts are removed from the release tree, kept on disk.
 RETIRED = ('RealtimeShield/SurfaceDetector.mlpackage/',
            'RealtimeShield/SurfaceDetectorMetadata.json')
-MODEL_DIR = 'data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources'
-MODEL_HASHES = {
-    'AppRouterV10': '275be8a74dcb00f2382071fc5fde6b8ff110878f8b56e66dd0a25c63c11651d5',
-    'YouTubeDetectorV10': '10daf9a48edddba4a480e0376648563094f2196621bf10eb93731cf8c4bd755e',
-    'InstagramDetectorV10': '64a05d722c785cc62bb4420e6aa1ff14dcc751a30e35b6edbcc93eb396c8b09a',
-    'FacebookDetectorV10': '807e5f31e091db26c8285e92e04f7ebc9cf224db1d25be4d72dbcf8306136c8d',
-    'XDetectorV10': 'eec050ecc6ba357eac0f430cd2f76ca3c9765bd8130304ef81d8a1a86f6e3b99',
-}
-RUNTIME = 'RealtimeShield/CascadeV10RuntimeMetadata.json'
-RUNTIME_HASH = '41ee86e2d0410dd455297c31c8a839aa2d72fb2b39a9698060e0a412ae63896a'
+MODEL_DIR = 'data-model/exports/flat-11-seed7-20261015'
+MODEL_HASHES = {'FlatDetector': '4d672879ea1f33e8ddbad369b67d26e048e09836522e2eaad561dbf55b1f7a1e'}
+RUNTIME = 'RealtimeShield/FlatDetectorMetadata.json'
+RUNTIME_HASH = '5759a56cccb193afc60faaf6ae8ecbda2838059eb7318afe04df0e87f4b923c9'
 PACKAGE_FILES = {'Manifest.json', 'Data/com.apple.CoreML/model.mlmodel',
                  'Data/com.apple.CoreML/weights/weight.bin'}
 
@@ -195,7 +191,7 @@ def package_sha(package):
 
 def verify_models(source):
     require(sha(source / RUNTIME) == RUNTIME_HASH, 'Runtime metadata SHA-256 mismatch')
-    require(RUNTIME_HASH in (source / 'RealtimeShield/CascadePolicy.swift').read_text(),
+    require(RUNTIME_HASH in (source / 'RealtimeShield/FlatClassifier.swift').read_text(),
             'Swift runtime metadata pin differs')
     for name, expected in MODEL_HASHES.items():
         path = source / MODEL_DIR / (name + '.mlpackage')
@@ -237,13 +233,14 @@ def install_models(source, local_root, bundle):
 
 
 def model_bundle(source, destination):
-    with tarfile.open(destination, 'w:gz', format=tarfile.USTAR_FORMAT) as tar:
-        for name in sorted(model_files()):
-            data = (source / name).read_bytes()
-            entry = tarfile.TarInfo(name)
-            entry.size = len(data)
-            entry.mode = 0o644
-            tar.addfile(entry, io.BytesIO(data))
+    with destination.open('wb') as raw, gzip.GzipFile(filename='', mode='wb', fileobj=raw, mtime=0) as compressed:
+        with tarfile.open(fileobj=compressed, mode='w', format=tarfile.USTAR_FORMAT) as tar:
+            for name in sorted(model_files()):
+                data = (source / name).read_bytes()
+                entry = tarfile.TarInfo(name)
+                entry.size = len(data)
+                entry.mode = 0o644
+                tar.addfile(entry, io.BytesIO(data))
 
 
 def prepare(source, root, bundle, spec):

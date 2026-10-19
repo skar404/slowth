@@ -11,17 +11,22 @@ import FamilyControls
 // while recording" — a single synchronous UserDefaults
 // snapshot read, safe to call from configuration(shielding:).
 //
-// The detected variant offers a safe default (close the app) and a secondary
-// Continue action that adds a brief intentional pause before release.
+// Application shields consistently offer Slowth above Close.
 final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     override func configuration(shielding application: Application) -> ShieldConfiguration {
-        Self.recordInstagramShieldPresentation(for: application)
-        return Self.currentConfiguration
+        configuration(for: application)
     }
 
     override func configuration(shielding application: Application, in category: ActivityCategory) -> ShieldConfiguration {
+        configuration(for: application)
+    }
+
+    private func configuration(for application: Application) -> ShieldConfiguration {
+        guard let target = Self.protectionTarget(application) else { return Self.unidentifiedConfiguration }
+        if PauseOnlyApps.contains(target) { return Self.pauseOnlyConfiguration }
+        if IOSPauseCoordinator.inferenceUnavailable(target) { return Self.unavailableConfiguration(target: target) }
         Self.recordInstagramShieldPresentation(for: application)
-        return Self.currentConfiguration
+        return Self.applicationConfiguration
     }
 
     override func configuration(shielding webDomain: WebDomain) -> ShieldConfiguration {
@@ -30,6 +35,87 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     override func configuration(shielding webDomain: WebDomain, in category: ActivityCategory) -> ShieldConfiguration {
         Self.currentConfiguration
+    }
+
+    private static func protectionTarget(_ application: Application) -> String? {
+        PauseOnlyApps.refreshSelections()
+        guard let token = application.token else {
+            PauseOnlyApps.recordRouting("configuration-no-token", appName: application.localizedDisplayName)
+            RTLog.shieldConfig.notice("Pause-only routing: application has no token")
+            return nil
+        }
+        let target = PauseOnlyApps.target(containing: token) ?? PauseOnlyApps.systemTarget(containing: token)
+        PauseOnlyApps.recordRouting("configuration", token: token, target: target, appName: application.localizedDisplayName)
+        let configured = PauseOnlyApps.targets.filter { PauseOnlyApps.selection($0) != nil }.count
+        RTLog.shieldConfig.notice("Pause-only routing: target=\(target ?? "unmatched", privacy: .public), configured=\(configured, privacy: .public)")
+        return target
+    }
+
+    private static func primaryLabel(bundle: Bundle) -> ShieldConfiguration.Label {
+        let text: String
+        if #available(iOS 26.5, *) { text = "Slowth" }
+        else { text = String(localized: "Close", table: "Interface", bundle: bundle) }
+        return .init(text: text, color: .white)
+    }
+
+    private static func secondaryLabel(bundle: Bundle) -> ShieldConfiguration.Label? {
+        if #available(iOS 26.5, *) {
+            return .init(text: String(localized: "Close", table: "Interface", bundle: bundle), color: .white)
+        }
+        return nil
+    }
+
+    private static var applicationConfiguration: ShieldConfiguration {
+        let state = SharedStore.snapshot()
+        let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
+        return state.broadcastActive
+            ? detectedConfiguration(state: state, bundle: bundle, application: true)
+            : recordingOffConfiguration(state: state, bundle: bundle, application: true)
+    }
+
+    // The system owns button width and font. Use the short product name in
+    // every locale; the subtitle explains that this opens the containing app.
+    private static var unidentifiedConfiguration: ShieldConfiguration {
+        let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
+        return ShieldConfiguration(
+            backgroundBlurStyle: .systemMaterialDark,
+            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            icon: slowthAppIcon,
+            title: .init(text: String(localized: "Blocked", bundle: bundle), color: .white),
+            subtitle: .init(text: String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), color: .white.withAlphaComponent(0.8)),
+            primaryButtonLabel: primaryLabel(bundle: bundle),
+            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            secondaryButtonLabel: secondaryLabel(bundle: bundle))
+    }
+
+    private static func unavailableConfiguration(target: String) -> ShieldConfiguration {
+        let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
+        let labels = ["youtube": "YouTube", "instagram": "Instagram", "facebook": "Facebook", "x": "X"]
+        let title = String(format: String(localized: "Unavailable for %@", table: "Interface", bundle: bundle),
+                           labels[target] ?? target)
+        return ShieldConfiguration(
+            backgroundBlurStyle: .systemMaterialDark,
+            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            icon: slowthAppIcon,
+            title: .init(text: title, color: .white),
+            subtitle: .init(text: String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), color: .white.withAlphaComponent(0.8)),
+            primaryButtonLabel: primaryLabel(bundle: bundle),
+            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            secondaryButtonLabel: secondaryLabel(bundle: bundle))
+    }
+
+    private static var pauseOnlyConfiguration: ShieldConfiguration {
+        let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
+        return ShieldConfiguration(
+            backgroundBlurStyle: .systemMaterialDark,
+            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            icon: slowthAppIcon,
+            title: .init(text: String(localized: "Blocked", bundle: bundle), color: .white),
+            subtitle: .init(text: String(localized: "Currently supported only in pause mode. Open Slowth and start a pause to use this app. Screen recording does not unlock it.", table: "Interface", bundle: bundle), color: .white.withAlphaComponent(0.8)),
+            primaryButtonLabel: primaryLabel(bundle: bundle),
+            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            secondaryButtonLabel: secondaryLabel(bundle: bundle)
+        )
     }
 
     private static var currentConfiguration: ShieldConfiguration {
@@ -58,10 +144,10 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         #endif
     }
 
-    private static func recordingOffConfiguration(state: SharedState, bundle: Bundle) -> ShieldConfiguration {
+    private static func recordingOffConfiguration(state: SharedState, bundle: Bundle, application: Bool = false) -> ShieldConfiguration {
         let openAppButton: ShieldConfiguration.Label?
         if #available(iOS 26.5, *) {
-            openAppButton = ShieldConfiguration.Label(text: String(localized: "Open Slowth", bundle: bundle), color: .white)
+            openAppButton = ShieldConfiguration.Label(text: "Slowth", color: .white)
         } else {
             openAppButton = nil
         }
@@ -78,12 +164,13 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
                 ),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
-            primaryButtonLabel: openAppButton,
-            primaryButtonBackgroundColor: UIColor(red: 0.90, green: 0.20, blue: 0.32, alpha: 1)
+            primaryButtonLabel: application ? primaryLabel(bundle: bundle) : openAppButton,
+            primaryButtonBackgroundColor: UIColor(red: 0.90, green: 0.20, blue: 0.32, alpha: 1),
+            secondaryButtonLabel: application ? secondaryLabel(bundle: bundle) : nil
         )
     }
 
-    private static func detectedConfiguration(state: SharedState, bundle: Bundle) -> ShieldConfiguration {
+    private static func detectedConfiguration(state: SharedState, bundle: Bundle, application: Bool = false) -> ShieldConfiguration {
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterialDark,
             backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
@@ -91,17 +178,18 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             title: ShieldConfiguration.Label(text: String(localized: "Blocked content detected", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
                 text: subtitleText(
-                    defaultText: String(localized: "Take a short break, then continue. Leave the blocked screen — Slowth will block it again if you stay there.\n\nIf you notice any issues, please share your feedback.", bundle: bundle),
+                    defaultText: String(localized: "Your one-minute rest has started. Open Slowth to see the remaining time.", table: "Interface", bundle: bundle),
                     state: state,
                     variant: "content detected"
                 ),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
-            primaryButtonLabel: ShieldConfiguration.Label(text: String(localized: "Close app", bundle: bundle), color: .white),
-            primaryButtonBackgroundColor: UIColor(red: 0.90, green: 0.20, blue: 0.32, alpha: 1),
-            secondaryButtonLabel: ShieldConfiguration.Label(
+            primaryButtonLabel: application ? primaryLabel(bundle: bundle) : ShieldConfiguration.Label(text: String(localized: "Close", table: "Interface", bundle: bundle), color: .white),
+            // Match the primary button on the pause-only shield.
+            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            secondaryButtonLabel: application ? secondaryLabel(bundle: bundle) : ShieldConfiguration.Label(
                 text: String(localized: "Continue", bundle: bundle),
-                color: UIColor.white.withAlphaComponent(0.85)
+                color: .white
             )
         )
     }

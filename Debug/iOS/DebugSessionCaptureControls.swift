@@ -368,5 +368,10 @@ private struct SessionShareSheet: UIViewControllerRepresentable {
     }
     func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }
+
+#Preview("Session capture controls") {
+    Form { DebugSessionCaptureControls() }.allowsHitTesting(false)
+}
+
 #endif
 #endif

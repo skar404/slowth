@@ -33,12 +33,9 @@ struct MacContentView: View {
     @State private var showStrictModeConfirmation = false
     #if DEBUG
     @AppStorage(DebugMode.storageKey, store: AppGroup.defaults) private var debugModeEnabled = false
-    @AppStorage(DebugModelSettings.storageKey, store: AppGroup.defaults) private var debugModelBackend = DebugModelSettings.defaultBackend.rawValue
-    @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
     @State private var versionTapCount = 0
     #endif
     #if os(iOS)
-    @AppStorage("uiMode") private var uiMode: String = "ios"
     @State private var showRealtimeRecordingPrompt = false
     #endif
     #if os(iOS) && canImport(FamilyControls)
@@ -592,43 +589,7 @@ struct MacContentView: View {
 
     #if DEBUG
     private var debugSection: some View {
-        Section {
-            Toggle("Debug mode", isOn: $debugModeEnabled)
-                .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
-                .onChange(of: debugModeEnabled) { _ in
-                    #if os(iOS) && canImport(FamilyControls)
-                    state.refreshFacebookModelSelection()
-                    #endif
-                }
-            #if os(iOS)
-            DebugSessionCaptureControls()
-            DebugSavedLeavesControl()
-            if DebugModelSettings.cascadeAvailable {
-                Picker("Model (next recording)", selection: Binding(
-                    get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
-                    set: { debugModelBackend = $0; state.refreshFacebookModelSelection() }
-                )) {
-                    ForEach(DebugModelBackend.allCases, id: \.rawValue) { backend in
-                        Text(backend.title).tag(backend.rawValue)
-                    }
-                }
-                .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
-            }
-            #endif
-            DebugAppReviewControls(hasEnabledBlocking: state.hasEnabledBlockingForReview,
-                                   isReady: isReadyForReview)
-            Toggle("Tips", isOn: $tipsFeatureEnabled)
-            Button("Reset Strict mode") {
-                state.resetStrictModeForDebug()
-            }
-            .disabled(!state.snapshot.isStrictModeActive)
-            Button("Show Tips card again") {
-                state.resetTipsDisplayForDebug()
-            }
-            .disabled(!state.snapshot.supportCardDismissed)
-        } header: {
-            Text("Debug")
-        }
+        DebugCompactSection(state: state, debugModeEnabled: $debugModeEnabled, isReadyForReview: isReadyForReview)
     }
 
     private func appVersionTapped() {

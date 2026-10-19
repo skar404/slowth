@@ -7,11 +7,10 @@ actor IOSPauseLiveActivity {
     static let shared = IOSPauseLiveActivity()
 
     static func content(_ lease: IOSPauseLease) -> ActivityContent<PauseActivityAttributes.ContentState> {
-        let labels = ["youtube": "YouTube", "instagram": "Instagram", "facebook": "Facebook", "x": "X", "tiktok": "TikTok"]
         var state = PauseActivityAttributes.ContentState(phase: lease.phase,
             startedAt: Date(timeIntervalSince1970: lease.started.wall),
             expiresAt: Date(timeIntervalSince1970: lease.expiresAt),
-            service: labels[lease.target] ?? lease.target)
+            service: PauseTargetDisplay.name(for: lease.target))
         state.target = lease.target
         var ledger = IOSPauseLedger()
         ledger.lease = lease

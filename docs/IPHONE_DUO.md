@@ -1,87 +1,57 @@
 # iPhone Duo layout
 
-The iOS settings screen uses the current window size and size class. It does
-not identify a device by name or cache a screen size at launch.
+`Shared/ContentView_iOS.swift` detects hinge capability using `onHingeChange`
+above the layout branches. A temporary nil hinge update does not discard the
+capability during a display transition. Device names and screen dimensions
+are not used to identify Duo.
 
-- On iPhone with iOS 27.1, regular-width windows at least 720 points wide and wider than
-  tall use SwiftUI's `ArrangementView`: app controls on the leading side and
-  Safari controls on the trailing side, with quiet headings on the shared background.
-  Only individual settings sections have cards; columns have no outer card,
-  border, or rounded clipping. Each Safari site has its own section/card.
-  The system can split along either axis to accommodate the fold.
-- Narrow/tall windows and accessibility Dynamic Type sizes use the full,
-  scrollable settings form. Each section belongs to exactly one pane in wide
-  mode. Do not use `splitArrangementAxis` to decide whether to duplicate a
-  section: that environment value describes an axis, not pane visibility.
-- `AppState`, purchase state, selections, and presentation flags remain above
-  the layout branches. Resizing does not recreate these objects. Scroll
-  positions can reset when switching between one and two forms.
-- On iOS 27.1, sheets use the system presentation instead of forcing compact
-  detents. The recording prompt scrolls and has a readable maximum width.
-- Hero card widths scale with Dynamic Type.
-- On a hinge-equipped iPhone (Duo), the system toolbar contains Strict,
-  and the native ReplayKit start/stop button. Send feedback is omitted on Duo
-  at the user's request. SwiftUI places
-  these actions in Duo's vertical bar and handles overflow and safe areas.
-  `onHingeChange` detects the capability, including the closed device; window
-  width alone never enables the Duo-only actions on an iPad or ordinary iPhone.
-  The Strict hero card, Strict form toggle, and feedback form row are omitted
-  only when these toolbar actions are available. Strict still requires the
-  existing confirmation and remains disabled for an active 24-hour lock.
-  Recording still requires the system ReplayKit confirmation. The toolbar
-  does not enable restrictions or start a broadcast automatically.
+- On a hinge-equipped iPhone, regular windows at least **720 pt** wide with
+  non-accessibility text show Apps and Safari together, regardless of aspect
+  ratio. `ArrangementView` owns exactly one Apps pane and one Safari pane;
+  the system can adapt the split to the fold. Each pane scrolls independently.
+- The shared iPad components use Duo-specific **16 pt** outer margins and a
+  **16 pt** horizontal pane gap. Feature cards sit above the headings: below
+  900 pt they scroll horizontally as compact icon-and-text cards (88 pt minimum
+  height at standard text); at 900 pt and
+  above they share a single row.
+- Outer-display, narrow, compact-size-class and accessibility-text windows
+  use Apps / Safari / Settings tabs. Cards begin Apps. Recording and pauses
+  stay inside Apps; Strict mode stays in Settings. There are no Duo-only
+  recording or Strict toolbar actions.
+- The Settings button uses a native `NavigationStack` toolbar with semantic
+  `primaryAction` placement, so iOS positions it in the system side bar for
+  supported Duo poses. The narrow layout retains the native Settings tab.
+- Settings now uses the native **384 pt Inspector**, sliding in from the
+  trailing edge at the user's request, replacing the floating dimmed overlay
+  in the original plan. The system owns drawer sizing and presentation; it
+  fills the available height. Close with the cross, Escape, or the toolbar
+  toggle. Native inspector behavior determines whether it overlays or sits
+  beside the content; there is no custom full-window dimmer on Duo.
+  Narrowing converts open Settings to its tab; widening restores the inspector
+  through the shared selected-section state. With the inspector open, the
+  remaining content measures its own width: below 720 pt it shows a native
+  Apps/Safari segmented control and one readable form, instead of squeezing
+  two columns beside the inspector.
+- Leading/trailing alignment mirrors the columns and panel for Arabic.
+- AppState, purchases, selections, independent Apps/Safari disclosure state,
+  authorization, and modal presentation handlers remain above branching.
+  Layout changes may reset scroll offsets, but do not reset selections or
+  disclosure state. System sheets retain their existing root presentation.
 
-## Build requirements
+## Compatibility and scope
 
-Build with **Xcode 27.1 / iOS 27.1 SDK or later** to include the arrangement.
-The SDK guard is `canImport(SwiftUI, _version: 8.0.85)`, paired with an iOS
-27.1 runtime availability check. Xcode 27.0 has the same Swift compiler version
-as Xcode 27.1 but lacks `ArrangementView`; a compiler-version guard is not
-sufficient. Older SDKs retain the single-form fallback and the iOS 16 minimum.
+New symbols use `canImport(SwiftUI, _version: 8.0.85)` and iOS 27.1 runtime
+checks. Older SDKs retain tabs; the deployment target remains iOS 16.
+Ordinary iPhone and existing iPad layout parameters are preserved. No public
+API, storage, macOS, marketing version, or build-number changes are part of
+this adaptation.
 
-The release workflow selects Xcode 27.1 on the `xcode-27` runner to include
-the Duo APIs. Older SDK builds still use the fallback layout.
+## Validation, 2026-10-20
 
-## Validation, 2026-10-06
+Debug iOS simulator build passed with Xcode 27.1 (27A9275). UI checks and raw
+screenshots are recorded in `reports/duo-layout-20261020/`. These checks do not
+qualify physical-device ReplayKit, Screen Time enforcement, Safari behavior,
+or detection models on Duo. Formatted marketing-card export remains deferred.
 
-- Duo action bar: Debug 27.1 and SDK-fallback Release 27.0 builds passed.
-  Inspected the system vertical bar on the inner display. An isolated Duo UI
-  test passed for Strict and ReplayKit button accessibility, absence of the
-  feedback toolbar button, and opening/cancelling Strict confirmation without
-  activating the lock. Actual recording was not started by this test.
-- Debug simulator build with Xcode 27.1: passed.
-- Release simulator build with Xcode 27.0: passed, including the SDK fallback.
-- On a dedicated iPhone Duo / iOS 27.1 simulator, an XCTest UI run verified
-  changing/restoring a Safari switch and opening/dismissing the help sheet.
-  Screenshots of the outer display were inspected. Orientation commands were
-  sent, but the captured app window remained 466 × 678 points, so this does
-  **not** establish successful rotation or cross-display continuity.
-- An existing Duo simulator also showed Slowth in a narrow window alongside
-  Settings on the inner display.
-- A second UI test passed with accessibility-large Dynamic Type, checking
-  that Safari controls remain reachable by scrolling. The test simulator was
-  restored to the normal large text setting afterward.
-- User inspection of the first wide layout found duplicated Safari controls.
-  Removed the environment-based visibility inference, assigned each section
-  to exactly one pane, and added pane headings/borders. Both Debug (27.1) and
-  Release (27.0) builds passed after this correction. The follow-up wide UI
-  test was blocked by an app-launch timeout after the simulator restarted
-  (`Failed to launch ... Timed out attempting to launch app`); its inner
-  display capture was black. A subsequent successful launch allowed visual
-  inspection of the inner display: the outer pane cards were removed on
-  user feedback, Safari sites now have separate cards, and both columns sit
-  on the shared background with a gap between them. The latest Debug build
-  passed and was installed in the original Duo simulator.
-
-Still verify in Device Hub: fullscreen inner display, book and tabletop folds,
-portrait/landscape transitions, and opening/closing the device with a sheet
-or Family Activity Picker already open. Check that Safari controls appear
-exactly once, stay reachable, and keep their values. Device Hub UI automation
-was unavailable because macOS Accessibility access was denied.
-
-ReplayKit capture, recognition quality on new display aspect ratios, Screen
-Time enforcement, and live Safari behavior need separate physical-device
-validation. These UI changes do not qualify the detection models for Duo.
-
-References: [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)
-and [Apple's adaptive layouts session](https://developer.apple.com/videos/play/tech-talks/111463/).
+Reference: [Apple: Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo),
+particularly “Optimize bars for vertical presentation”.

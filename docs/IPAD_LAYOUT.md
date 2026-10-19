@@ -1,32 +1,29 @@
-# iPad settings layout
+# iPad layout
 
-The iPad reuses the Duo settings panes without depending on iOS 27.1's
-ArrangementView. It uses the current window width and size class, so the same
-rules also apply to resized windows.
+`Shared/ContentView_iOS.swift` chooses layout from the current window, not the
+physical screen or launch orientation.
 
-- Regular-width windows at least 900 points wide show two independently
-  scrolling columns: in-app blocking on the left, Safari on the right.
-- The columns share a 1160-point maximum width with outer margins. There is
-  no enclosing card around either column. Safari retains one card per site.
-- Smaller windows and accessibility Dynamic Type use one centered form with
-  a maximum width of 680 points. Safari appears exactly once in either layout.
-- Strict retains its normal settings row and hero card on iPad. Recording
-  controls remain in the in-app blocking settings. The action toolbar is
-  exclusive to iPhone Duo.
-- AppState and presentation state remain above the layout branches. Switching
-  layouts may reset scroll positions but does not recreate settings state.
-- Ordinary iPhone and Duo layout rules are unchanged.
+- Regular windows at least 900 pt wide with non-accessibility text show the
+  existing iPad layout: feature cards across the top, Apps and Safari headings,
+  and independently scrolling forms. Content is capped at 1440 pt; outer
+  margins and the column gap remain 24 pt.
+- Smaller windows and accessibility text use Apps / Safari / Settings tabs.
+  Cards begin Apps. Recording and pauses remain in Apps; Strict mode is in
+  Settings.
+- Settings opens over wide content in a 384 pt trailing panel, capped at
+  600 pt high, with native grouped settings and a close button. The backdrop
+  covers the header too. Close with the cross, Escape, the backdrop, or the
+  original Settings button position. Narrowing with Settings selected shows
+  the Settings tab; widening shows the panel again.
+- AppState, selections, independent Apps/Safari expansion, and presentation
+  handlers live above the layout branches. Scroll offsets can reset between
+  layouts. Leading/trailing alignment follows the interface language.
+- Duo reuses these components with separate parameters; iPad does not use
+  ArrangementView or hinge detection to choose its layout.
 
-Validation on 2026-10-07:
+## Validation
 
-- Debug simulator build passed with Xcode 27.1.
-- iPad Pro 13-inch and 11-inch (iOS 27.0) UI checks passed in both orientations.
-  Checked column counts and widths and Safari ownership. The initial toolbar
-  checks preceded its removal at the user’s request. No strict lock or recording
-  was started.
-- Visually inspected the 13-inch landscape layout.
-- With accessibility-extra-large text on the 13-inch iPad, verified the single
-  column and that Safari controls remain reachable by scrolling. Restored the
-  standard large text setting after the check.
-- Stage Manager dragging and Split View resizing were not driven in the simulator.
-  Physical-device ReplayKit behavior was not tested by this UI change.
+The 2026-10-20 Duo change preserves the existing iPad thresholds, spacing,
+card style, panel size, and settings placement. Debug iOS simulator build
+passed with Xcode 27.1. iPad interactive regression, Stage Manager, Split View,
+VoiceOver, and real-device recording were not rerun for this change.

@@ -155,6 +155,29 @@ import Foundation
             selection: tokenB, now: after(50), strict: false)
         try check(switching.remaining(after(50), currentZone: "UTC") == 0)
 
+        // Pause-only apps use the same quota/deadline without requiring a recorder.
+        // Switching to the other service must not create a second grant or charge.
+        for (source, destination) in [("tiktok", "snapchat"), ("snapchat", "tiktok")] {
+            var pauseOnly = IOSPauseLedger()
+            try pauseOnly.prepare(id: source, kind: "application", target: source, selection: tokenA,
+                now: now, currentZone: "UTC", strict: false, requiresRecording: false)
+            try pauseOnly.activate(source, now: now, strict: false)
+            let deadline = pauseOnly.lease!.expiresAt
+            try pauseOnly.switchApplication(id: source, from: source, to: destination,
+                selection: tokenB, now: after(15), strict: false)
+            assert(pauseOnly.lease!.target == destination && pauseOnly.lease!.selection == tokenB)
+            assert(pauseOnly.lease!.requiresRecording == false && pauseOnly.lease!.expiresAt == deadline)
+            try check(pauseOnly.remaining(after(15), currentZone: "UTC") == 2)
+            expectError {
+                try pauseOnly.switchApplication(id: source, from: destination, to: source,
+                    selection: tokenA, now: after(16), strict: true)
+            }
+            assert(pauseOnly.lease!.expired(after(180)))
+            pauseOnly.finish(now: after(180))
+            assert(pauseOnly.lease == nil)
+            try check(pauseOnly.remaining(after(180), currentZone: "UTC") == 2)
+        }
+
         // Duration defaults/migration and persisted per-lease deadlines.
         var durationChoice = IOSPauseLedger()
         assert(durationChoice.pauseMinutes == 3)

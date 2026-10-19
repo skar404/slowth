@@ -15,13 +15,7 @@ enum FamilyControlsAuth {
     }
 
     static func isAuthorized(_ status: AuthorizationStatus) -> Bool {
-        if status == .approved {
-            return true
-        }
-        if #available(iOS 26.4, *), status == .approvedWithDataAccess {
-            return true
-        }
-        return false
+        IOSProtectionAuthorization.approved(status)
     }
 
     static func requestAuthorization() async -> Bool {
