@@ -98,7 +98,9 @@ struct ContentView: View {
     @State private var welcomeDismissing = false
     @State private var welcomeSession = UUID()
     @State private var pendingWelcomeSafari = false
-    @State private var pendingRecordingPrompt = false
+    @State private var shieldPrompt = IOSShieldPromptPresentation()
+    private var pendingRecordingPrompt: Bool { shieldPrompt.isPending }
+    @State private var visibleRestID: String?
     @State private var selectedSection = 0
     @State private var expandedService: String?
     @State private var expandedSafariService: String?
@@ -219,7 +221,11 @@ struct ContentView: View {
         .sheet(item: $restToShow, onDismiss: finishSheetDismissal) { rest in
             DetectionRestSheet(rest: rest)
                 .compactSheetDetents(isCompact: horizontalSizeClass == .compact, startsCompact: true)
-                .onAppear { restPresentation.acknowledge(rest) }
+                .onAppear {
+                    visibleRestID = rest.id
+                    restPresentation.acknowledge(rest)
+                }
+                .onDisappear { visibleRestID = nil }
         }
         .sheet(isPresented: $showSafariHelp, onDismiss: finishSheetDismissal) {
             SafariHelpSheet(openSettings: { state.openSafariExtensionSettings() })
@@ -277,7 +283,8 @@ struct ContentView: View {
             } else {
                 ShieldAppChoiceSheet { target in
                     recordingPromptPauseTarget = target
-                    pendingRecordingPrompt = true
+                    shieldPrompt.enqueue(target: target)
+                    shieldPrompt.beginDismissal()
                     showRealtimeRecordingPrompt = false
                 }
                 .tint(SlowthAppearance.sage)
@@ -346,6 +353,12 @@ struct ContentView: View {
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
             presentRealtimeRecordingPromptIfRequested()
             presentRestIfNeeded()
+        }
+        .onChange(of: state.lastError) { error in
+            if error == nil { presentRealtimeRecordingPromptIfRequested() }
+        }
+        .onChange(of: showStrictModeConfirmation) { showing in
+            if !showing { presentRealtimeRecordingPromptIfRequested() }
         }
         .onChange(of: familyControlsAuthorization.authorizationStatus) { _ in
             state.refreshProtectionAuthorization()
@@ -814,22 +827,24 @@ struct ContentView: View {
 
     #if canImport(FamilyControls)
     private func presentRealtimeRecordingPromptIfRequested() {
-        var target: String?
-        guard SharedStore.consumeRealtimeRecordingPromptRequest(target: &target) else { return }
-        PauseOnlyApps.recordRouting("handoff", target: target)
-        recordingPromptPauseTarget = target
-        state.reload()
-        selectedSection = 0
-        pendingRecordingPrompt = true
-        pendingWelcomeSafari = false
-        if restToShow != nil {
+        let active = UIApplication.shared.applicationState == .active
+        if shieldPrompt.receive(isActive: active, consume: {
+            guard SharedStore.consumeRealtimeRecordingPromptRequest(target: &$0) else { return false }
+            PauseOnlyApps.recordRouting("handoff", target: $0)
+            return true
+        }) {
+            state.reload()
+            selectedSection = 0
+            pendingWelcomeSafari = false
+            // Preserve the pending target independently of the currently visible sheet.
+            let hasSheet = restToShow != nil || showWelcome || showRealtimeRecordingPrompt ||
+                showPauseOnlyPrompt || showSafariHelp || showAbout || showContribution ||
+                showSupportSheet || showRealtimeBlockingBeta || showYouTubePicker ||
+                showInstagramPicker || showFacebookPicker || showXPicker || pauseOnlyPickerTarget != nil
+            if hasSheet { shieldPrompt.beginDismissal() }
             restToShow = nil
-        } else if showWelcome {
             closeWelcome()
-        } else if showRealtimeRecordingPrompt {
             showRealtimeRecordingPrompt = false
-        } else if !presentationIsIdle {
-            // Finish the current dismissal before presenting the explicit target.
             showPauseOnlyPrompt = false
             showSafariHelp = false
             showAbout = false
@@ -842,8 +857,19 @@ struct ContentView: View {
             showXPicker = false
             pauseOnlyPickerTarget = nil
             showStrictModeConfirmation = false
-        } else {
-            finishSheetDismissal()
+        }
+        guard active, presentationIsIdle, pendingRecordingPrompt else { return }
+        let rests = try? IOSPauseCoordinator.openRests()
+        guard let destination = shieldPrompt.take(isActive: active, isIdle: presentationIsIdle,
+                                                   rests: rests, isPauseOnly: PauseOnlyApps.contains) else { return }
+        switch destination {
+        case .rest(let rest): restToShow = rest
+        case .pause(let target):
+            recordingPromptPauseTarget = target
+            showPauseOnlyPrompt = true
+        case .recording(let target):
+            recordingPromptPauseTarget = target
+            showRealtimeRecordingPrompt = true
         }
     }
 
@@ -872,7 +898,7 @@ struct ContentView: View {
     }
 
     private var presentationIsIdle: Bool {
-        guard restToShow == nil, !showWelcome, !welcomeDismissing, !showSafariHelp, !showAbout, !showContribution,
+        guard !shieldPrompt.waitingForDismissal, restToShow == nil, !showWelcome, !welcomeDismissing, !showSafariHelp, !showAbout, !showContribution,
               !showSupportSheet, !showRealtimeBlockingBeta, !showRealtimeRecordingPrompt, !showPauseOnlyPrompt,
               !showStrictModeConfirmation, state.lastError == nil else { return false }
         #if canImport(FamilyControls)
@@ -891,7 +917,7 @@ struct ContentView: View {
         pendingRests = rests
         if let shown = restToShow {
             restToShow = rests.first { $0.id == shown.id }
-            if let current = restToShow { restPresentation.acknowledge(current) }
+            if let current = restToShow, visibleRestID == current.id { restPresentation.acknowledge(current) }
         } else if !pendingRecordingPrompt, presentationIsIdle, let rest = rests.first(where: { restPresentation.shouldPresent($0) }) {
             restToShow = rest
             if rest.requestedOrder != nil { selectedSection = 0 }
@@ -902,22 +928,12 @@ struct ContentView: View {
     }
 
     private func finishSheetDismissal() {
-        guard UIApplication.shared.applicationState == .active, presentationIsIdle else { return }
-        if pendingRecordingPrompt {
-            pendingRecordingPrompt = false
-            #if canImport(FamilyControls)
-            // Read again after dismissal: a rest may have finished during handoff.
-            if let target = recordingPromptPauseTarget,
-               let rest = (try? IOSPauseCoordinator.openRests())?.first(where: { $0.target == target }) {
-                restPresentation.acknowledge(rest)
-                restToShow = rest
-            } else if recordingPromptPauseTarget.map(PauseOnlyApps.contains) == true {
-                showPauseOnlyPrompt = true
-            } else {
-                showRealtimeRecordingPrompt = true
-            }
-            #endif
-        } else if let rest = (try? IOSPauseCoordinator.openRests())?.first(where: { restPresentation.shouldPresent($0) }) {
+        shieldPrompt.finishDismissal()
+        #if canImport(FamilyControls)
+        presentRealtimeRecordingPromptIfRequested()
+        #endif
+        guard UIApplication.shared.applicationState == .active, presentationIsIdle, !pendingRecordingPrompt else { return }
+        if let rest = (try? IOSPauseCoordinator.openRests())?.first(where: { restPresentation.shouldPresent($0) }) {
             restToShow = rest
         } else if pendingWelcomeSafari {
             pendingWelcomeSafari = false
@@ -1409,18 +1425,33 @@ struct ContentView: View {
 
     private var heroSection: some View {
         Section {
-            ScrollView(.horizontal, showsIndicators: false) {
-                Group {
-                    if isDuo {
-                        HStack(spacing: 12) { featureCards(compact: true) }
-                            .frame(width: 720)
-                            .fixedSize(horizontal: false, vertical: true)
-                    } else {
-                        HStack(spacing: 12) { featureCards(compact: false) }
+            Group {
+                if !isPad && !isDuo {
+                    VStack(spacing: 10) {
+                        let layout = dynamicTypeSize.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(spacing: 10))
+                            : AnyLayout(HStackLayout(alignment: .top, spacing: 10))
+                        layout {
+                            featureCards(compact: false, flexible: true, includeSupport: false)
+                        }
+                        if FeatureFlags.tipsEnabled { phoneSupportCard }
+                    }
+                    .padding(.vertical, 12)
+                } else {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        Group {
+                            if isDuo {
+                                HStack(spacing: 12) { featureCards(compact: true) }
+                                    .frame(width: 720)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            } else {
+                                HStack(spacing: 12) { featureCards(compact: false) }
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
             }
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
@@ -1429,14 +1460,14 @@ struct ContentView: View {
     }
 
     @ViewBuilder
-    private func featureCards(compact: Bool) -> some View {
+    private func featureCards(compact: Bool, flexible: Bool = false, includeSupport: Bool = true) -> some View {
         IOSFeatureCard(
             title: String(localized: "Help improve"),
             subtitle: String(localized: "In-app blocking") + " 👉👈",
             icon: "heart.text.clipboard",
             gradient: [Color(red: 0.12, green: 0.65, blue: 0.57),
                        Color(red: 0.08, green: 0.43, blue: 0.49)],
-            action: { showContribution = true }, compact: compact
+            action: { showContribution = true }, compact: compact, flexible: flexible
         )
         .accessibilityIdentifier("contribution.card")
 
@@ -1446,9 +1477,9 @@ struct ContentView: View {
             icon: "sparkles",
             gradient: [Color(red: 0.36, green: 0.46, blue: 0.95),
                        Color(red: 0.55, green: 0.32, blue: 0.86)],
-            action: { showAbout = true }, compact: compact
+            action: { showAbout = true }, compact: compact, flexible: flexible
         )
-        if FeatureFlags.tipsEnabled {
+        if includeSupport && FeatureFlags.tipsEnabled {
             IOSFeatureCard(
                 title: String(localized: "Support"),
                 subtitle: String(localized: "Tip the developer"),
@@ -1461,6 +1492,31 @@ struct ContentView: View {
         }
     }
 
+
+    private var phoneSupportCard: some View {
+        Button { showSupportSheet = true } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "heart.fill")
+                    .font(.body)
+                Text(String(localized: "Tip the developer"))
+                    .font(.subheadline.weight(.semibold))
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.forward")
+                    .font(.caption.weight(.semibold))
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
+            .background(LinearGradient(
+                colors: [Color(red: 0.95, green: 0.42, blue: 0.55), Color(red: 0.85, green: 0.20, blue: 0.45)],
+                startPoint: .leading, endPoint: .trailing))
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("support.card")
+    }
 
     private var helpSection: some View {
         Section {

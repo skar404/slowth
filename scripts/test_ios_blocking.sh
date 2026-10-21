@@ -10,6 +10,8 @@ for mode in Release Debug; do
     swiftc "${flags[@]}" Shared/PauseTargetDisplay.swift tests/IOSPauses/PauseTargetDisplayTests.swift -o "$output/target-display"
     "$output/target-display"
     base=("$module/IOSPauseLedger.swift" "$module/BlockingDatabase.swift" "$module/BlockingRules.swift")
+    swiftc "${flags[@]}" "${base[@]}" iOS/IOSShieldPromptPresentation.swift tests/IOSPauses/ShieldPromptPresentationTests.swift -o "$output/shield-prompt"
+    "$output/shield-prompt"
     for suite in Ledger DetectionRest; do
         swiftc "${flags[@]}" "${base[@]}" "tests/IOSPauses/${suite}Tests.swift" -o "$output/$suite"
         "$output/$suite"

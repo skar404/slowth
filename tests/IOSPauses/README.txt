@@ -198,3 +198,16 @@ QA run 2026-10-19:
 - Physical Screen Time/ReplayKit, device lock/reboot/force-quit, VoiceOver and
   interactive pause/Shield handoff remain unverified. UI launch fixtures cover
   presentation only; no physical device settings were changed in this run.
+
+Shield-to-host prompt regression:
+- IOSShieldPromptPresentation keeps shared requests unconsumed while inactive,
+  retains the target through activation, errors and sheet dismissal, and resolves
+  the destination using fresh openRests immediately before presentation.
+- ShieldPromptPresentationTests runs in both modes of test_ios_blocking.sh:
+  cold activation, repeated activation/request, occupied UI, dismissal animation,
+  failed refresh, target replacement, all three destinations, expired rest and
+  no unsolicited reopening. Rest acknowledgement begins at sheet appearance.
+- Physical acceptance: force-quit/background Slowth, Continue from each configured
+  app's Shield, dismiss and Continue again. Check recording/pause/rest routes,
+  correct target, preserved remaining rest time, and expiry while another modal
+  blocks presentation. Unit tests/build/install do not confirm these OS transitions.

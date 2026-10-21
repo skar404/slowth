@@ -8,6 +8,7 @@ struct IOSFeatureCard: View {
     let gradient: [Color]
     let action: (() -> Void)?
     var compact = false
+    var flexible = false
     var onDismiss: (() -> Void)? = nil
 
     var body: some View {
@@ -70,7 +71,7 @@ struct IOSFeatureCard: View {
                 .background(.white.opacity(0.18), in: Circle())
             Spacer(minLength: 8)
             Text(title)
-                .font(.title3.bold())
+                .font(flexible ? .headline : .title3.bold())
                 .foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)
             Text(subtitle)
@@ -79,8 +80,9 @@ struct IOSFeatureCard: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(13)
-        .frame(width: cardWidth, alignment: .leading)
-        .frame(minHeight: 145, alignment: .leading)
+        .frame(width: flexible ? nil : cardWidth, alignment: .leading)
+        .frame(maxWidth: flexible ? .infinity : nil, alignment: .leading)
+        .frame(minHeight: flexible ? 130 : 145, alignment: .leading)
         .background(
             LinearGradient(colors: gradient, startPoint: .topLeading, endPoint: .bottomTrailing)
         )
