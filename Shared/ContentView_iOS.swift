@@ -1542,17 +1542,19 @@ struct ContentView: View {
         } header: {
             Text(String(localized: "Feedback & Support"))
         } footer: {
-            #if DEBUG
-            Button(action: appVersionTapped) {
+            VStack(alignment: .leading, spacing: 4) {
+                #if DEBUG
+                Button(action: appVersionTapped) {
+                    Text(appVersion)
+                }
+                .buttonStyle(.plain)
+                #else
                 Text(appVersion)
-            }
-            .buttonStyle(.plain)
-            #else
-            Text(appVersion)
-            #endif
-            if let evidence = BuildProvenance.current {
-                Link(destination: evidence.runURL) {
-                    Text(verbatim: "CI · \(evidence.shortCommit)")
+                #endif
+                if let evidence = BuildProvenance.current {
+                    Link(destination: evidence.runURL) {
+                        Text(verbatim: "CI · \(evidence.shortCommit)")
+                    }
                 }
             }
         }

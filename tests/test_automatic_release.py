@@ -17,13 +17,14 @@ from release_tools import automatic, core
 
 class TagTests(unittest.TestCase):
     def verify(self, *, object_type=b'tag', commit=b'head', tip=b'head', remote=b'object\trefs/tags/v2026.8.3\n',
-               marketing='2026.8.3', signature_failure=False):
+               marketing='2026.8.3', signature_failure=False, tag='v2026.8.3'):
         def git(*args, **kwargs):
+            args = tuple(a.replace(tag, 'v2026.8.3') for a in args)
             return {('rev-parse', 'HEAD'): b'head',
                     ('cat-file', '-t', 'refs/slowth/verified-tags/v2026.8.3'): object_type,
                     ('rev-parse', 'refs/slowth/verified-tags/v2026.8.3^{commit}'): commit,
                     ('rev-parse', 'refs/slowth/verified-tags/v2026.8.3'): b'object',
-                    ('ls-remote', '--refs', 'origin', 'refs/tags/v2026.8.3'): remote,
+                    ('ls-remote', '--refs', 'origin', 'refs/tags/v2026.8.3'): remote.replace(b'v2026.8.3', tag.encode()),
                     ('rev-parse', 'origin/main'): tip}.get(args, b'')
         with patch.dict(os.environ, {'GITHUB_ACTIONS': 'false'}), \
              patch.object(core, 'git', side_effect=git), \
@@ -31,13 +32,20 @@ class TagTests(unittest.TestCase):
              patch.object(automatic, 'public_keyring', return_value=nullcontext()), \
              patch.object(automatic, 'source_version', return_value=(marketing, '18')), \
              patch.object(core, 'verify_signature', side_effect=RuntimeError('wrong signer') if signature_failure else None) as verify:
-            result = automatic.verify_tag('v2026.8.3')
+            result = automatic.verify_tag(tag)
         self.assertEqual(verify.call_count, 2)
         self.assertTrue(all(call.args[-1] == automatic.FINGERPRINT for call in verify.call_args_list))
         return result
 
     def test_matching_signed_tag_and_commit(self):
         self.assertEqual(self.verify(), ('owner/repo', 'head', '2026.8.3', '18'))
+
+    def test_rc_matches_base_version_and_keeps_signature_and_tip_checks(self):
+        self.assertEqual(self.verify(tag='v2026.8.3rc1'), ('owner/repo', 'head', '2026.8.3', '18'))
+        for change in ({'marketing': '2026.8.4'}, {'signature_failure': True},
+                       {'tip': b'other'}, {'object_type': b'commit'}):
+            with self.subTest(change=change), self.assertRaises(RuntimeError):
+                self.verify(tag='v2026.8.3rc1', **change)
 
     def test_checkout_lightweight_tag_does_not_hide_remote_annotated_object(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -76,8 +84,28 @@ class TagTests(unittest.TestCase):
                 self.verify(**change)
 
     def test_tag_names_no_options_paths_or_leading_zeros(self):
-        for tag in ('v2026.08.3', 'v2026.8.03', 'v2026.8', 'models-v10-1', '--all', '../v2026.8.3'):
+        for tag in ('v2026.08.3', 'v2026.8.03', 'v2026.8', 'models-v10-1', '--all', '../v2026.8.3',
+                    'v2026.8.3rc', 'v2026.8.3rc0', 'v2026.8.3rc01', 'v2026.8.3rc-1',
+                    'v2026.8.3-rc1', 'v2026.8.3rc1extra'):
             with self.subTest(tag=tag), self.assertRaises(RuntimeError): automatic.app_tag(tag)
+
+    def test_cli_creates_signed_stable_and_rc_tags(self):
+        import release
+        for rc, expected in (([], 'v2026.10.6'), (['--rc', '1'], 'v2026.10.6rc1')):
+            args = release.parser().parse_args(['tag', '--gpg-key', automatic.FINGERPRINT, *rc])
+            with patch.object(core, 'snapshot', return_value=(Path('source'), 'head', 'tree')), \
+                 patch.object(automatic.models, 'published_source'), \
+                 patch.object(core, 'versions', return_value=('2026.10.6', '26', {})), \
+                 patch.object(core, 'remote_preflight') as preflight, \
+                 patch.object(core, 'signing_key', return_value=automatic.FINGERPRINT), \
+                 patch.object(core, 'verify_signature'), patch.object(core, 'git') as git, \
+                 redirect_stdout(io.StringIO()):
+                automatic.tag(args)
+            preflight.assert_called_once_with(core.ROOT, 'head', expected)
+            signing = git.call_args_list[0].args
+            self.assertIn('-s', signing)
+            self.assertIn(expected, signing)
+            self.assertEqual(git.call_args.args[-1], f'refs/tags/{expected}:refs/tags/{expected}')
 
     def test_no_dispatch_if_tag_verification_fails(self):
         with patch.object(automatic, 'verify_tag', side_effect=RuntimeError('bad tag')), patch.object(core, 'run') as run:
@@ -216,7 +244,7 @@ class PublicationTests(unittest.TestCase):
             publish.assert_not_called()
             self.assertEqual(run.call_count, 1)
 
-    def publication(self, corrupt=False):
+    def publication(self, corrupt=False, tag='v2026.8.3', reported_prerelease=None):
         calls = []
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp)
@@ -228,15 +256,36 @@ class PublicationTests(unittest.TestCase):
                     for name in automatic.ASSETS: shutil.copyfile(output / name, destination / name)
                     if corrupt: (destination / 'Unscroll.ipa').write_text('corrupt')
                 if args[:3] == ('gh', 'release', 'view'):
-                    return json.dumps({'isDraft': False, 'tagName': 'v2026.8.3', 'url': 'https://example.invalid',
+                    return json.dumps({'isDraft': False, 'tagName': tag,
+                                       'isPrerelease': ('rc' in tag if reported_prerelease is None else reported_prerelease), 'url': 'https://example.invalid',
                                        'assets': [{'name': n} for n in automatic.ASSETS]}).encode()
             with patch.object(core, 'run', side_effect=run), redirect_stdout(io.StringIO()):
                 if corrupt:
                     with self.assertRaisesRegex(RuntimeError, 'checksum mismatch'):
-                        automatic.publish_assets(output, 'owner/repo', 'v2026.8.3')
+                        automatic.publish_assets(output, 'owner/repo', tag)
                 else:
-                    automatic.publish_assets(output, 'owner/repo', 'v2026.8.3')
+                    automatic.publish_assets(output, 'owner/repo', tag)
         return calls
+
+    def test_rc_is_prerelease_and_never_latest(self):
+        calls = self.publication(tag='v2026.8.3rc1')
+        for operation in ('create', 'edit'):
+            args = next(c for c in calls if c[:3] == ('gh', 'release', operation))
+            self.assertIn('--prerelease', args)
+            self.assertIn('--latest=false', args)
+            self.assertNotIn('--latest', args)
+        stable = self.publication()
+        edit = next(c for c in stable if c[:3] == ('gh', 'release', 'edit'))
+        self.assertIn('--latest', edit)
+        self.assertNotIn('--prerelease', edit)
+
+    def test_wrong_published_prerelease_flag_is_rejected(self):
+        with self.assertRaisesRegex(RuntimeError, 'Published release verification failed'):
+            self.publication(tag='v2026.8.3rc1', reported_prerelease=False)
+
+    def test_corrupt_rc_download_stays_draft(self):
+        calls = self.publication(corrupt=True, tag='v2026.8.3rc1')
+        self.assertFalse(any(c[:3] == ('gh', 'release', 'edit') for c in calls))
 
     def test_corrupt_download_stays_draft(self):
         calls = self.publication(corrupt=True)

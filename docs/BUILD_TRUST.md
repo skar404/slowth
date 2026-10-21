@@ -47,8 +47,27 @@ python3 scripts/release.py tag --gpg-key 68BEAF78936945EC66B7C5273E8FD639DD4791C
 Or create an annotated, GPG-signed `v<MARKETING_VERSION>` tag using that same key
 and push it explicitly. Lightweight/unsigned tags and tags for a different version,
 source commit or signer are rejected. `models-*` tags do not trigger app builds.
-There is one immutable GitHub Release per marketing version. Existing tags and
+Each stable or RC tag has its own immutable GitHub Release. Existing tags and
 releases, including older manually published releases, are never overwritten.
+
+### Release candidates
+
+Keep the app marketing version numeric (for example `2026.10.6`) and increment
+the shared build number for every upload. After signing and pushing main, run:
+
+```sh
+python3 scripts/release.py tag --rc 1 --gpg-key 68BEAF78936945EC66B7C5273E8FD639DD4791CC
+```
+
+This creates `v2026.10.6rc1`. RC numbers are positive integers without leading
+zeros. The signed tag must match the app's base marketing version and exact main
+commit. RC tags use the same build, TestFlight upload and evidence verification
+as stable tags. GitHub publication is marked prerelease and never replaces Latest.
+The existing `v*` workflow trigger handles both forms.
+
+Use a new RC number and build number for another candidate. A later stable tag
+(`tag` without `--rc`) also builds and uploads, so it needs another build number;
+it does not reuse the RC upload. Neither path submits the app for App Review.
 
 `release-tag.yml` verifies the tag and commit against the checked-in public key,
 then dispatches `release-ci.yml` on main with the version tag as input.

@@ -74,6 +74,8 @@ python3 scripts/release.py ci --model-release models-v10-1 --testflight
 # Publish a NEW app version: update marketing version + shared build number first,
 # regenerate, sign the source commit and push main, then:
 python3 scripts/release.py tag --gpg-key YOUR_GPG_FINGERPRINT
+# Release candidate: same numeric app version, fresh build number, GitHub prerelease.
+python3 scripts/release.py tag --rc 1 --gpg-key YOUR_GPG_FINGERPRINT
 # Or push an annotated tag signed with that key: git tag -s ...; git push origin ...
 # CI builds both platforms, uploads to TestFlight and publishes the verified assets.
 

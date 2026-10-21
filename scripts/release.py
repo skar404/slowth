@@ -30,6 +30,7 @@ def parser():
     remote.add_argument('--model-release', required=True, help='Published app or model release containing Slowth-models.tar.gz')
     remote.add_argument('--testflight', action='store_true', help='Upload to TestFlight; otherwise unsigned validation')
     tag = commands.add_parser('tag', help='Sign and push the current version tag; CI builds and publishes automatically')
+    tag.add_argument('--rc', type=int, help='Positive release candidate number, e.g. --rc 1 creates v2026.10.6rc1')
     tag.add_argument('--gpg-key', default=os.environ.get('RELEASE_GPG_KEY'), help='Explicit local signing key')
     auto = commands.add_parser('automation', help='Internal tag-workflow stages; no local Apple upload')
     auto.add_argument('stage', choices=['dispatch', 'check', 'prepare', 'publish'])

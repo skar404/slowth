@@ -16,9 +16,13 @@ ASSETS = version.EVIDENCE | {models.ASSET, 'checksums-attestation.jsonl'}
 
 
 def app_tag(tag):
-    core.require(re.fullmatch(r'v[1-9]\d*\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)', tag),
-                 'Expected an app tag such as v2026.8.3, without leading zeros')
+    core.require(re.fullmatch(r'v[1-9]\d*\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:rc[1-9]\d*)?', tag),
+                 'Expected an app tag such as v2026.8.3 or v2026.8.3rc1, without leading zeros')
     return tag
+
+
+def tag_version(tag):
+    return app_tag(tag)[1:].partition('rc')[0]
 
 
 def source_version(ref=None):
@@ -34,7 +38,7 @@ def source_version(ref=None):
                  'Source version/build settings differ')
     core.require(f'Slowth v{marketing}</div>' in read('WebExt/app.html'),
                  'Visible version label differs')
-    app_tag('v' + marketing)
+    core.require(tag_version('v' + marketing) == marketing, 'Marketing version must not contain an RC suffix')
     return marketing, builds[0]
 
 
@@ -89,7 +93,7 @@ def verify_tag(tag, *, tip=True, historical=False):
         core.verify_signature(core.ROOT, 'tag', ref, FINGERPRINT)
         core.verify_signature(core.ROOT, 'commit', head, FINGERPRINT)
     marketing, build = source_version(head) if historical else source_version()
-    core.require(tag == f'v{marketing}', 'Tag does not match MARKETING_VERSION')
+    core.require(tag_version(tag) == marketing, 'Tag does not match MARKETING_VERSION')
     return repo, head, marketing, build
 
 
@@ -106,7 +110,7 @@ def tag(args):
         source, head, tree = core.snapshot(core.ROOT, Path(temp))
         models.published_source(head, tree)
         marketing, _, _ = core.versions(source)
-        name = app_tag(f'v{marketing}')
+        name = app_tag(f'v{marketing}' + (f'rc{args.rc}' if args.rc is not None else ''))
         core.remote_preflight(core.ROOT, head, name)
         fingerprint = core.signing_key(args.gpg_key)
         core.require(fingerprint == FINGERPRINT, 'Key differs from the configured release signer')
@@ -225,11 +229,13 @@ def prepare(tag, output, source_run=None):
 
 def publish_assets(output, repo, tag):
     """Never overwrite; public visibility comes only after downloading and verifying every asset."""
+    prerelease = app_tag(tag) != f'v{tag_version(tag)}'
     core.require({p.name for p in output.iterdir()} == ASSETS | {'release-notes.md'}, 'Unexpected publication files')
     core.require(all(p.is_file() and not p.is_symlink() for p in output.iterdir()), 'Assets must be regular files')
     core.run('gh', 'release', 'create', tag, *(output / name for name in sorted(ASSETS)),
              '--repo', repo, '--verify-tag', '--draft', '--title', f'Slowth {tag}',
-             '--notes-file', output / 'release-notes.md')
+             '--notes-file', output / 'release-notes.md',
+             *(['--prerelease', '--latest=false'] if prerelease else []))
     with tempfile.TemporaryDirectory(prefix='slowth-published-download-') as temp:
         downloaded = Path(temp)
         core.run('gh', 'release', 'download', tag, '--repo', repo, '--dir', downloaded)
@@ -237,10 +243,12 @@ def publish_assets(output, repo, tag):
         for name in ASSETS:
             core.require((downloaded / name).is_file() and not (downloaded / name).is_symlink()
                          and core.sha(downloaded / name) == core.sha(output / name), f'Uploaded checksum mismatch: {name}')
-    core.run('gh', 'release', 'edit', tag, '--repo', repo, '--draft=false', '--latest')
+    core.run('gh', 'release', 'edit', tag, '--repo', repo, '--draft=false',
+             *(['--prerelease', '--latest=false'] if prerelease else ['--latest']))
     result = json.loads(core.run('gh', 'release', 'view', tag, '--repo', repo,
-                                 '--json', 'url,isDraft,tagName,assets', capture=True))
+                                 '--json', 'url,isDraft,isPrerelease,tagName,assets', capture=True))
     core.require(not result['isDraft'] and result['tagName'] == tag
+                 and result['isPrerelease'] == prerelease
                  and {a['name'] for a in result['assets']} == ASSETS, 'Published release verification failed')
     print(f'Published {result["url"]}')
 
