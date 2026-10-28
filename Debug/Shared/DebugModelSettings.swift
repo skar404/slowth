@@ -29,7 +29,8 @@ extension ModelBackend {
     var title: String {
         switch self {
         #if DEBUG
-        case .flat14: return "Flat 14 · 2026-10-28 (default — experimental)"
+        case .flat14: return "Flat 14 · 2026-10-28 (experimental)"
+        case .flat15: return "Flat 15 · 2026-10-28 (default — experimental)"
         case .flat11IPhone13ProMax: return "Flat 11 · iPhone 13 Pro Max · 2026-10-26 (experimental — unqualified)"
         case .v14: return "V14 (experimental — unqualified)"
         case .v15: return "V15 (experimental — unqualified; CoreML parity failed)"

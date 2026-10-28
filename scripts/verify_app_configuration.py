@@ -24,6 +24,7 @@ def verify(app, configuration):
     flat['FlatDetector12'] = EXPORTS / 'flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage'
     flat['FlatDetector13'] = EXPORTS / 'flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage'
     flat['FlatDetector14'] = EXPORTS / 'flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage'
+    flat['FlatDetector15'] = EXPORTS / 'flat-15-seed7-20261028/ios-resources/FlatDetector15.mlpackage'
     alternatives = {
         'SurfaceDetectorV14': EXPORTS / 'v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage',
         'SurfaceDetectorV15': EXPORTS / 'v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage',
@@ -49,9 +50,10 @@ def verify(app, configuration):
     metadata['FlatDetector12Metadata'] = ROOT / 'RealtimeShield/FlatDetector12Metadata.json'
     metadata['FlatDetector13Metadata'] = ROOT / 'RealtimeShield/FlatDetector13Metadata.json'
     metadata['FlatDetector14Metadata'] = ROOT / 'RealtimeShield/FlatDetector14Metadata.json'
+    metadata['FlatDetector15Metadata'] = ROOT / 'RealtimeShield/FlatDetector15Metadata.json'
     if release:
-        flat = {'FlatDetector14': flat['FlatDetector14']}
-        metadata = {'FlatDetector14Metadata': metadata['FlatDetector14Metadata']}
+        flat = {'FlatDetector15': flat['FlatDetector15']}
+        metadata = {'FlatDetector15Metadata': metadata['FlatDetector15Metadata']}
     for bundle in [app, app / 'PlugIns/UnscrollBroadcastIOS.appex']:
         models = {} if release and bundle == app else flat | ({} if release else cascade | alternatives)
         expected_metadata = {} if release and bundle == app else metadata

@@ -48,6 +48,9 @@ def resources(runtime_only=False):
     flat14 = (ROOT / 'RealtimeShield/FlatDetector14Metadata.json').read_bytes()
     if hashlib.sha256(flat14).hexdigest() != '59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf':
         raise ValueError('Flat 14 runtime metadata identity changed')
+    flat15 = (ROOT / 'RealtimeShield/FlatDetector15Metadata.json').read_bytes()
+    if hashlib.sha256(flat15).hexdigest() != '6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d':
+        raise ValueError('Flat 15 runtime metadata identity changed')
     info = plistlib.loads((ROOT / 'iOS/Info.plist').read_bytes())
     del info['NSPhotoLibraryAddUsageDescription']
     del info['NSPhotoLibraryUsageDescription']
@@ -57,6 +60,7 @@ def resources(runtime_only=False):
         ROOT / 'RealtimeShield/FlatDetector12Metadata.json': flat12,
         ROOT / 'RealtimeShield/FlatDetector13Metadata.json': flat13,
         ROOT / 'RealtimeShield/FlatDetector14Metadata.json': flat14,
+        ROOT / 'RealtimeShield/FlatDetector15Metadata.json': flat15,
         ROOT / 'iOS/Info-Release.plist': plistlib.dumps(info, sort_keys=False),
     }
 

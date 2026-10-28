@@ -1,6 +1,42 @@
 # Flat model defaults
 
-## Flat 14 default (2026-10-28)
+## Flat 15 default (2026-10-28)
+
+Flat 15 (`flat-15-seed7-20261028`) is the shared default by explicit user choice.
+Release includes only FlatDetector15 and its runtime metadata; previous models
+remain selectable in local Debug builds. Explicit saved Debug selections still
+win when Debug is enabled. Selection remains frozen at broadcast start.
+macOS model resources, the 11-class contract, 3-of-5 temporal policy and fail-closed
+identity checks are unchanged.
+
+The 60-epoch run used 17,682 train frames per epoch (`shuffle-all`), 2,682 validation
+and 2,293 test frames. Best checkpoint: epoch 39, validation BA 94.522892%.
+On the same current test, Flat 14 to Flat 15 BA is 95.783173% to 94.532147%;
+false blocks remain zero. New-batch BA improves 95.068299% to 99.425121%.
+The no-regression gate failed on BA and Facebook Reels simulated p95 (0.50 to
+0.75 seconds). This is regression evidence, not an independent holdout.
+Three old Reels test frames were removed before this run; comparisons use the
+same surviving frames for both models, not the historical aggregate scores.
+
+CPU Core ML parity passed on all 4,975 validation/test frames: zero argmax and
+threshold differences, identical simulated temporal metrics, maximum probability
+error 0.0000064969. Physical iPhone/ANE/ReplayKit behavior remains unverified.
+
+Checkpoint SHA-256: `6b82cab92010a3f4814c6957ce60126460504a2926b2c22dd70ead358d998828`.
+Package SHA-256: `86e41923fb8349e0878128db6603fd8609930d32cacd4bf5c11481ad9373ef26`.
+Runtime metadata SHA-256: `6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d`.
+
+This is a local default change prepared for version/build 2026.10.7 / 28. A future
+upload requires publication of the newly pinned Flat 15 model asset.
+Existing GitHub releases and Apple uploads are unchanged.
+
+Local verification passed: Debug/Release iOS and macOS Release builds, 8 Swift
+selection/inference tests, 83 release tests and 5 configuration tests. The final
+iOS Release bundles contain only Flat 15 in the broadcast extension, no models
+in the host, and version/build 2026.10.7 / 28 across all seven bundles.
+The 34 App Store release texts are copied unchanged from 2026.10.6.
+
+## Flat 14 historical default (2026-10-28)
 
 Flat 14 (`flat-14-seed7-20261028`) is the shared default by explicit user choice,
 prioritizing the observed reduction in false blocks despite the temporal regressions

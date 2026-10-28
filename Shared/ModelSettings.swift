@@ -14,6 +14,7 @@ enum ModelBackend: String, CaseIterable {
     case flat12
     case flat13
     case flat14
+    case flat15
 
     /// Capability belongs to the frozen selection, even if loading that model fails.
     /// Failed loads retain the selection's capabilities for the blocking policy.
@@ -21,17 +22,17 @@ enum ModelBackend: String, CaseIterable {
         #if DEBUG
         if self == .flat11IPhone13ProMax { return true }
         #endif
-        return self == .cascadeV7 || self == .cascadeV8 || self == .cascadeV10 || self == .flat11 || self == .flat12 || self == .flat13 || self == .flat14
+        return self == .cascadeV7 || self == .cascadeV8 || self == .cascadeV10 || self == .flat11 || self == .flat12 || self == .flat13 || self == .flat14 || self == .flat15
     }
 
     var supportsX: Bool {
         #if DEBUG
         if self == .flat11IPhone13ProMax { return true }
         #endif
-        return self == .cascadeV8 || self == .cascadeV10 || self == .flat11 || self == .flat12 || self == .flat13 || self == .flat14
+        return self == .cascadeV8 || self == .cascadeV10 || self == .flat11 || self == .flat12 || self == .flat13 || self == .flat14 || self == .flat15
     }
 }
 
 enum ModelSettings {
-    static let defaultBackend: ModelBackend = .flat14
+    static let defaultBackend: ModelBackend = .flat15
 }

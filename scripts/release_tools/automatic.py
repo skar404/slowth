@@ -10,8 +10,8 @@ from . import core, models, version
 
 FINGERPRINT = '68BEAF78936945EC66B7C5273E8FD639DD4791CC'
 # Prepared locally; publish and verify this model asset before the next app release.
-MODEL_RELEASE = 'models-flat-14-seed7-20261028'
-MODEL_SHA256 = '2da4cb0d0dd60651d85a6951d4fb88f886c9958df174e038933b56d1951b91ea'
+MODEL_RELEASE = 'models-flat-15-seed7-20261028'
+MODEL_SHA256 = '6027f96d89402c4da7349d59980b89cea7291261042dfb37d8ca860a769f6971'
 ASSETS = version.EVIDENCE | {models.ASSET, 'checksums-attestation.jsonl'}
 
 

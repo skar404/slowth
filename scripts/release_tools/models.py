@@ -111,7 +111,7 @@ def prepare(args):
         notes = (args.notes.read_text() if args.notes else
                  f'# Slowth model inputs: {tag}\n\n'
                  f'Source commit: `{head}`' + (' (local changes; see source_tree in manifest).' if not committed else '.') +
-                 '\n\nOne pinned Flat 14 Core ML package and compact runtime metadata. '
+                 '\n\nOne pinned Flat 15 Core ML package and compact runtime metadata. '
                  'Training sources, datasets, checkpoints, calibration inventories and credentials are excluded. '
                  'Model qualification is unchanged. No app was uploaded to Apple.\n\n'
                  'Verify SHA256SUMS.asc with the trusted release signing key, then run '

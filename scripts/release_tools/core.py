@@ -37,11 +37,11 @@ PRIVATE_PARTS = {
 # Retired tracked artifacts are removed from the release tree, kept on disk.
 RETIRED = ('RealtimeShield/SurfaceDetector.mlpackage/',
            'RealtimeShield/SurfaceDetectorMetadata.json')
-MODEL_DIR = 'data-model/exports/flat-14-seed7-20261028/ios-resources'
-MODEL_HASHES = {'FlatDetector14': 'a75bb25d4187800e88f1da8fd5a7a2b943fb33e6dbe4a79c5b2a81123aef30c1'}
-MODEL_DIRS = {'FlatDetector14': MODEL_DIR}
-RUNTIME = 'RealtimeShield/FlatDetector14Metadata.json'
-RUNTIME_HASH = '59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf'
+MODEL_DIR = 'data-model/exports/flat-15-seed7-20261028/ios-resources'
+MODEL_HASHES = {'FlatDetector15': '86e41923fb8349e0878128db6603fd8609930d32cacd4bf5c11481ad9373ef26'}
+MODEL_DIRS = {'FlatDetector15': MODEL_DIR}
+RUNTIME = 'RealtimeShield/FlatDetector15Metadata.json'
+RUNTIME_HASH = '6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d'
 RUNTIME_HASHES = {RUNTIME: RUNTIME_HASH}
 PACKAGE_FILES = {'Manifest.json', 'Data/com.apple.CoreML/model.mlmodel',
                  'Data/com.apple.CoreML/weights/weight.bin'}

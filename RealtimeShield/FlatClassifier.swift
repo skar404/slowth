@@ -12,6 +12,7 @@ final class FlatClassifier: SurfaceClassifying {
         case flat12
         case flat13
         case flat14
+        case flat15
         #if DEBUG
         case iphone13ProMax
         #endif
@@ -26,6 +27,9 @@ final class FlatClassifier: SurfaceClassifying {
                         "d117451e29c1cf4c3f004e049f1c040abc44ec6ec6a0b5dfcc8b2275b91cbeab")
             case .current:
                 return ("FlatDetector", FlatClassifier.version, FlatClassifier.metadataSHA256)
+            case .flat15:
+                return ("FlatDetector15", "flat-15-seed7-20261028",
+                        "6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d")
             case .flat14:
                 return ("FlatDetector14", "flat-14-seed7-20261028",
                         "59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf")

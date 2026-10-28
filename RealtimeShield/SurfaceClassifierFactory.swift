@@ -6,6 +6,8 @@ enum SurfaceClassifierFactory {
         switch backend {
         case .flat11IPhone13ProMax:
             return try FlatClassifier(candidate: .iphone13ProMax)
+        case .flat15:
+            return try FlatClassifier(candidate: .flat15)
         case .flat14:
             return try FlatClassifier(candidate: .flat14)
         case .flat13:
@@ -48,7 +50,7 @@ enum SurfaceClassifierFactory {
             #endif
         }
         #else
-        return try FlatClassifier(candidate: .flat14)
+        return try FlatClassifier(candidate: .flat15)
         #endif
     }
 }
