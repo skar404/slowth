@@ -89,6 +89,7 @@ struct ContentView: View {
     #endif
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("iosWelcomeV1Handled") private var welcomeHandled = false
+    @AppStorage("shieldNotificationOfferHandled") private var notificationOfferHandled = false
     @State private var restToShow: IOSDetectionRest?
     @State private var restScrollTarget: String?
     @State private var restScrollRequest = UUID()
@@ -195,6 +196,7 @@ struct ContentView: View {
             IOSWelcomeView(
                 isCompact: horizontalSizeClass == .compact,
                 isDuo: isDuo,
+                authorized: FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus),
                 requestAuthorization: {
                     isAuthorizingFamilyControls = true
                     let granted = await state.requestFamilyControlsAuthorization()
@@ -666,6 +668,11 @@ struct ContentView: View {
                     if !isPad && !isDuo { heroSection }
                     strictModeSection
                     PauseDurationSettings(strict: disabledByStrict)
+                    #if canImport(FamilyControls)
+                    if #unavailable(iOS 26.5) {
+                        Section { ShieldNotificationPermissionView() }
+                    }
+                    #endif
                     helpSection
                     #if DEBUG
                     if debugModeEnabled {
@@ -875,8 +882,7 @@ struct ContentView: View {
 
     private func considerAutomaticWelcome() {
         guard !welcomeHandled, !ScreenshotPresentation.activeProtection else { return }
-        if PauseOnlyApps.targets.contains(where: { PauseOnlyApps.data($0) != nil }) || IOSWelcomeEligibility.isConfigured(state.snapshot,
-            authorized: FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus)) {
+        if IOSWelcomeEligibility.isConfigured() {
             welcomeHandled = true
         } else if !pendingRecordingPrompt && !showRealtimeRecordingPrompt && presentationIsIdle {
             openWelcome()
@@ -1013,9 +1019,9 @@ struct ContentView: View {
                     .font(.title2)
                     .foregroundStyle(SlowthAppearance.sage)
                     .accessibilityHidden(true)
-                Text(String(localized: "A little more focus", table: "Interface"))
+                Text(String(localized: "Continue setup", table: "Interface"))
                     .font(.title2.bold())
-                Text(String(localized: "Choose what distracts you. Slowth helps you take a break from short videos and stories.", table: "Interface"))
+                Text(String(localized: "Choose at least one app to start recording.", table: "Interface"))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 Button(action: openWelcome) {
@@ -1085,10 +1091,9 @@ struct ContentView: View {
                 AppRecordingCard(
                     preferredExtensionBundleID: state.broadcastExtensionBundleID,
                     isRecording: true,
-                    onLearnMore: {}
+                    onLearnMore: {},
+                    showsPause: true
                 )
-                Divider()
-                PausePanel(safari: false, embedded: true, compact: true)
             }
             .allowsHitTesting(false)
             .listRowInsets(EdgeInsets())
@@ -1128,24 +1133,46 @@ struct ContentView: View {
 
     @ViewBuilder
     private var realtimeShieldSection: some View {
-        Section {
-            RecordingPauseCard {
-                AppRecordingCard(
-                    preferredExtensionBundleID: state.broadcastExtensionBundleID,
-                    isRecording: state.snapshot.broadcastActive,
-                    onLearnMore: { showRealtimeBlockingBeta = true }
-                )
-                if !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot) {
-                    Divider()
-                    PausePanel(safari: false, embedded: true)
+        let configured = SharedStore.hasRecordingSelection()
+        if !configured {
+            Section {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(String(localized: "Set up the apps below", table: "Interface"))
+                        .font(.headline)
+                    Text(String(localized: "Choose at least one app to enable blocking.", table: "Interface"))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.vertical, 8)
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("apps.setup.hint")
             }
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-        } footer: {
-            if !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot) {
-                Text(String(localized: "Experimental: 3 pauses per day. Change their duration in Settings.", table: "Interface"))
+        }
+        if configured && !notificationOfferHandled {
+            if #unavailable(iOS 26.5) {
+                Section { ShieldNotificationPermissionView(isInitialOffer: true) }
+            }
+        }
+        // A running recording can always be stopped, even after the last binding
+        // is removed. All other recording/pause UI belongs after app selection.
+        if configured || state.snapshot.broadcastActive {
+            Section {
+                RecordingPauseCard {
+                    AppRecordingCard(
+                        preferredExtensionBundleID: state.broadcastExtensionBundleID,
+                        isRecording: state.snapshot.broadcastActive,
+                        onLearnMore: { showRealtimeBlockingBeta = true },
+                        showsPause: configured && !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot)
+                    )
+                }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if configured && !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot) {
+                    Text(String(localized: "Experimental: 3 pauses per day. Change their duration in Settings.", table: "Interface"))
+                }
             }
         }
         Group {
@@ -1900,7 +1927,7 @@ private struct DetectionRestSheet: View {
                                 Text(String(localized: "Screen recording is off", table: "Interface"))
                                     .font(.headline)
                                 HStack {
-                                    Text(String(localized: "Start screen recording", table: "Interface"))
+                                    Text(String(localized: "Enable blocking", table: "Interface"))
                                     Spacer()
                                     RecordingToolbarButton(preferredExtensionBundleID: (Bundle.main.bundleIdentifier ?? "") + ".Broadcast")
                                 }
@@ -1917,7 +1944,7 @@ private struct DetectionRestSheet: View {
                 .padding(.vertical, 12)
             }
             .background(SlowthAppearance.background)
-            .navigationTitle(String(localized: "One-minute rest", table: "Interface"))
+            .navigationTitle(String(localized: "Rest", table: "Interface"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -1929,5 +1956,64 @@ private struct DetectionRestSheet: View {
         .tint(SlowthAppearance.sage)
         .buttonBorderShape(.capsule)
     }
+}
+#endif
+
+#if DEBUG && os(iOS)
+private extension ContentView {
+    init(previewSection: Int) {
+        _state = StateObject(wrappedValue: AppState(previewSnapshot: .defaultState))
+        _selectedSection = State(initialValue: previewSection)
+        _selectedDuoSection = State(initialValue: previewSection)
+    }
+
+    // Render the real layout without the host's automatic onboarding and shield prompts.
+    var previewLayout: some View {
+        GeometryReader { geometry in
+            adaptiveLayout(in: geometry.size)
+        }
+        .tint(SlowthAppearance.sage)
+        .allowsHitTesting(false)
+    }
+
+    var contributionPreview: some View {
+        NavigationStack {
+            ScrollView {
+                contributionContent.padding(24)
+            }
+            .navigationTitle("Help improve Slowth")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+#Preview("Apps · iPhone") {
+    ContentView(previewSection: 0).previewLayout
+}
+#Preview("Safari · iPhone") {
+    ContentView(previewSection: 1).previewLayout
+}
+#Preview("Settings · iPhone") {
+    ContentView(previewSection: 2).previewLayout
+}
+#Preview("Settings · dark · large text") {
+    ContentView(previewSection: 2).previewLayout
+        .preferredColorScheme(.dark)
+        .dynamicTypeSize(.accessibility1)
+}
+@available(iOS 17.0, macOS 14.0, *)
+#Preview("Main · iPad", traits: .fixedLayout(width: 1194, height: 834)) {
+    ContentView(previewSection: 0).previewLayout
+        .environment(\.horizontalSizeClass, .regular)
+}
+#Preview("Contribute") {
+    ContentView(previewSection: 2).contributionPreview
+}
+#Preview("Support · iOS") {
+    SupportSheet(tipStore: TipStore())
+}
+#Preview("Detection rest") {
+    DetectionRestSheet(rest: IOSDetectionRest(target: "youtube", started: IOSPauseCoordinator.restClock()))
+        .tint(SlowthAppearance.sage)
 }
 #endif

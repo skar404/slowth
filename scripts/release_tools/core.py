@@ -37,10 +37,12 @@ PRIVATE_PARTS = {
 # Retired tracked artifacts are removed from the release tree, kept on disk.
 RETIRED = ('RealtimeShield/SurfaceDetector.mlpackage/',
            'RealtimeShield/SurfaceDetectorMetadata.json')
-MODEL_DIR = 'data-model/exports/flat-11-seed7-20261015'
-MODEL_HASHES = {'FlatDetector': '4d672879ea1f33e8ddbad369b67d26e048e09836522e2eaad561dbf55b1f7a1e'}
-RUNTIME = 'RealtimeShield/FlatDetectorMetadata.json'
-RUNTIME_HASH = '5759a56cccb193afc60faaf6ae8ecbda2838059eb7318afe04df0e87f4b923c9'
+MODEL_DIR = 'data-model/exports/flat-14-seed7-20261028/ios-resources'
+MODEL_HASHES = {'FlatDetector14': 'a75bb25d4187800e88f1da8fd5a7a2b943fb33e6dbe4a79c5b2a81123aef30c1'}
+MODEL_DIRS = {'FlatDetector14': MODEL_DIR}
+RUNTIME = 'RealtimeShield/FlatDetector14Metadata.json'
+RUNTIME_HASH = '59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf'
+RUNTIME_HASHES = {RUNTIME: RUNTIME_HASH}
 PACKAGE_FILES = {'Manifest.json', 'Data/com.apple.CoreML/model.mlmodel',
                  'Data/com.apple.CoreML/weights/weight.bin'}
 
@@ -176,7 +178,7 @@ def versions(source):
 
 
 def model_files():
-    return {f'{MODEL_DIR}/{name}.mlpackage/{part}' for name in MODEL_HASHES for part in PACKAGE_FILES} | {RUNTIME}
+    return {f'{MODEL_DIRS[name]}/{name}.mlpackage/{part}' for name in MODEL_HASHES for part in PACKAGE_FILES} | set(RUNTIME_HASHES)
 
 
 def package_sha(package):
@@ -190,11 +192,12 @@ def package_sha(package):
 
 
 def verify_models(source):
-    require(sha(source / RUNTIME) == RUNTIME_HASH, 'Runtime metadata SHA-256 mismatch')
-    require(RUNTIME_HASH in (source / 'RealtimeShield/FlatClassifier.swift').read_text(),
-            'Swift runtime metadata pin differs')
+    for runtime, expected in RUNTIME_HASHES.items():
+        require(sha(source / runtime) == expected, 'Runtime metadata SHA-256 mismatch')
+        require(expected in (source / 'RealtimeShield/FlatClassifier.swift').read_text(),
+                'Swift runtime metadata pin differs')
     for name, expected in MODEL_HASHES.items():
-        path = source / MODEL_DIR / (name + '.mlpackage')
+        path = source / MODEL_DIRS[name] / (name + '.mlpackage')
         actual = {p.relative_to(path).as_posix() for p in path.rglob('*') if p.is_file()}
         require(actual == PACKAGE_FILES, f'Unexpected/missing model files: {name}')
         require(package_sha(path) == expected, f'Model SHA-256 mismatch: {name}')
@@ -215,14 +218,14 @@ def install_models(source, local_root, bundle):
                 seen.add(member.name)
                 data = tar.extractfile(member).read()
                 dest = source / member.name
-                if member.name == RUNTIME:
+                if member.name in RUNTIME_HASHES:
                     require(data == dest.read_bytes(), 'Bundle runtime metadata differs from source')
                 else:
                     dest.parent.mkdir(parents=True, exist_ok=True)
                     dest.write_bytes(data)
         require(seen == model_files(), 'Incomplete model bundle')
     else:
-        for name in model_files() - {RUNTIME}:
+        for name in model_files() - set(RUNTIME_HASHES):
             src = local_root / name
             require(src.is_file() and not src.is_symlink()
                     and src.resolve().is_relative_to(local_root.resolve()), f'Invalid model input: {name}')

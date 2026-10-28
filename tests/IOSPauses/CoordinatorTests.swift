@@ -110,7 +110,7 @@ actor IOSPauseLiveActivity {
     static let shared = IOSPauseLiveActivity()
     func synchronize() {}
 }
-enum DebugMode { static let isEnabled = true }
+enum DebugMode { static var isEnabled = true }
 
 @main enum CoordinatorChecks {
     static func main() throws {
@@ -143,6 +143,40 @@ enum DebugMode { static let isEnabled = true }
         func expectFailure(_ action: () throws -> Void) {
             do { try action(); fatalError("Expected rejection") } catch {}
         }
+        #if DEBUG
+        reset()
+        try IOSPauseCoordinator.requestRest(target: "youtube")
+        _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
+        try IOSPauseCoordinator.startApplication(target: "instagram", id: "debug-reset-pause")
+        try BlockingStorage.database().transaction { ledger in
+            ledger.detectionRestProgress = [
+                "youtube": .init(day: "2026-10-27", count: 7),
+                "instagram": .init(day: "2026-10-27", count: 5)]
+            ledger.detectionRestZone = "UTC"
+        }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        let beforeReset = try IOSPauseCoordinator.presentationSnapshot()
+        let beforeShields = ManagedSettingsStore.stores.mapValues { $0.applications }
+        DebugMode.isEnabled = false
+        expectFailure { try IOSPauseCoordinator.resetRestProgressForDebug() }
+        try check(encoder.encode(IOSPauseCoordinator.presentationSnapshot()) == encoder.encode(beforeReset))
+        DebugMode.isEnabled = true
+        try IOSPauseCoordinator.resetRestProgressForDebug()
+        let afterReset = try IOSPauseCoordinator.presentationSnapshot()
+        var expectedReset = beforeReset
+        expectedReset.detectionRestProgress = nil
+        expectedReset.detectionRestZone = nil
+        try check(encoder.encode(afterReset) == encoder.encode(expectedReset))
+        assert(ManagedSettingsStore.stores.mapValues { $0.applications } == beforeShields)
+        var nextRest = afterReset
+        nextRest.invalidateBinding("youtube")
+        nextRest.requestDetectionRest(target: "youtube", selection: youtube,
+            now: CoordinatorTestEnvironment.now, fromShieldAction: false, currentZone: "UTC")
+        assert(nextRest.detectionRests?["youtube"]?.effectiveDuration == 5)
+        print("PASS: Debug reset clears only progression; release gates, shields, pause, quota and rest clocks unchanged")
+        #endif
+
         reset()
         try IOSPauseCoordinator.beginRecordingGrace()
         advance(6)
@@ -153,8 +187,14 @@ enum DebugMode { static let isEnabled = true }
         try check(try IOSPauseCoordinator.returnToApplicationAfterRest(target: "youtube") == false)
         try IOSPauseCoordinator.requestRest(target: "youtube", prioritize: true)
         let rests = try IOSPauseCoordinator.openRests()
-        assert(rests.count == 1 && rests[0].released == nil && rests[0].remaining(CoordinatorTestEnvironment.now) == 60)
-        advance(60)
+        assert(rests.count == 1 && rests[0].released == nil && rests[0].remaining(CoordinatorTestEnvironment.now) == 5)
+        let notificationBefore = try Data(contentsOf: CoordinatorTestEnvironment.databaseURL)
+        for _ in 0..<3 { try check(try IOSPauseCoordinator.hasRestForNotification(target: "youtube")) }
+        try check(try !IOSPauseCoordinator.hasRestForNotification(target: "unknown"))
+        try check(try Data(contentsOf: CoordinatorTestEnvironment.databaseURL) == notificationBefore)
+        advance(5)
+        try check(try !IOSPauseCoordinator.hasRestForNotification(target: "youtube"))
+        try check(try Data(contentsOf: CoordinatorTestEnvironment.databaseURL) == notificationBefore)
         try IOSPauseCoordinator.advanceRests()
         assert(shield() == nil)
         let released = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["youtube"]!.released!
@@ -169,27 +209,27 @@ enum DebugMode { static let isEnabled = true }
         _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
         let cycle = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["youtube"]!
         assert(cycle.started?.continuous == 1000 && shield() == ["youtube-original"])
-        try check(try IOSPauseCoordinator.openRests()[0].remaining(CoordinatorTestEnvironment.now) == 60)
-        advance(40)
-        try check(try IOSPauseCoordinator.openRests()[0].remaining(CoordinatorTestEnvironment.now) == 20)
+        try check(try IOSPauseCoordinator.openRests()[0].remaining(CoordinatorTestEnvironment.now) == 5)
+        advance(2)
+        try check(try IOSPauseCoordinator.openRests()[0].remaining(CoordinatorTestEnvironment.now) > 2.99)
         try IOSPauseCoordinator.requestRest(target: "youtube")
         try IOSPauseCoordinator.requestRest(target: "youtube", prioritize: true)
         _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
         let repeated = try IOSPauseCoordinator.openRests()[0]
         assert(repeated.id == cycle.id && repeated.started?.continuous == 1000)
-        advance(20)
+        advance(3)
         try IOSPauseCoordinator.advanceRests()
         assert(shield() == nil)
         try check(try IOSPauseCoordinator.openRests().isEmpty)
-        assert(IOSPauseCoordinator.restGrants()["youtube"]?.graceRemaining(CoordinatorTestEnvironment.now) == 5)
-        print("PASS: Shield starts minute; opening, detection and repeated writes preserve deadline")
+        assert(IOSPauseCoordinator.restGrants()["youtube"]?.graceRemaining(CoordinatorTestEnvironment.now) == 3)
+        print("PASS: Shield starts progressive rest; opening, detection and repeated writes preserve deadline")
 
         for stopped in [false, true] {
             reset()
             try IOSPauseCoordinator.requestRest(target: "youtube")
             _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
             // No host calls: the watchdog reloads persisted state after background/lock.
-            advance(60)
+            advance(5)
             if stopped { SharedStore.state.broadcastActive = false }
             try IOSPauseCoordinator.advanceRests()
             assert((shield() != nil) == stopped)
@@ -199,7 +239,7 @@ enum DebugMode { static let isEnabled = true }
         try IOSPauseCoordinator.requestRest(target: "youtube")
         _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
         try IOSPauseCoordinator.setInferenceFailure(true, state: SharedStore.state, target: "youtube")
-        advance(60)
+        advance(5)
         try IOSPauseCoordinator.advanceRests()
         assert(shield() == ["youtube-original"] && IOSPauseCoordinator.restGrants()["youtube"] == nil)
         try check(try IOSPauseCoordinator.openRests().isEmpty)
@@ -211,6 +251,7 @@ enum DebugMode { static let isEnabled = true }
             try BlockingStorage.database().transaction { ledger in
                 ledger.detectionRests = ["youtube": IOSDetectionRest(target: "youtube", selection: youtube)]
             }
+            try check(try IOSPauseCoordinator.hasRestForNotification(target: "youtube"))
             try IOSPauseCoordinator.advanceRests()
             try check(try IOSPauseCoordinator.presentationSnapshot().detectionRests!["youtube"]!.started == nil)
             if useShield {
@@ -242,7 +283,7 @@ enum DebugMode { static let isEnabled = true }
             CoordinatorTestEnvironment.inExtension = flag(2)
             if flag(4) { SharedStore.state.youtubeSelectionData = try selected("matrix-replacement") }
             SharedStore.state.realtimeYouTubeBlockingEnabled = !flag(6)
-            advance(60)
+            advance(5)
             try IOSPauseCoordinator.advanceRests()
             let result = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["youtube"]!
             let shouldRelease = flag(0) && (flag(1) || flag(2)) && !flag(3) && !flag(4) && !flag(5) && !flag(6)
@@ -258,17 +299,17 @@ enum DebugMode { static let isEnabled = true }
         reset()
         try IOSPauseCoordinator.requestRest(target: "youtube")
         _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
-        advance(40)
+        advance(2)
         try IOSPauseCoordinator.requestRest(target: "instagram")
         _ = IOSPauseCoordinator.intercept(target: "instagram", requested: .init(applicationTokens: ["instagram-original"]))
-        advance(19.999)
+        advance(2.999)
         try IOSPauseCoordinator.advanceRests()
         assert(shield() != nil && shield("instagram") != nil)
         advance(0.002)
         try IOSPauseCoordinator.advanceRests()
         assert(shield() == nil && shield("instagram") != nil)
         let firstGrant = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["youtube"]!
-        advance(4.999)
+        advance(2.999)
         try IOSPauseCoordinator.advanceRests()
         assert(firstGrant.graceRemaining(CoordinatorTestEnvironment.now) > 0)
         advance(0.002)
@@ -276,11 +317,11 @@ enum DebugMode { static let isEnabled = true }
         try IOSPauseCoordinator.requestRest(target: "youtube")
         _ = IOSPauseCoordinator.intercept(target: "youtube", requested: .init(applicationTokens: ["youtube-original"]))
         let nextCycle = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["youtube"]!
-        assert(nextCycle.id != firstGrant.id && nextCycle.remaining(CoordinatorTestEnvironment.now) == 60)
-        advance(35)
+        assert(nextCycle.id != firstGrant.id && nextCycle.remaining(CoordinatorTestEnvironment.now) == 5)
+        advance(0.5)
         try IOSPauseCoordinator.advanceRests()
         assert(shield() != nil && shield("instagram") == nil)
-        print("PASS: 60s/5s boundary checks, independent services and next detection cycle")
+        print("PASS: 5s/3s boundary checks, independent services and next detection cycle")
 
         // A fault wins over startup grace, released rests, direct clears and restore.
         reset()
@@ -303,12 +344,12 @@ enum DebugMode { static let isEnabled = true }
         reset()
         try IOSPauseCoordinator.requestRest(target: "youtube")
         _ = try IOSPauseCoordinator.openRests()
-        advance(20)
+        advance(0.2)
         try IOSPauseCoordinator.startApplication(target: "youtube", id: "rest-pause")
-        advance(20)
+        advance(0.2)
         try check(try IOSPauseCoordinator.openRests().isEmpty)
         try IOSPauseCoordinator.finish(id: "rest-pause")
-        try check(try IOSPauseCoordinator.openRests()[0].remaining(CoordinatorTestEnvironment.now) == 20)
+        try check(try IOSPauseCoordinator.openRests()[0].remaining(CoordinatorTestEnvironment.now) > 4.59)
         print("PASS: existing rest survives an ordinary pause")
 
         reset()

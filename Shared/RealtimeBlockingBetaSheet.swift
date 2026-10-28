@@ -277,3 +277,11 @@ private extension View {
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }
+
+#if DEBUG
+#Preview("Screen access and blocking") {
+    if let url = URL(string: "https://github.com/skar404/slowth/issues") {
+        RealtimeBlockingBetaSheet(feedbackURL: url)
+    }
+}
+#endif

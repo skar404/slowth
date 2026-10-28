@@ -58,7 +58,7 @@ enum IOSRestAuthorization {
 }
 
 struct IOSDetectionRest: Codable, Identifiable {
-    static let duration: TimeInterval = BlockingRules.restSeconds
+    static let duration: TimeInterval = BlockingRules.restSeconds // Legacy records keep their original minute.
     var id = UUID().uuidString
     var target: String
     var selection: Data?
@@ -68,14 +68,16 @@ struct IOSDetectionRest: Codable, Identifiable {
     var requestedOrder: Double?
     var completed: Bool?
     var graceSeconds: TimeInterval?
+    var durationSeconds: TimeInterval?
+    var effectiveDuration: TimeInterval { durationSeconds ?? Self.duration }
 
     static func recordingGrace(target: String, selection: Data?, now: IOSPauseClock, revision: Int) -> Self {
         Self(target: target, selection: selection, started: now, released: now,
              releaseRevision: revision, completed: true, graceSeconds: BlockingRules.navigationGraceSeconds)
     }
     func remaining(_ now: IOSPauseClock) -> Double {
-        guard let started, started.boot == now.boot, now.continuous >= started.continuous else { return Self.duration }
-        return max(0, Self.duration - (now.continuous - started.continuous))
+        guard let started, started.boot == now.boot, now.continuous >= started.continuous else { return effectiveDuration }
+        return max(0, effectiveDuration - (now.continuous - started.continuous))
     }
     func graceRemaining(_ now: IOSPauseClock) -> Double {
         guard let released, released.boot == now.boot, now.continuous >= released.continuous else { return 0 }
@@ -147,9 +149,32 @@ struct IOSPauseLedger: Codable {
         inferenceFailures?.removeValue(forKey: target)
     }
 
+    struct RestProgress: Codable {
+        var day: String
+        var count: Int
+    }
+    var detectionRestProgress: [String: RestProgress]?
+    var detectionRestZone: String?
+    static let restSecondSteps = [5, 5, 5, 10, 10, 15, 20, 30, 40, 60]
+
+    private mutating func nextRestDuration(target: String, now: IOSPauseClock, currentZone: String) -> TimeInterval {
+        guard now.wall.isFinite,
+              let today = try? day(now, zone: detectionRestZone ?? currentZone) else { return 60 }
+        detectionRestZone = detectionRestZone ?? currentZone
+        var progress = detectionRestProgress?[target] ?? RestProgress(day: today, count: 0)
+        // A backward wall-clock or time-zone change must not reset escalation.
+        if today > progress.day { progress = RestProgress(day: today, count: 0) }
+        let index = min(max(0, progress.count), Self.restSecondSteps.count - 1)
+        let duration = Self.restSecondSteps[index]
+        progress.count = min(index + 1, Self.restSecondSteps.count - 1)
+        if detectionRestProgress == nil { detectionRestProgress = [:] }
+        detectionRestProgress?[target] = progress
+        return TimeInterval(duration)
+    }
+
     var detectionRests: [String: IOSDetectionRest]?
     mutating func requestDetectionRest(target: String, selection: Data?, now: IOSPauseClock,
-                                       fromShieldAction: Bool) {
+                                       fromShieldAction: Bool, currentZone: String = TimeZone.current.identifier) {
         if let existing = detectionRests?[target], existing.selection == selection,
            (fromShieldAction && (existing.released == nil || existing.releaseRevision == revision)) ||
            (existing.released == nil && existing.completed != true) ||
@@ -158,8 +183,9 @@ struct IOSPauseLedger: Codable {
             return
         }
         if detectionRests == nil { detectionRests = [:] }
+        let duration = nextRestDuration(target: target, now: now, currentZone: currentZone)
         detectionRests?[target] = IOSDetectionRest(target: target, selection: selection,
-            requestedOrder: fromShieldAction ? now.continuous : nil)
+            requestedOrder: fromShieldAction ? now.continuous : nil, durationSeconds: duration)
     }
 
     var version = 1
@@ -172,17 +198,21 @@ struct IOSPauseLedger: Codable {
     var changedAt: Double = 0
     // Optional so existing version-1 records decode without a migration.
     var leafRewards: LeafRewards?
-    var selectedPauseMinutes: Int?
-    static let pauseMinuteOptions = [1, 3, 5]
-    var pauseMinutes: Int {
-        guard let value = selectedPauseMinutes, Self.pauseMinuteOptions.contains(value) else { return 3 }
-        return value
+    var selectedPauseMinutes: Int? // Legacy preference, decoded without changing active leases.
+    var selectedPauseSeconds: Int?
+    static let pauseSecondOptions = [30, 60, 180]
+    var pauseSeconds: Int {
+        if let value = selectedPauseSeconds {
+            return Self.pauseSecondOptions.contains(value) ? value : 60
+        }
+        return selectedPauseMinutes == 3 ? 180 : 60
     }
 
-    mutating func setPauseMinutes(_ minutes: Int, strict: Bool) throws {
-        guard Self.pauseMinuteOptions.contains(minutes) else { throw IOSPauseError.invalidTarget }
+    mutating func setPauseSeconds(_ seconds: Int, strict: Bool) throws {
+        guard Self.pauseSecondOptions.contains(seconds) else { throw IOSPauseError.invalidTarget }
         guard !strict else { throw IOSPauseError.strict }
-        selectedPauseMinutes = minutes
+        selectedPauseSeconds = seconds
+        selectedPauseMinutes = nil
     }
 
     struct LeafRewards: Codable {
@@ -247,7 +277,7 @@ struct IOSPauseLedger: Codable {
         let key = try day(now, zone: zone!)
         lease = IOSPauseLease(id: id, kind: kind, target: target, selection: selection, started: now, day: key)
         lease?.requiresRecording = requiresRecording
-        let seconds = TimeInterval(pauseMinutes * 60)
+        let seconds = TimeInterval(pauseSeconds)
         lease?.durationSeconds = seconds
         revision += 1
         changedAt = now.wall

@@ -33,7 +33,7 @@ def validate_evidence(output, repo, run_id, attempt, head, tree, version, build)
     expected = {'repository': repo, 'commit': head, 'source_tree': tree,
                 'marketing_version': version, 'build_number': build, 'kind': 'testflight-upload',
                 'run_url': f'https://github.com/{repo}/actions/runs/{run_id}/attempts/{attempt}',
-                'model_packages': core.MODEL_HASHES, 'runtime_metadata_sha256': core.RUNTIME_HASH}
+                'model_packages': core.MODEL_HASHES, 'runtime_metadata_sha256': core.RUNTIME_HASH, 'runtime_metadata_hashes': core.RUNTIME_HASHES}
     core.require(all(manifest.get(k) == v for k, v in expected.items()), 'CI manifest identity or model pins differ')
     for platform, key in [('IOS', 'app_store_connect'), ('MAC_OS', 'macos_app_store_connect')]:
         apple = manifest[key]

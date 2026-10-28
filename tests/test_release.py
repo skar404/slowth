@@ -98,7 +98,8 @@ class BundleTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         (self.root / 'RealtimeShield').mkdir()
-        (self.root / release.RUNTIME).write_text('{}')
+        for runtime in release.RUNTIME_HASHES:
+            (self.root / runtime).write_text('{}')
 
     def archive(self, names, kind=tarfile.REGTYPE):
         path = self.root / 'models.tar.gz'
@@ -137,7 +138,8 @@ class BundleTests(unittest.TestCase):
     def test_real_model_roundtrip(self):
         if not (release.ROOT / release.MODEL_DIR).exists():
             self.skipTest('Private local model inputs are unavailable')
-        (self.root / release.RUNTIME).write_bytes((release.ROOT / release.RUNTIME).read_bytes())
+        for runtime in release.RUNTIME_HASHES:
+            (self.root / runtime).write_bytes((release.ROOT / runtime).read_bytes())
         (self.root / 'RealtimeShield/FlatClassifier.swift').write_bytes((release.ROOT / 'RealtimeShield/FlatClassifier.swift').read_bytes())
         release.install_models(self.root, release.ROOT, None)
         bundle = self.root / 'roundtrip.tar.gz'

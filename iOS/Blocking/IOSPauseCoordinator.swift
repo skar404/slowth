@@ -31,6 +31,15 @@ enum IOSPauseCoordinator {
         refreshLiveActivity()
     }
 
+    static func resetRestProgressForDebug() throws {
+        guard DebugMode.isEnabled else { throw IOSPauseError.unavailable }
+        try database().transaction { ledger in
+            ledger.detectionRestProgress = nil
+            ledger.detectionRestZone = nil
+            // Keep active rests, ordinary pauses, shields, grace and quota intact.
+        }
+    }
+
     static func resetQuotaForDebug() throws {
         guard DebugMode.isEnabled else { throw IOSPauseError.unavailable }
         try database().transaction { ledger in
@@ -39,9 +48,9 @@ enum IOSPauseCoordinator {
     }
     #endif
 
-    static func setPauseMinutes(_ minutes: Int) throws {
+    static func setPauseSeconds(_ seconds: Int) throws {
         try database().transaction { ledger in
-            try ledger.setPauseMinutes(minutes, strict: SharedStore.snapshot().isStrictModeActive)
+            try ledger.setPauseSeconds(seconds, strict: SharedStore.snapshot().isStrictModeActive)
         }
     }
 
@@ -200,6 +209,17 @@ enum IOSPauseCoordinator {
     }
     #endif
 
+    // Read only: notification taps must never start/advance a rest or spend a pause.
+    static func hasRestForNotification(target: String) throws -> Bool {
+        try database().transaction { ledger in
+            let state = SharedStore.snapshot()
+            guard let rest = ledger.detectionRests?[target],
+                  enabled(target, state: state), rest.selection == selection(target, state: state),
+                  rest.released == nil, rest.completed != true else { return false }
+            return rest.started == nil || rest.remaining(restClock()) > 0
+        }
+    }
+
     static func openRests() throws -> [IOSDetectionRest] {
         try advanceRests()
         return try database().transaction { ledger in
@@ -239,7 +259,7 @@ enum IOSPauseCoordinator {
             ledger.detectionRests?[target] = rest
         }
         // Commit the grant before touching the OS. A crash cannot leave an
-        // unrecorded clear or let a repeated tap extend the five-second deadline.
+        // unrecorded clear or let a repeated tap extend the three-second deadline.
         try database().transaction { ledger in
             let state = SharedStore.snapshot()
             guard let rest = ledger.detectionRests?[target], rest.id == id,

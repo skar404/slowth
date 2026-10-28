@@ -34,3 +34,9 @@ struct FamilyActivityPickerWrapper: View {
     }
 }
 #endif
+
+#if DEBUG && canImport(FamilyControls)
+#Preview("Choose apps") {
+    FamilyActivityPickerWrapper(selection: FamilyActivitySelection())
+}
+#endif

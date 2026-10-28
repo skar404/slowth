@@ -7,20 +7,52 @@ import Foundation
 final class FlatClassifier: SurfaceClassifying {
     static let version = "flat-11-seed7-20261015"
     static let metadataSHA256 = "5759a56cccb193afc60faaf6ae8ecbda2838059eb7318afe04df0e87f4b923c9"
+    enum Candidate {
+        case current
+        case flat12
+        case flat13
+        case flat14
+        #if DEBUG
+        case iphone13ProMax
+        #endif
+
+        var identity: (resource: String, version: String, metadataSHA256: String) {
+            switch self {
+            case .flat13:
+                return ("FlatDetector13", "flat-13-seed7-20261027",
+                        "35211614cd836f8ef6c074edf0df80256bf41fed469bb89a51cb3d5fc020fc1e")
+            case .flat12:
+                return ("FlatDetector12", "flat-12-seed7-20261027",
+                        "d117451e29c1cf4c3f004e049f1c040abc44ec6ec6a0b5dfcc8b2275b91cbeab")
+            case .current:
+                return ("FlatDetector", FlatClassifier.version, FlatClassifier.metadataSHA256)
+            case .flat14:
+                return ("FlatDetector14", "flat-14-seed7-20261028",
+                        "59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf")
+            #if DEBUG
+            case .iphone13ProMax:
+                return ("FlatDetectorIPhone13ProMax", "flat-11-seed7-iphone13promax-20261026",
+                        "405d40f624fdc377f061a4d4837a2dcc081dfa77faf3ae638d9cb3cf05bffabb")
+            #endif
+            }
+        }
+    }
+
     let metadata: SurfaceModelMetadata
     private let model: MLModel
     private let imageResizer: ModelImageResizer
 
-    init(bundle: Bundle = .main, computeUnits: MLComputeUnits = .cpuAndNeuralEngine) throws {
-        guard let url = bundle.url(forResource: "FlatDetectorMetadata", withExtension: "json") else {
+    init(bundle: Bundle = .main, candidate: Candidate = .current, computeUnits: MLComputeUnits = .cpuAndNeuralEngine) throws {
+        let identity = candidate.identity
+        guard let url = bundle.url(forResource: identity.resource + "Metadata", withExtension: "json") else {
             throw SurfaceClassifierError.metadataMissing
         }
         let data = try Data(contentsOf: url)
-        guard SHA256.hash(data: data).map({ String(format: "%02x", $0) }).joined() == Self.metadataSHA256 else {
+        guard SHA256.hash(data: data).map({ String(format: "%02x", $0) }).joined() == identity.metadataSHA256 else {
             throw SurfaceClassifierError.invalidMetadata
         }
         metadata = try JSONDecoder().decode(SurfaceModelMetadata.self, from: data)
-        guard let modelURL = bundle.url(forResource: "FlatDetector", withExtension: "mlmodelc") else {
+        guard let modelURL = bundle.url(forResource: identity.resource, withExtension: "mlmodelc") else {
             throw SurfaceClassifierError.modelMissing
         }
         let configuration = MLModelConfiguration()
@@ -28,8 +60,8 @@ final class FlatClassifier: SurfaceClassifying {
         model = try MLModel(contentsOf: modelURL, configuration: configuration)
         let creator = model.modelDescription.metadata[.creatorDefinedKey] as? [String: String] ?? [:]
         let labels = creator["classes"].flatMap { $0.data(using: .utf8) }
-        guard metadata.modelVersion == Self.version,
-              creator["modelVersion"] == Self.version,
+        guard metadata.modelVersion == identity.version,
+              creator["modelVersion"] == identity.version,
               creator["checkpointSHA256"] == metadata.checkpointSHA256,
               creator["experimental"] == "true",
               let labels, try JSONDecoder().decode([String].self, from: labels) == SurfaceClass.allCases.map(\.rawValue) else {

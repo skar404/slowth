@@ -63,6 +63,11 @@ struct DebugIOSSection: View {
                                    isReady: isReadyForReview)
             Toggle("Tips", isOn: $tipsFeatureEnabled)
             DebugSavedLeavesControl()
+            Button(String(localized: "Reset rest progression", table: "Interface")) {
+                do { try IOSPauseCoordinator.resetRestProgressForDebug() }
+                catch { state.lastError = AppLocalization.string("Could not save") }
+            }
+            .accessibilityIdentifier("debug.rest.reset")
             Button(String(localized: "Reset pauses", table: "Interface")) {
                 do { try IOSPauseCoordinator.resetPausesForDebug() }
                 catch { state.lastError = String(localized: "Could not reset pauses. Try again.", table: "Interface") }

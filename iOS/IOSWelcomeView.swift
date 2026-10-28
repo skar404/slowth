@@ -3,10 +3,13 @@ import SwiftUI
 struct IOSWelcomeView: View {
     let isCompact: Bool
     var isDuo: Bool = false
+    var authorized: Bool = false
+    @AppStorage("iosWelcomeNotificationsHandled") private var notificationsHandled = false
     let requestAuthorization: () async -> Bool
     let onAuthorized: () -> Void
     let onSafari: () -> Void
     let onClose: () -> Void
+    @State private var authorizationGranted = false
     @State private var requesting = false
     @State private var denied = false
     @State private var fittedHeight: CGFloat = 460
@@ -14,6 +17,13 @@ struct IOSWelcomeView: View {
     @ScaledMetric(relativeTo: .body) private var stepSize = 36
 
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize = 36
+
+    private var hasAuthorization: Bool { authorized || authorizationGranted }
+
+    private var needsNotifications: Bool {
+        if #available(iOS 26.5, *) { return false }
+        return !notificationsHandled
+    }
 
     private var compactDuo: Bool { isDuo && !isCompact && !dynamicTypeSize.isAccessibilitySize }
 
@@ -49,10 +59,14 @@ struct IOSWelcomeView: View {
                             }
                         }
 
-                        protectionSteps
+                        if needsNotifications {
+                            ShieldNotificationPermissionView(onContinue: { notificationsHandled = true })
+                        } else {
+                            protectionSteps
+                        }
 
                         if !compactDuo { Spacer(minLength: 0) }
-                        actions
+                        if !needsNotifications { actions }
                     }
                     .frame(minHeight: max(0, compactDuo ? 0 : geometry.size.height - 32), alignment: .topLeading)
                     .padding(.horizontal, 24)
@@ -100,11 +114,11 @@ struct IOSWelcomeView: View {
         VStack(alignment: .leading, spacing: 0) {
             step(1, title: String(localized: "Allow Screen Time", table: "Interface"),
                  detail: String(localized: "Allows Slowth to block the whole app when selected content is detected.", table: "Interface"),
-                 active: true)
+                 active: !hasAuthorization)
             step(2, title: String(localized: "Choose apps and content", table: "Interface"),
                  detail: String(localized: "Content recognition happens only on your device.", table: "Interface"),
-                 active: false)
-            step(3, title: String(localized: "Start screen recording", table: "Interface"),
+                 active: hasAuthorization)
+            step(3, title: String(localized: "Enable blocking", table: "Interface"),
                  detail: String(localized: "Screen recording lets Slowth recognize short videos and stories on your device. You start it yourself.", table: "Interface"),
                  active: false, hasNext: false)
         }
@@ -153,23 +167,26 @@ struct IOSWelcomeView: View {
 
     private var actions: some View {
         VStack(spacing: 10) {
-            if denied {
+            if denied && !hasAuthorization {
                 Text(String(localized: "Screen Time access was not granted. You can try again or continue without app protection.", table: "Interface"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .accessibilityIdentifier("welcome.denied")
             }
             Button {
+                if hasAuthorization { onAuthorized(); return }
                 guard !requesting else { return }
                 requesting = true
                 Task { @MainActor in
                     let granted = await requestAuthorization()
                     requesting = false
-                    if granted { onAuthorized() } else { denied = true }
+                    if granted { authorizationGranted = true; denied = false } else { denied = true }
                 }
             } label: {
                 HStack {
-                    Text(denied
+                    Text(hasAuthorization
+                         ? String(localized: "Choose apps and content", table: "Interface")
+                         : denied
                          ? String(localized: "Try again", table: "Interface")
                          : String(localized: "Continue", table: "Interface"))
                         .fontWeight(.semibold)
@@ -181,7 +198,9 @@ struct IOSWelcomeView: View {
             .buttonBorderShape(.capsule)
             .disabled(requesting)
             .accessibilityIdentifier("welcome.continue")
-            Text(String(localized: "A system Screen Time permission request will open.", table: "Interface"))
+            Text(hasAuthorization
+                 ? String(localized: "Choose at least one app to start recording.", table: "Interface")
+                 : String(localized: "A system Screen Time permission request will open.", table: "Interface"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

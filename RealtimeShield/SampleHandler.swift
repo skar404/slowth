@@ -8,6 +8,7 @@ import FamilyControls
 // Observation storage is pure; timing, routing and enforcement stay here.
 final class SampleHandler: RPBroadcastSampleHandler {
     // ReplayKit callbacks and the rest watchdog share classifier/latch state.
+    private var admission = RecordingAdmission()
     private let processingLock = NSRecursiveLock()
     private var restWatchdog: DispatchSourceTimer?
     private var classifier: (any SurfaceClassifying)?
@@ -56,9 +57,28 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     #endif
 
+    private func admitRecording() -> Bool {
+        AppGroup.defaults.synchronize()
+        guard admission.enter(hasSelection: SharedStore.hasRecordingSelection()) else {
+            // A resumed session has already applied its at-rest policy in pause.
+            // Rejection only closes local resources; it must not touch the ledger,
+            // shields, startup grace, or broadcastActive (including in finished).
+            stopRestWatchdog()
+            #if DEBUG
+            sessionCapture?.finish(reason: "selection_required")
+            #endif
+            finishBroadcastWithError(NSError(domain: "Slowth.Recording", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: AppLocalization.string(
+                    "First open Slowth and choose at least one app")]))
+            return false
+        }
+        return true
+    }
+
     override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
         processingLock.lock()
         defer { processingLock.unlock() }
+        guard admitRecording() else { return }
         RTLog.sampleHandler.notice("broadcastStarted — loading selected surface classifier")
         SoftYouTubeActivityMonitoring.stop()
         SharedStore.setBroadcastActive(true)
@@ -98,6 +118,8 @@ final class SampleHandler: RPBroadcastSampleHandler {
     override func broadcastPaused() {
         processingLock.lock()
         defer { processingLock.unlock() }
+        guard admission.active else { return }
+        admission.pause()
         RTLog.sampleHandler.notice("broadcastPaused — applying at-rest shield policy")
         stopRestWatchdog()
         SharedStore.setBroadcastActive(false)
@@ -114,6 +136,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
     override func broadcastResumed() {
         processingLock.lock()
         defer { processingLock.unlock() }
+        guard admitRecording() else { return }
         RTLog.sampleHandler.notice("broadcastResumed — restoring surface classifier state")
         SoftYouTubeActivityMonitoring.stop()
         SharedStore.setBroadcastActive(true)
@@ -144,6 +167,8 @@ final class SampleHandler: RPBroadcastSampleHandler {
     override func broadcastFinished() {
         processingLock.lock()
         defer { processingLock.unlock() }
+        guard admission.admitted else { return }
+        admission.finish()
         RTLog.sampleHandler.notice("broadcastFinished — applying at-rest shield policy")
         stopRestWatchdog()
         SharedStore.setBroadcastActive(false)
@@ -163,7 +188,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
     ) {
         processingLock.lock()
         defer { processingLock.unlock() }
-        guard sampleBufferType == .video else { return }
+        guard admission.active, sampleBufferType == .video else { return }
         #if DEBUG
         var framePredictions: [String: Double]?
         defer {

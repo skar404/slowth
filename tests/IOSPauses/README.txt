@@ -75,7 +75,7 @@ Host opening displays that same deadline. Calendar time is not an expiry source.
 Legacy records without a start begin on Shield application or host opening.
 After reboot, the next watchdog, Shield write or host opening restarts an
 unfinished running minute. Completed records do not restart.
-A committed cycle ID authorizes one release with a fixed five-second grace.
+A committed cycle ID authorizes one release with a fixed three-second grace.
 Pause revision changes invalidate old grants. Existing pauses retain their rules.
 
 Debug UI preview: launch with --preview-rest (presentation only; no grant or
@@ -88,10 +88,10 @@ Physical acceptance still requires real Screen Time authorization and ReplayKit:
   seconds with healthy active recording. A later opening shows no completed rest.
 - Close/lock/force-quit Slowth, reopen: remaining time must be preserved.
 - Before 60 seconds, no release; afterwards the rest disappears automatically.
-  Active recording grants a fixed five-second grace; recording off keeps protection.
+  Active recording grants a fixed three-second grace; recording off keeps protection.
 - Stop recording: the completed rest disappears without clearing protection.
 - Process the same completed cycle twice: deadline must not extend.
-- Return to blocked content after five seconds: a new cycle must be created.
+- Return to blocked content after three seconds: a new cycle must be created.
 - Reboot while waiting/counting; move calendar forward/back; change selection;
   test two services independently, existing pause, strict mode, stale cycle IDs.
 Simulator previews and pure clock tests do not verify system Shield handoff.
@@ -150,7 +150,7 @@ Enforcement order:
 - A valid ordinary app pause temporarily overrides the target's protection.
 - A classifier failure protects the current binding, even with a released rest.
 - Pending detection rests retain Shield; applying Shield starts their 60-second clock.
-- Completed rests grant five seconds only with recording active and no failure.
+- Completed rests grant three seconds only with recording active and no failure.
 - Healthy recognition resumes after grace; pause observations are discarded.
 - Recording stopped uses the existing at-rest policy, including soft YouTube.
 - TikTok/Snapchat are recording-independent and open only during a valid pause.
@@ -178,7 +178,7 @@ Expanded rest QA matrix:
   context, classifier fault, changed binding, active pause and enabled target.
   Each case creates a real SQLite rest, applies Shield and checks completion and
   release permission after 60 seconds. Runs in both Debug and Release harnesses.
-- Subsecond checks on either side of the 60-second rest and five-second grace;
+- Subsecond checks on either side of the 60-second rest and three-second grace;
   independently staggered YouTube/Instagram cycles and fresh detection after grace.
 - Simulator UI fixtures accept --preview-rest-remaining 20 in Debug only.
   These cannot qualify Screen Time/ReplayKit; see Debug/README.md for setup.
@@ -211,3 +211,85 @@ Shield-to-host prompt regression:
   app's Shield, dismiss and Continue again. Check recording/pause/rest routes,
   correct target, preserved remaining rest time, and expiry while another modal
   blocks presentation. Unit tests/build/install do not confirm these OS transitions.
+
+Legacy iOS Shield notification handoff (2026-10-27):
+- Application Shields below iOS 26.5 offer Slowth and Close. Slowth sends one
+  immediate, silent local notification, then returns defer
+  even on error. Domain/category callbacks retain their previous behavior.
+- Permission is requested only from the blocking section button, including
+  compact iOS. Only alert authorization is requested. Returning from Settings
+  refreshes status. New notification strings are English/Russian, with English
+  fallback for other app languages, in ShieldNotifications.xcstrings.
+- ShieldNotificationTests compiles the production sender against a fake OS
+  delivery boundary: text combinations, target payload, replacement, permission
+  denial/delivery error callbacks and tap filtering. Actual OS delivery and
+  permission dialogs are not simulated. CoordinatorTests verifies that reading
+  notification state leaves ledger bytes and unstarted rest timers unchanged.
+- ShieldPromptPresentationTests covers cold/inactive activation and stale rest
+  routing against current state; notification payloads never contain a rest.
+- Device acceptance on iOS 18.6.2: allow banners from the button; stop recording;
+  open a blocked app; Close must close it, Slowth must leave it blocked and show
+  a notification. Tap with Slowth backgrounded and force-quit. Repeat Slowth taps
+  and check only one notification of each type remains. Test an active and then expired rest,
+  pause-only app, denied permission and Focus. Denied/hidden banners must leave
+  Shield active and manual opening must remain available. Check compact mode
+  offers permission and a notification tap switches to ordinary iOS UI.
+- Follow-up user request separates rest and recording notifications: rest uses
+  slowth.shield.rest; recording/other navigation retains slowth.shield.open.
+  Each type replaces itself, with distinct rest/recording titles. Both identifiers
+  (including old delivered notifications) resolve the current state on tapping.
+- On iOS 26.5+ check direct Slowth handoff and Close, with no permission button
+  or notification generated. Builds/installations are not physical acceptance.
+
+Verification for this notification change:
+- iOS simulator Debug/Release, signed iPhone Debug and macOS Debug built.
+- Swift blocking suites passed in Debug/Release; 12 pause JavaScript tests and
+  four catalog tests passed. Compiled existing tables passed in 46 locales;
+  the new notification table passed in en/ru in host and both Shield bundles.
+- On 2026-10-27 the user confirmed on iPhone 13 Pro Max / iOS 18.6.2:
+  both Shield buttons appeared, Close closed the blocked app, Slowth kept the
+  Shield active and delivered a notification, and tapping it opened Slowth.
+  Installed local Debug was 2026.10.6 (26), including the pre-existing dirty
+  workspace changes. This is a user-observed device result, not automated QA.
+- iPhone 17 Pro Max / iOS 27.2 was detected but Xcode could not mount its
+  developer disk image; direct handoff was not physically retested here.
+- Follow-up device observation: notifications sometimes appeared only in
+  Notification Center without a banner. Delivery/opening is confirmed; reliable
+  banner presentation for every repeat is not. The user isolated this to rapid
+  repeated Slowth taps; first taps after a pause show the banner. System
+  suppression/coalescing is a hypothesis, not a confirmed OS-level diagnosis.
+- Retest after separating identifiers: the user confirmed the new rest title,
+  but the rest notification still appeared only in Notification Center. The
+  later observation ties missing banners to active screen broadcasting; with
+  recording stopped, banners appear. Cause (OS setting versus OS bug) remains
+  unconfirmed. Legacy Shield guidance now explicitly mentions Notification
+  Center as well as manually opening Slowth. Separate IDs are a UX choice,
+  not a verified fix for banner suppression.
+- Force-quit launch, denied permissions, Focus, expired-rest physical routing
+  and direct iOS 26.5+ handoff remain unconfirmed on devices in this run.
+
+2026-10-27 duration update
+- Voluntary pauses: 30 / 60 / 180 seconds, default 60. Stored minute preferences
+  1 and 3 remain 60 and 180; old 5-minute preference falls back to 60.
+- selectedPauseSeconds is optional for old ledgers. Issued leases keep their
+  durationSeconds, including existing 300-second leases; legacy leases without
+  that field retain 180 seconds. Safari accepts 300 only for such issued leases.
+- Detection rests progress independently per service:
+  5, 5, 5, 10, 10, 15, 20, 30, 40, 60, 60, ... seconds.
+  Count advances only on creating a new cycle, not repeated frames, Shield taps,
+  host opens, or startup navigation grace. Counter and committed duration persist
+  in the same SQLite ledger transaction. Binding changes do not clear the count.
+- Reset on the first new cycle of a later calendar day. The initial local time
+  zone is stored for consistent host/extension day boundaries. Clock rollback
+  cannot reset escalation. Pending rests crossing midnight keep their duration.
+- Old rest records without durationSeconds keep their original 60 seconds.
+  Reboot retains the committed duration, using the existing fail-closed restart
+  of its clock. Ordinary pause quotas are unchanged; navigation grace is now three seconds.
+- Run scripts/test_ios_blocking.sh and node --test tests/IOSPauses/policy.test.cjs.
+  Physical-device checks remain needed for 30-second DeviceActivity expiry and
+  progressive Shield/rest UI (including background, reboot and midnight).
+- Debug-only "Reset rest progression" is available in both iOS layouts. It
+  clears daily progression/zone for all services, leaving the active rest,
+  ordinary pause, quota, grace, revisions and shields unchanged. The next new
+  rest starts at 5 seconds. The coordinator also rejects the call if Debug mode
+  is off; the reset API and button are excluded from Release.

@@ -48,7 +48,7 @@ test('three-minute boundary and oversized grants', () => {
   assert.equal(h.ns.pauseValid(old, 'youtube'), false);
 });
 
-for (const seconds of [60, 180, 300]) {
+for (const seconds of [30, 60, 180, 300]) {
   test(`configured ${seconds}-second pause expires at its own deadline`, () => {
     const h = harness(), s = state();
     s.pause.expiresAt = 1000 + seconds;

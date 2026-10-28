@@ -542,6 +542,39 @@ enum SharedStore {
 
     // MARK: - Real-time (broadcast-gated) app blocking
 
+    /// A failed coordinator write must not leave a newly saved binding ready
+    /// for recording. Restore only this binding; never overwrite concurrent
+    /// pause/rest state or unrelated app settings.
+    static func withSelectionRollback(key: String, save: () throws -> Void) throws {
+        let previous = d.data(forKey: key)
+        do {
+            try save()
+        } catch {
+            if let previous { d.set(previous, forKey: key) }
+            else { d.removeObject(forKey: key) }
+            d.synchronize()
+            throw error
+        }
+    }
+
+    /// Read-only readiness shared by the host and ReplayKit. No flags or permissions
+    /// can substitute for a decoded, single-app binding (pause-only apps count).
+    static func hasRecordingSelection() -> Bool {
+        #if (os(iOS) && canImport(FamilyControls)) || RECORDING_SELECTION_TESTS
+        let keys = [SharedStoreKey.youtubeSelectionData, SharedStoreKey.instagramSelectionData,
+                    SharedStoreKey.facebookSelectionData, SharedStoreKey.xSelectionData,
+                    "pauseOnly.tiktok.selection", "pauseOnly.snapchat.selection"]
+        return keys.contains { key in
+            guard let data = d.data(forKey: key),
+                  let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else { return false }
+            return selection.applicationTokens.count == 1
+                && selection.categoryTokens.isEmpty && selection.webDomainTokens.isEmpty
+        }
+        #else
+        return false
+        #endif
+    }
+
     static func youtubeSelectionData() -> Data? {
         d.data(forKey: SharedStoreKey.youtubeSelectionData)
     }

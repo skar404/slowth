@@ -4,6 +4,14 @@ enum SurfaceClassifierFactory {
     static func make(backend: ModelBackend = ModelSettings.defaultBackend) throws -> any SurfaceClassifying {
         #if DEBUG
         switch backend {
+        case .flat11IPhone13ProMax:
+            return try FlatClassifier(candidate: .iphone13ProMax)
+        case .flat14:
+            return try FlatClassifier(candidate: .flat14)
+        case .flat13:
+            return try FlatClassifier(candidate: .flat13)
+        case .flat12:
+            return try FlatClassifier(candidate: .flat12)
         case .flat11:
             return try FlatClassifier()
         case .v14:
@@ -40,7 +48,7 @@ enum SurfaceClassifierFactory {
             #endif
         }
         #else
-        return try FlatClassifier()
+        return try FlatClassifier(candidate: .flat14)
         #endif
     }
 }

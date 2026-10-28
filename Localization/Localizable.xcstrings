@@ -44690,277 +44690,277 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إيقاف تسجيل الشاشة"
+            "value": "إيقاف التسجيل"
           }
         },
         "ar-EG": {
           "stringUnit": {
             "state": "translated",
-            "value": "وقّف تسجيل الشاشة"
+            "value": "وقّف التسجيل"
           }
         },
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Спыніць запіс экрана"
+            "value": "Спыніць запіс"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "স্ক্রিন রেকর্ডিং বন্ধ করুন"
+            "value": "রেকর্ডিং বন্ধ করুন"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zastavit nahrávání obrazovky"
+            "value": "Zastavit nahrávání"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop skærmoptagelse"
+            "value": "Stop optagelse"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bildschirmaufnahme stoppen"
+            "value": "Aufnahme stoppen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop screen recording"
+            "value": "Stop recording"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detener grabación de pantalla"
+            "value": "Detener grabación"
           }
         },
         "fil": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ihinto ang pag-record ng screen"
+            "value": "Ihinto ang pag-record"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Arrêter l’enregistrement de l’écran"
+            "value": "Arrêter l’enregistrement"
           }
         },
         "ha": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dakatar da rikodin allo"
+            "value": "Dakatar da rikodi"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "עצירת הקלטת מסך"
+            "value": "עצירת הקלטה"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "स्क्रीन रिकॉर्डिंग बंद करें"
+            "value": "रिकॉर्डिंग बंद करें"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Képernyőfelvétel leállítása"
+            "value": "Felvétel leállítása"
           }
         },
         "hy": {
           "stringUnit": {
             "state": "translated",
-            "value": "Դադարեցնել էկրանի ձայնագրումը"
+            "value": "Դադարեցնել տեսագրումը"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hentikan perekaman layar"
+            "value": "Hentikan rekaman"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Interrompi registrazione dello schermo"
+            "value": "Ferma registrazione"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "画面収録を停止"
+            "value": "収録を停止"
           }
         },
         "ka": {
           "stringUnit": {
             "state": "translated",
-            "value": "ეკრანის ჩაწერის შეწყვეტა"
+            "value": "ჩაწერის შეწყვეტა"
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Экран жазуын тоқтату"
+            "value": "Жазуды тоқтату"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "화면 기록 중단"
+            "value": "녹화 중지"
           }
         },
         "ky": {
           "stringUnit": {
             "state": "translated",
-            "value": "Экран жазуусун токтотуу"
+            "value": "Жазууну токтотуу"
           }
         },
         "lt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sustabdyti ekrano įrašymą"
+            "value": "Stabdyti įrašymą"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "स्क्रीन रेकॉर्डिंग बंद करा"
+            "value": "रेकॉर्डिंग बंद करा"
           }
         },
         "ne": {
           "stringUnit": {
             "state": "translated",
-            "value": "स्क्रिन रेकर्डिङ बन्द गर्नुहोस्"
+            "value": "रेकर्डिङ रोक्नुहोस्"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop schermopname"
+            "value": "Stop opname"
           }
         },
         "pa-Arab": {
           "stringUnit": {
             "state": "translated",
-            "value": "سکرین ریکارڈنگ بند کرو"
+            "value": "ریکارڈنگ بند کرو"
           }
         },
         "pcm": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop screen recording"
+            "value": "Stop recording"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zatrzymaj nagrywanie ekranu"
+            "value": "Zatrzymaj nagrywanie"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Parar gravação de tela"
+            "value": "Parar gravação"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Parar gravação de ecrã"
+            "value": "Parar gravação"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oprește înregistrarea ecranului"
+            "value": "Oprește înregistrarea"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Остановить запись экрана"
+            "value": "Остановить запись"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stoppa skärminspelning"
+            "value": "Stoppa inspelning"
           }
         },
         "sw": {
           "stringUnit": {
             "state": "translated",
-            "value": "Simamisha kurekodi skrini"
+            "value": "Simamisha kurekodi"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "திரைப் பதிவை நிறுத்து"
+            "value": "பதிவை நிறுத்து"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "స్క్రీన్ రికార్డింగ్ ఆపు"
+            "value": "రికార్డింగ్ ఆపు"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "หยุดบันทึกหน้าจอ"
+            "value": "หยุดบันทึก"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ekran kaydını durdur"
+            "value": "Kaydı durdur"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Зупинити запис екрана"
+            "value": "Зупинити запис"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "اسکرین ریکارڈنگ بند کریں"
+            "value": "ریکارڈنگ بند کریں"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dừng ghi màn hình"
+            "value": "Dừng ghi"
           }
         },
         "yue": {
           "stringUnit": {
             "state": "translated",
-            "value": "停止螢幕錄製"
+            "value": "停止錄製"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "停止录制屏幕"
+            "value": "停止录制"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "停止螢幕錄製"
+            "value": "停止錄製"
           }
         }
       }
@@ -60416,6 +60416,287 @@
           "stringUnit": {
             "state": "translated",
             "value": "只需錄下你平常使用 App 的過程，不需要解釋或標註。我會親自查看並標註影片，用來訓練和測試封鎖模型。"
+          }
+        }
+      }
+    },
+    "First open Slowth and choose at least one app": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح Slowth أولًا واختر تطبيقًا واحدًا على الأقل"
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح Slowth أولًا واختر تطبيقًا واحدًا على الأقل"
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спачатку адкрый Slowth і выберы хаця б адну праграму"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "প্রথমে Slowth খুলে অন্তত একটি অ্যাপ বেছে নিন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nejprve otevři Slowth a vyber alespoň jednu aplikaci"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åbn først Slowth, og vælg mindst én app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne zuerst Slowth und wähle mindestens eine App"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First open Slowth and choose at least one app"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primero abre Slowth y elige al menos una app"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buksan muna ang Slowth at pumili ng kahit isang app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre d’abord Slowth et choisis au moins une app"
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da farko buɗe Slowth ka zaɓi aƙalla manhaja ɗaya"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "יש לפתוח תחילה את Slowth ולבחור לפחות יישום אחד"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहले Slowth खोलें और कम से कम एक ऐप चुनें"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Először nyisd meg a Slowth appot, és válassz legalább egy alkalmazást"
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Նախ բացիր Slowth-ը և ընտրիր առնվազն մեկ հավելված"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Slowth terlebih dahulu dan pilih setidaknya satu app"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima apri Slowth e scegli almeno un’app"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まずSlowthを開き、アプリを1つ以上選んでください"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ჯერ გახსენი Slowth და აირჩიე სულ მცირე ერთი აპი"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Алдымен Slowth қолданбасын ашып, кемінде бір қолданбаны таңда"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "먼저 Slowth를 열고 앱을 하나 이상 선택하세요"
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адегенде Slowth колдонмосун ачып, кеминде бир колдонмо танда"
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pirmiausia atidaryk Slowth ir pasirink bent vieną programėlę"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आधी Slowth उघडा आणि किमान एक ॲप निवडा"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहिले Slowth खोलेर कम्तीमा एउटा एप छान्नुहोस्"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open eerst Slowth en kies minstens één app"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پہلاں Slowth کھولو تے گھٹ توں گھٹ اک ایپ چنو"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First open Slowth and choose at least one app"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Najpierw otwórz Slowth i wybierz co najmniej jedną aplikację"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primeiro abra o Slowth e escolha pelo menos um app"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primeiro abre o Slowth e escolhe pelo menos uma aplicação"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mai întâi deschide Slowth și alege cel puțin o aplicație"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала открой Slowth и выбери хотя бы одно приложение"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öppna först Slowth och välj minst en app"
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kwanza fungua Slowth na uchague angalau programu moja"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "முதலில் Slowth-ஐத் திறந்து குறைந்தது ஓர் செயலியைத் தேர்ந்தெடுக்கவும்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ముందుగా Slowth తెరిచి కనీసం ఒక యాప్‌ను ఎంచుకోండి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เปิด Slowth ก่อน แล้วเลือกอย่างน้อยหนึ่งแอป"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önce Slowth’u aç ve en az bir uygulama seç"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спочатку відкрий Slowth і вибери хоча б один застосунок"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پہلے Slowth کھولیں اور کم از کم ایک ایپ منتخب کریں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trước tiên, mở Slowth và chọn ít nhất một ứng dụng"
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先開啟 Slowth，再揀至少一個 App"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先打开 Slowth 并选择至少一个 App"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請先開啟 Slowth 並選擇至少一個 App"
           }
         }
       }

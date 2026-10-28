@@ -26,6 +26,7 @@ class EvidenceTests(unittest.TestCase):
             'marketing_version': '2026.8.2', 'build_number': '15', 'kind': 'testflight-upload',
             'run_url': 'https://github.com/owner/repo/actions/runs/123/attempts/1',
             'model_packages': core.MODEL_HASHES, 'runtime_metadata_sha256': core.RUNTIME_HASH,
+            'runtime_metadata_hashes': core.RUNTIME_HASHES,
             'platforms': {'iOS': {'code_signed': True}, 'macOS': {'code_signed': True}},
             'ipa': {'name': 'Unscroll.ipa', 'sha256': core.sha(self.output / 'Unscroll.ipa')},
             'macos': {'name': 'Slowth-macOS.zip', 'sha256': core.sha(self.output / 'Slowth-macOS.zip'),

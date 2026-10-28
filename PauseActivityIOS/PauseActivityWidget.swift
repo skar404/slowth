@@ -65,3 +65,31 @@ struct PauseActivityWidget: Widget {
             .accessibilityLabel(Text("Time remaining", tableName: "PauseActivity"))
     }
 }
+
+#if DEBUG
+@available(iOS 17.0, *)
+#Preview("Pause · Lock Screen", as: .content, using:
+    PauseActivityAttributes(pauseID: "preview", service: "YouTube", safari: false)
+) {
+    PauseActivityWidget()
+} contentStates: {
+    PauseActivityAttributes.ContentState(
+        phase: "active", startedAt: .now, expiresAt: .now.addingTimeInterval(180),
+        service: "YouTube", target: "youtube", switchTargets: ["instagram", "facebook"])
+    PauseActivityAttributes.ContentState(
+        phase: "active", startedAt: .now, expiresAt: .now.addingTimeInterval(180),
+        service: "YouTube", target: "youtube", switchTargets: ["instagram", "facebook"], choosingApp: true)
+    PauseActivityAttributes.ContentState(
+        phase: "ending", startedAt: .now.addingTimeInterval(-180), expiresAt: .now)
+}
+@available(iOS 17.0, *)
+#Preview("Pause · Dynamic Island", as: .dynamicIsland(.expanded), using:
+    PauseActivityAttributes(pauseID: "preview", service: "YouTube", safari: false)
+) {
+    PauseActivityWidget()
+} contentStates: {
+    PauseActivityAttributes.ContentState(
+        phase: "active", startedAt: .now, expiresAt: .now.addingTimeInterval(180),
+        service: "YouTube", target: "youtube", switchTargets: ["instagram", "facebook"])
+}
+#endif

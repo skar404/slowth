@@ -113,3 +113,11 @@ private struct HowItWorksCard<Content: View>: View {
         .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 16))
     }
 }
+
+#if DEBUG
+#Preview("How it works") {
+    if let url = URL(string: "https://github.com/skar404/slowth/issues") {
+        HowItWorksSheet(feedbackURL: url)
+    }
+}
+#endif

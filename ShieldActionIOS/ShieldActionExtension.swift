@@ -18,7 +18,16 @@ final class ShieldActionExtension: ShieldActionDelegate {
             SharedStore.requestRealtimeRecordingPrompt(at: now, target: surface(containing: application)?.rawValue)
             completionHandler(.openParentalControlsApp)
         } else {
-            completionHandler(.close)
+            let target = surface(containing: application)?.rawValue
+            let pauseOnly = target.map { PauseOnlyApps.contains($0) } ?? false
+            let unavailable = target.map { IOSPauseCoordinator.inferenceUnavailable($0) } ?? false
+            let hasRest = target.map { (try? IOSPauseCoordinator.hasRestForNotification(target: $0)) ?? false } ?? false
+            let message = ShieldNotification.message(known: target != nil, unavailable: unavailable,
+                pauseOnly: pauseOnly, recording: SharedStore.snapshot().broadcastActive, hasRest: hasRest)
+            ShieldNotification.send(target: target, message: message) { error in
+                if let error { RTLog.shieldAction.error("Notification failed: \(error.localizedDescription, privacy: .public)") }
+                completionHandler(.defer)
+            }
         }
     }
 

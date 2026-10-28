@@ -1,7 +1,5 @@
-// Run from the repository root:
-// xcrun swiftc -module-cache-path /tmp/slowth-welcome-module-cache Shared/AppLocalization.swift Shared/SharedStore.swift iOS/IOSWelcomeEligibility.swift tests/IOSWelcomeTests.swift -o /tmp/slowth-welcome-tests
-// /tmp/slowth-welcome-tests
-
+// Run with scripts/test_ios_welcome.sh. The token fixture exercises the same
+// decoding/readiness code on macOS; native FamilyControls tokens need device QA.
 import Foundation
 
 enum AppGroup {
@@ -9,41 +7,82 @@ enum AppGroup {
     static let defaults = UserDefaults(suiteName: identifier)!
 }
 
+enum DebugMode { static let isEnabled = false }
+
+struct FamilyActivitySelection: Codable {
+    var applicationTokens: Set<String> = []
+    var categoryTokens: Set<String> = []
+    var webDomainTokens: Set<String> = []
+}
+
 @main
 struct IOSWelcomeTests {
     static func main() throws {
-        defer { AppGroup.defaults.removePersistentDomain(forName: AppGroup.identifier) }
-        let fresh = SharedStore.snapshot()
-        precondition(!IOSWelcomeEligibility.isConfigured(fresh, authorized: false), "Default-on Safari rules must not suppress a fresh welcome")
-        precondition(IOSWelcomeEligibility.isConfigured(fresh, authorized: true))
-        let flags: [WritableKeyPath<SharedState, Bool>] = [
-            \.onboardingDone, \.broadcastActive, \.realtimeShieldEnabled,
-            \.realtimeYouTubeBlockingEnabled, \.softYouTubeBlockingEnabled,
-            \.realtimeInstagramReelsBlockingEnabled, \.realtimeInstagramStoriesBlockingEnabled,
-            \.realtimeFacebookReelsBlockingEnabled, \.realtimeFacebookStoriesBlockingEnabled,
-            \.realtimeXReelsBlockingEnabled
-        ]
-        for flag in flags {
-            var snapshot = fresh
-            snapshot[keyPath: flag] = true
-            precondition(IOSWelcomeEligibility.isConfigured(snapshot, authorized: false))
+        let defaults = AppGroup.defaults
+        defer { defaults.removePersistentDomain(forName: AppGroup.identifier) }
+        let keys = [SharedStoreKey.youtubeSelectionData, SharedStoreKey.instagramSelectionData,
+                    SharedStoreKey.facebookSelectionData, SharedStoreKey.xSelectionData,
+                    "pauseOnly.tiktok.selection", "pauseOnly.snapchat.selection"]
+        // Neither prior welcome, authorization, Safari nor recording/blocking flags
+        // substitute for a saved binding. Readiness is a read-only operation.
+        for key in ["iosWelcomeV1Handled", "onboardingDone", "broadcastActive",
+                    "realtimeShieldEnabled", "realtimeYouTubeBlockingEnabled"] {
+            defaults.set(true, forKey: key)
         }
-        let selections: [WritableKeyPath<SharedState, Data?>] = [
-            \.youtubeSelectionData, \.instagramSelectionData, \.facebookSelectionData, \.xSelectionData
-        ]
-        for selection in selections {
-            var snapshot = fresh
-            snapshot[keyPath: selection] = Data([1])
-            precondition(IOSWelcomeEligibility.isConfigured(snapshot, authorized: false), "Preserve users with saved selections even after permission revocation")
-        }
-        for site in SharedState.supportedSites {
-            for feature in SiteFeature.available(for: site) {
-                var snapshot = fresh
-                snapshot.toggles[site]![feature].toggle()
-                precondition(IOSWelcomeEligibility.isConfigured(snapshot, authorized: false))
+        let before = defaults.dictionaryRepresentation() as NSDictionary
+        precondition(!IOSWelcomeEligibility.isConfigured())
+        precondition(before.isEqual(to: defaults.dictionaryRepresentation()))
+        let valid = try JSONEncoder().encode(FamilyActivitySelection(applicationTokens: ["app"]))
+        let invalid = try [FamilyActivitySelection(),
+            FamilyActivitySelection(applicationTokens: ["a", "b"]),
+            FamilyActivitySelection(applicationTokens: ["a"], categoryTokens: ["c"]),
+            FamilyActivitySelection(applicationTokens: ["a"], webDomainTokens: ["web"])
+        ].map { try JSONEncoder().encode($0) } + [Data([1])]
+        for key in keys {
+            for data in invalid {
+                defaults.set(data, forKey: key)
+                precondition(!IOSWelcomeEligibility.isConfigured(), "Invalid binding: \(key)")
             }
+            defaults.removeObject(forKey: key)
+            enum SaveFailure: Error { case coordinator }
+            do {
+                try SharedStore.withSelectionRollback(key: key) {
+                    defaults.set(valid, forKey: key)
+                    throw SaveFailure.coordinator
+                }
+                preconditionFailure("Expected save failure")
+            } catch SaveFailure.coordinator {}
+            precondition(!IOSWelcomeEligibility.isConfigured(), "Failed first save must not complete setup")
+            defaults.set(valid, forKey: key)
+            precondition(IOSWelcomeEligibility.isConfigured(), "Every supported app counts: \(key)")
+            let savedState = defaults.dictionaryRepresentation() as NSDictionary
+            do {
+                try SharedStore.withSelectionRollback(key: key) {
+                    defaults.removeObject(forKey: key)
+                    throw SaveFailure.coordinator
+                }
+                preconditionFailure("Expected replacement failure")
+            } catch SaveFailure.coordinator {}
+            precondition(savedState.isEqual(to: defaults.dictionaryRepresentation()))
+            defaults.synchronize()
+            precondition(UserDefaults(suiteName: AppGroup.identifier)!.data(forKey: key) == valid)
+            defaults.removeObject(forKey: key)
+            precondition(!IOSWelcomeEligibility.isConfigured(), "Last removal must revoke readiness")
         }
-        precondition(SharedStore.snapshot() == fresh, "Eligibility must not mutate existing settings")
-        print("Welcome migration checks passed (authorization, 10 flags, 4 selections, every Safari control, no mutation)")
+        // Exercise the admission gate used before every side effect in SampleHandler.
+        var admission = RecordingAdmission()
+        precondition(!admission.enter(hasSelection: false))
+        precondition(!admission.active && !admission.admitted)
+        precondition(admission.enter(hasSelection: true))
+        // Removing a binding has no effect on the running gate.
+        precondition(admission.active)
+        admission.pause()
+        precondition(!admission.active && admission.admitted)
+        precondition(!admission.enter(hasSelection: false))
+        precondition(!admission.admitted, "Rejected resume must skip finish's blocking mutations")
+        precondition(admission.enter(hasSelection: true))
+        admission.finish()
+        precondition(!admission.active && !admission.admitted)
+        print("Welcome checks passed: 6 app types, invalid/empty selections, persistence, removal, no writes, start/resume admission")
     }
 }

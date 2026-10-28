@@ -9,7 +9,8 @@
     if (!anchor || anchor.id !== p.id) anchor = {id: p.id, wall, mono};
     if (Math.abs((wall - anchor.wall) - (mono - anchor.mono)) > 3) return false;
     return Number.isFinite(p.startedAt) && Number.isFinite(p.expiresAt) &&
-      [60, 180, 300].includes(p.expiresAt - p.startedAt) && wall >= p.startedAt && wall < p.expiresAt;
+      // 300 remains valid only for an already-issued legacy lease.
+      [30, 60, 180, 300].includes(p.expiresAt - p.startedAt) && wall >= p.startedAt && wall < p.expiresAt;
   };
   ns.pauseSettings = function (site, state, settings) {
     if (!ns.pauseValid(state, site)) return settings;

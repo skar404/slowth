@@ -173,8 +173,10 @@ final class AppState: ObservableObject {
         guard empty || validatedForSingleApp(selection, appName: target == "tiktok" ? "TikTok" : "Snapchat",
                                               blockedContent: "") else { return }
         do {
-            try PauseOnlyApps.save(selection, target: target)
-            try IOSPauseCoordinator.selectionDidChange(target: target, previousSelection: previousSelection)
+            try SharedStore.withSelectionRollback(key: "pauseOnly.\(target).selection") {
+                try PauseOnlyApps.save(selection, target: target)
+                try IOSPauseCoordinator.selectionDidChange(target: target, previousSelection: previousSelection)
+            }
             reload()
             enforcePauseOnlyApps()
             _ = try? IOSPauseCoordinator.snapshot()
@@ -308,17 +310,19 @@ final class AppState: ObservableObject {
         guard let data = try? JSONEncoder().encode(selection) else { return }
         let isFirstSelection = !SharedStore.hasValidYouTubeSelection()
         do {
-            try SharedStore.setYouTubeSelectionData(data)
-            // Initialize blocking only for a new binding; preserve choices on replacement.
-            if isFirstSelection {
-                _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(true)
-                _ = try SharedStore.setSoftYouTubeBlockingEnabled(
-                    true,
-                    allowInitialStrictActivation: true
-                )
-                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            try SharedStore.withSelectionRollback(key: SharedStoreKey.youtubeSelectionData) {
+                try SharedStore.setYouTubeSelectionData(data)
+                // Initialize blocking only for a new binding; preserve choices on replacement.
+                if isFirstSelection {
+                    _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(true)
+                    _ = try SharedStore.setSoftYouTubeBlockingEnabled(
+                        true,
+                        allowInitialStrictActivation: true
+                    )
+                    _ = try SharedStore.setRealtimeShieldEnabled(true)
+                }
+                try IOSPauseCoordinator.selectionDidChange(target: "youtube", previousSelection: previousSelection)
             }
-            try IOSPauseCoordinator.selectionDidChange(target: "youtube", previousSelection: previousSelection)
             RTLog.appState.notice("saveYouTubeSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             restoreRealtimeShieldAfterAppActivation()
@@ -359,14 +363,16 @@ final class AppState: ObservableObject {
         guard let data = try? JSONEncoder().encode(selection) else { return }
         let isFirstSelection = !SharedStore.hasValidInstagramSelection()
         do {
-            try SharedStore.setInstagramSelectionData(data)
-            // Clearing a binding makes the next valid selection a first selection again.
-            if isFirstSelection {
-                _ = try SharedStore.setRealtimeInstagramReelsBlockingEnabled(true)
-                _ = try SharedStore.setRealtimeInstagramStoriesBlockingEnabled(true)
-                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            try SharedStore.withSelectionRollback(key: SharedStoreKey.instagramSelectionData) {
+                try SharedStore.setInstagramSelectionData(data)
+                // Clearing a binding makes the next valid selection a first selection again.
+                if isFirstSelection {
+                    _ = try SharedStore.setRealtimeInstagramReelsBlockingEnabled(true)
+                    _ = try SharedStore.setRealtimeInstagramStoriesBlockingEnabled(true)
+                    _ = try SharedStore.setRealtimeShieldEnabled(true)
+                }
+                try IOSPauseCoordinator.selectionDidChange(target: "instagram", previousSelection: previousSelection)
             }
-            try IOSPauseCoordinator.selectionDidChange(target: "instagram", previousSelection: previousSelection)
             RTLog.appState.notice("saveInstagramSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()
@@ -407,14 +413,16 @@ final class AppState: ObservableObject {
         guard let data = try? JSONEncoder().encode(selection) else { return }
         let isFirstSelection = !SharedStore.hasValidFacebookSelection()
         do {
-            try SharedStore.setFacebookSelectionData(data)
-            // Clearing a binding makes the next valid selection a first selection again.
-            if isFirstSelection && facebookModelSelected {
-                _ = try SharedStore.setRealtimeFacebookReelsBlockingEnabled(true)
-                _ = try SharedStore.setRealtimeFacebookStoriesBlockingEnabled(true)
-                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            try SharedStore.withSelectionRollback(key: SharedStoreKey.facebookSelectionData) {
+                try SharedStore.setFacebookSelectionData(data)
+                // Clearing a binding makes the next valid selection a first selection again.
+                if isFirstSelection && facebookModelSelected {
+                    _ = try SharedStore.setRealtimeFacebookReelsBlockingEnabled(true)
+                    _ = try SharedStore.setRealtimeFacebookStoriesBlockingEnabled(true)
+                    _ = try SharedStore.setRealtimeShieldEnabled(true)
+                }
+                try IOSPauseCoordinator.selectionDidChange(target: "facebook", previousSelection: previousSelection)
             }
-            try IOSPauseCoordinator.selectionDidChange(target: "facebook", previousSelection: previousSelection)
             RTLog.appState.notice("saveFacebookSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()
@@ -455,13 +463,15 @@ final class AppState: ObservableObject {
         guard let data = try? JSONEncoder().encode(selection) else { return }
         let isFirstSelection = !SharedStore.hasValidXSelection()
         do {
-            try SharedStore.setXSelectionData(data)
-            // Clearing a binding makes the next valid selection a first selection again.
-            if isFirstSelection && xModelSelected {
-                _ = try SharedStore.setRealtimeXReelsBlockingEnabled(true)
-                _ = try SharedStore.setRealtimeShieldEnabled(true)
+            try SharedStore.withSelectionRollback(key: SharedStoreKey.xSelectionData) {
+                try SharedStore.setXSelectionData(data)
+                // Clearing a binding makes the next valid selection a first selection again.
+                if isFirstSelection && xModelSelected {
+                    _ = try SharedStore.setRealtimeXReelsBlockingEnabled(true)
+                    _ = try SharedStore.setRealtimeShieldEnabled(true)
+                }
+                try IOSPauseCoordinator.selectionDidChange(target: "x", previousSelection: previousSelection)
             }
-            try IOSPauseCoordinator.selectionDidChange(target: "x", previousSelection: previousSelection)
             RTLog.appState.notice("saveXSelection: \(selection.applicationTokens.count, privacy: .public) app token(s) saved")
             reload()
             enforceRealtimeShieldAtRest()

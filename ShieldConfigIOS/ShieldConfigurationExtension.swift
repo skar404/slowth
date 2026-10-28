@@ -52,17 +52,18 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     }
 
     private static func primaryLabel(bundle: Bundle) -> ShieldConfiguration.Label {
-        let text: String
-        if #available(iOS 26.5, *) { text = "Slowth" }
-        else { text = String(localized: "Close", table: "Interface", bundle: bundle) }
-        return .init(text: text, color: .white)
+        .init(text: "Slowth", color: .white)
     }
 
     private static func secondaryLabel(bundle: Bundle) -> ShieldConfiguration.Label? {
-        if #available(iOS 26.5, *) {
-            return .init(text: String(localized: "Close", table: "Interface", bundle: bundle), color: .white)
-        }
-        return nil
+        .init(text: String(localized: "Close", table: "Interface", bundle: bundle), color: .white)
+    }
+
+    private static func applicationSubtitle(_ text: String, bundle: Bundle, application: Bool = true) -> String {
+        if #available(iOS 26.5, *) { return text }
+        guard application else { return text }
+        let key = "Tap Slowth, then open its notification. If no banner appears, check Notification Center or open Slowth manually."
+        return text + "\n\n" + bundle.localizedString(forKey: key, value: key, table: "ShieldNotifications")
     }
 
     private static var applicationConfiguration: ShieldConfiguration {
@@ -82,7 +83,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
             icon: slowthAppIcon,
             title: .init(text: String(localized: "Blocked", bundle: bundle), color: .white),
-            subtitle: .init(text: String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), color: .white.withAlphaComponent(0.8)),
+            subtitle: .init(text: applicationSubtitle(String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), bundle: bundle), color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: primaryLabel(bundle: bundle),
             primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
             secondaryButtonLabel: secondaryLabel(bundle: bundle))
@@ -98,7 +99,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
             icon: slowthAppIcon,
             title: .init(text: title, color: .white),
-            subtitle: .init(text: String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), color: .white.withAlphaComponent(0.8)),
+            subtitle: .init(text: applicationSubtitle(String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), bundle: bundle), color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: primaryLabel(bundle: bundle),
             primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
             secondaryButtonLabel: secondaryLabel(bundle: bundle))
@@ -111,7 +112,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
             icon: slowthAppIcon,
             title: .init(text: String(localized: "Blocked", bundle: bundle), color: .white),
-            subtitle: .init(text: String(localized: "Currently supported only in pause mode. Open Slowth and start a pause to use this app. Screen recording does not unlock it.", table: "Interface", bundle: bundle), color: .white.withAlphaComponent(0.8)),
+            subtitle: .init(text: applicationSubtitle(String(localized: "Currently supported only in pause mode. Open Slowth and start a pause to use this app. Screen recording does not unlock it.", table: "Interface", bundle: bundle), bundle: bundle), color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: primaryLabel(bundle: bundle),
             primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
             secondaryButtonLabel: secondaryLabel(bundle: bundle)
@@ -157,11 +158,11 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             icon: slowthAppIcon,
             title: ShieldConfiguration.Label(text: String(localized: "Blocked", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
-                text: subtitleText(
+                text: applicationSubtitle(subtitleText(
                     defaultText: String(localized: "Open Slowth and start screen recording to unlock enabled apps. They stay open while you're not viewing selected blocked content.\n\nIf you notice any issues, please share your feedback.", bundle: bundle),
                     state: state,
                     variant: "recording off"
-                ),
+                ), bundle: bundle, application: application),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
             primaryButtonLabel: application ? primaryLabel(bundle: bundle) : openAppButton,
@@ -177,11 +178,11 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             icon: slowthAppIcon,
             title: ShieldConfiguration.Label(text: String(localized: "Blocked content detected", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
-                text: subtitleText(
-                    defaultText: String(localized: "Your one-minute rest has started. Open Slowth to see the remaining time.", table: "Interface", bundle: bundle),
+                text: applicationSubtitle(subtitleText(
+                    defaultText: String(localized: "Your rest has started. Open Slowth to see the remaining time.", table: "Interface", bundle: bundle),
                     state: state,
                     variant: "content detected"
-                ),
+                ), bundle: bundle, application: application),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
             primaryButtonLabel: application ? primaryLabel(bundle: bundle) : ShieldConfiguration.Label(text: String(localized: "Close", table: "Interface", bundle: bundle), color: .white),

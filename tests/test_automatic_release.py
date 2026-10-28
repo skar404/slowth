@@ -207,24 +207,29 @@ class RecoveryTests(unittest.TestCase):
     def test_flat_archive_verification_in_empty_workspace_keeps_swift_pin_check(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            package = root / core.MODEL_DIR / 'FlatDetector.mlpackage'
-            for name in core.PACKAGE_FILES:
-                path = package / name
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes(b'{}' if path.suffix == '.json' else b'model fixture')
-            runtime = core.ROOT / core.RUNTIME
-            (root / core.RUNTIME).parent.mkdir(parents=True, exist_ok=True)
-            (root / core.RUNTIME).write_bytes(runtime.read_bytes())
+            hashes = {}
+            for model, directory in core.MODEL_DIRS.items():
+                package = root / directory / (model + '.mlpackage')
+                for name in core.PACKAGE_FILES:
+                    path = package / name
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(b'{}' if path.suffix == '.json' else b'model fixture')
+                hashes[model] = core.package_sha(package)
+            source = {'RealtimeShield/FlatClassifier.swift':
+                      (core.ROOT / 'RealtimeShield/FlatClassifier.swift').read_bytes()}
+            for runtime in core.RUNTIME_HASHES:
+                data = (core.ROOT / runtime).read_bytes()
+                target = root / runtime
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(data)
+                source[runtime] = data
             bundle = root / 'models.tar.gz'
             core.model_bundle(root, bundle)
-            source = {core.RUNTIME: runtime.read_bytes(),
-                      'RealtimeShield/FlatClassifier.swift':
-                          (core.ROOT / 'RealtimeShield/FlatClassifier.swift').read_bytes()}
             def git(*args, **kwargs):
                 self.assertEqual(args[0], 'show')
                 self.assertTrue(args[1].startswith('signed-source:'))
                 return source[args[1].split(':', 1)[1]]
-            with patch.object(core, 'MODEL_HASHES', {'FlatDetector': core.package_sha(package)}), \
+            with patch.object(core, 'MODEL_HASHES', hashes), \
                  patch.object(core, 'git', side_effect=git):
                 automatic.verify_model_archive(bundle, 'signed-source')
                 source['RealtimeShield/FlatClassifier.swift'] = b'wrong runtime pin'

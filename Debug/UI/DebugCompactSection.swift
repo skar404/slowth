@@ -23,6 +23,11 @@ struct DebugCompactSection: View {
             #if os(iOS)
             DebugSessionCaptureControls()
             DebugSavedLeavesControl()
+            Button(String(localized: "Reset rest progression", table: "Interface")) {
+                do { try IOSPauseCoordinator.resetRestProgressForDebug() }
+                catch { state.lastError = AppLocalization.string("Could not save") }
+            }
+            .accessibilityIdentifier("debug.rest.reset")
             if DebugModelSettings.cascadeAvailable {
                 Picker("Model (next recording)", selection: Binding(
                     get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },

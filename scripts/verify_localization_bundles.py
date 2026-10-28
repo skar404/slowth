@@ -64,6 +64,8 @@ def verify_app(app, catalogs, locales):
                 tables.append('Interface')
             if bundle == app or identifier.endswith('.PauseActivity'):
                 tables.append('PauseActivity')
+            if bundle == app or identifier.endswith(('.ShieldConfig', '.ShieldAction')):
+                tables.append('ShieldNotifications')
         for table in tables:
             verify_table(resources, table, catalogs[table], locales)
         if (resources / 'manifest.json').exists():

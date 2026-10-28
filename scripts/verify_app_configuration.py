@@ -21,6 +21,9 @@ def verify(app, configuration):
     cascade = {name + 'V10': current / (name + 'V10.mlpackage')
                for name in ('AppRouter', 'YouTubeDetector', 'InstagramDetector', 'FacebookDetector', 'XDetector')}
     flat = {'FlatDetector': EXPORTS / 'flat-11-seed7-20261015/FlatDetector.mlpackage'}
+    flat['FlatDetector12'] = EXPORTS / 'flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage'
+    flat['FlatDetector13'] = EXPORTS / 'flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage'
+    flat['FlatDetector14'] = EXPORTS / 'flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage'
     alternatives = {
         'SurfaceDetectorV14': EXPORTS / 'v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage',
         'SurfaceDetectorV15': EXPORTS / 'v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage',
@@ -30,6 +33,9 @@ def verify(app, configuration):
                     **{name + 'Metadata': p.with_name(name + 'Metadata.json')
                        for name, p in alternatives.items()}})
     if not release:
+        candidate = EXPORTS / "flat-11-seed7-iphone13promax-20261026/ios-resources"
+        alternatives["FlatDetectorIPhone13ProMax"] = candidate / "FlatDetectorIPhone13ProMax.mlpackage"
+        metadata["FlatDetectorIPhone13ProMaxMetadata"] = candidate / "FlatDetectorIPhone13ProMaxMetadata.json"
         for version, directory, names in (
             ('V6', aliases, ('AppRouter', 'YouTubeDetector', 'InstagramDetector')),
             ('V7', EXPORTS / 'cascade-v7-facebook-20260928-114500/ios-resources',
@@ -40,8 +46,12 @@ def verify(app, configuration):
             alternatives.update({name + version: directory / (name + version + '.mlpackage') for name in names})
             metadata['Cascade' + version + 'Metadata'] = directory / ('Cascade' + version + 'Metadata.json')
     metadata['FlatDetectorMetadata'] = ROOT / 'RealtimeShield/FlatDetectorMetadata.json'
+    metadata['FlatDetector12Metadata'] = ROOT / 'RealtimeShield/FlatDetector12Metadata.json'
+    metadata['FlatDetector13Metadata'] = ROOT / 'RealtimeShield/FlatDetector13Metadata.json'
+    metadata['FlatDetector14Metadata'] = ROOT / 'RealtimeShield/FlatDetector14Metadata.json'
     if release:
-        metadata.pop('CascadeV10RuntimeMetadata')
+        flat = {'FlatDetector14': flat['FlatDetector14']}
+        metadata = {'FlatDetector14Metadata': metadata['FlatDetector14Metadata']}
     for bundle in [app, app / 'PlugIns/UnscrollBroadcastIOS.appex']:
         models = {} if release and bundle == app else flat | ({} if release else cascade | alternatives)
         expected_metadata = {} if release and bundle == app else metadata

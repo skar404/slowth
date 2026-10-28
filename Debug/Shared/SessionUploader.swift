@@ -7,16 +7,25 @@ enum SessionUploadServer {
 
     static func url(from value: String) throws -> URL {
         guard var components = URLComponents(string: value.trimmingCharacters(in: .whitespacesAndNewlines)),
-              components.scheme?.lowercased() == "https",
+              let scheme = components.scheme?.lowercased(),
               let host = components.host, !host.isEmpty,
               components.user == nil, components.password == nil,
               components.query == nil, components.fragment == nil,
               components.port.map({ (1...65535).contains($0) }) ?? true else {
             throw SessionUploadError.serverURL
         }
-        components.scheme = "https"
+        let octets = host.split(separator: ".", omittingEmptySubsequences: false)
+        let isLAN = octets.count == 4 && octets[0] == "192" && octets[1] == "168"
+            && octets.allSatisfy { part in
+                guard let number = Int(part), (0...255).contains(number) else { return false }
+                return String(number) == part
+            }
+        guard scheme == "https" || (scheme == "http" && isLAN) else {
+            throw SessionUploadError.serverURL
+        }
+        components.scheme = scheme
         components.host = host.lowercased()
-        if components.port == 443 { components.port = nil }
+        if (scheme == "https" && components.port == 443) || (scheme == "http" && components.port == 80) { components.port = nil }
         while components.path.hasSuffix("/") { components.path.removeLast() }
         guard let url = components.url else { throw SessionUploadError.serverURL }
         return url

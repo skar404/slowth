@@ -1,36 +1,38 @@
 import SwiftUI
 import Combine
 
-private func pauseButtonTitle(_ minutes: Int) -> String {
-    switch minutes {
-    case 1: return String(localized: "Pause for 1 minute", table: "Interface")
-    case 5: return String(localized: "Pause for 5 minutes", table: "Interface")
+private func pauseButtonTitle(_ seconds: Int) -> String {
+    switch seconds {
+    case 60: return String(localized: "Pause for 1 minute", table: "Interface")
+    case 30: return String(localized: "Pause for 30 seconds", table: "Interface")
     default: return String(localized: "Pause for 3 minutes", table: "Interface")
     }
 }
 
 struct PauseDurationSettings: View {
     let strict: Bool
-    @State private var minutes = 3
+    @State private var seconds = 60
     @State private var readable = false
     @State private var error: String?
 
     var body: some View {
         Section {
             Picker(String(localized: "Pause duration", table: "Interface"), selection: Binding(
-                get: { minutes },
+                get: { seconds },
                 set: { value in
                     do {
-                        try IOSPauseCoordinator.setPauseMinutes(value)
-                        minutes = value
+                        try IOSPauseCoordinator.setPauseSeconds(value)
+                        seconds = value
                         error = nil
                     } catch {
                         self.error = String(localized: "Could not save pause duration", table: "Interface")
                     }
                 }
             )) {
-                ForEach(IOSPauseLedger.pauseMinuteOptions, id: \.self) { value in
-                    Text(String(format: String(localized: "%lld min", table: "Interface"), locale: Locale.current, value))
+                ForEach(IOSPauseLedger.pauseSecondOptions, id: \.self) { value in
+                    Text(value == 30
+                         ? String(localized: "30 sec", table: "Interface")
+                         : String(format: String(localized: "%lld min", table: "Interface"), locale: Locale.current, value / 60))
                         .tag(value)
                 }
             }
@@ -41,7 +43,7 @@ struct PauseDurationSettings: View {
         }
         .onAppear {
             do {
-                minutes = try IOSPauseCoordinator.presentationSnapshot().pauseMinutes
+                seconds = try IOSPauseCoordinator.presentationSnapshot().pauseSeconds
                 readable = true
                 error = nil
             } catch {
@@ -148,6 +150,9 @@ struct PausePanel: View {
     var preferredTarget: String? = nil
     var embedded = false
     var compact = false
+    var sharedBackground = false
+    var recordingExtensionBundleID: String? = nil
+    var isRecording = false
     @StateObject private var model = PausePanelModel()
     @State private var showingTargetPicker = false
     @State private var showingSwitchPicker = false
@@ -187,8 +192,10 @@ struct PausePanel: View {
         Group {
             if embedded {
                 panelContent
-                    .padding(compact ? 12 : 20)
-                    .background(panelBackground)
+                    .padding(.horizontal, sharedBackground ? 16 : compact ? 12 : 20)
+                    .padding(.top, sharedBackground ? 0 : compact ? 12 : 20)
+                    .padding(.bottom, sharedBackground ? 16 : compact ? 12 : 20)
+                    .background(sharedBackground ? Color.clear : panelBackground)
             } else {
                 Section {
                     panelContent
@@ -231,7 +238,8 @@ struct PausePanel: View {
     private var panelContent: some View {
           VStack(alignment: .leading, spacing: compact ? 8 : 12) {
             HStack(alignment: .firstTextBaseline) {
-                Text(String(localized: "Pauses today", table: "Interface")).font(.headline)
+                Text(String(localized: "Pauses today", table: "Interface"))
+                    .font(compact ? .subheadline.weight(.medium) : .headline)
                 Spacer(minLength: 8)
                 HStack(spacing: 5) {
                     ForEach(0..<3) { index in
@@ -244,9 +252,10 @@ struct PausePanel: View {
             }
             HStack {
                 Text(String(localized: "Saved leaves", table: "Interface"))
+                    .font(compact ? .caption : .body)
                 Spacer()
                 Label(model.readable ? "+\(model.ledger.savedLeaves)" : "—", systemImage: "leaf.fill")
-                    .font(.headline.monospacedDigit())
+                    .font((compact ? Font.caption.weight(.medium) : .headline).monospacedDigit())
                     .foregroundStyle(Color.accentColor)
             }
             if !compact {
@@ -275,6 +284,7 @@ struct PausePanel: View {
                         if lease.kind == "application" && lease.phase == "active" {
                             switchAppButton
                         }
+                        if recordingExtensionBundleID == nil {
                         Button { model.end() } label: {
                             Label {
                                 Text(lease.phase == "preparing"
@@ -289,6 +299,7 @@ struct PausePanel: View {
                         }
                         .buttonStyle(.plain)
                         .disabled(model.loading)
+                        }
                     }
                     .font(.subheadline.weight(.semibold))
                 }
@@ -300,6 +311,52 @@ struct PausePanel: View {
                     Text(String(localized: "This app is already selected for another service.", table: "Interface"))
                         .font(.footnote).foregroundStyle(.orange)
                 }
+                if recordingExtensionBundleID == nil { pauseStartButton }
+                if IOSPauseCoordinator.strictModeBlocksPauses(model.snapshot) {
+                    Text(String(localized: "Strict mode active")).font(.footnote)
+                    if let until = model.snapshot.strictModeUntil {
+                        Text(String(localized: "Locked until \(L10n.dateTime(until))")).font(.footnote)
+                    }
+                } else if targets.isEmpty {
+                    Text(String(localized: "Enable a restriction to use a pause", table: "Interface"))
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+            }
+            if let error = model.error { Text(error).font(.footnote).foregroundStyle(.orange) }
+            if let recordingExtensionBundleID {
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(spacing: 10))
+                    : AnyLayout(HStackLayout(spacing: 10))
+                layout {
+                    RealtimeRecordingCard(preferredExtensionBundleID: recordingExtensionBundleID,
+                                          isRecording: isRecording, guidance: "", actionOnly: true)
+                    if let lease = model.ledger.lease {
+                        Button { model.end() } label: {
+                            Label(lease.phase == "preparing" ? String(localized: "Cancel")
+                                  : String(localized: "End pause", table: "Interface"), systemImage: "stop.fill")
+                                .font(.subheadline.weight(.medium))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 12)
+                                .frame(minHeight: 48, maxHeight: .infinity)
+                                .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(model.loading)
+                    } else {
+                        pauseStartButton
+                            .fixedSize(horizontal: !dynamicTypeSize.isAccessibilitySize, vertical: false)
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 8)
+            }
+          }
+          .padding(.vertical, 4)
+          .saturation(isExhausted && recordingExtensionBundleID == nil ? 0 : 1)
+          .opacity(isExhausted && recordingExtensionBundleID == nil ? 0.65 : 1)
+    }
+
+    private var pauseStartButton: some View {
                 Button {
                     model.refresh()
                     if canStart {
@@ -307,11 +364,21 @@ struct PausePanel: View {
                         else { showingTargetPicker = true }
                     }
                 } label: {
-                    Label(pauseButtonTitle(model.ledger.pauseMinutes), systemImage: "play.fill")
-                        .frame(maxWidth: .infinity, minHeight: embedded ? 44 : 32)
+                    HStack(spacing: 6) {
+                        Image(systemName: "pause.fill")
+                        Text(recordingExtensionBundleID == nil ? pauseButtonTitle(model.ledger.pauseSeconds) : String(localized: "Pause", table: "Interface"))
+                    }
+                        .font(.subheadline.weight(.medium))
+                        .fixedSize(horizontal: recordingExtensionBundleID != nil && !dynamicTypeSize.isAccessibilitySize, vertical: true)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .frame(minHeight: recordingExtensionBundleID == nil ? 44 : 48,
+                               maxHeight: recordingExtensionBundleID != nil && !dynamicTypeSize.isAccessibilitySize ? .infinity : nil)
+                        .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.plain)
                 .disabled(!canStart)
+                .accessibilityHint(pauseButtonTitle(model.ledger.pauseSeconds))
                 .confirmationDialog(
                     String(localized: safari ? "Choose a website to pause" : "Choose an app to pause", table: "Interface"),
                     isPresented: $showingTargetPicker,
@@ -327,21 +394,6 @@ struct PausePanel: View {
                     }
                     Button(String(localized: "Cancel"), role: .cancel) { }
                 }
-                if IOSPauseCoordinator.strictModeBlocksPauses(model.snapshot) {
-                    Text(String(localized: "Strict mode active")).font(.footnote)
-                    if let until = model.snapshot.strictModeUntil {
-                        Text(String(localized: "Locked until \(L10n.dateTime(until))")).font(.footnote)
-                    }
-                } else if targets.isEmpty {
-                    Text(String(localized: "Enable a restriction to use a pause", table: "Interface"))
-                        .font(.footnote).foregroundStyle(.secondary)
-                }
-            }
-            if let error = model.error { Text(error).font(.footnote).foregroundStyle(.orange) }
-          }
-          .padding(.vertical, 4)
-          .saturation(isExhausted ? 0 : 1)
-          .opacity(isExhausted ? 0.65 : 1)
     }
 
     private var switchAppButton: some View {
@@ -378,7 +430,7 @@ struct PausePanel: View {
 struct ShieldPauseButton: View {
     let target: String
     let onStarted: () -> Void
-    @State private var minutes = 3
+    @State private var seconds = 60
     @State private var available = false
     @State private var starting = false
     @State private var error: String?
@@ -413,17 +465,18 @@ struct ShieldPauseButton: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "pause.circle")
-                            .font(.system(size: 20, weight: .semibold))
+                            .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(.secondary)
-                            .frame(width: 32, height: 32)
+                            .frame(width: 24, height: 24)
                             .accessibilityHidden(true)
-                        Text(pauseButtonTitle(minutes))
-                            .font(.body.weight(.semibold))
-                        Spacer(minLength: 8)
+                        Text(pauseButtonTitle(seconds))
+                            .font(.subheadline.weight(.medium))
+                            .fixedSize(horizontal: false, vertical: true)
                         if starting { ProgressView() }
                     }
-                    .padding(20)
-                    .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .frame(minHeight: 44, alignment: .leading)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -443,7 +496,7 @@ struct ShieldPauseButton: View {
     private func refresh() {
         guard !starting else { return }
         available = IOSPauseCoordinator.canStartApplicationPause(target: target)
-        minutes = (try? IOSPauseCoordinator.presentationSnapshot().pauseMinutes) ?? 3
+        seconds = (try? IOSPauseCoordinator.presentationSnapshot().pauseSeconds) ?? 60
     }
 }
 
@@ -506,7 +559,7 @@ struct PauseOnlyPromptSheet: View {
                                         .frame(width: 40, height: 40)
                                         .background(Color.accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: 12))
                                         .accessibilityHidden(true)
-                                    Text(pauseButtonTitle(model.ledger.pauseMinutes))
+                                    Text(pauseButtonTitle(model.ledger.pauseSeconds))
                                         .font(.body.weight(.semibold))
                                     Spacer(minLength: 0)
                                     if model.loading {
@@ -705,3 +758,28 @@ struct ShieldAppChoiceSheet: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Pause duration") {
+    Form { PauseDurationSettings(strict: false) }
+}
+#Preview("Pause duration · strict mode") {
+    Form { PauseDurationSettings(strict: true) }
+}
+#Preview("Pause · Safari") {
+    Form { PausePanel(safari: true) }
+        .tint(SlowthAppearance.sage)
+}
+#Preview("Pause · apps") {
+    Form { PausePanel(safari: false, preferredTarget: "youtube") }
+        .tint(SlowthAppearance.sage)
+}
+#Preview("Pause prompt") {
+    PauseOnlyPromptSheet(target: "tiktok")
+        .tint(SlowthAppearance.sage)
+}
+#Preview("Choose blocked app") {
+    ShieldAppChoiceSheet(onSelect: { _ in })
+        .tint(SlowthAppearance.sage)
+}
+#endif

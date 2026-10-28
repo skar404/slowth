@@ -103,7 +103,7 @@ def prepare(args):
         manifest = {'schema_version': 1, 'kind': 'production-model-inputs', 'tag': tag,
                     'commit': head if committed else None, 'source_tree': tree,
                     'model_bundle_sha256': core.sha(bundle), 'model_packages': core.MODEL_HASHES,
-                    'runtime_metadata_sha256': core.RUNTIME_HASH,
+                    'runtime_metadata_sha256': core.RUNTIME_HASH, 'runtime_metadata_hashes': core.RUNTIME_HASHES,
                     'package_hash_algorithm': 'SHA256 of sorted relative UTF-8 file paths, NUL, file bytes',
                     'note': 'Pinned inference inputs only. No app build or Apple upload. Model qualification is unchanged.'}
         manifest_path = output / 'model-manifest.json'
@@ -111,7 +111,7 @@ def prepare(args):
         notes = (args.notes.read_text() if args.notes else
                  f'# Slowth model inputs: {tag}\n\n'
                  f'Source commit: `{head}`' + (' (local changes; see source_tree in manifest).' if not committed else '.') +
-                 '\n\nOne pinned Flat 11 Core ML package and compact runtime metadata. '
+                 '\n\nOne pinned Flat 14 Core ML package and compact runtime metadata. '
                  'Training sources, datasets, checkpoints, calibration inventories and credentials are excluded. '
                  'Model qualification is unchanged. No app was uploaded to Apple.\n\n'
                  'Verify SHA256SUMS.asc with the trusted release signing key, then run '

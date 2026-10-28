@@ -24,9 +24,9 @@ import Foundation
         try state.activate("a", now: now, strict: false)
         expectError { try state.activate("a", now: now, strict: false) }
         try check(state.remaining(now, currentZone: "UTC") == 2)
-        assert(state.lease!.expiresAt - state.lease!.started.wall == 180)
-        assert(!state.lease!.expired(after(179.9)))
-        assert(state.lease!.expired(after(180)))
+        assert(state.lease!.expiresAt - state.lease!.started.wall == 60)
+        assert(!state.lease!.expired(after(59.9)))
+        assert(state.lease!.expired(after(60)))
         assert(state.lease!.expired(.init(wall: now.wall + 10, continuous: 10, boot: "B")))
         assert(state.lease!.expired(.init(wall: now.wall + 3600, continuous: 1001, boot: "A")))
         state.finish(now: after(20))
@@ -110,7 +110,7 @@ import Foundation
         // Switching keeps one charged lease, its exact deadline and reward history.
         var switching = IOSPauseLedger()
         let tokenA = Data([1]), tokenB = Data([2])
-        try switching.setPauseMinutes(5, strict: false)
+        try switching.setPauseSeconds(180, strict: false)
         try switching.prepare(id: "switch", kind: "application", target: "youtube", selection: tokenA,
             now: now, currentZone: "UTC", strict: false, requiresRecording: false)
         expectError {
@@ -180,40 +180,47 @@ import Foundation
 
         // Duration defaults/migration and persisted per-lease deadlines.
         var durationChoice = IOSPauseLedger()
-        assert(durationChoice.pauseMinutes == 3)
-        for minutes in IOSPauseLedger.pauseMinuteOptions {
-            try durationChoice.setPauseMinutes(minutes, strict: false)
-            try prepare(&durationChoice, id: "duration-\(minutes)")
-            try durationChoice.activate("duration-\(minutes)", now: now, strict: false)
-            let duration = Double(minutes * 60)
+        assert(durationChoice.pauseSeconds == 60)
+        assert(IOSPauseLedger.pauseSecondOptions == [30, 60, 180])
+        for seconds in IOSPauseLedger.pauseSecondOptions {
+            try durationChoice.setPauseSeconds(seconds, strict: false)
+            try prepare(&durationChoice, id: "duration-\(seconds)")
+            try durationChoice.activate("duration-\(seconds)", now: now, strict: false)
+            let duration = Double(seconds)
             let deadline = durationChoice.lease!.expiresAt
             assert(deadline == now.wall + duration)
             assert(!durationChoice.lease!.expired(after(duration - 0.1)))
             assert(durationChoice.lease!.expired(after(duration)))
-            try durationChoice.setPauseMinutes(minutes == 5 ? 1 : 5, strict: false)
+            try durationChoice.setPauseSeconds(seconds == 30 ? 60 : 30, strict: false)
             assert(durationChoice.lease!.expiresAt == deadline)
             let persisted = try JSONDecoder().decode(IOSPauseLedger.self,
                 from: JSONEncoder().encode(durationChoice))
             assert(persisted.lease!.expiresAt == deadline)
-            assert(persisted.pauseMinutes == durationChoice.pauseMinutes)
+            assert(persisted.pauseSeconds == durationChoice.pauseSeconds)
             durationChoice.finish(now: after(duration))
         }
-        expectError { try durationChoice.setPauseMinutes(10, strict: false) }
-        try durationChoice.setPauseMinutes(3, strict: false)
-        expectError { try durationChoice.setPauseMinutes(5, strict: true) }
-        expectError { try durationChoice.setPauseMinutes(1, strict: true) }
-        expectError { try durationChoice.setPauseMinutes(3, strict: true) }
-        assert(durationChoice.pauseMinutes == 3)
-        try durationChoice.setPauseMinutes(1, strict: false)
-        assert(durationChoice.pauseMinutes == 1)
+        expectError { try durationChoice.setPauseSeconds(300, strict: false) }
+        expectError { try durationChoice.setPauseSeconds(10, strict: false) }
+        for seconds in IOSPauseLedger.pauseSecondOptions {
+            expectError { try durationChoice.setPauseSeconds(seconds, strict: true) }
+        }
         var oldDurationRecord = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
         oldDurationRecord.removeValue(forKey: "selectedPauseMinutes")
+        oldDurationRecord.removeValue(forKey: "selectedPauseSeconds")
         var oldLease = oldDurationRecord["lease"] as! [String: Any]
         oldLease.removeValue(forKey: "durationSeconds")
         oldDurationRecord["lease"] = oldLease
         let oldDuration = try JSONDecoder().decode(IOSPauseLedger.self,
             from: JSONSerialization.data(withJSONObject: oldDurationRecord))
-        assert(oldDuration.pauseMinutes == 3 && oldDuration.lease!.effectiveDuration == 180)
+        assert(oldDuration.pauseSeconds == 60 && oldDuration.lease!.effectiveDuration == 180)
+        for (legacyMinutes, expected) in [(1, 60), (3, 180), (5, 60)] {
+            oldDurationRecord["selectedPauseMinutes"] = legacyMinutes
+            oldLease["durationSeconds"] = 300
+            oldDurationRecord["lease"] = oldLease
+            let migrated = try JSONDecoder().decode(IOSPauseLedger.self,
+                from: JSONSerialization.data(withJSONObject: oldDurationRecord))
+            assert(migrated.pauseSeconds == expected && migrated.lease!.effectiveDuration == 300)
+        }
 
         // Rewards settle completed calendar days once, including days away.
         var rewards = IOSPauseLedger()

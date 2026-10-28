@@ -1,0 +1,51 @@
+{
+  "modelVersion": "flat-12-seed7-20261027",
+  "classes": [
+    "youtube_shorts",
+    "youtube_normal",
+    "instagram_reels",
+    "instagram_stories",
+    "instagram_normal",
+    "other_app",
+    "facebook_reels",
+    "facebook_stories",
+    "facebook_normal",
+    "x_reels",
+    "x_normal"
+  ],
+  "checkpointSHA256": "83179b7136df664691eb391a11b18a3f682365d87c4aa488265743a0329a53ed",
+  "inputWidth": 192,
+  "inputHeight": 384,
+  "confidenceThresholds": {
+    "youtube_shorts": 0.9993141323328019,
+    "instagram_reels": 0.4255248084664345,
+    "instagram_stories": 0.6512015968561172,
+    "facebook_reels": 0.9513579070568084,
+    "facebook_stories": 0.9965591549873352,
+    "x_reels": 0.9497638836503028
+  },
+  "inferenceIntervalSeconds": 0.25,
+  "requiredConsecutiveHits": 3,
+  "observationWindowFrames": 5,
+  "experimental": true,
+  "qualification": {
+    "status": "unqualified",
+    "reason": "No independent holdout or physical iPhone qualification"
+  },
+  "appLabels": [
+    "youtube",
+    "instagram",
+    "other",
+    "facebook",
+    "x"
+  ],
+  "youtubeContentLabels": [
+    "shorts",
+    "normal"
+  ],
+  "instagramContentLabels": [
+    "reels",
+    "stories",
+    "normal"
+  ]
+}

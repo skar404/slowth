@@ -39,12 +39,24 @@ def resources(runtime_only=False):
     flat = (ROOT / 'RealtimeShield/FlatDetectorMetadata.json').read_bytes()
     if hashlib.sha256(flat).hexdigest() != '5759a56cccb193afc60faaf6ae8ecbda2838059eb7318afe04df0e87f4b923c9':
         raise ValueError('Flat runtime metadata identity changed')
+    flat12 = (ROOT / 'RealtimeShield/FlatDetector12Metadata.json').read_bytes()
+    if hashlib.sha256(flat12).hexdigest() != 'd117451e29c1cf4c3f004e049f1c040abc44ec6ec6a0b5dfcc8b2275b91cbeab':
+        raise ValueError('Flat 12 runtime metadata identity changed')
+    flat13 = (ROOT / 'RealtimeShield/FlatDetector13Metadata.json').read_bytes()
+    if hashlib.sha256(flat13).hexdigest() != '35211614cd836f8ef6c074edf0df80256bf41fed469bb89a51cb3d5fc020fc1e':
+        raise ValueError('Flat 13 runtime metadata identity changed')
+    flat14 = (ROOT / 'RealtimeShield/FlatDetector14Metadata.json').read_bytes()
+    if hashlib.sha256(flat14).hexdigest() != '59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf':
+        raise ValueError('Flat 14 runtime metadata identity changed')
     info = plistlib.loads((ROOT / 'iOS/Info.plist').read_bytes())
     del info['NSPhotoLibraryAddUsageDescription']
     del info['NSPhotoLibraryUsageDescription']
     return {
         ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json': compact,
         ROOT / 'RealtimeShield/FlatDetectorMetadata.json': flat,
+        ROOT / 'RealtimeShield/FlatDetector12Metadata.json': flat12,
+        ROOT / 'RealtimeShield/FlatDetector13Metadata.json': flat13,
+        ROOT / 'RealtimeShield/FlatDetector14Metadata.json': flat14,
         ROOT / 'iOS/Info-Release.plist': plistlib.dumps(info, sort_keys=False),
     }
 

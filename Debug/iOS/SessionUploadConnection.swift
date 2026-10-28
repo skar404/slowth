@@ -63,6 +63,8 @@ import Combine
 }
 
 struct SessionUploadConnectionView: View {
+    var initialServerAddress: String? = nil
+    var initialCredential: String? = nil
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(SessionUploadServer.storageKey) private var serverAddress = ""
@@ -73,14 +75,14 @@ struct SessionUploadConnectionView: View {
         NavigationStack {
             Form {
                 Section("Private labeler") {
-                    TextField("Labeler URL (https://host:port)", text: $serverAddress)
+                    TextField("Labeler URL (HTTPS or local HTTP)", text: $serverAddress)
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
                     Text("The address is saved automatically on this device.").font(.caption)
                     if let serverURL {
                         Link("Open labeler in browser", destination: serverURL)
                     } else if !serverAddress.isEmpty {
-                        Text("Enter a valid HTTPS address without a username, password, query or fragment.")
+                        Text("Enter HTTPS or local http://192.168.x.x:port without a username, password, query or fragment.")
                             .font(.caption).foregroundStyle(.red)
                     }
                     Text("Enable Tailscale. In the browser open ‘Подключить Slowth iOS’, request the credential and copy it here yourself. Never put it in chat. Saving a credential does not send screenshots.")
@@ -102,9 +104,18 @@ struct SessionUploadConnectionView: View {
             }
             .navigationTitle("Labeler connection")
             .toolbar { Button("Done") { draft = ""; dismiss() } }
+            .onAppear {
+                if let initialServerAddress, !SessionUploadConnection.shared.isUploading {
+                    serverAddress = initialServerAddress
+                    draft = initialCredential ?? ""
+                }
+            }
             .onDisappear { draft = "" }
-            .onChange(of: serverAddress) { _ in draft = ""; message = nil }
-            .onChange(of: scenePhase) { phase in if phase != .active { draft = "" } }
+            .onChange(of: serverAddress) { value in
+                if value != initialServerAddress { draft = "" }
+                message = nil
+            }
+            .onChange(of: scenePhase) { phase in if phase == .background { draft = ""; dismiss() } }
         }
     }
 }

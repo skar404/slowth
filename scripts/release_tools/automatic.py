@@ -10,8 +10,8 @@ from . import core, models, version
 
 FINGERPRINT = '68BEAF78936945EC66B7C5273E8FD639DD4791CC'
 # Prepared locally; publish and verify this model asset before the next app release.
-MODEL_RELEASE = 'models-flat-11-seed7-20261015'
-MODEL_SHA256 = '57c02d1a9057d054c7ad058b3ae82e4582d523662fa03625c0bb5c2edbfa55a8'
+MODEL_RELEASE = 'models-flat-14-seed7-20261028'
+MODEL_SHA256 = '2da4cb0d0dd60651d85a6951d4fb88f886c9958df174e038933b56d1951b91ea'
 ASSETS = version.EVIDENCE | {models.ASSET, 'checksums-attestation.jsonl'}
 
 
@@ -182,7 +182,7 @@ def verify_model_archive(bundle, head):
     """Use runtime pins from the signed app source, including the Swift consumer."""
     with tempfile.TemporaryDirectory(prefix='slowth-model-verification-') as temp:
         source = Path(temp)
-        for name in (core.RUNTIME, 'RealtimeShield/FlatClassifier.swift'):
+        for name in (*core.RUNTIME_HASHES, 'RealtimeShield/FlatClassifier.swift'):
             dest = source / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(core.git('show', f'{head}:{name}', capture=True))

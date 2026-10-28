@@ -161,7 +161,7 @@ def main(argv=None):
                     'macos': ['sw_vers', '-productVersion']}.items()},
                 'runner_image': {'version': os.environ.get('ImageVersion'), 'os': os.environ.get('ImageOS')},
                 'model_bundle_sha256': release.sha(args.model_bundle),
-                'model_packages': release.MODEL_HASHES, 'runtime_metadata_sha256': release.RUNTIME_HASH,
+                'model_packages': release.MODEL_HASHES, 'runtime_metadata_sha256': release.RUNTIME_HASH, 'runtime_metadata_hashes': release.RUNTIME_HASHES,
                 'platforms': records,
                 'checks': ['public-snapshot', 'version-consistency', 'pinned-models',
                            'release-resources', 'webextension-tests', 'archive-build',

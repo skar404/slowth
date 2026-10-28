@@ -36,6 +36,7 @@ struct MacContentView: View {
     @State private var versionTapCount = 0
     #endif
     #if os(iOS)
+    @AppStorage("shieldNotificationOfferHandled") private var notificationOfferHandled = false
     @State private var showRealtimeRecordingPrompt = false
     #endif
     #if os(iOS) && canImport(FamilyControls)
@@ -178,6 +179,16 @@ struct MacContentView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
+
+            #if os(iOS) && canImport(FamilyControls)
+            if #unavailable(iOS 26.5) {
+                Section {
+                    ShieldNotificationPermissionView()
+                } header: {
+                    Text(String(localized: "Settings", table: "Interface"))
+                }
+            }
+            #endif
 
             Section {
                 Toggle(isOn: Binding(
@@ -391,6 +402,9 @@ struct MacContentView: View {
     #if os(iOS) && canImport(FamilyControls)
     private var realtimeShieldSection: some View {
         Section {
+            if SharedStore.hasRecordingSelection() && !notificationOfferHandled {
+                ShieldNotificationPermissionView(isInitialOffer: true)
+            }
             Toggle(isOn: Binding(
                 get: { state.snapshot.realtimeShieldEnabled },
                 set: { state.setRealtimeShieldEnabled($0) }
@@ -399,7 +413,7 @@ struct MacContentView: View {
             }
             .disabled(disabledByStrict)
 
-            if state.snapshot.realtimeShieldEnabled {
+            if state.snapshot.broadcastActive || (state.snapshot.realtimeShieldEnabled && SharedStore.hasRecordingSelection()) {
                 RealtimeRecordingCard(
                     preferredExtensionBundleID: state.broadcastExtensionBundleID,
                     isRecording: state.snapshot.broadcastActive,
@@ -963,3 +977,25 @@ private struct TipHistoryRow: View {
         }
     }
 }
+
+#if DEBUG
+private extension MacContentView {
+    init(previewSnapshot: SharedState) {
+        _state = StateObject(wrappedValue: AppState(previewSnapshot: previewSnapshot))
+    }
+}
+@available(iOS 17.0, macOS 14.0, *)
+#Preview("Main · compact", traits: .fixedLayout(width: 680, height: 820)) {
+    MacContentView(previewSnapshot: .defaultState)
+        .allowsHitTesting(false)
+}
+@available(iOS 17.0, macOS 14.0, *)
+#Preview("Main · compact · dark", traits: .fixedLayout(width: 680, height: 820)) {
+    MacContentView(previewSnapshot: .defaultState)
+        .preferredColorScheme(.dark)
+        .allowsHitTesting(false)
+}
+#Preview("Support · compact") {
+    SupportSheet(tipStore: TipStore())
+}
+#endif

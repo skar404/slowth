@@ -3,6 +3,22 @@ import SwiftUI
 import ReplayKit
 
 private final class ChromeHidingBroadcastPickerView: RPSystemBroadcastPickerView {
+    var hostEnabled = true { didSet { refreshReadiness() } }
+    private var readinessTimer: Timer?
+
+    private func refreshReadiness() {
+        let active = AppGroup.defaults.bool(forKey: SharedStoreKey.broadcastActive)
+        let enabled = active || (hostEnabled && SharedStore.hasRecordingSelection())
+        isUserInteractionEnabled = enabled
+        alpha = enabled ? 1 : 0.4
+        for button in subviews.compactMap({ $0 as? UIButton }) { button.isEnabled = enabled }
+    }
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        refreshReadiness()
+        return super.hitTest(point, with: event)
+    }
+
     var hidesSystemControlChrome = false {
         didSet {
             setNeedsLayout()
@@ -22,6 +38,14 @@ private final class ChromeHidingBroadcastPickerView: RPSystemBroadcastPickerView
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
+        readinessTimer?.invalidate()
+        readinessTimer = nil
+        refreshReadiness()
+        if window != nil {
+            readinessTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+                self?.refreshReadiness()
+            }
+        }
         hideSystemControlChromeIfNeeded()
     }
 
@@ -95,8 +119,7 @@ struct BroadcastPickerView: UIViewRepresentable {
         // .disabled()/environment isEnabled — apply it manually so a
         // disabled BroadcastPickerView is actually untappable, not just
         // visually dimmed by a modifier with no effect on the UIButton.
-        picker.isUserInteractionEnabled = isEnabled
-        picker.alpha = isEnabled ? 1.0 : 0.4
+        picker.hostEnabled = isEnabled
     }
 }
 
@@ -105,11 +128,13 @@ struct BroadcastPickerView: UIViewRepresentable {
 struct RecordingToolbarButton: View {
     let preferredExtensionBundleID: String
     @State private var isRecording = SharedStore.snapshot().broadcastActive
+    @State private var hasSelection = SharedStore.hasRecordingSelection()
 
     var body: some View {
         Image(systemName: isRecording ? "stop.circle.fill" : "record.circle")
             .font(.title2)
             .foregroundStyle(.red)
+            .opacity(isRecording || hasSelection ? 1 : 0.4)
             .frame(width: 44, height: 44)
             .accessibilityHidden(true)
             .overlay {
@@ -118,13 +143,14 @@ struct RecordingToolbarButton: View {
                     showsSystemControl: false,
                     accessibilityLabel: isRecording
                         ? String(localized: "Stop screen recording")
-                        : String(localized: "Start screen recording")
+                        : String(localized: "Enable blocking", table: "Interface")
                 )
                 .accessibilityIdentifier("duo.recording")
             }
             .task {
                 while !Task.isCancelled {
                     isRecording = SharedStore.snapshot().broadcastActive
+                    hasSelection = SharedStore.hasRecordingSelection()
                     try? await Task.sleep(nanoseconds: 500_000_000)
                 }
             }
@@ -137,6 +163,7 @@ struct RecordingPauseCard<Content: View>: View {
 
     var body: some View {
         VStack(spacing: 0, content: content)
+            .background(SlowthAppearance.card)
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 }
@@ -158,29 +185,26 @@ struct AppRecordingCard: View {
     let preferredExtensionBundleID: String
     let isRecording: Bool
     let onLearnMore: () -> Void
+    var showsPause = false
+    var pauseTarget: String? = nil
 
     var body: some View {
-        HStack(alignment: .top, spacing: 0) {
+        VStack(spacing: 0) {
             RealtimeRecordingCard(
                 preferredExtensionBundleID: preferredExtensionBundleID,
                 isRecording: isRecording,
                 guidance: String(localized: "Screen recording helps detect and block short videos.", table: "Interface"),
-                embedded: true
+                embedded: true,
+                headerOnly: showsPause,
+                onLearnMore: onLearnMore
             )
-            Button(action: onLearnMore) {
-                Image(systemName: "questionmark.circle")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.black.opacity(0.65))
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
+            if showsPause {
+                PausePanel(safari: false, preferredTarget: pauseTarget, embedded: true,
+                           compact: true, sharedBackground: true,
+                           recordingExtensionBundleID: preferredExtensionBundleID,
+                           isRecording: isRecording)
             }
-            .buttonStyle(.plain)
-            .padding(.top, 6)
-            .padding(.trailing, 6)
-            .accessibilityLabel(String(localized: "How it works"))
-            .accessibilityIdentifier("recording.help")
         }
-        .background(Color.white)
     }
 }
 
@@ -190,74 +214,83 @@ struct RealtimeRecordingCard: View {
     let guidance: String
     var prominent = false
     var embedded = false
+    var headerOnly = false
+    var actionOnly = false
+    var onLearnMore: (() -> Void)? = nil
+    @Environment(\.colorScheme) private var colorScheme
     @State private var observedRecording: Bool?
+    @State private var hasSelection = SharedStore.hasRecordingSelection()
 
     var body: some View {
-        HStack(spacing: prominent ? 14 : 8) {
-            ZStack {
-                Circle()
-                    .fill(embedded ? Color.clear : statusColor.opacity(0.14))
-                    .frame(width: prominent ? 44 : 32, height: prominent ? 44 : 32)
-                Image(systemName: displayedRecording ? "stop.circle" : embedded ? "record.circle" : "lock.open.fill")
-                    .font(.system(size: prominent ? 22 : embedded ? 20 : 16, weight: .semibold))
-                    .foregroundStyle(statusColor)
-            }
-
-            VStack(alignment: .leading, spacing: prominent ? 8 : 2) {
-                Text(displayedRecording ? String(localized: "Screen recording is active") : String(localized: "Start screen recording"))
-                    .font(embedded ? .body.weight(.bold) : prominent ? .title3.weight(.semibold) : .subheadline.weight(.semibold))
-                    .foregroundStyle(embedded ? Color.black : Color.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-                if displayedRecording || !guidance.isEmpty {
-                Text(displayedRecording ? String(localized: "Tap anywhere here to stop.") : guidance)
-                    .font(.footnote)
-                    .foregroundStyle(embedded ? Color.black.opacity(0.65) : Color.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 10) {
+            if !actionOnly {
+                HStack(alignment: .center, spacing: 8) {
+                    Text(displayedRecording
+                         ? String(localized: "Screen recording is active")
+                         : hasSelection ? guidance
+                         : String(localized: "Choose at least one app to start recording.", table: "Interface"))
+                        .font(displayedRecording ? .subheadline.weight(.semibold) : .footnote)
+                        .foregroundStyle(Color.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    if let onLearnMore {
+                        Button(action: onLearnMore) {
+                            Image(systemName: "questionmark.circle")
+                                .font(.system(size: 20))
+                                .foregroundStyle(Color.secondary)
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(String(localized: "How it works"))
+                        .accessibilityIdentifier("recording.help")
+                    }
                 }
             }
-
-            Spacer(minLength: embedded ? 0 : 8)
-
-            if !embedded {
-            Image(systemName: displayedRecording ? "stop.circle.fill" : "record.circle.fill")
-                .font(.system(size: 26, weight: .semibold))
-                .foregroundStyle(.red)
-                .frame(width: 34, height: 34)
+            if !headerOnly {
+                Label(displayedRecording
+                      ? String(localized: "Stop screen recording")
+                      : String(localized: "Enable blocking", table: "Interface"),
+                      systemImage: displayedRecording ? "stop.fill" : "play.fill")
+                    .font(.headline)
+                    .foregroundStyle(displayedRecording || colorScheme == .light ? Color.white : Color.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, minHeight: prominent ? 56 : 48,
+                           maxHeight: actionOnly ? .infinity : nil)
+                    .background(displayedRecording ? Color.red : SlowthAppearance.sage,
+                                in: RoundedRectangle(cornerRadius: 14))
+                    .opacity(displayedRecording || hasSelection ? 1 : 0.5)
+                    .accessibilityHidden(true)
+                    .overlay {
+                        // The native ReplayKit button owns just this visible button,
+                        // never the explanatory copy, help button or pause controls.
+                        BroadcastPickerView(
+                            preferredExtensionBundleID: preferredExtensionBundleID,
+                            showsSystemControl: false,
+                            accessibilityLabel: displayedRecording
+                                ? String(localized: "Stop screen recording")
+                                : String(localized: "Enable blocking", table: "Interface")
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .accessibilityIdentifier("recording.action")
+                    }
             }
         }
-        .padding(prominent || embedded ? 20 : 9)
-        .frame(maxWidth: .infinity, minHeight: prominent ? 132 : embedded ? 80 : nil, alignment: .leading)
+        .padding(actionOnly ? 0 : prominent ? 20 : 16)
         .background {
-            if embedded {
-                Color.white
-            } else {
-                RoundedRectangle(cornerRadius: prominent ? 22 : 12, style: .continuous)
-                    .fill(statusColor.opacity(displayedRecording ? 0.18 : 0.08))
+            if embedded || actionOnly { Color.clear }
+            else {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.accentColor.opacity(0.06))
             }
-        }
-        .overlay {
-            if !prominent && !embedded {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(
-                    statusColor.opacity(displayedRecording ? 0.55 : 0.18),
-                    lineWidth: displayedRecording ? 1.5 : 1
-                )
-            }
-        }
-        .accessibilityHidden(true)
-        .overlay {
-            BroadcastPickerView(
-                preferredExtensionBundleID: preferredExtensionBundleID,
-                showsSystemControl: false,
-                accessibilityLabel: displayedRecording
-                    ? String(localized: "Stop screen recording")
-                    : String(localized: "Start screen recording")
-            )
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .task {
             guard !ScreenshotPresentation.activeProtection else { return }
             while !Task.isCancelled {
+                hasSelection = SharedStore.hasRecordingSelection()
                 let active = SharedStore.snapshot().broadcastActive
                 if observedRecording != active {
                     observedRecording = active
@@ -275,11 +308,7 @@ struct RealtimeRecordingCard: View {
         ScreenshotPresentation.activeProtection || (observedRecording ?? isRecording)
     }
 
-    private var statusColor: Color {
-        if displayedRecording { return .red }
-        guard embedded else { return .accentColor }
-        return .black
-    }
+
 }
 
 struct ScreenRecordingInfoCard: View {
@@ -346,12 +375,10 @@ struct RealtimeRecordingPromptSheet: View {
                         AppRecordingCard(
                             preferredExtensionBundleID: preferredExtensionBundleID,
                             isRecording: isRecording,
-                            onLearnMore: onLearnMore
+                            onLearnMore: onLearnMore,
+                            showsPause: pauseTarget != nil,
+                            pauseTarget: pauseTarget
                         )
-                        if let pauseTarget {
-                            Divider()
-                            PausePanel(safari: false, preferredTarget: pauseTarget, embedded: true)
-                        }
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
@@ -381,5 +408,16 @@ struct RealtimeRecordingPromptSheet: View {
                 : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
         }))
     }
+}
+#endif
+
+#if DEBUG && canImport(FamilyControls)
+#Preview("Recording prompt") {
+    RealtimeRecordingPromptSheet(
+        preferredExtensionBundleID: "", isRecording: false, pauseTarget: "youtube")
+}
+#Preview("Recording prompt · active") {
+    RealtimeRecordingPromptSheet(
+        preferredExtensionBundleID: "", isRecording: true, pauseTarget: "youtube")
 }
 #endif

@@ -43,7 +43,7 @@ struct BlockingDecision {
 
 enum BlockingRules {
     static let restSeconds: Double = 60
-    static let navigationGraceSeconds: Double = 5
+    static let navigationGraceSeconds: Double = 3
     static let softUsageSeconds = 1
 
     enum SettingsRejection { case strict, youtubeDisabled }
