@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "YouTube Shorts, Reels, TikTok અને Safari માં પ્રતિ-સાઇટ નિયંત્રણો સાથે વિચલિત ફીડ્સને અવરોધિત કરો."
+  },
+  "locale": {
+    "message": "gu"
+  },
+  "tagline": {
+    "message": "બ્લોક YouTube Shorts, Instagram અને Facebook Reels, ઉપરાંત X પર અન્વેષણ અને વલણો. સંપૂર્ણપણે TikTok ને અવરોધિત કરો. તમારી સેટિંગ્સને 24 કલાક માટે સ્ટ્રિક્ટ મોડ સાથે લૉક કરો."
+  },
+  "stepSettings": {
+    "message": "તમારા ઉપકરણની સેટિંગ્સ ખોલો"
+  },
+  "stepExtensions": {
+    "message": "એપ્સ → Safari → એક્સ્ટેન્શનમાં જાઓ"
+  },
+  "stepEnable": {
+    "message": "Slowth ચાલુ કરો અને દરેક વેબસાઇટ પર મંજૂરી આપો"
+  },
+  "onboardingDone": {
+    "message": "મેં ચાલુ કર્યું છે"
+  },
+  "blocking": {
+    "message": "બ્લોકીંગ"
+  },
+  "strictHelp": {
+    "message": "24 કલાક સુધી ચાલુ પ્રતિબંધો બંધ કરી શકાતા નથી. તમે પ્રતિબંધો ઉમેરી શકો છો, પરંતુ આખી સાઇટનું બ્લૉકિંગ ચાલુ કરી શકતા નથી."
+  },
+  "strictEnableConfirm": {
+    "message": "24 કલાક સુધી ચાલુ પ્રતિબંધો બંધ કરી શકાતા નથી. તમે પ્રતિબંધો ઉમેરી શકો છો, પરંતુ આખી સાઇટનું બ્લૉકિંગ ચાલુ કરી શકતા નથી."
+  },
+  "strictConfirmTitle": {
+    "message": "કડક મોડ ચાલુ કરવો છે?"
+  },
+  "cancel": {
+    "message": "રદ કરો"
+  },
+  "enable": {
+    "message": "ચાલુ કરો"
+  },
+  "updates": {
+    "message": "અપડેટ્સ"
+  },
+  "updateNow": {
+    "message": "હમણાં અપડેટ કરો"
+  },
+  "loading": {
+    "message": "લોડ થઈ રહ્યું છે…"
+  },
+  "guide": {
+    "message": "માર્ગદર્શિકા"
+  },
+  "howToUse": {
+    "message": "Slowth કેવી રીતે વાપરવું"
+  },
+  "modesExplained": {
+    "message": "કડક મોડ અને સાઇટ મુજબના મોડની સમજણ"
+  },
+  "strictGuideTitle": {
+    "message": "કડક મોડ શું કરે છે"
+  },
+  "strictGuide": {
+    "message": "24 કલાક સુધી ચાલુ પ્રતિબંધો બંધ કરી શકાતા નથી. તમે પ્રતિબંધો ઉમેરી શકો છો, પરંતુ આખી સાઇટનું બ્લૉકિંગ ચાલુ કરી શકતા નથી. ફરી શરૂ કર્યા પછી કે બળજબરીથી બંધ કર્યા પછી પણ ટાઇમર ચાલે છે."
+  },
+  "strictAdvice": {
+    "message": "માત્ર ઇચ્છાશક્તિ પૂરતી ન હોય ત્યારે ચાલુ કરો. ફક્ત હળવી યાદ અપાવવાની જરૂર હોય તો બંધ રાખો."
+  },
+  "howBlockingWorks": {
+    "message": "બ્લૉકિંગ કેવી રીતે કામ કરે છે"
+  },
+  "modeOffHelp": {
+    "message": "સાઇટ સામાન્ય રીતે લોડ થાય છે. Slowth કંઈ કરતું નથી."
+  },
+  "siteSpecific": {
+    "message": "સાઇટ મુજબ બ્લૉકિંગ"
+  },
+  "modeShortsHelp": {
+    "message": "બ્લોક્સ YouTube Shorts, Instagram / Facebook Reels, અથવા X એક્સપ્લોર અને વલણો. બાકીની સાઇટ કામ કરતી રહે છે."
+  },
+  "addFeed": {
+    "message": "ફીડ બ્લોકીંગ ઉમેરો"
+  },
+  "modeFeedHelp": {
+    "message": "થોડી સ્ક્રીનો પછી અનંત હોમ ફીડ પણ બંધ કરે છે. Instagram વધુમાં એક્સપ્લોર, સ્ટોરીઝ અને વધુ Reels સપાટીઓને આવરી લે છે."
+  },
+  "modeAllHelp": {
+    "message": "સાઇટ ખોલતાં તેના બદલે મૈત્રીપૂર્ણ બ્લૉક પેજ દેખાય છે."
+  },
+  "leaveFeedback": {
+    "message": "પ્રતિસાદ આપો"
+  },
+  "showIntro": {
+    "message": "પરિચય ફરી બતાવો"
+  },
+  "rulesNever": {
+    "message": "નિયમો: ક્યારેય મેળવ્યા નથી"
+  },
+  "rulesNow": {
+    "message": "નિયમો: હમણાં જ"
+  },
+  "rulesRelative": {
+    "message": "નિયમો: $1"
+  },
+  "strictUntil": {
+    "message": "$1 સુધી કડક મોડ ચાલુ"
+  },
+  "openSafariSettings": {
+    "message": "Safari સેટિંગ્સ ખોલો"
+  },
+  "rulesCurrent": {
+    "message": "નિયમો: અપડેટ છે"
+  },
+  "rulesFailed": {
+    "message": "નિયમો: અપડેટ થઈ શક્યા નહીં. ફરી પ્રયાસ કરો."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth દ્વારા અવરોધિત"
+  },
+  "thisSite": {
+    "message": "આ સાઇટ"
+  },
+  "blockedTitle": {
+    "message": "$1 અવરોધિત છે"
+  },
+  "blockedTabTitle": {
+    "message": "અવરોધિત: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth તમને $1થી દૂર રાખે છે. શ્વાસ લો. કંઈક બીજું કરો."
+  },
+  "backToSite": {
+    "message": "← $1 પર પાછા"
+  },
+  "why": {
+    "message": "શા માટે"
+  },
+  "quoteTeam": {
+    "message": "Reels સેંકડો લોકોની ટીમે બનાવ્યું, જેમનો પગાર $$400k હતો. Slowth એક ડેવલપરે એક સપ્તાહાંતમાં બનાવ્યું."
+  },
+  "quoteBillions": {
+    "message": "તમે સ્ક્રૉલ કરતા રહો તે માટે તેમણે અબજો ખર્ચ્યા. તમને રોકવા અમે નાનું સ્થાનિક એક્સ્ટેન્શન બનાવ્યું."
+  },
+  "quoteBug": {
+    "message": "અનંત ફીડ એક ખામી છે. આ રહ્યો ઉકેલ."
+  },
+  "best": {
+    "message": "શ્રેષ્ઠ"
+  },
+  "gameLabel": {
+    "message": "નાની ઉડાન રમત"
+  },
+  "gameHelp": {
+    "message": "પાંખ ફફડાવવા ટૅપ કરો અથવા સ્પેસ દબાવો"
+  },
+  "back": {
+    "message": "← પાછા"
+  },
+  "signature": {
+    "message": "Slowth · ધીમા પડો, શ્વાસ લો, બનાવો"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap રમવા ટૅપ કરો →"
+  },
+  "avoidBranches": {
+    "message": "ડાળીઓ સાથે અથડાશો નહીં"
+  },
+  "newBest": {
+    "message": "નવો રેકોર્ડ! ફરી ઊડવા ટૅપ કરો"
+  },
+  "flyAgain": {
+    "message": "ફરી ઊડવા ટૅપ કરો"
+  },
+  "tapStart": {
+    "message": "શરૂ કરવા ટૅપ કરો"
+  },
+  "gameOver": {
+    "message": "રમત પૂરી"
+  },
+  "feedTitle": {
+    "message": "અનંત ફીડ બ્લૉક છે"
+  },
+  "feedSubtitle": {
+    "message": "Slowth તમને અનંત ફીડથી દૂર રાખે છે. શ્વાસ લો. કંઈક બીજું કરો."
+  },
+  "backHome": {
+    "message": "ઘરે પાછા"
+  },
+  "dismiss": {
+    "message": "બંધ કરો"
+  },
+  "storiesTime": {
+    "message": "તમે સ્ટોરી પર પહેલેથી $1 ખર્ચ્યા છે. શ્વાસ લો."
+  },
+  "enableSafari": {
+    "message": "Safariમાં ચાલુ કરો"
+  },
+  "openSettings": {
+    "message": "સેટિંગ્સ ખોલો"
+  },
+  "strictMode": {
+    "message": "કડક મોડ"
+  },
+  "off": {
+    "message": "બંધ"
+  },
+  "blockShorts": {
+    "message": "બ્લોક Shorts"
+  },
+  "blockReels": {
+    "message": "બ્લોક Reels"
+  },
+  "blockFeeds": {
+    "message": "બ્લોક Reels + ફીડ્સ"
+  },
+  "blockFeed": {
+    "message": "બ્લોક Reels + ફીડ"
+  },
+  "blockExplore": {
+    "message": "અન્વેષણ અને વલણોને અવરોધિત કરો"
+  },
+  "blockSite": {
+    "message": "બ્લોક સાઇટ"
+  },
+  "updating": {
+    "message": "અપડેટ થઈ રહ્યું છે…"
+  },
+  "blockInfiniteFeed": {
+    "message": "અનંત ફીડને અવરોધિત કરો"
+  },
+  "infiniteFeedHelp": {
+    "message": "અનંત ફીડ સ્ક્રૉલ મર્યાદિત કરે છે. Instagram પર તેમાં Explore અને Stories પણ છે."
+  },
+  "settingsSaveFailed": {
+    "message": "સાચવી શકાયું નહીં"
+  }
+}

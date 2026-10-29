@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safari ਵਿੱਚ Shorts, Reels, TikTok ਅਤੇ ਧਿਆਨ ਭਟਕਾਉਣ ਵਾਲੀਆਂ ਫੀਡਾਂ ਬਲੌਕ ਕਰੋ।"
+  },
+  "locale": {
+    "message": "pa"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram ਅਤੇ Facebook Reels, ਨਾਲ ਹੀ X ਉੱਤੇ Explore ਅਤੇ ਰੁਝਾਨ ਬਲੌਕ ਕਰੋ। TikTok ਪੂਰੀ ਤਰ੍ਹਾਂ ਬਲੌਕ ਕਰੋ। ਸਖ਼ਤ ਮੋਡ ਨਾਲ ਆਪਣੀਆਂ ਸੈਟਿੰਗਾਂ 24 ਘੰਟਿਆਂ ਲਈ ਲੌਕ ਕਰੋ।"
+  },
+  "stepSettings": {
+    "message": "ਆਪਣੀ ਡਿਵਾਈਸ ਦੀਆਂ ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ"
+  },
+  "stepExtensions": {
+    "message": "ਐਪਾਂ → Safari → ਐਕਸਟੈਂਸ਼ਨਾਂ ਉੱਤੇ ਜਾਓ"
+  },
+  "stepEnable": {
+    "message": "Slowth ਚਾਲੂ ਕਰੋ ਅਤੇ ਹਰ ਵੈੱਬਸਾਈਟ ਉੱਤੇ ਇਜਾਜ਼ਤ ਦਿਓ"
+  },
+  "onboardingDone": {
+    "message": "ਮੈਂ ਚਾਲੂ ਕਰ ਦਿੱਤਾ ਹੈ"
+  },
+  "blocking": {
+    "message": "ਬਲੌਕਿੰਗ"
+  },
+  "strictHelp": {
+    "message": "24 ਘੰਟਿਆਂ ਲਈ ਚਾਲੂ ਪਾਬੰਦੀਆਂ ਬੰਦ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ। ਤੁਸੀਂ ਪਾਬੰਦੀਆਂ ਜੋੜ ਸਕਦੇ ਹੋ, ਪਰ ਪੂਰੀ ਸਾਈਟ ਦੀ ਬਲੌਕਿੰਗ ਚਾਲੂ ਨਹੀਂ ਕਰ ਸਕਦੇ।"
+  },
+  "strictEnableConfirm": {
+    "message": "24 ਘੰਟਿਆਂ ਲਈ ਚਾਲੂ ਪਾਬੰਦੀਆਂ ਬੰਦ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ। ਤੁਸੀਂ ਪਾਬੰਦੀਆਂ ਜੋੜ ਸਕਦੇ ਹੋ, ਪਰ ਪੂਰੀ ਸਾਈਟ ਦੀ ਬਲੌਕਿੰਗ ਚਾਲੂ ਨਹੀਂ ਕਰ ਸਕਦੇ।"
+  },
+  "strictConfirmTitle": {
+    "message": "ਸਖ਼ਤ ਮੋਡ ਚਾਲੂ ਕਰਨਾ ਹੈ?"
+  },
+  "cancel": {
+    "message": "ਰੱਦ ਕਰੋ"
+  },
+  "enable": {
+    "message": "ਚਾਲੂ ਕਰੋ"
+  },
+  "updates": {
+    "message": "ਅੱਪਡੇਟ"
+  },
+  "updateNow": {
+    "message": "ਹੁਣ ਅੱਪਡੇਟ ਕਰੋ"
+  },
+  "loading": {
+    "message": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…"
+  },
+  "guide": {
+    "message": "ਮਾਰਗਦਰਸ਼ਨ"
+  },
+  "howToUse": {
+    "message": "Slowth ਕਿਵੇਂ ਵਰਤਣਾ ਹੈ"
+  },
+  "modesExplained": {
+    "message": "ਸਖ਼ਤ ਮੋਡ ਅਤੇ ਹਰ ਸਾਈਟ ਦੇ ਮੋਡ ਦੀ ਵਿਆਖਿਆ"
+  },
+  "strictGuideTitle": {
+    "message": "ਸਖ਼ਤ ਮੋਡ ਕੀ ਕਰਦਾ ਹੈ"
+  },
+  "strictGuide": {
+    "message": "24 ਘੰਟਿਆਂ ਲਈ ਚਾਲੂ ਪਾਬੰਦੀਆਂ ਬੰਦ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ। ਤੁਸੀਂ ਪਾਬੰਦੀਆਂ ਜੋੜ ਸਕਦੇ ਹੋ, ਪਰ ਪੂਰੀ ਸਾਈਟ ਦੀ ਬਲੌਕਿੰਗ ਚਾਲੂ ਨਹੀਂ ਕਰ ਸਕਦੇ। ਮੁੜ ਚਾਲੂ ਕਰਨ ਜਾਂ ਜ਼ਬਰਦਸਤੀ ਬੰਦ ਕਰਨ ਤੋਂ ਬਾਅਦ ਵੀ ਟਾਈਮਰ ਚੱਲਦਾ ਹੈ।"
+  },
+  "strictAdvice": {
+    "message": "ਜਦੋਂ ਸਿਰਫ਼ ਇੱਛਾ-ਸ਼ਕਤੀ ਕਾਫ਼ੀ ਨਾ ਹੋਵੇ ਤਾਂ ਚਾਲੂ ਕਰੋ। ਜੇ ਸਿਰਫ਼ ਹਲਕਾ ਇਸ਼ਾਰਾ ਚਾਹੀਦਾ ਹੈ ਤਾਂ ਬੰਦ ਰੱਖੋ।"
+  },
+  "howBlockingWorks": {
+    "message": "ਬਲੌਕਿੰਗ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ"
+  },
+  "modeOffHelp": {
+    "message": "ਸਾਈਟ ਆਮ ਵਾਂਗ ਲੋਡ ਹੁੰਦੀ ਹੈ। Slowth ਕੁਝ ਨਹੀਂ ਕਰਦਾ।"
+  },
+  "siteSpecific": {
+    "message": "ਸਾਈਟ-ਵਿਸ਼ੇਸ਼ ਬਲੌਕ"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels ਜਾਂ X ਉੱਤੇ Explore ਅਤੇ ਰੁਝਾਨ ਬਲੌਕ ਕਰਦਾ ਹੈ। ਬਾਕੀ ਸਾਈਟ ਕੰਮ ਕਰਦੀ ਰਹਿੰਦੀ ਹੈ।"
+  },
+  "addFeed": {
+    "message": "ਫੀਡ ਬਲੌਕਿੰਗ ਜੋੜੋ"
+  },
+  "modeFeedHelp": {
+    "message": "ਕੁਝ ਸਕ੍ਰੀਨਾਂ ਤੋਂ ਬਾਅਦ ਬੇਅੰਤ ਹੋਮ ਫੀਡ ਵੀ ਰੋਕਦਾ ਹੈ। Instagram ਉੱਤੇ Explore, Stories ਅਤੇ Reels ਵਾਲੇ ਹੋਰ ਹਿੱਸੇ ਵੀ ਸ਼ਾਮਲ ਹਨ।"
+  },
+  "modeAllHelp": {
+    "message": "ਸਾਈਟ ਖੋਲ੍ਹਣ ਉੱਤੇ ਇਸ ਦੀ ਥਾਂ ਦੋਸਤਾਨਾ ਬਲੌਕ ਪੰਨਾ ਦਿਖਦਾ ਹੈ।"
+  },
+  "leaveFeedback": {
+    "message": "ਸੁਝਾਅ ਦਿਓ"
+  },
+  "showIntro": {
+    "message": "ਜਾਣ-ਪਛਾਣ ਮੁੜ ਦਿਖਾਓ"
+  },
+  "rulesNever": {
+    "message": "ਨਿਯਮ: ਕਦੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤੇ"
+  },
+  "rulesNow": {
+    "message": "ਨਿਯਮ: ਹੁਣੇ"
+  },
+  "rulesRelative": {
+    "message": "ਨਿਯਮ: $1"
+  },
+  "strictUntil": {
+    "message": "$1 ਤੱਕ ਸਖ਼ਤ ਮੋਡ ਚਾਲੂ"
+  },
+  "openSafariSettings": {
+    "message": "Safari ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ"
+  },
+  "rulesCurrent": {
+    "message": "ਨਿਯਮ: ਅੱਪਡੇਟ ਹਨ"
+  },
+  "rulesFailed": {
+    "message": "ਨਿਯਮ: ਅੱਪਡੇਟ ਨਹੀਂ ਹੋ ਸਕੇ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ਵੱਲੋਂ ਬਲੌਕ ਕੀਤਾ ਗਿਆ"
+  },
+  "thisSite": {
+    "message": "ਇਹ ਸਾਈਟ"
+  },
+  "blockedTitle": {
+    "message": "$1 ਬਲੌਕ ਹੈ"
+  },
+  "blockedTabTitle": {
+    "message": "ਬਲੌਕ: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth ਤੁਹਾਨੂੰ $1 ਤੋਂ ਦੂਰ ਰੱਖ ਰਿਹਾ ਹੈ। ਸਾਹ ਲਓ। ਕੁਝ ਹੋਰ ਕਰੋ।"
+  },
+  "backToSite": {
+    "message": "← $1 ਉੱਤੇ ਵਾਪਸ"
+  },
+  "why": {
+    "message": "ਕਿਉਂ"
+  },
+  "quoteTeam": {
+    "message": "Reels ਸੈਂਕੜੇ ਲੋਕਾਂ ਦੀ ਟੀਮ ਨੇ ਬਣਾਇਆ, ਜਿਨ੍ਹਾਂ ਦੀਆਂ ਤਨਖਾਹਾਂ $$400k ਸਨ। Slowth ਇੱਕ ਡਿਵੈਲਪਰ ਨੇ ਇੱਕ ਹਫ਼ਤੇਅੰਤ ਵਿੱਚ ਬਣਾਇਆ।"
+  },
+  "quoteBillions": {
+    "message": "ਤੁਹਾਨੂੰ ਸਕ੍ਰੋਲ ਕਰਦੇ ਰੱਖਣ ਲਈ ਉਹਨਾਂ ਨੇ ਅਰਬਾਂ ਖਰਚੇ। ਤੁਹਾਨੂੰ ਰੋਕਣ ਲਈ ਅਸੀਂ ਇੱਕ ਛੋਟਾ ਸਥਾਨਕ ਐਕਸਟੈਂਸ਼ਨ ਬਣਾਇਆ।"
+  },
+  "quoteBug": {
+    "message": "ਬੇਅੰਤ ਫੀਡ ਇੱਕ ਖਾਮੀ ਹੈ। ਇਹ ਰਿਹਾ ਹੱਲ।"
+  },
+  "best": {
+    "message": "ਸਭ ਤੋਂ ਵਧੀਆ"
+  },
+  "gameLabel": {
+    "message": "ਛੋਟੀ ਉਡਾਣ ਖੇਡ"
+  },
+  "gameHelp": {
+    "message": "ਖੰਭ ਫੜਫੜਾਉਣ ਲਈ ਟੈਪ ਕਰੋ ਜਾਂ ਸਪੇਸ ਦਬਾਓ"
+  },
+  "back": {
+    "message": "← ਵਾਪਸ"
+  },
+  "signature": {
+    "message": "Slowth · ਹੌਲੀ ਹੋਵੋ, ਸਾਹ ਲਓ, ਬਣਾਓ"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap ਖੇਡਣ ਲਈ ਟੈਪ ਕਰੋ →"
+  },
+  "avoidBranches": {
+    "message": "ਟਾਹਣੀਆਂ ਨਾਲ ਨਾ ਟਕਰਾਓ"
+  },
+  "newBest": {
+    "message": "ਨਵਾਂ ਰਿਕਾਰਡ! ਮੁੜ ਉੱਡਣ ਲਈ ਟੈਪ ਕਰੋ"
+  },
+  "flyAgain": {
+    "message": "ਮੁੜ ਉੱਡਣ ਲਈ ਟੈਪ ਕਰੋ"
+  },
+  "tapStart": {
+    "message": "ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ"
+  },
+  "gameOver": {
+    "message": "ਖੇਡ ਖਤਮ"
+  },
+  "feedTitle": {
+    "message": "ਬੇਅੰਤ ਫੀਡ ਬਲੌਕ ਹੈ"
+  },
+  "feedSubtitle": {
+    "message": "Slowth ਤੁਹਾਨੂੰ ਬੇਅੰਤ ਫੀਡ ਤੋਂ ਦੂਰ ਰੱਖ ਰਿਹਾ ਹੈ। ਸਾਹ ਲਓ। ਕੁਝ ਹੋਰ ਕਰੋ।"
+  },
+  "backHome": {
+    "message": "ਹੋਮ ਉੱਤੇ ਵਾਪਸ"
+  },
+  "dismiss": {
+    "message": "ਬੰਦ ਕਰੋ"
+  },
+  "storiesTime": {
+    "message": "ਤੁਸੀਂ ਸਟੋਰੀਆਂ ਉੱਤੇ ਪਹਿਲਾਂ ਹੀ $1 ਲਾ ਚੁੱਕੇ ਹੋ। ਸਾਹ ਲਓ।"
+  },
+  "enableSafari": {
+    "message": "Safari ਵਿੱਚ ਚਾਲੂ ਕਰੋ"
+  },
+  "openSettings": {
+    "message": "ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ"
+  },
+  "strictMode": {
+    "message": "ਸਖ਼ਤ ਮੋਡ"
+  },
+  "off": {
+    "message": "ਬੰਦ"
+  },
+  "blockShorts": {
+    "message": "Shorts ਬਲੌਕ ਕਰੋ"
+  },
+  "blockReels": {
+    "message": "Reels ਬਲੌਕ ਕਰੋ"
+  },
+  "blockFeeds": {
+    "message": "Reels ਅਤੇ ਫੀਡਾਂ ਬਲੌਕ ਕਰੋ"
+  },
+  "blockFeed": {
+    "message": "Reels ਅਤੇ ਫੀਡ ਬਲੌਕ ਕਰੋ"
+  },
+  "blockExplore": {
+    "message": "Explore ਅਤੇ ਰੁਝਾਨ ਬਲੌਕ ਕਰੋ"
+  },
+  "blockSite": {
+    "message": "ਸਾਈਟ ਬਲੌਕ ਕਰੋ"
+  },
+  "updating": {
+    "message": "ਅੱਪਡੇਟ ਹੋ ਰਿਹਾ ਹੈ…"
+  },
+  "blockInfiniteFeed": {
+    "message": "ਬੇਅੰਤ ਫੀਡ ਬਲੌਕ ਕਰੋ"
+  },
+  "infiniteFeedHelp": {
+    "message": "ਬੇਅੰਤ ਫੀਡ ਸਕ੍ਰੋਲ ਨੂੰ ਸੀਮਤ ਕਰਦੀ ਹੈ। Instagram ਉੱਤੇ ਇਸ ਵਿੱਚ Explore ਅਤੇ Stories ਵੀ ਸ਼ਾਮਲ ਹਨ।"
+  },
+  "settingsSaveFailed": {
+    "message": "ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
+  }
+}

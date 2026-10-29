@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safariയിൽ Shorts, Reels, TikTok, ശ്രദ്ധ തെറ്റിക്കുന്ന ഫീഡുകൾ തടയുക."
+  },
+  "locale": {
+    "message": "ml"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram, Facebook Reels, Xലെ Explore, ട്രെൻഡുകൾ എന്നിവ തടയുക. TikTok പൂർണമായി തടയുക. കർശന മോഡിൽ ക്രമീകരണങ്ങൾ 24 മണിക്കൂർ ലോക്ക് ചെയ്യുക."
+  },
+  "stepSettings": {
+    "message": "ഉപകരണത്തിലെ ക്രമീകരണങ്ങൾ തുറക്കുക"
+  },
+  "stepExtensions": {
+    "message": "ആപ്പുകൾ → Safari → എക്സ്റ്റൻഷനുകളിലേക്ക് പോകുക"
+  },
+  "stepEnable": {
+    "message": "Slowth ഓൺ ചെയ്ത് എല്ലാ വെബ്സൈറ്റിലും അനുവദിക്കുക"
+  },
+  "onboardingDone": {
+    "message": "ഞാൻ സജീവമാക്കി"
+  },
+  "blocking": {
+    "message": "തടയൽ"
+  },
+  "strictHelp": {
+    "message": "24 മണിക്കൂർ സജീവ നിയന്ത്രണങ്ങൾ ഓഫ് ചെയ്യാനാവില്ല. നിയന്ത്രണങ്ങൾ ചേർക്കാം, എന്നാൽ മുഴുവൻ സൈറ്റും തടയൽ സജീവമാക്കാനാവില്ല."
+  },
+  "strictEnableConfirm": {
+    "message": "24 മണിക്കൂർ സജീവ നിയന്ത്രണങ്ങൾ ഓഫ് ചെയ്യാനാവില്ല. നിയന്ത്രണങ്ങൾ ചേർക്കാം, എന്നാൽ മുഴുവൻ സൈറ്റും തടയൽ സജീവമാക്കാനാവില്ല."
+  },
+  "strictConfirmTitle": {
+    "message": "കർശന മോഡ് സജീവമാക്കണോ?"
+  },
+  "cancel": {
+    "message": "റദ്ദാക്കുക"
+  },
+  "enable": {
+    "message": "സജീവമാക്കുക"
+  },
+  "updates": {
+    "message": "അപ്ഡേറ്റുകൾ"
+  },
+  "updateNow": {
+    "message": "ഇപ്പോൾ പുതുക്കുക"
+  },
+  "loading": {
+    "message": "ലോഡ് ചെയ്യുന്നു…"
+  },
+  "guide": {
+    "message": "മാർഗദർശി"
+  },
+  "howToUse": {
+    "message": "Slowth ഉപയോഗിക്കുന്നത് എങ്ങനെ"
+  },
+  "modesExplained": {
+    "message": "കർശന മോഡും ഓരോ സൈറ്റിന്റെ മോഡുകളും വിശദീകരിക്കുന്നു"
+  },
+  "strictGuideTitle": {
+    "message": "കർശന മോഡ് എന്ത് ചെയ്യുന്നു"
+  },
+  "strictGuide": {
+    "message": "24 മണിക്കൂർ സജീവ നിയന്ത്രണങ്ങൾ ഓഫ് ചെയ്യാനാവില്ല. നിയന്ത്രണങ്ങൾ ചേർക്കാം, എന്നാൽ മുഴുവൻ സൈറ്റും തടയൽ സജീവമാക്കാനാവില്ല. പുനരാരംഭിച്ചാലും നിർബന്ധിച്ച് അടച്ചാലും ടൈമർ തുടരും."
+  },
+  "strictAdvice": {
+    "message": "മനോബലം മാത്രം പോരാത്തപ്പോൾ ഓൺ ചെയ്യുക. ചെറിയൊരു ഓർമ്മപ്പെടുത്തൽ മതിയെങ്കിൽ ഓഫ് ആയി വയ്ക്കുക."
+  },
+  "howBlockingWorks": {
+    "message": "തടയൽ പ്രവർത്തിക്കുന്നത് എങ്ങനെ"
+  },
+  "modeOffHelp": {
+    "message": "സൈറ്റ് പതിവുപോലെ ലോഡ് ചെയ്യും. Slowth ഒന്നും ചെയ്യില്ല."
+  },
+  "siteSpecific": {
+    "message": "സൈറ്റ് അനുസരിച്ചുള്ള തടയൽ"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels, അല്ലെങ്കിൽ Xലെ Explore, ട്രെൻഡുകൾ തടയുന്നു. സൈറ്റിന്റെ ബാക്കി ഭാഗം പ്രവർത്തിക്കും."
+  },
+  "addFeed": {
+    "message": "ഫീഡ് തടയൽ ചേർക്കുക"
+  },
+  "modeFeedHelp": {
+    "message": "ഏതാനും സ്ക്രീനുകൾക്കുശേഷം അവസാനമില്ലാത്ത ഹോം ഫീഡും നിർത്തും. Instagramൽ Explore, Stories, അധിക Reels ഭാഗങ്ങൾ എന്നിവയും ഉൾപ്പെടും."
+  },
+  "modeAllHelp": {
+    "message": "സൈറ്റ് സന്ദർശിക്കുമ്പോൾ പകരം സൗഹൃദപരമായ തടയൽ പേജ് കാണിക്കും."
+  },
+  "leaveFeedback": {
+    "message": "പ്രതികരണം നൽകുക"
+  },
+  "showIntro": {
+    "message": "ആമുഖം വീണ്ടും കാണിക്കുക"
+  },
+  "rulesNever": {
+    "message": "നിയമങ്ങൾ: ഇതുവരെ ലഭ്യമാക്കിയിട്ടില്ല"
+  },
+  "rulesNow": {
+    "message": "നിയമങ്ങൾ: ഇപ്പോൾത്തന്നെ"
+  },
+  "rulesRelative": {
+    "message": "നിയമങ്ങൾ: $1"
+  },
+  "strictUntil": {
+    "message": "$1 വരെ കർശന മോഡ് സജീവം"
+  },
+  "openSafariSettings": {
+    "message": "Safari ക്രമീകരണങ്ങൾ തുറക്കുക"
+  },
+  "rulesCurrent": {
+    "message": "നിയമങ്ങൾ: പുതുക്കിയതാണ്"
+  },
+  "rulesFailed": {
+    "message": "നിയമങ്ങൾ: പുതുക്കാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth തടഞ്ഞിരിക്കുന്നു"
+  },
+  "thisSite": {
+    "message": "ഈ സൈറ്റ്"
+  },
+  "blockedTitle": {
+    "message": "$1 തടഞ്ഞിരിക്കുന്നു"
+  },
+  "blockedTabTitle": {
+    "message": "തടഞ്ഞത്: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth നിങ്ങളെ $1ൽനിന്ന് അകറ്റുന്നു. ശ്വാസമെടുക്കൂ. മറ്റെന്തെങ്കിലും ചെയ്യൂ."
+  },
+  "backToSite": {
+    "message": "← $1ലേക്ക് മടങ്ങുക"
+  },
+  "why": {
+    "message": "എന്തുകൊണ്ട്"
+  },
+  "quoteTeam": {
+    "message": "$$400k ശമ്പളം വാങ്ങുന്ന നൂറുകണക്കിന് ആളുകളുടെ സംഘമാണ് Reels നിർമ്മിച്ചത്. Slowth ഒരു ഡെവലപ്പർ ഒരു വാരാന്ത്യത്തിൽ നിർമ്മിച്ചതാണ്."
+  },
+  "quoteBillions": {
+    "message": "നിങ്ങളെ സ്ക്രോൾ ചെയ്യിക്കാൻ അവർ ശതകോടികൾ ചെലവഴിച്ചു. നിങ്ങളെ നിർത്താൻ ഞങ്ങൾ ചെറിയൊരു ലോക്കൽ എക്സ്റ്റൻഷൻ ഉണ്ടാക്കി."
+  },
+  "quoteBug": {
+    "message": "അനന്ത ഫീഡ് ഒരു പിശകാണ്. ഇതാ പരിഹാരം."
+  },
+  "best": {
+    "message": "മികച്ചത്"
+  },
+  "gameLabel": {
+    "message": "ചെറിയ പറക്കൽ കളി"
+  },
+  "gameHelp": {
+    "message": "ചിറകടിക്കാൻ ടാപ്പ് ചെയ്യുക അല്ലെങ്കിൽ സ്പേസ് അമർത്തുക"
+  },
+  "back": {
+    "message": "← തിരികെ"
+  },
+  "signature": {
+    "message": "Slowth · വേഗം കുറയ്ക്കൂ, ശ്വസിക്കൂ, സൃഷ്ടിക്കൂ"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap കളിക്കാൻ ടാപ്പ് ചെയ്യുക →"
+  },
+  "avoidBranches": {
+    "message": "കൊമ്പുകളിൽ ഇടിക്കരുത്"
+  },
+  "newBest": {
+    "message": "പുതിയ റെക്കോർഡ്! വീണ്ടും പറക്കാൻ ടാപ്പ് ചെയ്യുക"
+  },
+  "flyAgain": {
+    "message": "വീണ്ടും പറക്കാൻ ടാപ്പ് ചെയ്യുക"
+  },
+  "tapStart": {
+    "message": "തുടങ്ങാൻ ടാപ്പ് ചെയ്യുക"
+  },
+  "gameOver": {
+    "message": "കളി കഴിഞ്ഞു"
+  },
+  "feedTitle": {
+    "message": "അനന്ത ഫീഡ് തടഞ്ഞിരിക്കുന്നു"
+  },
+  "feedSubtitle": {
+    "message": "Slowth നിങ്ങളെ അനന്ത ഫീഡിൽനിന്ന് അകറ്റുന്നു. ശ്വാസമെടുക്കൂ. മറ്റെന്തെങ്കിലും ചെയ്യൂ."
+  },
+  "backHome": {
+    "message": "ഹോമിലേക്ക് മടങ്ങുക"
+  },
+  "dismiss": {
+    "message": "അടയ്ക്കുക"
+  },
+  "storiesTime": {
+    "message": "സ്റ്റോറികൾക്കായി ഇതിനകം $1 ചെലവഴിച്ചു. ശ്വാസമെടുക്കൂ."
+  },
+  "enableSafari": {
+    "message": "Safariയിൽ സജീവമാക്കുക"
+  },
+  "openSettings": {
+    "message": "ക്രമീകരണങ്ങൾ തുറക്കുക"
+  },
+  "strictMode": {
+    "message": "കർശന മോഡ്"
+  },
+  "off": {
+    "message": "ഓഫ്"
+  },
+  "blockShorts": {
+    "message": "Shorts തടയുക"
+  },
+  "blockReels": {
+    "message": "Reels തടയുക"
+  },
+  "blockFeeds": {
+    "message": "Reels, ഫീഡുകൾ തടയുക"
+  },
+  "blockFeed": {
+    "message": "Reels, ഫീഡ് തടയുക"
+  },
+  "blockExplore": {
+    "message": "Explore, ട്രെൻഡുകൾ തടയുക"
+  },
+  "blockSite": {
+    "message": "സൈറ്റ് തടയുക"
+  },
+  "updating": {
+    "message": "പുതുക്കുന്നു…"
+  },
+  "blockInfiniteFeed": {
+    "message": "അനന്ത ഫീഡ് തടയുക"
+  },
+  "infiniteFeedHelp": {
+    "message": "അനന്ത ഫീഡ് സ്ക്രോളിംഗ് പരിമിതപ്പെടുത്തുന്നു. Instagramൽ Explore, Stories എന്നിവയും ഉൾപ്പെടും."
+  },
+  "settingsSaveFailed": {
+    "message": "സംരക്ഷിക്കാനായില്ല"
+  }
+}

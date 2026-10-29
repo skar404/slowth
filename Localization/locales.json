@@ -1,0 +1,566 @@
+{
+  "schemaVersion": 1,
+  "source": "https://developer.apple.com/help/app-store-connect/reference/app-information/app-store-localizations/",
+  "verifiedOn": "2026-10-29",
+  "appStore": {
+    "ar-SA": {
+      "language": "ar",
+      "appleLocale": "ar_SA",
+      "label": "Arabic",
+      "direction": "rtl"
+    },
+    "bn-BD": {
+      "language": "bn",
+      "appleLocale": "bn_BD",
+      "label": "Bangla",
+      "direction": "ltr"
+    },
+    "ca": {
+      "language": "ca",
+      "appleLocale": "ca_ES",
+      "label": "Catalan",
+      "direction": "ltr"
+    },
+    "zh-Hans": {
+      "language": "zh-Hans",
+      "appleLocale": "zh_CN",
+      "label": "Chinese (Simplified)",
+      "direction": "ltr"
+    },
+    "zh-Hant": {
+      "language": "zh-Hant",
+      "appleLocale": "zh_TW",
+      "label": "Chinese (Traditional)",
+      "direction": "ltr"
+    },
+    "hr": {
+      "language": "hr",
+      "appleLocale": "hr_HR",
+      "label": "Croatian",
+      "direction": "ltr"
+    },
+    "cs": {
+      "language": "cs",
+      "appleLocale": "cs_CZ",
+      "label": "Czech",
+      "direction": "ltr"
+    },
+    "da": {
+      "language": "da",
+      "appleLocale": "da_DK",
+      "label": "Danish",
+      "direction": "ltr"
+    },
+    "nl-NL": {
+      "language": "nl",
+      "appleLocale": "nl_NL",
+      "label": "Dutch",
+      "direction": "ltr"
+    },
+    "en-AU": {
+      "language": "en-AU",
+      "appleLocale": "en_AU",
+      "label": "English (Australia)",
+      "direction": "ltr"
+    },
+    "en-CA": {
+      "language": "en-CA",
+      "appleLocale": "en_CA",
+      "label": "English (Canada)",
+      "direction": "ltr"
+    },
+    "en-GB": {
+      "language": "en-GB",
+      "appleLocale": "en_GB",
+      "label": "English (UK)",
+      "direction": "ltr"
+    },
+    "en-US": {
+      "language": "en",
+      "appleLocale": "en_US",
+      "label": "English (US)",
+      "direction": "ltr"
+    },
+    "fi": {
+      "language": "fi",
+      "appleLocale": "fi_FI",
+      "label": "Finnish",
+      "direction": "ltr"
+    },
+    "fr-FR": {
+      "language": "fr",
+      "appleLocale": "fr_FR",
+      "label": "French",
+      "direction": "ltr"
+    },
+    "fr-CA": {
+      "language": "fr-CA",
+      "appleLocale": "fr_CA",
+      "label": "French (Canada)",
+      "direction": "ltr"
+    },
+    "de-DE": {
+      "language": "de",
+      "appleLocale": "de_DE",
+      "label": "German",
+      "direction": "ltr"
+    },
+    "el": {
+      "language": "el",
+      "appleLocale": "el_GR",
+      "label": "Greek",
+      "direction": "ltr"
+    },
+    "gu-IN": {
+      "language": "gu",
+      "appleLocale": "gu_IN",
+      "label": "Gujarati",
+      "direction": "ltr"
+    },
+    "he": {
+      "language": "he",
+      "appleLocale": "he_IL",
+      "label": "Hebrew",
+      "direction": "rtl"
+    },
+    "hi": {
+      "language": "hi",
+      "appleLocale": "hi_IN",
+      "label": "Hindi",
+      "direction": "ltr"
+    },
+    "hu": {
+      "language": "hu",
+      "appleLocale": "hu_HU",
+      "label": "Hungarian",
+      "direction": "ltr"
+    },
+    "id": {
+      "language": "id",
+      "appleLocale": "id_ID",
+      "label": "Indonesian",
+      "direction": "ltr"
+    },
+    "it": {
+      "language": "it",
+      "appleLocale": "it_IT",
+      "label": "Italian",
+      "direction": "ltr"
+    },
+    "ja": {
+      "language": "ja",
+      "appleLocale": "ja_JP",
+      "label": "Japanese",
+      "direction": "ltr"
+    },
+    "kn-IN": {
+      "language": "kn",
+      "appleLocale": "kn_IN",
+      "label": "Kannada",
+      "direction": "ltr"
+    },
+    "ko": {
+      "language": "ko",
+      "appleLocale": "ko_KR",
+      "label": "Korean",
+      "direction": "ltr"
+    },
+    "ms": {
+      "language": "ms",
+      "appleLocale": "ms_MY",
+      "label": "Malay",
+      "direction": "ltr"
+    },
+    "ml-IN": {
+      "language": "ml",
+      "appleLocale": "ml_IN",
+      "label": "Malayalam",
+      "direction": "ltr"
+    },
+    "mr-IN": {
+      "language": "mr",
+      "appleLocale": "mr_IN",
+      "label": "Marathi",
+      "direction": "ltr"
+    },
+    "no": {
+      "language": "nb",
+      "appleLocale": "nb_NO",
+      "label": "Norwegian",
+      "direction": "ltr"
+    },
+    "or-IN": {
+      "language": "or",
+      "appleLocale": "or_IN",
+      "label": "Odia",
+      "direction": "ltr"
+    },
+    "pl": {
+      "language": "pl",
+      "appleLocale": "pl_PL",
+      "label": "Polish",
+      "direction": "ltr"
+    },
+    "pt-BR": {
+      "language": "pt-BR",
+      "appleLocale": "pt_BR",
+      "label": "Portuguese (Brazil)",
+      "direction": "ltr"
+    },
+    "pt-PT": {
+      "language": "pt-PT",
+      "appleLocale": "pt_PT",
+      "label": "Portuguese (Portugal)",
+      "direction": "ltr"
+    },
+    "pa-IN": {
+      "language": "pa",
+      "appleLocale": "pa_IN",
+      "label": "Punjabi (Gurmukhi)",
+      "direction": "ltr"
+    },
+    "ro": {
+      "language": "ro",
+      "appleLocale": "ro_RO",
+      "label": "Romanian",
+      "direction": "ltr"
+    },
+    "ru": {
+      "language": "ru",
+      "appleLocale": "ru_RU",
+      "label": "Russian",
+      "direction": "ltr"
+    },
+    "sk": {
+      "language": "sk",
+      "appleLocale": "sk_SK",
+      "label": "Slovak",
+      "direction": "ltr"
+    },
+    "es-MX": {
+      "language": "es-MX",
+      "appleLocale": "es_MX",
+      "label": "Spanish (Mexico)",
+      "direction": "ltr"
+    },
+    "es-ES": {
+      "language": "es",
+      "appleLocale": "es_ES",
+      "label": "Spanish (Spain)",
+      "direction": "ltr"
+    },
+    "sv": {
+      "language": "sv",
+      "appleLocale": "sv_SE",
+      "label": "Swedish",
+      "direction": "ltr"
+    },
+    "ta-IN": {
+      "language": "ta",
+      "appleLocale": "ta_IN",
+      "label": "Tamil",
+      "direction": "ltr"
+    },
+    "te-IN": {
+      "language": "te",
+      "appleLocale": "te_IN",
+      "label": "Telugu",
+      "direction": "ltr"
+    },
+    "th": {
+      "language": "th",
+      "appleLocale": "th_TH",
+      "label": "Thai",
+      "direction": "ltr"
+    },
+    "tr": {
+      "language": "tr",
+      "appleLocale": "tr_TR",
+      "label": "Turkish",
+      "direction": "ltr"
+    },
+    "uk": {
+      "language": "uk",
+      "appleLocale": "uk_UA",
+      "label": "Ukrainian",
+      "direction": "ltr"
+    },
+    "ur-PK": {
+      "language": "ur",
+      "appleLocale": "ur_PK",
+      "label": "Urdu",
+      "direction": "rtl"
+    },
+    "vi": {
+      "language": "vi",
+      "appleLocale": "vi_VN",
+      "label": "Vietnamese",
+      "direction": "ltr"
+    },
+    "sl-SI": {
+      "language": "sl",
+      "appleLocale": "sl_SI",
+      "label": "Slovenian",
+      "direction": "ltr"
+    }
+  },
+  "appLanguages": {
+    "ar": {
+      "webExtension": "ar",
+      "direction": "rtl"
+    },
+    "ar-EG": {
+      "webExtension": "ar_EG",
+      "direction": "rtl"
+    },
+    "be": {
+      "webExtension": "be",
+      "direction": "ltr"
+    },
+    "bn": {
+      "webExtension": "bn",
+      "direction": "ltr"
+    },
+    "ca": {
+      "webExtension": "ca",
+      "direction": "ltr"
+    },
+    "cs": {
+      "webExtension": "cs",
+      "direction": "ltr"
+    },
+    "da": {
+      "webExtension": "da",
+      "direction": "ltr"
+    },
+    "de": {
+      "webExtension": "de",
+      "direction": "ltr"
+    },
+    "el": {
+      "webExtension": "el",
+      "direction": "ltr"
+    },
+    "en": {
+      "webExtension": "en",
+      "direction": "ltr"
+    },
+    "en-AU": {
+      "webExtension": "en_AU",
+      "direction": "ltr"
+    },
+    "en-CA": {
+      "webExtension": "en_CA",
+      "direction": "ltr"
+    },
+    "en-GB": {
+      "webExtension": "en_GB",
+      "direction": "ltr"
+    },
+    "es": {
+      "webExtension": "es",
+      "direction": "ltr"
+    },
+    "es-MX": {
+      "webExtension": "es_MX",
+      "direction": "ltr"
+    },
+    "fi": {
+      "webExtension": "fi",
+      "direction": "ltr"
+    },
+    "fil": {
+      "webExtension": "fil",
+      "direction": "ltr"
+    },
+    "fr": {
+      "webExtension": "fr",
+      "direction": "ltr"
+    },
+    "fr-CA": {
+      "webExtension": "fr_CA",
+      "direction": "ltr"
+    },
+    "gu": {
+      "webExtension": "gu",
+      "direction": "ltr"
+    },
+    "ha": {
+      "webExtension": "ha",
+      "direction": "ltr"
+    },
+    "he": {
+      "webExtension": "he",
+      "direction": "rtl"
+    },
+    "hi": {
+      "webExtension": "hi",
+      "direction": "ltr"
+    },
+    "hr": {
+      "webExtension": "hr",
+      "direction": "ltr"
+    },
+    "hu": {
+      "webExtension": "hu",
+      "direction": "ltr"
+    },
+    "hy": {
+      "webExtension": "hy",
+      "direction": "ltr"
+    },
+    "id": {
+      "webExtension": "id",
+      "direction": "ltr"
+    },
+    "it": {
+      "webExtension": "it",
+      "direction": "ltr"
+    },
+    "ja": {
+      "webExtension": "ja",
+      "direction": "ltr"
+    },
+    "ka": {
+      "webExtension": "ka",
+      "direction": "ltr"
+    },
+    "kk": {
+      "webExtension": "kk",
+      "direction": "ltr"
+    },
+    "kn": {
+      "webExtension": "kn",
+      "direction": "ltr"
+    },
+    "ko": {
+      "webExtension": "ko",
+      "direction": "ltr"
+    },
+    "ky": {
+      "webExtension": "ky",
+      "direction": "ltr"
+    },
+    "lt": {
+      "webExtension": "lt",
+      "direction": "ltr"
+    },
+    "ml": {
+      "webExtension": "ml",
+      "direction": "ltr"
+    },
+    "mr": {
+      "webExtension": "mr",
+      "direction": "ltr"
+    },
+    "ms": {
+      "webExtension": "ms",
+      "direction": "ltr"
+    },
+    "nb": {
+      "webExtension": "nb",
+      "direction": "ltr"
+    },
+    "ne": {
+      "webExtension": "ne",
+      "direction": "ltr"
+    },
+    "nl": {
+      "webExtension": "nl",
+      "direction": "ltr"
+    },
+    "or": {
+      "webExtension": "or",
+      "direction": "ltr"
+    },
+    "pa": {
+      "webExtension": "pa",
+      "direction": "ltr"
+    },
+    "pa-Arab": {
+      "webExtension": "pa_Arab",
+      "direction": "rtl"
+    },
+    "pcm": {
+      "webExtension": "pcm",
+      "direction": "ltr"
+    },
+    "pl": {
+      "webExtension": "pl",
+      "direction": "ltr"
+    },
+    "pt-BR": {
+      "webExtension": "pt_BR",
+      "direction": "ltr"
+    },
+    "pt-PT": {
+      "webExtension": "pt_PT",
+      "direction": "ltr"
+    },
+    "ro": {
+      "webExtension": "ro",
+      "direction": "ltr"
+    },
+    "ru": {
+      "webExtension": "ru",
+      "direction": "ltr"
+    },
+    "sk": {
+      "webExtension": "sk",
+      "direction": "ltr"
+    },
+    "sl": {
+      "webExtension": "sl",
+      "direction": "ltr"
+    },
+    "sv": {
+      "webExtension": "sv",
+      "direction": "ltr"
+    },
+    "sw": {
+      "webExtension": "sw",
+      "direction": "ltr"
+    },
+    "ta": {
+      "webExtension": "ta",
+      "direction": "ltr"
+    },
+    "te": {
+      "webExtension": "te",
+      "direction": "ltr"
+    },
+    "th": {
+      "webExtension": "th",
+      "direction": "ltr"
+    },
+    "tr": {
+      "webExtension": "tr",
+      "direction": "ltr"
+    },
+    "uk": {
+      "webExtension": "uk",
+      "direction": "ltr"
+    },
+    "ur": {
+      "webExtension": "ur",
+      "direction": "rtl"
+    },
+    "vi": {
+      "webExtension": "vi",
+      "direction": "ltr"
+    },
+    "yue": {
+      "webExtension": "yue",
+      "direction": "ltr"
+    },
+    "zh-Hans": {
+      "webExtension": "zh_CN",
+      "direction": "ltr"
+    },
+    "zh-Hant": {
+      "webExtension": "zh_TW",
+      "direction": "ltr"
+    }
+  },
+  "shortcodeSource": "https://developer.apple.com/documentation/appstoreconnectapi/managing-metadata-in-your-app-by-using-locale-shortcodes"
+}

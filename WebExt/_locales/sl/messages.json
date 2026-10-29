@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokirajte Shorts, Reels, TikTok in moteče vire v Safariju z nastavitvami za posamezna mesta."
+  },
+  "locale": {
+    "message": "sl"
+  },
+  "tagline": {
+    "message": "Blokirajte YouTube Shorts, Instagram in Facebook Reels ter Raziskuj in trende na X. Povsem blokirajte TikTok. Zaklenite nastavitve s strogim načinom za 24 ur."
+  },
+  "stepSettings": {
+    "message": "Odprite Nastavitve v napravi"
+  },
+  "stepExtensions": {
+    "message": "Pojdite v Aplikacije → Safari → Razširitve"
+  },
+  "stepEnable": {
+    "message": "Vklopite Slowth in ga dovolite na vseh spletnih mestih"
+  },
+  "onboardingDone": {
+    "message": "Vklopljeno je"
+  },
+  "blocking": {
+    "message": "Blokiranje"
+  },
+  "strictHelp": {
+    "message": "Vklopljenih omejitev 24 ur ni mogoče izklopiti. Omejitve lahko dodajate, ne morete pa vklopiti blokiranja celotnih mest."
+  },
+  "strictEnableConfirm": {
+    "message": "Vklopljenih omejitev 24 ur ni mogoče izklopiti. Omejitve lahko dodajate, ne morete pa vklopiti blokiranja celotnih mest."
+  },
+  "strictConfirmTitle": {
+    "message": "Vklopiti strogi način?"
+  },
+  "cancel": {
+    "message": "Prekliči"
+  },
+  "enable": {
+    "message": "Vklopi"
+  },
+  "updates": {
+    "message": "Posodobitve"
+  },
+  "updateNow": {
+    "message": "Posodobi zdaj"
+  },
+  "loading": {
+    "message": "Nalaganje…"
+  },
+  "guide": {
+    "message": "Vodnik"
+  },
+  "howToUse": {
+    "message": "Kako uporabljati Slowth"
+  },
+  "modesExplained": {
+    "message": "Razlaga strogega načina in načinov po mestih"
+  },
+  "strictGuideTitle": {
+    "message": "Kaj naredi strogi način"
+  },
+  "strictGuide": {
+    "message": "Vklopljenih omejitev 24 ur ni mogoče izklopiti. Omejitve lahko dodajate, ne morete pa vklopiti blokiranja celotnih mest. Časovnik deluje tudi po ponovnem zagonu in prisilnem zapiranju."
+  },
+  "strictAdvice": {
+    "message": "Vklopite ga, ko sama volja ne zadošča. Pustite ga izklopljenega, če želite le blag opomnik."
+  },
+  "howBlockingWorks": {
+    "message": "Kako deluje blokiranje"
+  },
+  "modeOffHelp": {
+    "message": "Mesto se naloži kot običajno. Slowth ne naredi ničesar."
+  },
+  "siteSpecific": {
+    "message": "Blokiranje posameznega mesta"
+  },
+  "modeShortsHelp": {
+    "message": "Blokira YouTube Shorts, Instagram/Facebook Reels ali Raziskuj in trende na X. Preostanek mesta deluje naprej."
+  },
+  "addFeed": {
+    "message": "Dodaj blokiranje vira"
+  },
+  "modeFeedHelp": {
+    "message": "Po nekaj zaslonih ustavi tudi neskončni glavni vir. Na Instagramu vključuje še Raziskuj, zgodbe in dodatne dele z Reels."
+  },
+  "modeAllHelp": {
+    "message": "Ob obisku mesta se namesto njega prikaže prijazna blokirna stran."
+  },
+  "leaveFeedback": {
+    "message": "Pošlji povratne informacije"
+  },
+  "showIntro": {
+    "message": "Znova pokaži uvod"
+  },
+  "rulesNever": {
+    "message": "Pravila: nikoli pridobljena"
+  },
+  "rulesNow": {
+    "message": "Pravila: pravkar"
+  },
+  "rulesRelative": {
+    "message": "Pravila: $1"
+  },
+  "strictUntil": {
+    "message": "Strogi način aktiven do $1"
+  },
+  "openSafariSettings": {
+    "message": "Odpri nastavitve Safarija"
+  },
+  "rulesCurrent": {
+    "message": "Pravila: posodobljena"
+  },
+  "rulesFailed": {
+    "message": "Pravila: posodobitev ni uspela. Poskusite znova."
+  },
+  "blockedPageTitle": {
+    "message": "Blokiral Slowth"
+  },
+  "thisSite": {
+    "message": "to mesto"
+  },
+  "blockedTitle": {
+    "message": "$1 je blokiran"
+  },
+  "blockedTabTitle": {
+    "message": "Blokirano: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth vas drži stran od $1. Zadihajte. Počnite kaj drugega."
+  },
+  "backToSite": {
+    "message": "← Nazaj na $1"
+  },
+  "why": {
+    "message": "Zakaj"
+  },
+  "quoteTeam": {
+    "message": "Reels je ustvarila ekipa več sto ljudi s plačami $$400k. Slowth je ustvaril en razvijalec v enem koncu tedna."
+  },
+  "quoteBillions": {
+    "message": "Porabili so milijarde, da bi še naprej drseli. Mi smo ustvarili majhno lokalno razširitev, da se ustavite."
+  },
+  "quoteBug": {
+    "message": "Neskončni vir je napaka. Tu je popravek."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Mala igra letenja"
+  },
+  "gameHelp": {
+    "message": "Tapnite ali pritisnite preslednico za zamah"
+  },
+  "back": {
+    "message": "← Nazaj"
+  },
+  "signature": {
+    "message": "Slowth · upočasni, dihaj, ustvarjaj"
+  },
+  "playHint": {
+    "message": "🦥 tapnite za igro Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Ne zadenite vej"
+  },
+  "newBest": {
+    "message": "Nov rekord! Tapnite za nov polet"
+  },
+  "flyAgain": {
+    "message": "Tapnite za nov polet"
+  },
+  "tapStart": {
+    "message": "Tapnite za začetek"
+  },
+  "gameOver": {
+    "message": "Konec igre"
+  },
+  "feedTitle": {
+    "message": "Neskončni vir je blokiran"
+  },
+  "feedSubtitle": {
+    "message": "Slowth vas drži stran od neskončnega vira. Zadihajte. Počnite kaj drugega."
+  },
+  "backHome": {
+    "message": "Nazaj na začetek"
+  },
+  "dismiss": {
+    "message": "Zapri"
+  },
+  "storiesTime": {
+    "message": "Za zgodbe ste že porabili $1. Zadihajte."
+  },
+  "enableSafari": {
+    "message": "Vklopi v Safariju"
+  },
+  "openSettings": {
+    "message": "Odpri Nastavitve"
+  },
+  "strictMode": {
+    "message": "Strogi način"
+  },
+  "off": {
+    "message": "Izklopljeno"
+  },
+  "blockShorts": {
+    "message": "Blokiraj Shorts"
+  },
+  "blockReels": {
+    "message": "Blokiraj Reels"
+  },
+  "blockFeeds": {
+    "message": "Blokiraj Reels in vire"
+  },
+  "blockFeed": {
+    "message": "Blokiraj Reels in vir"
+  },
+  "blockExplore": {
+    "message": "Blokiraj Raziskuj in trende"
+  },
+  "blockSite": {
+    "message": "Blokiraj mesto"
+  },
+  "updating": {
+    "message": "Posodabljanje…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokiraj neskončni vir"
+  },
+  "infiniteFeedHelp": {
+    "message": "Neskončni vir omeji drsenje. Na Instagramu vključuje tudi Raziskuj in zgodbe."
+  },
+  "settingsSaveFailed": {
+    "message": "Shranjevanje ni uspelo"
+  }
+}

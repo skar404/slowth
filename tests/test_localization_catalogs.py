@@ -1,5 +1,6 @@
 """Regression checks for gates: missing translations and corrupt compiled plurals."""
 import copy
+import json
 import plistlib
 import sys
 import tempfile
@@ -19,7 +20,8 @@ class LocalizationTests(unittest.TestCase):
     def test_all_shipping_catalogs(self):
         catalogs = load_catalogs()
         locales = supported_locales(catalogs)
-        self.assertEqual(len(locales), 46)
+        registry = json.loads((Path(__file__).resolve().parents[1] / 'Localization/locales.json').read_text())
+        self.assertEqual(locales, set(registry['appLanguages']))
         for name, catalog in catalogs.items():
             verify_catalog(catalog, locales, name)
 
@@ -53,6 +55,17 @@ class LocalizationTests(unittest.TestCase):
             path.write_bytes(plistlib.dumps(data))
             with self.assertRaises(AssertionError):
                 verify_table(root, 'Interface', catalog, {'en'})
+
+    def test_english_fallback_and_wrong_punjabi_script_are_rejected(self):
+        key = 'Start screen recording'
+        catalog = {'sourceLanguage': 'en', 'strings': {key: {'localizations': {
+            'en': unit(key), 'pa': unit('ਸਕ੍ਰੀਨ ਰਿਕਾਰਡਿੰਗ ਸ਼ੁਰੂ ਕਰੋ')
+        }}}}
+        verify_catalog(catalog, {'en', 'pa'}, 'Interface')
+        for value in [key, 'سکرین ریکارڈنگ شروع کرو']:
+            catalog['strings'][key]['localizations']['pa'] = unit(value)
+            with self.assertRaises(AssertionError):
+                verify_catalog(catalog, {'en', 'pa'}, 'Interface')
 
 
 if __name__ == '__main__':

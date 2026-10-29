@@ -14,14 +14,16 @@ struct AppLocalizationTests {
         precondition(domain.hasPrefix("test.slowth.localization."))
         defer { defaults.removePersistentDomain(forName: domain) }
         func choose(_ language: String) { defaults.set(language, forKey: AppLocalization.languageKey) }
-        precondition(AppLocalization.availableLanguages.count == 46)
+        let registry = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1]))) as! [String: Any]
+        let languages = registry["appLanguages"] as! [String: Any]
+        precondition(Set(AppLocalization.availableLanguages) == Set(languages.keys))
         for language in AppLocalization.availableLanguages {
             choose(language)
             precondition(!AppLocalization.languageName(language).isEmpty)
             precondition(AppLocalization.locale.identifier == language)
             let bundle = AppLocalization.bundle(in: .main, preference: language)
             precondition(AppLocalization.string("Feedback & Support") == bundle.localizedString(forKey: "Feedback & Support", value: nil, table: nil))
-            precondition(AppLocalization.string("Language") != "Language" || ["en", "pcm"].contains(language))
+            precondition(AppLocalization.string("Language") != "Language" || (["en", "pcm"].contains(language) || language.hasPrefix("en-")))
         }
         choose("en")
         precondition(AppLocalization.string("Feedback & Support") == "Feedback & Support")
@@ -47,6 +49,6 @@ struct AppLocalizationTests {
         precondition(system == Bundle.main.preferredLocalizations.first)
         choose("unsupported-language")
         precondition(AppLocalization.locale.identifier == system)
-        print("App language: 46 locales, immediate switching, interpolation, persistence, RTL and system fallback passed")
+        print("App language: \(languages.count) locales, immediate switching, interpolation, persistence, RTL and system fallback passed")
     }
 }

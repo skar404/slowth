@@ -23,4 +23,4 @@ if proc.returncode:
     failures.append('English fallback')
 if failures:
     raise SystemExit('Failed locale selections: ' + ', '.join(failures))
-print('All 46 WebKit locale selections + English fallback passed')
+print(f'All {len(list((root / "WebExt/_locales").glob("*/messages.json")))} WebKit locale selections + English fallback passed')

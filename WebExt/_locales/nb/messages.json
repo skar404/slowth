@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokker Shorts, Reels, TikTok og distraherende strømmer i Safari med innstillinger for hvert nettsted."
+  },
+  "locale": {
+    "message": "nb"
+  },
+  "tagline": {
+    "message": "Blokker YouTube Shorts, Instagram- og Facebook-Reels samt Utforsk og trender på X. Blokker TikTok helt. Lås innstillingene i 24 timer med streng modus."
+  },
+  "stepSettings": {
+    "message": "Åpne Innstillinger på enheten"
+  },
+  "stepExtensions": {
+    "message": "Gå til Apper → Safari → Utvidelser"
+  },
+  "stepEnable": {
+    "message": "Slå på Slowth og tillat det på alle nettsteder"
+  },
+  "onboardingDone": {
+    "message": "Jeg har slått det på"
+  },
+  "blocking": {
+    "message": "Blokkering"
+  },
+  "strictHelp": {
+    "message": "Aktiverte begrensninger kan ikke slås av i 24 timer. Du kan legge til begrensninger, men ikke slå på blokkering av hele nettsteder."
+  },
+  "strictEnableConfirm": {
+    "message": "Aktiverte begrensninger kan ikke slås av i 24 timer. Du kan legge til begrensninger, men ikke slå på blokkering av hele nettsteder."
+  },
+  "strictConfirmTitle": {
+    "message": "Slå på streng modus?"
+  },
+  "cancel": {
+    "message": "Avbryt"
+  },
+  "enable": {
+    "message": "Slå på"
+  },
+  "updates": {
+    "message": "Oppdateringer"
+  },
+  "updateNow": {
+    "message": "Oppdater nå"
+  },
+  "loading": {
+    "message": "Laster inn…"
+  },
+  "guide": {
+    "message": "Veiledning"
+  },
+  "howToUse": {
+    "message": "Slik bruker du Slowth"
+  },
+  "modesExplained": {
+    "message": "Forklaring av streng modus og moduser per nettsted"
+  },
+  "strictGuideTitle": {
+    "message": "Hva streng modus gjør"
+  },
+  "strictGuide": {
+    "message": "Aktiverte begrensninger kan ikke slås av i 24 timer. Du kan legge til begrensninger, men ikke slå på blokkering av hele nettsteder. Tidsuret fortsetter etter omstart og tvungen avslutning."
+  },
+  "strictAdvice": {
+    "message": "Slå det på når viljestyrken alene ikke strekker til. La det være av hvis du bare vil ha en forsiktig påminnelse."
+  },
+  "howBlockingWorks": {
+    "message": "Slik fungerer blokkering"
+  },
+  "modeOffHelp": {
+    "message": "Nettstedet lastes som vanlig. Slowth gjør ingenting."
+  },
+  "siteSpecific": {
+    "message": "Blokkering per nettsted"
+  },
+  "modeShortsHelp": {
+    "message": "Blokkerer YouTube Shorts, Instagram-/Facebook-Reels eller Utforsk og trender på X. Resten av nettstedet fungerer fortsatt."
+  },
+  "addFeed": {
+    "message": "Legg til blokkering av strømmen"
+  },
+  "modeFeedHelp": {
+    "message": "Stopper også den endeløse hovedstrømmen etter noen skjermlengder. På Instagram dekkes også Utforsk, historier og flere steder med Reels."
+  },
+  "modeAllHelp": {
+    "message": "Når du besøker nettstedet, vises en vennlig blokkeringsside i stedet."
+  },
+  "leaveFeedback": {
+    "message": "Gi tilbakemelding"
+  },
+  "showIntro": {
+    "message": "Vis introduksjonen igjen"
+  },
+  "rulesNever": {
+    "message": "Regler: aldri hentet"
+  },
+  "rulesNow": {
+    "message": "Regler: akkurat nå"
+  },
+  "rulesRelative": {
+    "message": "Regler: $1"
+  },
+  "strictUntil": {
+    "message": "Streng modus aktiv til $1"
+  },
+  "openSafariSettings": {
+    "message": "Åpne Safari-innstillinger"
+  },
+  "rulesCurrent": {
+    "message": "Regler: oppdatert"
+  },
+  "rulesFailed": {
+    "message": "Regler: kunne ikke oppdatere. Prøv igjen."
+  },
+  "blockedPageTitle": {
+    "message": "Blokkert av Slowth"
+  },
+  "thisSite": {
+    "message": "dette nettstedet"
+  },
+  "blockedTitle": {
+    "message": "$1 er blokkert"
+  },
+  "blockedTabTitle": {
+    "message": "Blokkert: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth holder deg unna $1. Pust ut. Gjør noe annet."
+  },
+  "backToSite": {
+    "message": "← Tilbake til $1"
+  },
+  "why": {
+    "message": "Hvorfor"
+  },
+  "quoteTeam": {
+    "message": "Reels ble laget av et team på hundrevis av personer med lønn på $$400k. Slowth ble laget av én utvikler i løpet av en helg."
+  },
+  "quoteBillions": {
+    "message": "De brukte milliarder på å få deg til å fortsette å rulle. Vi laget en liten lokal utvidelse for å få deg til å stoppe."
+  },
+  "quoteBug": {
+    "message": "Den endeløse strømmen er en feil. Her er løsningen."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Lite flyspill"
+  },
+  "gameHelp": {
+    "message": "Trykk eller bruk mellomromstasten for å flakse"
+  },
+  "back": {
+    "message": "← Tilbake"
+  },
+  "signature": {
+    "message": "Slowth · senk tempoet, pust, skap"
+  },
+  "playHint": {
+    "message": "🦥 trykk for å spille Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Ikke treff grenene"
+  },
+  "newBest": {
+    "message": "Ny rekord! Trykk for å fly igjen"
+  },
+  "flyAgain": {
+    "message": "Trykk for å fly igjen"
+  },
+  "tapStart": {
+    "message": "Trykk for å starte"
+  },
+  "gameOver": {
+    "message": "Spillet er over"
+  },
+  "feedTitle": {
+    "message": "Den endeløse strømmen er blokkert"
+  },
+  "feedSubtitle": {
+    "message": "Slowth holder deg unna den endeløse strømmen. Pust ut. Gjør noe annet."
+  },
+  "backHome": {
+    "message": "Tilbake til startsiden"
+  },
+  "dismiss": {
+    "message": "Lukk"
+  },
+  "storiesTime": {
+    "message": "Du har allerede brukt $1 på historier. Pust ut."
+  },
+  "enableSafari": {
+    "message": "Slå på i Safari"
+  },
+  "openSettings": {
+    "message": "Åpne Innstillinger"
+  },
+  "strictMode": {
+    "message": "Streng modus"
+  },
+  "off": {
+    "message": "Av"
+  },
+  "blockShorts": {
+    "message": "Blokker Shorts"
+  },
+  "blockReels": {
+    "message": "Blokker Reels"
+  },
+  "blockFeeds": {
+    "message": "Blokker Reels og strømmer"
+  },
+  "blockFeed": {
+    "message": "Blokker Reels og strøm"
+  },
+  "blockExplore": {
+    "message": "Blokker Utforsk og trender"
+  },
+  "blockSite": {
+    "message": "Blokker nettsted"
+  },
+  "updating": {
+    "message": "Oppdaterer…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokker endeløs strøm"
+  },
+  "infiniteFeedHelp": {
+    "message": "Endeløs strøm begrenser rulling. På Instagram omfatter det også Utforsk og historier."
+  },
+  "settingsSaveFailed": {
+    "message": "Kunne ikke lagre"
+  }
+}

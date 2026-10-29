@@ -13,9 +13,17 @@ on:
         default: Slowth-models.tar.gz
         type: string
       testflight:
-        description: Sign both apps, notarize macOS and upload both to TestFlight
+        description: Sign and upload selected platforms to TestFlight (macOS also notarized)
         default: false
         type: boolean
+      platform:
+        description: Platforms to build (iOS uploads never build or upload macOS)
+        required: true
+        default: both
+        type: choice
+        options:
+          - both
+          - iOS
       release_tag:
         description: Signed version tag to publish after success (empty for build-only runs)
         default: ''
@@ -51,7 +59,10 @@ jobs:
           TESTFLIGHT: ${{ inputs.testflight }}
           MODEL_RELEASE: ${{ inputs.model_release }}
           MODEL_ASSET: ${{ inputs.model_asset }}
-        run: python3 scripts/release.py automation check --tag "$RELEASE_TAG"
+          BUILD_PLATFORM: ${{ inputs.platform || 'both' }}
+        run: |
+          test "$BUILD_PLATFORM" = both
+          python3 scripts/release.py automation check --tag "$RELEASE_TAG"
   build:
     needs: preflight
     if: github.ref == 'refs/heads/main' && inputs.source_run == ''
@@ -64,6 +75,7 @@ jobs:
       attestations: write
     env:
       DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
+      BUILD_PLATFORM: ${{ inputs.platform || 'both' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -106,9 +118,10 @@ jobs:
         if: ${{ !inputs.testflight }}
         run: >-
           python3 scripts/release.py build
+          --platform "$BUILD_PLATFORM"
           --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
           --output "$RUNNER_TEMP/slowth-build"
-      - name: Build both apps, notarize macOS and upload IPA and PKG to TestFlight
+      - name: Build and upload selected platforms to TestFlight
         if: inputs.testflight
         env:
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
@@ -136,6 +149,7 @@ jobs:
           IOS_PROFILE_SHIELD_ACTION_BASE64: ${{ secrets.IOS_PROFILE_SHIELD_ACTION_BASE64 }}
         run: >-
           python3 scripts/release.py build --testflight
+          --platform "$BUILD_PLATFORM"
           --model-bundle "$RUNNER_TEMP/Slowth-models.tar.gz"
           --output "$RUNNER_TEMP/slowth-build"
       - name: Attest the exact uploaded IPA
@@ -145,13 +159,13 @@ jobs:
         with:
           subject-path: ${{ runner.temp }}/slowth-build/public/Unscroll.ipa
       - name: Attest the notarized macOS download
-        if: inputs.testflight
+        if: inputs.testflight && inputs.platform != 'iOS'
         id: macos-attestation
         uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
         with:
           subject-path: ${{ runner.temp }}/slowth-build/public/Slowth-macOS.zip
       - name: Attest the exact macOS package uploaded to TestFlight
-        if: inputs.testflight
+        if: inputs.testflight && inputs.platform != 'iOS'
         id: macos-store-attestation
         uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661 # v3
         with:
@@ -199,9 +213,9 @@ jobs:
           TESTFLIGHT: ${{ inputs.testflight }}
         run: |
           if [[ "$TESTFLIGHT" == true ]]; then
-            echo 'Verified iOS IPA and macOS PKG uploaded and processed by Apple. Select this same build for App Store review; do not rebuild it.' >> "$GITHUB_STEP_SUMMARY"
+            echo "Selected platforms ($BUILD_PLATFORM) uploaded and processed by Apple. Select the same build for App Store review; do not rebuild it." >> "$GITHUB_STEP_SUMMARY"
           else
-            echo 'Unsigned iOS and macOS archive validation only. Nothing was uploaded to Apple.' >> "$GITHUB_STEP_SUMMARY"
+            echo "Unsigned archive validation ($BUILD_PLATFORM) only. Nothing was uploaded to Apple." >> "$GITHUB_STEP_SUMMARY"
           fi
           echo 'Download build-evidence for the manifest and attestations; signed runs retain the exact uploaded IPA/PKG and notarized Mac ZIP. Version-tag runs publish a verified GitHub Release in the next job.' >> "$GITHUB_STEP_SUMMARY"
 

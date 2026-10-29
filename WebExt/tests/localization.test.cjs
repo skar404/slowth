@@ -9,11 +9,13 @@ const languages = fs.readdirSync(path.join(root, '_locales')).filter(l => fs.exi
 const locales = Object.fromEntries(languages.map(l => [l, JSON.parse(read(`_locales/${l}/messages.json`))]));
 // Apple catalogs and Intl use BCP 47; WebExtensions use underscore-based
 // region names, including zh_CN for Simplified Chinese.
-const nativeLocale = language => ({ pt_BR: 'pt-BR', pt_PT: 'pt-PT', zh_CN: 'zh-Hans', zh_TW: 'zh-Hant', ar_EG: 'ar-EG', pa_Arab: 'pa-Arab' }[language] || language);
-const nativeLanguages = languages.map(nativeLocale).sort();
+const registry = JSON.parse(read('../Localization/locales.json'));
+const webToNative = Object.fromEntries(Object.entries(registry.appLanguages).map(([native, row]) => [row.webExtension, native]));
+const nativeLocale = language => webToNative[language];
+const nativeLanguages = Object.keys(registry.appLanguages).sort();
 const unsupportedLanguage = 'zz';
-const expectedLanguages = 'ar ar_EG be bn cs da de en es fil fr ha he hi hu hy id it ja ka kk ko ky lt mr ne nl pa_Arab pcm pl pt_BR pt_PT ro ru sv sw ta te th tr uk ur vi yue zh_CN zh_TW'.split(' ').sort();
-const rtlLanguages = new Set(['ar', 'ar_EG', 'he', 'ur', 'pa_Arab']);
+const expectedLanguages = Object.keys(webToNative).sort();
+const rtlLanguages = new Set(Object.values(registry.appLanguages).filter(row => row.direction === 'rtl').map(row => row.webExtension));
 const direction = language => rtlLanguages.has(language) ? 'rtl' : 'ltr';
 const placeholders = value => (value.replaceAll('$$', '').match(/\$\d+/g) || []).sort();
 

@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Bloqueja YouTube Shorts, Reels, TikTok i els canals de distracció a Safari amb controls per lloc."
+  },
+  "locale": {
+    "message": "ca"
+  },
+  "tagline": {
+    "message": "Bloqueja YouTube Shorts, Instagram i Facebook Reels, més Explora i tendències a X. Bloqueja TikTok completament. Bloqueja la teva configuració amb el mode estricte durant 24 hores."
+  },
+  "stepSettings": {
+    "message": "Obriu Configuració al dispositiu"
+  },
+  "stepExtensions": {
+    "message": "Aneu a Aplicacions → Safari → Extensions"
+  },
+  "stepEnable": {
+    "message": "Activa Slowth i permet-ho a tots els llocs web"
+  },
+  "onboardingDone": {
+    "message": "L'he habilitat"
+  },
+  "blocking": {
+    "message": "Bloqueig"
+  },
+  "strictHelp": {
+    "message": "Durant 24 hores, les restriccions activades no es poden desactivar. Podeu afegir restriccions, però no podeu activar el bloqueig de tot el lloc."
+  },
+  "strictEnableConfirm": {
+    "message": "Durant 24 hores, les restriccions activades no es poden desactivar. Podeu afegir restriccions, però no podeu activar el bloqueig de tot el lloc."
+  },
+  "strictConfirmTitle": {
+    "message": "Vols activar el mode estricte?"
+  },
+  "cancel": {
+    "message": "Cancel·la"
+  },
+  "enable": {
+    "message": "Activa"
+  },
+  "updates": {
+    "message": "Actualitzacions"
+  },
+  "updateNow": {
+    "message": "Actualitza ara"
+  },
+  "loading": {
+    "message": "S'està carregant…"
+  },
+  "guide": {
+    "message": "Guia"
+  },
+  "howToUse": {
+    "message": "Com utilitzar Slowth"
+  },
+  "modesExplained": {
+    "message": "S'explica el mode estricte i els modes per lloc"
+  },
+  "strictGuideTitle": {
+    "message": "Què fa el mode estricte"
+  },
+  "strictGuide": {
+    "message": "Durant 24 hores, les restriccions activades no es poden desactivar. Podeu afegir restriccions, però no podeu activar el bloqueig de tot el lloc. El temporitzador sobreviu als reinicis i a les sortides forçades."
+  },
+  "strictAdvice": {
+    "message": "Enceneu-lo quan només la força de voluntat no sigui suficient. Deixeu-ho apagat si només voleu un cop suau."
+  },
+  "howBlockingWorks": {
+    "message": "Com funciona el bloqueig"
+  },
+  "modeOffHelp": {
+    "message": "El lloc es carrega com de costum. Slowth no fa res."
+  },
+  "siteSpecific": {
+    "message": "Bloc específic del lloc"
+  },
+  "modeShortsHelp": {
+    "message": "Blocs YouTube Shorts, Instagram / Facebook Reels o X Explora i tendències. La resta del lloc continua funcionant."
+  },
+  "addFeed": {
+    "message": "Afegeix bloqueig de feeds"
+  },
+  "modeFeedHelp": {
+    "message": "També atura el canal d'inici sense fi després d'unes quantes pantalles. Instagram també cobreix Explore, Stories i més superfícies Reels."
+  },
+  "modeAllHelp": {
+    "message": "En visitar el lloc es mostra una pàgina bloquejada amigable."
+  },
+  "leaveFeedback": {
+    "message": "Deixa comentaris"
+  },
+  "showIntro": {
+    "message": "Mostra la introducció de nou"
+  },
+  "rulesNever": {
+    "message": "Regles: mai s'han agafat"
+  },
+  "rulesNow": {
+    "message": "Regles: ara mateix"
+  },
+  "rulesRelative": {
+    "message": "Normes: $1"
+  },
+  "strictUntil": {
+    "message": "Mode estricte actiu fins a $1"
+  },
+  "openSafariSettings": {
+    "message": "Obriu la configuració de Safari"
+  },
+  "rulesCurrent": {
+    "message": "Normes: actualitzades"
+  },
+  "rulesFailed": {
+    "message": "Regles: no s'ha pogut actualitzar. Si us plau, torna-ho a provar."
+  },
+  "blockedPageTitle": {
+    "message": "Bloquejat per Slowth"
+  },
+  "thisSite": {
+    "message": "aquest lloc"
+  },
+  "blockedTitle": {
+    "message": "$1 està bloquejat"
+  },
+  "blockedTabTitle": {
+    "message": "Bloquejat: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth us manté fora de $1. Respira. Fes una altra cosa."
+  },
+  "backToSite": {
+    "message": "← Torna a $1"
+  },
+  "why": {
+    "message": "Per què"
+  },
+  "quoteTeam": {
+    "message": "Reels va ser creat per un equip de centenars de persones amb sous de $$400k. Slowth el va crear un sol desenvolupador en un cap de setmana."
+  },
+  "quoteBillions": {
+    "message": "Van gastar milers de milions per mantenir-te desplaçant. Hem construït una petita ampliació local per fer-vos aturar."
+  },
+  "quoteBug": {
+    "message": "L'alimentació infinita és un error. Aquí teniu la solució."
+  },
+  "best": {
+    "message": "millor"
+  },
+  "gameLabel": {
+    "message": "Mini joc de solapes"
+  },
+  "gameHelp": {
+    "message": "Toqueu o premeu espai per tancar"
+  },
+  "back": {
+    "message": "← Enrere"
+  },
+  "signature": {
+    "message": "Slowth · frenar, respirar, construir"
+  },
+  "playHint": {
+    "message": "🦥 toca per jugar a Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "No colpejar les branques"
+  },
+  "newBest": {
+    "message": "El millor nou! Toca per tornar a volar"
+  },
+  "flyAgain": {
+    "message": "Toca per tornar a volar"
+  },
+  "tapStart": {
+    "message": "Toqueu per començar"
+  },
+  "gameOver": {
+    "message": "S'ha acabat el joc"
+  },
+  "feedTitle": {
+    "message": "L'alimentació infinita està bloquejada"
+  },
+  "feedSubtitle": {
+    "message": "Slowth us manté fora de l'alimentació infinita. Respira. Fes una altra cosa."
+  },
+  "backHome": {
+    "message": "Tornada a casa"
+  },
+  "dismiss": {
+    "message": "Descartar"
+  },
+  "storiesTime": {
+    "message": "Ja has gravat $1 a les històries. Respira."
+  },
+  "enableSafari": {
+    "message": "Activa a Safari"
+  },
+  "openSettings": {
+    "message": "Obriu Configuració"
+  },
+  "strictMode": {
+    "message": "Mode estricte"
+  },
+  "off": {
+    "message": "Desactivat"
+  },
+  "blockShorts": {
+    "message": "Bloc Shorts"
+  },
+  "blockReels": {
+    "message": "Bloc Reels"
+  },
+  "blockFeeds": {
+    "message": "Bloqueja Reels + feeds"
+  },
+  "blockFeed": {
+    "message": "Bloc Reels + feed"
+  },
+  "blockExplore": {
+    "message": "Bloqueja Explora i tendències"
+  },
+  "blockSite": {
+    "message": "Bloquejar el lloc"
+  },
+  "updating": {
+    "message": "S'està actualitzant..."
+  },
+  "blockInfiniteFeed": {
+    "message": "Bloqueja l'alimentació infinita"
+  },
+  "infiniteFeedHelp": {
+    "message": "Feed infinit limita el desplaçament. A Instagram també inclou Explore i Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "No s'ha pogut desar"
+  }
+}

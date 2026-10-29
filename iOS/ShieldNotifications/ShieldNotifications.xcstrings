@@ -279,6 +279,114 @@
             "state": "translated",
             "value": "在 Slowth 中開始螢幕錄影以繼續"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start screen recording in Slowth to continue"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start screen recording in Slowth to continue"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start screen recording in Slowth to continue"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarre l’enregistrement de l’écran dans Slowth pour continuer"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia la grabación de pantalla en Slowth para continuar"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicieu l'enregistrament de la pantalla a Slowth per continuar"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ξεκινήστε την εγγραφή οθόνης στο Slowth για να συνεχίσετε"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aloita näytön tallennus Slowth:ssä jatkaaksesi"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start skjermopptak i Slowth for å fortsette"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mulakan rakaman skrin dalam Slowth untuk meneruskan"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokrenite snimanje zaslona u Slowthu da biste nastavili"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spustite nahrávanie obrazovky v Slowthe a pokračujte"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Za nadaljevanje začnite snemati zaslon v Slowthu"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਜਾਰੀ ਰੱਖਣ ਲਈ Slowth ਵਿੱਚ ਸਕ੍ਰੀਨ ਰਿਕਾਰਡਿੰਗ ਸ਼ੁਰੂ ਕਰੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આગળ વધવા Slowthમાં સ્ક્રીન રેકોર્ડિંગ શરૂ કરો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮುಂದುವರಿಯಲು Slowthನಲ್ಲಿ ಪರದೆ ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "തുടരാൻ Slowthൽ സ്ക്രീൻ റെക്കോർഡിംഗ് തുടങ്ങുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଜାରି ରଖିବାକୁ Slowthରେ ସ୍କ୍ରିନ୍ ରେକର୍ଡିଂ ଆରମ୍ଭ କରନ୍ତୁ"
+          }
         }
       }
     },
@@ -559,6 +667,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "開啟 Slowth 查看剩餘休息時間"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to see your remaining rest time"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to see your remaining rest time"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to see your remaining rest time"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre Slowth pour voir le temps de repos restant"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre Slowth para ver cuánto tiempo de descanso te queda"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obriu Slowth per veure el temps de descans restant"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ανοίξτε το Slowth για να δείτε τον υπόλοιπο χρόνο ανάπαυσης"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avaa Slowth nähdäksesi jäljellä oleva lepoaikasi"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åpne Slowth for å se gjenværende hviletid"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Slowth untuk melihat baki masa rehat"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvorite Slowth da biste vidjeli preostalo vrijeme odmora"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvorte Slowth a pozrite si zostávajúci čas oddychu"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odprite Slowth, da vidite preostali čas počitka"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਰਾਮ ਦਾ ਬਾਕੀ ਸਮਾਂ ਦੇਖਣ ਲਈ Slowth ਖੋਲ੍ਹੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આરામનો બાકી સમય જોવા Slowth ખોલો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿದ ವಿಶ್ರಾಂತಿ ಸಮಯ ನೋಡಲು Slowth ತೆರೆಯಿರಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "വിശ്രമത്തിന്റെ ബാക്കി സമയം കാണാൻ Slowth തുറക്കുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବାକି ବିଶ୍ରାମ ସମୟ ଦେଖିବାକୁ Slowth ଖୋଲନ୍ତୁ"
           }
         }
       }
@@ -841,6 +1057,114 @@
             "state": "translated",
             "value": "開啟 Slowth 選擇暫停"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to choose a pause"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to choose a pause"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to choose a pause"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre Slowth pour choisir une pause"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre Slowth para elegir una pausa"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obriu Slowth per triar una pausa"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ανοίξτε το Slowth για να επιλέξετε παύση"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valitse tauko avaamalla Slowth"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åpne Slowth for å velge en pause"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Slowth untuk memilih jeda"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvorite Slowth da biste odabrali stanku"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvorte Slowth a vyberte prestávku"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odprite Slowth, da izberete premor"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਵਿਰਾਮ ਚੁਣਨ ਲਈ Slowth ਖੋਲ੍ਹੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "વિરામ પસંદ કરવા Slowth ખોલો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವಿರಾಮ ಆಯ್ಕೆಮಾಡಲು Slowth ತೆರೆಯಿರಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഇടവേള തിരഞ്ഞെടുക്കാൻ Slowth തുറക്കുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିରତି ବାଛିବାକୁ Slowth ଖୋଲନ୍ତୁ"
+          }
         }
       }
     },
@@ -1121,6 +1445,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "開啟Slowth選擇如何繼續。"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to choose how to continue"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to choose how to continue"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Slowth to choose how to continue"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez Slowth pour choisir comment continuer."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra Slowth para elegir cómo continuar."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obriu Slowth per triar com continuar"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ανοίξτε το Slowth για να επιλέξετε πώς θα συνεχίσετε"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avaa Slowth valitaksesi, miten jatkat"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åpne Slowth for å velge hvordan du vil fortsette"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Slowth untuk memilih cara meneruskan"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvorite Slowth da biste odabrali kako nastaviti"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvorte Slowth a vyberte, ako pokračovať"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odprite Slowth, da izberete način nadaljevanja"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅੱਗੇ ਵਧਣ ਦਾ ਤਰੀਕਾ ਚੁਣਨ ਲਈ Slowth ਖੋਲ੍ਹੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આગળ કેવી રીતે વધવું તે પસંદ કરવા Slowth ખોલો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮುಂದುವರಿಯುವ ವಿಧಾನ ಆಯ್ಕೆಮಾಡಲು Slowth ತೆರೆಯಿರಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "തുടരേണ്ട രീതി തിരഞ്ഞെടുക്കാൻ Slowth തുറക്കുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆଗକୁ ବଢ଼ିବା ଉପାୟ ବାଛିବାକୁ Slowth ଖୋଲନ୍ତୁ"
           }
         }
       }
@@ -1403,6 +1835,114 @@
             "state": "translated",
             "value": "開啟通知，以便從封鎖畫面開啟 Slowth"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable notifications to open Slowth from blocking"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable notifications to open Slowth from blocking"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable notifications to open Slowth from blocking"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active les notifications pour ouvrir Slowth depuis l’écran de blocage"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activa las notificaciones para abrir Slowth desde la pantalla de bloqueo de la app"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habiliteu les notificacions per obrir Slowth de bloqueig"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ενεργοποιήστε τις ειδοποιήσεις για να ανοίξετε το Slowth από αποκλεισμό"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ota ilmoitukset käyttöön avataksesi Slowth:n eston"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slå på varslinger for å åpne Slowth fra blokkeringen"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan pemberitahuan untuk membuka Slowth daripada sekatan"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uključite obavijesti za otvaranje Slowtha iz blokiranja"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapnite hlásenia na otvorenie Slowthu z blokovania"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vklopite obvestila za odpiranje Slowtha iz blokiranja"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਬਲੌਕਿੰਗ ਤੋਂ Slowth ਖੋਲ੍ਹਣ ਲਈ ਸੂਚਨਾਵਾਂ ਚਾਲੂ ਕਰੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "બ્લૉકિંગમાંથી Slowth ખોલવા સૂચનાઓ ચાલુ કરો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿರ್ಬಂಧದಿಂದ Slowth ತೆರೆಯಲು ಅಧಿಸೂಚನೆಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "തടയലിൽനിന്ന് Slowth തുറക്കാൻ അറിയിപ്പുകൾ സജീവമാക്കുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଅବରୋଧରୁ Slowth ଖୋଲିବାକୁ ସୂଚନା ସକ୍ରିୟ କରନ୍ତୁ"
+          }
         }
       }
     },
@@ -1683,6 +2223,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "用於開啟 Slowth 的通知已開啟"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications for opening Slowth are enabled"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications for opening Slowth are enabled"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications for opening Slowth are enabled"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications pour ouvrir Slowth sont activées"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones para abrir Slowth están activadas"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notificacions per obrir Slowth estan habilitades"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι ειδοποιήσεις για το άνοιγμα του Slowth είναι ενεργοποιημένες"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ilmoitukset Slowth:n avaamisesta ovat käytössä"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Varslinger for å åpne Slowth er slått på"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pemberitahuan untuk membuka Slowth diaktifkan"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obavijesti za otvaranje Slowtha su uključene"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hlásenia na otváranie Slowthu sú zapnuté"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obvestila za odpiranje Slowtha so vklopljena"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ਖੋਲ੍ਹਣ ਲਈ ਸੂਚਨਾਵਾਂ ਚਾਲੂ ਹਨ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ખોલવા માટે સૂચનાઓ ચાલુ છે"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ತೆರೆಯುವ ಅಧಿಸೂಚನೆಗಳು ಸಕ್ರಿಯವಾಗಿವೆ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth തുറക്കാനുള്ള അറിയിപ്പുകൾ സജീവമാണ്"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ଖୋଲିବା ସୂଚନା ସକ୍ରିୟ ଅଛି"
           }
         }
       }
@@ -1965,6 +2613,114 @@
             "state": "translated",
             "value": "通知設定"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification settings"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification settings"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification settings"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages des notifications"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuración de notificaciones"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuració de notificacions"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ρυθμίσεις ειδοποίησης"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ilmoitusasetukset"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Varslingsinnstillinger"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seting pemberitahuan"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Postavke obavijesti"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nastavenia hlásení"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nastavitve obvestil"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੂਚਨਾ ਸੈਟਿੰਗਾਂ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સૂચના સેટિંગ્સ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಅಧಿಸೂಚನೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അറിയിപ്പ് ക്രമീകരണങ്ങൾ"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସୂଚନା ସେଟିଂସ୍"
+          }
         }
       }
     },
@@ -2245,6 +3001,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "開啟設定"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open settings"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open settings"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open settings"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Réglages"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Configuración"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obre la configuració"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Άνοιγμα ρυθμίσεων"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avaa asetukset"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Åpne innstillinger"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka seting"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvori postavke"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otvoriť nastavenia"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odpri nastavitve"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સેટિંગ્સ ખોલો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು ತೆರೆಯಿರಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ക്രമീകരണങ്ങൾ തുറക്കുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଟିଂସ୍ ଖୋଲନ୍ତୁ"
           }
         }
       }
@@ -2527,6 +3391,114 @@
             "state": "translated",
             "value": "取消"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel·la"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ακύρωση"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peruuta"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avbryt"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Batal"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odustani"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zrušiť"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prekliči"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰੱਦ ਕਰੋ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "રદ કરો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ರದ್ದುಮಾಡಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "റദ്ദാക്കുക"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବାତିଲ୍ କରନ୍ତୁ"
+          }
         }
       }
     },
@@ -2807,6 +3779,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "請在「設定」中允許橫幅。專注模式可能會隱藏通知；你隨時可以手動開啟 Slowth。"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow banners in Settings. Focus may hide notifications; you can always open Slowth manually."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow banners in Settings. Focus may hide notifications; you can always open Slowth manually."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow banners in Settings. Focus may hide notifications; you can always open Slowth manually."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorise les bannières dans Réglages. Un mode de concentration peut masquer les notifications ; tu peux toujours ouvrir Slowth manuellement."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite las tiras en Configuración. Un modo de concentración puede ocultar las notificaciones; siempre puedes abrir Slowth manualmente."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permet banners a Configuració. El focus pot amagar les notificacions; sempre podeu obrir Slowth manualment."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Να επιτρέπονται τα banner στις Ρυθμίσεις. Η εστίαση μπορεί να κρύβει ειδοποιήσεις. μπορείτε πάντα να ανοίξετε το Slowth χειροκίνητα."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salli bannerit asetuksissa. Focus voi piilottaa ilmoitukset; voit aina avata Slowth:n manuaalisesti."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tillat bannere i Innstillinger. Fokus kan skjule varslinger; du kan alltid åpne Slowth manuelt."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benarkan sepanduk dalam Seting. Fokus mungkin menyembunyikan pemberitahuan; anda boleh membuka Slowth secara manual pada bila-bila masa."
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopustite banere u Postavkama. Fokus može sakriti obavijesti; Slowth uvijek možete otvoriti ručno."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Povoľte bannery v Nastaveniach. Môj čas môže skryť hlásenia; Slowth môžete vždy otvoriť manuálne."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V Nastavitvah dovolite pasice. Osredotočenost lahko skrije obvestila; Slowth lahko vedno odprete ročno."
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਬੈਨਰਾਂ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ। Focus ਸੂਚਨਾਵਾਂ ਲੁਕਾ ਸਕਦਾ ਹੈ; ਤੁਸੀਂ Slowth ਨੂੰ ਹੱਥੀਂ ਕਦੇ ਵੀ ਖੋਲ੍ਹ ਸਕਦੇ ਹੋ।"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સેટિંગ્સમાં બેનરોને મંજૂરી આપો. ફોકસ સૂચનાઓને છુપાવી શકે છે; તમે હંમેશા Slowth જાતે ખોલી શકો છો."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಬ್ಯಾನರ್‌ಗಳನ್ನು ಅನುಮತಿಸಿ. Focus ಅಧಿಸೂಚನೆಗಳನ್ನು ಮರೆಮಾಡಬಹುದು; ನೀವು Slowth ಅನ್ನು ಕೈಯಾರೆ ಯಾವಾಗ ಬೇಕಾದರೂ ತೆರೆಯಬಹುದು."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ക്രമീകരണങ്ങളിൽ ബാനറുകൾ അനുവദിക്കുക. Focus അറിയിപ്പുകൾ മറച്ചേക്കാം; Slowth നിങ്ങൾക്ക് എപ്പോഴും നേരിട്ട് തുറക്കാം."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଟିଂସ୍‌ରେ ବ୍ୟାନର୍ ଅନୁମତି ଦିଅନ୍ତୁ। Focus ସୂଚନା ଲୁଚାଇପାରେ; ଆପଣ Slowthକୁ ନିଜେ ଯେକୌଣସି ସମୟରେ ଖୋଲିପାରିବେ।"
           }
         }
       }
@@ -3089,6 +4169,114 @@
             "state": "translated",
             "value": "Slowth · 休息一分鐘"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · One-minute rest"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · One-minute rest"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · One-minute rest"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Une minute de repos"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Un minuto de descanso"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Un minut de descans"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Ένα λεπτό ξεκούραση"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Minuutin lepo"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Ett minutts hvile"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Rehat satu minit"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Jednominutni odmor"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Minútový oddych"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Enominutni počitek"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ਇੱਕ ਮਿੰਟ ਦਾ ਆਰਾਮ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · એક મિનિટનો આરામ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ಒಂದು ನಿಮಿಷದ ವಿಶ್ರಾಂತಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ഒരു മിനിറ്റ് വിശ്രമം"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ଏକ ମିନିଟ୍ ବିଶ୍ରାମ"
+          }
         }
       }
     },
@@ -3369,6 +4557,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slowth · 螢幕錄製"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Screen recording"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Screen recording"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Screen recording"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Enregistrement d'écran"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Grabación de pantalla"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Enregistrament de pantalla"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Εγγραφή οθόνης"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Näytön tallennus"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Skjermopptak"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Rakaman skrin"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Snimanje zaslona"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Nahrávanie obrazovky"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Snemanje zaslona"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ਸਕ੍ਰੀਨ ਰਿਕਾਰਡਿੰਗ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · સ્ક્રીન રેકોર્ડિંગ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ಪರದೆ ರೆಕಾರ್ಡಿಂಗ್"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · സ്ക്രീൻ റെക്കോർഡിംഗ്"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ସ୍କ୍ରିନ୍ ରେକର୍ଡିଂ"
           }
         }
       }
@@ -3651,6 +4947,114 @@
             "state": "translated",
             "value": "點一下 Slowth，然後開啟其通知。如果沒有橫幅，請查看通知中心或手動開啟 Slowth。"
           }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap Slowth, then open its notification. If no banner appears, check Notification Center or open Slowth manually."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap Slowth, then open its notification. If no banner appears, check Notification Center or open Slowth manually."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap Slowth, then open its notification. If no banner appears, check Notification Center or open Slowth manually."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche Slowth, puis ouvre sa notification. Si aucune bannière n’apparaît, consulte le Centre de notifications ou ouvre Slowth manuellement."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca Slowth y luego abre su notificación. Si no aparece ningún aviso, revisa el Centro de notificaciones o abre Slowth manualmente."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toqueu Slowth i, a continuació, obriu la seva notificació. Si no apareix cap bàner, comproveu el Centre de notificacions o obriu Slowth manualment."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πατήστε Slowth και μετά ανοίξτε την ειδοποίησή του. Εάν δεν εμφανίζεται κανένα banner, ελέγξτε το Κέντρο ειδοποιήσεων ή ανοίξτε το Slowth χειροκίνητα."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Napauta Slowth ja avaa sen ilmoitus. Jos banneria ei näy, tarkista Ilmoituskeskus tai avaa Slowth manuaalisesti."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trykk på Slowth og åpne deretter varslingen. Hvis det ikke vises noe banner, sjekk Varslingssenter eller åpne Slowth manuelt."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ketik Slowth, kemudian buka pemberitahuannya. Jika tiada sepanduk muncul, semak Pusat Pemberitahuan atau buka Slowth secara manual."
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dodirnite Slowth pa otvorite njegovu obavijest. Ako se baner ne pojavi, provjerite Centar za obavijesti ili ručno otvorite Slowth."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klepnite na Slowth a otvorte jeho hlásenie. Ak sa banner nezobrazí, skontrolujte Centrum hlásení alebo otvorte Slowth manuálne."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tapnite Slowth in odprite njegovo obvestilo. Če se pasica ne prikaže, preverite Središče za obvestila ali odprite Slowth ročno."
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ਉੱਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ ਇਸ ਦੀ ਸੂਚਨਾ ਖੋਲ੍ਹੋ। ਜੇ ਬੈਨਰ ਨਾ ਆਵੇ, ਤਾਂ ਸੂਚਨਾ ਕੇਂਦਰ ਜਾਂਚੋ ਜਾਂ Slowth ਹੱਥੀਂ ਖੋਲ੍ਹੋ।"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth પર ટૅપ કરો, પછી તેની સૂચના ખોલો. બૅનર ન દેખાય તો સૂચના કેન્દ્ર તપાસો અથવા Slowth જાતે ખોલો."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ಟ್ಯಾಪ್ ಮಾಡಿ, ನಂತರ ಅದರ ಅಧಿಸೂಚನೆ ತೆರೆಯಿರಿ. ಬ್ಯಾನರ್ ಕಾಣಿಸದಿದ್ದರೆ ಅಧಿಸೂಚನೆ ಕೇಂದ್ರ ಪರಿಶೀಲಿಸಿ ಅಥವಾ Slowth ಕೈಯಾರೆ ತೆರೆಯಿರಿ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ടാപ്പ് ചെയ്ത് അതിന്റെ അറിയിപ്പ് തുറക്കുക. ബാനർ കാണുന്നില്ലെങ്കിൽ അറിയിപ്പ് കേന്ദ്രം പരിശോധിക്കുക അല്ലെങ്കിൽ Slowth നേരിട്ട് തുറക്കുക."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ଟ୍ୟାପ୍ କରି ଏହାର ସୂଚନା ଖୋଲନ୍ତୁ। ବ୍ୟାନର୍ ନ ଆସିଲେ ସୂଚନା କେନ୍ଦ୍ର ଯାଞ୍ଚ କରନ୍ତୁ କିମ୍ବା Slowth ନିଜେ ଖୋଲନ୍ତୁ।"
+          }
         }
       }
     },
@@ -3931,6 +5335,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slowth · 休息"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Rest"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Rest"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Rest"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Repos"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Descanso"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Descans"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Ανάπαυ"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Lepo"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Hvile"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Rehat"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Odmor"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Oddych"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · Počitek"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ਆਰਾਮ"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · આરામ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ವಿಶ್ರಾಂತಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · വിശ്രമം"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth · ବିଶ୍ରାମ"
           }
         }
       }

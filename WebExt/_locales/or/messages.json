@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safariରେ Shorts, Reels, TikTok ଓ ଧ୍ୟାନ ଭଙ୍ଗକାରୀ ଫିଡ୍ ଅବରୋଧ କରନ୍ତୁ।"
+  },
+  "locale": {
+    "message": "or"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram ଓ Facebook Reels, ଏବଂ Xର Explore ଓ ଟ୍ରେଣ୍ଡ ଅବରୋଧ କରନ୍ତୁ। TikTok ସମ୍ପୂର୍ଣ୍ଣ ଅବରୋଧ କରନ୍ତୁ। କଠୋର ମୋଡ୍‌ରେ ସେଟିଂସ୍‌କୁ 24 ଘଣ୍ଟା ଲକ୍ କରନ୍ତୁ।"
+  },
+  "stepSettings": {
+    "message": "ଡିଭାଇସ୍ ସେଟିଂସ୍ ଖୋଲନ୍ତୁ"
+  },
+  "stepExtensions": {
+    "message": "ଆପ୍ → Safari → ଏକ୍ସଟେନ୍ସନ୍‌କୁ ଯାଆନ୍ତୁ"
+  },
+  "stepEnable": {
+    "message": "Slowth ଚାଲୁ କରି ସବୁ ୱେବ୍‌ସାଇଟ୍‌ରେ ଅନୁମତି ଦିଅନ୍ତୁ"
+  },
+  "onboardingDone": {
+    "message": "ମୁଁ ସକ୍ରିୟ କରିଛି"
+  },
+  "blocking": {
+    "message": "ଅବରୋଧ"
+  },
+  "strictHelp": {
+    "message": "24 ଘଣ୍ଟା ପର୍ଯ୍ୟନ୍ତ ସକ୍ରିୟ ପ୍ରତିବନ୍ଧକ ବନ୍ଦ କରିହେବ ନାହିଁ। ପ୍ରତିବନ୍ଧକ ଯୋଡ଼ିପାରିବେ, କିନ୍ତୁ ସମଗ୍ର ସାଇଟ୍ ଅବରୋଧ ସକ୍ରିୟ କରିପାରିବେ ନାହିଁ।"
+  },
+  "strictEnableConfirm": {
+    "message": "24 ଘଣ୍ଟା ପର୍ଯ୍ୟନ୍ତ ସକ୍ରିୟ ପ୍ରତିବନ୍ଧକ ବନ୍ଦ କରିହେବ ନାହିଁ। ପ୍ରତିବନ୍ଧକ ଯୋଡ଼ିପାରିବେ, କିନ୍ତୁ ସମଗ୍ର ସାଇଟ୍ ଅବରୋଧ ସକ୍ରିୟ କରିପାରିବେ ନାହିଁ।"
+  },
+  "strictConfirmTitle": {
+    "message": "କଠୋର ମୋଡ୍ ସକ୍ରିୟ କରିବେ?"
+  },
+  "cancel": {
+    "message": "ବାତିଲ୍ କରନ୍ତୁ"
+  },
+  "enable": {
+    "message": "ସକ୍ରିୟ କରନ୍ତୁ"
+  },
+  "updates": {
+    "message": "ଅପଡେଟ୍"
+  },
+  "updateNow": {
+    "message": "ଏବେ ଅପଡେଟ୍ କରନ୍ତୁ"
+  },
+  "loading": {
+    "message": "ଲୋଡ୍ ହେଉଛି…"
+  },
+  "guide": {
+    "message": "ମାର୍ଗଦର୍ଶିକା"
+  },
+  "howToUse": {
+    "message": "Slowth କିପରି ବ୍ୟବହାର କରିବେ"
+  },
+  "modesExplained": {
+    "message": "କଠୋର ମୋଡ୍ ଓ ପ୍ରତି ସାଇଟ୍ ମୋଡ୍‌ର ବ୍ୟାଖ୍ୟା"
+  },
+  "strictGuideTitle": {
+    "message": "କଠୋର ମୋଡ୍ କଣ କରେ"
+  },
+  "strictGuide": {
+    "message": "24 ଘଣ୍ଟା ପର୍ଯ୍ୟନ୍ତ ସକ୍ରିୟ ପ୍ରତିବନ୍ଧକ ବନ୍ଦ କରିହେବ ନାହିଁ। ପ୍ରତିବନ୍ଧକ ଯୋଡ଼ିପାରିବେ, କିନ୍ତୁ ସମଗ୍ର ସାଇଟ୍ ଅବରୋଧ ସକ୍ରିୟ କରିପାରିବେ ନାହିଁ। ପୁନଃଆରମ୍ଭ କିମ୍ବା ବଳପୂର୍ବକ ବନ୍ଦ ପରେ ମଧ୍ୟ ଟାଇମର୍ ଚାଲେ।"
+  },
+  "strictAdvice": {
+    "message": "କେବଳ ଇଚ୍ଛାଶକ୍ତି ଯଥେଷ୍ଟ ନ ହେଲେ ଚାଲୁ କରନ୍ତୁ। କେବଳ ହାଲୁକା ମନେପକାଇବା ଦରକାର ହେଲେ ବନ୍ଦ ରଖନ୍ତୁ।"
+  },
+  "howBlockingWorks": {
+    "message": "ଅବରୋଧ କିପରି କାମ କରେ"
+  },
+  "modeOffHelp": {
+    "message": "ସାଇଟ୍ ସାଧାରଣ ଭାବେ ଲୋଡ୍ ହୁଏ। Slowth କିଛି କରେ ନାହିଁ।"
+  },
+  "siteSpecific": {
+    "message": "ସାଇଟ୍ ଅନୁସାରେ ଅବରୋଧ"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels କିମ୍ବା Xର Explore ଓ ଟ୍ରେଣ୍ଡ ଅବରୋଧ କରେ। ସାଇଟ୍‌ର ବାକି ଅଂଶ କାମ କରେ।"
+  },
+  "addFeed": {
+    "message": "ଫିଡ୍ ଅବରୋଧ ଯୋଡ଼ନ୍ତୁ"
+  },
+  "modeFeedHelp": {
+    "message": "କିଛି ପରଦା ପରେ ଅସୀମ ହୋମ୍ ଫିଡ୍ ମଧ୍ୟ ବନ୍ଦ କରେ। Instagramରେ Explore, Stories ଏବଂ ଅଧିକ Reels ଅଂଶ ମଧ୍ୟ ସାମିଲ।"
+  },
+  "modeAllHelp": {
+    "message": "ସାଇଟ୍ ଖୋଲିଲେ ବଦଳରେ ବନ୍ଧୁତ୍ୱପୂର୍ଣ୍ଣ ଅବରୋଧ ପୃଷ୍ଠା ଦେଖାଯାଏ।"
+  },
+  "leaveFeedback": {
+    "message": "ମତାମତ ଦିଅନ୍ତୁ"
+  },
+  "showIntro": {
+    "message": "ପରିଚୟ ପୁଣି ଦେଖାନ୍ତୁ"
+  },
+  "rulesNever": {
+    "message": "ନିୟମ: କେବେ ଅଣାଯାଇନାହିଁ"
+  },
+  "rulesNow": {
+    "message": "ନିୟମ: ଏବେ ମାତ୍ର"
+  },
+  "rulesRelative": {
+    "message": "ନିୟମ: $1"
+  },
+  "strictUntil": {
+    "message": "$1 ପର୍ଯ୍ୟନ୍ତ କଠୋର ମୋଡ୍ ସକ୍ରିୟ"
+  },
+  "openSafariSettings": {
+    "message": "Safari ସେଟିଂସ୍ ଖୋଲନ୍ତୁ"
+  },
+  "rulesCurrent": {
+    "message": "ନିୟମ: ଅପଡେଟ୍ ଅଛି"
+  },
+  "rulesFailed": {
+    "message": "ନିୟମ: ଅପଡେଟ୍ ହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ଦ୍ୱାରା ଅବରୋଧିତ"
+  },
+  "thisSite": {
+    "message": "ଏହି ସାଇଟ୍"
+  },
+  "blockedTitle": {
+    "message": "$1 ଅବରୋଧିତ"
+  },
+  "blockedTabTitle": {
+    "message": "ଅବରୋଧିତ: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth ଆପଣଙ୍କୁ $1ରୁ ଦୂରେ ରଖୁଛି। ନିଶ୍ୱାସ ନିଅନ୍ତୁ। ଅନ୍ୟ କିଛି କରନ୍ତୁ।"
+  },
+  "backToSite": {
+    "message": "← $1କୁ ଫେରନ୍ତୁ"
+  },
+  "why": {
+    "message": "କାହିଁକି"
+  },
+  "quoteTeam": {
+    "message": "$$400k ଦରମା ପାଉଥିବା ଶହଶହ ଲୋକଙ୍କ ଦଳ Reels ତିଆରି କରିଥିଲା। Slowth ଜଣେ ଡେଭେଲପର୍ ଗୋଟିଏ ସପ୍ତାହାନ୍ତରେ ତିଆରି କରିଥିଲେ।"
+  },
+  "quoteBillions": {
+    "message": "ଆପଣଙ୍କୁ ସ୍କ୍ରୋଲ୍ କରାଇବାକୁ ସେମାନେ କୋଟିକୋଟି ଖର୍ଚ୍ଚ କଲେ। ଆପଣଙ୍କୁ ରୋକିବାକୁ ଆମେ ଛୋଟ ସ୍ଥାନୀୟ ଏକ୍ସଟେନ୍ସନ୍ ତିଆରି କଲୁ।"
+  },
+  "quoteBug": {
+    "message": "ଅସୀମ ଫିଡ୍ ଏକ ତ୍ରୁଟି। ଏଠାରେ ସମାଧାନ।"
+  },
+  "best": {
+    "message": "ସର୍ବୋତ୍ତମ"
+  },
+  "gameLabel": {
+    "message": "ଛୋଟ ଉଡ଼ାଣ ଖେଳ"
+  },
+  "gameHelp": {
+    "message": "ଡେଣା ଝାଡ଼ିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ କିମ୍ବା ସ୍ପେସ୍ ଦବାନ୍ତୁ"
+  },
+  "back": {
+    "message": "← ପଛକୁ"
+  },
+  "signature": {
+    "message": "Slowth · ଧୀର ହୁଅନ୍ତୁ, ନିଶ୍ୱାସ ନିଅନ୍ତୁ, ଗଢ଼ନ୍ତୁ"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap ଖେଳିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ →"
+  },
+  "avoidBranches": {
+    "message": "ଡାଳରେ ଧକ୍କା ଦିଅନ୍ତୁ ନାହିଁ"
+  },
+  "newBest": {
+    "message": "ନୂଆ ରେକର୍ଡ! ପୁଣି ଉଡ଼ିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ"
+  },
+  "flyAgain": {
+    "message": "ପୁଣି ଉଡ଼ିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ"
+  },
+  "tapStart": {
+    "message": "ଆରମ୍ଭ ପାଇଁ ଟ୍ୟାପ୍ କରନ୍ତୁ"
+  },
+  "gameOver": {
+    "message": "ଖେଳ ଶେଷ"
+  },
+  "feedTitle": {
+    "message": "ଅସୀମ ଫିଡ୍ ଅବରୋଧିତ"
+  },
+  "feedSubtitle": {
+    "message": "Slowth ଆପଣଙ୍କୁ ଅସୀମ ଫିଡ୍‌ରୁ ଦୂରେ ରଖୁଛି। ନିଶ୍ୱାସ ନିଅନ୍ତୁ। ଅନ୍ୟ କିଛି କରନ୍ତୁ।"
+  },
+  "backHome": {
+    "message": "ହୋମ୍‌କୁ ଫେରନ୍ତୁ"
+  },
+  "dismiss": {
+    "message": "ବନ୍ଦ କରନ୍ତୁ"
+  },
+  "storiesTime": {
+    "message": "ଷ୍ଟୋରିରେ ଆପଣ ପୂର୍ବରୁ $1 ଖର୍ଚ୍ଚ କରିଛନ୍ତି। ନିଶ୍ୱାସ ନିଅନ୍ତୁ।"
+  },
+  "enableSafari": {
+    "message": "Safariରେ ସକ୍ରିୟ କରନ୍ତୁ"
+  },
+  "openSettings": {
+    "message": "ସେଟିଂସ୍ ଖୋଲନ୍ତୁ"
+  },
+  "strictMode": {
+    "message": "କଠୋର ମୋଡ୍"
+  },
+  "off": {
+    "message": "ବନ୍ଦ"
+  },
+  "blockShorts": {
+    "message": "Shorts ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "blockReels": {
+    "message": "Reels ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "blockFeeds": {
+    "message": "Reels ଓ ଫିଡ୍‌ଗୁଡ଼ିକ ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "blockFeed": {
+    "message": "Reels ଓ ଫିଡ୍ ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "blockExplore": {
+    "message": "Explore ଏବଂ ଟ୍ରେଣ୍ଡ ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "blockSite": {
+    "message": "ସାଇଟ୍ ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "updating": {
+    "message": "ଅପଡେଟ୍ ହେଉଛି…"
+  },
+  "blockInfiniteFeed": {
+    "message": "ଅସୀମ ଫିଡ୍ ଅବରୋଧ କରନ୍ତୁ"
+  },
+  "infiniteFeedHelp": {
+    "message": "ଅସୀମ ଫିଡ୍ ସ୍କ୍ରୋଲିଂ ସୀମିତ କରେ। Instagramରେ Explore ଓ Stories ମଧ୍ୟ ସାମିଲ।"
+  },
+  "settingsSaveFailed": {
+    "message": "ସଞ୍ଚୟ ହେଲା ନାହିଁ"
+  }
+}

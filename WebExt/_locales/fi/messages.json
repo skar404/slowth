@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Estä YouTube Shorts, Reels, TikTok ja häiritsevät syötteet Safari:ssä paikkakohtaisilla ohjauksilla."
+  },
+  "locale": {
+    "message": "fi"
+  },
+  "tagline": {
+    "message": "Lohko YouTube Shorts, Instagram ja Facebook Reels sekä tutkia X:n trendejä. Lohko TikTok kokonaan. Lukitse asetuksesi Strict-tilassa 24 tunniksi."
+  },
+  "stepSettings": {
+    "message": "Avaa Asetukset laitteessasi"
+  },
+  "stepExtensions": {
+    "message": "Siirry kohtaan Sovellukset → Safari → Laajennukset"
+  },
+  "stepEnable": {
+    "message": "Ota Slowth käyttöön ja salli se kaikilla verkkosivustoilla"
+  },
+  "onboardingDone": {
+    "message": "Olen ottanut sen käyttöön"
+  },
+  "blocking": {
+    "message": "Estäminen"
+  },
+  "strictHelp": {
+    "message": "Käytössä olevia rajoituksia ei voi poistaa käytöstä 24 tunnin ajaksi. Voit lisätä rajoituksia, mutta et voi ottaa käyttöön koko sivuston estoa."
+  },
+  "strictEnableConfirm": {
+    "message": "Käytössä olevia rajoituksia ei voi poistaa käytöstä 24 tunnin ajaksi. Voit lisätä rajoituksia, mutta et voi ottaa käyttöön koko sivuston estoa."
+  },
+  "strictConfirmTitle": {
+    "message": "Otetaanko tiukka tila käyttöön?"
+  },
+  "cancel": {
+    "message": "Peruuta"
+  },
+  "enable": {
+    "message": "Ota käyttöön"
+  },
+  "updates": {
+    "message": "Päivitykset"
+  },
+  "updateNow": {
+    "message": "Päivitä nyt"
+  },
+  "loading": {
+    "message": "Ladataan…"
+  },
+  "guide": {
+    "message": "Opas"
+  },
+  "howToUse": {
+    "message": "Slowth:n käyttö"
+  },
+  "modesExplained": {
+    "message": "Tiukka tila ja paikkakohtaiset tilat selitetty"
+  },
+  "strictGuideTitle": {
+    "message": "Mitä Strict-tila tekee"
+  },
+  "strictGuide": {
+    "message": "Käytössä olevia rajoituksia ei voi poistaa käytöstä 24 tunnin ajaksi. Voit lisätä rajoituksia, mutta et voi ottaa käyttöön koko sivuston estoa. Ajastin kestää uudelleenkäynnistykset ja pakolliset sammutukset."
+  },
+  "strictAdvice": {
+    "message": "Kytke se päälle, kun tahdonvoima ei yksin riitä. Jätä se pois, jos haluat vain pehmeän nykäyksen."
+  },
+  "howBlockingWorks": {
+    "message": "Kuinka esto toimii"
+  },
+  "modeOffHelp": {
+    "message": "Sivusto latautuu normaalisti. Slowth ei tee mitään."
+  },
+  "siteSpecific": {
+    "message": "Paikkakohtainen lohko"
+  },
+  "modeShortsHelp": {
+    "message": "Lohkot YouTube Shorts, Instagram / Facebook Reels tai X Tutki ja trendejä. Muu sivusto jatkaa toimintaansa."
+  },
+  "addFeed": {
+    "message": "Lisää syötteen esto"
+  },
+  "modeFeedHelp": {
+    "message": "Pysäyttää myös loputtoman kotisyötteen muutaman näytön jälkeen. Instagram kattaa lisäksi Explore-, Stories- ja muut Reels -pinnat."
+  },
+  "modeAllHelp": {
+    "message": "Sivustossa käyminen näyttää sen sijaan ystävällisen estetyn sivun."
+  },
+  "leaveFeedback": {
+    "message": "Jätä palautetta"
+  },
+  "showIntro": {
+    "message": "Näytä johdanto uudelleen"
+  },
+  "rulesNever": {
+    "message": "Säännöt: ei koskaan haettu"
+  },
+  "rulesNow": {
+    "message": "Säännöt: juuri nyt"
+  },
+  "rulesRelative": {
+    "message": "Säännöt: $1"
+  },
+  "strictUntil": {
+    "message": "Tiukka tila aktiivinen $1 asti"
+  },
+  "openSafariSettings": {
+    "message": "Avaa Safari -asetukset"
+  },
+  "rulesCurrent": {
+    "message": "Säännöt: ajan tasalla"
+  },
+  "rulesFailed": {
+    "message": "Säännöt: ei voitu päivittää. Yritä uudelleen."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth estänyt"
+  },
+  "thisSite": {
+    "message": "tällä sivustolla"
+  },
+  "blockedTitle": {
+    "message": "$1 on estetty"
+  },
+  "blockedTabTitle": {
+    "message": "Estetty: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth pitää sinut poissa $1:stä. Vedä henkeä. Tee jotain muuta."
+  },
+  "backToSite": {
+    "message": "← Takaisin $1"
+  },
+  "why": {
+    "message": "Miksi"
+  },
+  "quoteTeam": {
+    "message": "Reelsin rakensi satojen ihmisten tiimi, jonka jäsenet ansaitsivat $$400k. Slowthin rakensi yksi kehittäjä viikonlopun aikana."
+  },
+  "quoteBillions": {
+    "message": "He käyttivät miljardeja pitääkseen sinut selaamassa. Rakensimme pienen paikallisen laajennuksen, jotta voit pysähtyä."
+  },
+  "quoteBug": {
+    "message": "Ääretön syöttö on virhe. Tässä on korjaus."
+  },
+  "best": {
+    "message": "paras"
+  },
+  "gameLabel": {
+    "message": "Miniläppäpeli"
+  },
+  "gameHelp": {
+    "message": "Napauta tai paina välilyöntiä"
+  },
+  "back": {
+    "message": "← Takaisin"
+  },
+  "signature": {
+    "message": "Slowth · hidasta, hengitä, rakenna"
+  },
+  "playHint": {
+    "message": "🦥 napauta pelataksesi Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Älä lyö oksia"
+  },
+  "newBest": {
+    "message": "Uusi paras! Napauta lentääksesi uudelleen"
+  },
+  "flyAgain": {
+    "message": "Napauta lentääksesi uudelleen"
+  },
+  "tapStart": {
+    "message": "Aloita napauttamalla"
+  },
+  "gameOver": {
+    "message": "Peli ohi"
+  },
+  "feedTitle": {
+    "message": "Ääretön syöttö on estetty"
+  },
+  "feedSubtitle": {
+    "message": "Slowth pitää sinut poissa loputtomasta syötöstä. Vedä henkeä. Tee jotain muuta."
+  },
+  "backHome": {
+    "message": "Takaisin kotiin"
+  },
+  "dismiss": {
+    "message": "Hylkää"
+  },
+  "storiesTime": {
+    "message": "Olet jo polttanut $1 tarinoihin. Vedä henkeä."
+  },
+  "enableSafari": {
+    "message": "Ota käyttöön kohteessa Safari"
+  },
+  "openSettings": {
+    "message": "Avaa Asetukset"
+  },
+  "strictMode": {
+    "message": "Tiukka tila"
+  },
+  "off": {
+    "message": "Pois"
+  },
+  "blockShorts": {
+    "message": "Lohko Shorts"
+  },
+  "blockReels": {
+    "message": "Lohko Reels"
+  },
+  "blockFeeds": {
+    "message": "Lohko Reels + syötteet"
+  },
+  "blockFeed": {
+    "message": "Lohko Reels + syöttö"
+  },
+  "blockExplore": {
+    "message": "Block Explore ja trendit"
+  },
+  "blockSite": {
+    "message": "Estä sivusto"
+  },
+  "updating": {
+    "message": "Päivitetään…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Estä ääretön syöttö"
+  },
+  "infiniteFeedHelp": {
+    "message": "Infinite Feed rajoittaa vieritystä. Instagram:ssä se sisältää myös Explore- ja Stories-toiminnot."
+  },
+  "settingsSaveFailed": {
+    "message": "Ei voitu tallentaa"
+  }
+}

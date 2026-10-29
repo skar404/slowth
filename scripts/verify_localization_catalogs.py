@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline checks for native catalogs. The main catalog defines supported locales.
+"""Offline checks for native catalogs. Localization/locales.json defines the agreed supported locales.
 
 Run before building; verify_localization_bundles.py checks the compiled output.
 """
@@ -41,7 +41,10 @@ def load_catalogs(root=ROOT):
 
 
 def supported_locales(catalogs):
-    return set().union(*(e.get('localizations', {}) for e in catalogs['Localizable']['strings'].values()))
+    expected = set(json.loads((ROOT / 'Localization/locales.json').read_text())['appLanguages'])
+    actual = set().union(*(e.get('localizations', {}) for e in catalogs['Localizable']['strings'].values()))
+    assert actual == expected, ('Localizable locale set', 'missing', expected - actual, 'extra', actual - expected)
+    return expected
 
 
 def verify_catalog(catalog, locales, name):
@@ -51,6 +54,7 @@ def verify_catalog(catalog, locales, name):
             continue
         translations = entry.get('localizations', {})
         assert set(translations) == locales, (name, key, 'missing', locales - translations.keys(), 'extra', translations.keys() - locales)
+        english_values = {u['value'] for _, u in units(translations['en'])}
         for locale, node in translations.items():
             # Substitution dictionaries require separate argument accounting; fail
             # explicitly rather than silently skipping a newly introduced schema.
@@ -60,7 +64,13 @@ def verify_catalog(catalog, locales, name):
             for context, unit in values:
                 assert unit.get('state') == 'translated', (context, 'untranslated state')
                 assert unit.get('value', '').strip(), (context, 'empty translation')
+                assert '\ufffd' not in unit['value'], (context, 'Unicode replacement character')
                 assert arguments(unit['value']) == arguments(key), (context, 'format arguments', unit['value'])
+                if locale not in {'en', 'pcm'} and not locale.startswith('en-'):
+                    assert not (len(unit['value']) > 14 and unit['value'] in english_values
+                                and re.search(r'[A-Za-z]{4}', unit['value'])), (context, 'unexpected English copy')
+                if locale == 'pa':
+                    assert not re.search(r'[\u0600-\u06ff]', unit['value']), (context, 'Punjabi requires Gurmukhi, not Arabic script')
                 if name != 'Localizable' and '\n' in key:
                     assert unit['value'].count('\n') == key.count('\n'), (context, 'line breaks')
                 depth = 0
@@ -77,7 +87,6 @@ def verify_catalog(catalog, locales, name):
 def main():
     catalogs = load_catalogs()
     locales = supported_locales(catalogs)
-    assert len(locales) == 46, f'Expected 46 locales, got {len(locales)}'
     for name, catalog in catalogs.items():
         verify_catalog(catalog, locales, name)
         print(f'{name}: {len(catalog["strings"])} entries, {len(locales)} locales; values and format arguments verified')

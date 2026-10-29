@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Blokujte Shorts, Reels, TikTok a rušivý obsah v Safari s nastaveniami pre jednotlivé stránky."
+  },
+  "locale": {
+    "message": "sk"
+  },
+  "tagline": {
+    "message": "Blokujte YouTube Shorts, Instagram a Facebook Reels aj Preskúmať a trendy na X. Zablokujte TikTok úplne. Uzamknite nastavenia prísnym režimom na 24 hodín."
+  },
+  "stepSettings": {
+    "message": "Otvorte Nastavenia na zariadení"
+  },
+  "stepExtensions": {
+    "message": "Prejdite na Apky → Safari → Rozšírenia"
+  },
+  "stepEnable": {
+    "message": "Zapnite Slowth a povoľte ho na všetkých webových stránkach"
+  },
+  "onboardingDone": {
+    "message": "Už je to zapnuté"
+  },
+  "blocking": {
+    "message": "Blokovanie"
+  },
+  "strictHelp": {
+    "message": "Zapnuté obmedzenia sa nedajú vypnúť 24 hodín. Môžete pridávať obmedzenia, ale nemôžete zapnúť blokovanie celých stránok."
+  },
+  "strictEnableConfirm": {
+    "message": "Zapnuté obmedzenia sa nedajú vypnúť 24 hodín. Môžete pridávať obmedzenia, ale nemôžete zapnúť blokovanie celých stránok."
+  },
+  "strictConfirmTitle": {
+    "message": "Zapnúť prísny režim?"
+  },
+  "cancel": {
+    "message": "Zrušiť"
+  },
+  "enable": {
+    "message": "Zapnúť"
+  },
+  "updates": {
+    "message": "Aktualizácie"
+  },
+  "updateNow": {
+    "message": "Aktualizovať teraz"
+  },
+  "loading": {
+    "message": "Načítava sa…"
+  },
+  "guide": {
+    "message": "Sprievodca"
+  },
+  "howToUse": {
+    "message": "Ako používať Slowth"
+  },
+  "modesExplained": {
+    "message": "Vysvetlenie prísneho režimu a režimov stránok"
+  },
+  "strictGuideTitle": {
+    "message": "Čo robí prísny režim"
+  },
+  "strictGuide": {
+    "message": "Zapnuté obmedzenia sa nedajú vypnúť 24 hodín. Môžete pridávať obmedzenia, ale nemôžete zapnúť blokovanie celých stránok. Časovač pokračuje aj po reštarte a vynútenom ukončení."
+  },
+  "strictAdvice": {
+    "message": "Zapnite ho, keď samotná vôľa nestačí. Nechajte ho vypnutý, ak chcete len jemné postrčenie."
+  },
+  "howBlockingWorks": {
+    "message": "Ako funguje blokovanie"
+  },
+  "modeOffHelp": {
+    "message": "Stránka sa načíta ako zvyčajne. Slowth nič nerobí."
+  },
+  "siteSpecific": {
+    "message": "Blokovanie konkrétnej stránky"
+  },
+  "modeShortsHelp": {
+    "message": "Blokuje YouTube Shorts, Instagram/Facebook Reels alebo Preskúmať a trendy na X. Zvyšok stránky naďalej funguje."
+  },
+  "addFeed": {
+    "message": "Pridať blokovanie kanála"
+  },
+  "modeFeedHelp": {
+    "message": "Po niekoľkých obrazovkách zastaví aj nekonečný hlavný kanál. Na Instagrame zahŕňa aj Preskúmať, príbehy a ďalšie časti s Reels."
+  },
+  "modeAllHelp": {
+    "message": "Pri návšteve stránky sa namiesto nej zobrazí prívetivá blokovacia stránka."
+  },
+  "leaveFeedback": {
+    "message": "Poslať spätnú väzbu"
+  },
+  "showIntro": {
+    "message": "Znova zobraziť úvod"
+  },
+  "rulesNever": {
+    "message": "Pravidlá: nikdy nenačítané"
+  },
+  "rulesNow": {
+    "message": "Pravidlá: práve teraz"
+  },
+  "rulesRelative": {
+    "message": "Pravidlá: $1"
+  },
+  "strictUntil": {
+    "message": "Prísny režim aktívny do $1"
+  },
+  "openSafariSettings": {
+    "message": "Otvoriť nastavenia Safari"
+  },
+  "rulesCurrent": {
+    "message": "Pravidlá: aktuálne"
+  },
+  "rulesFailed": {
+    "message": "Pravidlá: aktualizácia zlyhala. Skúste to znova."
+  },
+  "blockedPageTitle": {
+    "message": "Zablokované Slowthom"
+  },
+  "thisSite": {
+    "message": "táto stránka"
+  },
+  "blockedTitle": {
+    "message": "$1 je zablokovaný"
+  },
+  "blockedTabTitle": {
+    "message": "Zablokované: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth vás drží ďalej od $1. Nadýchnite sa. Robte niečo iné."
+  },
+  "backToSite": {
+    "message": "← Späť na $1"
+  },
+  "why": {
+    "message": "Prečo"
+  },
+  "quoteTeam": {
+    "message": "Reels vytvoril tím stoviek ľudí s platmi $$400k. Slowth vytvoril jeden vývojár za víkend."
+  },
+  "quoteBillions": {
+    "message": "Minuli miliardy, aby ste neprestali rolovať. My sme vytvorili malé lokálne rozšírenie, aby ste prestali."
+  },
+  "quoteBug": {
+    "message": "Nekonečný kanál je chyba. Tu je oprava."
+  },
+  "best": {
+    "message": "rekord"
+  },
+  "gameLabel": {
+    "message": "Malá lietacia hra"
+  },
+  "gameHelp": {
+    "message": "Klepnite alebo stlačte medzerník a mávnite"
+  },
+  "back": {
+    "message": "← Späť"
+  },
+  "signature": {
+    "message": "Slowth · spomaľ, dýchaj, tvor"
+  },
+  "playHint": {
+    "message": "🦥 klepnite a zahrajte si Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Nenarážajte do konárov"
+  },
+  "newBest": {
+    "message": "Nový rekord! Klepnite a leťte znova"
+  },
+  "flyAgain": {
+    "message": "Klepnite a leťte znova"
+  },
+  "tapStart": {
+    "message": "Klepnite a začnite"
+  },
+  "gameOver": {
+    "message": "Koniec hry"
+  },
+  "feedTitle": {
+    "message": "Nekonečný kanál je zablokovaný"
+  },
+  "feedSubtitle": {
+    "message": "Slowth vás drží ďalej od nekonečného kanála. Nadýchnite sa. Robte niečo iné."
+  },
+  "backHome": {
+    "message": "Späť na úvod"
+  },
+  "dismiss": {
+    "message": "Zavrieť"
+  },
+  "storiesTime": {
+    "message": "Na príbehoch ste už strávili $1. Nadýchnite sa."
+  },
+  "enableSafari": {
+    "message": "Zapnúť v Safari"
+  },
+  "openSettings": {
+    "message": "Otvoriť Nastavenia"
+  },
+  "strictMode": {
+    "message": "Prísny režim"
+  },
+  "off": {
+    "message": "Vypnuté"
+  },
+  "blockShorts": {
+    "message": "Blokovať Shorts"
+  },
+  "blockReels": {
+    "message": "Blokovať Reels"
+  },
+  "blockFeeds": {
+    "message": "Blokovať Reels a kanály"
+  },
+  "blockFeed": {
+    "message": "Blokovať Reels a kanál"
+  },
+  "blockExplore": {
+    "message": "Blokovať Preskúmať a trendy"
+  },
+  "blockSite": {
+    "message": "Blokovať stránku"
+  },
+  "updating": {
+    "message": "Aktualizuje sa…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Blokovať nekonečný kanál"
+  },
+  "infiniteFeedHelp": {
+    "message": "Nekonečný kanál obmedzuje rolovanie. Na Instagrame zahŕňa aj Preskúmať a príbehy."
+  },
+  "settingsSaveFailed": {
+    "message": "Nepodarilo sa uložiť"
+  }
+}

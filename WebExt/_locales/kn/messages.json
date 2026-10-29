@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Safariಯಲ್ಲಿ Shorts, Reels, TikTok ಮತ್ತು ಗಮನ ಸೆಳೆಯುವ ಫೀಡ್‌ಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ."
+  },
+  "locale": {
+    "message": "kn"
+  },
+  "tagline": {
+    "message": "YouTube Shorts, Instagram ಮತ್ತು Facebook Reels ಹಾಗೂ Xನ Explore ಮತ್ತು ಟ್ರೆಂಡ್‌ಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ. TikTok ಸಂಪೂರ್ಣವಾಗಿ ನಿರ್ಬಂಧಿಸಿ. ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್‌ನಲ್ಲಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು 24 ಗಂಟೆ ಲಾಕ್ ಮಾಡಿ."
+  },
+  "stepSettings": {
+    "message": "ಸಾಧನದ ಸೆಟ್ಟಿಂಗ್‌ಗಳು ತೆರೆಯಿರಿ"
+  },
+  "stepExtensions": {
+    "message": "ಆ್ಯಪ್‌ಗಳು → Safari → ವಿಸ್ತರಣೆಗಳಿಗೆ ಹೋಗಿ"
+  },
+  "stepEnable": {
+    "message": "Slowth ಆನ್ ಮಾಡಿ ಎಲ್ಲಾ ವೆಬ್‌ಸೈಟ್‌ಗಳಲ್ಲಿ ಅನುಮತಿಸಿ"
+  },
+  "onboardingDone": {
+    "message": "ನಾನು ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದೇನೆ"
+  },
+  "blocking": {
+    "message": "ನಿರ್ಬಂಧ"
+  },
+  "strictHelp": {
+    "message": "24 ಗಂಟೆಗಳವರೆಗೆ ಸಕ್ರಿಯ ನಿರ್ಬಂಧಗಳನ್ನು ಆಫ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ. ನಿರ್ಬಂಧಗಳನ್ನು ಸೇರಿಸಬಹುದು, ಆದರೆ ಇಡೀ ಸೈಟ್ ನಿರ್ಬಂಧ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ."
+  },
+  "strictEnableConfirm": {
+    "message": "24 ಗಂಟೆಗಳವರೆಗೆ ಸಕ್ರಿಯ ನಿರ್ಬಂಧಗಳನ್ನು ಆಫ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ. ನಿರ್ಬಂಧಗಳನ್ನು ಸೇರಿಸಬಹುದು, ಆದರೆ ಇಡೀ ಸೈಟ್ ನಿರ್ಬಂಧ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ."
+  },
+  "strictConfirmTitle": {
+    "message": "ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಸಕ್ರಿಯಗೊಳಿಸುವುದೇ?"
+  },
+  "cancel": {
+    "message": "ರದ್ದುಮಾಡಿ"
+  },
+  "enable": {
+    "message": "ಸಕ್ರಿಯಗೊಳಿಸಿ"
+  },
+  "updates": {
+    "message": "ನವೀಕರಣಗಳು"
+  },
+  "updateNow": {
+    "message": "ಈಗ ನವೀಕರಿಸಿ"
+  },
+  "loading": {
+    "message": "ಲೋಡ್ ಆಗುತ್ತಿದೆ…"
+  },
+  "guide": {
+    "message": "ಮಾರ್ಗದರ್ಶಿ"
+  },
+  "howToUse": {
+    "message": "Slowth ಬಳಸುವುದು ಹೇಗೆ"
+  },
+  "modesExplained": {
+    "message": "ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಮತ್ತು ಪ್ರತಿ ಸೈಟ್ ಮೋಡ್‌ಗಳ ವಿವರಣೆ"
+  },
+  "strictGuideTitle": {
+    "message": "ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಏನು ಮಾಡುತ್ತದೆ"
+  },
+  "strictGuide": {
+    "message": "24 ಗಂಟೆಗಳವರೆಗೆ ಸಕ್ರಿಯ ನಿರ್ಬಂಧಗಳನ್ನು ಆಫ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ. ನಿರ್ಬಂಧಗಳನ್ನು ಸೇರಿಸಬಹುದು, ಆದರೆ ಇಡೀ ಸೈಟ್ ನಿರ್ಬಂಧ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ. ಮರುಪ್ರಾರಂಭ ಮತ್ತು ಬಲವಂತದ ಮುಚ್ಚುವಿಕೆಯ ನಂತರವೂ ಟೈಮರ್ ಮುಂದುವರಿಯುತ್ತದೆ."
+  },
+  "strictAdvice": {
+    "message": "ಕೇವಲ ಇಚ್ಛಾಶಕ್ತಿ ಸಾಕಾಗದಾಗ ಆನ್ ಮಾಡಿ. ಸಣ್ಣ ನೆನಪು ಮಾತ್ರ ಬೇಕಿದ್ದರೆ ಆಫ್ ಇರಿಸಿ."
+  },
+  "howBlockingWorks": {
+    "message": "ನಿರ್ಬಂಧ ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ"
+  },
+  "modeOffHelp": {
+    "message": "ಸೈಟ್ ಎಂದಿನಂತೆ ಲೋಡ್ ಆಗುತ್ತದೆ. Slowth ಏನೂ ಮಾಡುವುದಿಲ್ಲ."
+  },
+  "siteSpecific": {
+    "message": "ನಿರ್ದಿಷ್ಟ ಸೈಟ್ ನಿರ್ಬಂಧ"
+  },
+  "modeShortsHelp": {
+    "message": "YouTube Shorts, Instagram/Facebook Reels ಅಥವಾ Xನ Explore ಮತ್ತು ಟ್ರೆಂಡ್‌ಗಳನ್ನು ನಿರ್ಬಂಧಿಸುತ್ತದೆ. ಸೈಟ್‌ನ ಉಳಿದ ಭಾಗ ಕೆಲಸ ಮಾಡುತ್ತದೆ."
+  },
+  "addFeed": {
+    "message": "ಫೀಡ್ ನಿರ್ಬಂಧ ಸೇರಿಸಿ"
+  },
+  "modeFeedHelp": {
+    "message": "ಕೆಲವು ಪರದೆಗಳ ನಂತರ ಅಂತ್ಯವಿಲ್ಲದ ಮುಖ್ಯ ಫೀಡ್ ಕೂಡ ನಿಲ್ಲುತ್ತದೆ. Instagramನಲ್ಲಿ Explore, Stories ಮತ್ತು ಹೆಚ್ಚುವರಿ Reels ಭಾಗಗಳೂ ಸೇರಿವೆ."
+  },
+  "modeAllHelp": {
+    "message": "ಸೈಟ್‌ಗೆ ಭೇಟಿ ನೀಡಿದಾಗ ಬದಲಿಗೆ ಸ್ನೇಹಪರ ನಿರ್ಬಂಧ ಪುಟ ಕಾಣುತ್ತದೆ."
+  },
+  "leaveFeedback": {
+    "message": "ಪ್ರತಿಕ್ರಿಯೆ ನೀಡಿ"
+  },
+  "showIntro": {
+    "message": "ಪರಿಚಯ ಮತ್ತೆ ತೋರಿಸಿ"
+  },
+  "rulesNever": {
+    "message": "ನಿಯಮಗಳು: ಇನ್ನೂ ಪಡೆದಿಲ್ಲ"
+  },
+  "rulesNow": {
+    "message": "ನಿಯಮಗಳು: ಈಗಷ್ಟೇ"
+  },
+  "rulesRelative": {
+    "message": "ನಿಯಮಗಳು: $1"
+  },
+  "strictUntil": {
+    "message": "$1 ವರೆಗೆ ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಸಕ್ರಿಯ"
+  },
+  "openSafariSettings": {
+    "message": "Safari ಸೆಟ್ಟಿಂಗ್‌ಗಳು ತೆರೆಯಿರಿ"
+  },
+  "rulesCurrent": {
+    "message": "ನಿಯಮಗಳು: ನವೀಕೃತ"
+  },
+  "rulesFailed": {
+    "message": "ನಿಯಮಗಳು: ನವೀಕರಿಸಲು ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+  },
+  "blockedPageTitle": {
+    "message": "Slowth ನಿರ್ಬಂಧಿಸಿದೆ"
+  },
+  "thisSite": {
+    "message": "ಈ ಸೈಟ್"
+  },
+  "blockedTitle": {
+    "message": "$1 ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ"
+  },
+  "blockedTabTitle": {
+    "message": "ನಿರ್ಬಂಧಿತ: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth ನಿಮ್ಮನ್ನು $1ನಿಂದ ದೂರವಿರಿಸುತ್ತದೆ. ಉಸಿರೆಳೆದುಕೊಳ್ಳಿ. ಬೇರೆ ಏನಾದರೂ ಮಾಡಿ."
+  },
+  "backToSite": {
+    "message": "← $1ಗೆ ಹಿಂತಿರುಗಿ"
+  },
+  "why": {
+    "message": "ಏಕೆ"
+  },
+  "quoteTeam": {
+    "message": "Reels ಅನ್ನು $$400k ಸಂಬಳ ಪಡೆಯುವ ನೂರಾರು ಜನರ ತಂಡ ನಿರ್ಮಿಸಿದೆ. Slowth ಅನ್ನು ಒಬ್ಬ ಡೆವಲಪರ್ ಒಂದು ವಾರಾಂತ್ಯದಲ್ಲಿ ನಿರ್ಮಿಸಿದ್ದಾರೆ."
+  },
+  "quoteBillions": {
+    "message": "ನೀವು ಸ್ಕ್ರೋಲ್ ಮಾಡುತ್ತಿರಲು ಅವರು ಶತಕೋಟಿ ಖರ್ಚು ಮಾಡಿದ್ದಾರೆ. ನೀವು ನಿಲ್ಲಿಸಲು ನಾವು ಚಿಕ್ಕ ಸ್ಥಳೀಯ ವಿಸ್ತರಣೆ ನಿರ್ಮಿಸಿದ್ದೇವೆ."
+  },
+  "quoteBug": {
+    "message": "ಅಂತ್ಯವಿಲ್ಲದ ಫೀಡ್ ಒಂದು ದೋಷ. ಇಲ್ಲಿದೆ ಪರಿಹಾರ."
+  },
+  "best": {
+    "message": "ಅತ್ಯುತ್ತಮ"
+  },
+  "gameLabel": {
+    "message": "ಚಿಕ್ಕ ಹಾರಾಟದ ಆಟ"
+  },
+  "gameHelp": {
+    "message": "ರೆಕ್ಕೆ ಬಡಿಯಲು ಟ್ಯಾಪ್ ಮಾಡಿ ಅಥವಾ ಸ್ಪೇಸ್ ಒತ್ತಿ"
+  },
+  "back": {
+    "message": "← ಹಿಂದೆ"
+  },
+  "signature": {
+    "message": "Slowth · ನಿಧಾನಿಸಿ, ಉಸಿರಾಡಿ, ನಿರ್ಮಿಸಿ"
+  },
+  "playHint": {
+    "message": "🦥 Slow Flap ಆಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ →"
+  },
+  "avoidBranches": {
+    "message": "ಕೊಂಬೆಗಳಿಗೆ ತಾಗಬೇಡಿ"
+  },
+  "newBest": {
+    "message": "ಹೊಸ ದಾಖಲೆ! ಮತ್ತೆ ಹಾರಲು ಟ್ಯಾಪ್ ಮಾಡಿ"
+  },
+  "flyAgain": {
+    "message": "ಮತ್ತೆ ಹಾರಲು ಟ್ಯಾಪ್ ಮಾಡಿ"
+  },
+  "tapStart": {
+    "message": "ಪ್ರಾರಂಭಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ"
+  },
+  "gameOver": {
+    "message": "ಆಟ ಮುಗಿದಿದೆ"
+  },
+  "feedTitle": {
+    "message": "ಅಂತ್ಯವಿಲ್ಲದ ಫೀಡ್ ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ"
+  },
+  "feedSubtitle": {
+    "message": "Slowth ನಿಮ್ಮನ್ನು ಅಂತ್ಯವಿಲ್ಲದ ಫೀಡ್‌ನಿಂದ ದೂರವಿರಿಸುತ್ತದೆ. ಉಸಿರೆಳೆದುಕೊಳ್ಳಿ. ಬೇರೆ ಏನಾದರೂ ಮಾಡಿ."
+  },
+  "backHome": {
+    "message": "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ"
+  },
+  "dismiss": {
+    "message": "ಮುಚ್ಚಿ"
+  },
+  "storiesTime": {
+    "message": "ಸ್ಟೋರಿಗಳಲ್ಲಿ ಈಗಾಗಲೇ $1 ಕಳೆದಿದ್ದೀರಿ. ಉಸಿರೆಳೆದುಕೊಳ್ಳಿ."
+  },
+  "enableSafari": {
+    "message": "Safariಯಲ್ಲಿ ಸಕ್ರಿಯಗೊಳಿಸಿ"
+  },
+  "openSettings": {
+    "message": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು ತೆರೆಯಿರಿ"
+  },
+  "strictMode": {
+    "message": "ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್"
+  },
+  "off": {
+    "message": "ಆಫ್"
+  },
+  "blockShorts": {
+    "message": "Shorts ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "blockReels": {
+    "message": "Reels ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "blockFeeds": {
+    "message": "Reels ಮತ್ತು ಫೀಡ್‌ಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "blockFeed": {
+    "message": "Reels ಮತ್ತು ಫೀಡ್ ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "blockExplore": {
+    "message": "Explore ಮತ್ತು ಟ್ರೆಂಡ್‌ಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "blockSite": {
+    "message": "ಸೈಟ್ ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "updating": {
+    "message": "ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ…"
+  },
+  "blockInfiniteFeed": {
+    "message": "ಅಂತ್ಯವಿಲ್ಲದ ಫೀಡ್ ನಿರ್ಬಂಧಿಸಿ"
+  },
+  "infiniteFeedHelp": {
+    "message": "ಅಂತ್ಯವಿಲ್ಲದ ಫೀಡ್ ಸ್ಕ್ರೋಲಿಂಗ್ ಮಿತಿಗೊಳಿಸುತ್ತದೆ. Instagramನಲ್ಲಿ Explore ಮತ್ತು Stories ಕೂಡ ಸೇರಿವೆ."
+  },
+  "settingsSaveFailed": {
+    "message": "ಉಳಿಸಲು ಆಗಲಿಲ್ಲ"
+  }
+}

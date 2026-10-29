@@ -21,4 +21,4 @@ cat > "$fixture_app/Contents/Info.plist" <<EOF
 EOF
 xcrun swiftc -parse-as-library Shared/AppLocalization.swift WebExt/tests/AppLocalizationTests.swift \
     -o "$fixture_app/Contents/MacOS/LanguageChecks"
-"$fixture_app/Contents/MacOS/LanguageChecks"
+"$fixture_app/Contents/MacOS/LanguageChecks" "$(pwd)/Localization/locales.json"

@@ -1,0 +1,239 @@
+{
+  "extensionName": {
+    "message": "Slowth"
+  },
+  "extensionDescription": {
+    "message": "Sekat YouTube Shorts, Reels, TikTok dan suapan mengganggu dalam Safari dengan kawalan bagi setiap tapak."
+  },
+  "locale": {
+    "message": "ms"
+  },
+  "tagline": {
+    "message": "Sekat YouTube Shorts, Instagram dan Facebook Reels, serta Teroka dan trend pada X. Sekat TikTok sepenuhnya. Kunci seting anda dengan mod Ketat selama 24 jam."
+  },
+  "stepSettings": {
+    "message": "Buka Seting pada peranti anda"
+  },
+  "stepExtensions": {
+    "message": "Pergi ke App → Safari → Sambungan"
+  },
+  "stepEnable": {
+    "message": "Hidupkan Slowth dan benarkannya pada setiap tapak web"
+  },
+  "onboardingDone": {
+    "message": "Saya telah mengaktifkannya"
+  },
+  "blocking": {
+    "message": "Sekatan"
+  },
+  "strictHelp": {
+    "message": "Selama 24 jam, sekatan yang diaktifkan tidak boleh dimatikan. Anda boleh menambah sekatan, tetapi tidak boleh mengaktifkan sekatan seluruh tapak."
+  },
+  "strictEnableConfirm": {
+    "message": "Selama 24 jam, sekatan yang diaktifkan tidak boleh dimatikan. Anda boleh menambah sekatan, tetapi tidak boleh mengaktifkan sekatan seluruh tapak."
+  },
+  "strictConfirmTitle": {
+    "message": "Aktifkan mod Ketat?"
+  },
+  "cancel": {
+    "message": "Batal"
+  },
+  "enable": {
+    "message": "Aktifkan"
+  },
+  "updates": {
+    "message": "Kemas kini"
+  },
+  "updateNow": {
+    "message": "Kemas kini sekarang"
+  },
+  "loading": {
+    "message": "Memuatkan…"
+  },
+  "guide": {
+    "message": "Panduan"
+  },
+  "howToUse": {
+    "message": "Cara menggunakan Slowth"
+  },
+  "modesExplained": {
+    "message": "Penjelasan mod Ketat dan mod setiap tapak"
+  },
+  "strictGuideTitle": {
+    "message": "Fungsi mod Ketat"
+  },
+  "strictGuide": {
+    "message": "Selama 24 jam, sekatan yang diaktifkan tidak boleh dimatikan. Anda boleh menambah sekatan, tetapi tidak boleh mengaktifkan sekatan seluruh tapak. Pemasa kekal berjalan selepas mula semula dan penutupan paksa."
+  },
+  "strictAdvice": {
+    "message": "Aktifkannya apabila keazaman sahaja tidak mencukupi. Biarkan dimatikan jika anda cuma mahukan dorongan lembut."
+  },
+  "howBlockingWorks": {
+    "message": "Cara sekatan berfungsi"
+  },
+  "modeOffHelp": {
+    "message": "Tapak dimuatkan seperti biasa. Slowth tidak melakukan apa-apa."
+  },
+  "siteSpecific": {
+    "message": "Sekatan khusus tapak"
+  },
+  "modeShortsHelp": {
+    "message": "Menyekat YouTube Shorts, Instagram/Facebook Reels, atau Teroka dan trend pada X. Bahagian lain tapak terus berfungsi."
+  },
+  "addFeed": {
+    "message": "Tambah sekatan suapan"
+  },
+  "modeFeedHelp": {
+    "message": "Turut menghentikan suapan utama tanpa henti selepas beberapa skrin. Pada Instagram, ini juga meliputi Teroka, Stories dan lebih banyak bahagian Reels."
+  },
+  "modeAllHelp": {
+    "message": "Apabila melawat tapak, halaman sekatan yang mesra dipaparkan sebagai ganti."
+  },
+  "leaveFeedback": {
+    "message": "Beri maklum balas"
+  },
+  "showIntro": {
+    "message": "Tunjukkan pengenalan lagi"
+  },
+  "rulesNever": {
+    "message": "Peraturan: belum pernah diambil"
+  },
+  "rulesNow": {
+    "message": "Peraturan: sebentar tadi"
+  },
+  "rulesRelative": {
+    "message": "Peraturan: $1"
+  },
+  "strictUntil": {
+    "message": "Mod Ketat aktif sehingga $1"
+  },
+  "openSafariSettings": {
+    "message": "Buka Seting Safari"
+  },
+  "rulesCurrent": {
+    "message": "Peraturan: terkini"
+  },
+  "rulesFailed": {
+    "message": "Peraturan: tidak dapat dikemas kini. Sila cuba lagi."
+  },
+  "blockedPageTitle": {
+    "message": "Disekat oleh Slowth"
+  },
+  "thisSite": {
+    "message": "tapak ini"
+  },
+  "blockedTitle": {
+    "message": "$1 disekat"
+  },
+  "blockedTabTitle": {
+    "message": "Disekat: $1"
+  },
+  "blockedSubtitle": {
+    "message": "Slowth menjauhkan anda daripada $1. Tarik nafas. Buat perkara lain."
+  },
+  "backToSite": {
+    "message": "← Kembali ke $1"
+  },
+  "why": {
+    "message": "Mengapa"
+  },
+  "quoteTeam": {
+    "message": "Reels dibina oleh pasukan ratusan orang dengan gaji $$400k. Slowth dibina oleh seorang pembangun pada hujung minggu."
+  },
+  "quoteBillions": {
+    "message": "Mereka membelanjakan berbilion untuk memastikan anda terus menatal. Kami membina sambungan setempat yang kecil untuk membantu anda berhenti."
+  },
+  "quoteBug": {
+    "message": "Suapan tanpa henti ialah pepijat. Inilah penyelesaiannya."
+  },
+  "best": {
+    "message": "terbaik"
+  },
+  "gameLabel": {
+    "message": "Permainan kepak mini"
+  },
+  "gameHelp": {
+    "message": "Ketik atau tekan bar ruang untuk mengepak"
+  },
+  "back": {
+    "message": "← Kembali"
+  },
+  "signature": {
+    "message": "Slowth · perlahan, bernafas, bina"
+  },
+  "playHint": {
+    "message": "🦥 ketik untuk bermain Slow Flap →"
+  },
+  "avoidBranches": {
+    "message": "Jangan langgar dahan"
+  },
+  "newBest": {
+    "message": "Rekod baharu! Ketik untuk terbang lagi"
+  },
+  "flyAgain": {
+    "message": "Ketik untuk terbang lagi"
+  },
+  "tapStart": {
+    "message": "Ketik untuk mula"
+  },
+  "gameOver": {
+    "message": "Permainan tamat"
+  },
+  "feedTitle": {
+    "message": "Suapan tanpa henti disekat"
+  },
+  "feedSubtitle": {
+    "message": "Slowth menjauhkan anda daripada suapan tanpa henti. Tarik nafas. Buat perkara lain."
+  },
+  "backHome": {
+    "message": "Kembali ke halaman utama"
+  },
+  "dismiss": {
+    "message": "Tutup"
+  },
+  "storiesTime": {
+    "message": "Anda sudah menghabiskan $1 pada cerita. Tarik nafas."
+  },
+  "enableSafari": {
+    "message": "Aktifkan dalam Safari"
+  },
+  "openSettings": {
+    "message": "Buka Seting"
+  },
+  "strictMode": {
+    "message": "Mod Ketat"
+  },
+  "off": {
+    "message": "Mati"
+  },
+  "blockShorts": {
+    "message": "Sekat Shorts"
+  },
+  "blockReels": {
+    "message": "Sekat Reels"
+  },
+  "blockFeeds": {
+    "message": "Sekat Reels dan suapan"
+  },
+  "blockFeed": {
+    "message": "Sekat Reels dan suapan"
+  },
+  "blockExplore": {
+    "message": "Sekat Teroka dan trend"
+  },
+  "blockSite": {
+    "message": "Sekat tapak"
+  },
+  "updating": {
+    "message": "Mengemas kini…"
+  },
+  "blockInfiniteFeed": {
+    "message": "Sekat suapan tanpa henti"
+  },
+  "infiniteFeedHelp": {
+    "message": "Suapan Tanpa Henti mengehadkan tatal. Pada Instagram, ini turut merangkumi Teroka dan Stories."
+  },
+  "settingsSaveFailed": {
+    "message": "Tidak dapat menyimpan"
+  }
+}
