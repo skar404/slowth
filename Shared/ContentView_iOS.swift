@@ -88,6 +88,7 @@ struct ContentView: View {
     @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
     #endif
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @AppStorage("automaticallyReturnToApplication", store: AppGroup.defaults) private var automaticallyReturnToApplication = true
     @AppStorage("iosWelcomeV1Handled") private var welcomeHandled = false
     @AppStorage("shieldNotificationOfferHandled") private var notificationOfferHandled = false
     @State private var restToShow: IOSDetectionRest?
@@ -120,6 +121,7 @@ struct ContentView: View {
     @State private var showRealtimeRecordingPrompt = false
     @State private var showPauseOnlyPrompt = false
     @State private var recordingPromptPauseTarget: String?
+    @State private var recordingPromptReturnsToApplication = false
     @State private var showStrictModeConfirmation = false
     #if DEBUG
     @AppStorage(DebugMode.storageKey, store: AppGroup.defaults) private var debugModeEnabled = false
@@ -279,7 +281,8 @@ struct ContentView: View {
                     preferredExtensionBundleID: state.broadcastExtensionBundleID,
                     isRecording: state.snapshot.broadcastActive,
                     onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true },
-                    pauseTarget: target
+                    pauseTarget: target,
+                    returnToApplication: recordingPromptReturnsToApplication
                 )
                 .compactSheetDetents(isCompact: horizontalSizeClass == .compact, startsCompact: true)
             } else {
@@ -668,6 +671,13 @@ struct ContentView: View {
                     if !isPad && !isDuo { heroSection }
                     strictModeSection
                     PauseDurationSettings(strict: disabledByStrict)
+                    Section {
+                        Toggle(String(localized: "Auto-return", table: "ApplicationNavigation"),
+                               isOn: $automaticallyReturnToApplication)
+                            .accessibilityIdentifier("settings.automaticAppReturn")
+                    } footer: {
+                        Text(String(localized: "Return to the original app after starting recording or a pause.", table: "ApplicationNavigation"))
+                    }
                     #if canImport(FamilyControls)
                     if #unavailable(iOS 26.5) {
                         Section { ShieldNotificationPermissionView() }
@@ -836,7 +846,8 @@ struct ContentView: View {
     private func presentRealtimeRecordingPromptIfRequested() {
         let active = UIApplication.shared.applicationState == .active
         if shieldPrompt.receive(isActive: active, consume: {
-            guard SharedStore.consumeRealtimeRecordingPromptRequest(target: &$0) else { return false }
+            guard SharedStore.consumeRealtimeRecordingPromptRequest(target: &$0,
+                returnToApplication: &recordingPromptReturnsToApplication) else { return false }
             PauseOnlyApps.recordRouting("handoff", target: $0)
             return true
         }) {

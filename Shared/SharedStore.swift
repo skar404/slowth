@@ -843,19 +843,6 @@ enum SharedStore {
         return state
     }
 
-    // Written by the Broadcast Upload Extension reacting to OS broadcast
-    // lifecycle events, not a user settings change — never gated by strict
-    // mode. Gating this could leave the shield's own re-detection loop stuck.
-    static func setBroadcastActive(_ active: Bool) {
-        d.set(active, forKey: SharedStoreKey.broadcastActive)
-        if active {
-            // An active broadcast is controlled by the classifier, not by an
-            // at-rest restoration deferral left by a previous session.
-            d.set(false, forKey: SharedStoreKey.youtubeShieldRestoreDeferred)
-            d.removeObject(forKey: SharedStoreKey.softYouTubeMonitorGeneration)
-        }
-    }
-
     // Internal lifecycle state shared by the host app and broadcast extension.
     // This is not a user setting, so Strict mode does not gate it.
     static func setYouTubeShieldRestoreDeferred(_ deferred: Bool) {
@@ -931,13 +918,14 @@ enum SharedStore {
         d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastShieldActionInvokedAt)
     }
 
-    static func requestRealtimeRecordingPrompt(at date: Date = Date(), target: String? = nil) {
+    static func requestRealtimeRecordingPrompt(at date: Date = Date(), target: String? = nil, returnToApplication: Bool = false) {
         let defaults = d
         if let target {
             defaults.set(target, forKey: "realtimeRecordingPromptTarget")
         } else {
             defaults.removeObject(forKey: "realtimeRecordingPromptTarget")
         }
+        defaults.set(returnToApplication && target != nil, forKey: "realtimeRecordingReturnToApplication")
         defaults.set(date.timeIntervalSince1970,
                      forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()
@@ -949,12 +937,19 @@ enum SharedStore {
     }
 
     static func consumeRealtimeRecordingPromptRequest(target: inout String?) -> Bool {
+        var returnToApplication = false
+        return consumeRealtimeRecordingPromptRequest(target: &target, returnToApplication: &returnToApplication)
+    }
+
+    static func consumeRealtimeRecordingPromptRequest(target: inout String?, returnToApplication: inout Bool) -> Bool {
         let defaults = d
         defaults.synchronize()
         guard defaults.double(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt) > 0 else {
             return false
         }
         target = defaults.string(forKey: "realtimeRecordingPromptTarget")
+        returnToApplication = defaults.bool(forKey: "realtimeRecordingReturnToApplication")
+        defaults.removeObject(forKey: "realtimeRecordingReturnToApplication")
         defaults.removeObject(forKey: "realtimeRecordingPromptTarget")
         defaults.removeObject(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()

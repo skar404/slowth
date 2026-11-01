@@ -33,6 +33,9 @@ final class AppState: ObservableObject {
     private var foregroundObserver: NSObjectProtocol?
     private var backgroundObserver: NSObjectProtocol?
     private var tickTimer: Timer?
+    #if os(iOS) && canImport(FamilyControls)
+    private var recordingHealthTask: Task<Void, Never>?
+    #endif
 
     #if DEBUG
     /// Display fixtures only: no defaults, observers, timer or system protection.
@@ -99,6 +102,9 @@ final class AppState: ObservableObject {
         if let foregroundObserver { NotificationCenter.default.removeObserver(foregroundObserver) }
         if let backgroundObserver { NotificationCenter.default.removeObserver(backgroundObserver) }
         tickTimer?.invalidate()
+        #if os(iOS) && canImport(FamilyControls)
+        recordingHealthTask?.cancel()
+        #endif
     }
 
     func reload() {
@@ -695,11 +701,24 @@ final class AppState: ObservableObject {
     }
 
     private func restoreRealtimeShieldAfterAppActivation() {
+        if recordingHealthTask == nil {
+            recordingHealthTask = Task { [weak self] in
+                await RecordingHealthMonitor.run {
+                    guard let self else { return }
+                    BlockingCoordinator.hostOpened(facebookSupported: self.facebookModelSelected,
+                                                   xSupported: self.xModelSelected)
+                    self.reload()
+                    self.lastError = String(localized: "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again.", table: "ApplicationNavigation")
+                }
+            }
+        }
         BlockingCoordinator.hostOpened(facebookSupported: facebookModelSelected, xSupported: xModelSelected)
         reload()
     }
 
     private func armSoftYouTubeShieldAfterLeavingSlowth() {
+        recordingHealthTask?.cancel()
+        recordingHealthTask = nil
         BlockingCoordinator.hostClosed(facebookSupported: facebookModelSelected, xSupported: xModelSelected)
         reload()
     }

@@ -60,6 +60,8 @@ def verify_app(app, catalogs, locales):
         identifier = info['CFBundleIdentifier']
         tables = ['Localizable']
         if not is_mac:
+            if bundle == app or identifier.endswith('.Broadcast'):
+                tables.append('ApplicationNavigation')
             if bundle == app or identifier.endswith('.ShieldConfig'):
                 tables.append('Interface')
             if bundle == app or identifier.endswith('.PauseActivity'):

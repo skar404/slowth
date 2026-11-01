@@ -11,6 +11,8 @@ struct DebugIOSSection: View {
     @AppStorage(DebugModelSettings.storageKey, store: AppGroup.defaults) private var debugModelBackend = DebugModelSettings.defaultBackend.rawValue
     @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
 
+    @AppStorage(DebugMode.shieldDiagnosticsStorageKey, store: AppGroup.defaults) private var shieldDiagnosticsEnabled = false
+
     var body: some View {
         Section {
             Toggle("Debug mode", isOn: $debugModeEnabled)
@@ -20,6 +22,8 @@ struct DebugIOSSection: View {
                     state.refreshFacebookModelSelection()
                     #endif
                 }
+            Toggle("Debug Shield", isOn: $shieldDiagnosticsEnabled)
+                .accessibilityIdentifier("debug.shieldDiagnostics")
             DebugSessionCaptureControls()
             if DebugModelSettings.cascadeAvailable {
                 Picker("Model (next recording)", selection: Binding(

@@ -51,8 +51,14 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         return target
     }
 
+    // A translucent forest tint keeps the underlying app visible while giving
+    // the white labels a consistent backdrop. Shared by every Shield state.
+    private static let backgroundTint = UIColor(red: 0.09, green: 0.17, blue: 0.14, alpha: 0.38)
+    private static let buttonColor = UIColor(red: 0.67, green: 0.80, blue: 0.61, alpha: 1)
+    private static let buttonTextColor = UIColor(red: 0.12, green: 0.22, blue: 0.16, alpha: 1)
+
     private static func primaryLabel(bundle: Bundle) -> ShieldConfiguration.Label {
-        .init(text: "Slowth", color: .white)
+        .init(text: "Slowth", color: buttonTextColor)
     }
 
     private static func secondaryLabel(bundle: Bundle) -> ShieldConfiguration.Label? {
@@ -79,13 +85,13 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     private static var unidentifiedConfiguration: ShieldConfiguration {
         let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
-            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            backgroundBlurStyle: .systemUltraThinMaterialDark,
+            backgroundColor: backgroundTint,
             icon: slowthAppIcon,
             title: .init(text: String(localized: "Blocked", bundle: bundle), color: .white),
             subtitle: .init(text: applicationSubtitle(String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), bundle: bundle), color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: primaryLabel(bundle: bundle),
-            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            primaryButtonBackgroundColor: buttonColor,
             secondaryButtonLabel: secondaryLabel(bundle: bundle))
     }
 
@@ -95,26 +101,26 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         let title = String(format: String(localized: "Unavailable for %@", table: "Interface", bundle: bundle),
                            labels[target] ?? target)
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
-            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            backgroundBlurStyle: .systemUltraThinMaterialDark,
+            backgroundColor: backgroundTint,
             icon: slowthAppIcon,
             title: .init(text: title, color: .white),
             subtitle: .init(text: applicationSubtitle(String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle), bundle: bundle), color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: primaryLabel(bundle: bundle),
-            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            primaryButtonBackgroundColor: buttonColor,
             secondaryButtonLabel: secondaryLabel(bundle: bundle))
     }
 
     private static var pauseOnlyConfiguration: ShieldConfiguration {
         let bundle = ShieldLocalization.bundle(in: Bundle(for: ShieldConfigurationExtension.self))
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
-            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            backgroundBlurStyle: .systemUltraThinMaterialDark,
+            backgroundColor: backgroundTint,
             icon: slowthAppIcon,
             title: .init(text: String(localized: "Blocked", bundle: bundle), color: .white),
             subtitle: .init(text: applicationSubtitle(String(localized: "Currently supported only in pause mode. Open Slowth and start a pause to use this app. Screen recording does not unlock it.", table: "Interface", bundle: bundle), bundle: bundle), color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: primaryLabel(bundle: bundle),
-            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            primaryButtonBackgroundColor: buttonColor,
             secondaryButtonLabel: secondaryLabel(bundle: bundle)
         )
     }
@@ -148,33 +154,33 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     private static func recordingOffConfiguration(state: SharedState, bundle: Bundle, application: Bool = false) -> ShieldConfiguration {
         let openAppButton: ShieldConfiguration.Label?
         if #available(iOS 26.5, *) {
-            openAppButton = ShieldConfiguration.Label(text: "Slowth", color: .white)
+            openAppButton = ShieldConfiguration.Label(text: "Slowth", color: buttonTextColor)
         } else {
             openAppButton = nil
         }
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
-            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            backgroundBlurStyle: .systemUltraThinMaterialDark,
+            backgroundColor: backgroundTint,
             icon: slowthAppIcon,
             title: ShieldConfiguration.Label(text: String(localized: "Blocked", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
                 text: applicationSubtitle(subtitleText(
-                    defaultText: String(localized: "Open Slowth and start screen recording to unlock enabled apps. They stay open while you're not viewing selected blocked content.\n\nIf you notice any issues, please share your feedback.", bundle: bundle),
+                    defaultText: String(localized: "Open Slowth to choose how to continue.", table: "Interface", bundle: bundle),
                     state: state,
                     variant: "recording off"
                 ), bundle: bundle, application: application),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
             primaryButtonLabel: application ? primaryLabel(bundle: bundle) : openAppButton,
-            primaryButtonBackgroundColor: UIColor(red: 0.90, green: 0.20, blue: 0.32, alpha: 1),
+            primaryButtonBackgroundColor: buttonColor,
             secondaryButtonLabel: application ? secondaryLabel(bundle: bundle) : nil
         )
     }
 
     private static func detectedConfiguration(state: SharedState, bundle: Bundle, application: Bool = false) -> ShieldConfiguration {
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterialDark,
-            backgroundColor: UIColor(red: 0.10, green: 0.10, blue: 0.16, alpha: 1),
+            backgroundBlurStyle: .systemUltraThinMaterialDark,
+            backgroundColor: backgroundTint,
             icon: slowthAppIcon,
             title: ShieldConfiguration.Label(text: String(localized: "Blocked content detected", bundle: bundle), color: .white),
             subtitle: ShieldConfiguration.Label(
@@ -185,9 +191,9 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
                 ), bundle: bundle, application: application),
                 color: UIColor.white.withAlphaComponent(0.8)
             ),
-            primaryButtonLabel: application ? primaryLabel(bundle: bundle) : ShieldConfiguration.Label(text: String(localized: "Close", table: "Interface", bundle: bundle), color: .white),
+            primaryButtonLabel: application ? primaryLabel(bundle: bundle) : ShieldConfiguration.Label(text: String(localized: "Close", table: "Interface", bundle: bundle), color: buttonTextColor),
             // Match the primary button on the pause-only shield.
-            primaryButtonBackgroundColor: UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1),
+            primaryButtonBackgroundColor: buttonColor,
             secondaryButtonLabel: application ? secondaryLabel(bundle: bundle) : ShieldConfiguration.Label(
                 text: String(localized: "Continue", bundle: bundle),
                 color: .white
@@ -200,7 +206,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         state: SharedState,
         variant: String
     ) -> String {
-        guard DebugMode.isEnabled else { return defaultText }
+        guard DebugMode.shieldDiagnosticsEnabled else { return defaultText }
         let diagnostics = state.realtimeShieldDiagnostics
         let requiredHits = diagnostics.requiredConsecutiveHits.map(String.init) ?? "?"
         let prediction = [diagnostics.lastApp, diagnostics.lastContent]
@@ -258,6 +264,19 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             RTLog.shieldConfig.error("Slowth shield icon resource is missing — using system fallback")
             return UIImage(systemName: "hourglass")
         }
-        return image.withRenderingMode(.alwaysOriginal)
+        // Use app-icon proportions with rounded corners instead of a circular badge.
+        let size = CGSize(width: 96, height: 96)
+        let badge = UIGraphicsImageRenderer(size: size).image { context in
+            let bounds = CGRect(origin: .zero, size: size).insetBy(dx: 3, dy: 3)
+            let outline = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.width * 0.225)
+            context.cgContext.saveGState()
+            outline.addClip()
+            image.draw(in: bounds)
+            context.cgContext.restoreGState()
+            UIColor.white.withAlphaComponent(0.35).setStroke()
+            outline.lineWidth = 2
+            outline.stroke()
+        }
+        return badge.withRenderingMode(.alwaysOriginal)
     }()
 }

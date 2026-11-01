@@ -1,0 +1,1951 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Could not open the app. Open it manually.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر فتح التطبيق. افتحه يدويًا."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر فتح التطبيق. افتحه يدويًا."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не ўдалося адкрыць праграму. Адкрый яе ўручную."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "অ্যাপটি খোলা যায়নি। নিজে খুলুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No s’ha pogut obrir l’app. Obre-la manualment."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikaci se nepodařilo otevřít. Otevřete ji ručně."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appen kunne ikke åbnes. Åbn den manuelt."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App konnte nicht geöffnet werden. Öffne sie manuell."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεν ήταν δυνατό το άνοιγμα της εφαρμογής. Άνοιξέ την χειροκίνητα."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the app. Open it manually."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the app. Open it manually."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the app. Open it manually."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the app. Open it manually."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo abrir la app. Ábrela manualmente."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo abrir la app. Ábrela manualmente."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appia ei voitu avata. Avaa se itse."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hindi mabuksan ang app. Buksan ito nang mano-mano."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’ouvrir l’app. Ouvre-la manuellement."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’ouvrir l’app. Ouvre-la manuellement."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ઍપ ખોલી શકાઈ નથી. તેને જાતે ખોલો."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An kasa buɗe manhajar. Ka buɗe ta da kanka."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לא ניתן לפתוח את היישום. יש לפתוח אותו ידנית."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ऐप नहीं खुल सका। इसे मैन्युअल रूप से खोलें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikaciju nije moguće otvoriti. Otvori je ručno."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az appot nem sikerült megnyitni. Nyisd meg kézzel."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Չհաջողվեց բացել հավելվածը։ Բացիր այն ձեռքով։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak dapat membuka aplikasi. Buka secara manual."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile aprire l’app. Aprila manualmente."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリを開けませんでした。手動で開いてください。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "აპი ვერ გაიხსნა. გახსენი ხელით."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Қолданбаны ашу мүмкін болмады. Оны қолмен ашыңыз."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಆ್ಯಪ್ ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಅದನ್ನು ನೀವೇ ತೆರೆಯಿರಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱을 열 수 없습니다. 직접 열어 주세요."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Колдонмону ачуу мүмкүн болгон жок. Аны кол менен ачыңыз."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nepavyko atidaryti programėlės. Atidaryk ją rankiniu būdu."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ആപ്പ് തുറക്കാനായില്ല. അത് നേരിട്ട് തുറക്കുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अ‍ॅप उघडता आले नाही. ते स्वतः उघडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi tidak dapat dibuka. Buka secara manual."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunne ikke åpne appen. Åpne den manuelt."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एप खोल्न सकिएन। आफैँ खोल्नुहोस्।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De app kon niet worden geopend. Open deze handmatig."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପ୍ ଖୋଲିହେଲା ନାହିଁ। ଏହାକୁ ନିଜେ ଖୋଲନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਐਪ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕੀ। ਇਸਨੂੰ ਖੁਦ ਖੋਲ੍ਹੋ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ایپ نہیں کھل سکی۔ ایہنوں آپ کھولو۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We no fit open di app. Open am by yourself."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie udało się otworzyć aplikacji. Otwórz ją ręcznie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível abrir o app. Abra-o manualmente."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível abrir a app. Abre-a manualmente."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplicația nu a putut fi deschisă. Deschide-o manual."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось открыть приложение. Открой его вручную."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikáciu sa nepodarilo otvoriť. Otvor ju ručne."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikacije ni bilo mogoče odpreti. Odpri jo ročno."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Det gick inte att öppna appen. Öppna den manuellt."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imeshindikana kufungua programu. Ifungue mwenyewe."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "செயலியைத் திறக்க முடியவில்லை. அதை நீங்களே திறக்கவும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "యాప్‌ను తెరవలేకపోయాము. దాన్ని మీరే తెరవండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เปิดแอปไม่ได้ โปรดเปิดด้วยตนเอง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulama açılamadı. Elle açın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося відкрити застосунок. Відкрий його вручну."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ایپ نہیں کھل سکی۔ اسے خود کھولیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không thể mở ứng dụng. Hãy mở thủ công."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法開啟 App。請手動開啟。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法打开 App。请手动打开。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法開啟 App。請手動開啟。"
+          }
+        }
+      }
+    },
+    "Return to the original app after starting recording or a pause.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة إلى التطبيق الأصلي بعد بدء التسجيل أو الاستراحة."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة إلى التطبيق الأصلي بعد بدء التسجيل أو الاستراحة."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вяртацца ў зыходную праграму пасля запуску запісу або паўзы."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "রেকর্ডিং বা বিরতি শুরু করার পর আগের অ্যাপে ফিরে যান।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna a l’app original després d’iniciar la gravació o una pausa."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Po spuštění nahrávání nebo pauzy se vrátit do původní aplikace."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vend tilbage til den oprindelige app, når optagelse eller en pause starter."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach dem Start einer Aufnahme oder Pause zur ursprünglichen App zurückkehren."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επιστροφή στην αρχική εφαρμογή μετά την έναρξη εγγραφής ή διαλείμματος."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the original app after starting recording or a pause."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the original app after starting recording or a pause."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the original app after starting recording or a pause."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the original app after starting recording or a pause."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a la app original al iniciar la grabación o una pausa."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a la app original al iniciar la grabación o una pausa."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palaa alkuperäiseen appiin tallennuksen tai tauon alkaessa."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bumalik sa dating app pagkatapos simulan ang pag-record o pahinga."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenir à l’app d’origine après le démarrage de l’enregistrement ou d’une pause."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenir à l’app d’origine après le démarrage de l’enregistrement ou d’une pause."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "રેકોર્ડિંગ અથવા વિરામ શરૂ કર્યા પછી મૂળ ઍપમાં પાછા ફરો."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koma manhajar da ka fito bayan fara rikodi ko hutu."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "חזרה ליישום המקורי לאחר תחילת ההקלטה או ההפסקה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिकॉर्डिंग या विराम शुरू करने के बाद मूल ऐप में वापस जाएँ।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vratite se u izvornu aplikaciju nakon pokretanja snimanja ili pauze."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visszatérés az eredeti appba a felvétel vagy egy szünet indítása után."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Տեսագրումը կամ դադարը սկսելուց հետո վերադառնալ սկզբնական հավելված։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali ke app sebelumnya setelah memulai perekaman atau jeda."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna all’app di origine dopo aver avviato la registrazione o una pausa."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "録画または休憩を開始した後、元のアプリに戻ります。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ჩაწერის ან შესვენების დაწყების შემდეგ საწყის აპში დაბრუნება."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жазуды немесе үзілісті бастағаннан кейін бастапқы қолданбаға қайту."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ರೆಕಾರ್ಡಿಂಗ್ ಅಥವಾ ವಿರಾಮವನ್ನು ಪ್ರಾರಂಭಿಸಿದ ನಂತರ ಮೂಲ ಆ್ಯಪ್‌ಗೆ ಹಿಂತಿರುಗಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "녹화 또는 휴식을 시작한 후 원래 앱으로 돌아갑니다."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жаздыруу же тыныгуу башталгандан кийин баштапкы колдонмого кайтуу."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pradėjus įrašymą arba pertrauką grįžti į ankstesnę programėlę."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "റെക്കോർഡിങ്ങോ ഇടവേളയോ ആരംഭിച്ച ശേഷം ആദ്യത്തെ ആപ്പിലേക്ക് മടങ്ങുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेकॉर्डिंग किंवा विराम सुरू केल्यानंतर मूळ ॲपमध्ये परत जा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali ke app asal selepas memulakan rakaman atau rehat."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gå tilbake til den opprinnelige appen etter at opptak eller en pause starter."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेकर्डिङ वा विश्राम सुरु गरेपछि पहिलेको एपमा फर्कनुहोस्।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ga terug naar de oorspronkelijke app nadat een opname of pauze is gestart."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ରେକର୍ଡିଂ କିମ୍ବା ବିରତି ଆରମ୍ଭ କରିବା ପରେ ପୂର୍ବ ଆପ୍‌କୁ ଫେରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਕਾਰਡਿੰਗ ਜਾਂ ਵਿਰਾਮ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਬਾਅਦ ਪਹਿਲੀ ਐਪ ਵਿੱਚ ਵਾਪਸ ਜਾਓ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ریکارڈنگ یا وقفہ شروع کرن توں بعد پہلی ایپ وچ واپس جاؤ۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go back to the app wey you come from after recording or break start."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wróć do poprzedniej aplikacji po rozpoczęciu nagrywania lub przerwy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar ao app original após iniciar a gravação ou uma pausa."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regressar à aplicação original após iniciar a gravação ou uma pausa."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revino la aplicația inițială după pornirea înregistrării sau a unei pauze."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Возвращаться в исходное приложение после запуска записи или паузы."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Po spustení nahrávania alebo prestávky sa vrátiť do pôvodnej apky."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Po začetku snemanja ali odmora se vrni v prvotno aplikacijo."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Återgå till den ursprungliga appen när inspelning eller en paus startar."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rudi kwenye programu ya awali baada ya kuanza kurekodi au kupumzika."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பதிவு அல்லது இடைவேளையைத் தொடங்கிய பிறகு முந்தைய செயலிக்குத் திரும்பவும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "రికార్డింగ్ లేదా విరామం ప్రారంభించిన తర్వాత మునుపటి యాప్‌కు తిరిగివెళ్ళండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กลับไปยังแอปเดิมหลังเริ่มบันทึกหรือเริ่มพัก"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt veya mola başladıktan sonra önceki uygulamaya dön."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повертатися до початкової програми після запуску запису або паузи."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ریکارڈنگ یا وقفہ شروع کرنے کے بعد اصل ایپ میں واپس جائیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quay lại ứng dụng ban đầu sau khi bắt đầu ghi hoặc nghỉ."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始錄影或休息後，返回原本嘅 App。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始录屏或休息后，返回原来的 App。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始錄製螢幕或休息後，返回原本的 App。"
+          }
+        }
+      }
+    },
+    "Auto-return": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة التلقائية"
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة التلقائية"
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аўтавяртанне"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "স্বয়ংক্রিয় ফেরা"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retorn automàtic"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatický návrat"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisk retur"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch zurück"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αυτόματη επιστροφή"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-return"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-return"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-return"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-return"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regreso automático"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regreso automático"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automaattinen paluu"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awtomatikong pagbabalik"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour automatique"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour automatique"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આપમેળે પાછા ફરો"
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Komawa ta atomatik"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "חזרה אוטומטית"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अपने-आप वापस जाएँ"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatski povratak"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatikus visszatérés"
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ինքնաշխատ վերադարձ"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali otomatis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ritorno automatico"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動で戻る"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ავტომატური დაბრუნება"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Автоматты қайту"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸ್ವಯಂಚಾಲಿತ ಹಿಂತಿರುಗುವಿಕೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자동 복귀"
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Автоматтык кайтуу"
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatinis grįžimas"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "താനേ മടങ്ങുക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपोआप परत जा"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali automatik"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisk retur"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्वतः फर्कनुहोस्"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch terug"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସ୍ୱୟଂଚାଳିତ ଫେରନ୍ତୁ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਪਣੇ ਆਪ ਵਾਪਸੀ"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپے واپسی"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go back by itself"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatyczny powrót"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retorno automático"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regresso automático"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenire automată"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Автовозврат"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatický návrat"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samodejna vrnitev"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisk återgång"
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurudi kiotomatiki"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தானாகத் திரும்பு"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "స్వయంచాలకంగా తిరిగివెళ్ళు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กลับอัตโนมัติ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otomatik dönüş"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Автоповернення"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خودکار واپسی"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tự động quay lại"
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動返回"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自动返回"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動返回"
+          }
+        }
+      }
+    },
+    "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انقطع التسجيل. إذا كان iOS لا يزال يعرض التسجيل السابق، فأوقفه ثم ابدأ التسجيل مجددًا."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انقطع التسجيل. إذا كان iOS لا يزال يعرض التسجيل السابق، فأوقفه ثم ابدأ التسجيل مجددًا."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запіс перапыніўся. Калі iOS яшчэ паказвае папярэдні запіс, спыніце яго, а потым пачніце запіс нанова."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "রেকর্ডিং বাধাপ্রাপ্ত হয়েছে। iOS-এ আগের রেকর্ডিং এখনও দেখা গেলে সেটি বন্ধ করে আবার রেকর্ডিং শুরু করুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La gravació s’ha interromput. Si iOS encara mostra la gravació anterior, atura-la i torna a iniciar la gravació."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nahrávání bylo přerušeno. Pokud iOS stále zobrazuje předchozí nahrávání, zastavte ho a spusťte nahrávání znovu."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optagelsen blev afbrudt. Hvis iOS stadig viser den gamle optagelse, skal du stoppe den og starte optagelsen igen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Aufnahme wurde unterbrochen. Falls iOS die alte Aufnahme noch anzeigt, beende sie und starte die Aufnahme erneut."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η εγγραφή διακόπηκε. Αν το iOS εξακολουθεί να εμφανίζει την προηγούμενη εγγραφή, σταματήστε την και ξεκινήστε ξανά την εγγραφή."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La grabación se interrumpió. Si iOS sigue mostrando la grabación anterior, detenla y vuelve a iniciar la grabación."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La grabación se interrumpió. Si iOS sigue mostrando la grabación anterior, detenla y vuelve a iniciar la grabación."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallennus keskeytyi. Jos iOS näyttää vielä aiemman tallennuksen, lopeta se ja aloita tallennus uudelleen."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naantala ang pag-record. Kung ipinapakita pa rin ng iOS ang dating pag-record, ihinto ito at magsimulang mag-record muli."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’enregistrement a été interrompu. Si iOS affiche encore l’ancien enregistrement, arrêtez-le, puis relancez l’enregistrement."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’enregistrement a été interrompu. Si iOS affiche encore l’ancien enregistrement, arrêtez-le, puis relancez l’enregistrement."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "રેકોર્ડિંગમાં વિક્ષેપ પડ્યો. જો iOS હજી પણ જૂનું રેકોર્ડિંગ બતાવતું હોય, તો તેને બંધ કરો અને ફરીથી રેકોર્ડિંગ શરૂ કરો."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An katse rikodi. Idan iOS har yanzu yana nuna tsohon rikodin, dakatar da shi sannan ka sake fara rikodi."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ההקלטה נקטעה. אם iOS עדיין מציג את ההקלטה הקודמת, יש לעצור אותה ולהתחיל להקליט מחדש."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिकॉर्डिंग बाधित हो गई। अगर iOS अभी भी पुरानी रिकॉर्डिंग दिखा रहा है, तो उसे रोकें और फिर रिकॉर्डिंग शुरू करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snimanje je prekinuto. Ako iOS i dalje prikazuje prethodno snimanje, zaustavite ga i ponovno pokrenite snimanje."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A felvétel megszakadt. Ha az iOS még mindig a korábbi felvételt jelzi, állítsd le, majd indítsd újra a felvételt."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Տեսագրումն ընդհատվել է։ Եթե iOS-ը դեռ ցույց է տալիս նախորդ տեսագրումը, դադարեցրեք այն, ապա նորից սկսեք տեսագրումը։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perekaman terputus. Jika iOS masih menampilkan rekaman sebelumnya, hentikan lalu mulai merekam lagi."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La registrazione si è interrotta. Se iOS mostra ancora la registrazione precedente, interrompila e avvia di nuovo la registrazione."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "録画が中断されました。iOSに前の録画がまだ表示されている場合は停止してから、録画を開始し直してください。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ჩაწერა შეწყდა. თუ iOS ჯერ კიდევ აჩვენებს წინა ჩაწერას, შეაჩერეთ ის და ხელახლა დაიწყეთ ჩაწერა."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жазу үзілді. iOS әлі де бұрынғы жазуды көрсетіп тұрса, оны тоқтатып, жазуды қайта бастаңыз."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ರೆಕಾರ್ಡಿಂಗ್‌ಗೆ ಅಡಚಣೆಯಾಯಿತು. iOS ಇನ್ನೂ ಹಿಂದಿನ ರೆಕಾರ್ಡಿಂಗ್ ತೋರಿಸುತ್ತಿದ್ದರೆ, ಅದನ್ನು ನಿಲ್ಲಿಸಿ ಮತ್ತೆ ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "녹화가 중단되었습니다. iOS에 이전 녹화가 아직 표시되면 중지한 후 녹화를 다시 시작하세요."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жаздыруу үзгүлтүккө учурады. Эгер iOS мурдагы жаздырууну дагы эле көрсөтүп жатса, аны токтотуп, жаздырууну кайра баштаңыз."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Įrašymas nutrūko. Jei iOS vis dar rodo ankstesnį įrašymą, sustabdykite jį ir pradėkite įrašymą iš naujo."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "റെക്കോർഡിങ് തടസ്സപ്പെട്ടു. iOS ഇപ്പോഴും പഴയ റെക്കോർഡിങ് കാണിക്കുന്നുണ്ടെങ്കിൽ, അത് നിർത്തി വീണ്ടും റെക്കോർഡിങ് ആരംഭിക്കുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेकॉर्डिंगमध्ये व्यत्यय आला. iOS अजूनही जुने रेकॉर्डिंग दाखवत असल्यास, ते थांबवा आणि पुन्हा रेकॉर्डिंग सुरू करा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rakaman terganggu. Jika iOS masih memaparkan rakaman lama, hentikannya kemudian mulakan rakaman semula."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opptaket ble avbrutt. Hvis iOS fortsatt viser det gamle opptaket, stopper du det og starter opptaket på nytt."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेकर्डिङ अवरुद्ध भयो। iOS ले अझै पुरानो रेकर्डिङ देखाइरहेको छ भने त्यसलाई रोकेर फेरि रेकर्डिङ सुरु गर्नुहोस्।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De opname is onderbroken. Als iOS de vorige opname nog weergeeft, stop deze dan en start de opname opnieuw."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ରେକର୍ଡିଂ ବାଧାପ୍ରାପ୍ତ ହୋଇଛି। iOS ଯଦି ଏବେ ବି ପୁରୁଣା ରେକର୍ଡିଂ ଦେଖାଉଛି, ତାହାକୁ ବନ୍ଦ କରି ପୁଣି ରେକର୍ଡିଂ ଆରମ୍ଭ କରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਕਾਰਡਿੰਗ ਵਿੱਚ ਰੁਕਾਵਟ ਆਈ। ਜੇ iOS ਹਾਲੇ ਵੀ ਪੁਰਾਣੀ ਰਿਕਾਰਡਿੰਗ ਦਿਖਾ ਰਿਹਾ ਹੈ, ਤਾਂ ਉਸਨੂੰ ਰੋਕੋ ਅਤੇ ਰਿਕਾਰਡਿੰਗ ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ریکارڈنگ رک گئی اے۔ جے iOS ہن وی پرانی ریکارڈنگ وکھا رہیا اے، اوہنوں روکو تے ریکارڈنگ فیر شروع کرو۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording stop unexpectedly. If iOS still dey show the old recording, stop am, then start recording again."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nagrywanie zostało przerwane. Jeśli iOS nadal pokazuje poprzednie nagrywanie, zatrzymaj je i rozpocznij nagrywanie ponownie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A gravação foi interrompida. Se o iOS ainda mostrar a gravação anterior, pare-a e inicie a gravação novamente."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A gravação foi interrompida. Se o iOS ainda mostrar a gravação anterior, pare-a e volte a iniciar a gravação."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Înregistrarea a fost întreruptă. Dacă iOS încă afișează înregistrarea anterioară, oprește-o, apoi pornește înregistrarea din nou."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись прервалась. Если iOS всё ещё показывает старую запись, остановите её, затем запустите запись заново."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nahrávanie bolo prerušené. Ak iOS stále zobrazuje predchádzajúce nahrávanie, zastavte ho a spustite nahrávanie znova."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snemanje je bilo prekinjeno. Če iOS še vedno prikazuje prejšnje snemanje, ga ustavite in znova začnite snemati."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspelningen avbröts. Om iOS fortfarande visar den gamla inspelningen ska du stoppa den och starta inspelningen igen."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurekodi kumekatizwa. Ikiwa iOS bado inaonyesha rekodi ya awali, isimamishe kisha uanze kurekodi tena."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பதிவு தடைப்பட்டது. iOS இன்னும் பழைய பதிவைக் காட்டினால், அதை நிறுத்திவிட்டு மீண்டும் பதிவைத் தொடங்கவும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "రికార్డింగ్‌కు అంతరాయం కలిగింది. iOS ఇంకా పాత రికార్డింగ్‌ను చూపిస్తే, దాన్ని ఆపి మళ్ళీ రికార్డింగ్ ప్రారంభించండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกถูกขัดจังหวะ หาก iOS ยังแสดงการบันทึกเดิมอยู่ ให้หยุดแล้วเริ่มบันทึกใหม่"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt kesildi. iOS hâlâ önceki kaydı gösteriyorsa durdurun ve kaydı yeniden başlatın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запис перервався. Якщо iOS досі показує попередній запис, зупиніть його, а потім почніть запис знову."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ریکارڈنگ میں خلل آ گیا۔ اگر iOS اب بھی پرانی ریکارڈنگ دکھا رہا ہے، تو اسے روک کر دوبارہ ریکارڈنگ شروع کریں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quá trình ghi đã bị gián đoạn. Nếu iOS vẫn hiển thị phiên ghi cũ, hãy dừng phiên đó rồi bắt đầu ghi lại."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "錄影中斷咗。如果 iOS 仲顯示緊之前嘅錄影，請先停止，再重新開始錄影。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录屏已中断。如果 iOS 仍显示之前的录屏，请先停止，再重新开始录屏。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "螢幕錄製已中斷。如果 iOS 仍顯示先前的錄製，請先停止，再重新開始錄製。"
+          }
+        }
+      }
+    },
+    "Could not start recording. Please try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر بدء التسجيل. حاول مجددًا."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر بدء التسجيل. حاول مجددًا."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не ўдалося пачаць запіс. Паспрабуйце яшчэ раз."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "রেকর্ডিং শুরু করা যায়নি। আবার চেষ্টা করুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No s’ha pogut iniciar la gravació. Torna-ho a provar."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nahrávání se nepodařilo spustit. Zkuste to znovu."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optagelsen kunne ikke startes. Prøv igen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Aufnahme konnte nicht gestartet werden. Versuche es erneut."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεν ήταν δυνατή η έναρξη της εγγραφής. Δοκιμάστε ξανά."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start recording. Please try again."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start recording. Please try again."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start recording. Please try again."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start recording. Please try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo iniciar la grabación. Inténtalo de nuevo."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo iniciar la grabación. Inténtalo de nuevo."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallennusta ei voitu aloittaa. Yritä uudelleen."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hindi masimulan ang pag-record. Subukan muli."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de démarrer l’enregistrement. Réessayez."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de démarrer l’enregistrement. Réessayez."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "રેકોર્ડિંગ શરૂ થઈ શક્યું નહીં. ફરી પ્રયાસ કરો."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An kasa fara rikodi. Sake gwadawa."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לא ניתן להתחיל בהקלטה. יש לנסות שוב."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिकॉर्डिंग शुरू नहीं हो सकी। फिर से कोशिश करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snimanje nije moguće pokrenuti. Pokušajte ponovno."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nem sikerült elindítani a felvételt. Próbáld újra."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Չհաջողվեց սկսել տեսագրումը։ Փորձեք կրկին։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak dapat memulai perekaman. Coba lagi."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile avviare la registrazione. Riprova."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "録画を開始できませんでした。もう一度お試しください。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ჩაწერის დაწყება ვერ მოხერხდა. სცადეთ ხელახლა."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жазуды бастау мүмкін болмады. Қайталап көріңіз."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "녹화를 시작할 수 없습니다. 다시 시도하세요."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жаздырууну баштоо мүмкүн болгон жок. Кайра аракет кылыңыз."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nepavyko pradėti įrašymo. Bandykite dar kartą."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "റെക്കോർഡിങ് ആരംഭിക്കാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेकॉर्डिंग सुरू करता आले नाही. पुन्हा प्रयत्न करा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rakaman tidak dapat dimulakan. Cuba lagi."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunne ikke starte opptaket. Prøv igjen."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रेकर्डिङ सुरु गर्न सकिएन। फेरि प्रयास गर्नुहोस्।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De opname kon niet worden gestart. Probeer het opnieuw."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ରେକର୍ଡିଂ ଆରମ୍ଭ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਕਾਰਡਿੰਗ ਸ਼ੁਰੂ ਨਹੀਂ ਹੋ ਸਕੀ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ریکارڈنگ شروع نہیں ہو سکی۔ فیر کوشش کرو۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording no fit start. Try again."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie udało się rozpocząć nagrywania. Spróbuj ponownie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível iniciar a gravação. Tente novamente."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível iniciar a gravação. Tente novamente."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Înregistrarea nu a putut fi pornită. Încearcă din nou."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось начать запись. Попробуйте ещё раз."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nahrávanie sa nepodarilo spustiť. Skúste to znova."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snemanja ni bilo mogoče začeti. Poskusite znova."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Det gick inte att starta inspelningen. Försök igen."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imeshindikana kuanza kurekodi. Jaribu tena."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பதிவைத் தொடங்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "రికార్డింగ్ ప్రారంభించలేకపోయాము. మళ్ళీ ప్రయత్నించండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ไม่สามารถเริ่มบันทึกได้ โปรดลองอีกครั้ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt başlatılamadı. Lütfen tekrar deneyin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося почати запис. Спробуйте ще раз."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ریکارڈنگ شروع نہیں ہو سکی۔ دوبارہ کوشش کریں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không thể bắt đầu ghi. Vui lòng thử lại."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始唔到錄影，請再試一次。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法开始录屏，请重试。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法開始錄製螢幕，請再試一次。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATHS = ('Localization/Localizable.xcstrings', 'iOS/Interface.xcstrings',
-                 'iOS/PauseActivity.xcstrings', 'iOS/ShieldNotifications/ShieldNotifications.xcstrings')
+                 'iOS/ApplicationNavigation.xcstrings', 'iOS/PauseActivity.xcstrings', 'iOS/ShieldNotifications/ShieldNotifications.xcstrings')
 FORMAT = re.compile(r'%(?:(\d+)\$)?[-+ #0]*(?:\d+)?(?:\.\d+)?(lld|llu|ld|lu|d|u|f|g|s|@)')
 PLURAL_CATEGORIES = {'zero', 'one', 'two', 'few', 'many', 'other'}
 

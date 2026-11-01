@@ -9,6 +9,7 @@ import FamilyControls
 final class SampleHandler: RPBroadcastSampleHandler {
     // ReplayKit callbacks and the rest watchdog share classifier/latch state.
     private var admission = RecordingAdmission()
+    private var recordingHealthSession: String?
     private let processingLock = NSRecursiveLock()
     private var restWatchdog: DispatchSourceTimer?
     private var classifier: (any SurfaceClassifying)?
@@ -81,7 +82,12 @@ final class SampleHandler: RPBroadcastSampleHandler {
         guard admitRecording() else { return }
         RTLog.sampleHandler.notice("broadcastStarted — loading selected surface classifier")
         SoftYouTubeActivityMonitoring.stop()
-        SharedStore.setBroadcastActive(true)
+        do { recordingHealthSession = try RecordingHealthStore.shared().start() }
+        catch {
+            finishBroadcastWithError(NSError(domain: "Slowth.RecordingHealth", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: String(localized: "Could not start recording. Please try again.", table: "ApplicationNavigation", bundle: ShieldLocalization.bundle(in: .main))]))
+            return
+        }
         resetSessionState()
         // Freeze the choice before a delayed load or a retry after pause/failure.
         #if DEBUG
@@ -122,7 +128,8 @@ final class SampleHandler: RPBroadcastSampleHandler {
         admission.pause()
         RTLog.sampleHandler.notice("broadcastPaused — applying at-rest shield policy")
         stopRestWatchdog()
-        SharedStore.setBroadcastActive(false)
+        guard let session = recordingHealthSession,
+              (try? RecordingHealthStore.shared().stop(session: session)) == true else { return }
         resetStreaks()
         prepareEnabledSurfacesAfterBroadcastStops()
         _ = try? IOSPauseCoordinator.snapshot()
@@ -139,7 +146,12 @@ final class SampleHandler: RPBroadcastSampleHandler {
         guard admitRecording() else { return }
         RTLog.sampleHandler.notice("broadcastResumed — restoring surface classifier state")
         SoftYouTubeActivityMonitoring.stop()
-        SharedStore.setBroadcastActive(true)
+        do { recordingHealthSession = try RecordingHealthStore.shared().start() }
+        catch {
+            finishBroadcastWithError(NSError(domain: "Slowth.RecordingHealth", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: String(localized: "Could not start recording. Please try again.", table: "ApplicationNavigation", bundle: ShieldLocalization.bundle(in: .main))]))
+            return
+        }
         resetStreaks()
         resetLatchesForActiveBroadcast()
         lastInferenceTimestamp = nil
@@ -171,7 +183,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
         admission.finish()
         RTLog.sampleHandler.notice("broadcastFinished — applying at-rest shield policy")
         stopRestWatchdog()
-        SharedStore.setBroadcastActive(false)
+        guard let session = recordingHealthSession,
+              (try? RecordingHealthStore.shared().stop(session: session)) == true else { return }
+        recordingHealthSession = nil
         resetStreaks()
         prepareEnabledSurfacesAfterBroadcastStops()
         _ = try? IOSPauseCoordinator.snapshot()
@@ -196,7 +210,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
         #endif
         let sharedState = SharedStore.snapshot()
-        guard sharedState.realtimeShieldEnabled else { return }
+        guard sharedState.broadcastActive, sharedState.realtimeShieldEnabled else { return }
 
         if classifier == nil && classifierStatus == "disabled" {
             loadClassifier()
@@ -878,7 +892,23 @@ final class SampleHandler: RPBroadcastSampleHandler {
             guard let self else { return }
             self.processingLock.lock()
             defer { self.processingLock.unlock() }
-            guard self.restWatchdog != nil, SharedStore.snapshot().broadcastActive else { return }
+            guard self.restWatchdog != nil else { return }
+            let ownsSession: Bool
+            do {
+                ownsSession = try self.recordingHealthSession.map {
+                    try RecordingHealthStore.shared().respond(session: $0)
+                } ?? false
+            } catch {
+                // Temporary lock/storage unavailability is not a revoked session.
+                return
+            }
+            guard ownsSession else {
+                self.stopRestWatchdog()
+                self.admission.finish()
+                self.finishBroadcastWithError(NSError(domain: "Slowth.RecordingHealth", code: 2,
+                    userInfo: [NSLocalizedDescriptionKey: String(localized: "Recording was interrupted. Stop the old recording if it is still shown by iOS, then start recording again.", table: "ApplicationNavigation", bundle: ShieldLocalization.bundle(in: .main))]))
+                return
+            }
             self.consumeUnlockRequests(at: Date())
         }
         restWatchdog = timer

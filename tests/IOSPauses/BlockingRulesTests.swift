@@ -1,6 +1,17 @@
 // Frozen pre-refactor decisions, exhaustively compared to the pure rules.
 @main enum BlockingRuleChecks {
     static func main() {
+        var expiredRecorder = BlockingContext(recording: false, requestedShield: false, recorderRequest: true)
+        assert(BlockingRules.decide(expiredRecorder, .shieldRequest).shield == .block)
+        expiredRecorder.activePause = true
+        assert(BlockingRules.decide(expiredRecorder, .shieldRequest).shield == .clear)
+        expiredRecorder.activePause = false
+        expiredRecorder.enabled = false
+        assert(BlockingRules.decide(expiredRecorder, .shieldRequest).shield == .clear)
+        expiredRecorder.enabled = true
+        expiredRecorder.recorderRequest = false
+        assert(BlockingRules.decide(expiredRecorder, .shieldRequest).shield == .clear)
+
         for bits in 0..<(1 << 12) {
             func flag(_ bit: Int) -> Bool { bits & (1 << bit) != 0 }
             let c = BlockingContext(enabled: flag(0), recording: flag(1),

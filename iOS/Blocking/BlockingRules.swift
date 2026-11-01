@@ -15,6 +15,7 @@ struct BlockingContext {
     var validSelection = true
     var currentGeneration = true
     var requestedShield = false
+    var recorderRequest = false
     var runtimeFresh = false
     var runtimeWantsShield = true
     var bindingChanged = false
@@ -69,6 +70,9 @@ enum BlockingRules {
                          reason: "Discard observations across bindings, pauses and grace")
         case .shieldRequest:
             if c.activePause { return .init(shield: .clear, reason: "Active ordinary pause") }
+            if c.enabled && c.recorderRequest && !c.recording {
+                return .init(shield: .block, reason: "Stopped recorder cannot clear protection")
+            }
             if c.enabled && !c.pauseOnly {
                 if c.recording && c.inferenceFailed { return .init(shield: .block, reason: "Classifier unavailable") }
                 if c.pendingRest { return .init(shield: .block, reason: "Rest unfinished") }

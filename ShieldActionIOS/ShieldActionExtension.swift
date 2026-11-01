@@ -15,7 +15,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
             return
         }
         if #available(iOS 26.5, *) {
-            SharedStore.requestRealtimeRecordingPrompt(at: now, target: surface(containing: application)?.rawValue)
+            SharedStore.requestRealtimeRecordingPrompt(at: now, target: surface(containing: application)?.rawValue, returnToApplication: true)
             completionHandler(.openParentalControlsApp)
         } else {
             let target = surface(containing: application)?.rawValue

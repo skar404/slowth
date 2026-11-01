@@ -463,8 +463,9 @@ enum IOSPauseCoordinator {
                     // with the request that happened to discover the expired lease.
                     return
                 }
-                if Bundle.main.bundleIdentifier?.hasSuffix(".Broadcast") == true ||
-                    Bundle.main.bundleIdentifier?.contains("Broadcast") == true {
+                let recorderRequest = Bundle.main.bundleIdentifier?.hasSuffix(".Broadcast") == true ||
+                    Bundle.main.bundleIdentifier?.contains("Broadcast") == true
+                if recorderRequest {
                     AppGroup.defaults.set(requested != nil, forKey: "pause.runtime.\(target).shield")
                     AppGroup.defaults.set(now.wall, forKey: "pause.runtime.\(target).at")
                 }
@@ -480,7 +481,7 @@ enum IOSPauseCoordinator {
                     inferenceFailed: ledger.inferenceFailed(target, selection: selection(target, state: state)),
                     pendingRest: boundRest && rest != nil && rest?.released == nil && rest?.completed != true,
                     graceActive: boundRest && rest?.releaseRevision == ledger.revision && (rest?.graceRemaining(restClock()) ?? 0) > 0,
-                    requestedShield: requested != nil)
+                    requestedShield: requested != nil, recorderRequest: recorderRequest)
                 let decision = BlockingRules.decide(context, .shieldRequest)
                 if decision.shield == .block {
                     // Start only a bound detection cycle when protection is applied.

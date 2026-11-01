@@ -3,6 +3,11 @@ import Foundation
 enum DebugMode {
     static let storageKey = "debugModeEnabled"
     static let requiredVersionTapCount = 15
+    static let shieldDiagnosticsStorageKey = "debugShieldDiagnosticsEnabled"
+
+    static var shieldDiagnosticsEnabled: Bool {
+        isEnabled && AppGroup.defaults.bool(forKey: shieldDiagnosticsStorageKey)
+    }
 
     static var isEnabled: Bool {
         resolve(stored: AppGroup.defaults.bool(forKey: storageKey))
