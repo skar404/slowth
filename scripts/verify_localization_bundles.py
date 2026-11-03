@@ -8,7 +8,7 @@ import json
 import plistlib
 from pathlib import Path
 
-from verify_localization_catalogs import ROOT, arguments, load_catalogs, supported_locales, verify_catalog
+from verify_localization_catalogs import ROOT, arguments, fallback_locales, load_catalogs, supported_locales, verify_catalog, verify_fallback_policy
 
 
 def read_plist(path):
@@ -28,10 +28,21 @@ def verify_table(resources, table, catalog, locales):
         plural_path = folder / f'{table}.stringsdict'
         strings = read_plist(strings_path) if strings_path.exists() else {}
         plurals = read_plist(plural_path) if plural_path.exists() else {}
-        assert keys <= strings.keys() | plurals.keys(), (resources, table, locale, keys - (strings.keys() | plurals.keys()))
+        fallback_keys = {key for key in keys if locale in fallback_locales(table, key)
+                         and locale not in catalog['strings'][key]['localizations']}
+        required = keys - fallback_keys
+        assert required <= strings.keys() | plurals.keys(), (resources, table, locale, required - (strings.keys() | plurals.keys()))
         for key in keys:
-            expected = catalog['strings'][key]['localizations'][locale]
             context = (resources, table, locale, key)
+            if key in fallback_keys:
+                english = catalog['strings'][key]['localizations']['en']
+                assert english == {'stringUnit': {'state': 'translated', 'value': key}}, context
+                assert key not in plurals, (*context, 'unexpected fallback plural')
+                # Xcode may omit the entry or emit the English source value.
+                # A present but incorrect value must still fail validation.
+                assert key not in strings or strings[key] == key, (*context, 'incorrect English fallback')
+                continue
+            expected = catalog['strings'][key]['localizations'][locale]
             if 'stringUnit' in expected:
                 assert strings.get(key) == expected['stringUnit']['value'], context
             else:
@@ -84,6 +95,7 @@ def main():
     args = parser.parse_args()
     catalogs = load_catalogs()
     locales = supported_locales(catalogs)
+    verify_fallback_policy(catalogs, locales)
     for name, catalog in catalogs.items():
         verify_catalog(catalog, locales, name)
     for app in args.apps:

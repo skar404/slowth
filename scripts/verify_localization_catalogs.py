@@ -13,6 +13,28 @@ CATALOG_PATHS = ('Localization/Localizable.xcstrings', 'iOS/Interface.xcstrings'
                  'iOS/ApplicationNavigation.xcstrings', 'iOS/PauseActivity.xcstrings', 'iOS/ShieldNotifications/ShieldNotifications.xcstrings')
 FORMAT = re.compile(r'%(?:(\d+)\$)?[-+ #0]*(?:\d+)?(?:\.\d+)?(lld|llu|ld|lu|d|u|f|g|s|@)')
 PLURAL_CATEGORIES = {'zero', 'one', 'two', 'few', 'many', 'other'}
+FALLBACK_POLICY = json.loads((ROOT / 'Localization/english-fallbacks.json').read_text())
+
+
+def fallback_locales(table, key):
+    if key in FALLBACK_POLICY['tables'].get(table, []):
+        return set(FALLBACK_POLICY['locales'])
+    return set()
+
+
+def verify_fallback_policy(catalogs, locales):
+    allowed = FALLBACK_POLICY['locales']
+    assert len(allowed) == len(set(allowed)), 'Duplicate fallback locales'
+    assert set(allowed) <= locales - {'en', 'ru'}, 'Fallback must preserve English and Russian'
+    for table, keys in FALLBACK_POLICY['tables'].items():
+        assert table in catalogs, ('Unknown fallback table', table)
+        assert len(keys) == len(set(keys)), ('Duplicate fallback keys', table)
+        for key in keys:
+            entry = catalogs[table]['strings'].get(key)
+            assert entry is not None and entry.get('shouldTranslate') is not False, ('Unknown or untranslatable fallback key', table, key)
+            # Missing compiled keys resolve to the source key. Only plain strings
+            # whose English value equals that key may use this temporary policy.
+            assert entry.get('localizations', {}).get('en') == {'stringUnit': {'state': 'translated', 'value': key}}, ('Fallback needs a plain English source key', table, key)
 
 
 def arguments(value):
@@ -53,7 +75,8 @@ def verify_catalog(catalog, locales, name):
         if entry.get('shouldTranslate') is False:
             continue
         translations = entry.get('localizations', {})
-        assert set(translations) == locales, (name, key, 'missing', locales - translations.keys(), 'extra', translations.keys() - locales)
+        missing = locales - translations.keys()
+        assert missing <= fallback_locales(name, key) and not translations.keys() - locales, (name, key, 'missing', missing, 'extra', translations.keys() - locales)
         english_values = {u['value'] for _, u in units(translations['en'])}
         for locale, node in translations.items():
             # Substitution dictionaries require separate argument accounting; fail
@@ -87,6 +110,7 @@ def verify_catalog(catalog, locales, name):
 def main():
     catalogs = load_catalogs()
     locales = supported_locales(catalogs)
+    verify_fallback_policy(catalogs, locales)
     for name, catalog in catalogs.items():
         verify_catalog(catalog, locales, name)
         print(f'{name}: {len(catalog["strings"])} entries, {len(locales)} locales; values and format arguments verified')
