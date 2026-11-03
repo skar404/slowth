@@ -20,10 +20,12 @@ Free and open source. No account required. No tracking.
 </div>
 
 <p align="center">
-  <img src="docs/showcase-00.jpg" width="30%" alt="Infinite scroll is a bug. This is the patch." />
-  <img src="docs/showcase-01.jpg" width="30%" alt="Your attention is the product. We're taking it off the shelf." />
-  <img src="docs/showcase-02.jpg" width="30%" alt="Slowth host app on macOS" />
+  <img src="docs/showcase-00.jpg" width="30%" alt="Slowth — block distractions in apps and Safari" />
+  <img src="docs/showcase-01.jpg" width="30%" alt="Slowth on iPhone — app protection and pauses" />
+  <img src="docs/showcase-02.jpg" width="30%" alt="Slowth on iPhone — Safari content and whole-site controls" />
 </p>
+
+English iPhone screenshots from the [App Store listing](https://apps.apple.com/us/app/slowth-short-video-blocker/id6764140763), updated November 4, 2026.
 
 ## Try Slowth
 
