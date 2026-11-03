@@ -23,7 +23,7 @@ PUBLIC_FILES = {
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',
     'docs/FLAT_MODEL.md', 'docs/IOS_LOCALIZATION.md',
-    'project.yml', 'README.md', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
+    'project.yml', 'README.md', 'BUDGET.md', 'funding.json', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
     'AGENTS.md', 'APP_STORE_LOCALIZATION.md',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
     'Configs/Slowth.storekit', 'docs/icon.png', 'docs/showcase-00.jpg',
