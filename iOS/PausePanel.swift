@@ -145,12 +145,14 @@ struct PauseDurationSettings: View {
 }
 
 struct PausePanel: View {
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let safari: Bool
     var preferredTarget: String? = nil
     var embedded = false
     var compact = false
     var sharedBackground = false
+    var actionsOnly = false
     var recordingExtensionBundleID: String? = nil
     var isRecording = false
     @StateObject private var model = PausePanelModel()
@@ -194,7 +196,7 @@ struct PausePanel: View {
                 panelContent
                     .padding(.horizontal, sharedBackground ? 16 : compact ? 12 : 20)
                     .padding(.top, sharedBackground ? 0 : compact ? 12 : 20)
-                    .padding(.bottom, sharedBackground ? 16 : compact ? 12 : 20)
+                    .padding(.bottom, actionsOnly ? 0 : sharedBackground ? 16 : compact ? 12 : 20)
                     .background(sharedBackground ? Color.clear : panelBackground)
             } else {
                 Section {
@@ -218,6 +220,7 @@ struct PausePanel: View {
         }
         #endif
         .onReceive(timer) { _ in
+            guard scenePhase == .active else { return }
             model.refresh()
             if !canStart { showingTargetPicker = false }
             if switchTargets.isEmpty || model.ledger.lease?.id != switchSource?.id ||
@@ -237,32 +240,34 @@ struct PausePanel: View {
 
     private var panelContent: some View {
           VStack(alignment: .leading, spacing: compact ? 8 : 12) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(String(localized: "Pauses today", table: "Interface"))
-                    .font(compact ? .subheadline.weight(.medium) : .headline)
-                Spacer(minLength: 8)
-                HStack(spacing: 5) {
-                    ForEach(0..<3) { index in
-                        Image(systemName: index < remaining ? "leaf.fill" : "leaf")
-                            .foregroundStyle(index < remaining ? Color.accentColor : .secondary)
+            if !actionsOnly {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(String(localized: "Pauses today", table: "Interface"))
+                        .font(compact ? .subheadline.weight(.medium) : .headline)
+                    Spacer(minLength: 8)
+                    HStack(spacing: 5) {
+                        ForEach(0..<3) { index in
+                            Image(systemName: index < remaining ? "leaf.fill" : "leaf")
+                                .foregroundStyle(index < remaining ? Color.accentColor : .secondary)
+                        }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(String(format: String(localized: "%lld of 3 remaining", table: "Interface"), locale: Locale.current, remaining))
                 }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(String(format: String(localized: "%lld of 3 remaining", table: "Interface"), locale: Locale.current, remaining))
+                HStack {
+                    Text(String(localized: "Saved leaves", table: "Interface"))
+                        .font(compact ? .caption : .body)
+                    Spacer()
+                    Label(model.readable ? "+\(model.ledger.savedLeaves)" : "—", systemImage: "leaf.fill")
+                        .font((compact ? Font.caption.weight(.medium) : .headline).monospacedDigit())
+                        .foregroundStyle(Color.accentColor)
+                }
+                if !compact {
+                    Text(String(localized: "Unused leaves are saved after each day as a reward.", table: "Interface"))
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
             }
-            HStack {
-                Text(String(localized: "Saved leaves", table: "Interface"))
-                    .font(compact ? .caption : .body)
-                Spacer()
-                Label(model.readable ? "+\(model.ledger.savedLeaves)" : "—", systemImage: "leaf.fill")
-                    .font((compact ? Font.caption.weight(.medium) : .headline).monospacedDigit())
-                    .foregroundStyle(Color.accentColor)
-            }
-            if !compact {
-                Text(String(localized: "Unused leaves are saved after each day as a reward.", table: "Interface"))
-                    .font(.footnote).foregroundStyle(.secondary)
-            }
-            if let lease = model.ledger.lease {
+            if !actionsOnly, let lease = model.ledger.lease {
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text((PauseTargetDisplay.name(for: lease.target)) + (lease.kind == "safari" ? " · Safari" : ""))
@@ -324,7 +329,7 @@ struct PausePanel: View {
             }
             if let error = model.error { Text(error).font(.footnote).foregroundStyle(.orange) }
             if let recordingExtensionBundleID {
-                let layout = dynamicTypeSize.isAccessibilitySize
+                let layout = !actionsOnly && dynamicTypeSize.isAccessibilitySize
                     ? AnyLayout(VStackLayout(spacing: 10))
                     : AnyLayout(HStackLayout(spacing: 10))
                 layout {
@@ -332,26 +337,34 @@ struct PausePanel: View {
                                           isRecording: isRecording, guidance: "", actionOnly: true)
                     if let lease = model.ledger.lease {
                         Button { model.end() } label: {
-                            Label(lease.phase == "preparing" ? String(localized: "Cancel")
-                                  : String(localized: "End pause", table: "Interface"), systemImage: "stop.fill")
+                            HStack(spacing: 6) {
+                                Image(systemName: lease.phase == "preparing" ? "xmark" : "stop.fill")
+                                if !actionsOnly {
+                                    Text(lease.phase == "preparing" ? String(localized: "Cancel")
+                                         : String(localized: "End pause", table: "Interface"))
+                                }
+                            }
                                 .font(.subheadline.weight(.medium))
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding(.horizontal, 12)
+                                .frame(width: actionsOnly ? 48 : nil)
                                 .frame(minHeight: 48, maxHeight: .infinity)
                                 .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel(lease.phase == "preparing" ? String(localized: "Cancel")
+                                            : String(localized: "End pause", table: "Interface"))
                         .disabled(model.loading)
                     } else {
                         pauseStartButton
-                            .fixedSize(horizontal: !dynamicTypeSize.isAccessibilitySize, vertical: false)
+                            .fixedSize(horizontal: actionsOnly || !dynamicTypeSize.isAccessibilitySize, vertical: false)
                     }
                 }
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 8)
+                .padding(.top, actionsOnly ? 0 : 8)
             }
           }
-          .padding(.vertical, 4)
+          .padding(.vertical, actionsOnly ? 0 : 4)
           .saturation(isExhausted && recordingExtensionBundleID == nil ? 0 : 1)
           .opacity(isExhausted && recordingExtensionBundleID == nil ? 0.65 : 1)
     }
@@ -361,23 +374,28 @@ struct PausePanel: View {
                     model.refresh()
                     if canStart {
                         if let preferredTarget { model.start(target: preferredTarget, safari: safari) }
+                        else if !safari, GroupedApps.isEnabled { model.start(target: "apps", safari: false) }
                         else { showingTargetPicker = true }
                     }
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "pause.fill")
-                        Text(recordingExtensionBundleID == nil ? pauseButtonTitle(model.ledger.pauseSeconds) : String(localized: "Pause", table: "Interface"))
+                        if !actionsOnly {
+                            Text(recordingExtensionBundleID == nil ? pauseButtonTitle(model.ledger.pauseSeconds) : String(localized: "Pause", table: "Interface"))
+                        }
                     }
                         .font(.subheadline.weight(.medium))
                         .fixedSize(horizontal: recordingExtensionBundleID != nil && !dynamicTypeSize.isAccessibilitySize, vertical: true)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
+                        .frame(width: actionsOnly ? 48 : nil)
                         .frame(minHeight: recordingExtensionBundleID == nil ? 44 : 48,
                                maxHeight: recordingExtensionBundleID != nil && !dynamicTypeSize.isAccessibilitySize ? .infinity : nil)
                         .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
                 }
                 .buttonStyle(.plain)
                 .disabled(!canStart)
+                .accessibilityLabel(pauseButtonTitle(model.ledger.pauseSeconds))
                 .accessibilityHint(pauseButtonTitle(model.ledger.pauseSeconds))
                 .confirmationDialog(
                     String(localized: safari ? "Choose a website to pause" : "Choose an app to pause", table: "Interface"),
@@ -428,6 +446,7 @@ struct PausePanel: View {
 }
 /// The Shield handoff carries the exact service; never spend a pause on another app.
 struct ShieldPauseButton: View {
+    @Environment(\.scenePhase) private var scenePhase
     let target: String
     let onStarted: () -> Void
     @State private var seconds = 60
@@ -490,7 +509,10 @@ struct ShieldPauseButton: View {
         }
         .onAppear { refresh() }
         .onChange(of: target) { _ in refresh() }
-        .onReceive(timer) { _ in refresh() }
+        .onReceive(timer) { _ in
+            guard scenePhase == .active else { return }
+            refresh()
+        }
     }
 
     private func refresh() {
@@ -502,6 +524,7 @@ struct ShieldPauseButton: View {
 
 /// Focused handoff from a pause-only app's Shield. Never offers recording access.
 struct PauseOnlyPromptSheet: View {
+    @Environment(\.scenePhase) private var scenePhase
     let target: String
     @Environment(\.dismiss) private var dismiss
     @StateObject private var model = PausePanelModel()
@@ -608,7 +631,10 @@ struct PauseOnlyPromptSheet: View {
             }
         }
         .onAppear(perform: refresh)
-        .onReceive(timer) { _ in refresh() }
+        .onReceive(timer) { _ in
+            guard scenePhase == .active else { return }
+            refresh()
+        }
     }
 
     private var cardBackground: Color { Color(uiColor: .secondarySystemGroupedBackground) }

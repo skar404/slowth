@@ -63,6 +63,15 @@ final class UNUserNotificationCenter {
         assert(center.delivered[ShieldNotification.identifier]!.content.title == ShieldNotification.Message.recording.title)
         assert(center.delivered[ShieldNotification.restIdentifier]!.content.userInfo["target"] as? String == "instagram")
 
+        let navigationToken = Data("opaque-callback".utf8)
+        ShieldNotification.send(target: nil, message: .other, navigationToken: navigationToken) { assert($0 == nil) }
+        let navigationPayload = center.delivered[ShieldNotification.identifier]!.content.userInfo
+        assert(navigationPayload[ShieldNotification.targetKey] == nil)
+        assert(Data(base64Encoded: navigationPayload[ShieldNotification.navigationTokenKey] as! String) == navigationToken)
+        // A subsequent notification must not inherit a previous unknown token.
+        ShieldNotification.send(target: "youtube", message: .recording) { assert($0 == nil) }
+        assert(center.delivered[ShieldNotification.identifier]!.content.userInfo[ShieldNotification.navigationTokenKey] == nil)
+
         for code in [1, 2] { // Permission denied and scheduling failure both finish the callback.
             center.failure = NSError(domain: "notification", code: code)
             ShieldNotification.send(target: nil, message: .other) { error in

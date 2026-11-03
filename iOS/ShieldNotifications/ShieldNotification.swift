@@ -7,6 +7,7 @@ enum ShieldNotification {
     static let identifier = "slowth.shield.open"
     static let restIdentifier = "slowth.shield.rest"
     static let targetKey = "target"
+    static let navigationTokenKey = "navigationToken"
 
     enum Message: String {
         case recording = "Start screen recording in Slowth to continue"
@@ -37,8 +38,10 @@ enum ShieldNotification {
         return .other
     }
 
-    static func payload(target: String?) -> [String: String] {
-        target.map { [targetKey: $0] } ?? [:]
+    static func payload(target: String?, navigationToken: Data? = nil) -> [String: String] {
+        var result = target.map { [targetKey: $0] } ?? [:]
+        if let navigationToken { result[navigationTokenKey] = navigationToken.base64EncodedString() }
+        return result
     }
 
     // Only navigation data is carried. Rest/pause state is read afresh by the host.
@@ -51,13 +54,13 @@ enum ShieldNotification {
     }
 
     #if os(iOS) || SHIELD_NOTIFICATION_TESTS
-    static func send(target: String?, message: Message, completion: @escaping (Error?) -> Void) {
+    static func send(target: String?, message: Message, navigationToken: Data? = nil, completion: @escaping (Error?) -> Void) {
         let content = UNMutableNotificationContent()
         let bundle = ShieldLocalization.bundle(in: .main)
         content.title = bundle.localizedString(forKey: message.title, value: message.title, table: "ShieldNotifications")
         content.body = bundle.localizedString(
             forKey: message.rawValue, value: message.rawValue, table: "ShieldNotifications")
-        content.userInfo = payload(target: target)
+        content.userInfo = payload(target: target, navigationToken: navigationToken)
         // Repeats replace their own type; a rest never replaces a recording prompt.
         // No sound, badge, authorization request, or blocking-state mutation here.
         UNUserNotificationCenter.current().add(

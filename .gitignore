@@ -38,6 +38,7 @@ screenshots-ipad/
 /RealtimeShield/SurfaceDetector.mlpackage/
 /RealtimeShield/SurfaceDetectorMetadata.json
 /logs/
+/reports/
 # Retired scratch location; keep ignored if historical tools recreate it.
 sandbox/
 /REALTIME_SHIELD_HANDOFF.md

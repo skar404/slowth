@@ -8,6 +8,11 @@ enum CoordinatorTestEnvironment {
     static var foreground = false
     static var generation: String?
 }
+// Replace process identity at the OS boundary so production Broadcast detection runs.
+enum Bundle {
+    struct Identity { var bundleIdentifier: String? }
+    static var main = Identity(bundleIdentifier: "test.Slowth")
+}
 struct FamilyActivitySelection: Codable {
     var applicationTokens: Set<String> = []
     var categoryTokens: Set<String> = []
@@ -83,6 +88,24 @@ enum PauseOnlyApps {
         data(target).flatMap { try? JSONDecoder().decode(FamilyActivitySelection.self, from: $0) }
     }
 }
+enum GroupedApps {
+    static var rules = GroupedContentRules()
+    static var exceptions: [GroupedContentException<String>] = []
+    static func blockedSelection(for kinds: Set<GroupedContentRules.Kind>) -> FamilyActivitySelection? {
+        guard var selected = selection else { return nil }
+        selected.applicationTokens = rules.blockedTokens(from: selected.applicationTokens, kinds: kinds, exceptions: exceptions)
+        return selected.applicationTokens.isEmpty ? nil : selected
+    }
+    static var isEnabled = false
+    static var data: Data?
+    static var selection: FamilyActivitySelection? {
+        data.flatMap { try? JSONDecoder().decode(FamilyActivitySelection.self, from: $0) }
+    }
+    static var softSelection: FamilyActivitySelection? {
+        guard SharedStore.state.softYouTubeBlockingEnabled else { return nil }
+        return SharedStore.state.youtubeSelectionData.flatMap { try? JSONDecoder().decode(FamilyActivitySelection.self, from: $0) }
+    }
+}
 enum DeviceActivityEvent { struct Name { let rawValue: String; init(_ value: String) { rawValue = value } } }
 enum SoftYouTubeActivityMonitoring {
     static var fails = false
@@ -100,7 +123,7 @@ enum SoftYouTubeActivityMonitoring {
     }
 }
 enum ManagedSettingsApplier {
-    enum Surface: String { case youtube, instagram, facebook, x, tiktok, snapchat }
+    enum Surface: String { case apps, youtube, instagram, facebook, x, tiktok, snapchat }
     static func apply(surface: Surface, selection: FamilyActivitySelection?) {
         _ = IOSPauseCoordinator.intercept(target: surface.rawValue, requested: selection)
     }
@@ -120,9 +143,14 @@ enum DebugMode { static var isEnabled = true }
         func selected(_ token: String) throws -> Data { try JSONEncoder().encode(FamilyActivitySelection(applicationTokens: [token])) }
         let youtube = try selected("youtube-original"), instagram = try selected("instagram-original")
         func reset() {
+            GroupedApps.rules = GroupedContentRules()
+            GroupedApps.exceptions = []
+            GroupedApps.isEnabled = false
+            GroupedApps.data = nil
             CoordinatorTestEnvironment.databaseURL = root.appendingPathComponent(UUID().uuidString)
             CoordinatorTestEnvironment.now = .init(wall: 1_792_000_000, continuous: 1000, boot: "test")
             CoordinatorTestEnvironment.inExtension = false
+            Bundle.main.bundleIdentifier = "test.Slowth"
             CoordinatorTestEnvironment.foreground = false
             CoordinatorTestEnvironment.generation = nil
             SoftYouTubeActivityMonitoring.fails = false
@@ -456,6 +484,80 @@ enum DebugMode { static var isEnabled = true }
         assert(shield() == ["youtube-original"])
         print("PASS: soft host/threshold sequences, stale generations, recording race, failure and duplicate callback")
 
+        // Replay SampleHandler's stop -> deferred permission -> Shield write as Broadcast.
+        func stopBroadcast(soft: Bool = true, monitorFails: Bool = false) -> Bool {
+            SharedStore.state.softYouTubeBlockingEnabled = soft
+            Bundle.main.bundleIdentifier = "test.Slowth.Broadcast"
+            CoordinatorTestEnvironment.inExtension = true
+            SoftYouTubeActivityMonitoring.fails = monitorFails
+            SharedStore.state.broadcastActive = false
+            let latch = BlockingCoordinator.recordingStopped(SharedStore.snapshot())
+            ManagedSettingsApplier.apply(surface: .youtube,
+                selection: latch ? .init(applicationTokens: ["youtube-original"]) : nil)
+            return latch
+        }
+        reset()
+        // Start with an existing Shield to prove this request actually removes it.
+        ManagedSettingsApplier.apply(surface: .youtube, selection: .init(applicationTokens: ["youtube-original"]))
+        assert(!stopBroadcast())
+        assert(SharedStore.state.youtubeShieldRestoreDeferred && CoordinatorTestEnvironment.generation != nil)
+        assert(AppGroup.defaults.object(forKey: "pause.runtime.youtube.shield") as? Bool == false)
+        assert(shield() == nil, "Broadcast clear must honor the newly granted soft deferral")
+        let stoppedGeneration = CoordinatorTestEnvironment.generation!
+        Bundle.main.bundleIdentifier = "test.Slowth.ActivityMonitor"
+        BlockingCoordinator.usageThreshold(.init(stoppedGeneration), activity: .init(stoppedGeneration))
+        Bundle.main.bundleIdentifier = "test.Slowth.Broadcast"
+        ManagedSettingsApplier.clear(surface: .youtube)
+        assert(shield() == ["youtube-original"] && !SharedStore.state.youtubeShieldRestoreDeferred)
+
+        for soft in [false, true] {
+            reset()
+            assert(stopBroadcast(soft: soft, monitorFails: soft))
+            ManagedSettingsApplier.clear(surface: .youtube)
+            assert(shield() == ["youtube-original"] && !SharedStore.state.youtubeShieldRestoreDeferred)
+        }
+        reset()
+        try IOSPauseCoordinator.requestRest(target: "youtube")
+        assert(!stopBroadcast())
+        assert(shield() == ["youtube-original"], "Unfinished rest wins over soft deferral")
+        try IOSPauseCoordinator.startApplication(target: "youtube", id: "soft-rest-pause")
+        ManagedSettingsApplier.clear(surface: .youtube)
+        assert(shield() == nil, "Active user pause wins over unfinished rest")
+        try IOSPauseCoordinator.finish(id: "soft-rest-pause")
+        ManagedSettingsApplier.clear(surface: .youtube)
+        assert(shield() == ["youtube-original"])
+
+        reset()
+        assert(!stopBroadcast())
+        SharedStore.state.realtimeFacebookBlockingEnabled = true
+        SharedStore.state.realtimeXBlockingEnabled = true
+        SharedStore.state.facebookSelectionData = try selected("facebook")
+        SharedStore.state.xSelectionData = try selected("x")
+        for target in PauseOnlyApps.targets { PauseOnlyApps.selections[target] = try selected(target) }
+        for target in IOSPauseCoordinator.apps where target != "youtube" {
+            _ = IOSPauseCoordinator.intercept(target: target, requested: nil)
+            assert(shield(target) != nil, "YouTube deferral must not open other apps")
+        }
+        for reopenHost in [false, true] {
+            reset()
+            assert(!stopBroadcast())
+            let stale = CoordinatorTestEnvironment.generation!
+            if reopenHost {
+                Bundle.main.bundleIdentifier = "test.Slowth"
+                CoordinatorTestEnvironment.inExtension = false
+                BlockingCoordinator.hostOpened(facebookSupported: true, xSupported: true)
+            } else {
+                // Same monitor cancellation and recording-state transition as broadcastStarted.
+                SoftYouTubeActivityMonitoring.stop()
+                SharedStore.state.broadcastActive = true
+                try IOSPauseCoordinator.beginRecordingGrace()
+            }
+            Bundle.main.bundleIdentifier = "test.Slowth.ActivityMonitor"
+            BlockingCoordinator.usageThreshold(.init(stale), activity: .init(stale))
+            assert(shield() == nil && CoordinatorTestEnvironment.generation == nil)
+        }
+        print("PASS: Broadcast stop deferral, threshold revocation, monitor failure, rest/pause priority, other apps and stale callbacks")
+
         var bindings = IOSRecorderBindings()
         let selections = ["youtube": youtube, "instagram": instagram]
         assert(bindings.update(selections, pausedTarget: nil, revision: 0) == ["youtube", "instagram"])
@@ -472,5 +574,151 @@ enum DebugMode { static var isEnabled = true }
         try IOSPauseCoordinator.finish(id: "race")
         expectFailure { try IOSPauseCoordinator.requestRest(target: "youtube", expectedSelection: youtube, expectedRevision: oldRevision) }
         print("PASS: pause/switch/binding transitions reset evidence; in-flight stale detection rejected")
+
+        reset()
+        GroupedApps.isEnabled = true
+        let group = FamilyActivitySelection(applicationTokens: ["youtube-original", "instagram-original", "arbitrary-app"])
+        GroupedApps.data = try JSONEncoder().encode(group)
+        assert(IOSPauseCoordinator.apps == ["apps"])
+        SharedStore.state.broadcastActive = false
+        BlockingCoordinator.enforceAtRest(SharedStore.state, facebookSupported: true, xSupported: true)
+        assert(shield("group") == group.applicationTokens)
+        try IOSPauseCoordinator.startApplication(target: "apps", id: "group-pause")
+        assert(shield("group") == nil && shield("youtube") == nil)
+        try check(IOSPauseCoordinator.applicationSwitchTargets(try IOSPauseCoordinator.snapshot(), state: SharedStore.state, now: CoordinatorTestEnvironment.now).isEmpty)
+        try IOSPauseCoordinator.finish(id: "group-pause")
+        assert(shield("group") == group.applicationTokens)
+        SharedStore.state.broadcastActive = true
+        try IOSPauseCoordinator.beginRecordingGrace()
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: nil)
+        assert(shield("group") == nil)
+        advance(6)
+        try IOSPauseCoordinator.requestRest(target: "apps")
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: group)
+        assert(shield("group") == group.applicationTokens)
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: nil)
+        assert(shield("group") == group.applicationTokens, "Another service's clear cannot bypass the group rest")
+        advance(6)
+        try IOSPauseCoordinator.advanceRests()
+        assert(shield("group") == nil)
+        try IOSPauseCoordinator.setInferenceFailure(true, state: SharedStore.state)
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: nil)
+        assert(shield("group") == group.applicationTokens)
+        try IOSPauseCoordinator.startApplication(target: "apps", id: "group-fault-pause")
+        assert(shield("group") == nil)
+        try IOSPauseCoordinator.finish(id: "group-fault-pause")
+        assert(shield("group") == group.applicationTokens)
+        print("PASS: multi-app group shares pause, detection rest, grace and inference-failure protection")
+
+        reset()
+        GroupedApps.isEnabled = true
+        GroupedApps.data = try JSONEncoder().encode(group)
+        SharedStore.state.broadcastActive = false
+        SharedStore.state.softYouTubeBlockingEnabled = true
+        BlockingCoordinator.hostOpened(facebookSupported: true, xSupported: true)
+        assert(shield("group") == ["instagram-original", "arbitrary-app"] && shield("youtube") == nil)
+        BlockingCoordinator.hostClosed(facebookSupported: true, xSupported: true)
+        let groupGeneration = CoordinatorTestEnvironment.generation!
+        BlockingCoordinator.usageThreshold(.init(groupGeneration), activity: .init(groupGeneration))
+        assert(shield("youtube") == ["youtube-original"])
+        assert(shield("group") == ["instagram-original", "arbitrary-app"])
+        try IOSPauseCoordinator.startApplication(target: "apps", id: "group-soft-pause")
+        assert(shield("group") == nil && shield("youtube") == nil)
+        ManagedSettingsApplier.apply(surface: .youtube, selection: .init(applicationTokens: ["youtube-original"]))
+        assert(shield("youtube") == nil, "Soft monitor cannot override the shared pause")
+        try IOSPauseCoordinator.finish(id: "group-soft-pause")
+        assert(shield("group") == ["instagram-original", "arbitrary-app"] && shield("youtube") == ["youtube-original"])
+        SharedStore.state.broadcastActive = true
+        try IOSPauseCoordinator.requestRest(target: "apps")
+        SharedStore.state.broadcastActive = false
+        SharedStore.state.youtubeShieldRestoreDeferred = true
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: group)
+        assert(shield("youtube") == ["youtube-original"], "Pending group rest wins over soft deferral")
+        let boundGroup = GroupedApps.data
+        let replacementGroup = FamilyActivitySelection(applicationTokens: ["replacement-app"])
+        GroupedApps.data = try JSONEncoder().encode(replacementGroup)
+        try IOSPauseCoordinator.selectionDidChange(target: "apps", previousSelection: boundGroup)
+        assert(shield("group") == ["replacement-app"] && shield("youtube") == nil)
+        SharedStore.state.broadcastActive = true
+        expectFailure { try IOSPauseCoordinator.requestRest(target: "apps", expectedSelection: boundGroup) }
+        GroupedApps.data = try JSONEncoder().encode(FamilyActivitySelection())
+        try IOSPauseCoordinator.selectionDidChange(target: "apps", previousSelection: try JSONEncoder().encode(replacementGroup))
+        assert(shield("group") == nil && shield("youtube") == nil)
+        print("PASS: soft YouTube is separate at rest, but shares the group's pause and detection-rest priority")
+
+        // Content exceptions protect opaque tokens, independently of inferred app identity.
+        reset()
+        GroupedApps.isEnabled = true
+        GroupedApps.data = try JSONEncoder().encode(group)
+        GroupedApps.exceptions = [
+            .init(token: "youtube-original", allowShortVideos: true, allowStories: true),
+            .init(token: "instagram-original", allowShortVideos: false, allowStories: true),
+            .init(token: "arbitrary-app", allowShortVideos: true, allowStories: false)]
+        SharedStore.state.softYouTubeBlockingEnabled = true
+        let accepted = try IOSPauseCoordinator.requestRest(target: "apps", contentKinds: [.shortVideos])
+        assert(accepted == .accepted)
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: group)
+        assert(shield("group") == ["instagram-original"] && shield("youtube") == nil)
+        // Host soft-mode writes must respect the persisted content subset too.
+        _ = IOSPauseCoordinator.intercept(target: "youtube", requested: nil)
+        assert(shield("youtube") == nil)
+        let firstRest = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["apps"]!
+        advance(1)
+        try IOSPauseCoordinator.startApplication(target: "apps", id: "exception-pause")
+        assert(shield("group") == nil && shield("youtube") == nil)
+        try IOSPauseCoordinator.finish(id: "exception-pause")
+        assert(shield("group") == ["instagram-original"] && shield("youtube") == nil)
+        try IOSPauseCoordinator.requestRest(target: "apps", contentKinds: [.stories])
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: nil)
+        assert(shield("group") == ["instagram-original", "arbitrary-app"] && shield("youtube") == nil)
+        let mergedRest = try IOSPauseCoordinator.presentationSnapshot().detectionRests!["apps"]!
+        assert(mergedRest.id == firstRest.id && mergedRest.started?.continuous == firstRest.started?.continuous)
+        assert(mergedRest.contentKinds == [.shortVideos, .stories])
+        // Codable persistence preserves the full binding and the narrower blocked subset.
+        let restoredRest = try JSONDecoder().decode(IOSDetectionRest.self, from: JSONEncoder().encode(mergedRest))
+        assert(restoredRest.selection == GroupedApps.data && restoredRest.blockedSelection == mergedRest.blockedSelection)
+        SharedStore.state.broadcastActive = false
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: group)
+        assert(shield("group") == ["instagram-original", "arbitrary-app"] && shield("youtube") == ["youtube-original"])
+        SharedStore.state.broadcastActive = true
+        try IOSPauseCoordinator.setInferenceFailure(true, state: SharedStore.state)
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: nil)
+        assert(shield("youtube") == ["youtube-original"], "An inference fault remains fail-closed")
+        print("PASS: token exceptions survive pause/host writes/persistence; mixed detections union subsets without extending rest")
+
+        reset()
+        GroupedApps.isEnabled = true
+        GroupedApps.data = try JSONEncoder().encode(group)
+        GroupedApps.exceptions = group.applicationTokens.map { .init(token: $0, allowShortVideos: true, allowStories: true) }
+        let ignored = try IOSPauseCoordinator.requestRest(target: "apps", contentKinds: [.shortVideos, .stories])
+        assert(ignored == .noBlockedApplications)
+        let emptyRestLedger = try IOSPauseCoordinator.presentationSnapshot()
+        assert(emptyRestLedger.detectionRests?["apps"] == nil && emptyRestLedger.detectionRestProgress?["apps"] == nil)
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: nil)
+        assert(shield("group") == nil && shield("youtube") == nil)
+        GroupedApps.exceptions = []
+        try IOSPauseCoordinator.requestRest(target: "apps", contentKinds: [.stories])
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: group)
+        SharedStore.state.broadcastActive = false
+        GroupedApps.exceptions = group.applicationTokens.map { .init(token: $0, allowShortVideos: false, allowStories: true) }
+        try IOSPauseCoordinator.refreshGroupedExceptions()
+        try check(IOSPauseCoordinator.presentationSnapshot().detectionRests?["apps"] == nil)
+        print("PASS: all-exempt detection creates no rest/progression; stopped-recording edits retire an empty subset")
+
+        reset()
+        GroupedApps.isEnabled = true
+        GroupedApps.data = try JSONEncoder().encode(group)
+        GroupedApps.exceptions = [.init(token: "arbitrary-app", allowShortVideos: true, allowStories: true)]
+        try IOSPauseCoordinator.requestRest(target: "apps", contentKinds: [.shortVideos])
+        _ = IOSPauseCoordinator.intercept(target: "apps", requested: group)
+        try IOSPauseCoordinator.startApplication(target: "apps", id: "completed-exception-rest")
+        advance(6)
+        try IOSPauseCoordinator.advanceRests()
+        try check(IOSPauseCoordinator.presentationSnapshot().detectionRests?["apps"]?.completed == true)
+        try IOSPauseCoordinator.finish(id: "completed-exception-rest")
+        assert(shield("group") == ["youtube-original", "instagram-original"], "Completed but unreleased rest must not briefly block an exempt app")
+        try IOSPauseCoordinator.advanceRests()
+        assert(shield("group") == nil)
+        print("PASS: exception subset retained when a rest completes during a user pause")
     }
 }

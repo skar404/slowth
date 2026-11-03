@@ -12,6 +12,7 @@ import AppKit
 #endif
 #if os(iOS) && canImport(FamilyControls)
 import FamilyControls
+import ManagedSettings
 #endif
 
 enum ForceRefreshOutcome {
@@ -128,6 +129,7 @@ final class AppState: ObservableObject {
         #if os(iOS) && canImport(FamilyControls)
         guard snapshot.realtimeShieldEnabled,
               FamilyControlsAuth.isAuthorized(AuthorizationCenter.shared.authorizationStatus) else { return false }
+        if GroupedApps.isEnabled { return GroupedApps.selection != nil }
         return (hasYouTubeSelection && snapshot.realtimeYouTubeBlockingEnabled)
             || (hasInstagramSelection && snapshot.realtimeInstagramBlockingEnabled)
             || (hasFacebookSelection && facebookModelSelected && snapshot.realtimeFacebookBlockingEnabled)
@@ -171,6 +173,85 @@ final class AppState: ObservableObject {
     }
 
     #if os(iOS) && canImport(FamilyControls)
+    func setGroupedException(_ rule: GroupedContentException<ApplicationToken>) {
+        do {
+            try SharedStore.withSelectionRollback(key: GroupedApps.exceptionsKey) {
+                try GroupedApps.setException(rule)
+                try IOSPauseCoordinator.refreshGroupedExceptions()
+            }
+            restoreRealtimeShieldAfterAppActivation()
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+        } catch {
+            lastError = String(localized: "Stop recording before changing content settings.", table: "Interface")
+        }
+        reload()
+    }
+
+    func setGroupedContentBlocking(_ kind: GroupedContentRules.Kind, enabled: Bool) {
+        do {
+            try GroupedApps.setContentBlocking(kind, enabled: enabled)
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+        } catch {
+            lastError = String(localized: "Stop recording before changing content settings.", table: "Interface")
+        }
+        reload()
+    }
+
+    func saveGroupedSelection(_ selection: FamilyActivitySelection) {
+        guard !snapshot.isStrictModeActive else { lastError = AppLocalization.string("Strict mode is active"); return }
+        guard !snapshot.broadcastActive else {
+            lastError = String(localized: "Stop recording before changing the app list.", table: "Interface"); return
+        }
+        guard selection.categoryTokens.isEmpty || (selection.includeEntireCategory && !selection.applicationTokens.isEmpty) else {
+            lastError = String(localized: "Could not expand this category. Select individual apps.", table: "Interface"); return
+        }
+        var appsOnly = FamilyActivitySelection()
+        appsOnly.applicationTokens = selection.applicationTokens
+        let previous = GroupedApps.data
+        let wasEnabled = GroupedApps.isEnabled
+        var committed = false
+        do {
+            try SharedStore.withSelectionRollback(key: GroupedApps.key) {
+                AppGroup.defaults.set(try JSONEncoder().encode(appsOnly), forKey: GroupedApps.key)
+                AppGroup.defaults.set(true, forKey: "groupedApps.enabled.v1")
+                AppGroup.defaults.synchronize()
+                try IOSPauseCoordinator.selectionDidChange(target: "apps", previousSelection: previous)
+            }
+            committed = true
+            try IOSPauseCoordinator.retireLegacyApplications()
+            if GroupedApps.softSelection == nil {
+                _ = try SharedStore.setSoftYouTubeBlockingEnabled(false)
+            }
+            restoreRealtimeShieldAfterAppActivation()
+        } catch {
+            if !wasEnabled && !committed { AppGroup.defaults.set(false, forKey: "groupedApps.enabled.v1") }
+            lastError = AppLocalization.string("Could not save")
+        }
+        reload()
+    }
+
+    func saveGroupedYouTube(_ selection: FamilyActivitySelection) {
+        guard !snapshot.broadcastActive, !snapshot.isStrictModeActive else {
+            lastError = String(localized: "Stop recording and disable strict mode before changing this setting.", table: "Interface"); return
+        }
+        guard selection.applicationTokens.count == 1, selection.categoryTokens.isEmpty, selection.webDomainTokens.isEmpty else {
+            lastError = AppLocalization.string("Choose exactly one app."); return
+        }
+        do {
+            try SharedStore.setYouTubeSelectionData(JSONEncoder().encode(selection))
+            _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(true)
+            var all = GroupedApps.selection ?? FamilyActivitySelection()
+            all.applicationTokens.formUnion(selection.applicationTokens)
+            saveGroupedSelection(all)
+            guard lastError == nil else { return }
+            _ = try SharedStore.setSoftYouTubeBlockingEnabled(true)
+            restoreRealtimeShieldAfterAppActivation()
+        } catch { lastError = AppLocalization.string("Could not save") }
+        reload()
+    }
+
     func hasPauseOnlySelection(_ target: String) -> Bool { PauseOnlyApps.selection(target) != nil }
 
     func savePauseOnlySelection(_ selection: FamilyActivitySelection, target: String) {

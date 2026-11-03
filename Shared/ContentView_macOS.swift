@@ -26,6 +26,7 @@ struct MacContentView: View {
     @StateObject private var tipStore = TipStore()
     #if os(macOS)
     @AppStorage(AppLocalization.languageKey) private var appLanguage = ""
+    @State private var expandedSites: Set<String> = []
     #endif
     @State private var showAbout = false
     @State private var showSupportSheet = false
@@ -42,14 +43,10 @@ struct MacContentView: View {
     #if os(iOS) && canImport(FamilyControls)
     @ObservedObject private var familyControlsAuthorization = AuthorizationCenter.shared
     @State private var isAuthorizingFamilyControls = false
+    @State private var showGroupedPicker = false
+    @State private var groupedSelection = FamilyActivitySelection()
     @State private var showYouTubePicker = false
-    @State private var showInstagramPicker = false
-    @State private var showFacebookPicker = false
-    @State private var showXPicker = false
     @State private var youtubeSelection = FamilyActivitySelection()
-    @State private var instagramSelection = FamilyActivitySelection()
-    @State private var facebookSelection = FamilyActivitySelection()
-    @State private var xSelection = FamilyActivitySelection()
     #endif
 
     var body: some View {
@@ -145,6 +142,9 @@ struct MacContentView: View {
             realtimeShieldSection
             #endif
 
+            #if os(macOS)
+            safariSiteSections
+            #else
             Section {
                 ForEach(sites) { site in
                     ForEach(SiteBlockingControl.controls(for: site.id)) { control in
@@ -179,6 +179,7 @@ struct MacContentView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
+            #endif
 
             #if os(iOS) && canImport(FamilyControls)
             if #unavailable(iOS 26.5) {
@@ -324,49 +325,25 @@ struct MacContentView: View {
             RealtimeRecordingPromptSheet(
                 preferredExtensionBundleID: state.broadcastExtensionBundleID,
                 isRecording: state.snapshot.broadcastActive,
-                onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true }
+                onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true },
+                pauseTarget: "apps"
             )
+        }
+        .sheet(isPresented: $showGroupedPicker) {
+            FamilyActivityPickerWrapper(selection: groupedSelection, allowsMultiple: true,
+                onDone: { selection in
+                    state.lastError = nil
+                    state.saveGroupedSelection(selection)
+                    if state.lastError == nil { showGroupedPicker = false }
+                }, onCancel: { showGroupedPicker = false })
         }
         .sheet(isPresented: $showYouTubePicker) {
-            FamilyActivityPickerWrapper(
-                selection: youtubeSelection,
+            FamilyActivityPickerWrapper(selection: youtubeSelection, appName: "YouTube",
                 onDone: { selection in
-                    state.saveYouTubeSelection(selection)
-                    showYouTubePicker = false
-                },
-                onCancel: { showYouTubePicker = false }
-            )
-        }
-        .sheet(isPresented: $showInstagramPicker) {
-            FamilyActivityPickerWrapper(
-                selection: instagramSelection,
-                onDone: { selection in
-                    state.saveInstagramSelection(selection)
-                    showInstagramPicker = false
-                },
-                onCancel: { showInstagramPicker = false }
-            )
-        }
-        .sheet(isPresented: $showFacebookPicker) {
-            FamilyActivityPickerWrapper(
-                selection: facebookSelection,
-                onDone: { selection in
-                    state.saveFacebookSelection(selection)
-                    showFacebookPicker = false
-                },
-                onCancel: { showFacebookPicker = false }
-            )
-        }
-
-        .sheet(isPresented: $showXPicker) {
-            FamilyActivityPickerWrapper(
-                selection: xSelection,
-                onDone: { selection in
-                    state.saveXSelection(selection)
-                    showXPicker = false
-                },
-                onCancel: { showXPicker = false }
-            )
+                    state.lastError = nil
+                    state.saveGroupedYouTube(selection)
+                    if state.lastError == nil { showYouTubePicker = false }
+                }, onCancel: { showYouTubePicker = false })
         }
         .onAppear(perform: presentRealtimeRecordingPromptIfRequested)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
@@ -385,8 +362,7 @@ struct MacContentView: View {
         guard !showRealtimeRecordingPrompt else { return false }
         #endif
         #if os(iOS) && canImport(FamilyControls)
-        guard !isAuthorizingFamilyControls, !showYouTubePicker, !showInstagramPicker,
-              !showFacebookPicker, !showXPicker else { return false }
+        guard !isAuthorizingFamilyControls, !showYouTubePicker, !showGroupedPicker else { return false }
         #endif
         return true
     }
@@ -400,197 +376,106 @@ struct MacContentView: View {
     #endif
 
     #if os(iOS) && canImport(FamilyControls)
+    @ViewBuilder
     private var realtimeShieldSection: some View {
-        Section {
-            if SharedStore.hasRecordingSelection() && !notificationOfferHandled {
-                ShieldNotificationPermissionView(isInitialOffer: true)
-            }
-            Toggle(isOn: Binding(
-                get: { state.snapshot.realtimeShieldEnabled },
-                set: { state.setRealtimeShieldEnabled($0) }
-            )) {
-                Text(AppLocalization.string("In-app blocking"))
-            }
-            .disabled(disabledByStrict)
-
-            if state.snapshot.broadcastActive || (state.snapshot.realtimeShieldEnabled && SharedStore.hasRecordingSelection()) {
-                RealtimeRecordingCard(
-                    preferredExtensionBundleID: state.broadcastExtensionBundleID,
-                    isRecording: state.snapshot.broadcastActive,
-                    guidance: realtimeRecordingGuidance
-                )
-                ScreenRecordingInfoCard(onLearnMore: { showRealtimeBlockingBeta = true })
-            }
-
-            if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
-                Button {
+        if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
+            Section {
+                Button(AppLocalization.string("Allow Screen Time access")) {
                     Task {
                         isAuthorizingFamilyControls = true
                         _ = await state.requestFamilyControlsAuthorization()
                         isAuthorizingFamilyControls = false
                     }
-                } label: {
-                    HStack {
-                        Text(AppLocalization.string("Allow Screen Time access"))
-                        Spacer()
-                        if isAuthorizingFamilyControls { ProgressView().controlSize(.small) }
-                    }
-                }
-                .disabled(isAuthorizingFamilyControls)
-            } else {
-                Button {
-                    youtubeSelection = decodedSelection(state.snapshot.youtubeSelectionData)
-                    showYouTubePicker = true
-                } label: {
-                    HStack {
-                        Text(AppLocalization.string("Choose YouTube app"))
-                        Spacer()
-                        if state.hasYouTubeSelection {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-                .disabled(disabledByStrict && state.hasYouTubeSelection)
-
-                Toggle(AppLocalization.string("Block YouTube Shorts"), isOn: Binding(
-                    get: { state.snapshot.realtimeYouTubeBlockingEnabled },
-                    set: { state.setRealtimeYouTubeBlockingEnabled($0) }
-                ))
-                .disabled((disabledByStrict && state.snapshot.realtimeYouTubeBlockingEnabled) || !state.hasYouTubeSelection)
-
-                Toggle(AppLocalization.string("Soft YouTube blocking"), isOn: Binding(
-                    get: { state.snapshot.softYouTubeBlockingEnabled },
-                    set: { state.setSoftYouTubeBlockingEnabled($0) }
-                ))
-                .disabled(
-                    disabledByStrict && state.snapshot.softYouTubeBlockingEnabled
-                        || !state.hasYouTubeSelection
-                        || !state.snapshot.realtimeYouTubeBlockingEnabled
-                )
-
-                Text(AppLocalization.string("Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Button {
-                    instagramSelection = decodedSelection(state.snapshot.instagramSelectionData)
-                    showInstagramPicker = true
-                } label: {
-                    HStack {
-                        Text(AppLocalization.string("Choose Instagram app"))
-                        Spacer()
-                        if state.hasInstagramSelection {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-                .disabled(disabledByStrict && state.hasInstagramSelection)
-
-                Toggle(AppLocalization.string("Block Instagram Reels"), isOn: Binding(
-                    get: { state.snapshot.realtimeInstagramReelsBlockingEnabled },
-                    set: { state.setRealtimeInstagramReelsBlockingEnabled($0) }
-                ))
-                .disabled((disabledByStrict && state.snapshot.realtimeInstagramReelsBlockingEnabled) || !state.hasInstagramSelection)
-
-                Toggle(AppLocalization.string("Block Instagram Stories"), isOn: Binding(
-                    get: { state.snapshot.realtimeInstagramStoriesBlockingEnabled },
-                    set: { state.setRealtimeInstagramStoriesBlockingEnabled($0) }
-                ))
-                .disabled((disabledByStrict && state.snapshot.realtimeInstagramStoriesBlockingEnabled) || !state.hasInstagramSelection)
-
-                if state.facebookModelSelected || state.snapshot.realtimeFacebookBlockingEnabled {
-                    Button {
-                        facebookSelection = decodedSelection(state.snapshot.facebookSelectionData)
-                        showFacebookPicker = true
-                    } label: {
-                        HStack {
-                            Text(AppLocalization.string("Choose Facebook app"))
-                            Spacer()
-                            if state.hasFacebookSelection {
-                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                            }
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(disabledByStrict && state.hasFacebookSelection)
-
-                    Toggle(AppLocalization.string("Block Facebook Reels"), isOn: Binding(
-                        get: { state.snapshot.realtimeFacebookReelsBlockingEnabled },
-                        set: { state.setRealtimeFacebookReelsBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeFacebookReelsBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookReelsBlockingEnabled))
-
-                    Toggle(AppLocalization.string("Block Facebook Stories"), isOn: Binding(
-                        get: { state.snapshot.realtimeFacebookStoriesBlockingEnabled },
-                        set: { state.setRealtimeFacebookStoriesBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeFacebookStoriesBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookStoriesBlockingEnabled))
-                }
-
-                if state.xModelSelected || state.snapshot.realtimeXBlockingEnabled {
-                    Button {
-                        xSelection = decodedSelection(state.snapshot.xSelectionData)
-                        showXPicker = true
-                    } label: {
-                        HStack {
-                            Text(AppLocalization.string("Choose X app"))
-                            Spacer()
-                            if state.hasXSelection {
-                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                            }
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(disabledByStrict && state.hasXSelection)
-
-                    Toggle(AppLocalization.string("Block X Reels"), isOn: Binding(
-                        get: { state.snapshot.realtimeXReelsBlockingEnabled },
-                        set: { state.setRealtimeXReelsBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeXReelsBlockingEnabled) || !state.hasXSelection || (!state.xModelSelected && !state.snapshot.realtimeXReelsBlockingEnabled))
-
-                }
-
+                }.disabled(isAuthorizingFamilyControls)
             }
-        } header: {
-            Text(AppLocalization.string("Block content in apps"))
-        } footer: {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(InAppBlockingCopy.setup)
-                Text(AppLocalization.string("Apps with blocking enabled stay blocked when screen recording is off. Soft YouTube mode can delay blocking."))
-                Text(AppLocalization.string("Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
-                Text(AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything."))
+        } else {
+            if SharedStore.hasRecordingSelection() || state.snapshot.broadcastActive {
+                Section {
+                    RecordingPauseCard {
+                        AppRecordingCard(preferredExtensionBundleID: state.broadcastExtensionBundleID,
+                            isRecording: state.snapshot.broadcastActive,
+                            onLearnMore: { showRealtimeBlockingBeta = true },
+                            showsPause: !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot))
+                    }
+                }
             }
-                .font(.callout)
-                .foregroundStyle(.secondary)
+            GroupedAppSelectionSection(state: state, tokens: GroupedApps.orderedTokens) {
+                groupedSelection = GroupedApps.pickerSelection
+                showGroupedPicker = true
+            }
+            GroupedAppAdvancedSettings(state: state, tokens: GroupedApps.orderedTokens, onChooseYouTube: {
+                youtubeSelection = state.snapshot.youtubeSelectionData.flatMap {
+                    try? JSONDecoder().decode(FamilyActivitySelection.self, from: $0)
+                } ?? FamilyActivitySelection()
+                showYouTubePicker = true
+            })
         }
     }
+    #endif
 
-    private var realtimeRecordingGuidance: String {
-        if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
-            return AppLocalization.string("Allow Screen Time access below to finish setup.")
+    #if os(macOS)
+    private var safariSiteSections: some View {
+        ForEach(sites) { site in
+            Section {
+                DisclosureGroup(isExpanded: Binding(
+                    get: { expandedSites.contains(site.id) },
+                    set: { expanded in
+                        if expanded { expandedSites.insert(site.id) }
+                        else { expandedSites.remove(site.id) }
+                    }
+                )) {
+                    siteControls(for: site)
+                        .padding(.top, 4)
+                } label: {
+                    HStack(spacing: 10) {
+                        Image("Service-" + site.id)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 26, height: 26)
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                            .accessibilityHidden(true)
+                        Text(verbatim: site.label)
+                            .font(.headline)
+                            .accessibilityAddTraits(.isHeader)
+                    }
+                }
+                .disclosureGroupStyle(SiteDisclosureStyle())
+                .accessibilityIdentifier("site-section-" + site.id)
+            } header: {
+                if site.id == sites.first?.id {
+                    Text(AppLocalization.string("Safari extension settings"))
+                }
+            } footer: {
+                if site.id == sites.last?.id {
+                    Text(AppLocalization.string("Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
-        let youtubeReady = state.hasYouTubeSelection
-            && state.snapshot.realtimeYouTubeBlockingEnabled
-        let instagramReady = state.hasInstagramSelection
-            && state.snapshot.realtimeInstagramBlockingEnabled
-        let facebookReady = state.hasFacebookSelection
-            && state.snapshot.realtimeFacebookBlockingEnabled
-        let xReady = state.hasXSelection
-            && state.snapshot.realtimeXBlockingEnabled
-        if !youtubeReady && !instagramReady && !facebookReady && !xReady {
-            return AppLocalization.string("Choose an app and enable at least one blocking option below.")
-        }
-        return AppLocalization.string("Tap the red button to start screen recording.")
     }
+    #endif
 
-    private func decodedSelection(_ data: Data?) -> FamilyActivitySelection {
-        guard let data, let decoded = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
-            return FamilyActivitySelection()
+    #if os(macOS)
+    private func siteControls(for site: SiteSpec) -> some View {
+        VStack(spacing: 0) {
+            ForEach(SiteBlockingControl.controls(for: site.id)) { control in
+                if control.feature != .all { Divider() }
+                Toggle(isOn: bindingForSite(control.site, feature: control.feature)) {
+                    Text(control.feature.label(for: control.site))
+                        .fontWeight(control.feature == .all ? .medium : .regular)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .toggleStyle(.switch)
+                .controlSize(.small)
+                .padding(.vertical, 5)
+                .disabled((disabledByStrict &&
+                           (control.feature == .all || state.setting(control.feature, for: control.site))) ||
+                          (control.feature != .all && state.setting(.all, for: control.site)))
+                .accessibilityIdentifier(control.id)
+            }
         }
-        return decoded
+        .padding(.leading, 36)
     }
     #endif
 
@@ -997,5 +882,36 @@ private extension MacContentView {
 }
 #Preview("Support · compact") {
     SupportSheet(tipStore: TipStore())
+}
+#endif
+
+#if os(macOS)
+private struct SiteDisclosureStyle: DisclosureGroupStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.18)) {
+                    configuration.isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 12) {
+                    configuration.label
+                    Spacer(minLength: 12)
+                    Image(systemName: "chevron.down")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .rotationEffect(.degrees(configuration.isExpanded ? 180 : 0))
+                        .accessibilityHidden(true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 6)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            if configuration.isExpanded {
+                configuration.content
+            }
+        }
+    }
 }
 #endif

@@ -5,6 +5,7 @@ import UIKit
 import Darwin
 #if canImport(FamilyControls)
 import FamilyControls
+import ManagedSettings
 #endif
 
 private struct SiteSpec: Identifiable {
@@ -88,7 +89,6 @@ struct ContentView: View {
     @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
     #endif
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @AppStorage("automaticallyReturnToApplication", store: AppGroup.defaults) private var automaticallyReturnToApplication = true
     @AppStorage("iosWelcomeV1Handled") private var welcomeHandled = false
     @AppStorage("shieldNotificationOfferHandled") private var notificationOfferHandled = false
     @State private var restToShow: IOSDetectionRest?
@@ -121,7 +121,7 @@ struct ContentView: View {
     @State private var showRealtimeRecordingPrompt = false
     @State private var showPauseOnlyPrompt = false
     @State private var recordingPromptPauseTarget: String?
-    @State private var recordingPromptReturnsToApplication = false
+    @State private var recordingPromptChoice: ShieldNavigationBindings.Choice?
     @State private var showStrictModeConfirmation = false
     #if DEBUG
     @AppStorage(DebugMode.storageKey, store: AppGroup.defaults) private var debugModeEnabled = false
@@ -132,15 +132,13 @@ struct ContentView: View {
     @ObservedObject private var familyControlsAuthorization = AuthorizationCenter.shared
     @State private var isAuthorizingFamilyControls = false
     @State private var showYouTubePicker = false
-    @State private var showInstagramPicker = false
-    @State private var showFacebookPicker = false
-    @State private var showXPicker = false
-    @State private var pauseOnlyPickerTarget: String?
-    @State private var pauseOnlySelection = FamilyActivitySelection()
+    #if DEBUG
+    @State private var showCategoryProbe = ProcessInfo.processInfo.arguments.contains("--probe-category-selection")
+    @State private var showFamilyIconProbe = ProcessInfo.processInfo.arguments.contains("--probe-family-icons")
+    #endif
+    @State private var showGroupedPicker = false
+    @State private var groupedSelection = FamilyActivitySelection()
     @State private var youtubeSelection = FamilyActivitySelection()
-    @State private var instagramSelection = FamilyActivitySelection()
-    @State private var facebookSelection = FamilyActivitySelection()
-    @State private var xSelection = FamilyActivitySelection()
     #endif
 
     init() {
@@ -280,13 +278,15 @@ struct ContentView: View {
                 RealtimeRecordingPromptSheet(
                     preferredExtensionBundleID: state.broadcastExtensionBundleID,
                     isRecording: state.snapshot.broadcastActive,
-                    onLearnMore: { showRealtimeRecordingPrompt = false; showRealtimeBlockingBeta = true },
-                    pauseTarget: target,
-                    returnToApplication: recordingPromptReturnsToApplication
+                    pauseTarget: target
                 )
-                .compactSheetDetents(isCompact: horizontalSizeClass == .compact, startsCompact: true)
             } else {
                 ShieldAppChoiceSheet { target in
+                    if let choice = recordingPromptChoice {
+                        ShieldNavigationBindings.confirm(choice, target: target,
+                            selections: navigationSelections(), defaults: AppGroup.defaults)
+                    }
+                    recordingPromptChoice = nil
                     recordingPromptPauseTarget = target
                     shieldPrompt.enqueue(target: target)
                     shieldPrompt.beginDismissal()
@@ -296,64 +296,29 @@ struct ContentView: View {
                 .compactSheetDetents(isCompact: horizontalSizeClass == .compact, startsCompact: true)
             }
         }
+        #if DEBUG
+        .sheet(isPresented: $showFamilyIconProbe) { FamilyIconProbeSheet() }
+        .sheet(isPresented: $showCategoryProbe) { FamilyCategoryProbeSheet() }
+        #endif
+        .sheet(isPresented: $showGroupedPicker, onDismiss: finishSheetDismissal) {
+            FamilyActivityPickerWrapper(selection: groupedSelection, allowsMultiple: true,
+                onDone: { selection in
+                    state.lastError = nil
+                    state.saveGroupedSelection(selection)
+                    if state.lastError == nil { showGroupedPicker = false }
+                }, onCancel: { showGroupedPicker = false })
+        }
         .sheet(isPresented: $showYouTubePicker, onDismiss: finishSheetDismissal) {
             FamilyActivityPickerWrapper(
                 selection: youtubeSelection,
+                appName: "YouTube",
                 onDone: { selection in
-                    state.saveYouTubeSelection(selection)
-                    expandedService = state.hasYouTubeSelection ? "apps.youtube" : nil
-                    showYouTubePicker = false
+                    state.lastError = nil
+                    state.saveGroupedYouTube(selection)
+                    if state.lastError == nil { showYouTubePicker = false }
                 },
                 onCancel: { showYouTubePicker = false }
             )
-        }
-        .sheet(isPresented: $showInstagramPicker, onDismiss: finishSheetDismissal) {
-            FamilyActivityPickerWrapper(
-                selection: instagramSelection,
-                onDone: { selection in
-                    state.saveInstagramSelection(selection)
-                    expandedService = state.hasInstagramSelection ? "apps.instagram" : nil
-                    showInstagramPicker = false
-                },
-                onCancel: { showInstagramPicker = false }
-            )
-        }
-        .sheet(isPresented: $showFacebookPicker, onDismiss: finishSheetDismissal) {
-            FamilyActivityPickerWrapper(
-                selection: facebookSelection,
-                onDone: { selection in
-                    state.saveFacebookSelection(selection)
-                    expandedService = state.hasFacebookSelection ? "apps.facebook" : nil
-                    showFacebookPicker = false
-                },
-                onCancel: { showFacebookPicker = false }
-            )
-        }
-
-        .sheet(isPresented: $showXPicker, onDismiss: finishSheetDismissal) {
-            FamilyActivityPickerWrapper(
-                selection: xSelection,
-                onDone: { selection in
-                    state.saveXSelection(selection)
-                    expandedService = state.hasXSelection ? "apps.x" : nil
-                    showXPicker = false
-                },
-                onCancel: { showXPicker = false }
-            )
-        }
-        .sheet(isPresented: Binding(get: { pauseOnlyPickerTarget != nil }, set: { if !$0 { pauseOnlyPickerTarget = nil } }), onDismiss: finishSheetDismissal) {
-            if let target = pauseOnlyPickerTarget {
-                FamilyActivityPickerWrapper(
-                    selection: pauseOnlySelection,
-                    onDone: { selection in
-                        state.savePauseOnlySelection(selection, target: target)
-                        expandedService = state.hasPauseOnlySelection(target) ? "apps." + target : nil
-                        pauseOnlyPickerTarget = nil
-                    },
-                    onCancel: { pauseOnlyPickerTarget = nil }
-                )
-                .id(target)
-            }
         }
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
             presentRealtimeRecordingPromptIfRequested()
@@ -671,13 +636,6 @@ struct ContentView: View {
                     if !isPad && !isDuo { heroSection }
                     strictModeSection
                     PauseDurationSettings(strict: disabledByStrict)
-                    Section {
-                        Toggle(String(localized: "Auto-return", table: "ApplicationNavigation"),
-                               isOn: $automaticallyReturnToApplication)
-                            .accessibilityIdentifier("settings.automaticAppReturn")
-                    } footer: {
-                        Text(String(localized: "Return to the original app after starting recording or a pause.", table: "ApplicationNavigation"))
-                    }
                     #if canImport(FamilyControls)
                     if #unavailable(iOS 26.5) {
                         Section { ShieldNotificationPermissionView() }
@@ -836,19 +794,38 @@ struct ContentView: View {
               !showSafariHelp, !showAbout, !showContribution, !showSupportSheet, !showRealtimeBlockingBeta,
               !showRealtimeRecordingPrompt, !showPauseOnlyPrompt, !showStrictModeConfirmation else { return false }
         #if canImport(FamilyControls)
-        guard !isAuthorizingFamilyControls, !showYouTubePicker, !showInstagramPicker,
-              !showFacebookPicker, !showXPicker, pauseOnlyPickerTarget == nil else { return false }
+        guard !isAuthorizingFamilyControls, !showGroupedPicker, !showYouTubePicker else { return false }
         #endif
         return true
     }
 
     #if canImport(FamilyControls)
+    private func navigationSelections() -> [String: Data] {
+        let state = SharedStore.snapshot()
+        return Dictionary(uniqueKeysWithValues: IOSPauseCoordinator.apps.compactMap { target in
+            IOSPauseCoordinator.selection(target, state: state).map { (target, $0) }
+        })
+    }
+
     private func presentRealtimeRecordingPromptIfRequested() {
         let active = UIApplication.shared.applicationState == .active
         if shieldPrompt.receive(isActive: active, consume: {
+            var token: Data?
             guard SharedStore.consumeRealtimeRecordingPromptRequest(target: &$0,
-                returnToApplication: &recordingPromptReturnsToApplication) else { return false }
-            PauseOnlyApps.recordRouting("handoff", target: $0)
+                navigationToken: &token) else { return false }
+            if GroupedApps.isEnabled { $0 = "apps"; recordingPromptChoice = nil; return true }
+            recordingPromptChoice = nil
+            var routeSource = "token"
+            if $0 == nil, let token {
+                let selections = navigationSelections()
+                $0 = ShieldNavigationBindings.target(for: token, selections: selections, defaults: AppGroup.defaults)
+                routeSource = $0 == nil ? "unknown" : "manual"
+                if $0 == nil {
+                    recordingPromptChoice = .init(token: token, selections: selections)
+                }
+            }
+            let callback = token.flatMap { try? JSONDecoder().decode(ApplicationToken.self, from: $0) }
+            PauseOnlyApps.recordRouting("handoff", token: callback, target: $0, source: routeSource)
             return true
         }) {
             state.reload()
@@ -857,8 +834,7 @@ struct ContentView: View {
             // Preserve the pending target independently of the currently visible sheet.
             let hasSheet = restToShow != nil || showWelcome || showRealtimeRecordingPrompt ||
                 showPauseOnlyPrompt || showSafariHelp || showAbout || showContribution ||
-                showSupportSheet || showRealtimeBlockingBeta || showYouTubePicker ||
-                showInstagramPicker || showFacebookPicker || showXPicker || pauseOnlyPickerTarget != nil
+                showSupportSheet || showRealtimeBlockingBeta || showGroupedPicker || showYouTubePicker
             if hasSheet { shieldPrompt.beginDismissal() }
             restToShow = nil
             closeWelcome()
@@ -869,11 +845,8 @@ struct ContentView: View {
             showContribution = false
             showSupportSheet = false
             showRealtimeBlockingBeta = false
+            showGroupedPicker = false
             showYouTubePicker = false
-            showInstagramPicker = false
-            showFacebookPicker = false
-            showXPicker = false
-            pauseOnlyPickerTarget = nil
             showStrictModeConfirmation = false
         }
         guard active, presentationIsIdle, pendingRecordingPrompt else { return }
@@ -919,8 +892,7 @@ struct ContentView: View {
               !showSupportSheet, !showRealtimeBlockingBeta, !showRealtimeRecordingPrompt, !showPauseOnlyPrompt,
               !showStrictModeConfirmation, state.lastError == nil else { return false }
         #if canImport(FamilyControls)
-        guard !isAuthorizingFamilyControls, !showYouTubePicker, !showInstagramPicker,
-              !showFacebookPicker, !showXPicker, pauseOnlyPickerTarget == nil else { return false }
+        guard !isAuthorizingFamilyControls, !showGroupedPicker, !showYouTubePicker else { return false }
         #endif
         return true
     }
@@ -991,7 +963,7 @@ struct ContentView: View {
     }
 
     #if canImport(FamilyControls)
-    private func chooseApplication(_ service: String) {
+    private func chooseSoftYouTube() {
         guard !isAuthorizingFamilyControls else { return }
         Task { @MainActor in
             if !FamilyControlsAuth.isAuthorized(familyControlsAuthorization.authorizationStatus) {
@@ -1000,27 +972,15 @@ struct ContentView: View {
                 isAuthorizingFamilyControls = false
                 guard authorized else { return }
             }
-            if PauseOnlyApps.contains(service) {
-                pauseOnlySelection = decodedSelection(PauseOnlyApps.data(service))
-                pauseOnlyPickerTarget = service
-                return
-            }
-            switch service {
-            case "youtube":
-                youtubeSelection = decodedSelection(state.snapshot.youtubeSelectionData)
-                showYouTubePicker = true
-            case "instagram":
-                instagramSelection = decodedSelection(state.snapshot.instagramSelectionData)
-                showInstagramPicker = true
-            case "facebook":
-                facebookSelection = decodedSelection(state.snapshot.facebookSelectionData)
-                showFacebookPicker = true
-            case "x":
-                xSelection = decodedSelection(state.snapshot.xSelectionData)
-                showXPicker = true
-            default: break
-            }
+            youtubeSelection = decodedSelection(state.snapshot.youtubeSelectionData)
+            showYouTubePicker = true
         }
+    }
+
+    private func openIconProbe() {
+        #if DEBUG
+        showFamilyIconProbe = true
+        #endif
     }
 
     private var screenTimeAccessSection: some View {
@@ -1050,48 +1010,12 @@ struct ContentView: View {
 
     private var appProtectionPreviewSection: some View {
         Section {
-            appProtectionPreview("youtube", title: "YouTube", detail: "Shorts")
-            appProtectionPreview("instagram", title: "Instagram",
-                                 detail: "Reels · " + String(localized: "Stories", table: "Interface"))
-            if state.facebookModelSelected || state.snapshot.realtimeFacebookBlockingEnabled {
-                appProtectionPreview("facebook", title: "Facebook",
-                                     detail: "Reels · " + String(localized: "Stories", table: "Interface"))
+            Button(action: openWelcome) {
+                Label(String(localized: "Selected apps", table: "Interface"), systemImage: "square.stack.3d.up")
             }
-            if state.xModelSelected || state.snapshot.realtimeXBlockingEnabled {
-                appProtectionPreview("x", title: "X",
-                                     detail: String(localized: "Short videos", table: "Interface"))
-            }
-            ForEach(PauseOnlyApps.targets, id: \.self) { target in
-                appProtectionPreview(target, title: target == "tiktok" ? "TikTok" : "Snapchat",
-                                     detail: pauseOnlyDescription(target))
-            }
-        } header: {
-            Text(String(localized: "What you can protect", table: "Interface"))
         } footer: {
             Text(String(localized: "Screen Time is needed for app protection. You choose apps and settings after allowing access.", table: "Interface"))
         }
-    }
-
-    private func pauseOnlyDescription(_ target: String) -> String {
-        target == "snapchat"
-            ? String(localized: "Content blocking is in development. For now, only pause mode is available.", table: "Interface")
-            : String(localized: "Currently supported only in pause mode.", table: "Interface")
-    }
-
-    private func appProtectionPreview(_ id: String, title: String, detail: String) -> some View {
-        Button(action: openWelcome) {
-            HStack(spacing: 12) {
-                serviceLabel("apps." + id, title: title, summary: detail, isConfigured: false)
-                Spacer(minLength: 0)
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-            }
-            .padding(.vertical, 8)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("preview.apps." + id)
     }
 
     #if DEBUG && targetEnvironment(simulator)
@@ -1113,42 +1037,25 @@ struct ContentView: View {
         } footer: {
             Text(String(localized: "Experimental: 3 pauses per day. Change their duration in Settings.", table: "Interface"))
         }
-        serviceCard("apps.youtube", title: "YouTube", summary: "Shorts") {
-            Toggle("Shorts", isOn: .constant(true))
-            Toggle(String(localized: "Soft mode", table: "Interface"), isOn: .constant(false))
+        Section {
+            Label(String(localized: "Selected apps", table: "Interface"), systemImage: "square.stack.3d.up")
+            Toggle(String(localized: "Short videos (Shorts / Reels)", table: "Interface"), isOn: .constant(true))
+            Toggle(String(localized: "Stories", table: "Interface"), isOn: .constant(true))
         }
         .allowsHitTesting(false)
-        serviceCard("apps.instagram", title: "Instagram",
-                    summary: "Reels · " + String(localized: "Stories", table: "Interface")) {
-            Toggle("Reels", isOn: .constant(true))
-        }
-        .allowsHitTesting(false)
-        serviceCard("apps.facebook", title: "Facebook",
-                    summary: "Reels · " + String(localized: "Stories", table: "Interface")) {
-            Toggle("Reels", isOn: .constant(true))
-        }
-        .allowsHitTesting(false)
-        serviceCard("apps.x", title: "X", summary: String(localized: "Short videos", table: "Interface")) {
-            Toggle(String(localized: "Short videos", table: "Interface"), isOn: .constant(true))
-        }
-        .allowsHitTesting(false)
-        ForEach(PauseOnlyApps.targets, id: \.self) { target in
-            serviceCard("apps." + target, title: target == "tiktok" ? "TikTok" : "Snapchat",
-                        summary: String(localized: "Blocked outside pauses", table: "Interface")) {
-                Text(pauseOnlyDescription(target))
-            }
-            .allowsHitTesting(false)
-        }
     }
     #endif
 
+    private var selectedAppTokens: [ApplicationToken] { GroupedApps.orderedTokens }
+
     @ViewBuilder
     private var realtimeShieldSection: some View {
-        let configured = SharedStore.hasRecordingSelection()
+        let tokens = selectedAppTokens
+        let configured = GroupedApps.isEnabled && GroupedApps.selection != nil
         if !configured {
             Section {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(String(localized: "Set up the apps below", table: "Interface"))
+                    Text(String(localized: "Selected apps", table: "Interface"))
                         .font(.headline)
                     Text(String(localized: "Choose at least one app to enable blocking.", table: "Interface"))
                         .font(.subheadline)
@@ -1186,179 +1093,12 @@ struct ContentView: View {
                 }
             }
         }
-        Group {
-            Group {
-                serviceCard("apps.youtube", title: "YouTube", summary: appSummary("youtube"),
-                    isConfigured: state.hasYouTubeSelection, onChoose: { chooseApplication("youtube") }) {
-                    Toggle("Shorts", isOn: Binding(
-                        get: { state.snapshot.realtimeYouTubeBlockingEnabled },
-                        set: { state.setRealtimeYouTubeBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeYouTubeBlockingEnabled) || !state.hasYouTubeSelection)
-
-                    Toggle(String(localized: "Soft mode", table: "Interface"), isOn: Binding(
-                        get: { state.snapshot.softYouTubeBlockingEnabled },
-                        set: { state.setSoftYouTubeBlockingEnabled($0) }
-                    ))
-                    .disabled(
-                        disabledByStrict && state.snapshot.softYouTubeBlockingEnabled
-                            || !state.hasYouTubeSelection
-                            || !state.snapshot.realtimeYouTubeBlockingEnabled
-                    )
-
-                    Text(String(localized: "Soft mode works well for audio podcasts. Picture in Picture may still be blocked when screen recording is off."))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    Button(role: .destructive) {
-                        state.saveYouTubeSelection(FamilyActivitySelection())
-                        if !state.hasYouTubeSelection {
-                            state.setSoftYouTubeBlockingEnabled(false)
-                            expandedService = nil
-                        }
-                    } label: {
-                        Text(String(localized: "Reset", table: "Interface"))
-                            .font(.body)
-                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(disabledByStrict)
-                    .accessibilityIdentifier("service.youtube.reset")
-                }
-                serviceCard("apps.instagram", title: "Instagram", summary: appSummary("instagram"),
-                    isConfigured: state.hasInstagramSelection, onChoose: { chooseApplication("instagram") }) {
-                    Toggle("Reels", isOn: Binding(
-                        get: { state.snapshot.realtimeInstagramReelsBlockingEnabled },
-                        set: { state.setRealtimeInstagramReelsBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeInstagramReelsBlockingEnabled) || !state.hasInstagramSelection)
-
-                    Toggle(String(localized: "Stories", table: "Interface"), isOn: Binding(
-                        get: { state.snapshot.realtimeInstagramStoriesBlockingEnabled },
-                        set: { state.setRealtimeInstagramStoriesBlockingEnabled($0) }
-                    ))
-                    .disabled((disabledByStrict && state.snapshot.realtimeInstagramStoriesBlockingEnabled) || !state.hasInstagramSelection)
-
-                    Button(role: .destructive) {
-                        state.saveInstagramSelection(FamilyActivitySelection())
-                        if !state.hasInstagramSelection {
-                            expandedService = nil
-                        }
-                    } label: {
-                        Text(String(localized: "Reset", table: "Interface"))
-                            .font(.body)
-                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(disabledByStrict)
-                    .accessibilityIdentifier("service.instagram.reset")
-                }
-                if state.facebookModelSelected || state.snapshot.realtimeFacebookBlockingEnabled {
-                    serviceCard("apps.facebook", title: "Facebook", summary: appSummary("facebook"),
-                    isConfigured: state.hasFacebookSelection, onChoose: { chooseApplication("facebook") }) {
-                        Toggle("Reels", isOn: Binding(
-                            get: { state.snapshot.realtimeFacebookReelsBlockingEnabled },
-                            set: { state.setRealtimeFacebookReelsBlockingEnabled($0) }
-                        ))
-                        .disabled((disabledByStrict && state.snapshot.realtimeFacebookReelsBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookReelsBlockingEnabled))
-
-                        Toggle(String(localized: "Stories", table: "Interface"), isOn: Binding(
-                            get: { state.snapshot.realtimeFacebookStoriesBlockingEnabled },
-                            set: { state.setRealtimeFacebookStoriesBlockingEnabled($0) }
-                        ))
-                        .disabled((disabledByStrict && state.snapshot.realtimeFacebookStoriesBlockingEnabled) || !state.hasFacebookSelection || (!state.facebookModelSelected && !state.snapshot.realtimeFacebookStoriesBlockingEnabled))
-
-                        Button(role: .destructive) {
-                            state.saveFacebookSelection(FamilyActivitySelection())
-                            if !state.hasFacebookSelection {
-                                expandedService = nil
-                            }
-                        } label: {
-                            Text(String(localized: "Reset", table: "Interface"))
-                                .font(.body)
-                                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                        }
-                        .buttonStyle(.borderless)
-                        .disabled(disabledByStrict)
-                        .accessibilityIdentifier("service.facebook.reset")
-                    }
-                }
-                if state.xModelSelected || state.snapshot.realtimeXBlockingEnabled {
-                    serviceCard("apps.x", title: "X", summary: appSummary("x"),
-                    isConfigured: state.hasXSelection, onChoose: { chooseApplication("x") }) {
-                        Toggle(String(localized: "Short videos", table: "Interface"), isOn: Binding(
-                            get: { state.snapshot.realtimeXReelsBlockingEnabled },
-                            set: { state.setRealtimeXReelsBlockingEnabled($0) }
-                        ))
-                        .disabled((disabledByStrict && state.snapshot.realtimeXReelsBlockingEnabled) || !state.hasXSelection || (!state.xModelSelected && !state.snapshot.realtimeXReelsBlockingEnabled))
-
-                        Button(role: .destructive) {
-                            state.saveXSelection(FamilyActivitySelection())
-                            if !state.hasXSelection {
-                                expandedService = nil
-                            }
-                        } label: {
-                            Text(String(localized: "Reset", table: "Interface"))
-                                .font(.body)
-                                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                        }
-                        .buttonStyle(.borderless)
-                        .disabled(disabledByStrict)
-                        .accessibilityIdentifier("service.x.reset")
-                    }
-                }
-
-            }
+        GroupedAppSelectionSection(state: state, tokens: tokens) {
+            groupedSelection = GroupedApps.pickerSelection
+            showGroupedPicker = true
         }
-        ForEach(PauseOnlyApps.targets, id: \.self) { target in
-            serviceCard("apps." + target, title: target == "tiktok" ? "TikTok" : "Snapchat",
-                        summary: target == "snapchat" ? pauseOnlyDescription(target) : String(localized: "Blocked outside pauses", table: "Interface"),
-                        isConfigured: state.hasPauseOnlySelection(target),
-                        onChoose: { chooseApplication(target) },
-                        selectionHint: pauseOnlyDescription(target)) {
-                Label(String(localized: "Blocked outside pauses", table: "Interface"), systemImage: "lock.fill")
-                if target == "snapchat" {
-                    Text(pauseOnlyDescription(target))
-                        .font(.subheadline).foregroundStyle(.secondary)
-                }
-                Text(String(localized: "Currently supported only in pause mode. Start a pause to open the app. Screen recording is not required.", table: "Interface"))
-                    .font(.subheadline).foregroundStyle(.secondary)
-                Button(role: .destructive) {
-                    state.savePauseOnlySelection(FamilyActivitySelection(), target: target)
-                    if !state.hasPauseOnlySelection(target) { expandedService = nil }
-                } label: {
-                    Text(String(localized: "Reset", table: "Interface"))
-                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                }
-                .disabled(disabledByStrict)
-                .accessibilityIdentifier("service." + target + ".reset")
-            }
-        }
-    }
-
-    private func appSummary(_ id: String) -> String {
-        let selected: Bool
-        let labels: [String]
-        switch id {
-        case "youtube":
-            selected = state.hasYouTubeSelection
-            labels = [state.snapshot.realtimeYouTubeBlockingEnabled ? "Shorts" : nil,
-                      state.snapshot.softYouTubeBlockingEnabled ? String(localized: "Soft YouTube blocking") : nil].compactMap { $0 }
-        case "instagram":
-            selected = state.hasInstagramSelection
-            labels = [state.snapshot.realtimeInstagramReelsBlockingEnabled ? "Reels" : nil,
-                      state.snapshot.realtimeInstagramStoriesBlockingEnabled ? String(localized: "Stories", table: "Interface") : nil].compactMap { $0 }
-        case "facebook":
-            selected = state.hasFacebookSelection
-            labels = [state.snapshot.realtimeFacebookReelsBlockingEnabled ? "Reels" : nil,
-                      state.snapshot.realtimeFacebookStoriesBlockingEnabled ? String(localized: "Stories", table: "Interface") : nil].compactMap { $0 }
-        default:
-            selected = state.hasXSelection
-            labels = state.snapshot.realtimeXReelsBlockingEnabled ? ["Reels"] : []
-        }
-        guard selected else { return String(localized: "Choose an app", table: "Interface") }
-        let summary = restrictionSummary(labels)
-        return state.snapshot.realtimeShieldEnabled || labels.isEmpty ? summary : String(localized: "Off") + " · " + summary
+        GroupedAppAdvancedSettings(state: state, tokens: tokens,
+            onChooseYouTube: chooseSoftYouTube, onIconProbe: openIconProbe)
     }
 
     private func decodedSelection(_ data: Data?) -> FamilyActivitySelection {
@@ -2026,5 +1766,162 @@ private extension ContentView {
 #Preview("Detection rest") {
     DetectionRestSheet(rest: IOSDetectionRest(target: "youtube", started: IOSPauseCoordinator.restClock()))
         .tint(SlowthAppearance.sage)
+}
+#endif
+
+#if os(iOS) && canImport(FamilyControls)
+private struct GroupedAppExceptionsView: View {
+    @ObservedObject var state: AppState
+    let tokens: [ApplicationToken]
+
+    var body: some View {
+        List {
+            Section {
+                ForEach(tokens, id: \.self) { token in
+                    NavigationLink {
+                        GroupedAppExceptionEditor(state: state, token: token)
+                    } label: {
+                        HStack {
+                            Label(token).labelStyle(.titleAndIcon)
+                            Spacer()
+                            if GroupedApps.exception(for: token).isException {
+                                Image(systemName: "slider.horizontal.3").foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+            } footer: {
+                Text(String(localized: "Choose an app and allow the content it should not be blocked for. Other apps keep their common rules.", table: "Interface"))
+            }
+        }
+        .navigationTitle(String(localized: "App exceptions", table: "Interface"))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+private struct GroupedAppExceptionEditor: View {
+    @ObservedObject var state: AppState
+    let token: ApplicationToken
+    private var rule: GroupedContentException<ApplicationToken> { GroupedApps.exception(for: token) }
+
+    var body: some View {
+        Form {
+            Section { Label(token).labelStyle(.titleAndIcon).font(.title3).padding(.vertical, 8) }
+            Section {
+                Toggle(String(localized: "Allow short videos (Shorts / Reels)", table: "Interface"), isOn: Binding(
+                    get: { rule.allowShortVideos },
+                    set: { value in var updated = rule; updated.allowShortVideos = value; state.setGroupedException(updated) }))
+                    .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && !rule.allowShortVideos))
+                Toggle(String(localized: "Allow Stories", table: "Interface"), isOn: Binding(
+                    get: { rule.allowStories },
+                    set: { value in var updated = rule; updated.allowStories = value; state.setGroupedException(updated) }))
+                    .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && !rule.allowStories))
+            } footer: {
+                Text(String(localized: "Allowed content will not block this app when detected, even if other apps are blocked. Without recording, normal app blocking still applies. Stop recording to edit exceptions.", table: "Interface"))
+            }
+            if rule.isException {
+                Section {
+                    Button(String(localized: "Use common rules", table: "Interface")) {
+                        state.setGroupedException(.init(token: token))
+                    }
+                    .disabled(state.snapshot.broadcastActive)
+                }
+            }
+        }
+        .navigationTitle(String(localized: "App exception", table: "Interface"))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+#endif
+
+#if os(iOS) && canImport(FamilyControls)
+struct GroupedAppSelectionSection: View {
+    @ObservedObject var state: AppState
+    let tokens: [ApplicationToken]
+    let onChoose: () -> Void
+    var body: some View {
+        Section {
+            Button {
+                onChoose()
+            } label: {
+                HStack {
+                    Text(String(localized: "Selected apps", table: "Interface"))
+                    Spacer()
+                    Text("\(tokens.count)")
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.right").font(.caption)
+                }
+            }
+            .disabled(state.snapshot.isStrictModeActive || state.snapshot.broadcastActive)
+            .accessibilityIdentifier("apps.group.choose")
+            if !tokens.isEmpty {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 44, maximum: 56), spacing: 12)],
+                          alignment: .leading, spacing: 12) {
+                    ForEach(tokens, id: \.self) { token in
+                        Label(token)
+                            .labelStyle(.iconOnly)
+                            .frame(width: 40, height: 40)
+                    }
+                }
+                .padding(.vertical, 4)
+                .listRowSeparator(.hidden)
+                .accessibilityIdentifier("apps.group.icons")
+            }
+        } footer: {
+            Text(String(localized: "Without recording, selected apps are blocked. During recording, detected content blocks apps without a matching exception. A pause opens the whole group.", table: "Interface"))
+        }
+    }
+}
+
+struct GroupedAppAdvancedSettings: View {
+    @ObservedObject var state: AppState
+    let tokens: [ApplicationToken]
+    let onChooseYouTube: () -> Void
+    var onIconProbe: (() -> Void)? = nil
+    @State private var expanded = false
+    var body: some View {
+        Section {
+            DisclosureGroup(isExpanded: $expanded) {
+                Toggle(String(localized: "Short videos (Shorts / Reels)", table: "Interface"), isOn: Binding(
+                    get: { GroupedApps.contentRules.shortVideos },
+                    set: { state.setGroupedContentBlocking(.shortVideos, enabled: $0) }))
+                    .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && GroupedApps.contentRules.shortVideos))
+                    .accessibilityIdentifier("apps.group.short-videos")
+                Toggle(String(localized: "Stories", table: "Interface"), isOn: Binding(
+                    get: { GroupedApps.contentRules.stories },
+                    set: { state.setGroupedContentBlocking(.stories, enabled: $0) }))
+                    .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && GroupedApps.contentRules.stories))
+                    .accessibilityIdentifier("apps.group.stories")
+                Text(String(localized: "These are the common content rules. You can allow content for individual apps under App exceptions. Stop recording to change settings.", table: "Interface"))
+                    .font(.footnote).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                NavigationLink {
+                    GroupedAppExceptionsView(state: state, tokens: tokens)
+                } label: {
+                    Label(String(localized: "App exceptions", table: "Interface"), systemImage: "slider.horizontal.below.square.filled.and.square")
+                }
+                .disabled(tokens.isEmpty)
+                .accessibilityIdentifier("apps.group.exceptions")
+                Toggle(String(localized: "Soft YouTube blocking"), isOn: Binding(
+                    get: { state.snapshot.softYouTubeBlockingEnabled && GroupedApps.isEnabled },
+                    set: { enabled in
+                        if enabled { onChooseYouTube() }
+                        else { state.setSoftYouTubeBlockingEnabled(false) }
+                    }))
+                    .disabled(state.snapshot.isStrictModeActive || state.snapshot.broadcastActive)
+                #if DEBUG
+                if let onIconProbe {
+                    Button("Эксперимент: получить иконки", action: onIconProbe).disabled(tokens.isEmpty)
+                }
+                #endif
+                Text(String(localized: "Choose YouTube separately for soft mode. It shares the group's pauses and detection rests.", table: "Interface"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } label: {
+                Label(String(localized: "Additional settings", table: "Interface"), systemImage: "slider.horizontal.3")
+            }
+            .accessibilityIdentifier("apps.group.additional-settings")
+        }    }
 }
 #endif

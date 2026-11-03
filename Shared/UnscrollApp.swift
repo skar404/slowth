@@ -2,6 +2,13 @@ import SwiftUI
 
 @main
 struct UnscrollApp: App {
+    init() {
+        #if os(iOS)
+        // SwiftUI constructs App before UIApplicationMain. Reject early access
+        // until the delegate installs the real UIKit application at launch.
+        IOSPauseDatabase.beginHostAccess = { throw IOSPauseError.storage }
+        #endif
+    }
     #if os(macOS)
     @AppStorage(AppLocalization.languageKey) private var appLanguage = ""
     #endif
@@ -78,3 +85,51 @@ struct UnscrollApp: App {
     }
     #endif
 }
+
+#if os(iOS)
+/// Host-only: this file is not part of the app extensions. UIKit's begin/end
+/// background task APIs are thread safe; no main-queue sync while SQLite waits.
+final class PauseDatabaseBackgroundTask: @unchecked Sendable {
+    private let application: UIApplication
+    private let lock = NSLock()
+    private var identifier: UIBackgroundTaskIdentifier = .invalid
+    private var ended = false
+
+    private init(application: UIApplication) { self.application = application }
+
+    static func begin(application: UIApplication) throws -> IOSPauseDatabaseAccess {
+        let task = PauseDatabaseBackgroundTask(application: application)
+        let access = IOSPauseDatabaseAccess()
+        access.onFinish = { task.end() }
+        let identifier = application.beginBackgroundTask(withName: "Pause database") {
+            // Interrupt SQL, prevent commit, and wait for rollback/close before
+            // releasing the assertion. Database edits must not wait on main.
+            access.cancelAndWait()
+            task.end()
+        }
+        task.install(identifier)
+        guard identifier != .invalid else {
+            access.finish()
+            throw IOSPauseError.storage
+        }
+        return access
+    }
+
+    private func install(_ identifier: UIBackgroundTaskIdentifier) {
+        lock.lock()
+        let alreadyEnded = ended
+        if !alreadyEnded { self.identifier = identifier }
+        lock.unlock()
+        if alreadyEnded && identifier != .invalid { application.endBackgroundTask(identifier) }
+    }
+
+    private func end() {
+        lock.lock()
+        let identifier = self.identifier
+        self.identifier = .invalid
+        ended = true
+        lock.unlock()
+        if identifier != .invalid { application.endBackgroundTask(identifier) }
+    }
+}
+#endif

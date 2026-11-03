@@ -54,3 +54,11 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
 This uses a temporary application bundle and preference domain. It covers all
 46 languages, switching without restarting, preference loading in a new process,
 interpolation, right-to-left direction, and system/unsupported-language fallback.
+
+Popup site sections: open the extension on YouTube (including m.youtube.com),
+Instagram, and the other supported sites. The current site's section should move to the top and
+start expanded, preserving the order of the remaining sites; an unrelated or inaccessible tab leaves all sections collapsed.
+Repeat on the extension's own whole-site blocked page. Each section can be opened
+and closed manually with touch, mouse, or keyboard, including in Strict mode.
+Changing switches must preserve the existing whole-site priority and Strict mode
+rules. Verify the bundled icons in light/dark appearance, narrow widths, and RTL.

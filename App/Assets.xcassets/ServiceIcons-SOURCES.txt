@@ -1,0 +1,22 @@
+App artwork downloaded from Apple App Store lookup, 2026-10-14.
+Icons are owned by their respective publishers; used to identify supported services.
+
+YouTube
+https://apps.apple.com/app/id544007664
+https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/9d/cc/4d/9dcc4d29-3199-cfdb-da1e-64ec30a4046b/logo_youtube_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.jpg
+
+Instagram
+https://apps.apple.com/app/id389801252
+https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/41/41/0a/41410ad0-b22e-c93c-d4b1-7f14f8494e06/Prod-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg
+
+Facebook
+https://apps.apple.com/app/id284882215
+https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/8a/a0/a8/8aa0a82f-fcd1-b9b4-f664-28b5389f2886/Icon-Production-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg
+
+TikTok - Videos, Shop & LIVE
+https://apps.apple.com/app/id835599320
+https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/d8/f0/b2/d8f0b203-3968-dd77-07ff-70134b89f7c1/TikTok_AppIcon26-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg
+
+X
+https://apps.apple.com/app/id333903271
+https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/51/9b/81/519b818f-5d32-ac14-e4b5-7a9f889b9bd4/ProductionAppIcon-0-0-1x_U007emarketing-0-8-0-0-0-85-220.png/512x512bb.jpg

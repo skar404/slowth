@@ -1,6 +1,27 @@
 // Frozen pre-refactor decisions, exhaustively compared to the pure rules.
 @main enum BlockingRuleChecks {
     static func main() {
+        assert(GroupedContentRules().shortVideos && GroupedContentRules().stories)
+        for shortVideos in [false, true] {
+            for stories in [false, true] {
+                let rules = GroupedContentRules(shortVideos: shortVideos, stories: stories)
+                assert(rules.hasEnabledContent == (shortVideos || stories))
+                for source in 0..<6 {
+                    for hits in [0, 2, 3, 5] {
+                        var videoHits = [0, 0, 0, 0]
+                        var storyHits = [0, 0]
+                        if source < 4 { videoHits[source] = hits }
+                        else { storyHits[source - 4] = hits }
+                        let expected = hits >= 3 && (source < 4 ? shortVideos : stories)
+                        assert(rules.detects(shortVideoHits: videoHits, storyHits: storyHits, requiredHits: 3) == expected)
+                    }
+                }
+                // Cached evidence from a disabled family cannot trigger a rest.
+                assert(rules.detects(shortVideoHits: [100], storyHits: [100], requiredHits: 3) == rules.hasEnabledContent)
+                assert(!rules.detects(shortVideoHits: [], storyHits: [], requiredHits: 3))
+            }
+        }
+        print("PASS: grouped content filters independently gate four video and two story sources, thresholds and stale evidence")
         var expiredRecorder = BlockingContext(recording: false, requestedShield: false, recorderRequest: true)
         assert(BlockingRules.decide(expiredRecorder, .shieldRequest).shield == .block)
         expiredRecorder.activePause = true
@@ -11,6 +32,19 @@
         expiredRecorder.enabled = true
         expiredRecorder.recorderRequest = false
         assert(BlockingRules.decide(expiredRecorder, .shieldRequest).shield == .clear)
+
+        // Stopped Broadcast exception is scoped to YouTube and a live soft grant.
+        for target in ["youtube", "instagram", "facebook", "x", "tiktok", "snapchat"] {
+            for bits in 0..<(1 << 5) {
+                func flag(_ bit: Int) -> Bool { bits & (1 << bit) != 0 }
+                let c = BlockingContext(target: target, activePause: flag(0),
+                    pendingRest: flag(1), soft: flag(2), deferred: flag(3),
+                    requestedShield: flag(4), recorderRequest: true)
+                let expectedBlock = !c.activePause && (c.pendingRest || c.requestedShield ||
+                    target != "youtube" || !c.soft || !c.deferred)
+                assert((BlockingRules.decide(c, .shieldRequest).shield == .block) == expectedBlock)
+            }
+        }
 
         for bits in 0..<(1 << 12) {
             func flag(_ bit: Int) -> Bool { bits & (1 << bit) != 0 }

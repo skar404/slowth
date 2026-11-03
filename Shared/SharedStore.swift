@@ -560,6 +560,9 @@ enum SharedStore {
     /// Read-only readiness shared by the host and ReplayKit. No flags or permissions
     /// can substitute for a decoded, single-app binding (pause-only apps count).
     static func hasRecordingSelection() -> Bool {
+        #if os(iOS) && canImport(FamilyControls)
+        if GroupedApps.isEnabled { return GroupedApps.selection != nil }
+        #endif
         #if (os(iOS) && canImport(FamilyControls)) || RECORDING_SELECTION_TESTS
         let keys = [SharedStoreKey.youtubeSelectionData, SharedStoreKey.instagramSelectionData,
                     SharedStoreKey.facebookSelectionData, SharedStoreKey.xSelectionData,
@@ -918,14 +921,15 @@ enum SharedStore {
         d.set(date.timeIntervalSince1970, forKey: SharedStoreKey.lastShieldActionInvokedAt)
     }
 
-    static func requestRealtimeRecordingPrompt(at date: Date = Date(), target: String? = nil, returnToApplication: Bool = false) {
+    static func requestRealtimeRecordingPrompt(at date: Date = Date(), target: String? = nil, navigationToken: Data? = nil) {
         let defaults = d
+        if let navigationToken { defaults.set(navigationToken, forKey: "realtimeRecordingNavigationToken") }
+        else { defaults.removeObject(forKey: "realtimeRecordingNavigationToken") }
         if let target {
             defaults.set(target, forKey: "realtimeRecordingPromptTarget")
         } else {
             defaults.removeObject(forKey: "realtimeRecordingPromptTarget")
         }
-        defaults.set(returnToApplication && target != nil, forKey: "realtimeRecordingReturnToApplication")
         defaults.set(date.timeIntervalSince1970,
                      forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()
@@ -937,19 +941,19 @@ enum SharedStore {
     }
 
     static func consumeRealtimeRecordingPromptRequest(target: inout String?) -> Bool {
-        var returnToApplication = false
-        return consumeRealtimeRecordingPromptRequest(target: &target, returnToApplication: &returnToApplication)
+        var navigationToken: Data?
+        return consumeRealtimeRecordingPromptRequest(target: &target, navigationToken: &navigationToken)
     }
 
-    static func consumeRealtimeRecordingPromptRequest(target: inout String?, returnToApplication: inout Bool) -> Bool {
+    static func consumeRealtimeRecordingPromptRequest(target: inout String?, navigationToken: inout Data?) -> Bool {
         let defaults = d
         defaults.synchronize()
         guard defaults.double(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt) > 0 else {
             return false
         }
+        navigationToken = defaults.data(forKey: "realtimeRecordingNavigationToken")
+        defaults.removeObject(forKey: "realtimeRecordingNavigationToken")
         target = defaults.string(forKey: "realtimeRecordingPromptTarget")
-        returnToApplication = defaults.bool(forKey: "realtimeRecordingReturnToApplication")
-        defaults.removeObject(forKey: "realtimeRecordingReturnToApplication")
         defaults.removeObject(forKey: "realtimeRecordingPromptTarget")
         defaults.removeObject(forKey: SharedStoreKey.realtimeRecordingPromptRequestedAt)
         defaults.synchronize()

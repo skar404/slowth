@@ -1,5 +1,67 @@
 # iOS and iPadOS blocking
 
+## Grouped-app MVP (2026-11-02)
+
+The new iOS UI offers one multi-app selection. Saving it opts into
+`groupedApps.enabled.v1`; `GroupedApps` (in `Shared/PauseOnlyApps.swift`) stores
+`groupedApps.selection.v1`. Select the list once after installing this MVP.
+Legacy per-service selections are retained for rollback, but their stores and
+rest bindings are retired when the group is saved. Safari is unchanged.
+
+- One coordinator target, `apps`, owns the full token set, pause lease, progressive
+  rest, inference-failure state and selection revision. A pause opens the whole
+  group, including soft YouTube. No app chooser is shown when starting a pause.
+- With no recording the group is blocked. With recording, the existing supported
+  Shorts/Reels/Stories heads can trigger a rest for the entire group. Model coverage
+  has not expanded: selecting an arbitrary app does not add a detector for it.
+- The soft YouTube picker is requested when enabling soft mode. Its token is added
+  to the group. The system stores split into `RealtimeShield.group` and
+  `RealtimeShield.youtube`; only YouTube gets the stopped-recording soft deferral.
+  Both stores obey the same ordinary pause and unfinished detection rest.
+- Additional settings includes shared Short videos (YouTube Shorts, Instagram/
+  Facebook Reels, X videos supported by the active model) and Stories (Instagram/
+  Facebook) switches. Both default to on. Their values are frozen when recording
+  starts/resumes. Editing requires stopped recording; strict mode prevents weakening.
+  With both off, recording needs no classifier and creates no new detection rests;
+  the coordinator still preserves pending rests, pauses, and at-rest protection.
+- App exceptions are stored by opaque application token (`groupedApps.exceptions.v1`).
+  Each app may allow short videos and/or Stories. They apply to detection events,
+  not recording-off protection or classifier/storage failure. The coordinator
+  persists the event's content families and blocked token subset with the full
+  selection as its binding. A second family unions affected tokens into the same
+  rest without restarting the clock. Empty subsets create no rest/progression.
+  Ordinary pauses still open the entire group. Stopped-recording exception edits
+  recompute an existing subset; strict mode prevents adding permissions.
+- List and soft-binding edits require stopped recording and no strict lock.
+  Categories/sites are rejected. Removing all apps clears protection for the group.
+- Shield handoff always targets the group. Known service display names observed
+  by Shield configuration are used only for navigation to known URL schemes;
+  never for enforcement. Unknown apps require the app switcher. No identity picker.
+- New UI copy has English/Russian translations; other locales fall back to English.
+  The legacy implementation remains as fallback before the first group save.
+
+Automated validation: `bash scripts/test_ios_blocking.sh` includes production
+coordinator tests for multi-app pause/rest/grace/fault handling, soft YouTube
+priority, replacement bindings and stale detection rejection, in Debug/Release.
+A device build/install is not physical behavior qualification.
+
+Device MVP checklist:
+
+1. Stop recording; choose at least two apps. Confirm both are blocked.
+2. Start a pause from either app: both open; ending/expiry restores both.
+3. Start recording: ordinary content opens; supported Shorts/Reels/Stories closes
+   the entire group. Confirm one shared rest, including when opening a second app.
+4. Complete the rest; test navigation grace and a new detection. Stop recording:
+   ordinary selected apps must block again.
+5. Enable soft YouTube via its picker. Check podcasts/background playback, the
+   existing foreground usage threshold, common pause, and common detection rest.
+6. Replace/remove apps with recording stopped; old tokens must no longer be blocked.
+   Check launch after force quit, device lock, recording interruption, and reboot.
+7. Check Shield → Slowth → return for YouTube/Instagram, and app-switcher guidance
+   for an arbitrary app. Verify Safari pauses still behave as before.
+
+The sections below describe the retained legacy implementation where applicable.
+
 Start with **BlockingRules.swift**. It contains the ordered policy, its input
 `BlockingContext`, incoming `BlockingEvent`, and output `BlockingDecision`.
 A decision names the Shield action, monitor action, deferred-access change,
@@ -90,3 +152,13 @@ qualify physical Shield, ReplayKit or DeviceActivity delivery. On a device check
 foreground/background, screen lock, force-quit/relaunch, recording stop/resume,
 a stationary Shield with no new frames, rest completion, and stale usage events.
 See `tests/IOSPauses/README.txt` for the detailed physical acceptance cases.
+
+Exception device checks:
+- Choose two apps. Allow Stories for one, detect Stories, confirm only the other
+  app receives Shield. Repeat with short videos and swap the exceptions.
+- Allow both types for all apps: detections must not create a rest or increase
+  the progressive rest count. Stopping recording should still protect the group.
+- During an active rest, view a different forbidden content family in an exempt
+  app. Its affected tokens join the existing rest without extending its deadline.
+- Pause during a partial rest; end it both before and after the rest timer elapses.
+  Exempt apps must not acquire a temporary Shield. Check soft YouTube separately.

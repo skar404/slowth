@@ -18,7 +18,7 @@ enum BlockingCoordinator {
         SoftYouTubeActivityMonitoring.stop()
         switch setting {
         case .recordingProtection:
-            for surface in [ManagedSettingsApplier.Surface.youtube, .instagram, .facebook, .x] {
+            for surface in [ManagedSettingsApplier.Surface.apps, .youtube, .instagram, .facebook, .x] {
                 ManagedSettingsApplier.clear(surface: surface)
             }
         case .youtube:
@@ -43,7 +43,7 @@ enum BlockingCoordinator {
     static func enforceAtRest(_ state: SharedState, facebookSupported: Bool, xSupported: Bool) {
         enforcePauseOnlyApps()
         guard state.realtimeShieldEnabled, !state.broadcastActive else { return }
-        for target in ["youtube", "instagram", "facebook", "x"] {
+        for target in GroupedApps.isEnabled ? ["apps"] : ["youtube", "instagram", "facebook", "x"] {
             let data = IOSPauseCoordinator.selection(target, state: state)
             let selection = data.flatMap { try? JSONDecoder().decode(FamilyActivitySelection.self, from: $0) }
             let supported = (target != "facebook" || facebookSupported) && (target != "x" || xSupported)
@@ -59,6 +59,7 @@ enum BlockingCoordinator {
     }
 
     static func enforcePauseOnlyApps() {
+        if GroupedApps.isEnabled { return }
         let approved = IOSProtectionAuthorization.approved(AuthorizationCenter.shared.authorizationStatus)
         for target in PauseOnlyApps.targets {
             ManagedSettingsApplier.apply(surface: ManagedSettingsApplier.Surface(rawValue: target)!,
@@ -71,7 +72,7 @@ enum BlockingCoordinator {
         SharedStore.syncRealtimeShieldAuthorization(AuthorizationCenter.shared.authorizationStatus)
         if !IOSProtectionAuthorization.approved(AuthorizationCenter.shared.authorizationStatus) {
             SoftYouTubeActivityMonitoring.stop()
-            for surface in [ManagedSettingsApplier.Surface.youtube, .instagram, .facebook, .x] {
+            for surface in [ManagedSettingsApplier.Surface.apps, .youtube, .instagram, .facebook, .x] {
                 ManagedSettingsApplier.clear(surface: surface)
             }
         }

@@ -367,74 +367,75 @@ private struct RecordingSheetBackground: ViewModifier {
     }
 }
 
+private struct RecordingPromptHeight: PreferenceKey {
+    static var defaultValue: CGFloat = 140
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
+}
+
 struct RealtimeRecordingPromptSheet: View {
-    @AppStorage("automaticallyReturnToApplication", store: AppGroup.defaults) private var automaticallyReturnToApplication = true
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.scenePhase) private var scenePhase
     @State private var applicationOpenFailed = false
-    @State private var applicationReturn = IOSApplicationReturn()
-    @State private var didArmReturn = false
+    @State private var contentHeight: CGFloat = 140
 
     let preferredExtensionBundleID: String
     let isRecording: Bool
     var onLearnMore: () -> Void = {}
     var pauseTarget: String? = nil
-    var returnToApplication = false
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    AppRecordingCard(
-                        preferredExtensionBundleID: preferredExtensionBundleID,
-                        isRecording: isRecording,
-                        onLearnMore: onLearnMore,
-                        showsPause: pauseTarget != nil,
-                        pauseTarget: pauseTarget
-                    )
-                    .padding(.horizontal, -16)
-
-                    if applicationOpenFailed {
-                        Text(String(localized: "Could not open the app. Open it manually.", table: "ApplicationNavigation"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(spacing: 4) {
+                if let pauseTarget {
+                    PausePanel(safari: false, preferredTarget: pauseTarget, embedded: true,
+                               compact: true, sharedBackground: true, actionsOnly: true,
+                               recordingExtensionBundleID: preferredExtensionBundleID,
+                               isRecording: isRecording)
+                } else {
+                    RealtimeRecordingCard(preferredExtensionBundleID: preferredExtensionBundleID,
+                        isRecording: isRecording, guidance: "", actionOnly: true)
+                }
+                if let url = (pauseTarget == "apps" ? GroupedApps.returnTarget : pauseTarget).flatMap(IOSApplicationLink.url(for:)) {
+                    Button {
+                        applicationOpenFailed = false
+                        UIApplication.shared.open(url, options: [:]) { opened in
+                            applicationOpenFailed = !opened
+                            if opened { dismiss() }
+                        }
+                    } label: {
+                        Label(String(localized: "Return to app", table: "ApplicationNavigation"),
+                              systemImage: "arrow.uturn.backward")
+                            .font(.subheadline)
+                            .padding(.horizontal, 16)
+                            .frame(minHeight: 44)
                     }
-                    Text(String(localized: "Slowth analyzes your screen, including other apps, on this device. Audio is ignored.", table: "Interface"))
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.horizontal, 4)
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("recording.return-to-app")
                 }
-                .frame(maxWidth: 560)
-                .frame(maxWidth: .infinity)
-                .padding(20)
+                if pauseTarget == "apps", GroupedApps.returnTarget.flatMap(IOSApplicationLink.url(for:)) == nil {
+                    Text(String(localized: "Return using the app switcher.", table: "Interface"))
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+                if applicationOpenFailed {
+                    Text(String(localized: "Could not open the app. Open it manually.", table: "ApplicationNavigation"))
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
             }
-            .background(Color.clear)
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .navigationTitle(String(localized: "Choose how to continue", table: "Interface"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Done")) { dismiss() }
+            .frame(maxWidth: 560)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 8)
+            .padding(.top, 24)
+            .padding(.bottom, 4)
+            .background {
+                GeometryReader { geometry in
+                    Color.clear.preference(key: RecordingPromptHeight.self, value: geometry.size.height)
                 }
             }
         }
+        .onPreferenceChange(RecordingPromptHeight.self) { contentHeight = $0 }
+        .presentationDetents([.height(max(140, contentHeight)), .large])
+        .presentationDragIndicator(.visible)
+        .accessibilityAction(.escape) { dismiss() }
         .modifier(RecordingSheetBackground())
-        .onAppear {
-            guard !didArmReturn else { return }
-            didArmReturn = true
-            guard returnToApplication, automaticallyReturnToApplication else { return }
-            applicationReturn.arm(target: pauseTarget, recording: SharedStore.snapshot().broadcastActive,
-                                  pauseID: activePauseID(), now: Date())
-            recordReturn("Ожидание новой записи или паузы: \(pauseTarget ?? "unknown")")
-        }
-        .onDisappear { applicationReturn.cancel() }
-        .onChange(of: scenePhase) { phase in
-            if phase == .background { applicationReturn.cancel() }
-        }
-        .onReceive(Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()) { _ in
-            returnIfReady()
-        }
         .tint(Color(uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
                 ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
@@ -442,50 +443,6 @@ struct RealtimeRecordingPromptSheet: View {
         }))
     }
 
-    private func recordReturn(_ message: String) {
-        let entry = "\(Date().ISO8601Format()) · \(message)"
-        var history = AppGroup.defaults.stringArray(forKey: "recordingReturnHistory") ?? []
-        history.append(entry)
-        AppGroup.defaults.set(Array(history.suffix(20)), forKey: "recordingReturnHistory")
-        RTLog.shieldAction.notice("\(entry, privacy: .public)")
-    }
-
-    private func activePauseID() -> String? {
-        guard let target = pauseTarget else { return nil }
-        let snapshot = SharedStore.snapshot()
-        guard let ledger = try? IOSPauseCoordinator.presentationSnapshot(),
-              let lease = ledger.lease,
-              lease.kind == "application", lease.target == target, lease.phase == "active",
-              (lease.requiresRecording == false || snapshot.broadcastActive),
-              !lease.expired(IOSPauseCoordinator.clock()),
-              !IOSPauseCoordinator.strictModeBlocksPauses(snapshot),
-              IOSPauseCoordinator.enabled(target, state: snapshot),
-              let selection = IOSPauseCoordinator.selection(target, state: snapshot),
-              lease.selection == selection,
-              !IOSPauseCoordinator.hasSelectionConflict(target, state: snapshot) else { return nil }
-        return lease.id
-    }
-
-    private func returnIfReady() {
-        guard returnToApplication, automaticallyReturnToApplication, let target = pauseTarget else { return }
-        let snapshot = SharedStore.snapshot()
-        let diagnostics = snapshot.realtimeShieldDiagnostics
-        let store = ManagedSettingsStore(named: .init("RealtimeShield.\(target)"))
-        let shieldCleared = (store.shield.applications?.isEmpty ?? true)
-            && store.shield.applicationCategories == nil
-        guard let url = applicationReturn.take(
-            now: Date(), foreground: scenePhase == .active,
-            recording: snapshot.broadcastActive,
-            ready: diagnostics.modelStatus == "ready" && diagnostics.inferenceCount > 0,
-            evidenceAt: diagnostics.updatedAt, pauseID: activePauseID(), shieldCleared: shieldCleared
-        ) else { return }
-        recordReturn("Автопереход в \(target)")
-        UIApplication.shared.open(url, options: [:]) { opened in
-            applicationOpenFailed = !opened
-            recordReturn("Автопереход в \(target): opened=\(opened)")
-            if opened { dismiss() }
-        }
-    }
 
 }
 #endif

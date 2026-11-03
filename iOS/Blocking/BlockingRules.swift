@@ -70,7 +70,10 @@ enum BlockingRules {
                          reason: "Discard observations across bindings, pauses and grace")
         case .shieldRequest:
             if c.activePause { return .init(shield: .clear, reason: "Active ordinary pause") }
-            if c.enabled && c.recorderRequest && !c.recording {
+            // A stopped Broadcast may clear only while soft YouTube still has
+            // its usage deferral. Rest and requested-shield checks below still win.
+            let softRecorderDeferral = c.target == "youtube" && c.soft && c.deferred
+            if c.enabled && c.recorderRequest && !c.recording && !softRecorderDeferral {
                 return .init(shield: .block, reason: "Stopped recorder cannot clear protection")
             }
             if c.enabled && !c.pauseOnly {
@@ -126,4 +129,39 @@ enum BlockingRules {
             return .init(shield: .block, deferred: false, reason: "Monitor registration failed")
         }
     }
+}
+
+/// Content filters are shared by all selected apps. App identity stays opaque.
+struct GroupedContentRules: Equatable {
+    enum Kind: String, Codable { case shortVideos, stories }
+    var shortVideos = true
+    var stories = true
+    var hasEnabledContent: Bool { shortVideos || stories }
+
+    func detectedKinds(shortVideoHits: [Int], storyHits: [Int], requiredHits: Int) -> Set<Kind> {
+        var result = Set<Kind>()
+        if shortVideos && shortVideoHits.contains(where: { $0 >= requiredHits }) { result.insert(.shortVideos) }
+        if stories && storyHits.contains(where: { $0 >= requiredHits }) { result.insert(.stories) }
+        return result
+    }
+
+    func detects(shortVideoHits: [Int], storyHits: [Int], requiredHits: Int) -> Bool {
+        !detectedKinds(shortVideoHits: shortVideoHits, storyHits: storyHits, requiredHits: requiredHits).isEmpty
+    }
+
+    func blockedTokens<Token: Hashable & Codable>(from tokens: Set<Token>, kinds: Set<Kind>,
+                                                 exceptions: [GroupedContentException<Token>]) -> Set<Token> {
+        tokens.filter { token in
+            let exception = exceptions.first { $0.token == token }
+            return (shortVideos && kinds.contains(.shortVideos) && exception?.allowShortVideos != true) ||
+                   (stories && kinds.contains(.stories) && exception?.allowStories != true)
+        }
+    }
+}
+
+struct GroupedContentException<Token: Hashable & Codable>: Codable, Equatable {
+    var token: Token
+    var allowShortVideos = false
+    var allowStories = false
+    var isException: Bool { allowShortVideos || allowStories }
 }

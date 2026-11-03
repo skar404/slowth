@@ -1,3 +1,42 @@
+import Foundation
+
+/// User-confirmed navigation only. Never used to select a Shield or grant access.
+enum ShieldNavigationBindings {
+    private static let key = "shield.navigationBindings.v1"
+    private struct Entry: Codable {
+        let token: Data
+        let target: String
+        let selection: Data
+    }
+    struct Choice {
+        let token: Data
+        let selections: [String: Data]
+    }
+    private static func entries(_ defaults: UserDefaults) -> [Entry] {
+        guard let data = defaults.data(forKey: key),
+              let entries = try? JSONDecoder().decode([Entry].self, from: data) else { return [] }
+        return entries
+    }
+    static func target(for token: Data, selections: [String: Data], defaults: UserDefaults) -> String? {
+        entries(defaults).first {
+            $0.token == token && selections[$0.target] == $0.selection
+        }?.target
+    }
+    static func confirm(_ choice: Choice, target: String, selections: [String: Data], defaults: UserDefaults) {
+        guard let selection = choice.selections[target], selections[target] == selection else { return }
+        var entries = entries(defaults).filter {
+            $0.token != choice.token && selections[$0.target] == $0.selection
+        }
+        entries.append(Entry(token: choice.token, target: target, selection: selection))
+        defaults.set(try? JSONEncoder().encode(Array(entries.suffix(32))), forKey: key)
+        defaults.synchronize()
+    }
+    static func invalidate(_ target: String, defaults: UserDefaults) {
+        defaults.set(try? JSONEncoder().encode(entries(defaults).filter { $0.target != target }), forKey: key)
+        defaults.synchronize()
+    }
+}
+
 #if os(iOS) && canImport(FamilyControls)
 import Foundation
 import FamilyControls
@@ -46,7 +85,7 @@ enum PauseOnlyApps {
     /// Bounded, local-only routing diagnostics for physical-device Debug builds.
     /// Store token fingerprints, never tokens or screen content.
     static func recordRouting(_ stage: String, token: ApplicationToken? = nil,
-                              target: String? = nil, appName: String? = nil) {
+                              target: String? = nil, appName: String? = nil, source: String? = nil) {
         #if DEBUG
         func fingerprint(_ token: ApplicationToken) -> String {
             guard let data = try? JSONEncoder().encode(token) else { return "unencodable" }
@@ -60,6 +99,8 @@ enum PauseOnlyApps {
         event["callback"] = token.map(fingerprint) ?? "none"
         let name = appName?.lowercased() ?? ""
         event["knownApp"] = name.contains("snapchat") ? "snapchat" : name.contains("tiktok") ? "tiktok" : "other-or-unavailable"
+        event["hasName"] = appName != nil
+        event["source"] = source ?? "token"
         for service in targets {
             event[service] = selection(service)?.applicationTokens.map(fingerprint).sorted() ?? []
         }
@@ -90,5 +131,96 @@ enum PauseOnlyApps {
         defaults.synchronize()
         recordRouting("saved", target: target)
     }
+}
+#endif
+
+#if os(iOS) && canImport(FamilyControls)
+/// MVP: a single opaque application set owns one pause and one detection rest.
+/// Legacy selections remain stored for rollback, but do not enforce after opt-in.
+enum GroupedApps {
+    static var contentRules: GroupedContentRules {
+        GroupedContentRules(
+            shortVideos: AppGroup.defaults.object(forKey: "groupedApps.shortVideos.v1") as? Bool ?? true,
+            stories: AppGroup.defaults.object(forKey: "groupedApps.stories.v1") as? Bool ?? true)
+    }
+    static func setContentBlocking(_ kind: GroupedContentRules.Kind, enabled: Bool) throws {
+        let state = SharedStore.snapshot()
+        guard !state.broadcastActive else { throw SharedStoreError.invalidValue }
+        if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
+        let key = kind == .shortVideos ? "groupedApps.shortVideos.v1" : "groupedApps.stories.v1"
+        AppGroup.defaults.set(enabled, forKey: key)
+        AppGroup.defaults.synchronize()
+    }
+    static let exceptionsKey = "groupedApps.exceptions.v1"
+    static var exceptions: [GroupedContentException<ApplicationToken>] {
+        guard let data = AppGroup.defaults.data(forKey: exceptionsKey),
+              let rules = try? JSONDecoder().decode([GroupedContentException<ApplicationToken>].self, from: data) else { return [] }
+        return rules
+    }
+    static func exception(for token: ApplicationToken) -> GroupedContentException<ApplicationToken> {
+        exceptions.first { $0.token == token } ?? .init(token: token)
+    }
+    static func setException(_ rule: GroupedContentException<ApplicationToken>) throws {
+        let state = SharedStore.snapshot()
+        guard !state.broadcastActive, selection?.applicationTokens.contains(rule.token) == true else { throw SharedStoreError.invalidValue }
+        let old = exception(for: rule.token)
+        if state.isStrictModeActive && ((!old.allowShortVideos && rule.allowShortVideos) || (!old.allowStories && rule.allowStories)) {
+            throw SharedStoreError.strictModeActive
+        }
+        var rules = exceptions.filter { $0.token != rule.token && selection?.applicationTokens.contains($0.token) == true }
+        if rule.isException { rules.append(rule) }
+        AppGroup.defaults.set(try JSONEncoder().encode(rules), forKey: exceptionsKey)
+        AppGroup.defaults.synchronize()
+    }
+    static func blockedSelection(for kinds: Set<GroupedContentRules.Kind>) -> FamilyActivitySelection? {
+        guard var selected = selection else { return nil }
+        selected.applicationTokens = contentRules.blockedTokens(from: selected.applicationTokens, kinds: kinds, exceptions: exceptions)
+        return selected.applicationTokens.isEmpty ? nil : selected
+    }
+    static let key = "groupedApps.selection.v1"
+    static var isEnabled: Bool { AppGroup.defaults.bool(forKey: "groupedApps.enabled.v1") }
+    static var data: Data? { AppGroup.defaults.data(forKey: key) }
+    static var selection: FamilyActivitySelection? {
+        guard let data, let value = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data),
+              !value.applicationTokens.isEmpty, value.categoryTokens.isEmpty, value.webDomainTokens.isEmpty else { return nil }
+        return value
+    }
+    // Categories are expanded by the system picker; persist a snapshot of apps only.
+    static var pickerSelection: FamilyActivitySelection {
+        var value = FamilyActivitySelection(includeEntireCategory: true)
+        value.applicationTokens = selection?.applicationTokens ?? []
+        return value
+    }
+    static var orderedTokens: [ApplicationToken] {
+        Array(selection?.applicationTokens ?? []).sorted {
+            (try? JSONEncoder().encode($0).base64EncodedString()) ?? "" < (try? JSONEncoder().encode($1).base64EncodedString()) ?? ""
+        }
+    }
+    static var softSelection: FamilyActivitySelection? {
+        let state = SharedStore.snapshot()
+        guard state.softYouTubeBlockingEnabled,
+              let data = state.youtubeSelectionData,
+              let value = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data),
+              value.applicationTokens.count == 1,
+              value.applicationTokens.isSubset(of: selection?.applicationTokens ?? []) else { return nil }
+        return value
+    }
+    static func rememberReturn(token: ApplicationToken?, name: String?) {
+        guard let token, let data = try? JSONEncoder().encode(token), let name else { return }
+        let names = ["youtube": "youtube", "instagram": "instagram", "facebook": "facebook", "x": "x", "twitter": "x"]
+        guard let target = names[name.lowercased()] else { return }
+        var links = AppGroup.defaults.dictionary(forKey: "groupedApps.returnLinks") as? [String: String] ?? [:]
+        links[data.base64EncodedString()] = target
+        AppGroup.defaults.set(links, forKey: "groupedApps.returnLinks")
+    }
+    static func prepareReturn(token: ApplicationToken) {
+        AppGroup.defaults.synchronize()
+        let data = try? JSONEncoder().encode(token)
+        let links = AppGroup.defaults.dictionary(forKey: "groupedApps.returnLinks") as? [String: String] ?? [:]
+        let target = data.flatMap { links[$0.base64EncodedString()] }
+        AppGroup.defaults.set(target, forKey: "groupedApps.returnTarget")
+        AppGroup.defaults.synchronize()
+    }
+    static var returnTarget: String? { AppGroup.defaults.string(forKey: "groupedApps.returnTarget") }
 }
 #endif

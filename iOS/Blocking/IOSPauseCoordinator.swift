@@ -10,7 +10,7 @@ import DeviceActivity
 enum IOSPauseCoordinator {
     static let activityPrefix = "slowth.pause."
     static let sites = ["youtube", "instagram", "facebook", "x", "tiktok"]
-    static let apps = ["youtube", "instagram", "facebook", "x"] + PauseOnlyApps.targets
+    static var apps: [String] { GroupedApps.isEnabled ? ["apps"] : ["youtube", "instagram", "facebook", "x"] + PauseOnlyApps.targets }
 
     #if DEBUG
     static func setSavedLeavesForDebug(_ count: Int) throws {
@@ -96,7 +96,8 @@ enum IOSPauseCoordinator {
 
     @discardableResult
     static func requestRest(target: String, prioritize: Bool = false,
-                            expectedSelection: Data? = nil, expectedRevision: Int? = nil) throws -> IOSDetectionDisposition {
+                            expectedSelection: Data? = nil, expectedRevision: Int? = nil,
+                            contentKinds: Set<GroupedContentRules.Kind>? = nil) throws -> IOSDetectionDisposition {
         try database().transaction { ledger in
             let state = SharedStore.snapshot()
             let selected = selection(target, state: state)
@@ -116,8 +117,24 @@ enum IOSPauseCoordinator {
             case .accept: break
             case nil: throw IOSPauseError.unavailable
             }
+            var kinds = contentKinds
+            var blocked: Data?
+            if GroupedApps.isEnabled && target == "apps", let requestedKinds = kinds {
+                guard GroupedApps.blockedSelection(for: requestedKinds) != nil else { return .noBlockedApplications }
+                if let existing = ledger.detectionRests?[target], existing.selection == selected,
+                   existing.released == nil, existing.completed != true {
+                    // A second content family may add targets, never restart the timer.
+                    kinds = requestedKinds.union(existing.contentKinds ?? [.shortVideos, .stories])
+                }
+                guard let filtered = GroupedApps.blockedSelection(for: kinds!) else { return .noBlockedApplications }
+                blocked = try JSONEncoder().encode(filtered)
+            }
             ledger.requestDetectionRest(target: target, selection: selection(target, state: state),
                 now: restClock(), fromShieldAction: prioritize)
+            if let kinds, let blocked {
+                ledger.detectionRests?[target]?.contentKinds = kinds
+                ledger.detectionRests?[target]?.blockedSelection = blocked
+            }
             return .accepted
         }
     }
@@ -317,6 +334,9 @@ enum IOSPauseCoordinator {
     static func selectionDidChange(target: String, previousSelection: Data?) throws {
         let currentSelection = selection(target, state: SharedStore.snapshot())
         guard decoded(previousSelection)?.applicationTokens != decoded(currentSelection)?.applicationTokens else { return }
+        #if !PAUSE_COORDINATOR_TESTS
+        ShieldNavigationBindings.invalidate(target, defaults: AppGroup.defaults)
+        #endif
         var endedID: String?
         try database().transaction { ledger in
             let state = SharedStore.snapshot()
@@ -336,7 +356,42 @@ enum IOSPauseCoordinator {
         refreshLiveActivity()
     }
 
+    /// Recompute an existing rest after a stopped-recording settings edit without
+    /// restarting its clock, charging a pause, or changing the selected app set.
+    static func refreshGroupedExceptions() throws {
+        guard GroupedApps.isEnabled else { return }
+        try database().transaction { ledger in
+            guard !SharedStore.snapshot().broadcastActive else { throw IOSPauseError.busy }
+            if var rest = ledger.detectionRests?["apps"], let kinds = rest.contentKinds {
+                if let filtered = GroupedApps.blockedSelection(for: kinds) {
+                    rest.blockedSelection = try JSONEncoder().encode(filtered)
+                    ledger.detectionRests?["apps"] = rest
+                } else {
+                    ledger.detectionRests?.removeValue(forKey: "apps")
+                }
+            }
+            ledger.revision += 1
+        }
+    }
+
+    static func retireLegacyApplications() throws {
+        guard GroupedApps.isEnabled else { return }
+        var endedID: String?
+        try database().transaction { ledger in
+            if let lease = ledger.lease, lease.kind == "application", lease.target != "apps" {
+                endedID = lease.id
+                ledger.finish(now: clock())
+            }
+            for target in ["youtube", "instagram", "facebook", "x", "tiktok", "snapchat"] {
+                ledger.invalidateBinding(target)
+                write(target, selection: nil)
+            }
+        }
+        if let endedID { BlockingPauseMonitor.stop([DeviceActivityName(activityPrefix + endedID)]) }
+    }
+
     static func selection(_ target: String, state: SharedState) -> Data? {
+        if GroupedApps.isEnabled { return target == "apps" ? GroupedApps.data : nil }
         if PauseOnlyApps.contains(target) { return PauseOnlyApps.data(target) }
         switch target {
         case "youtube": return state.youtubeSelectionData
@@ -348,10 +403,11 @@ enum IOSPauseCoordinator {
     }
     private static func decoded(_ data: Data?) -> FamilyActivitySelection? {
         guard let data, let s = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data),
-              s.applicationTokens.count == 1, s.categoryTokens.isEmpty, s.webDomainTokens.isEmpty else { return nil }
+              (GroupedApps.isEnabled ? !s.applicationTokens.isEmpty : s.applicationTokens.count == 1), s.categoryTokens.isEmpty, s.webDomainTokens.isEmpty else { return nil }
         return s
     }
     static func enabled(_ target: String, state: SharedState) -> Bool {
+        if GroupedApps.isEnabled { return target == "apps" && state.realtimeShieldEnabled && GroupedApps.selection != nil }
         if PauseOnlyApps.contains(target) { return PauseOnlyApps.selection(target) != nil }
         guard state.realtimeShieldEnabled else { return false }
         switch target {
@@ -362,8 +418,8 @@ enum IOSPauseCoordinator {
         default: return false
         }
     }
-    private static func write(_ target: String, selection: FamilyActivitySelection?) {
-        BlockingShield.write(target, selection: selection)
+    private static func write(_ target: String, selection: FamilyActivitySelection?, allowSoftDeferral: Bool = true) {
+        BlockingShield.write(target, selection: selection, allowSoftDeferral: allowSoftDeferral)
     }
 
     static func hasSelectionConflict(_ target: String, state: SharedState) -> Bool {
@@ -408,7 +464,10 @@ enum IOSPauseCoordinator {
         context.runtimeFresh = age >= 0 && age <= 3
         context.runtimeWantsShield = AppGroup.defaults.object(forKey: "pause.runtime.\(target).shield") as? Bool ?? true
         let decision = BlockingRules.decide(context, .pauseEnded)
-        write(target, selection: decision.shield == .block ? current : nil)
+        let filtered = target == "apps" && state.broadcastActive && rest?.released == nil &&
+            rest?.selection == selection(target, state: state) && !inferenceFailed
+            ? decoded(rest?.blockedSelection) ?? current : current
+        write(target, selection: decision.shield == .block ? filtered : nil, allowSoftDeferral: !context.pendingRest && !context.inferenceFailed)
     }
 
     private static func reconcile(_ ledger: inout IOSPauseLedger, now: IOSPauseClock,
@@ -435,7 +494,7 @@ enum IOSPauseCoordinator {
 
     /// Read only: presentation must not itself change protection or spend attempts.
     static func presentationSnapshot() throws -> IOSPauseLedger {
-        try database().transaction { $0 }
+        try database().read()
     }
 
     private static func refreshLiveActivity() {
@@ -445,7 +504,10 @@ enum IOSPauseCoordinator {
     }
 
     /// All Shield writers pass through the same process-wide database lock.
-    static func intercept(target: String, requested: FamilyActivitySelection?) -> Bool {
+    static func intercept(target requestedTarget: String, requested: FamilyActivitySelection?) -> Bool {
+        let softWrite = GroupedApps.isEnabled && requestedTarget == "youtube"
+        let target = softWrite ? "apps" : requestedTarget
+        let outputTarget = softWrite ? "youtube" : target
         // Never affect an installation that has not started a pause.
         var endedPause = false
         do {
@@ -475,12 +537,13 @@ enum IOSPauseCoordinator {
                 } ?? false
                 let rest = ledger.detectionRests?[target]
                 let boundRest = rest?.selection == selection(target, state: state)
-                let context = BlockingContext(target: target, enabled: enabled(target, state: state),
+                let context = BlockingContext(target: softWrite ? "youtube" : target, enabled: enabled(target, state: state),
                     recording: state.broadcastActive, pauseOnly: PauseOnlyApps.contains(target),
                     activePause: restHiddenByPause,
                     inferenceFailed: ledger.inferenceFailed(target, selection: selection(target, state: state)),
                     pendingRest: boundRest && rest != nil && rest?.released == nil && rest?.completed != true,
                     graceActive: boundRest && rest?.releaseRevision == ledger.revision && (rest?.graceRemaining(restClock()) ?? 0) > 0,
+                    soft: state.softYouTubeBlockingEnabled, deferred: state.youtubeShieldRestoreDeferred,
                     requestedShield: requested != nil, recorderRequest: recorderRequest)
                 let decision = BlockingRules.decide(context, .shieldRequest)
                 if decision.shield == .block {
@@ -489,9 +552,19 @@ enum IOSPauseCoordinator {
                     if boundRest, rest != nil {
                         ledger.detectionRests?[target]?.startIfNeeded(restClock())
                     }
-                    write(target, selection: decision.useRequestedSelection ? requested : decoded(selection(target, state: state)))
+                    var protected = decision.useRequestedSelection ? requested : decoded(selection(target, state: state))
+                    if target == "apps", state.broadcastActive, boundRest, rest?.released == nil, !context.inferenceFailed,
+                       let subset = decoded(rest?.blockedSelection) {
+                        protected = subset
+                    }
+                    if softWrite {
+                        var soft = GroupedApps.softSelection
+                        soft?.applicationTokens.formIntersection(protected?.applicationTokens ?? [])
+                        protected = soft
+                    }
+                    write(outputTarget, selection: protected, allowSoftDeferral: !context.pendingRest && !context.inferenceFailed)
                 } else {
-                    write(target, selection: nil)
+                    write(outputTarget, selection: nil)
                 }
             }
             if endedPause { refreshLiveActivity() }
@@ -499,7 +572,7 @@ enum IOSPauseCoordinator {
             // An unreadable coordinator must never authorize an unbounded clear.
             let state = SharedStore.snapshot()
             if enabled(target, state: state) {
-                if let s = decoded(selection(target, state: state)) { write(target, selection: s) }
+                if let s = decoded(selection(target, state: state)) { write(target, selection: s, allowSoftDeferral: false) }
             } else { write(target, selection: requested) }
         }
         return true

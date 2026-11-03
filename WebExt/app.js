@@ -39,39 +39,78 @@
 
   feedbackLink.href = ns.FEEDBACK_MAILTO;
 
+  const siteSections = new Map();
+  let siteSelectionTouched = false;
+
+  function createFeatureRow(site, feature) {
+    const row = document.createElement("label");
+    row.className = "row site-content";
+    const label = document.createElement("span");
+    label.textContent = t(feature === "all" ? "blockSite"
+      : feature === "feed" ? "blockInfiniteFeed"
+      : site === "youtube" ? "blockShorts" : site === "x" ? "blockExplore" : "blockReels");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.setAttribute("role", "switch");
+    input.dataset.site = site;
+    input.dataset.feature = feature;
+    input.disabled = true;
+    row.appendChild(label);
+    row.appendChild(input);
+    return row;
+  }
+
   for (const site of ns.SITES) {
-    const section = document.createElement("section");
+    const section = document.createElement("details");
     section.className = "site-settings";
     section.setAttribute("aria-label", ns.SITE_LABELS[site]);
+    const heading = document.createElement("summary");
+    heading.className = "site-heading";
+    const icon = document.createElement("img");
+    icon.className = "site-icon";
+    icon.src = `images/sites/${site}.svg`;
+    icon.alt = "";
+    icon.width = 32;
+    icon.height = 32;
+    const name = document.createElement("strong");
+    name.textContent = ns.SITE_LABELS[site];
+    heading.appendChild(icon);
+    heading.appendChild(name);
+    // A slow tabs query must never override a user's manual selection.
+    heading.addEventListener("click", () => { siteSelectionTouched = true; });
+    section.appendChild(heading);
     const features = ["all", ...ns.SITE_FEATURES[site].filter(feature => feature !== "all")];
-    for (const feature of features) {
-      const row = document.createElement("label");
-      row.className = feature === "all" ? "row site-heading" : "row site-content";
-      const span = document.createElement("span");
-      if (feature === "all") {
-        const name = document.createElement("strong");
-        name.textContent = ns.SITE_LABELS[site];
-        const action = document.createElement("span");
-        action.className = "site-action";
-        action.textContent = " — " + t("blockSite");
-        span.appendChild(name);
-        span.appendChild(action);
-      } else {
-        span.textContent = t(feature === "feed" ? "blockInfiniteFeed"
-          : site === "youtube" ? "blockShorts" : site === "x" ? "blockExplore" : "blockReels");
-      }
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.setAttribute("role", "switch");
-      input.dataset.site = site;
-      input.dataset.feature = feature;
-      input.disabled = true;
-      row.appendChild(span);
-      row.appendChild(input);
-      section.appendChild(row);
-    }
+    for (const feature of features) section.appendChild(createFeatureRow(site, feature));
+    siteSections.set(site, section);
     sitesEl.appendChild(section);
   }
+
+  async function expandActiveSite() {
+    try {
+      const query = { active: true, currentWindow: true };
+      const tabs = globalThis.browser
+        ? await extensionAPI.tabs.query(query)
+        : await new Promise(resolve => extensionAPI.tabs.query(query, tabs => {
+          const error = extensionAPI.runtime.lastError;
+          resolve(error ? [] : tabs);
+        }));
+      if (siteSelectionTouched || !tabs?.[0]?.url) return;
+      const url = new URL(tabs[0].url);
+      let site = ns.siteForURL(url.href);
+      // Whole-site blocking redirects to our own extension page.
+      const blockedURL = new URL(extensionAPI.runtime.getURL("blocked.html"));
+      if (url.protocol === blockedURL.protocol && url.host === blockedURL.host
+          && url.pathname === blockedURL.pathname) site = url.searchParams.get("host");
+      const section = siteSections.get(site);
+      if (section) {
+        sitesEl.prepend(section);
+        section.open = true;
+      }
+    } catch (_) {
+      // Missing tab access leaves every site available for manual expansion.
+    }
+  }
+  expandActiveSite();
 
   function formatRelative(ts) {
     if (!ts) return t("rulesNever");

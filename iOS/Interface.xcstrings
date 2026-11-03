@@ -1,6 +1,414 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Without recording, selected apps are blocked. During recording, detected content blocks apps without a matching exception. A pause opens the whole group." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without recording, selected apps are blocked. During recording, detected content blocks apps without a matching exception. A pause opens the whole group."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без записи выбранные приложения заблокированы. Во время записи обнаружение контента блокирует приложения без соответствующего исключения. Пауза открывает весь список."
+          }
+        }
+      }
+    },
+    "These are the common content rules. You can allow content for individual apps under App exceptions. Stop recording to change settings." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These are the common content rules. You can allow content for individual apps under App exceptions. Stop recording to change settings."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Это общие правила контента. В разделе «Исключения для приложений» можно разрешить контент отдельным приложениям. Чтобы изменить настройки, остановите запись."
+          }
+        }
+      }
+    },
+    "App exceptions" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App exceptions"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Исключения для приложений"
+          }
+        }
+      }
+    },
+    "App exception" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App exception"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Исключение для приложения"
+          }
+        }
+      }
+    },
+    "Allow short videos (Shorts / Reels)" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow short videos (Shorts / Reels)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешить короткие видео (Shorts / Reels)"
+          }
+        }
+      }
+    },
+    "Allow Stories" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Stories"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешить Stories"
+          }
+        }
+      }
+    },
+    "Use common rules" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use common rules"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Использовать общие правила"
+          }
+        }
+      }
+    },
+    "Choose an app and allow the content it should not be blocked for. Other apps keep their common rules." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an app and allow the content it should not be blocked for. Other apps keep their common rules."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите приложение и разрешите контент, за который его не нужно блокировать. Для остальных приложений сохранятся общие правила."
+          }
+        }
+      }
+    },
+    "Allowed content will not block this app when detected, even if other apps are blocked. Without recording, normal app blocking still applies. Stop recording to edit exceptions." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed content will not block this app when detected, even if other apps are blocked. Without recording, normal app blocking still applies. Stop recording to edit exceptions."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обнаружение разрешённого контента не заблокирует это приложение, даже если другие приложения будут заблокированы. Без записи действует обычная блокировка приложений. Чтобы изменить исключения, остановите запись."
+          }
+        }
+      }
+    },
+    "Short videos (Shorts / Reels)" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short videos (Shorts / Reels)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Короткие видео (Shorts / Reels)"
+          }
+        }
+      }
+    },
+    "Stop recording before changing content settings." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop recording before changing content settings."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановите запись перед изменением настроек контента."
+          }
+        }
+      }
+    },
+    "Content settings apply to every selected app during recording. Stop recording to change them." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Content settings apply to every selected app during recording. Stop recording to change them."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки контента действуют на все выбранные приложения во время записи. Чтобы изменить их, остановите запись."
+          }
+        }
+      }
+    },
+    "Without recording, selected apps are blocked. During recording, the content types enabled below block the whole group when detected. A pause opens the whole group." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without recording, selected apps are blocked. During recording, the content types enabled below block the whole group when detected. A pause opens the whole group."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без записи выбранные приложения заблокированы. Во время записи обнаружение включённых ниже типов контента блокирует весь список. Пауза открывает все выбранные приложения."
+          }
+        }
+      }
+    },
+    "Additional settings" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Additional settings"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дополнительные настройки"
+          }
+        }
+      }
+    },
+    "Selected apps" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected apps"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбранные приложения"
+          }
+        }
+      }
+    },
+    "Choose the apps to protect. Blocking and pauses apply to all selected apps." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the apps to protect. Blocking and pauses apply to all selected apps."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите приложения для защиты. Блокировка и паузы действуют на весь список."
+          }
+        }
+      }
+    },
+    "Without recording, selected apps are blocked. During recording, detected Shorts, Reels, or Stories block the whole group. A pause opens the whole group." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without recording, selected apps are blocked. During recording, detected Shorts, Reels, or Stories block the whole group. A pause opens the whole group."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без записи выбранные приложения заблокированы. При записи обнаружение Shorts, Reels или Stories блокирует весь список. Пауза открывает все выбранные приложения."
+          }
+        }
+      }
+    },
+    "Choose YouTube separately for soft mode. It shares the group's pauses and detection rests." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose YouTube separately for soft mode. It shares the group's pauses and detection rests."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для мягкого режима выберите YouTube отдельно. Паузы и отдых после обнаружения контента общие для всего списка."
+          }
+        }
+      }
+    },
+    "Stop recording before changing the app list." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop recording before changing the app list."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановите запись перед изменением списка приложений."
+          }
+        }
+      }
+    },
+    "Select individual apps, not categories or websites." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select individual apps, not categories or websites."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбирайте отдельные приложения, а не категории или сайты."
+          }
+        }
+      }
+    },
+    "Stop recording and disable strict mode before changing this setting." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop recording and disable strict mode before changing this setting."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чтобы изменить эту настройку, остановите запись и дождитесь окончания строгого режима."
+          }
+        }
+      }
+    },
+    "Return using the app switcher." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return using the app switcher."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вернитесь в приложение через переключатель приложений."
+          }
+        }
+      }
+    },
+    "Choose %@" : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите %@"
+          }
+        }
+      }
+    },
+    "Tap Search below, enter %@, and select the app." : {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap Search below, enter %@, and select the app."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите «Поиск» внизу, введите %@ и выберите приложение."
+          }
+        }
+      }
+    },
     "%lld min" : {
       "extractionState" : "manual",
       "localizations" : {

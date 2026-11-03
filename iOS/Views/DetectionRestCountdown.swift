@@ -7,14 +7,22 @@ struct DetectionRestCountdown: View {
     let remaining: TimeInterval
     var compact = false
     private var appName: String {
-        target == "youtube" ? "YouTube" : target == "x" ? "X" : target.capitalized
+        PauseTargetDisplay.name(for: target)
     }
 
+    @ViewBuilder
     private var serviceIcon: some View {
+        if target == "apps" {
+            Image(systemName: "square.stack.3d.up.fill")
+                .font(compact ? .title2 : .largeTitle)
+                .foregroundStyle(SlowthAppearance.sage)
+                .accessibilityHidden(true)
+        } else {
         Image("Service-" + target)
             .resizable().scaledToFit().frame(width: compact ? 28 : 40, height: compact ? 28 : 40)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .accessibilityHidden(true)
+        }
     }
 
     private var lockIcon: some View {

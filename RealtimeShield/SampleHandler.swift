@@ -27,6 +27,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
     private var classifierError: String?
     private var lastDiagnosticsWrite = Date.distantPast
     private var lastTelemetryLog = Date.distantPast
+    private var recordingGroupRules = GroupedContentRules()
+    private var lastDisabledGroupWrite = -Double.infinity
+    private var groupDetectedKinds = Set<GroupedContentRules.Kind>()
+    private var groupShieldLatched = false
+    private var lastGroupGrantID: String?
     private var youtubeShieldLatched = false
     private var instagramShieldLatched = false
     private var facebookShieldLatched = false
@@ -89,6 +94,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
             return
         }
         resetSessionState()
+        recordingGroupRules = GroupedApps.contentRules
         // Freeze the choice before a delayed load or a retry after pause/failure.
         #if DEBUG
         recordingBackend = DebugModelSettings.resolve(
@@ -99,7 +105,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         recordingBackend = ModelSettings.defaultBackend
         #endif
         let sharedState = SharedStore.snapshot()
-        if sharedState.realtimeShieldEnabled {
+        if sharedState.realtimeShieldEnabled && (!GroupedApps.isEnabled || recordingGroupRules.hasEnabledContent) {
             loadClassifier()
         } else {
             classifierStatus = "disabled"
@@ -152,12 +158,13 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 userInfo: [NSLocalizedDescriptionKey: String(localized: "Could not start recording. Please try again.", table: "ApplicationNavigation", bundle: ShieldLocalization.bundle(in: .main))]))
             return
         }
+        recordingGroupRules = GroupedApps.contentRules
         resetStreaks()
         resetLatchesForActiveBroadcast()
         lastInferenceTimestamp = nil
         timestampClock = CascadeTimestampClock()
         let sharedState = SharedStore.snapshot()
-        if sharedState.realtimeShieldEnabled && classifier == nil {
+        if sharedState.realtimeShieldEnabled && classifier == nil && (!GroupedApps.isEnabled || recordingGroupRules.hasEnabledContent) {
             loadClassifier()
         }
         publishDiagnostics(force: true)
@@ -209,15 +216,36 @@ final class SampleHandler: RPBroadcastSampleHandler {
             captureSessionFrame(sampleBuffer, predictions: framePredictions)
         }
         #endif
-        let sharedState = SharedStore.snapshot()
+        var sharedState = SharedStore.snapshot()
+        if GroupedApps.isEnabled {
+            sharedState.realtimeYouTubeBlockingEnabled = recordingGroupRules.shortVideos
+            sharedState.realtimeInstagramReelsBlockingEnabled = recordingGroupRules.shortVideos
+            sharedState.realtimeInstagramStoriesBlockingEnabled = recordingGroupRules.stories
+            sharedState.realtimeFacebookReelsBlockingEnabled = recordingGroupRules.shortVideos && recordingBackend.supportsFacebook
+            sharedState.realtimeFacebookStoriesBlockingEnabled = recordingGroupRules.stories && recordingBackend.supportsFacebook
+            sharedState.realtimeXReelsBlockingEnabled = recordingGroupRules.shortVideos && recordingBackend.supportsX
+        }
         guard sharedState.broadcastActive, sharedState.realtimeShieldEnabled else { return }
 
-        if classifier == nil && classifierStatus == "disabled" {
+        if classifier == nil && classifierStatus == "disabled" && (!GroupedApps.isEnabled || recordingGroupRules.hasEnabledContent) {
             loadClassifier()
         }
         receivedVideoFrames += 1
         let now = Date()
         consumeUnlockRequests(at: now)
+
+        if GroupedApps.isEnabled && !recordingGroupRules.hasEnabledContent {
+            // No model is needed. Coordinator still enforces unfinished rests,
+            // ordinary pauses and recording-stop protection.
+            let uptime = ProcessInfo.processInfo.systemUptime
+            if uptime - lastDisabledGroupWrite >= 0.25 {
+                lastDisabledGroupWrite = uptime
+                ManagedSettingsApplier.clear(surface: .apps)
+            }
+            classifierStatus = "disabled"
+            publishDiagnostics(force: false)
+            return
+        }
 
         guard let classifier else {
             failCloseEnabledSurfaces(sharedState)
@@ -293,7 +321,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 + prediction.xContentProbabilities.map { ("x.\($0.key.rawValue)", $0.value) })
 
             #endif
-            let youtubeVerdict = !ignoresDetection("youtube") && prediction.probability(for: .youtubeShorts) >= youtubeThreshold
+            let youtubeVerdict = !ignoresDetection("youtube") && sharedState.realtimeYouTubeBlockingEnabled && prediction.probability(for: .youtubeShorts) >= youtubeThreshold
             let instagramReelsVerdict = !ignoresDetection("instagram") && sharedState.realtimeInstagramReelsBlockingEnabled
                 && prediction.probability(for: .instagramReels) >= instagramReelsThreshold
             let instagramStoriesVerdict = !ignoresDetection("instagram") && sharedState.realtimeInstagramStoriesBlockingEnabled
@@ -328,6 +356,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 requiredHits: classifier.metadata.requiredConsecutiveHits,
                 observationWindowFrames: classifier.metadata.effectiveObservationWindowFrames
             )
+            if GroupedApps.isEnabled {
+                enforceGroup(requiredHits: classifier.metadata.requiredConsecutiveHits, state: sharedState, now: now)
+            } else {
             enforceYouTube(
                 requiredHits: classifier.metadata.requiredConsecutiveHits,
                 sharedState: sharedState,
@@ -348,6 +379,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 now: now
             )
             enforceX(verdict: xReelsVerdict, requiredHits: classifier.metadata.requiredConsecutiveHits, sharedState: sharedState, now: now)
+            }
             classifierStatus = "ready"
             classifierError = nil
         } catch {
@@ -415,6 +447,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     private func resetLatchesForActiveBroadcast() {
+        groupShieldLatched = false
+        groupDetectedKinds.removeAll()
+        lastDisabledGroupWrite = -Double.infinity
+        lastGroupGrantID = nil
         detectionRestGrants = [:]
         lastRestGrantRead = -Double.infinity
         youtubeShieldLatched = false
@@ -432,6 +468,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     private func publishClassifierAvailability(_ state: SharedState) throws {
+        if GroupedApps.isEnabled && !recordingGroupRules.hasEnabledContent {
+            try IOSPauseCoordinator.setInferenceFailure(false, state: state)
+            return
+        }
         try IOSPauseCoordinator.setInferenceFailure(classifier == nil, state: state)
         if metadata?.threshold(for: .youtubeShorts) == nil {
             try IOSPauseCoordinator.setInferenceFailure(true, state: state, target: "youtube")
@@ -448,6 +488,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     private func prepareEnabledSurfacesForActiveBroadcast(_ sharedState: SharedState) {
+        if GroupedApps.isEnabled {
+            ManagedSettingsApplier.apply(surface: .apps, selection: recordingGroupRules.hasEnabledContent && classifier == nil ? GroupedApps.selection : nil)
+            return
+        }
         for surface in [ManagedSettingsApplier.Surface.youtube, .instagram, .facebook, .x] {
             let supported = (surface != .facebook || metadata?.threshold(for: .facebookReels) != nil)
                 && (surface != .x || metadata?.threshold(for: .xReels) != nil)
@@ -626,6 +670,43 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     #endif
+    private func enforceGroup(requiredHits: Int, state: SharedState, now: Date) {
+        if ignoresDetection("apps") {
+            groupShieldLatched = false
+            groupDetectedKinds.removeAll()
+            resetStreaks()
+        } else {
+            let kinds = recordingGroupRules.detectedKinds(
+                shortVideoHits: [observations.youtubeShortsStreak, observations.instagramReelsStreak,
+                                 observations.facebookReelsStreak, observations.xReelsStreak],
+                storyHits: [observations.instagramStoriesStreak, observations.facebookStoriesStreak],
+                requiredHits: requiredHits).subtracting(groupDetectedKinds)
+            if !kinds.isEmpty {
+                do {
+                    let result = try IOSPauseCoordinator.requestRest(target: "apps",
+                        expectedSelection: IOSPauseCoordinator.selection("apps", state: state),
+                        expectedRevision: recorderBindings.revision, contentKinds: kinds)
+                    switch result {
+                    case .accepted:
+                        groupShieldLatched = true
+                        groupDetectedKinds.formUnion(kinds)
+                        RTLog.sampleHandler.notice("Content detected — shielding apps without an exception")
+                    case .noBlockedApplications:
+                        groupDetectedKinds.formUnion(kinds)
+                    case .suppressedByPause:
+                        groupShieldLatched = false
+                        groupDetectedKinds.removeAll()
+                        resetStreaks()
+                    }
+                } catch {
+                    ManagedSettingsApplier.apply(surface: .apps, selection: GroupedApps.selection)
+                    return
+                }
+            }
+        }
+        ManagedSettingsApplier.apply(surface: .apps, selection: groupShieldLatched ? GroupedApps.selection : nil)
+    }
+
     private func registerDetection(_ target: String, state: SharedState) -> Bool {
         do {
             return try IOSPauseCoordinator.requestRest(target: target,
@@ -866,6 +947,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     private func failCloseEnabledSurfaces(_ sharedState: SharedState) {
         try? IOSPauseCoordinator.setInferenceFailure(true, state: sharedState)
+        if GroupedApps.isEnabled {
+            groupShieldLatched = true
+            ManagedSettingsApplier.apply(surface: .apps, selection: GroupedApps.selection)
+            return
+        }
         if sharedState.realtimeYouTubeBlockingEnabled {
             youtubeShieldLatched = true
             applyShield(surface: .youtube)
@@ -922,7 +1008,8 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     deinit { restWatchdog?.cancel() }
 
-    private func ignoresDetection(_ target: String) -> Bool {
+    private func ignoresDetection(_ requestedTarget: String) -> Bool {
+        let target = GroupedApps.isEnabled ? "apps" : requestedTarget
         let context = BlockingContext(activePause: recorderBindings.pausedTarget == target,
             graceActive: detectionRestGrants[target].map { $0.graceRemaining(IOSPauseCoordinator.restClock()) > 0 } ?? false)
         return BlockingRules.decide(context, .observation).resetObservations
@@ -941,6 +1028,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
             let changed = recorderBindings.update(selections, pausedTarget: policy?.pausedTarget, revision: policy?.revision ?? -1)
             if !changed.isEmpty {
                 resetStreaks()
+                if changed.contains("apps") { groupShieldLatched = false; groupDetectedKinds.removeAll() }
                 if changed.contains("youtube") { youtubeShieldLatched = false }
                 if changed.contains("instagram") { instagramShieldLatched = false }
                 if changed.contains("facebook") { facebookShieldLatched = false }
@@ -948,6 +1036,16 @@ final class SampleHandler: RPBroadcastSampleHandler {
             }
             detectionRestGrants = IOSPauseCoordinator.restGrants()
             lastRestGrantRead = continuous
+        }
+        if GroupedApps.isEnabled {
+            if let grant = detectionRestGrants["apps"], lastGroupGrantID != grant.id {
+                lastGroupGrantID = grant.id
+                groupShieldLatched = false
+                groupDetectedKinds.removeAll()
+                resetStreaks()
+                ManagedSettingsApplier.clear(surface: .apps)
+            }
+            return
         }
         if let grant = detectionRestGrants["youtube"],
            lastHandledYouTubeUnlockAt != grant.id {
@@ -1119,6 +1217,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     private func reshieldEnabledSurfaces() {
         let sharedState = SharedStore.snapshot()
+        if GroupedApps.isEnabled {
+            ManagedSettingsApplier.apply(surface: .apps, selection: sharedState.realtimeShieldEnabled ? GroupedApps.selection : nil)
+            return
+        }
         if sharedState.realtimeShieldEnabled
             && sharedState.realtimeYouTubeBlockingEnabled
             && !sharedState.youtubeShieldRestoreDeferred {
@@ -1144,6 +1246,10 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     private func applyShield(surface: ManagedSettingsApplier.Surface) {
+        if GroupedApps.isEnabled && surface == .apps {
+            ManagedSettingsApplier.apply(surface: .apps, selection: GroupedApps.selection)
+            return
+        }
         #if canImport(FamilyControls)
         let sharedState = SharedStore.snapshot()
         guard sharedState.realtimeShieldEnabled else {

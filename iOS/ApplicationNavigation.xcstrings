@@ -1,6 +1,395 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "Return to app": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة إلى التطبيق"
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة إلى التطبيق"
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вярнуцца ў праграму"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "অ্যাপে ফিরে যান"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna a l’app"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zpět do aplikace"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tilbage til appen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zur App"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επιστροφή στην εφαρμογή"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to app"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to app"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to app"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to app"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a la app"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a la app"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palaa appiin"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bumalik sa app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenir à l’app"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenir à l’app"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ઍપમાં પાછા જાઓ"
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koma zuwa manhajar"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "חזרה לאפליקציה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ऐप पर वापस जाएँ"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Povratak u aplikaciju"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vissza az appba"
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Վերադառնալ հավելված"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali ke app"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna all’app"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリに戻る"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "აპში დაბრუნება"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Қолданбаға оралу"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಆ್ಯಪ್‌ಗೆ ಹಿಂತಿರುಗಿ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱으로 돌아가기"
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Колдонмого кайтуу"
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grįžti į programėlę"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ആപ്പിലേക്ക് മടങ്ങുക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ॲपवर परत जा"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali ke app"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tilbake til appen"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एपमा फर्कनुहोस्"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terug naar app"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପ୍‌କୁ ଫେରନ୍ତୁ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਐਪ ਵਿੱਚ ਵਾਪਸ ਜਾਓ"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ایپ وچ واپس جاؤ"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go back to di app"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wróć do aplikacji"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar ao app"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar à app"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Înapoi la aplicație"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вернуться в приложение"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Späť do aplikácie"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nazaj v aplikacijo"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tillbaka till appen"
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rudi kwenye programu"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "செயலிக்குத் திரும்பு"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "యాప్‌కు తిరిగి వెళ్లండి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กลับไปที่แอป"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulamaya dön"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повернутися в застосунок"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ایپ پر واپس جائیں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quay lại ứng dụng"
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "返回 App"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "返回 App"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "返回 App"
+          }
+        }
+      }
+    },
     "Could not open the app. Open it manually.": {
       "extractionState": "manual",
       "localizations": {
@@ -386,784 +775,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "無法開啟 App。請手動開啟。"
-          }
-        }
-      }
-    },
-    "Return to the original app after starting recording or a pause.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "العودة إلى التطبيق الأصلي بعد بدء التسجيل أو الاستراحة."
-          }
-        },
-        "ar-EG": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "العودة إلى التطبيق الأصلي بعد بدء التسجيل أو الاستراحة."
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вяртацца ў зыходную праграму пасля запуску запісу або паўзы."
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "রেকর্ডিং বা বিরতি শুরু করার পর আগের অ্যাপে ফিরে যান।"
-          }
-        },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Torna a l’app original després d’iniciar la gravació o una pausa."
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Po spuštění nahrávání nebo pauzy se vrátit do původní aplikace."
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vend tilbage til den oprindelige app, når optagelse eller en pause starter."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach dem Start einer Aufnahme oder Pause zur ursprünglichen App zurückkehren."
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Επιστροφή στην αρχική εφαρμογή μετά την έναρξη εγγραφής ή διαλείμματος."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Return to the original app after starting recording or a pause."
-          }
-        },
-        "en-AU": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Return to the original app after starting recording or a pause."
-          }
-        },
-        "en-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Return to the original app after starting recording or a pause."
-          }
-        },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Return to the original app after starting recording or a pause."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volver a la app original al iniciar la grabación o una pausa."
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volver a la app original al iniciar la grabación o una pausa."
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Palaa alkuperäiseen appiin tallennuksen tai tauon alkaessa."
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bumalik sa dating app pagkatapos simulan ang pag-record o pahinga."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Revenir à l’app d’origine après le démarrage de l’enregistrement ou d’une pause."
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Revenir à l’app d’origine après le démarrage de l’enregistrement ou d’une pause."
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "રેકોર્ડિંગ અથવા વિરામ શરૂ કર્યા પછી મૂળ ઍપમાં પાછા ફરો."
-          }
-        },
-        "ha": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Koma manhajar da ka fito bayan fara rikodi ko hutu."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "חזרה ליישום המקורי לאחר תחילת ההקלטה או ההפסקה."
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "रिकॉर्डिंग या विराम शुरू करने के बाद मूल ऐप में वापस जाएँ।"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vratite se u izvornu aplikaciju nakon pokretanja snimanja ili pauze."
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Visszatérés az eredeti appba a felvétel vagy egy szünet indítása után."
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Տեսագրումը կամ դադարը սկսելուց հետո վերադառնալ սկզբնական հավելված։"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kembali ke app sebelumnya setelah memulai perekaman atau jeda."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Torna all’app di origine dopo aver avviato la registrazione o una pausa."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "録画または休憩を開始した後、元のアプリに戻ります。"
-          }
-        },
-        "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ჩაწერის ან შესვენების დაწყების შემდეგ საწყის აპში დაბრუნება."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жазуды немесе үзілісті бастағаннан кейін бастапқы қолданбаға қайту."
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ರೆಕಾರ್ಡಿಂಗ್ ಅಥವಾ ವಿರಾಮವನ್ನು ಪ್ರಾರಂಭಿಸಿದ ನಂತರ ಮೂಲ ಆ್ಯಪ್‌ಗೆ ಹಿಂತಿರುಗಿ."
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "녹화 또는 휴식을 시작한 후 원래 앱으로 돌아갑니다."
-          }
-        },
-        "ky": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жаздыруу же тыныгуу башталгандан кийин баштапкы колдонмого кайтуу."
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pradėjus įrašymą arba pertrauką grįžti į ankstesnę programėlę."
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "റെക്കോർഡിങ്ങോ ഇടവേളയോ ആരംഭിച്ച ശേഷം ആദ്യത്തെ ആപ്പിലേക്ക് മടങ്ങുക."
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "रेकॉर्डिंग किंवा विराम सुरू केल्यानंतर मूळ ॲपमध्ये परत जा."
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kembali ke app asal selepas memulakan rakaman atau rehat."
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gå tilbake til den opprinnelige appen etter at opptak eller en pause starter."
-          }
-        },
-        "ne": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "रेकर्डिङ वा विश्राम सुरु गरेपछि पहिलेको एपमा फर्कनुहोस्।"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ga terug naar de oorspronkelijke app nadat een opname of pauze is gestart."
-          }
-        },
-        "or": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ରେକର୍ଡିଂ କିମ୍ବା ବିରତି ଆରମ୍ଭ କରିବା ପରେ ପୂର୍ବ ଆପ୍‌କୁ ଫେରନ୍ତୁ।"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਰਿਕਾਰਡਿੰਗ ਜਾਂ ਵਿਰਾਮ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਬਾਅਦ ਪਹਿਲੀ ਐਪ ਵਿੱਚ ਵਾਪਸ ਜਾਓ।"
-          }
-        },
-        "pa-Arab": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ریکارڈنگ یا وقفہ شروع کرن توں بعد پہلی ایپ وچ واپس جاؤ۔"
-          }
-        },
-        "pcm": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Go back to the app wey you come from after recording or break start."
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wróć do poprzedniej aplikacji po rozpoczęciu nagrywania lub przerwy."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voltar ao app original após iniciar a gravação ou uma pausa."
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Regressar à aplicação original após iniciar a gravação ou uma pausa."
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Revino la aplicația inițială după pornirea înregistrării sau a unei pauze."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Возвращаться в исходное приложение после запуска записи или паузы."
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Po spustení nahrávania alebo prestávky sa vrátiť do pôvodnej apky."
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Po začetku snemanja ali odmora se vrni v prvotno aplikacijo."
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Återgå till den ursprungliga appen när inspelning eller en paus startar."
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rudi kwenye programu ya awali baada ya kuanza kurekodi au kupumzika."
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "பதிவு அல்லது இடைவேளையைத் தொடங்கிய பிறகு முந்தைய செயலிக்குத் திரும்பவும்."
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "రికార్డింగ్ లేదా విరామం ప్రారంభించిన తర్వాత మునుపటి యాప్‌కు తిరిగివెళ్ళండి."
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "กลับไปยังแอปเดิมหลังเริ่มบันทึกหรือเริ่มพัก"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kayıt veya mola başladıktan sonra önceki uygulamaya dön."
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Повертатися до початкової програми після запуску запису або паузи."
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ریکارڈنگ یا وقفہ شروع کرنے کے بعد اصل ایپ میں واپس جائیں۔"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quay lại ứng dụng ban đầu sau khi bắt đầu ghi hoặc nghỉ."
-          }
-        },
-        "yue": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開始錄影或休息後，返回原本嘅 App。"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开始录屏或休息后，返回原来的 App。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開始錄製螢幕或休息後，返回原本的 App。"
-          }
-        }
-      }
-    },
-    "Auto-return": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "العودة التلقائية"
-          }
-        },
-        "ar-EG": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "العودة التلقائية"
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Аўтавяртанне"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "স্বয়ংক্রিয় ফেরা"
-          }
-        },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retorn automàtic"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatický návrat"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisk retur"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch zurück"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Αυτόματη επιστροφή"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto-return"
-          }
-        },
-        "en-AU": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto-return"
-          }
-        },
-        "en-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto-return"
-          }
-        },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto-return"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Regreso automático"
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Regreso automático"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automaattinen paluu"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Awtomatikong pagbabalik"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retour automatique"
-          }
-        },
-        "fr-CA": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retour automatique"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "આપમેળે પાછા ફરો"
-          }
-        },
-        "ha": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komawa ta atomatik"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "חזרה אוטומטית"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "अपने-आप वापस जाएँ"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatski povratak"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatikus visszatérés"
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ինքնաշխատ վերադարձ"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kembali otomatis"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritorno automatico"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自動で戻る"
-          }
-        },
-        "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ავტომატური დაბრუნება"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автоматты қайту"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ಸ್ವಯಂಚಾಲಿತ ಹಿಂತಿರುಗುವಿಕೆ"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자동 복귀"
-          }
-        },
-        "ky": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автоматтык кайтуу"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatinis grįžimas"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "താനേ മടങ്ങുക"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "आपोआप परत जा"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kembali automatik"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisk retur"
-          }
-        },
-        "ne": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "स्वतः फर्कनुहोस्"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch terug"
-          }
-        },
-        "or": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ସ୍ୱୟଂଚାଳିତ ଫେରନ୍ତୁ"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਆਪਣੇ ਆਪ ਵਾਪਸੀ"
-          }
-        },
-        "pa-Arab": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "آپے واپسی"
-          }
-        },
-        "pcm": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Go back by itself"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatyczny powrót"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retorno automático"
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Regresso automático"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Revenire automată"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автовозврат"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatický návrat"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Samodejna vrnitev"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisk återgång"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kurudi kiotomatiki"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "தானாகத் திரும்பு"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "స్వయంచాలకంగా తిరిగివెళ్ళు"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "กลับอัตโนมัติ"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otomatik dönüş"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автоповернення"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "خودکار واپسی"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tự động quay lại"
-          }
-        },
-        "yue": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自動返回"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自动返回"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自動返回"
           }
         }
       }

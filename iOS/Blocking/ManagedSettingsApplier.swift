@@ -10,6 +10,7 @@ import ManagedSettings
 // opaque, so each app has its own picker and shield.
 enum ManagedSettingsApplier {
     enum Surface: String, CaseIterable {
+        case apps
         case youtube
         case instagram
         case facebook
@@ -21,6 +22,11 @@ enum ManagedSettingsApplier {
 
     static func apply(surface: Surface, selection requestedSelection: FamilyActivitySelection?) {
         #if canImport(ManagedSettings) && canImport(FamilyControls)
+        if GroupedApps.isEnabled {
+            guard surface == .apps || surface == .youtube else { return }
+            _ = IOSPauseCoordinator.intercept(target: surface.rawValue, requested: requestedSelection)
+            return
+        }
         // A recorder's clear request must never unlock a pause-only service.
         // Only the coordinator may temporarily remove its shield during a lease.
         let selection = PauseOnlyApps.contains(surface.rawValue)

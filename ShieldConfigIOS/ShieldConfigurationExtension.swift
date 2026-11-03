@@ -22,6 +22,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     }
 
     private func configuration(for application: Application) -> ShieldConfiguration {
+        if GroupedApps.isEnabled { GroupedApps.rememberReturn(token: application.token, name: application.localizedDisplayName) }
         guard let target = Self.protectionTarget(application) else { return Self.unidentifiedConfiguration }
         if PauseOnlyApps.contains(target) { return Self.pauseOnlyConfiguration }
         if IOSPauseCoordinator.inferenceUnavailable(target) { return Self.unavailableConfiguration(target: target) }
@@ -38,6 +39,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     }
 
     private static func protectionTarget(_ application: Application) -> String? {
+        if GroupedApps.isEnabled { return "apps" }
         PauseOnlyApps.refreshSelections()
         guard let token = application.token else {
             PauseOnlyApps.recordRouting("configuration-no-token", appName: application.localizedDisplayName)

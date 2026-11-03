@@ -6,6 +6,17 @@
 
   ns.SITES = ["youtube", "instagram", "tiktok", "facebook", "x"];
 
+  ns.siteForURL = function (value) {
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+      const domains = { youtube: ["youtube.com"], instagram: ["instagram.com"],
+        tiktok: ["tiktok.com"], facebook: ["facebook.com"], x: ["x.com", "twitter.com"] };
+      return ns.SITES.find(site => domains[site].some(domain =>
+        url.hostname === domain || url.hostname.endsWith("." + domain))) || null;
+    } catch (_) { return null; }
+  };
+
   // Wire keys and migration mirror Shared/SharedStore.swift.
   ns.SITE_FEATURES = {
     youtube: ["shorts", "feed", "all"],

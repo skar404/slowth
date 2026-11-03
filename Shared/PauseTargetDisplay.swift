@@ -4,6 +4,7 @@ import Foundation
 enum PauseTargetDisplay {
     static func name(for target: String) -> String {
         switch target {
+        case "apps": return String(localized: "Selected apps", table: "Interface")
         case "youtube": return "YouTube"
         case "instagram": return "Instagram"
         case "facebook": return "Facebook"

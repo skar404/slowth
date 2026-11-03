@@ -69,6 +69,10 @@ struct IOSDetectionRest: Codable, Identifiable {
     var completed: Bool?
     var graceSeconds: TimeInterval?
     var durationSeconds: TimeInterval?
+    // Full selection remains the binding; this is the durable per-event shield subset.
+    // Nil preserves whole-group behavior for pre-exception records.
+    var blockedSelection: Data?
+    var contentKinds: Set<GroupedContentRules.Kind>?
     var effectiveDuration: TimeInterval { durationSeconds ?? Self.duration }
 
     static func recordingGrace(target: String, selection: Data?, now: IOSPauseClock, revision: Int) -> Self {
@@ -133,7 +137,7 @@ struct IOSRecorderBindings {
     }
 }
 
-enum IOSDetectionDisposition { case accepted, suppressedByPause }
+enum IOSDetectionDisposition { case accepted, suppressedByPause, noBlockedApplications }
 
 struct IOSPauseLedger: Codable {
     // Optional for old ledgers. Failures are bound to the exact app selection;

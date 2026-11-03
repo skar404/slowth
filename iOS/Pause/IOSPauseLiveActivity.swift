@@ -37,8 +37,10 @@ actor IOSPauseLiveActivity {
     /// An extension may lose execution time or be unable to enumerate the host activity;
     /// the host repeats this reconciliation on foreground. staleDate makes that gap visible.
     func synchronize() async {
+        let activities = Activity<PauseActivityAttributes>.activities
+        guard !activities.isEmpty else { return }
         guard let ledger = try? IOSPauseCoordinator.presentationSnapshot() else { return }
-        for activity in Activity<PauseActivityAttributes>.activities {
+        for activity in activities {
             if let lease = ledger.lease, lease.id == activity.attributes.pauseID {
                 var content = Self.content(lease)
                 if activity.content.state.target == lease.target,

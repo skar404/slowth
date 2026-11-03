@@ -14,8 +14,9 @@ final class ShieldActionExtension: ShieldActionDelegate {
             completionHandler(.close)
             return
         }
+        if GroupedApps.isEnabled { GroupedApps.prepareReturn(token: application) }
         if #available(iOS 26.5, *) {
-            SharedStore.requestRealtimeRecordingPrompt(at: now, target: surface(containing: application)?.rawValue, returnToApplication: true)
+            SharedStore.requestRealtimeRecordingPrompt(at: now, target: surface(containing: application)?.rawValue, navigationToken: try? JSONEncoder().encode(application))
             completionHandler(.openParentalControlsApp)
         } else {
             let target = surface(containing: application)?.rawValue
@@ -24,7 +25,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
             let hasRest = target.map { (try? IOSPauseCoordinator.hasRestForNotification(target: $0)) ?? false } ?? false
             let message = ShieldNotification.message(known: target != nil, unavailable: unavailable,
                 pauseOnly: pauseOnly, recording: SharedStore.snapshot().broadcastActive, hasRest: hasRest)
-            ShieldNotification.send(target: target, message: message) { error in
+            ShieldNotification.send(target: target, message: message, navigationToken: try? JSONEncoder().encode(application)) { error in
                 if let error { RTLog.shieldAction.error("Notification failed: \(error.localizedDescription, privacy: .public)") }
                 completionHandler(.defer)
             }
@@ -149,6 +150,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
     }
 
     private func surface(containing token: ApplicationToken) -> ManagedSettingsApplier.Surface? {
+        if GroupedApps.isEnabled { return .apps }
         PauseOnlyApps.refreshSelections()
         if let target = PauseOnlyApps.target(containing: token) ?? PauseOnlyApps.systemTarget(containing: token) {
             PauseOnlyApps.recordRouting("action", token: token, target: target)

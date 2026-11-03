@@ -233,9 +233,34 @@ dialog::backdrop { background: #0008; }
   overflow: hidden;
 }
 .site-settings + .site-settings { margin-top: 12px; }
-.site-heading { background: color-mix(in srgb, var(--tint) 8%, var(--card)); }
+summary.site-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 15px;
+}
+summary.site-heading::-webkit-details-marker { display: none; }
+summary.site-heading::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-inline-start: auto;
+  margin-inline-end: 3px;
+  border-inline-end: 1.5px solid var(--secondary);
+  border-bottom: 1.5px solid var(--secondary);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.site-settings[open] > summary.site-heading::after { transform: rotate(225deg); }
+summary.site-heading:focus-visible { outline: 2px solid var(--tint); outline-offset: -3px; }
+summary.site-heading:hover { background: color-mix(in srgb, var(--card) 94%, var(--label)); }
+.site-icon { display: block; flex: 0 0 32px; border-radius: 8px; }
+.site-settings[open] > .site-heading { border-bottom: 0.5px solid var(--separator); }
 .site-heading strong { font-weight: 600; }
-.site-action { color: var(--secondary); }
 .site-content { padding-inline-start: 24px; }
 .site-settings .row { flex-wrap: nowrap; }
 .site-settings .row > span { min-width: 0; overflow-wrap: anywhere; }

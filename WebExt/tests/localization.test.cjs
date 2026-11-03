@@ -122,7 +122,7 @@ test('all content scripts load i18n before site-specific code', () => {
   }
 });
 
-function popupHarness(language, namespace) {
+function popupHarness(language, namespace, tabURL, tabError = false) {
   const { context } = harness(language);
   class Element {
     constructor(tag = 'div') {
@@ -138,6 +138,10 @@ function popupHarness(language, namespace) {
       };
     }
     appendChild(el) { this.children.push(el); }
+    prepend(el) {
+      this.children = this.children.filter(child => child !== el);
+      this.children.unshift(el);
+    }
     addEventListener(name, callback) { this.listeners[name] = callback; }
     setAttribute(name, value) { this[name] = value; }
     querySelectorAll(tag) {
@@ -156,7 +160,23 @@ function popupHarness(language, namespace) {
   const state = { strictModeUntil: 0, onboardingDone: false, rulesFetchedAt: Date.now() / 1000 - 120, toggles: { youtube: 'shorts' } };
   const calls = [];
   const api = context.browser;
+  context.URL = URL;
+  api.tabs = { query(query, callback) {
+    assert.equal(query.active, true);
+    assert.equal(query.currentWindow, true);
+    if (tabError) {
+      if (!callback) return Promise.reject(new Error("No tab access"));
+      api.runtime.lastError = { message: "No tab access" };
+      callback();
+      delete api.runtime.lastError;
+      return;
+    }
+    const tabs = tabURL ? [{ url: tabURL }] : [];
+    if (callback) callback(tabs);
+    else return Promise.resolve(tabs);
+  } };
   api.runtime = {
+    getURL: name => `safari-web-extension://test/${name}`,
     id: 'safari-localization-test',
     sendMessage(message, callback) {
       calls.push(message);
@@ -309,3 +329,47 @@ test('whole-site blocking disables content controls without changing their check
   await context.refreshPopup();
   assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[false, false], [false, false], [true, false]]);
 });
+
+for (const namespace of ['browser', 'chrome']) {
+  for (const [url, expected] of [
+    ['https://www.youtube.com/watch?v=123', 'youtube'],
+    ['https://m.youtube.com/', 'youtube'],
+    ['https://www.instagram.com/reels/', 'instagram'],
+    ['https://twitter.com/home', 'x'],
+    ['https://www.facebook.com/', 'facebook'],
+    ['https://www.tiktok.com/', 'tiktok'],
+    ['safari-web-extension://test/blocked.html?host=instagram', 'instagram'],
+    ['safari-web-extension://other/blocked.html?host=instagram', null],
+    ['https://youtube.com.evil.example/', null],
+    ['https://notyoutube.com/', null],
+    ['https://example.com/blocked.html?host=youtube', null],
+    ['file:///youtube.com', null],
+    [undefined, null]
+  ]) test(`${namespace}: popup expands only the active site: ${url}`, async () => {
+    const { context, elements } = popupHarness('en', namespace, url);
+    await context.refreshPopup();
+    const sections = elements.get('sites').children;
+    assert.deepEqual(sections.filter(el => el.open).map(el => el['aria-label']),
+      expected ? [context.Unscroll.SITE_LABELS[expected]] : []);
+    const originalOrder = Array.from(context.Unscroll.SITES);
+    const expectedOrder = expected
+      ? [expected, ...originalOrder.filter(site => site !== expected)] : originalOrder;
+    assert.deepEqual(sections.map(el => el['aria-label']),
+      expectedOrder.map(site => context.Unscroll.SITE_LABELS[site]));
+    assert.equal(sections.length, 5);
+    assert.ok(sections.every(el => el.tagName === 'details'));
+    assert.ok(sections.every(el => fs.existsSync(path.join(root, el.children[0].children[0].src))));
+  });
+  test(`${namespace}: failed tab access still loads controls`, async () => {
+    const { context, elements } = popupHarness('en', namespace, undefined, true);
+    await context.refreshPopup();
+    assert.ok(elements.get('sites').querySelectorAll('input').every(el => !el.disabled));
+    assert.ok(elements.get('sites').children.every(el => !el.open));
+  });
+  test(`${namespace}: automatic expansion respects manual interaction`, async () => {
+    const { context, elements } = popupHarness('en', namespace, 'https://youtube.com/');
+    elements.get('sites').children[1].children[0].listeners.click();
+    await context.refreshPopup();
+    assert.ok(elements.get('sites').children.every(el => !el.open));
+  });
+}
