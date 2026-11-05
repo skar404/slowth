@@ -43,7 +43,14 @@ struct BlockingDecision {
 }
 
 enum BlockingRules {
-    static let restSeconds: Double = 60
+    // ShieldSettings.applications accepts at most 50 application tokens.
+    static let maximumSelectedApplications = 50
+
+    static func supportsApplicationCount(_ count: Int) -> Bool {
+        (0...maximumSelectedApplications).contains(count)
+    }
+
+    static let restSeconds: Double = 15
     static let navigationGraceSeconds: Double = 3
     static let softUsageSeconds = 1
 
@@ -164,4 +171,45 @@ struct GroupedContentException<Token: Hashable & Codable>: Codable, Equatable {
     var allowShortVideos = false
     var allowStories = false
     var isException: Bool { allowShortVideos || allowStories }
+}
+
+/// Stored per opaque app token. Missing entries use safe defaults for new apps.
+struct AppBlockingSettings<Token: Hashable & Codable>: Codable, Equatable {
+    var token: Token
+    var shortVideos = true
+    var stories = true
+    var soft = false
+    func weakens(_ old: Self) -> Bool {
+        (old.shortVideos && !shortVideos) || (old.stories && !stories) || (!old.soft && soft)
+    }
+}
+
+struct AppBlockingConfiguration<Token: Hashable & Codable>: Codable {
+    var version = 2
+    var apps: [AppBlockingSettings<Token>] = []
+    func settings(for token: Token) -> AppBlockingSettings<Token> {
+        apps.first { $0.token == token } ?? .init(token: token)
+    }
+    mutating func set(_ settings: AppBlockingSettings<Token>) {
+        apps.removeAll { $0.token == settings.token }
+        apps.append(settings)
+    }
+    static func migrate(tokens: Set<Token>, rules: GroupedContentRules,
+                        exceptions: [GroupedContentException<Token>], softTokens: Set<Token>) -> Self {
+        Self(apps: tokens.map { token in
+            let exception = exceptions.first { $0.token == token }
+            return .init(token: token, shortVideos: rules.shortVideos && exception?.allowShortVideos != true,
+                         stories: rules.stories && exception?.allowStories != true, soft: softTokens.contains(token))
+        })
+    }
+}
+
+/// One generation with independent, one-shot events; consuming one app leaves others armed.
+struct GroupedSoftSession<Token: Hashable & Codable>: Codable {
+    var generation: String
+    var events: [String: Token]
+    mutating func consume(_ event: String, generation: String) -> Token? {
+        guard self.generation == generation else { return nil }
+        return events.removeValue(forKey: event)
+    }
 }

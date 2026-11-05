@@ -87,6 +87,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         guard admitRecording() else { return }
         RTLog.sampleHandler.notice("broadcastStarted — loading selected surface classifier")
         SoftYouTubeActivityMonitoring.stop()
+        GroupedSoftActivityMonitoring.stop()
         do { recordingHealthSession = try RecordingHealthStore.shared().start() }
         catch {
             finishBroadcastWithError(NSError(domain: "Slowth.RecordingHealth", code: 1,
@@ -152,6 +153,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         guard admitRecording() else { return }
         RTLog.sampleHandler.notice("broadcastResumed — restoring surface classifier state")
         SoftYouTubeActivityMonitoring.stop()
+        GroupedSoftActivityMonitoring.stop()
         do { recordingHealthSession = try RecordingHealthStore.shared().start() }
         catch {
             finishBroadcastWithError(NSError(domain: "Slowth.RecordingHealth", code: 1,
@@ -217,6 +219,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
         }
         #endif
         var sharedState = SharedStore.snapshot()
+        guard sharedState.broadcastActive, sharedState.realtimeShieldEnabled else { return }
+        let now = Date()
+        consumeUnlockRequests(at: now)
         if GroupedApps.isEnabled {
             sharedState.realtimeYouTubeBlockingEnabled = recordingGroupRules.shortVideos
             sharedState.realtimeInstagramReelsBlockingEnabled = recordingGroupRules.shortVideos
@@ -225,14 +230,11 @@ final class SampleHandler: RPBroadcastSampleHandler {
             sharedState.realtimeFacebookStoriesBlockingEnabled = recordingGroupRules.stories && recordingBackend.supportsFacebook
             sharedState.realtimeXReelsBlockingEnabled = recordingGroupRules.shortVideos && recordingBackend.supportsX
         }
-        guard sharedState.broadcastActive, sharedState.realtimeShieldEnabled else { return }
-
         if classifier == nil && classifierStatus == "disabled" && (!GroupedApps.isEnabled || recordingGroupRules.hasEnabledContent) {
             loadClassifier()
+            try? publishClassifierAvailability(sharedState)
         }
         receivedVideoFrames += 1
-        let now = Date()
-        consumeUnlockRequests(at: now)
 
         if GroupedApps.isEnabled && !recordingGroupRules.hasEnabledContent {
             // No model is needed. Coordinator still enforces unfinished rests,
@@ -1021,18 +1023,22 @@ final class SampleHandler: RPBroadcastSampleHandler {
         let continuous = IOSPauseCoordinator.restClock().continuous
         if continuous - lastRestGrantRead >= 0.1 {
             let state = SharedStore.snapshot()
-            let selections = Dictionary(uniqueKeysWithValues: IOSPauseCoordinator.apps.compactMap { target in
-                IOSPauseCoordinator.selection(target, state: state).map { (target, $0) }
-            })
             let policy = try? IOSPauseCoordinator.recordingPolicy()
-            let changed = recorderBindings.update(selections, pausedTarget: policy?.pausedTarget, revision: policy?.revision ?? -1)
-            if !changed.isEmpty {
+            let rulesChanged = policy.map { $0.groupRules != recordingGroupRules } ?? false
+            if let policy { recordingGroupRules = policy.groupRules }
+            let changed = recorderBindings.update(policy?.selections ?? [:], pausedTarget: policy?.pausedTarget,
+                                                  revision: policy?.revision ?? -1)
+            if !changed.isEmpty || rulesChanged {
                 resetStreaks()
                 if changed.contains("apps") { groupShieldLatched = false; groupDetectedKinds.removeAll() }
                 if changed.contains("youtube") { youtubeShieldLatched = false }
                 if changed.contains("instagram") { instagramShieldLatched = false }
                 if changed.contains("facebook") { facebookShieldLatched = false }
                 if changed.contains("x") { xShieldLatched = false }
+            }
+            if GroupedApps.isEnabled && (rulesChanged || changed.contains("apps")) {
+                if !recordingGroupRules.hasEnabledContent { classifierStatus = "disabled" }
+                try? publishClassifierAvailability(state)
             }
             detectionRestGrants = IOSPauseCoordinator.restGrants()
             lastRestGrantRead = continuous

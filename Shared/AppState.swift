@@ -35,6 +35,9 @@ final class AppState: ObservableObject {
     private var backgroundObserver: NSObjectProtocol?
     private var tickTimer: Timer?
     #if os(iOS) && canImport(FamilyControls)
+    @Published private(set) var groupSelectionRestSeconds = 0
+    private var activeObserver: NSObjectProtocol?
+    private var recordingStateTimer: Timer?
     private var recordingHealthTask: Task<Void, Never>?
     #endif
 
@@ -89,6 +92,20 @@ final class AppState: ObservableObject {
             Task { @MainActor in self?.objectWillChange.send() }
         }
         #if os(iOS) && canImport(FamilyControls)
+        // ReplayKit's system UI can resign activity without backgrounding the
+        // host, so willEnterForeground alone does not refresh the controls.
+        activeObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in self?.reload() }
+        }
+        let recordingTimer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.refreshRecordingStateIfNeeded() }
+        }
+        RunLoop.main.add(recordingTimer, forMode: .common)
+        recordingStateTimer = recordingTimer
         if UIApplication.shared.applicationState == .background {
             SharedStore.syncRealtimeShieldAuthorization(AuthorizationCenter.shared.authorizationStatus)
             SharedStore.setSlowthAppForeground(false)
@@ -104,6 +121,8 @@ final class AppState: ObservableObject {
         if let backgroundObserver { NotificationCenter.default.removeObserver(backgroundObserver) }
         tickTimer?.invalidate()
         #if os(iOS) && canImport(FamilyControls)
+        if let activeObserver { NotificationCenter.default.removeObserver(activeObserver) }
+        recordingStateTimer?.invalidate()
         recordingHealthTask?.cancel()
         #endif
     }
@@ -115,6 +134,9 @@ final class AppState: ObservableObject {
         snapshot = SharedStore.snapshot()
         rulesEtag = SharedStore.rulesEtag()
         rulesLastAttemptAt = SharedStore.rulesLastAttemptAt()
+        #if os(iOS) && canImport(FamilyControls)
+        refreshGroupSelectionRest()
+        #endif
     }
 
     func setting(_ feature: SiteFeature, for site: String) -> Bool {
@@ -140,6 +162,9 @@ final class AppState: ObservableObject {
     }
 
     func setSetting(_ feature: SiteFeature, enabled: Bool, for site: String) {
+        #if os(iOS) && canImport(FamilyControls)
+        guard canEditDuringDetectionRest() else { return }
+        #endif
         do {
             _ = try SharedStore.setToggle(site: site, feature: feature, enabled: enabled)
             reload()
@@ -153,6 +178,9 @@ final class AppState: ObservableObject {
     }
 
     func setStrictMode(_ enabled: Bool) {
+        #if os(iOS) && canImport(FamilyControls)
+        guard canEditDuringDetectionRest() else { return }
+        #endif
         do {
             _ = try SharedStore.setStrictMode(enabled)
             #if os(iOS)
@@ -173,36 +201,66 @@ final class AppState: ObservableObject {
     }
 
     #if os(iOS) && canImport(FamilyControls)
-    func setGroupedException(_ rule: GroupedContentException<ApplicationToken>) {
+    func setAppBlockingSettings(_ settings: AppBlockingSettings<ApplicationToken>) {
         do {
-            try SharedStore.withSelectionRollback(key: GroupedApps.exceptionsKey) {
-                try GroupedApps.setException(rule)
-                try IOSPauseCoordinator.refreshGroupedExceptions()
+            try SharedStore.withSelectionRollback(key: GroupedApps.settingsKey) {
+                try IOSPauseCoordinator.refreshGroupedContentSettings {
+                    try GroupedApps.setSettings(settings)
+                }
             }
             restoreRealtimeShieldAfterAppActivation()
+        } catch IOSPauseError.busy {
+            lastError = String(localized: "Take a short pause", table: "Interface")
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode is active")
         } catch {
-            lastError = String(localized: "Stop recording before changing content settings.", table: "Interface")
+            lastError = AppLocalization.string("Could not save")
+        }
+        reload()
+    }
+
+    func setGroupedException(_ rule: GroupedContentException<ApplicationToken>) {
+        do {
+            try SharedStore.withSelectionRollback(key: GroupedApps.exceptionsKey) {
+                try IOSPauseCoordinator.refreshGroupedContentSettings {
+                    try GroupedApps.setException(rule)
+                }
+            }
+            restoreRealtimeShieldAfterAppActivation()
+        } catch IOSPauseError.busy {
+            lastError = String(localized: "Take a short pause", table: "Interface")
+        } catch SharedStoreError.strictModeActive {
+            lastError = AppLocalization.string("Strict mode is active")
+        } catch {
+            lastError = AppLocalization.string("Could not save")
         }
         reload()
     }
 
     func setGroupedContentBlocking(_ kind: GroupedContentRules.Kind, enabled: Bool) {
         do {
-            try GroupedApps.setContentBlocking(kind, enabled: enabled)
+            try SharedStore.withSelectionRollback(key: GroupedApps.contentRuleKey(kind)) {
+                try IOSPauseCoordinator.refreshGroupedContentSettings {
+                    try GroupedApps.setContentBlocking(kind, enabled: enabled)
+                }
+            }
+        } catch IOSPauseError.busy {
+            lastError = String(localized: "Take a short pause", table: "Interface")
         } catch SharedStoreError.strictModeActive {
             lastError = AppLocalization.string("Strict mode is active")
         } catch {
-            lastError = String(localized: "Stop recording before changing content settings.", table: "Interface")
+            lastError = AppLocalization.string("Could not save")
         }
         reload()
     }
 
     func saveGroupedSelection(_ selection: FamilyActivitySelection) {
+        reload()
         guard !snapshot.isStrictModeActive else { lastError = AppLocalization.string("Strict mode is active"); return }
-        guard !snapshot.broadcastActive else {
-            lastError = String(localized: "Stop recording before changing the app list.", table: "Interface"); return
+        guard BlockingRules.supportsApplicationCount(selection.applicationTokens.count) else {
+            lastError = String(format: String(localized: "Select up to %d apps to enable blocking.", table: "Interface"),
+                               BlockingRules.maximumSelectedApplications)
+            return
         }
         guard selection.categoryTokens.isEmpty || (selection.includeEntireCategory && !selection.applicationTokens.isEmpty) else {
             lastError = String(localized: "Could not expand this category. Select individual apps.", table: "Interface"); return
@@ -214,17 +272,21 @@ final class AppState: ObservableObject {
         var committed = false
         do {
             try SharedStore.withSelectionRollback(key: GroupedApps.key) {
-                AppGroup.defaults.set(try JSONEncoder().encode(appsOnly), forKey: GroupedApps.key)
-                AppGroup.defaults.set(true, forKey: "groupedApps.enabled.v1")
-                AppGroup.defaults.synchronize()
-                try IOSPauseCoordinator.selectionDidChange(target: "apps", previousSelection: previous)
+                try IOSPauseCoordinator.selectionDidChange(target: "apps", previousSelection: previous) {
+                    try GroupedApps.migrateSettings()
+                    AppGroup.defaults.set(try JSONEncoder().encode(appsOnly), forKey: GroupedApps.key)
+                    AppGroup.defaults.set(true, forKey: "groupedApps.enabled.v1")
+                    AppGroup.defaults.synchronize()
+                }
             }
             committed = true
             try IOSPauseCoordinator.retireLegacyApplications()
-            if GroupedApps.softSelection == nil {
+            if !GroupedApps.usesAppSettings && GroupedApps.softSelection == nil {
                 _ = try SharedStore.setSoftYouTubeBlockingEnabled(false)
             }
             restoreRealtimeShieldAfterAppActivation()
+        } catch IOSPauseError.busy {
+            lastError = String(localized: "Pause", table: "Interface")
         } catch {
             if !wasEnabled && !committed { AppGroup.defaults.set(false, forKey: "groupedApps.enabled.v1") }
             lastError = AppLocalization.string("Could not save")
@@ -233,19 +295,20 @@ final class AppState: ObservableObject {
     }
 
     func saveGroupedYouTube(_ selection: FamilyActivitySelection) {
-        guard !snapshot.broadcastActive, !snapshot.isStrictModeActive else {
-            lastError = String(localized: "Stop recording and disable strict mode before changing this setting.", table: "Interface"); return
+        reload()
+        guard !snapshot.isStrictModeActive else {
+            lastError = AppLocalization.string("Strict mode is active"); return
         }
         guard selection.applicationTokens.count == 1, selection.categoryTokens.isEmpty, selection.webDomainTokens.isEmpty else {
             lastError = AppLocalization.string("Choose exactly one app."); return
         }
         do {
-            try SharedStore.setYouTubeSelectionData(JSONEncoder().encode(selection))
-            _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(true)
             var all = GroupedApps.selection ?? FamilyActivitySelection()
             all.applicationTokens.formUnion(selection.applicationTokens)
             saveGroupedSelection(all)
             guard lastError == nil else { return }
+            try SharedStore.setYouTubeSelectionData(JSONEncoder().encode(selection))
+            _ = try SharedStore.setRealtimeYouTubeBlockingEnabled(true)
             _ = try SharedStore.setSoftYouTubeBlockingEnabled(true)
             restoreRealtimeShieldAfterAppActivation()
         } catch { lastError = AppLocalization.string("Could not save") }
@@ -317,6 +380,9 @@ final class AppState: ObservableObject {
     }
 
     func setPausesAllowedInStrictMode(_ allowed: Bool) {
+        #if os(iOS) && canImport(FamilyControls)
+        guard canEditDuringDetectionRest() else { return }
+        #endif
         do {
             try SharedStore.setPausesAllowedInStrictMode(allowed)
             // Reconcile immediately so forbidding pauses also ends an active one.
@@ -779,6 +845,38 @@ final class AppState: ObservableObject {
     // primary enforcement, this just covers the gap before/between sessions.
     func enforceRealtimeShieldAtRest() {
         BlockingCoordinator.enforceAtRest(snapshot, facebookSupported: facebookModelSelected, xSupported: xModelSelected)
+    }
+
+    private func refreshRecordingStateIfNeeded() {
+        guard UIApplication.shared.applicationState == .active else { return }
+        refreshGroupSelectionRest()
+        guard SharedStore.snapshot().broadcastActive != snapshot.broadcastActive else { return }
+        // The extension owns this flag. Only refresh presentation here; polling
+        // must not restart protection, a pause, or the recording health probe.
+        reload()
+    }
+
+    private func canEditDuringDetectionRest() -> Bool {
+        do {
+            if try IOSPauseCoordinator.groupSelectionEditingRest() != nil {
+                lastError = String(localized: "Take a short pause", table: "Interface")
+                refreshGroupSelectionRest()
+                return false
+            }
+            return true
+        } catch {
+            lastError = AppLocalization.string("Could not save")
+            return false
+        }
+    }
+
+    private func refreshGroupSelectionRest() {
+        guard let rest = try? IOSPauseCoordinator.groupSelectionEditingRest() else {
+            if groupSelectionRestSeconds != 0 { groupSelectionRestSeconds = 0 }
+            return
+        }
+        let seconds = Int(ceil(rest.remaining(IOSPauseCoordinator.restClock())))
+        if groupSelectionRestSeconds != seconds { groupSelectionRestSeconds = seconds }
     }
 
     private func restoreRealtimeShieldAfterAppActivation() {

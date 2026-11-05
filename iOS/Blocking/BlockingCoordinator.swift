@@ -79,6 +79,10 @@ enum BlockingCoordinator {
         _ = try? IOSPauseCoordinator.snapshot()
         SharedStore.setSlowthAppForeground(true)
         SoftYouTubeActivityMonitoring.stop()
+        if GroupedApps.isEnabled {
+            configureGroupedSoft(arm: false)
+            if GroupedApps.usesAppSettings { return }
+        }
         let decision = BlockingRules.decide(softContext(SharedStore.snapshot()), .hostOpened)
         if let deferred = decision.deferred { SharedStore.setYouTubeShieldRestoreDeferred(deferred) }
         if decision.shield == .clear { ManagedSettingsApplier.clear(surface: .youtube) }
@@ -87,6 +91,7 @@ enum BlockingCoordinator {
 
     static func hostClosed(facebookSupported: Bool, xSupported: Bool) {
         SharedStore.setSlowthAppForeground(false)
+        if GroupedApps.usesAppSettings { configureGroupedSoft(arm: true); return }
         let decision = BlockingRules.decide(softContext(SharedStore.snapshot()), .hostClosed)
         if let deferred = decision.deferred { SharedStore.setYouTubeShieldRestoreDeferred(deferred) }
         guard decision.monitor == .start else { SoftYouTubeActivityMonitoring.stop(); return }
@@ -101,6 +106,10 @@ enum BlockingCoordinator {
     /// Returns the recorder's stopped-state YouTube latch. Other detector latches
     /// remain frame-processing state in SampleHandler.
     static func recordingStopped(_ state: SharedState) -> Bool {
+        if GroupedApps.usesAppSettings {
+            configureGroupedSoft(arm: !SharedStore.isSlowthAppForeground())
+            return false
+        }
         let decision = BlockingRules.decide(softContext(state), .recordingStopped)
         if let deferred = decision.deferred { SharedStore.setYouTubeShieldRestoreDeferred(deferred) }
         if decision.monitor == .start {
@@ -114,8 +123,29 @@ enum BlockingCoordinator {
         return state.realtimeYouTubeBlockingEnabled && decision.deferred != true
     }
 
+    private static func configureGroupedSoft(arm: Bool) {
+        SoftYouTubeActivityMonitoring.stop()
+        GroupedSoftActivityMonitoring.stop()
+        do {
+            if let session = try IOSPauseCoordinator.prepareGroupedSoftSession(), arm,
+               !GroupedSoftActivityMonitoring.start(session) {
+                try IOSPauseCoordinator.groupedSoftRegistrationFailed(generation: session.generation)
+            }
+        } catch {
+            GroupedApps.softSession = nil
+            ManagedSettingsApplier.apply(surface: .apps, selection: GroupedApps.selection)
+        }
+    }
+
     static func usageThreshold(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
-        guard let generation = SoftYouTubeActivityMonitoring.generation(for: activity, event: event) else { return }
+        if let generation = GroupedSoftActivityMonitoring.generation(activity) {
+            if (try? IOSPauseCoordinator.groupedSoftThreshold(generation: generation, event: event.rawValue)) == true {
+                GroupedSoftActivityMonitoring.stop(generation: generation)
+            }
+            return
+        }
+        guard !GroupedApps.usesAppSettings,
+              let generation = SoftYouTubeActivityMonitoring.generation(for: activity, event: event) else { return }
         let state = SharedStore.snapshot()
         var context = softContext(state)
         context.currentGeneration = SharedStore.softYouTubeMonitorGeneration() == generation

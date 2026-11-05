@@ -58,7 +58,7 @@ enum IOSRestAuthorization {
 }
 
 struct IOSDetectionRest: Codable, Identifiable {
-    static let duration: TimeInterval = BlockingRules.restSeconds // Legacy records keep their original minute.
+    static let duration: TimeInterval = BlockingRules.restSeconds
     var id = UUID().uuidString
     var target: String
     var selection: Data?
@@ -73,7 +73,8 @@ struct IOSDetectionRest: Codable, Identifiable {
     // Nil preserves whole-group behavior for pre-exception records.
     var blockedSelection: Data?
     var contentKinds: Set<GroupedContentRules.Kind>?
-    var effectiveDuration: TimeInterval { durationSeconds ?? Self.duration }
+    // Also cap persisted rests from older builds, keeping their original start.
+    var effectiveDuration: TimeInterval { min(durationSeconds ?? Self.duration, Self.duration) }
 
     static func recordingGrace(target: String, selection: Data?, now: IOSPauseClock, revision: Int) -> Self {
         Self(target: target, selection: selection, started: now, released: now,
@@ -114,6 +115,15 @@ struct IOSRestPresentation {
 
     mutating func acknowledge(_ rest: IOSDetectionRest) {
         presented[rest.id] = Request(order: rest.requestedOrder)
+    }
+
+    /// The active list excludes finished rests and rests covered by an allowance.
+    /// Neither event dismisses a sheet the user is still reading. A later detection
+    /// for the same target updates the visible countdown without reopening it.
+    func refreshedRest(_ shown: IOSDetectionRest, activeRests: [IOSDetectionRest]) -> IOSDetectionRest {
+        activeRests.first { $0.id == shown.id }
+            ?? activeRests.first { $0.target == shown.target }
+            ?? shown
     }
 }
 
@@ -159,11 +169,11 @@ struct IOSPauseLedger: Codable {
     }
     var detectionRestProgress: [String: RestProgress]?
     var detectionRestZone: String?
-    static let restSecondSteps = [5, 5, 5, 10, 10, 15, 20, 30, 40, 60]
+    static let restSecondSteps = [5, 5, 5, 10, 10, 15]
 
     private mutating func nextRestDuration(target: String, now: IOSPauseClock, currentZone: String) -> TimeInterval {
         guard now.wall.isFinite,
-              let today = try? day(now, zone: detectionRestZone ?? currentZone) else { return 60 }
+              let today = try? day(now, zone: detectionRestZone ?? currentZone) else { return IOSDetectionRest.duration }
         detectionRestZone = detectionRestZone ?? currentZone
         var progress = detectionRestProgress?[target] ?? RestProgress(day: today, count: 0)
         // A backward wall-clock or time-zone change must not reset escalation.

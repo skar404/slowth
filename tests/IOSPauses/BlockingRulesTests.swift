@@ -1,6 +1,27 @@
 // Frozen pre-refactor decisions, exhaustively compared to the pure rules.
 @main enum BlockingRuleChecks {
     static func main() {
+        for videos in [false, true] {
+            for stories in [false, true] {
+                let config = AppBlockingConfiguration.migrate(tokens: ["a", "b"],
+                    rules: .init(shortVideos: videos, stories: stories),
+                    exceptions: [.init(token: "a", allowShortVideos: true)], softTokens: ["b"])
+                assert(!config.settings(for: "a").shortVideos)
+                assert(config.settings(for: "a").stories == stories)
+                assert(config.settings(for: "b").shortVideos == videos && config.settings(for: "b").soft)
+                let new = config.settings(for: "new")
+                assert(new.shortVideos && new.stories && !new.soft)
+                var edited = config
+                edited.set(.init(token: "a", shortVideos: false, stories: false, soft: true))
+                assert(edited.settings(for: "b") == config.settings(for: "b"))
+                assert(edited.settings(for: "a").weakens(.init(token: "a")))
+            }
+        }
+        var session = GroupedSoftSession(generation: "new", events: ["one": "a", "two": "b"])
+        assert(session.consume("one", generation: "old") == nil && session.events.count == 2)
+        assert(session.consume("one", generation: "new") == "a" && session.events.count == 1)
+        assert(session.consume("one", generation: "new") == nil)
+        assert(session.consume("two", generation: "new") == "b" && session.events.isEmpty)
         assert(GroupedContentRules().shortVideos && GroupedContentRules().stories)
         for shortVideos in [false, true] {
             for stories in [false, true] {

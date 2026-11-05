@@ -2,6 +2,14 @@ import SwiftUI
 import UIKit
 
 enum SlowthAppearance {
+    static let blocked = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .systemRed
+            : UIColor(red: 0.70, green: 0.16, blue: 0.14, alpha: 1)
+    })
+    static let pause = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .systemOrange
+            : UIColor(red: 0.68, green: 0.32, blue: 0.03, alpha: 1)
+    })
     static let background = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
             ? UIColor(white: 0.065, alpha: 1) : .systemGroupedBackground

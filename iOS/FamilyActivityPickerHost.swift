@@ -8,8 +8,13 @@ struct FamilyActivityPickerWrapper: View {
     @State var selection: FamilyActivitySelection
     var appName: String? = nil
     var allowsMultiple = false
+    var selectionLockSeconds = 0
     var onDone: ((FamilyActivitySelection) -> Void)?
     var onCancel: (() -> Void)?
+
+    private var exceedsApplicationLimit: Bool {
+        allowsMultiple && !BlockingRules.supportsApplicationCount(selection.applicationTokens.count)
+    }
 
     private var invalidGroupSelection: Bool {
         allowsMultiple && !selection.categoryTokens.isEmpty && (!selection.includeEntireCategory || selection.applicationTokens.isEmpty)
@@ -18,16 +23,39 @@ struct FamilyActivityPickerWrapper: View {
     var body: some View {
         NavigationStack {
             FamilyActivityPicker(selection: $selection)
+                .disabled(selectionLockSeconds > 0)
                 .safeAreaInset(edge: .top) {
-                    Text(invalidGroupSelection ? String(localized: "Could not expand this category. Select individual apps.", table: "Interface") : allowsMultiple ? String(localized: "Choose apps or categories. Only apps are saved; websites are ignored. Reselect a category after installing new apps.", table: "Interface") : appName.map {
-                        String(format: String(localized: "Tap Search below, enter %@, and select the app.", table: "Interface"), $0)
-                    } ?? AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything."))
-                        .foregroundStyle(invalidGroupSelection ? Color.red : Color.primary)
-                        .font(.footnote)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.regularMaterial)
+                    VStack(alignment: .leading, spacing: 8) {
+                        if selectionLockSeconds > 0 {
+                            HStack {
+                                Text(String(localized: "Pause", table: "Interface"))
+                                Text(String(format: "%d:%02d", selectionLockSeconds / 60, selectionLockSeconds % 60))
+                                    .monospacedDigit()
+                            }
+                            .font(.headline)
+                            .accessibilityIdentifier("apps.selection.pause")
+                        }
+                        if allowsMultiple {
+                            Text(String(format: String(localized: "Select up to %d apps to enable blocking.", table: "Interface"),
+                                        BlockingRules.maximumSelectedApplications))
+                                .foregroundStyle(exceedsApplicationLimit ? Color.red : Color.primary)
+                                .font(.footnote)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityIdentifier("apps.selection.limit")
+                            Text(verbatim: "\(selection.applicationTokens.count) / \(BlockingRules.maximumSelectedApplications)")
+                                .font(.footnote.monospacedDigit())
+                                .foregroundStyle(exceedsApplicationLimit ? Color.red : Color.secondary)
+                        }
+                        Text(invalidGroupSelection ? String(localized: "Could not expand this category. Select individual apps.", table: "Interface") : allowsMultiple ? String(localized: "Choose apps or categories. Only apps are saved; websites are ignored. Reselect a category after installing new apps.", table: "Interface") : appName.map {
+                            String(format: String(localized: "Tap Search below, enter %@, and select the app.", table: "Interface"), $0)
+                        } ?? AppLocalization.string("Pick a single app, not a whole category or \"All Apps\" — that would block everything."))
+                            .foregroundStyle(invalidGroupSelection ? Color.red : Color.primary)
+                            .font(.footnote)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.regularMaterial)
                 }
                 .navigationTitle(allowsMultiple ? String(localized: "Selected apps", table: "Interface") : appName.map {
                     String(format: String(localized: "Choose %@", table: "Interface"), $0)
@@ -39,7 +67,7 @@ struct FamilyActivityPickerWrapper: View {
                     }
                     ToolbarItem(placement: .confirmationAction) {
                         Button(String(localized: "Done")) { onDone?(selection) }
-                            .disabled(invalidGroupSelection)
+                            .disabled(invalidGroupSelection || exceedsApplicationLimit || selectionLockSeconds > 0)
                     }
                 }
         }

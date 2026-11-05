@@ -84028,6 +84028,784 @@
           }
         }
       }
+    },
+    "Slowth checks screen images only to detect short videos and Stories.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفحص Slowth صور الشاشة فقط لاكتشاف مقاطع الفيديو القصيرة والقصص."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفحص Slowth صور الشاشة فقط لاكتشاف مقاطع الفيديو القصيرة والقصص."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth правярае выявы экрана толькі для выяўлення кароткіх відэа і гісторый."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth শুধু ছোট ভিডিও ও স্টোরি শনাক্ত করতে স্ক্রিনের ছবি পরীক্ষা করে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth comprova les imatges de la pantalla només per detectar vídeos curts i històries."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth kontroluje snímky obrazovky pouze za účelem rozpoznání krátkých videí a příběhů."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth undersøger kun skærmbilleder for at registrere korte videoer og historier."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth prüft Bildschirmbilder ausschließlich, um Kurzvideos und Storys zu erkennen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το Slowth ελέγχει τις εικόνες της οθόνης μόνο για να εντοπίζει σύντομα βίντεο και ιστορίες."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth checks screen images only to detect short videos and Stories."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth checks screen images only to detect short videos and Stories."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth checks screen images only to detect short videos and Stories."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth checks screen images only to detect short videos and Stories."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analiza las imágenes de la pantalla únicamente para detectar vídeos cortos e historias."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analiza las imágenes de la pantalla únicamente para detectar vídeos cortos e historias."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth tarkistaa näytön kuvia vain lyhytvideoiden ja tarinoiden tunnistamiseksi."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sinusuri ng Slowth ang mga larawan ng screen para lamang matukoy ang maiikling video at Stories."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analyse les images de l’écran uniquement pour détecter les vidéos courtes et les stories."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analyse les images de l’écran uniquement pour détecter les vidéos courtes et les stories."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth માત્ર ટૂંકા વિડિયો અને સ્ટોરીઝ શોધવા માટે સ્ક્રીનની છબીઓ તપાસે છે."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth yana duba hotunan allo ne kawai don gano gajerun bidiyoyi da labarai."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth בודק תמונות מסך רק כדי לזהות סרטונים קצרים וסטוריז."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth केवल छोटे वीडियो और स्टोरीज़ पहचानने के लिए स्क्रीन की तस्वीरें जाँचता है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth provjerava slike zaslona samo radi prepoznavanja kratkih videozapisa i priča."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Slowth kizárólag a rövid videók és történetek felismeréséhez vizsgálja a képernyő képeit."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth-ը ստուգում է էկրանի պատկերները միայն կարճ տեսանյութերն ու պատմությունները հայտնաբերելու համար։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth memeriksa gambar layar hanya untuk mendeteksi video pendek dan Stories."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth analizza le immagini dello schermo solo per rilevare video brevi e storie."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowthは、ショート動画とストーリーズを検出するためだけに画面の画像を確認します。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ეკრანის გამოსახულებებს მხოლოდ მოკლე ვიდეოებისა და სთორების ამოსაცნობად ამოწმებს."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth экран кескіндерін тек қысқа бейнелер мен хикаяларды анықтау үшін тексереді."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಕಿರು ವೀಡಿಯೊಗಳು ಮತ್ತು ಸ್ಟೋರಿಗಳನ್ನು ಪತ್ತೆಹಚ್ಚಲು ಮಾತ್ರ Slowth ಪರದೆಯ ಚಿತ್ರಗಳನ್ನು ಪರಿಶೀಲಿಸುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth는 짧은 동영상과 스토리를 감지하기 위해서만 화면 이미지를 확인합니다."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth экран сүрөттөрүн кыска видеолорду жана окуяларды аныктоо үчүн гана текшерет."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„Slowth“ tikrina ekrano vaizdus tik tam, kad atpažintų trumpus vaizdo įrašus ir istorijas."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഹ്രസ്വ വീഡിയോകളും സ്റ്റോറികളും കണ്ടെത്താൻ മാത്രമാണ് Slowth സ്ക്രീൻ ചിത്രങ്ങൾ പരിശോധിക്കുന്നത്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth केवळ लहान व्हिडिओ आणि स्टोरीज शोधण्यासाठी स्क्रीनवरील प्रतिमा तपासते."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth menyemak imej skrin hanya untuk mengesan video pendek dan Stories."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth undersøker skjermbilder kun for å oppdage korte videoer og historier."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ले छोटा भिडियो र स्टोरीहरू पहिचान गर्न मात्र स्क्रिनका तस्बिरहरू जाँच्छ।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth controleert schermbeelden uitsluitend om korte video’s en verhalen te herkennen."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth କେବଳ ଛୋଟ ଭିଡିଓ ଏବଂ ଷ୍ଟୋରି ଚିହ୍ନଟ କରିବା ପାଇଁ ସ୍କ୍ରିନ୍ ଛବିଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ਸਿਰਫ਼ ਛੋਟੇ ਵੀਡੀਓ ਅਤੇ ਸਟੋਰੀਆਂ ਪਛਾਣਨ ਲਈ ਸਕ੍ਰੀਨ ਦੀਆਂ ਤਸਵੀਰਾਂ ਦੀ ਜਾਂਚ ਕਰਦਾ ਹੈ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth صرف چھوٹیاں ویڈیوز تے سٹوریز دی پچھان لئی سکرین دیاں تصویراں نوں جانچدا اے۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth dey check screen pictures only to detect short videos and Stories."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth sprawdza obrazy ekranu wyłącznie po to, aby wykrywać krótkie filmy i relacje."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Slowth analisa as imagens da tela apenas para detectar vídeos curtos e stories."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Slowth analisa as imagens do ecrã apenas para detetar vídeos curtos e histórias."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth verifică imaginile ecranului doar pentru a detecta videoclipuri scurte și povești."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth проверяет изображения экрана только для распознавания коротких видео и историй."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth kontroluje snímky obrazovky iba na rozpoznávanie krátkych videí a príbehov."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth preverja slike zaslona samo za zaznavanje kratkih videoposnetkov in zgodb."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth granskar skärmbilder enbart för att upptäcka korta videor och berättelser."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth hukagua picha za skrini ili kutambua video fupi na hadithi pekee."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "குறுகிய வீடியோக்களையும் ஸ்டோரிகளையும் கண்டறிய மட்டுமே Slowth திரைப் படங்களைச் சரிபார்க்கிறது."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "చిన్న వీడియోలు మరియు స్టోరీలను గుర్తించడానికి మాత్రమే Slowth స్క్రీన్ చిత్రాలను తనిఖీ చేస్తుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ตรวจสอบภาพหน้าจอเพื่อตรวจหาวิดีโอสั้นและสตอรี่เท่านั้น"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth, ekran görüntülerini yalnızca kısa videoları ve hikâyeleri tespit etmek için inceler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth перевіряє зображення екрана лише для розпізнавання коротких відео та історій."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth صرف مختصر ویڈیوز اور اسٹوریز کی شناخت کے لیے اسکرین کی تصاویر کا جائزہ لیتا ہے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth kiểm tra hình ảnh màn hình chỉ để phát hiện video ngắn và tin."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth 只會檢查螢幕影像，用嚟識別短片同限時動態。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth 检查屏幕图像仅用于识别短视频和快拍。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth 檢查螢幕影像僅用於識別短影片和限時動態。"
+          }
+        }
+      }
+    },
+    "Debug capture is enabled, so this test build can save screen images. Saved images can be exported or shared.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التقاط الصور لتصحيح الأخطاء مفعّل، لذا يمكن لهذه النسخة التجريبية حفظ صور الشاشة. يمكن تصدير الصور المحفوظة أو مشاركتها."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التقاط الصور لتصحيح الأخطاء مفعّل، لذا يمكن لهذه النسخة التجريبية حفظ صور الشاشة. يمكن تصدير الصور المحفوظة أو مشاركتها."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уключаны адладачны захоп, таму гэтая тэставая зборка можа захоўваць выявы экрана. Захаваныя выявы можна экспартаваць або адпраўляць."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ডিবাগ ক্যাপচার চালু আছে, তাই এই পরীক্ষামূলক সংস্করণ স্ক্রিনের ছবি সংরক্ষণ করতে পারে। সংরক্ষিত ছবি এক্সপোর্ট বা শেয়ার করা যায়।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La captura de depuració està activada, de manera que aquesta versió de prova pot desar imatges de la pantalla. Les imatges desades es poden exportar o compartir."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Záznam pro ladění je zapnutý, takže tato testovací verze může ukládat snímky obrazovky. Uložené snímky lze exportovat nebo sdílet."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fejlfindingsoptagelse er slået til, så denne testversion kan gemme skærmbilleder. Gemte billeder kan eksporteres eller deles."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Debug-Aufzeichnung ist aktiviert. Diese Testversion kann daher Bildschirmbilder speichern. Gespeicherte Bilder können exportiert oder geteilt werden."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η καταγραφή αποσφαλμάτωσης είναι ενεργή, οπότε αυτή η δοκιμαστική έκδοση μπορεί να αποθηκεύει εικόνες οθόνης. Οι αποθηκευμένες εικόνες μπορούν να εξαχθούν ή να κοινοποιηθούν."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debug capture is enabled, so this test build can save screen images. Saved images can be exported or shared."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debug capture is enabled, so this test build can save screen images. Saved images can be exported or shared."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debug capture is enabled, so this test build can save screen images. Saved images can be exported or shared."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debug capture is enabled, so this test build can save screen images. Saved images can be exported or shared."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La captura de depuración está activada, por lo que esta versión de prueba puede guardar imágenes de la pantalla. Las imágenes guardadas se pueden exportar o compartir."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La captura de depuración está activada, por lo que esta versión de prueba puede guardar imágenes de la pantalla. Las imágenes guardadas se pueden exportar o compartir."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vianmääritystallennus on käytössä, joten tämä testiversio voi tallentaa näytön kuvia. Tallennetut kuvat voi viedä tai jakaa."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naka-enable ang debug capture, kaya maaaring mag-save ng mga larawan ng screen ang test build na ito. Maaaring i-export o ibahagi ang mga na-save na larawan."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La capture de débogage est activée : cette version de test peut donc enregistrer des images de l’écran. Les images enregistrées peuvent être exportées ou partagées."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La capture de débogage est activée : cette version de test peut donc enregistrer des images de l’écran. Les images enregistrées peuvent être exportées ou partagées."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ડિબગ કૅપ્ચર ચાલુ છે, તેથી આ પરીક્ષણ આવૃત્તિ સ્ક્રીનની છબીઓ સાચવી શકે છે. સાચવેલી છબીઓ નિકાસ અથવા શેર કરી શકાય છે."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An kunna ɗaukar hotuna don gyaran kurakurai, don haka wannan sigar gwaji na iya ajiye hotunan allo. Ana iya fitarwa ko raba hotunan da aka ajiye."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לכידה לצורכי ניפוי שגיאות מופעלת, ולכן גרסת הבדיקה הזו יכולה לשמור תמונות מסך. אפשר לייצא או לשתף תמונות שנשמרו."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डीबग कैप्चर चालू है, इसलिए यह परीक्षण संस्करण स्क्रीन की तस्वीरें सहेज सकता है। सहेजी गई तस्वीरें एक्सपोर्ट या शेयर की जा सकती हैं।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snimanje za otklanjanje pogrešaka uključeno je pa ova testna verzija može spremati slike zaslona. Spremljene slike mogu se izvesti ili dijeliti."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A hibakeresési rögzítés be van kapcsolva, ezért ez a tesztverzió mentheti a képernyő képeit. A mentett képek exportálhatók vagy megoszthatók."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Վրիպազերծման նկարահանումը միացված է, ուստի այս փորձնական տարբերակը կարող է պահպանել էկրանի պատկերները։ Պահպանված պատկերները կարելի է արտահանել կամ կիսվել դրանցով։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perekaman debug diaktifkan, jadi versi uji ini dapat menyimpan gambar layar. Gambar yang disimpan dapat diekspor atau dibagikan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’acquisizione di debug è attiva, quindi questa versione di prova può salvare immagini dello schermo. Le immagini salvate possono essere esportate o condivise."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デバッグキャプチャが有効なため、このテスト版は画面の画像を保存できます。保存した画像は書き出したり共有したりできます。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "გამართვისთვის კადრების შენახვა ჩართულია, ამიტომ ამ სატესტო ვერსიას ეკრანის გამოსახულებების შენახვა შეუძლია. შენახული გამოსახულებების ექსპორტი ან გაზიარება შესაძლებელია."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жөндеу үшін түсіру қосылған, сондықтан бұл сынақ нұсқасы экран кескіндерін сақтай алады. Сақталған кескіндерді экспорттауға немесе бөлісуге болады."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಡೀಬಗ್ ಕ್ಯಾಪ್ಚರ್ ಆನ್ ಆಗಿರುವುದರಿಂದ ಈ ಪರೀಕ್ಷಾ ಆವೃತ್ತಿಯು ಪರದೆಯ ಚಿತ್ರಗಳನ್ನು ಉಳಿಸಬಹುದು. ಉಳಿಸಿದ ಚಿತ್ರಗಳನ್ನು ರಫ್ತು ಮಾಡಬಹುದು ಅಥವಾ ಹಂಚಿಕೊಳ್ಳಬಹುದು."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "디버그 캡처가 켜져 있어 이 테스트 빌드는 화면 이미지를 저장할 수 있습니다. 저장된 이미지는 내보내거나 공유할 수 있습니다."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мүчүлүштүктөрдү оңдоо үчүн тартуу күйгүзүлгөн, ошондуктан бул сыноо версиясы экран сүрөттөрүн сактай алат. Сакталган сүрөттөрдү экспорттоого же бөлүшүүгө болот."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Įjungtas derinimo fiksavimas, todėl ši bandomoji versija gali išsaugoti ekrano vaizdus. Išsaugotus vaizdus galima eksportuoti arba bendrinti."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഡീബഗ് ക്യാപ്‌ചർ ഓണായതിനാൽ ഈ പരീക്ഷണ പതിപ്പിന് സ്ക്രീൻ ചിത്രങ്ങൾ സംരക്ഷിക്കാനാകും. സംരക്ഷിച്ച ചിത്രങ്ങൾ എക്സ്പോർട്ട് ചെയ്യുകയോ പങ്കിടുകയോ ചെയ്യാം."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डीबग कॅप्चर सुरू असल्यामुळे ही चाचणी आवृत्ती स्क्रीनवरील प्रतिमा जतन करू शकते. जतन केलेल्या प्रतिमा निर्यात किंवा शेअर करता येतात."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tangkapan nyahpepijat diaktifkan, jadi versi ujian ini boleh menyimpan imej skrin. Imej yang disimpan boleh dieksport atau dikongsi."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feilsøkingsopptak er aktivert, så denne testversjonen kan lagre skjermbilder. Lagrede bilder kan eksporteres eller deles."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डिबग क्याप्चर चालु भएकाले यो परीक्षण संस्करणले स्क्रिनका तस्बिरहरू सुरक्षित राख्न सक्छ। सुरक्षित गरिएका तस्बिरहरू निर्यात वा साझा गर्न सकिन्छ।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debugopname is ingeschakeld, dus deze testversie kan schermbeelden opslaan. Opgeslagen beelden kunnen worden geëxporteerd of gedeeld."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଡିବଗ୍ କ୍ୟାପ୍ଚର୍ ଚାଲୁ ଅଛି, ତେଣୁ ଏହି ପରୀକ୍ଷଣ ସଂସ୍କରଣ ସ୍କ୍ରିନ୍ ଛବି ସଂରକ୍ଷଣ କରିପାରେ। ସଂରକ୍ଷିତ ଛବିଗୁଡ଼ିକୁ ରପ୍ତାନି କିମ୍ବା ସେୟାର କରାଯାଇପାରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਡੀਬੱਗ ਕੈਪਚਰ ਚਾਲੂ ਹੈ, ਇਸ ਲਈ ਇਹ ਟੈਸਟ ਵਰਜਨ ਸਕ੍ਰੀਨ ਦੀਆਂ ਤਸਵੀਰਾਂ ਸੰਭਾਲ ਸਕਦਾ ਹੈ। ਸੰਭਾਲੀਆਂ ਤਸਵੀਰਾਂ ਐਕਸਪੋਰਟ ਜਾਂ ਸਾਂਝੀਆਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ ਹਨ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ڈی بگ کیپچر چالو اے، ایس لئی ایہہ ٹیسٹ ورژن سکرین دیاں تصویراں محفوظ کر سکدا اے۔ محفوظ تصویراں نوں ایکسپورٹ یا شیئر کیتا جا سکدا اے۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Debug capture dey on, so this test build fit save screen pictures. You fit export or share the pictures wey e save."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przechwytywanie debugowania jest włączone, więc ta wersja testowa może zapisywać obrazy ekranu. Zapisane obrazy można eksportować lub udostępniać."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A captura de depuração está ativada, então esta versão de teste pode salvar imagens da tela. As imagens salvas podem ser exportadas ou compartilhadas."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A captura de depuração está ativada, pelo que esta versão de teste pode guardar imagens do ecrã. As imagens guardadas podem ser exportadas ou partilhadas."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura pentru depanare este activată, așa că această versiune de test poate salva imagini ale ecranului. Imaginile salvate pot fi exportate sau distribuite."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включён отладочный захват, поэтому эта тестовая сборка может сохранять изображения экрана. Сохранённые изображения можно экспортировать или отправить."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Záznam na ladenie je zapnutý, takže táto testovacia verzia môže ukladať snímky obrazovky. Uložené snímky možno exportovať alebo zdieľať."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zajem za odpravljanje napak je vklopljen, zato lahko ta preizkusna različica shranjuje slike zaslona. Shranjene slike je mogoče izvoziti ali deliti."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Felsökningsinspelning är aktiverad, så den här testversionen kan spara skärmbilder. Sparade bilder kan exporteras eller delas."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unasaji wa utatuzi umewashwa, kwa hiyo toleo hili la majaribio linaweza kuhifadhi picha za skrini. Picha zilizohifadhiwa zinaweza kuhamishwa au kushirikiwa."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பிழைத்திருத்தப் பதிவு இயக்கப்பட்டுள்ளதால், இந்தச் சோதனைப் பதிப்பு திரைப் படங்களைச் சேமிக்கலாம். சேமித்த படங்களை ஏற்றுமதி செய்யலாம் அல்லது பகிரலாம்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "డీబగ్ క్యాప్చర్ ఆన్‌లో ఉంది, కాబట్టి ఈ పరీక్షా వెర్షన్ స్క్రీన్ చిత్రాలను సేవ్ చేయగలదు. సేవ్ చేసిన చిత్రాలను ఎగుమతి చేయవచ్చు లేదా షేర్ చేయవచ్చు."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เปิดการจับภาพเพื่อดีบักอยู่ เวอร์ชันทดสอบนี้จึงสามารถบันทึกภาพหน้าจอได้ ภาพที่บันทึกไว้สามารถส่งออกหรือแชร์ได้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hata ayıklama kaydı etkin olduğu için bu test sürümü ekran görüntülerini kaydedebilir. Kaydedilen görüntüler dışa aktarılabilir veya paylaşılabilir."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Увімкнено налагоджувальне захоплення, тому ця тестова збірка може зберігати зображення екрана. Збережені зображення можна експортувати або надсилати."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ڈیبگ کیپچر فعال ہے، اس لیے یہ آزمائشی ورژن اسکرین کی تصاویر محفوظ کر سکتا ہے۔ محفوظ تصاویر ایکسپورٹ یا شیئر کی جا سکتی ہیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tính năng ghi hình gỡ lỗi đang bật nên bản thử nghiệm này có thể lưu hình ảnh màn hình. Hình ảnh đã lưu có thể được xuất hoặc chia sẻ."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "偵錯擷取已開啟，所以呢個測試版本可以儲存螢幕影像。儲存咗嘅影像可以匯出或分享。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "调试捕获已开启，因此此测试版本可以保存屏幕图像。已保存的图像可以导出或分享。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "偵錯擷取已開啟，因此此測試版本可以儲存螢幕影像。已儲存的影像可以匯出或分享。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

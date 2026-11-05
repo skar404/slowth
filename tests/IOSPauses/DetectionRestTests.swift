@@ -18,7 +18,7 @@ import Foundation
         func progressionClock(_ t: Double, day: Double = 0, boot: String = "A") -> IOSPauseClock {
             .init(wall: midnight + day * 86400 + t, continuous: t, boot: boot)
         }
-        for expected in [5, 5, 5, 10, 10, 15, 20, 30, 40, 60, 60, 60] {
+        for expected in [5, 5, 5, 10, 10, 15, 15, 15, 15, 15, 15, 15] {
             let now = progressionClock(elapsed)
             progressive.requestDetectionRest(target: "youtube", selection: nil, now: now,
                 fromShieldAction: false, currentZone: "UTC")
@@ -72,7 +72,31 @@ import Foundation
         print("PASS: per-app progressive rest, cap, daily reset, duplicates, persistence, reboot and binding changes")
 
         let duration = IOSDetectionRest.duration
-        assert(duration == 60)
+        assert(duration == 15)
+        // Older serialized pauses obey the new cap without restarting the clock.
+        for savedDuration in [nil, 5, 10, 15, 20, 30, 40, 60] as [TimeInterval?] {
+            let old = IOSDetectionRest(target: "apps", started: clock(100), durationSeconds: savedDuration)
+            let decoded = try JSONDecoder().decode(IOSDetectionRest.self, from: JSONEncoder().encode(old))
+            let expected = min(savedDuration ?? 15, 15)
+            assert(decoded.effectiveDuration == expected)
+            assert(decoded.remaining(clock(104)) == expected - 4)
+            assert(decoded.remaining(clock(100 + expected)) == 0)
+            assert(decoded.started?.continuous == 100)
+        }
+        var oldProgress = IOSPauseLedger()
+        oldProgress.requestDetectionRest(target: "apps", selection: nil, now: progressionClock(100),
+            fromShieldAction: false, currentZone: "UTC")
+        oldProgress.detectionRestProgress?["apps"]?.count = 9
+        oldProgress.invalidateBinding("apps")
+        oldProgress = try JSONDecoder().decode(IOSPauseLedger.self, from: JSONEncoder().encode(oldProgress))
+        oldProgress.requestDetectionRest(target: "apps", selection: nil, now: progressionClock(200),
+            fromShieldAction: false, currentZone: "UTC")
+        assert(oldProgress.detectionRests?["apps"]?.effectiveDuration == 15)
+        var invalidWall = IOSPauseLedger()
+        invalidWall.requestDetectionRest(target: "apps", selection: nil, now: clock(100, wall: .infinity),
+            fromShieldAction: false, currentZone: "UTC")
+        assert(invalidWall.detectionRests?["apps"]?.effectiveDuration == 15)
+        print("PASS: 15-second cap for old records, persisted progression and invalid wall clock")
         // Reproduce denied kern.bootsessionuuid, as on sandboxed iOS devices.
         let fallback = IOSPauseClock.restBootIdentity(session: nil, bootTime: "100:0")
         assert(fallback == IOSPauseClock.restBootIdentity(session: nil, bootTime: "100:0"))
@@ -146,6 +170,17 @@ import Foundation
         assert(requestedAgain.remaining(clock(2025)) == pending.remaining(clock(2025)))
         presentation.acknowledge(requestedAgain) // Also acknowledge requests while already visible.
         assert(!presentation.shouldPresent(requestedAgain))
+        // Expiry removes the rest from openRests(), but must leave its sheet open.
+        let retained = presentation.refreshedRest(pending, activeRests: [])
+        assert(retained.id == pending.id)
+        assert(retained.remaining(clock(3000)) == 0)
+        assert(retained.started?.continuous == pending.started?.continuous)
+        assert(presentation.refreshedRest(pending, activeRests: [requestedAgain]).requestedOrder == requestedAgain.requestedOrder)
+        let nextCycle = IOSDetectionRest(target: pending.target, started: clock(3000), durationSeconds: 10)
+        assert(presentation.refreshedRest(retained, activeRests: [nextCycle]).id == nextCycle.id)
+        let unrelated = IOSDetectionRest(target: "youtube", started: clock(3000))
+        assert(presentation.refreshedRest(retained, activeRests: [unrelated]).id == retained.id)
+        assert(!presentation.shouldPresent(requestedAgain)) // Manual dismissal still stays dismissed.
         assert(presentation.shouldPresent(IOSDetectionRest(target: "youtube")))
         var unsolicited = IOSDetectionRest(target: "youtube")
         assert(presentation.shouldPresent(unsolicited))

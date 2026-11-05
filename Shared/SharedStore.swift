@@ -546,7 +546,7 @@ enum SharedStore {
     /// for recording. Restore only this binding; never overwrite concurrent
     /// pause/rest state or unrelated app settings.
     static func withSelectionRollback(key: String, save: () throws -> Void) throws {
-        let previous = d.data(forKey: key)
+        let previous = d.object(forKey: key)
         do {
             try save()
         } catch {

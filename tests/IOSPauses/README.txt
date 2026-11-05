@@ -1,5 +1,95 @@
 Pause integration — 2026.10.3
 
+Help and localization — 2026.11.5
+- How it works explains app selection, per-app rules, soft blocking, screen
+  access, automatic detection rests, temporary content allowances, daily and
+  saved leaves, duration settings, Safari and Strict mode, with two examples.
+- All added guide/picker strings cover the 64 locales in locales.json.
+  test_guide_and_picker_strings_are_registered catches missing source keys;
+  verify_localization_bundles.py also verifies the compiled host/extensions.
+- Simulator Debug rendering: --preview-how-it-works and optional
+  --preview-how-it-works-section apps|rules|monitoring|pause|access|leaves|privacy|safari.
+  Section navigation is excluded from Release. These are layout checks, not
+  evidence of physical Screen Time enforcement or UI gesture automation.
+
+Selection limit — 2026.11.5
+- ShieldSettings.applications supports at most 50 tokens. The picker shows
+  the limit/count and disables Done above it; saving rechecks the same limit.
+- Older oversized lists remain available to edit, with a warning instead of
+  active protection controls. Readiness/coordinator decoding rejects them.
+  Nothing silently truncates the list or overwrites the user's preferences.
+- GroupedSelectionTests checks the 50/51 boundary and the observed 171-app
+  saved list. CoordinatorTests checks protection/pause restore at the limit
+  and rejects oversized writes at the native API boundary.
+- Device acceptance: select All Apps, confirm Done is disabled above 50;
+  cancel preserves the old list. Reduce to 50 or fewer, save, stop recording,
+  and verify blocking/pause/restore in the selected apps.
+
+Per-app settings — 2026.11.5
+- Apps now opens an individual editor from each native token label. New apps
+  block short videos and stories; soft blocking starts off. An empty list has
+  only the selection card. The icon experiment lives in Settings / Debug.
+- groupedApps.settings.v2 stores version 2 and opaque-token settings. Migration
+  runs under the coordinator lock before modifying a selection and preserves
+  effective legacy common-rule AND exception behavior and the soft YouTube token.
+  Removed apps retain their explicit settings for re-adding. Extensions fall back
+  to legacy values until migration commits. No pause duration/quota migration.
+- GroupedSoftActivityMonitoring registers one activity with one event per soft
+  app. groupedApps.softSession.v2 maps random event IDs to tokens and tracks the
+  remaining events. Each threshold consumes only its own entry, under the same
+  lock as shield writers. Foreground/recording checks and generations reject stale
+  callbacks. Failed registration revokes deferrals; rests/faults override them.
+- The main list/empty-state and editor screenshot fixtures are presentation only:
+  --screenshot-active-protection with --screenshot-empty-apps or
+  --screenshot-app-detail. They use placeholder labels, never fabricated tokens.
+- BlockingRulesTests covers migration combinations, defaults, independent edits,
+  strict-mode weakening and one-shot events. CoordinatorTests covers multiple
+  soft apps, stale callbacks, registration failure, rest priority and user pauses.
+- Device acceptance: migrate an existing setup; select two soft apps plus one
+  normal app; leave Slowth without recording and use each soft app in turn.
+  Verify only that app re-blocks, then test recording start/stop, background,
+  an active rest/user pause, list edits, strict mode and restart persistence.
+  A one-second requested threshold is not a guarantee of OS callback latency.
+
+Live grouped settings — 2026.11.4
+- App lists, content rules and per-app exceptions can change during recording;
+  strict-mode restrictions still apply. Host recording status refreshes while
+  active and after returning from the system recording UI.
+- During an unfinished detection rest, app pickers, per-app rules/exceptions,
+  soft mode and protection settings are locked. The monitoring card turns red,
+  shows Blocked / Take a short pause, and replaces its power icon with the timer.
+  Stop monitoring remains a separate working action. The 5–15s progression
+  is shared with the sheet. Saves check the same rest under the database lock;
+  an already-open picker retains its draft and Cancel remains available. The
+  lock expires with the rest, including when recording has since stopped.
+  Allow content and recording controls remain available; an active application
+  allowance also unlocks settings. Rule/exception and duration saves recheck the
+  lock before running an edit, including from an editor opened before detection.
+- Rule/exception edits share the coordinator lock with detection requests and
+  advance its revision. The recorder refreshes rules and discards old evidence.
+  Existing rest deadlines, progression, ordinary pauses and grace are retained;
+  rests with no remaining blocked apps are removed. App-list changes invalidate
+  the old binding, including its pause/rest, as before.
+- CoordinatorTests covers live edits, stale detections, shield subsets, disabled
+  rules, preserved pauses/grace and app-list replacement. Device acceptance:
+  edit each setting while recording, disable/re-enable both content rules,
+  remove/re-add the last app, edit during a rest/pause, then stop/restart recording.
+  Check actual app access, persistence and strict mode; builds alone do not prove
+  ReplayKit/Screen Time behavior.
+
+Detection rest presentation — 2026.11.5
+- The sheet explains detection and shows a countdown, then Pause finished. It
+  remains open until dismissed, even after openRests() stops returning the rest.
+  A new detection for the same target updates the displayed cycle.
+- Allow content explains the one-leaf cost and shows its configured duration.
+  During an allowance, only the allowance timer is shown; Switch app and Block
+  again are omitted from this sheet. Main-card controls remain available.
+- DetectionRestTests covers retaining a finished sheet, same-cycle updates and
+  replacement cycles. UI fixtures: --preview-rest --preview-rest-remaining 5;
+  --screenshot-active-protection --screenshot-voluntary-pause --preview-rest;
+  --screenshot-active-protection --screenshot-detection-rest for the main timer.
+  Fixtures do not change protection, settings, or the durable pause ledger.
+
 The host and iOS extensions share a durable SQLite pause ledger in Debug and
 Release. PauseProbe has been retired. macOS keeps its existing behavior; the
 Safari pause adapter is applied only to the iOS extension bundle.
@@ -275,15 +365,17 @@ Verification for this notification change:
   durationSeconds, including existing 300-second leases; legacy leases without
   that field retain 180 seconds. Safari accepts 300 only for such issued leases.
 - Detection rests progress independently per service:
-  5, 5, 5, 10, 10, 15, 20, 30, 40, 60, 60, ... seconds.
+  5, 5, 5, 10, 10, 15, 15, ... seconds (maximum 15 seconds).
   Count advances only on creating a new cycle, not repeated frames, Shield taps,
   host opens, or startup navigation grace. Counter and committed duration persist
   in the same SQLite ledger transaction. Binding changes do not clear the count.
 - Reset on the first new cycle of a later calendar day. The initial local time
   zone is stored for consistent host/extension day boundaries. Clock rollback
   cannot reset escalation. Pending rests crossing midnight keep their duration.
-- Old rest records without durationSeconds keep their original 60 seconds.
-  Reboot retains the committed duration, using the existing fail-closed restart
+- Older rest records, including those without durationSeconds, are capped at
+  15 seconds without changing their start time. Shorter records retain their
+  duration. Existing progression counts map to the new capped sequence.
+  Reboot retains the capped duration, using the existing fail-closed restart
   of its clock. Ordinary pause quotas are unchanged; navigation grace is now three seconds.
 - Run scripts/test_ios_blocking.sh and node --test tests/IOSPauses/policy.test.cjs.
   Physical-device checks remain needed for 30-second DeviceActivity expiry and

@@ -50,6 +50,9 @@ enum IOSPauseCoordinator {
 
     static func setPauseSeconds(_ seconds: Int) throws {
         try database().transaction { ledger in
+            if GroupedApps.isEnabled, pendingSelectionRest(in: ledger, selection: GroupedApps.data) != nil {
+                throw IOSPauseError.busy
+            }
             try ledger.setPauseSeconds(seconds, strict: SharedStore.snapshot().isStrictModeActive)
         }
     }
@@ -101,6 +104,7 @@ enum IOSPauseCoordinator {
         try database().transaction { ledger in
             let state = SharedStore.snapshot()
             let selected = selection(target, state: state)
+            guard decoded(selected) != nil else { throw IOSPauseError.unavailable }
             let paused = ledger.lease.map {
                 $0.kind == "application" && $0.target == target && $0.phase == "active" &&
                 !$0.expired(clock()) && valid($0, state: state)
@@ -318,7 +322,8 @@ enum IOSPauseCoordinator {
         }
     }
 
-    static func recordingPolicy() throws -> (pausedTarget: String?, revision: Int) {
+    static func recordingPolicy() throws -> (pausedTarget: String?, revision: Int,
+                                             selections: [String: Data], groupRules: GroupedContentRules) {
         var endedPause = false
         defer { if endedPause { refreshLiveActivity() } }
         return try database().transaction { ledger in
@@ -326,25 +331,51 @@ enum IOSPauseCoordinator {
             reconcile(&ledger, now: clock(), enforceApplications: true)
             endedPause = previous != nil && ledger.lease == nil
             let target = ledger.lease.flatMap { $0.kind == "application" && $0.phase == "active" ? $0.target : nil }
-            return (target, ledger.revision)
+            let state = SharedStore.snapshot()
+            let selections = Dictionary(uniqueKeysWithValues: apps.compactMap { target in
+                selection(target, state: state).map { (target, $0) }
+            })
+            return (target, ledger.revision, selections, GroupedApps.contentRules)
         }
     }
 
-    /// Called after a successful settings write, before returning control to the UI.
-    static func selectionDidChange(target: String, previousSelection: Data?) throws {
-        let currentSelection = selection(target, state: SharedStore.snapshot())
-        guard decoded(previousSelection)?.applicationTokens != decoded(currentSelection)?.applicationTokens else { return }
-        #if !PAUSE_COORDINATOR_TESTS
-        ShieldNavigationBindings.invalidate(target, defaults: AppGroup.defaults)
-        #endif
+    /// Read-only UI state; inspecting the lock must not start or extend a rest.
+    static func groupSelectionEditingRest() throws -> IOSDetectionRest? {
+        guard GroupedApps.isEnabled else { return nil }
+        return pendingSelectionRest(in: try database().read(), selection: GroupedApps.data)
+    }
+
+    private static func pendingSelectionRest(in ledger: IOSPauseLedger, selection: Data?) -> IOSDetectionRest? {
+        guard let selection, let rest = ledger.detectionRests?["apps"], rest.selection == selection,
+              rest.released == nil, rest.completed != true, rest.remaining(restClock()) > 0 else { return nil }
+        // An explicit content allowance overrides the detection rest. Its own
+        // timer must not freeze settings after the user spends a leaf.
+        if let lease = ledger.lease, lease.kind == "application", lease.target == "apps",
+           lease.phase == "active", lease.selection == selection, !lease.expired(clock()) { return nil }
+        return rest
+    }
+
+    /// Group saves run under the same lock as detections, so a newly arriving
+    /// rest cannot be cleared by a picker that was opened before detection.
+    static func selectionDidChange(target: String, previousSelection: Data?, save: () throws -> Void = {}) throws {
         var endedID: String?
         try database().transaction { ledger in
+            if target == "apps", pendingSelectionRest(in: ledger, selection: previousSelection) != nil {
+                throw IOSPauseError.busy
+            }
+            try save()
             let state = SharedStore.snapshot()
+            let currentSelection = selection(target, state: state)
+            guard decoded(previousSelection)?.applicationTokens != decoded(currentSelection)?.applicationTokens else { return }
+            #if !PAUSE_COORDINATOR_TESTS
+            ShieldNavigationBindings.invalidate(target, defaults: AppGroup.defaults)
+            #endif
             if let lease = ledger.lease, lease.kind == "application", lease.target == target {
                 endedID = lease.id
                 ledger.finish(now: clock())
             }
             ledger.invalidateBinding(target)
+            ledger.revision += 1
             AppGroup.defaults.removeObject(forKey: "pause.runtime.\(target).shield")
             AppGroup.defaults.removeObject(forKey: "pause.runtime.\(target).at")
             // Replaces the whole named store, dropping the old token immediately.
@@ -356,13 +387,19 @@ enum IOSPauseCoordinator {
         refreshLiveActivity()
     }
 
-    /// Recompute an existing rest after a stopped-recording settings edit without
-    /// restarting its clock, charging a pause, or changing the selected app set.
-    static func refreshGroupedExceptions() throws {
-        guard GroupedApps.isEnabled else { return }
+    /// Serialize settings edits with detections. An unfinished detection rest
+    /// locks edits; refreshes without an edit retain the current protection policy.
+    static func refreshGroupedContentSettings(edit: (() throws -> Void)? = nil) throws {
+        guard GroupedApps.isEnabled else { try edit?(); return }
         try database().transaction { ledger in
-            guard !SharedStore.snapshot().broadcastActive else { throw IOSPauseError.busy }
-            if var rest = ledger.detectionRests?["apps"], let kinds = rest.contentKinds {
+            if let edit {
+                guard pendingSelectionRest(in: ledger, selection: GroupedApps.data) == nil else {
+                    throw IOSPauseError.busy
+                }
+                try edit()
+            }
+            let state = SharedStore.snapshot()
+            if var rest = ledger.detectionRests?["apps"], rest.released == nil, let kinds = rest.contentKinds {
                 if let filtered = GroupedApps.blockedSelection(for: kinds) {
                     rest.blockedSelection = try JSONEncoder().encode(filtered)
                     ledger.detectionRests?["apps"] = rest
@@ -370,7 +407,72 @@ enum IOSPauseCoordinator {
                     ledger.detectionRests?.removeValue(forKey: "apps")
                 }
             }
+            let oldRevision = ledger.revision
             ledger.revision += 1
+            if ledger.detectionRests?["apps"]?.releaseRevision == oldRevision {
+                ledger.detectionRests?["apps"]?.releaseRevision = ledger.revision
+            }
+            if !GroupedApps.contentRules.hasEnabledContent {
+                ledger.inferenceFailures?.removeValue(forKey: "apps")
+            }
+            AppGroup.defaults.removeObject(forKey: "pause.runtime.apps.shield")
+            AppGroup.defaults.removeObject(forKey: "pause.runtime.apps.at")
+            applyGroupedSettings(ledger, state: state)
+        }
+    }
+
+    private static func applyGroupedSettings(_ ledger: IOSPauseLedger, state: SharedState) {
+        let paused = ledger.lease.map {
+            $0.kind == "application" && $0.target == "apps" && $0.phase == "active" &&
+                !$0.expired(clock()) && valid($0, state: state)
+        } ?? false
+        let selected = selection("apps", state: state)
+        let rest = ledger.detectionRests?["apps"]
+        let failed = ledger.inferenceFailed("apps", selection: selected)
+        let pendingRest = rest != nil && rest?.selection == selected &&
+            rest?.released == nil && rest?.completed != true
+        var protected: FamilyActivitySelection?
+        if enabled("apps", state: state) && protectionAuthorized(state) && !paused {
+            if !state.broadcastActive || failed {
+                protected = decoded(selected)
+            } else if let rest, rest.selection == selected, rest.released == nil, rest.completed != true {
+                protected = decoded(rest.blockedSelection ?? selected)
+            }
+        }
+        write("apps", selection: protected, allowSoftDeferral: !pendingRest && !failed)
+    }
+
+    static func prepareGroupedSoftSession() throws -> GroupedSoftSession<ApplicationToken>? {
+        try database().transaction { ledger in
+            try GroupedApps.migrateSettings()
+            let state = SharedStore.snapshot()
+            let tokens = state.realtimeShieldEnabled && !state.broadcastActive ? GroupedApps.softTokens : []
+            let session = tokens.isEmpty ? nil : GroupedSoftSession(generation: UUID().uuidString,
+                events: Dictionary(uniqueKeysWithValues: tokens.map { (UUID().uuidString, $0) }))
+            GroupedApps.softSession = session
+            applyGroupedSettings(ledger, state: state)
+            return session
+        }
+    }
+
+    static func groupedSoftRegistrationFailed(generation: String) throws {
+        try database().transaction { ledger in
+            guard GroupedApps.softSession?.generation == generation else { return }
+            GroupedApps.softSession = nil
+            applyGroupedSettings(ledger, state: SharedStore.snapshot())
+        }
+    }
+
+    static func groupedSoftThreshold(generation: String, event: String) throws -> Bool {
+        try database().transaction { ledger in
+            let state = SharedStore.snapshot()
+            guard !state.broadcastActive, !SharedStore.isSlowthAppForeground(),
+                  state.realtimeShieldEnabled, var session = GroupedApps.softSession,
+                  session.consume(event, generation: generation) != nil else { return false }
+            GroupedApps.softSession = session
+            reconcile(&ledger, now: clock(), enforceApplications: true)
+            applyGroupedSettings(ledger, state: state)
+            return session.events.isEmpty
         }
     }
 
@@ -403,6 +505,7 @@ enum IOSPauseCoordinator {
     }
     private static func decoded(_ data: Data?) -> FamilyActivitySelection? {
         guard let data, let s = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data),
+              BlockingRules.supportsApplicationCount(s.applicationTokens.count),
               (GroupedApps.isEnabled ? !s.applicationTokens.isEmpty : s.applicationTokens.count == 1), s.categoryTokens.isEmpty, s.webDomainTokens.isEmpty else { return nil }
         return s
     }

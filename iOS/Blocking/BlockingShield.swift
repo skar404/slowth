@@ -8,7 +8,20 @@ import ManagedSettings
 /// never use this adapter to bypass pause/rest validation.
 enum BlockingShield {
     static func write(_ target: String, selection: FamilyActivitySelection?, allowSoftDeferral: Bool = true) {
+        // Also guard stale extension requests. An unsupported write must not
+        // replace an existing valid shield or reach ManagedSettings.
+        guard BlockingRules.supportsApplicationCount(selection?.applicationTokens.count ?? 0) else { return }
         if GroupedApps.isEnabled && target == "apps" {
+            if GroupedApps.usesAppSettings {
+                var protected = selection
+                if allowSoftDeferral && !SharedStore.snapshot().broadcastActive {
+                    let pending = Set(GroupedApps.softSession?.events.values.map { $0 } ?? [])
+                    protected?.applicationTokens.subtract(pending.intersection(GroupedApps.softTokens))
+                }
+                write("group", selection: protected)
+                write("youtube", selection: nil)
+                return
+            }
             var general = selection
             var soft = GroupedApps.softSelection
             soft?.applicationTokens.formIntersection(selection?.applicationTokens ?? [])

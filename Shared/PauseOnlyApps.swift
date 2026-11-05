@@ -134,20 +134,81 @@ enum PauseOnlyApps {
 }
 #endif
 
-#if os(iOS) && canImport(FamilyControls)
+#if (os(iOS) && canImport(FamilyControls)) || GROUPED_APPS_TESTS
 /// MVP: a single opaque application set owns one pause and one detection rest.
 /// Legacy selections remain stored for rollback, but do not enforce after opt-in.
 enum GroupedApps {
+    static let settingsKey = "groupedApps.settings.v2"
+    static let softSessionKey = "groupedApps.softSession.v2"
+    static var configuration: AppBlockingConfiguration<ApplicationToken>? {
+        guard let data = AppGroup.defaults.data(forKey: settingsKey),
+              let value = try? JSONDecoder().decode(AppBlockingConfiguration<ApplicationToken>.self, from: data),
+              value.version == 2 else { return nil }
+        return value
+    }
+    static var usesAppSettings: Bool { configuration != nil }
+    static func settings(for token: ApplicationToken) -> AppBlockingSettings<ApplicationToken> {
+        configuration?.settings(for: token) ?? .init(token: token,
+            shortVideos: legacyContentRules.shortVideos && !exception(for: token).allowShortVideos,
+            stories: legacyContentRules.stories && !exception(for: token).allowStories,
+            soft: softSelection?.applicationTokens.contains(token) == true)
+    }
+    /// Called only under the coordinator lock, before changing the selected tokens.
+    static func migrateSettings() throws {
+        if let data = AppGroup.defaults.data(forKey: settingsKey) {
+            let existing = try JSONDecoder().decode(AppBlockingConfiguration<ApplicationToken>.self, from: data)
+            guard existing.version == 2 else { throw SharedStoreError.invalidValue }
+            return
+        }
+        let value = AppBlockingConfiguration.migrate(tokens: savedSelection?.applicationTokens ?? [],
+            rules: legacyContentRules, exceptions: exceptions, softTokens: softSelection?.applicationTokens ?? [])
+        try saveConfiguration(value)
+    }
+    private static func saveConfiguration(_ value: AppBlockingConfiguration<ApplicationToken>) throws {
+        AppGroup.defaults.set(try JSONEncoder().encode(value), forKey: settingsKey)
+        AppGroup.defaults.synchronize()
+    }
+    static func setSettings(_ settings: AppBlockingSettings<ApplicationToken>) throws {
+        guard selection?.applicationTokens.contains(settings.token) == true else { throw SharedStoreError.invalidValue }
+        try migrateSettings()
+        guard var value = configuration else { throw SharedStoreError.invalidValue }
+        if SharedStore.snapshot().isStrictModeActive && settings.weakens(value.settings(for: settings.token)) {
+            throw SharedStoreError.strictModeActive
+        }
+        value.set(settings)
+        try saveConfiguration(value)
+    }
+    static var softTokens: Set<ApplicationToken> {
+        Set((selection?.applicationTokens ?? []).filter { settings(for: $0).soft })
+    }
+    static var softSession: GroupedSoftSession<ApplicationToken>? {
+        get {
+            AppGroup.defaults.data(forKey: softSessionKey).flatMap {
+                try? JSONDecoder().decode(GroupedSoftSession<ApplicationToken>.self, from: $0)
+            }
+        }
+        set {
+            AppGroup.defaults.set(newValue.flatMap { try? JSONEncoder().encode($0) }, forKey: softSessionKey)
+            AppGroup.defaults.synchronize()
+        }
+    }
     static var contentRules: GroupedContentRules {
+        guard let value = configuration else { return legacyContentRules }
+        let settings = (selection?.applicationTokens ?? []).map { value.settings(for: $0) }
+        return .init(shortVideos: settings.contains { $0.shortVideos }, stories: settings.contains { $0.stories })
+    }
+    private static var legacyContentRules: GroupedContentRules {
         GroupedContentRules(
             shortVideos: AppGroup.defaults.object(forKey: "groupedApps.shortVideos.v1") as? Bool ?? true,
             stories: AppGroup.defaults.object(forKey: "groupedApps.stories.v1") as? Bool ?? true)
     }
+    static func contentRuleKey(_ kind: GroupedContentRules.Kind) -> String {
+        kind == .shortVideos ? "groupedApps.shortVideos.v1" : "groupedApps.stories.v1"
+    }
     static func setContentBlocking(_ kind: GroupedContentRules.Kind, enabled: Bool) throws {
         let state = SharedStore.snapshot()
-        guard !state.broadcastActive else { throw SharedStoreError.invalidValue }
         if state.isStrictModeActive && !enabled { throw SharedStoreError.strictModeActive }
-        let key = kind == .shortVideos ? "groupedApps.shortVideos.v1" : "groupedApps.stories.v1"
+        let key = contentRuleKey(kind)
         AppGroup.defaults.set(enabled, forKey: key)
         AppGroup.defaults.synchronize()
     }
@@ -162,7 +223,7 @@ enum GroupedApps {
     }
     static func setException(_ rule: GroupedContentException<ApplicationToken>) throws {
         let state = SharedStore.snapshot()
-        guard !state.broadcastActive, selection?.applicationTokens.contains(rule.token) == true else { throw SharedStoreError.invalidValue }
+        guard selection?.applicationTokens.contains(rule.token) == true else { throw SharedStoreError.invalidValue }
         let old = exception(for: rule.token)
         if state.isStrictModeActive && ((!old.allowShortVideos && rule.allowShortVideos) || (!old.allowStories && rule.allowStories)) {
             throw SharedStoreError.strictModeActive
@@ -174,13 +235,27 @@ enum GroupedApps {
     }
     static func blockedSelection(for kinds: Set<GroupedContentRules.Kind>) -> FamilyActivitySelection? {
         guard var selected = selection else { return nil }
-        selected.applicationTokens = contentRules.blockedTokens(from: selected.applicationTokens, kinds: kinds, exceptions: exceptions)
+        if let value = configuration {
+            selected.applicationTokens = selected.applicationTokens.filter {
+                let rule = value.settings(for: $0)
+                return (rule.shortVideos && kinds.contains(.shortVideos)) || (rule.stories && kinds.contains(.stories))
+            }
+        } else {
+            selected.applicationTokens = contentRules.blockedTokens(from: selected.applicationTokens, kinds: kinds, exceptions: exceptions)
+        }
         return selected.applicationTokens.isEmpty ? nil : selected
     }
     static let key = "groupedApps.selection.v1"
     static var isEnabled: Bool { AppGroup.defaults.bool(forKey: "groupedApps.enabled.v1") }
     static var data: Data? { AppGroup.defaults.data(forKey: key) }
     static var selection: FamilyActivitySelection? {
+        guard let value = savedSelection,
+              BlockingRules.supportsApplicationCount(value.applicationTokens.count) else { return nil }
+        return value
+    }
+    // Preserve older oversized lists for correction in the picker, but never
+    // report them as a working protection configuration or silently truncate.
+    private static var savedSelection: FamilyActivitySelection? {
         guard let data, let value = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data),
               !value.applicationTokens.isEmpty, value.categoryTokens.isEmpty, value.webDomainTokens.isEmpty else { return nil }
         return value
@@ -188,11 +263,11 @@ enum GroupedApps {
     // Categories are expanded by the system picker; persist a snapshot of apps only.
     static var pickerSelection: FamilyActivitySelection {
         var value = FamilyActivitySelection(includeEntireCategory: true)
-        value.applicationTokens = selection?.applicationTokens ?? []
+        value.applicationTokens = savedSelection?.applicationTokens ?? []
         return value
     }
     static var orderedTokens: [ApplicationToken] {
-        Array(selection?.applicationTokens ?? []).sorted {
+        Array(savedSelection?.applicationTokens ?? []).sorted {
             (try? JSONEncoder().encode($0).base64EncodedString()) ?? "" < (try? JSONEncoder().encode($1).base64EncodedString()) ?? ""
         }
     }

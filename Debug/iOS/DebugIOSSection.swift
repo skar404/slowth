@@ -13,6 +13,8 @@ struct DebugIOSSection: View {
 
     @AppStorage(DebugMode.shieldDiagnosticsStorageKey, store: AppGroup.defaults) private var shieldDiagnosticsEnabled = false
 
+    @State private var showIconProbe = false
+
     var body: some View {
         Section {
             Toggle("Debug mode", isOn: $debugModeEnabled)
@@ -24,6 +26,9 @@ struct DebugIOSSection: View {
                 }
             Toggle("Debug Shield", isOn: $shieldDiagnosticsEnabled)
                 .accessibilityIdentifier("debug.shieldDiagnostics")
+            Button(String(localized: "Experiment: get app icons", table: "Interface")) { showIconProbe = true }
+                .disabled(GroupedApps.selection == nil)
+                .sheet(isPresented: $showIconProbe) { FamilyIconProbeSheet() }
             DebugSessionCaptureControls()
             if DebugModelSettings.cascadeAvailable {
                 Picker("Model (next recording)", selection: Binding(

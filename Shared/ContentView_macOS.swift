@@ -394,7 +394,6 @@ struct MacContentView: View {
                     RecordingPauseCard {
                         AppRecordingCard(preferredExtensionBundleID: state.broadcastExtensionBundleID,
                             isRecording: state.snapshot.broadcastActive,
-                            onLearnMore: { showRealtimeBlockingBeta = true },
                             showsPause: !IOSPauseCoordinator.strictModeBlocksPauses(state.snapshot))
                     }
                 }
@@ -403,12 +402,7 @@ struct MacContentView: View {
                 groupedSelection = GroupedApps.pickerSelection
                 showGroupedPicker = true
             }
-            GroupedAppAdvancedSettings(state: state, tokens: GroupedApps.orderedTokens, onChooseYouTube: {
-                youtubeSelection = state.snapshot.youtubeSelectionData.flatMap {
-                    try? JSONDecoder().decode(FamilyActivitySelection.self, from: $0)
-                } ?? FamilyActivitySelection()
-                showYouTubePicker = true
-            })
+
         }
     }
     #endif

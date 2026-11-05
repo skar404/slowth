@@ -1,6 +1,7 @@
 #if os(iOS) && canImport(DeviceActivity) && canImport(FamilyControls)
 import DeviceActivity
 import FamilyControls
+import ManagedSettings
 import Foundation
 
 /// Arms a fresh one-shot Device Activity event for the selected YouTube app.
@@ -113,6 +114,39 @@ enum SoftYouTubeActivityMonitoring {
     static func stop(activity: DeviceActivityName, generation: String) {
         DeviceActivityCenter().stopMonitoring([activity])
         _ = SharedStore.clearSoftYouTubeMonitorGeneration(ifMatching: generation)
+    }
+}
+/// A single activity owns one independently consumed event per soft app.
+enum GroupedSoftActivityMonitoring {
+    static let prefix = "groupedSoft.v2."
+    static func start(_ session: GroupedSoftSession<ApplicationToken>) -> Bool {
+        let schedule = DeviceActivitySchedule(intervalStart: DateComponents(hour: 0, minute: 0, second: 0),
+            intervalEnd: DateComponents(hour: 23, minute: 59, second: 59), repeats: true)
+        let events = Dictionary(uniqueKeysWithValues: session.events.map { id, token in
+            let event: DeviceActivityEvent
+            if #available(iOS 17.4, *) {
+                event = DeviceActivityEvent(applications: [token], threshold: DateComponents(second: BlockingRules.softUsageSeconds),
+                                            includesPastActivity: false)
+            } else {
+                event = DeviceActivityEvent(applications: [token], threshold: DateComponents(second: BlockingRules.softUsageSeconds))
+            }
+            return (DeviceActivityEvent.Name(id), event)
+        })
+        do {
+            try DeviceActivityCenter().startMonitoring(.init(prefix + session.generation), during: schedule, events: events)
+            return true
+        } catch { return false }
+    }
+    static func stop(generation: String? = nil) {
+        let center = DeviceActivityCenter()
+        center.stopMonitoring(center.activities.filter {
+            generation == nil
+                ? $0.rawValue.hasPrefix(prefix) : $0.rawValue == prefix + generation!
+        })
+    }
+    static func generation(_ activity: DeviceActivityName) -> String? {
+        guard activity.rawValue.hasPrefix(prefix) else { return nil }
+        return String(activity.rawValue.dropFirst(prefix.count))
     }
 }
 #endif

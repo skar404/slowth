@@ -2,9 +2,11 @@
 import copy
 import json
 import plistlib
+import re
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -16,7 +18,23 @@ def unit(value):
     return {'stringUnit': {'state': 'translated', 'value': value}}
 
 
+FALLBACK_FIXTURE = {'locales': ['fr'], 'tables': {'Interface': ['Choose %@']}}
+
+
 class LocalizationTests(unittest.TestCase):
+    def test_guide_and_picker_strings_are_registered(self):
+        # A well-formed catalog can still omit a newly added Swift source key.
+        # These screens previously showed English-only category instructions.
+        catalogs = load_catalogs()
+        root = Path(__file__).resolve().parents[1]
+        pattern = re.compile(r'(?:String\(localized:\s*|AppLocalization\.string\()'
+                             r'"((?:\\.|[^"\\])*)"(?:,\s*table:\s*"([^"]+)")?')
+        for source in ['Shared/HowItWorksSheet.swift', 'iOS/FamilyActivityPickerHost.swift']:
+            for match in pattern.finditer((root / source).read_text()):
+                key = json.loads('"' + match[1] + '"')
+                table = match[2] or 'Localizable'
+                self.assertIn(key, catalogs[table]['strings'], (source, table, key))
+
     def test_all_shipping_catalogs(self):
         catalogs = load_catalogs()
         locales = supported_locales(catalogs)
@@ -25,12 +43,18 @@ class LocalizationTests(unittest.TestCase):
         verify_fallback_policy(catalogs, locales)
         for name, catalog in catalogs.items():
             verify_catalog(catalog, locales, name)
+        untranslated = [(name, key) for name, catalog in catalogs.items()
+                        for key, entry in catalog['strings'].items()
+                        if entry.get('shouldTranslate') is False]
+        self.assertEqual(untranslated, [('Localizable', '%@')],
+                         'Visible UI copy must not bypass localization checks')
 
     def fallback_catalog(self):
         return {'sourceLanguage': 'en', 'strings': {
             'Choose %@': {'localizations': {'en': unit('Choose %@'), 'ru': unit('Выберите %@')}},
             'Existing': {'localizations': {'en': unit('Existing'), 'ru': unit('Существующий'), 'fr': unit('Existant')}}}}
 
+    @patch.dict(FALLBACK_POLICY, FALLBACK_FIXTURE, clear=True)
     def test_fallback_is_limited_to_listed_keys_tables_and_locales(self):
         catalog = self.fallback_catalog()
         locales = {'en', 'ru', 'fr'}
@@ -43,6 +67,7 @@ class LocalizationTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 verify_catalog(bad, locales, table)
 
+    @patch.dict(FALLBACK_POLICY, FALLBACK_FIXTURE, clear=True)
     def test_fallback_still_checks_present_translations(self):
         for replacement in [unit(''), unit('Choisir %lld'),
                             {'stringUnit': {'state': 'new', 'value': 'Choisir %@'}}]:
@@ -51,6 +76,7 @@ class LocalizationTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 verify_catalog(catalog, {'en', 'ru', 'fr'}, 'Interface')
 
+    @patch.dict(FALLBACK_POLICY, FALLBACK_FIXTURE, clear=True)
     def test_fallback_policy_rejects_deleted_keys_and_changed_english(self):
         catalogs = load_catalogs()
         locales = supported_locales(catalogs)
@@ -64,6 +90,7 @@ class LocalizationTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             verify_fallback_policy(catalogs, locales)
 
+    @patch.dict(FALLBACK_POLICY, FALLBACK_FIXTURE, clear=True)
     def test_compiled_fallback_accepts_omission_or_exact_english_only(self):
         catalog = self.fallback_catalog()
         locales = {'en', 'ru', 'fr'}

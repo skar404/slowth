@@ -2,82 +2,67 @@ import SwiftUI
 
 /// Presentation only. The coordinator owns the clock and release permission.
 struct DetectionRestCountdown: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let target: String
     let remaining: TimeInterval
-    var compact = false
-    private var appName: String {
-        PauseTargetDisplay.name(for: target)
-    }
-
-    @ViewBuilder
-    private var serviceIcon: some View {
-        if target == "apps" {
-            Image(systemName: "square.stack.3d.up.fill")
-                .font(compact ? .title2 : .largeTitle)
-                .foregroundStyle(SlowthAppearance.sage)
-                .accessibilityHidden(true)
-        } else {
-        Image("Service-" + target)
-            .resizable().scaledToFit().frame(width: compact ? 28 : 40, height: compact ? 28 : 40)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .accessibilityHidden(true)
-        }
-    }
-
-    private var lockIcon: some View {
-        Image(systemName: "lock.fill").foregroundStyle(SlowthAppearance.sage)
-            .accessibilityHidden(true)
-    }
-
-    private var appTitle: some View {
-        Text(appName).font(compact ? .headline : .title2.weight(.semibold))
-            .lineLimit(1).minimumScaleFactor(0.5)
-    }
+    let duration: TimeInterval
+    private var finished: Bool { remaining <= 0 }
 
     var body: some View {
-        VStack(spacing: compact ? 8 : 20) {
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        serviceIcon
-                        Spacer(minLength: 0)
-                        lockIcon
-                    }
-                    appTitle
-                }
-            } else {
-                HStack(spacing: 12) {
-                    serviceIcon
-                    appTitle
-                    Spacer(minLength: 0)
-                    if compact { countdown } else { lockIcon }
+        VStack(spacing: 16) {
+            VStack(spacing: 6) {
+                Text(finished ? String(localized: "Pause finished", table: "Interface")
+                     : String(localized: "Take a short pause", table: "Interface"))
+                    .font(.title2.weight(.semibold))
+                    .accessibilityIdentifier(finished ? "rest.completed" : "rest.active")
+                Text(PauseTargetDisplay.name(for: target))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            ZStack {
+                Circle().stroke(SlowthAppearance.sage.opacity(0.14), lineWidth: 5)
+                Circle()
+                    .trim(from: 0, to: finished ? 1 : min(1, max(0, remaining / max(1, duration))))
+                    .stroke(SlowthAppearance.sage, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                if finished {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 36, weight: .medium))
+                } else {
+                    Text(Duration.seconds(Int(ceil(max(0, remaining)))).formatted(.time(pattern: .minuteSecond)))
+                        .font(.system(size: 32, weight: .semibold, design: .rounded).monospacedDigit())
+                        .accessibilityLabel(String(localized: "Time remaining", table: "Interface"))
+                        .accessibilityValue(Duration.seconds(Int(ceil(max(0, remaining)))).formatted(.time(pattern: .minuteSecond)))
+                        .accessibilityIdentifier("rest.remaining")
                 }
             }
-            if !compact || dynamicTypeSize.isAccessibilitySize { countdown }
-            Text(String(localized: "You can close Slowth — the countdown continues.", table: "Interface"))
-                .font(compact ? .footnote : .subheadline).foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+            .foregroundStyle(SlowthAppearance.sage)
+            .frame(width: 120, height: 120)
+            .accessibilityHidden(finished)
+            .padding(.vertical, 4)
+
+            Text(finished
+                 ? String(localized: "Leave the blocked content when you return, or another pause may begin.", table: "Interface")
+                 : String(localized: "Slowth detected content you chose to block. Take a short break before returning to the app.", table: "Interface"))
+                .font(.body)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(finished ? String(localized: "Return using the app switcher.", table: "Interface")
+                 : String(localized: "You can close Slowth — the countdown continues.", table: "Interface"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.vertical, compact ? 0 : 12)
-    }
-
-    private var countdown: some View {
-        Text(Duration.seconds(Int(ceil(remaining))).formatted(.time(pattern: .minuteSecond)))
-            .font(.system(compact ? .title2 : .largeTitle, design: .rounded).weight(.semibold).monospacedDigit())
-            .foregroundStyle(SlowthAppearance.sage)
-            .padding(.vertical, compact ? 0 : 12)
-            .accessibilityIdentifier("rest.remaining")
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
     }
 }
 
 #if DEBUG
-#Preview("Rest · 60 seconds") {
-    Form { DetectionRestCountdown(target: "youtube", remaining: 60) }
+#Preview("Pause · countdown") {
+    DetectionRestCountdown(target: "apps", remaining: 12, duration: 15).padding(24)
 }
-#Preview("Rest · finishing · large text") {
-    Form { DetectionRestCountdown(target: "instagram", remaining: 5) }
+#Preview("Pause · finished · large text") {
+    DetectionRestCountdown(target: "apps", remaining: 0, duration: 15).padding(24)
         .environment(\.dynamicTypeSize, .accessibility3)
         .preferredColorScheme(.dark)
 }
