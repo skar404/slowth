@@ -14,6 +14,8 @@ struct DebugIOSSection: View {
     @AppStorage(DebugMode.shieldDiagnosticsStorageKey, store: AppGroup.defaults) private var shieldDiagnosticsEnabled = false
 
     @State private var showIconProbe = false
+    @State private var showMotionExperiment = false
+    @State private var showTransfers = false
 
     var body: some View {
         Section {
@@ -30,6 +32,12 @@ struct DebugIOSSection: View {
                 .disabled(GroupedApps.selection == nil)
                 .sheet(isPresented: $showIconProbe) { FamilyIconProbeSheet() }
             DebugSessionCaptureControls()
+            if #available(iOS 16.2, *) {
+                Button("Experiment: scroll motion") { showMotionExperiment = true }
+                    .sheet(isPresented: $showMotionExperiment) { MotionExperimentView() }
+            }
+            Button("Connections and transfer queue") { showTransfers = true }
+                .sheet(isPresented: $showTransfers) { DebugTransfersView() }
             if DebugModelSettings.cascadeAvailable {
                 Picker("Model (next recording)", selection: Binding(
                     get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
@@ -117,4 +125,12 @@ struct DebugIOSSection: View {
     .allowsHitTesting(false)
 }
 
+extension View {
+    func debugFormStyle() -> some View {
+        self.scrollContentBackground(.hidden)
+            .frame(maxWidth: 680).frame(maxWidth: .infinity)
+            .background(SlowthAppearance.background)
+            .environment(\.defaultMinListRowHeight, 48)
+    }
+}
 #endif

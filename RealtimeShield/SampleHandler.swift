@@ -60,6 +60,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
     #if DEBUG
     private var broadcastSessionID = UUID()
     private var sessionCapture: SessionCapture?
+    private var motionVideo: MotionVideoRecorder?
 
     #endif
 
@@ -95,6 +96,18 @@ final class SampleHandler: RPBroadcastSampleHandler {
             return
         }
         resetSessionState()
+        #if DEBUG
+        motionVideo = MotionVideoRecorder { [weak self] in
+            guard let self else { return }
+            self.processingLock.lock()
+            defer { self.processingLock.unlock() }
+            guard self.admission.admitted else { return }
+            // Run the normal stop policy before asking ReplayKit to terminate.
+            self.broadcastFinished()
+            self.finishBroadcastWithError(NSError(domain: "Slowth.MotionSession", code: 0,
+                userInfo: [NSLocalizedDescriptionKey: "The video and motion recording has ended."]))
+        }
+        #endif
         recordingGroupRules = GroupedApps.contentRules
         // Freeze the choice before a delayed load or a retry after pause/failure.
         #if DEBUG
@@ -129,6 +142,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     override func broadcastPaused() {
+        #if DEBUG
+        motionVideo?.pause()
+        #endif
         processingLock.lock()
         defer { processingLock.unlock() }
         guard admission.active else { return }
@@ -148,6 +164,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
     }
 
     override func broadcastResumed() {
+        #if DEBUG
+        motionVideo?.resume()
+        #endif
         processingLock.lock()
         defer { processingLock.unlock() }
         guard admitRecording() else { return }
@@ -187,7 +206,15 @@ final class SampleHandler: RPBroadcastSampleHandler {
 
     override func broadcastFinished() {
         processingLock.lock()
+        #if DEBUG
+        let motionCapture = motionVideo
+        motionVideo = nil
+        // Apply at-rest shields before flushing; take ownership under the lock
+        // so an automatic stop and ReplayKit's callback cannot finalize twice.
+        defer { processingLock.unlock(); motionCapture?.finish() }
+        #else
         defer { processingLock.unlock() }
+        #endif
         guard admission.admitted else { return }
         admission.finish()
         RTLog.sampleHandler.notice("broadcastFinished — applying at-rest shield policy")
@@ -213,6 +240,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
         defer { processingLock.unlock() }
         guard admission.active, sampleBufferType == .video else { return }
         #if DEBUG
+        motionVideo?.offer(sampleBuffer)
         var framePredictions: [String: Double]?
         defer {
             captureSessionFrame(sampleBuffer, predictions: framePredictions)

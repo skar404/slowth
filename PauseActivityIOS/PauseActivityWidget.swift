@@ -3,7 +3,12 @@ import SwiftUI
 import WidgetKit
 
 @main struct PauseActivityBundle: WidgetBundle {
-    var body: some Widget { PauseActivityWidget() }
+    var body: some Widget {
+        PauseActivityWidget()
+        #if DEBUG
+        MotionExperimentWidget()
+        #endif
+    }
 }
 
 struct PauseActivityWidget: Widget {

@@ -47,19 +47,15 @@ enum SessionCaptureName {
 /// Foundation creates a temporary ZIP for a directory with .forUploading.
 /// Copy it inside the accessor: the coordinated URL expires when it returns.
 enum SessionCaptureArchive {
-    static func export(_ directory: URL, to destination: URL,
-                       inspectSnapshot: ((URL) throws -> Void)? = nil) throws -> URL {
+    static func copySnapshot(_ directory: URL, to snapshot: URL, manifestData: Data? = nil) throws {
         let manager = FileManager.default
-        let data = try Data(contentsOf: directory.appendingPathComponent("session.json"))
+        let data = try manifestData ?? Data(contentsOf: directory.appendingPathComponent("session.json"))
         let manifest = try JSONDecoder().decode(SessionCapture.Manifest.self, from: data)
-        let snapshot = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
-        try manager.createDirectory(at: snapshot, withIntermediateDirectories: false)
-        defer { try? manager.removeItem(at: snapshot) }
-        // JPEGs are immutable and committed before the atomically replaced manifest.
+        // Images are immutable and committed before the atomically replaced manifest.
         // Snapshot only its inventory, so even interrupted/live sessions are coherent.
         for frame in manifest.frames {
             guard frame.filename == URL(fileURLWithPath: frame.filename).lastPathComponent,
-                  frame.filename.hasPrefix("frame_"), frame.filename.hasSuffix(".jpg") else {
+                  frame.filename.hasPrefix("frame_"), (frame.filename.hasSuffix(".jpg") || frame.filename.hasSuffix(".png")) else {
                 throw CocoaError(.fileReadCorruptFile)
             }
             try manager.copyItem(at: directory.appendingPathComponent(frame.filename),
@@ -69,6 +65,16 @@ enum SessionCaptureArchive {
         if let name = try SessionCaptureName.load(from: directory) {
             try SessionCaptureName.rename(in: snapshot, to: name)
         }
+    }
+
+    static func export(_ directory: URL, to destination: URL,
+                       inspectSnapshot: ((URL) throws -> Void)? = nil) throws -> URL {
+        let manager = FileManager.default
+        let data = try Data(contentsOf: directory.appendingPathComponent("session.json"))
+        let snapshot = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try manager.createDirectory(at: snapshot, withIntermediateDirectories: false)
+        defer { try? manager.removeItem(at: snapshot) }
+        try copySnapshot(directory, to: snapshot, manifestData: data)
         try inspectSnapshot?(snapshot)
         let coordinator = NSFileCoordinator()
         var coordinationError: NSError?

@@ -88,12 +88,21 @@ struct BroadcastPickerView: UIViewRepresentable {
     let preferredExtensionBundleID: String
     var showsSystemControl = true
     var accessibilityLabel = String(localized: "Start or stop screen recording")
+    /// Optional host preparation when the user opens the system picker.
+    /// The callback never starts/stops ReplayKit itself.
+    var onActivate: (() -> Void)? = nil
+
+    final class Coordinator: NSObject {
+        var onActivate: (() -> Void)?
+        @objc func activate() { onActivate?() }
+    }
+    func makeCoordinator() -> Coordinator { Coordinator() }
 
     func makeUIView(context: Context) -> UIView {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         let picker = ChromeHidingBroadcastPickerView(frame: container.bounds)
         picker.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        configure(picker, isEnabled: context.environment.isEnabled)
+        configure(picker, isEnabled: context.environment.isEnabled, coordinator: context.coordinator)
         container.addSubview(picker)
         return container
     }
@@ -102,10 +111,11 @@ struct BroadcastPickerView: UIViewRepresentable {
         guard let picker = uiView.subviews.first as? ChromeHidingBroadcastPickerView else {
             return
         }
-        configure(picker, isEnabled: context.environment.isEnabled)
+        configure(picker, isEnabled: context.environment.isEnabled, coordinator: context.coordinator)
     }
 
-    private func configure(_ picker: ChromeHidingBroadcastPickerView, isEnabled: Bool) {
+    private func configure(_ picker: ChromeHidingBroadcastPickerView, isEnabled: Bool, coordinator: Coordinator) {
+        coordinator.onActivate = onActivate
         picker.preferredExtension = preferredExtensionBundleID
         picker.showsMicrophoneButton = false
         picker.tintColor = showsSystemControl ? .systemRed : .clear
@@ -115,6 +125,8 @@ struct BroadcastPickerView: UIViewRepresentable {
         for button in picker.subviews.compactMap({ $0 as? UIButton }) {
             button.accessibilityLabel = accessibilityLabel
             button.accessibilityTraits = .button
+            button.removeTarget(coordinator, action: #selector(Coordinator.activate), for: .touchUpInside)
+            if onActivate != nil { button.addTarget(coordinator, action: #selector(Coordinator.activate), for: .touchUpInside) }
         }
         // Custom UIViewRepresentables don't automatically honor SwiftUI's
         // .disabled()/environment isEnabled — apply it manually so a
