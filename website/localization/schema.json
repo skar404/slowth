@@ -1,0 +1,41 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://slowth.app/#application",
+  "name": "Slowth: Short Video Blocker",
+  "url": "https://slowth.app/",
+  "description": "{{s98f7ff517cce}}",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": [
+    "iOS",
+    "iPadOS",
+    "macOS"
+  ],
+  "downloadUrl": "https://apps.apple.com/app/id6764140763",
+  "image": "https://slowth.app/img/social-preview.jpg",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "url": "https://apps.apple.com/app/id6764140763"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Denis Malin",
+    "url": "https://malina.page/"
+  },
+  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "sameAs": [
+    "https://github.com/skar404/slowth",
+    "https://apps.apple.com/app/id6764140763"
+  ],
+  "featureList": [
+    "{{sfbb216009327}}",
+    "{{s67047f1252a4}}",
+    "{{sa2c25ca56c81}}",
+    "{{sff04330b1f20}}",
+    "{{s89b0aad1ff69}}",
+    "{{s1d9030424f7c}}"
+  ]
+}

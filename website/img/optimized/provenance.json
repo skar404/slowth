@@ -1,0 +1,120 @@
+{
+  "provider": "Apple Design Resources",
+  "page": "https://developer.apple.com/design/resources/",
+  "download": "https://devimages-cdn.apple.com/design/resources/download/Bezel-iPhone-17.dmg",
+  "source": "PNG/iPhone 17 Pro Max/iPhone 17 Pro Max - Deep Blue - Portrait.png",
+  "assetsUnmodified": [
+    "frame.png"
+  ],
+  "displayGeometry": {
+    "canvas": [
+      1470,
+      3000
+    ],
+    "screen": [
+      75,
+      66,
+      1320,
+      2868
+    ]
+  },
+  "mask": "Physical screen opening only; full source extent at native aspect ratio",
+  "sha256": {
+    "frame.png": "5201a518fd2d3c6f968ad522a195c24793d7583e1d011d618aa705383bdde4da",
+    "frame-screen-mask.png": "765d825699eee872cfaeaec0329976d0a936c4ff6a3b6db6b6b010722416054c",
+    "LICENSE.rtf": "d4e878874cad6e0fe215ff45c3e2a2e31e4d4895af30332a12aebd425941d28a"
+  },
+  "website_derivatives": "Frame resized to 320, 640 and 960 pixels as transparent WebP; 640 pixel PNG fallback. Physical screen mask resized to 320 pixels.",
+  "screens": {
+    "setup": {
+      "source_pixels": [
+        1320,
+        2868
+      ],
+      "capture_sha256": "3d4473292aeafa38db4fa73fe0a1eecdae4e4cc4935f46284e59c1c27ff8f406",
+      "capture_arguments": [
+        "-AppleLanguages",
+        "(en)",
+        "-AppleLocale",
+        "en_US",
+        "-uiMode",
+        "ios",
+        "-iosWelcomeV1Handled",
+        "NO"
+      ],
+      "source": "Current local iOS simulator capture, English",
+      "presentation": "Existing screenshot preview data",
+      "derivative_widths": [
+        320,
+        480,
+        640,
+        960
+      ]
+    },
+    "apps": {
+      "source_pixels": [
+        1320,
+        2868
+      ],
+      "capture_sha256": "02f371fc778d5e4641196396c11aa2bf35419b6bb094a4488c3d5ebc74e3ddf7",
+      "capture_arguments": [
+        "-AppleLanguages",
+        "(en)",
+        "-AppleLocale",
+        "en_US",
+        "-uiMode",
+        "ios",
+        "-iosWelcomeV1Handled",
+        "YES",
+        "--screenshot-active-protection",
+        "--screenshot-recording-off"
+      ],
+      "source": "Current local iOS simulator capture, English",
+      "presentation": "Monitoring off; original service icons beside an aligned title-and-rules column",
+      "derivative_widths": [
+        320,
+        480,
+        640,
+        960
+      ],
+      "binarySha256": "f27b45bde2b1fd4a2403be452fc7852de43c56ccaeba69ed0f568e05988c2345",
+      "capturedAt": "2026-11-17T18:15:34.756933+00:00"
+    },
+    "safari": {
+      "source_pixels": [
+        1320,
+        2868
+      ],
+      "capture_sha256": "cf28e755460d65204b461aabaa5e672b40ed1c8c18f25aa8f8b876d50ae5faac",
+      "capture_arguments": [
+        "-AppleLanguages",
+        "(en)",
+        "-AppleLocale",
+        "en_US",
+        "-uiMode",
+        "ios",
+        "-iosWelcomeV1Handled",
+        "YES",
+        "--screenshot-active-protection",
+        "--preview-safari",
+        "--preview-service",
+        "safari.youtube"
+      ],
+      "source": "Current local iOS simulator capture, English",
+      "presentation": "Existing screenshot preview data",
+      "derivative_widths": [
+        320,
+        480,
+        640,
+        960
+      ]
+    }
+  },
+  "iosCapture": {
+    "capturedAt": "2026-11-17T18:12:44.349573+00:00",
+    "binarySha256": "f27b45bde2b1fd4a2403be452fc7852de43c56ccaeba69ed0f568e05988c2345",
+    "device": "iPhone 17 Pro Max",
+    "configuration": "Debug simulator; screenshot presentation flags",
+    "icons": "Existing Service-instagram, Service-youtube and Service-tiktok artwork in DEBUG simulator screenshot rows"
+  }
+}

@@ -1,0 +1,492 @@
+{
+  "en": {
+    "name": "English",
+    "title": "Privacy Policy",
+    "description": "How Slowth handles settings, Safari blocking, and on-device screen analysis.",
+    "updated": "Last updated: 20 September 2026",
+    "languageLabel": "Policy language",
+    "home": "Home",
+    "support": "Support",
+    "privacy": "Privacy",
+    "logo": "Slowth app logo",
+    "summary": "Slowth does not collect your browsing history or screen content. The App Store app has no account, analytics, tracking, advertising SDK, or developer-operated backend. Blocking and screen analysis run on your device.",
+    "sections": [
+      {
+        "heading": "Safari blocking",
+        "paragraphs": [
+          "Slowth is a Safari extension with a companion app for iPhone, iPad, and Mac. It reads supported pages locally to hide or redirect the content you choose to block. Browsing history, page content, and blocking choices are not sent to the developer."
+        ]
+      },
+      {
+        "heading": "Real-time Blocking (Beta) — iPhone and iPad",
+        "paragraphs": [
+          "If you enable this optional feature, Apple’s ReplayKit supplies screen frames while the broadcast is active. Slowth uses Core ML on your device to detect selected Shorts, Reels, or Stories and asks iOS to show a Screen Time shield. The system recording indicator remains visible while monitoring is active.",
+          "Screen frames are not saved or uploaded during normal use of the App Store app. Audio samples are not processed. You can stop monitoring using the recording controls. Developer capture and upload tools are restricted to debug builds and are not available in the App Store app.",
+          "On Mac, Slowth blocks content only in Safari; it does not monitor the screen or block content inside other apps."
+        ]
+      },
+      {
+        "heading": "What stays on your device",
+        "paragraphs": [
+          "Settings, per-site modes, the Strict Mode timer, app-selection tokens, and local operating status are stored on your device. Downloaded blocking rules are cached locally. These settings and rules are not sent to the developer."
+        ]
+      },
+      {
+        "heading": "Rule updates and network requests",
+        "paragraphs": [
+          "The Safari extension periodically downloads a public blocking-rule file from GitHub Gist over HTTPS. The same rules are available to everyone. The request does not include browsing history, page content, screen frames, or your app selections.",
+          "GitHub receives ordinary connection information, such as your IP address, when serving the file. Its own privacy policy applies."
+        ]
+      },
+      {
+        "heading": "Screen Time and Family Controls — iOS only",
+        "paragraphs": [
+          "With your permission, Slowth uses Apple’s Family Controls and Managed Settings frameworks to shield selected apps. Your selections are represented by privacy-protected tokens, stored locally and used to ask iOS to apply the shield."
+        ]
+      },
+      {
+        "heading": "Website and external services",
+        "paragraphs": [
+          "The Slowth website is served through GitHub Pages and Cloudflare. Visiting it creates ordinary web requests, so those providers receive connection information such as your IP address. Opening other external links is governed by the destination’s privacy policy. The language links on this page work without cookies or JavaScript."
+        ]
+      },
+      {
+        "heading": "Children",
+        "paragraphs": [
+          "Slowth does not collect browsing history or screen content from users, including children."
+        ]
+      },
+      {
+        "heading": "Changes to this policy",
+        "paragraphs": [
+          "If this policy changes, the date at the top will be updated. Material changes will also be described in app release notes."
+        ]
+      }
+    ],
+    "githubLabel": "GitHub privacy statement",
+    "cloudflareLabel": "Cloudflare privacy policy",
+    "contact": "Contact",
+    "contactText": "For privacy questions or requests, email us. If you contact us, we receive your email address and the information you send so we can respond.",
+    "emailLabel": "Email"
+  },
+  "es-MX": {
+    "name": "Español (México)",
+    "title": "Política de privacidad",
+    "description": "Cómo maneja Slowth la configuración, el bloqueo en Safari y el análisis de pantalla en el dispositivo.",
+    "updated": "Última actualización: 20 de septiembre de 2026",
+    "languageLabel": "Idioma de la política",
+    "home": "Inicio",
+    "support": "Soporte",
+    "privacy": "Privacidad",
+    "logo": "Logotipo de Slowth",
+    "summary": "Slowth no recopila tu historial de navegación ni el contenido de tu pantalla. La app del App Store no tiene cuentas, analítica, seguimiento, SDK de publicidad ni un servidor operado por el desarrollador. El bloqueo y el análisis de pantalla se realizan en tu dispositivo.",
+    "sections": [
+      {
+        "heading": "Bloqueo en Safari",
+        "paragraphs": [
+          "Slowth es una extensión de Safari con una app complementaria para iPhone, iPad y Mac. Lee localmente las páginas compatibles para ocultar o redirigir el contenido que elijas bloquear. El historial de navegación, el contenido de las páginas y tus opciones de bloqueo no se envían al desarrollador."
+        ]
+      },
+      {
+        "heading": "Bloqueo en tiempo real (beta) — iPhone y iPad",
+        "paragraphs": [
+          "Si activas esta función opcional, ReplayKit de Apple proporciona imágenes de la pantalla mientras la transmisión está activa. Slowth usa Core ML en tu dispositivo para detectar los Shorts, Reels o Historias seleccionados y solicita a iOS que muestre la pantalla de bloqueo de Tiempo en pantalla. El indicador de grabación del sistema permanece visible mientras el monitoreo está activo.",
+          "Durante el uso normal de la app del App Store, las imágenes de pantalla no se guardan ni se suben. No se procesan muestras de audio. Puedes detener el monitoreo con los controles de grabación. Las herramientas de captura y carga para desarrolladores están limitadas a las compilaciones de depuración y no están disponibles en la app del App Store.",
+          "En Mac, Slowth solo bloquea contenido en Safari; no monitorea la pantalla ni bloquea contenido dentro de otras apps."
+        ]
+      },
+      {
+        "heading": "Qué permanece en tu dispositivo",
+        "paragraphs": [
+          "La configuración, los modos por sitio, el temporizador del modo estricto, los identificadores protegidos de selección de apps y el estado de funcionamiento local se guardan en tu dispositivo. Las reglas de bloqueo descargadas se almacenan en caché localmente. Esta configuración y estas reglas no se envían al desarrollador."
+        ]
+      },
+      {
+        "heading": "Actualizaciones de reglas y solicitudes de red",
+        "paragraphs": [
+          "La extensión de Safari descarga periódicamente un archivo público de reglas de bloqueo desde GitHub Gist mediante HTTPS. Las mismas reglas están disponibles para todos. La solicitud no incluye historial de navegación, contenido de páginas, imágenes de pantalla ni tus selecciones de apps.",
+          "Al proporcionar el archivo, GitHub recibe información habitual de conexión, como tu dirección IP. Se aplica su propia política de privacidad."
+        ]
+      },
+      {
+        "heading": "Tiempo en pantalla y Family Controls — solo iOS",
+        "paragraphs": [
+          "Con tu permiso, Slowth usa los frameworks Family Controls y Managed Settings de Apple para bloquear las apps seleccionadas. Tus selecciones se representan mediante identificadores protegidos que se guardan localmente y se usan para solicitar a iOS que aplique el bloqueo."
+        ]
+      },
+      {
+        "heading": "Sitio web y servicios externos",
+        "paragraphs": [
+          "El sitio web de Slowth se sirve mediante GitHub Pages y Cloudflare. Visitarlo genera solicitudes web habituales, por lo que estos proveedores reciben información de conexión, como tu dirección IP. Al abrir otros enlaces externos, se aplica la política de privacidad del destino. Los enlaces de idioma de esta página funcionan sin cookies ni JavaScript."
+        ]
+      },
+      {
+        "heading": "Menores de edad",
+        "paragraphs": [
+          "Slowth no recopila el historial de navegación ni el contenido de pantalla de sus usuarios, incluidos los menores de edad."
+        ]
+      },
+      {
+        "heading": "Cambios en esta política",
+        "paragraphs": [
+          "Si esta política cambia, se actualizará la fecha que aparece al principio. Los cambios importantes también se describirán en las notas de las versiones de la app."
+        ]
+      }
+    ],
+    "githubLabel": "Declaración de privacidad de GitHub",
+    "cloudflareLabel": "Política de privacidad de Cloudflare",
+    "contact": "Contacto",
+    "contactText": "Escríbenos si tienes preguntas o solicitudes sobre privacidad. Si nos contactas, recibimos tu dirección de correo y la información que envíes para poder responderte.",
+    "emailLabel": "Correo electrónico"
+  },
+  "fr-FR": {
+    "name": "Français",
+    "title": "Politique de confidentialité",
+    "description": "Comment Slowth gère les réglages, le blocage dans Safari et l’analyse de l’écran sur votre appareil.",
+    "updated": "Dernière mise à jour : 20 septembre 2026",
+    "languageLabel": "Langue de la politique",
+    "home": "Accueil",
+    "support": "Assistance",
+    "privacy": "Confidentialité",
+    "logo": "Logo de Slowth",
+    "summary": "Slowth ne collecte ni votre historique de navigation ni le contenu de votre écran. L’app distribuée sur l’App Store ne comporte ni compte, ni outils d’analyse, ni suivi, ni SDK publicitaire, ni serveur exploité par le développeur. Le blocage et l’analyse de l’écran s’effectuent sur votre appareil.",
+    "sections": [
+      {
+        "heading": "Blocage dans Safari",
+        "paragraphs": [
+          "Slowth est une extension Safari accompagnée d’une app pour iPhone, iPad et Mac. Elle lit localement les pages prises en charge pour masquer les contenus que vous choisissez de bloquer ou vous rediriger. L’historique de navigation, le contenu des pages et vos choix de blocage ne sont pas envoyés au développeur."
+        ]
+      },
+      {
+        "heading": "Blocage en temps réel (bêta) — iPhone et iPad",
+        "paragraphs": [
+          "Si vous activez cette fonction facultative, ReplayKit d’Apple fournit des images de l’écran pendant la diffusion. Slowth utilise Core ML sur votre appareil pour détecter les Shorts, Reels ou stories sélectionnés, puis demande à iOS d’afficher l’écran de blocage de Temps d’écran. Le voyant d’enregistrement du système reste visible pendant la surveillance.",
+          "En utilisation normale de l’app distribuée sur l’App Store, les images de l’écran ne sont ni enregistrées ni envoyées. Les échantillons audio ne sont pas traités. Vous pouvez arrêter la surveillance à l’aide des commandes d’enregistrement. Les outils de capture et d’envoi destinés au développeur sont limités aux versions de débogage et ne sont pas disponibles dans l’app de l’App Store.",
+          "Sur Mac, Slowth bloque uniquement les contenus dans Safari ; il ne surveille pas l’écran et ne bloque pas les contenus à l’intérieur d’autres apps."
+        ]
+      },
+      {
+        "heading": "Ce qui reste sur votre appareil",
+        "paragraphs": [
+          "Les réglages, les modes par site, le minuteur du mode strict, les jetons de sélection des apps et l’état de fonctionnement local sont stockés sur votre appareil. Les règles de blocage téléchargées sont mises en cache localement. Ces réglages et ces règles ne sont pas envoyés au développeur."
+        ]
+      },
+      {
+        "heading": "Mises à jour des règles et requêtes réseau",
+        "paragraphs": [
+          "L’extension Safari télécharge régulièrement un fichier public de règles de blocage depuis GitHub Gist via HTTPS. Les mêmes règles sont accessibles à tous. La requête ne contient ni historique de navigation, ni contenu des pages, ni images de l’écran, ni sélection d’apps.",
+          "Lorsqu’il fournit le fichier, GitHub reçoit les informations de connexion habituelles, telles que votre adresse IP. Sa propre politique de confidentialité s’applique."
+        ]
+      },
+      {
+        "heading": "Temps d’écran et Family Controls — iOS uniquement",
+        "paragraphs": [
+          "Avec votre autorisation, Slowth utilise les frameworks Family Controls et Managed Settings d’Apple pour bloquer les apps sélectionnées. Vos sélections sont représentées par des jetons protégeant votre confidentialité, stockés localement et utilisés pour demander à iOS d’appliquer le blocage."
+        ]
+      },
+      {
+        "heading": "Site web et services externes",
+        "paragraphs": [
+          "Le site web de Slowth est servi par GitHub Pages et Cloudflare. Sa consultation génère des requêtes web ordinaires ; ces fournisseurs reçoivent donc des informations de connexion telles que votre adresse IP. L’ouverture d’autres liens externes relève de la politique de confidentialité du site de destination. Les liens de langue de cette page fonctionnent sans cookies ni JavaScript."
+        ]
+      },
+      {
+        "heading": "Enfants",
+        "paragraphs": [
+          "Slowth ne collecte ni l’historique de navigation ni le contenu de l’écran des utilisateurs, y compris des enfants."
+        ]
+      },
+      {
+        "heading": "Modifications de cette politique",
+        "paragraphs": [
+          "Si cette politique change, la date en haut de la page sera mise à jour. Les modifications importantes seront également décrites dans les notes de version de l’app."
+        ]
+      }
+    ],
+    "githubLabel": "Déclaration de confidentialité de GitHub",
+    "cloudflareLabel": "Politique de confidentialité de Cloudflare",
+    "contact": "Contact",
+    "contactText": "Pour toute question ou demande concernant la confidentialité, écrivez-nous par e-mail. Si vous nous contactez, nous recevons votre adresse e-mail et les informations que vous envoyez afin de pouvoir vous répondre.",
+    "emailLabel": "E-mail"
+  },
+  "de-DE": {
+    "name": "Deutsch",
+    "title": "Datenschutzerklärung",
+    "description": "Wie Slowth Einstellungen, Safari-Blockierung und die lokale Bildschirmanalyse verarbeitet.",
+    "updated": "Zuletzt aktualisiert: 20. September 2026",
+    "languageLabel": "Sprache der Datenschutzerklärung",
+    "home": "Startseite",
+    "support": "Support",
+    "privacy": "Datenschutz",
+    "logo": "Slowth-App-Logo",
+    "summary": "Slowth erhebt weder deinen Browserverlauf noch deine Bildschirminhalte. Die App aus dem App Store hat keine Konten, Nutzungsanalyse, Tracking, Werbe-SDKs oder vom Entwickler betriebene Server. Die Blockierung und Bildschirmanalyse erfolgen auf deinem Gerät.",
+    "sections": [
+      {
+        "heading": "Blockierung in Safari",
+        "paragraphs": [
+          "Slowth ist eine Safari-Erweiterung mit einer Begleit-App für iPhone, iPad und Mac. Sie liest unterstützte Seiten lokal, um die von dir ausgewählten Inhalte auszublenden oder dich umzuleiten. Browserverlauf, Seiteninhalte und deine Blockierauswahl werden nicht an den Entwickler gesendet."
+        ]
+      },
+      {
+        "heading": "Echtzeitblockierung (Beta) — iPhone und iPad",
+        "paragraphs": [
+          "Wenn du diese optionale Funktion aktivierst, liefert Apples ReplayKit während der laufenden Übertragung Bildschirmbilder. Slowth verwendet Core ML auf deinem Gerät, um ausgewählte Shorts, Reels oder Stories zu erkennen, und fordert iOS auf, die Bildschirmzeit-Sperre anzuzeigen. Die Aufnahmeanzeige des Systems bleibt während der Überwachung sichtbar.",
+          "Bei der normalen Nutzung der App aus dem App Store werden Bildschirmbilder weder gespeichert noch hochgeladen. Audiodaten werden nicht verarbeitet. Du kannst die Überwachung über die Aufnahmesteuerung beenden. Aufnahme- und Upload-Werkzeuge für Entwickler sind auf Debug-Versionen beschränkt und in der App aus dem App Store nicht verfügbar.",
+          "Auf dem Mac blockiert Slowth Inhalte ausschließlich in Safari. Es überwacht weder den Bildschirm noch blockiert es Inhalte innerhalb anderer Apps."
+        ]
+      },
+      {
+        "heading": "Was auf deinem Gerät bleibt",
+        "paragraphs": [
+          "Einstellungen, Website-Modi, der Timer des strengen Modus, Tokens für die App-Auswahl und der lokale Betriebsstatus werden auf deinem Gerät gespeichert. Heruntergeladene Blockierregeln werden lokal zwischengespeichert. Diese Einstellungen und Regeln werden nicht an den Entwickler gesendet."
+        ]
+      },
+      {
+        "heading": "Regelaktualisierungen und Netzwerkanfragen",
+        "paragraphs": [
+          "Die Safari-Erweiterung lädt regelmäßig eine öffentliche Datei mit Blockierregeln über HTTPS von GitHub Gist herunter. Dieselben Regeln stehen allen zur Verfügung. Die Anfrage enthält weder Browserverlauf, Seiteninhalte, Bildschirmbilder noch deine App-Auswahl.",
+          "Beim Bereitstellen der Datei erhält GitHub übliche Verbindungsinformationen wie deine IP-Adresse. Dabei gilt die Datenschutzerklärung von GitHub."
+        ]
+      },
+      {
+        "heading": "Bildschirmzeit und Family Controls — nur iOS",
+        "paragraphs": [
+          "Mit deiner Erlaubnis verwendet Slowth Apples Frameworks Family Controls und Managed Settings, um ausgewählte Apps zu sperren. Deine Auswahl wird durch datenschutzgeschützte Tokens dargestellt. Diese werden lokal gespeichert und verwendet, um iOS zur Anwendung der Sperre aufzufordern."
+        ]
+      },
+      {
+        "heading": "Website und externe Dienste",
+        "paragraphs": [
+          "Die Slowth-Website wird über GitHub Pages und Cloudflare bereitgestellt. Beim Besuch entstehen gewöhnliche Webanfragen, sodass diese Anbieter Verbindungsinformationen wie deine IP-Adresse erhalten. Beim Öffnen anderer externer Links gilt die Datenschutzerklärung der jeweiligen Zielseite. Die Sprachlinks auf dieser Seite funktionieren ohne Cookies oder JavaScript."
+        ]
+      },
+      {
+        "heading": "Kinder",
+        "paragraphs": [
+          "Slowth erhebt weder den Browserverlauf noch Bildschirminhalte von Nutzern, einschließlich Kindern."
+        ]
+      },
+      {
+        "heading": "Änderungen dieser Erklärung",
+        "paragraphs": [
+          "Wenn sich diese Erklärung ändert, wird das Datum oben auf der Seite aktualisiert. Wesentliche Änderungen werden auch in den Versionshinweisen der App beschrieben."
+        ]
+      }
+    ],
+    "githubLabel": "Datenschutzerklärung von GitHub",
+    "cloudflareLabel": "Datenschutzerklärung von Cloudflare",
+    "contact": "Kontakt",
+    "contactText": "Bei Fragen oder Anliegen zum Datenschutz kannst du uns eine E-Mail schreiben. Wenn du uns kontaktierst, erhalten wir deine E-Mail-Adresse und die von dir gesendeten Informationen, damit wir antworten können.",
+    "emailLabel": "E-Mail"
+  },
+  "hi": {
+    "name": "हिन्दी",
+    "title": "निजता नीति",
+    "description": "Slowth की सेटिंग्स, Safari ब्लॉकिंग और डिवाइस पर स्क्रीन विश्लेषण में डेटा का इस्तेमाल।",
+    "updated": "आखिरी अपडेट: 20 सितंबर 2026",
+    "languageLabel": "नीति की भाषा",
+    "home": "होम",
+    "support": "सहायता",
+    "privacy": "निजता",
+    "logo": "Slowth ऐप का लोगो",
+    "summary": "Slowth आपका ब्राउज़िंग इतिहास या स्क्रीन का कॉन्टेंट इकट्ठा नहीं करता। App Store वाले ऐप में कोई खाता, उपयोग संबंधी एनालिटिक्स, ट्रैकिंग, विज्ञापन SDK या डेवलपर द्वारा संचालित बैकएंड नहीं है। ब्लॉकिंग और स्क्रीन का विश्लेषण आपके डिवाइस पर ही होता है।",
+    "sections": [
+      {
+        "heading": "Safari में ब्लॉकिंग",
+        "paragraphs": [
+          "Slowth एक Safari एक्सटेंशन है, जिसके साथ iPhone, iPad और Mac के लिए एक ऐप मिलता है। यह समर्थित पेजों को डिवाइस पर ही पढ़ता है, ताकि आपके चुने हुए कॉन्टेंट को छिपा सके या आपको दूसरे पेज पर भेज सके। ब्राउज़िंग इतिहास, पेज का कॉन्टेंट और आपकी ब्लॉकिंग की पसंद डेवलपर को नहीं भेजी जाती।"
+        ]
+      },
+      {
+        "heading": "रीयल-टाइम ब्लॉकिंग (बीटा) — iPhone और iPad",
+        "paragraphs": [
+          "अगर आप यह वैकल्पिक सुविधा चालू करते हैं, तो प्रसारण चालू रहने के दौरान Apple का ReplayKit स्क्रीन की तस्वीरें देता है। Slowth आपके डिवाइस पर Core ML का इस्तेमाल करके चुने गए Shorts, Reels या स्टोरीज़ पहचानता है और iOS से स्क्रीन टाइम की ब्लॉकिंग स्क्रीन दिखाने का अनुरोध करता है। निगरानी चालू रहने तक सिस्टम का रिकॉर्डिंग संकेत दिखाई देता है।",
+          "App Store वाले ऐप के सामान्य इस्तेमाल में स्क्रीन की तस्वीरें सेव या अपलोड नहीं होतीं। ऑडियो सैंपल प्रोसेस नहीं किए जाते। रिकॉर्डिंग कंट्रोल से आप निगरानी बंद कर सकते हैं। डेवलपर के कैप्चर और अपलोड टूल केवल डीबग बिल्ड में होते हैं और App Store वाले ऐप में उपलब्ध नहीं हैं।",
+          "Mac पर Slowth केवल Safari में कॉन्टेंट ब्लॉक करता है। यह स्क्रीन की निगरानी नहीं करता और दूसरे ऐप्स के अंदर कॉन्टेंट ब्लॉक नहीं करता।"
+        ]
+      },
+      {
+        "heading": "आपके डिवाइस पर क्या रहता है",
+        "paragraphs": [
+          "सेटिंग्स, हर वेबसाइट का मोड, सख्त मोड का टाइमर, ऐप चयन के टोकन और कामकाज की स्थानीय स्थिति आपके डिवाइस पर सेव होते हैं। डाउनलोड किए गए ब्लॉकिंग नियम डिवाइस पर कैश किए जाते हैं। ये सेटिंग्स और नियम डेवलपर को नहीं भेजे जाते।"
+        ]
+      },
+      {
+        "heading": "नियमों के अपडेट और नेटवर्क अनुरोध",
+        "paragraphs": [
+          "Safari एक्सटेंशन समय-समय पर HTTPS के ज़रिए GitHub Gist से ब्लॉकिंग नियमों की एक सार्वजनिक फ़ाइल डाउनलोड करता है। सभी के लिए वही नियम उपलब्ध हैं। अनुरोध में ब्राउज़िंग इतिहास, पेज का कॉन्टेंट, स्क्रीन की तस्वीरें या आपके चुने हुए ऐप्स शामिल नहीं होते।",
+          "फ़ाइल देते समय GitHub को सामान्य कनेक्शन जानकारी मिलती है, जैसे आपका IP पता। इस पर GitHub की अपनी निजता नीति लागू होती है।"
+        ]
+      },
+      {
+        "heading": "स्क्रीन टाइम और Family Controls — केवल iOS",
+        "paragraphs": [
+          "आपकी अनुमति से Slowth, Apple के Family Controls और Managed Settings फ़्रेमवर्क का इस्तेमाल करके चुने हुए ऐप्स पर ब्लॉकिंग स्क्रीन लगाता है। आपकी पसंद को निजता-सुरक्षित टोकन के रूप में रखा जाता है। ये टोकन डिवाइस पर सेव होते हैं और iOS से ब्लॉकिंग लागू करने का अनुरोध करने में इस्तेमाल होते हैं।"
+        ]
+      },
+      {
+        "heading": "वेबसाइट और बाहरी सेवाएँ",
+        "paragraphs": [
+          "Slowth की वेबसाइट GitHub Pages और Cloudflare के ज़रिए उपलब्ध होती है। इसे खोलने पर सामान्य वेब अनुरोध बनते हैं, इसलिए इन सेवा प्रदाताओं को आपके IP पते जैसी कनेक्शन जानकारी मिलती है। दूसरे बाहरी लिंक खोलने पर उस वेबसाइट की निजता नीति लागू होती है। इस पेज के भाषा लिंक कुकीज़ या JavaScript के बिना काम करते हैं।"
+        ]
+      },
+      {
+        "heading": "बच्चे",
+        "paragraphs": [
+          "Slowth बच्चों सहित किसी भी उपयोगकर्ता का ब्राउज़िंग इतिहास या स्क्रीन का कॉन्टेंट इकट्ठा नहीं करता।"
+        ]
+      },
+      {
+        "heading": "इस नीति में बदलाव",
+        "paragraphs": [
+          "इस नीति में बदलाव होने पर पेज के ऊपर दी गई तारीख अपडेट की जाएगी। महत्वपूर्ण बदलाव ऐप के रिलीज़ नोट्स में भी बताए जाएँगे।"
+        ]
+      }
+    ],
+    "githubLabel": "GitHub का निजता वक्तव्य",
+    "cloudflareLabel": "Cloudflare की निजता नीति",
+    "contact": "संपर्क",
+    "contactText": "निजता से जुड़े सवालों या अनुरोधों के लिए हमें ईमेल करें। जब आप संपर्क करते हैं, तो हमें आपका ईमेल पता और भेजी गई जानकारी मिलती है, ताकि हम जवाब दे सकें।",
+    "emailLabel": "ईमेल"
+  },
+  "ja": {
+    "name": "日本語",
+    "title": "プライバシーポリシー",
+    "description": "Slowthの設定、Safariでのブロック、端末内での画面解析におけるデータの取り扱いについて。",
+    "updated": "最終更新日：2026年9月20日",
+    "languageLabel": "ポリシーの言語",
+    "home": "ホーム",
+    "support": "サポート",
+    "privacy": "プライバシー",
+    "logo": "Slowthアプリのロゴ",
+    "summary": "Slowthは閲覧履歴や画面の内容を収集しません。App Storeで配信するアプリには、アカウント、利用状況の解析、トラッキング、広告SDK、開発者が運営するバックエンドはありません。ブロック処理と画面解析は端末内で行われます。",
+    "sections": [
+      {
+        "heading": "Safariでのブロック",
+        "paragraphs": [
+          "Slowthは、iPhone、iPad、Mac向けのアプリを備えたSafari機能拡張です。対応するページを端末内で読み取り、選択したコンテンツを非表示にするか、別のページにリダイレクトします。閲覧履歴、ページの内容、ブロックの設定が開発者に送信されることはありません。"
+        ]
+      },
+      {
+        "heading": "リアルタイムブロック（ベータ）— iPhoneとiPad",
+        "paragraphs": [
+          "この任意の機能を有効にすると、ブロードキャストの実行中にAppleのReplayKitが画面画像を提供します。Slowthは端末内のCore MLで選択したショート、リール、ストーリーズを検出し、スクリーンタイムのブロック画面を表示するようiOSに要求します。監視中はシステムの録画インジケータが表示されます。",
+          "App Store版アプリの通常の利用では、画面画像は保存もアップロードもされません。音声サンプルは処理しません。録画コントロールから監視を停止できます。開発者向けのキャプチャおよびアップロード機能はデバッグビルドに限定され、App Store版アプリでは利用できません。",
+          "MacではSafari内のコンテンツのみをブロックします。画面の監視や、他のアプリ内のコンテンツのブロックは行いません。"
+        ]
+      },
+      {
+        "heading": "端末内に保存するもの",
+        "paragraphs": [
+          "設定、サイトごとのモード、厳格モードのタイマー、アプリ選択のトークン、動作状況は端末内に保存されます。ダウンロードしたブロックルールも端末内にキャッシュされます。これらの設定やルールが開発者に送信されることはありません。"
+        ]
+      },
+      {
+        "heading": "ルールの更新とネットワーク通信",
+        "paragraphs": [
+          "Safari機能拡張は、GitHub Gistの公開ブロックルールファイルをHTTPS経由で定期的にダウンロードします。同じルールがすべての利用者に公開されています。このリクエストには、閲覧履歴、ページの内容、画面画像、選択したアプリの情報は含まれません。",
+          "ファイルを配信する際、GitHubはIPアドレスなどの通常の接続情報を受け取ります。この通信にはGitHubのプライバシーポリシーが適用されます。"
+        ]
+      },
+      {
+        "heading": "スクリーンタイムとFamily Controls — iOSのみ",
+        "paragraphs": [
+          "利用者の許可を得て、SlowthはAppleのFamily ControlsおよびManaged Settingsフレームワークを使用し、選択されたアプリにブロック画面を表示します。アプリの選択は、プライバシーを保護するトークンで表されます。トークンは端末内に保存され、iOSにブロックの適用を要求するために使われます。"
+        ]
+      },
+      {
+        "heading": "ウェブサイトと外部サービス",
+        "paragraphs": [
+          "SlowthのウェブサイトはGitHub PagesとCloudflareを通じて配信されます。サイトにアクセスすると通常のウェブリクエストが発生するため、これらの事業者はIPアドレスなどの接続情報を受け取ります。他の外部リンクを開く場合は、リンク先のプライバシーポリシーが適用されます。このページの言語リンクは、CookieやJavaScriptを使わずに動作します。"
+        ]
+      },
+      {
+        "heading": "お子様の利用",
+        "paragraphs": [
+          "Slowthは、お子様を含む利用者の閲覧履歴や画面の内容を収集しません。"
+        ]
+      },
+      {
+        "heading": "ポリシーの変更",
+        "paragraphs": [
+          "このポリシーを変更した場合は、ページ上部の日付を更新します。重要な変更は、アプリのリリースノートでもお知らせします。"
+        ]
+      }
+    ],
+    "githubLabel": "GitHubのプライバシーステートメント",
+    "cloudflareLabel": "Cloudflareのプライバシーポリシー",
+    "contact": "お問い合わせ",
+    "contactText": "プライバシーに関するご質問やご要望は、メールでお寄せください。お問い合わせの際には、返信するためにメールアドレスと送信された情報を受け取ります。",
+    "emailLabel": "メール"
+  },
+  "ar-SA": {
+    "name": "العربية",
+    "title": "سياسة الخصوصية",
+    "description": "كيفية تعامل Slowth مع الإعدادات والحظر في Safari وتحليل الشاشة على جهازك.",
+    "updated": "آخر تحديث: 20 سبتمبر 2026",
+    "languageLabel": "لغة السياسة",
+    "home": "الرئيسية",
+    "support": "الدعم",
+    "privacy": "الخصوصية",
+    "logo": "شعار تطبيق Slowth",
+    "summary": "لا يجمع Slowth سجل تصفحك أو محتوى شاشتك. لا يتضمن التطبيق المتاح على App Store حسابات أو تحليلات للاستخدام أو تتبعاً أو حزم إعلانات أو خوادم خلفية يديرها المطوّر. تتم عمليات الحظر وتحليل الشاشة على جهازك.",
+    "sections": [
+      {
+        "heading": "الحظر في Safari",
+        "paragraphs": [
+          "Slowth ملحق لمتصفح Safari مع تطبيق مرافق لأجهزة iPhone وiPad وMac. يقرأ الصفحات المدعومة محلياً لإخفاء المحتوى الذي تختار حظره أو إعادة توجيهك إلى صفحة أخرى. لا يُرسل سجل التصفح أو محتوى الصفحات أو اختيارات الحظر إلى المطوّر."
+        ]
+      },
+      {
+        "heading": "الحظر في الوقت الفعلي (نسخة تجريبية) — iPhone وiPad",
+        "paragraphs": [
+          "إذا فعّلت هذه الميزة الاختيارية، يوفّر ReplayKit من Apple صوراً للشاشة أثناء تشغيل البث. يستخدم Slowth إطار Core ML على جهازك لاكتشاف مقاطع Shorts أو Reels أو القصص التي تختارها، ويطلب من iOS عرض شاشة الحظر الخاصة بمدة استخدام الجهاز. يظل مؤشر التسجيل الخاص بالنظام ظاهراً أثناء المراقبة.",
+          "لا تُحفظ صور الشاشة ولا تُرفع أثناء الاستخدام العادي للتطبيق المتاح على App Store. لا تتم معالجة عينات الصوت. يمكنك إيقاف المراقبة باستخدام عناصر التحكم في التسجيل. تقتصر أدوات الالتقاط والرفع الخاصة بالمطوّر على نسخ تصحيح الأخطاء، ولا تتوفر في تطبيق App Store.",
+          "على Mac، يحظر Slowth المحتوى في Safari فقط؛ ولا يراقب الشاشة أو يحظر المحتوى داخل التطبيقات الأخرى."
+        ]
+      },
+      {
+        "heading": "ما يبقى على جهازك",
+        "paragraphs": [
+          "تُخزّن الإعدادات وأوضاع الحظر لكل موقع ومؤقّت الوضع الصارم ورموز اختيار التطبيقات وحالة التشغيل المحلية على جهازك. وتُخزّن قواعد الحظر التي يتم تنزيلها مؤقتاً على الجهاز. لا تُرسل هذه الإعدادات والقواعد إلى المطوّر."
+        ]
+      },
+      {
+        "heading": "تحديثات القواعد وطلبات الشبكة",
+        "paragraphs": [
+          "ينزّل ملحق Safari دورياً ملفاً عاماً لقواعد الحظر من GitHub Gist عبر HTTPS. تتوفر القواعد نفسها للجميع. لا يتضمن الطلب سجل التصفح أو محتوى الصفحات أو صور الشاشة أو التطبيقات التي اخترتها.",
+          "عند تقديم الملف، يتلقى GitHub معلومات الاتصال المعتادة، مثل عنوان IP الخاص بك. وتُطبّق سياسة الخصوصية الخاصة به."
+        ]
+      },
+      {
+        "heading": "مدة استخدام الجهاز وFamily Controls — على iOS فقط",
+        "paragraphs": [
+          "بإذنك، يستخدم Slowth إطاري Family Controls وManaged Settings من Apple لحظر التطبيقات المحددة. تُمثّل اختياراتك برموز تحمي الخصوصية، وتُخزّن محلياً وتُستخدم لطلب تطبيق الحظر من iOS."
+        ]
+      },
+      {
+        "heading": "الموقع الإلكتروني والخدمات الخارجية",
+        "paragraphs": [
+          "يُقدّم موقع Slowth الإلكتروني عبر GitHub Pages وCloudflare. تنشئ زيارته طلبات ويب عادية، لذلك يتلقى مزوّدو هذه الخدمات معلومات اتصال مثل عنوان IP الخاص بك. يخضع فتح الروابط الخارجية الأخرى لسياسة الخصوصية الخاصة بالموقع المقصود. تعمل روابط اختيار اللغة في هذه الصفحة دون ملفات تعريف ارتباط أو JavaScript."
+        ]
+      },
+      {
+        "heading": "الأطفال",
+        "paragraphs": [
+          "لا يجمع Slowth سجل التصفح أو محتوى الشاشة من المستخدمين، بمن فيهم الأطفال."
+        ]
+      },
+      {
+        "heading": "التغييرات على هذه السياسة",
+        "paragraphs": [
+          "إذا تغيّرت هذه السياسة، فسيُحدّث التاريخ في أعلى الصفحة. وستُوضّح التغييرات الجوهرية أيضاً في ملاحظات إصدار التطبيق."
+        ]
+      }
+    ],
+    "githubLabel": "بيان خصوصية GitHub",
+    "cloudflareLabel": "سياسة خصوصية Cloudflare",
+    "contact": "التواصل",
+    "contactText": "للأسئلة أو الطلبات المتعلقة بالخصوصية، راسلنا عبر البريد الإلكتروني. إذا تواصلت معنا، نتلقى عنوان بريدك الإلكتروني والمعلومات التي ترسلها حتى نتمكن من الرد عليك.",
+    "emailLabel": "البريد الإلكتروني"
+  }
+}
