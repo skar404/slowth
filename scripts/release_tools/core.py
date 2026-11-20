@@ -17,10 +17,11 @@ ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_DIRS = {
     'Debug', 'App', 'Extension', 'ExtensionIOS', 'DeviceActivityIOS', 'iOS', 'Localization',
     'PauseActivityIOS', 'RealtimeShield', 'Shared', 'ShieldActionIOS', 'ShieldConfigIOS', 'WebExt',
-    'scripts', 'tests',
+    'scripts', 'tests', 'website',
 }
 PUBLIC_FILES = {
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
+    '.github/workflows/website.yml',
     'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',
     'docs/FLAT_MODEL.md', 'docs/IOS_LOCALIZATION.md',
     'project.yml', 'README.md', 'BUDGET.md', 'funding.json', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
