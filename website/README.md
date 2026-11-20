@@ -43,7 +43,7 @@ The Mac section is text-only at the user's request. It explains Safari support w
 
 Historical image URLs remain intact, but the page no longer loads the old iPhone gallery or Mac posters.
 
-`img/social-preview.jpg` is a 1200 × 630 link preview using the existing mascot. Canonical/Open Graph URLs use the production domain; the published assets use these URLs.
+`img/social-preview.jpg` is a 1200 × 630 link preview using the existing mascot. Open Graph metadata uses the identical `img/social-preview-3ba1ba653cd8.jpg` copy so link-preview services fetch the updated artwork under a new URL. When replacing the artwork, update this fingerprinted copy and both landing/support templates, then regenerate the localized pages. Canonical/Open Graph URLs use the production domain; the published assets use these URLs.
 
 ## Checks
 
