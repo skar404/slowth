@@ -888,13 +888,22 @@ footer .wordmark {
 footer .wordmark { min-width:0; max-width:100%; }
 .footer-tag { min-width:0; max-width:100%; overflow-wrap:anywhere; }
 
-.portfolio-link {
+.portfolio-return { height:0; position:relative; z-index:1; }
+.portfolio-return a {
+  position:absolute;
+  inset-block-start:16px;
+  inset-inline-start:0;
   display:inline-flex;
   align-items:center;
-  min-height:44px;
-  margin-block-end:12px;
+  min-height:36px;
   color:var(--body);
-  font-size:14px;
+  font-size:13px;
   text-decoration:none;
 }
-.portfolio-link:hover { text-decoration:underline; }
+.portfolio-return a:hover { text-decoration:underline; }
+.portfolio-return-flow { height:auto; padding-block-start:16px; }
+.portfolio-return-flow a { position:static; }
+@media(max-width:1000px) {
+  .portfolio-return { height:auto; padding-block-start:12px; }
+  .portfolio-return a { position:static; }
+}
