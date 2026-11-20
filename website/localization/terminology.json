@@ -1,0 +1,578 @@
+{
+  "ar": {
+    "Strict Mode": "الوضع الصارم",
+    "Strict mode": "الوضع الصارم",
+    "Language": "اللغة",
+    "Stories": "قصص",
+    "Start monitoring": "بدء المراقبة",
+    "Stop monitoring": "إيقاف المراقبة",
+    "Allow content": "السماح بالمحتوى"
+  },
+  "ar-EG": {
+    "Strict Mode": "الوضع الصارم",
+    "Strict mode": "الوضع الصارم",
+    "Language": "اللغة",
+    "Stories": "قصص",
+    "Start monitoring": "بدء المراقبة",
+    "Stop monitoring": "إيقاف المراقبة",
+    "Allow content": "السماح بالمحتوى"
+  },
+  "be": {
+    "Strict Mode": "Строгі рэжым",
+    "Strict mode": "Строгі рэжым",
+    "Language": "Мова",
+    "Stories": "Гісторыі",
+    "Start monitoring": "Уключыць маніторынг",
+    "Stop monitoring": "Выключыць маніторынг",
+    "Allow content": "Дазволіць кантэнт"
+  },
+  "bn": {
+    "Strict Mode": "কঠোর মোড",
+    "Strict mode": "কঠোর মোড",
+    "Language": "ভাষা",
+    "Stories": "গল্প",
+    "Start monitoring": "পর্যবেক্ষণ চালু করুন",
+    "Stop monitoring": "পর্যবেক্ষণ বন্ধ করুন",
+    "Allow content": "কনটেন্ট অনুমতি দিন"
+  },
+  "ca": {
+    "Strict Mode": "Mode estricte",
+    "Strict mode": "Mode estricte",
+    "Language": "Llengua",
+    "Stories": "Històries",
+    "Start monitoring": "Inicia el monitoratge",
+    "Stop monitoring": "Atura el monitoratge",
+    "Allow content": "Permet el contingut"
+  },
+  "cs": {
+    "Strict Mode": "Přísný režim",
+    "Strict mode": "Přísný režim",
+    "Language": "Jazyk",
+    "Stories": "Příběhy",
+    "Start monitoring": "Zapnout monitorování",
+    "Stop monitoring": "Vypnout monitorování",
+    "Allow content": "Povolit obsah"
+  },
+  "da": {
+    "Strict Mode": "Streng tilstand",
+    "Strict mode": "Streng tilstand",
+    "Language": "Sprog",
+    "Stories": "Historier",
+    "Start monitoring": "Start overvågning",
+    "Stop monitoring": "Stop overvågning",
+    "Allow content": "Tillad indhold"
+  },
+  "de": {
+    "Strict Mode": "Strenger Modus",
+    "Strict mode": "Strenger Modus",
+    "Language": "Sprache",
+    "Stories": "Storys",
+    "Start monitoring": "Überwachung starten",
+    "Stop monitoring": "Überwachung stoppen",
+    "Allow content": "Inhalte erlauben"
+  },
+  "el": {
+    "Strict Mode": "Αυστηρή λειτουργία",
+    "Strict mode": "Αυστηρή λειτουργία",
+    "Language": "Γλώσσα",
+    "Stories": "Ιστορίες",
+    "Start monitoring": "Έναρξη παρακολούθησης",
+    "Stop monitoring": "Διακοπή παρακολούθησης",
+    "Allow content": "Να επιτρέπεται το περιεχόμενο"
+  },
+  "en": {
+    "Strict Mode": "Strict mode",
+    "Strict mode": "Strict mode",
+    "Language": "Language",
+    "Stories": "Stories",
+    "Start monitoring": "Start monitoring",
+    "Stop monitoring": "Stop monitoring",
+    "Allow content": "Allow content"
+  },
+  "en-AU": {
+    "Strict Mode": "Strict mode",
+    "Strict mode": "Strict mode",
+    "Language": "Language",
+    "Stories": "Stories",
+    "Start monitoring": "Start monitoring",
+    "Stop monitoring": "Stop monitoring",
+    "Allow content": "Allow content"
+  },
+  "en-CA": {
+    "Strict Mode": "Strict mode",
+    "Strict mode": "Strict mode",
+    "Language": "Language",
+    "Stories": "Stories",
+    "Start monitoring": "Start monitoring",
+    "Stop monitoring": "Stop monitoring",
+    "Allow content": "Allow content"
+  },
+  "en-GB": {
+    "Strict Mode": "Strict mode",
+    "Strict mode": "Strict mode",
+    "Language": "Language",
+    "Stories": "Stories",
+    "Start monitoring": "Start monitoring",
+    "Stop monitoring": "Stop monitoring",
+    "Allow content": "Allow content"
+  },
+  "es": {
+    "Strict Mode": "Modo estricto",
+    "Strict mode": "Modo estricto",
+    "Language": "Idioma",
+    "Stories": "Historias",
+    "Start monitoring": "Iniciar supervisión",
+    "Stop monitoring": "Detener supervisión",
+    "Allow content": "Permitir contenido"
+  },
+  "es-MX": {
+    "Strict Mode": "Modo estricto",
+    "Strict mode": "Modo estricto",
+    "Language": "Idioma",
+    "Stories": "Historias",
+    "Start monitoring": "Iniciar supervisión",
+    "Stop monitoring": "Detener supervisión",
+    "Allow content": "Permitir contenido"
+  },
+  "fi": {
+    "Strict Mode": "Tiukka tila",
+    "Strict mode": "Tiukka tila",
+    "Language": "Kieli",
+    "Stories": "Tarinat",
+    "Start monitoring": "Aloita seuranta",
+    "Stop monitoring": "Lopeta seuranta",
+    "Allow content": "Salli sisältö"
+  },
+  "fil": {
+    "Strict Mode": "Mahigpit na mode",
+    "Strict mode": "Mahigpit na mode",
+    "Language": "Wika",
+    "Stories": "Mga kwento",
+    "Start monitoring": "Simulan ang pagsubaybay",
+    "Stop monitoring": "Ihinto ang pagsubaybay",
+    "Allow content": "Payagan ang content"
+  },
+  "fr": {
+    "Strict Mode": "Mode strict",
+    "Strict mode": "Mode strict",
+    "Language": "Langue",
+    "Stories": "Histoires",
+    "Start monitoring": "Démarrer la surveillance",
+    "Stop monitoring": "Arrêter la surveillance",
+    "Allow content": "Autoriser le contenu"
+  },
+  "fr-CA": {
+    "Strict Mode": "Mode strict",
+    "Strict mode": "Mode strict",
+    "Language": "Langue",
+    "Stories": "Histoires",
+    "Start monitoring": "Démarrer la surveillance",
+    "Stop monitoring": "Arrêter la surveillance",
+    "Allow content": "Autoriser le contenu"
+  },
+  "gu": {
+    "Strict Mode": "કડક મોડ",
+    "Strict mode": "કડક મોડ",
+    "Language": "ભાષા",
+    "Stories": "સ્ટોરીઝ",
+    "Start monitoring": "નિરીક્ષણ શરૂ કરો",
+    "Stop monitoring": "નિરીક્ષણ બંધ કરો",
+    "Allow content": "સામગ્રીને મંજૂરી આપો"
+  },
+  "ha": {
+    "Strict Mode": "Yanayi mai tsauri",
+    "Strict mode": "Yanayi mai tsauri",
+    "Language": "Harshe",
+    "Stories": "Labari",
+    "Start monitoring": "Fara sa ido",
+    "Stop monitoring": "Dakatar da sa ido",
+    "Allow content": "Ba da izinin abun ciki"
+  },
+  "he": {
+    "Strict Mode": "מצב קפדני",
+    "Strict mode": "מצב קפדני",
+    "Language": "שפה",
+    "Stories": "סיפורים",
+    "Start monitoring": "התחלת ניטור",
+    "Stop monitoring": "הפסקת ניטור",
+    "Allow content": "אפשר תוכן"
+  },
+  "hi": {
+    "Strict Mode": "सख्त मोड",
+    "Strict mode": "सख्त मोड",
+    "Language": "भाषा",
+    "Stories": "कहानियां",
+    "Start monitoring": "निगरानी शुरू करें",
+    "Stop monitoring": "निगरानी बंद करें",
+    "Allow content": "कॉन्टेंट की अनुमति दें"
+  },
+  "hr": {
+    "Strict Mode": "Strogi način",
+    "Strict mode": "Strogi način",
+    "Language": "Jezik",
+    "Stories": "Priče",
+    "Start monitoring": "Pokreni praćenje",
+    "Stop monitoring": "Zaustavi praćenje",
+    "Allow content": "Dopusti sadržaj"
+  },
+  "hu": {
+    "Strict Mode": "Szigorú mód",
+    "Strict mode": "Szigorú mód",
+    "Language": "Nyelv",
+    "Stories": "Történetek",
+    "Start monitoring": "Figyelés indítása",
+    "Stop monitoring": "Figyelés leállítása",
+    "Allow content": "Tartalom engedélyezése"
+  },
+  "hy": {
+    "Strict Mode": "Խիստ ռեժիմ",
+    "Strict mode": "Խիստ ռեժիմ",
+    "Language": "Լեզու",
+    "Stories": "Պատմություններ",
+    "Start monitoring": "Սկսել մշտադիտարկումը",
+    "Stop monitoring": "Դադարեցնել մշտադիտարկումը",
+    "Allow content": "Թույլատրել բովանդակությունը"
+  },
+  "id": {
+    "Strict Mode": "Mode ketat",
+    "Strict mode": "Mode ketat",
+    "Language": "Bahasa",
+    "Stories": "Cerita",
+    "Start monitoring": "Mulai pemantauan",
+    "Stop monitoring": "Hentikan pemantauan",
+    "Allow content": "Izinkan konten"
+  },
+  "it": {
+    "Strict Mode": "Modalità rigorosa",
+    "Strict mode": "Modalità rigorosa",
+    "Language": "Lingua",
+    "Stories": "Storie",
+    "Start monitoring": "Avvia monitoraggio",
+    "Stop monitoring": "Interrompi monitoraggio",
+    "Allow content": "Consenti contenuti"
+  },
+  "ja": {
+    "Strict Mode": "厳格モード",
+    "Strict mode": "厳格モード",
+    "Language": "言語",
+    "Stories": "ストーリー",
+    "Start monitoring": "モニタリングを開始",
+    "Stop monitoring": "モニタリングを停止",
+    "Allow content": "コンテンツを許可"
+  },
+  "ka": {
+    "Strict Mode": "მკაცრი რეჟიმი",
+    "Strict mode": "მკაცრი რეჟიმი",
+    "Language": "ენა",
+    "Stories": "მოთხრობები",
+    "Start monitoring": "მონიტორინგის დაწყება",
+    "Stop monitoring": "მონიტორინგის შეჩერება",
+    "Allow content": "კონტენტის დაშვება"
+  },
+  "kk": {
+    "Strict Mode": "Қатаң режим",
+    "Strict mode": "Қатаң режим",
+    "Language": "Тіл",
+    "Stories": "Әңгімелер",
+    "Start monitoring": "Бақылауды бастау",
+    "Stop monitoring": "Бақылауды тоқтату",
+    "Allow content": "Мазмұнға рұқсат беру"
+  },
+  "kn": {
+    "Strict Mode": "ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್",
+    "Strict mode": "ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್",
+    "Language": "ಭಾಷೆ",
+    "Stories": "ಸ್ಟೋರಿಗಳು",
+    "Start monitoring": "ಮೇಲ್ವಿಚಾರಣೆ ಪ್ರಾರಂಭಿಸಿ",
+    "Stop monitoring": "ಮೇಲ್ವಿಚಾರಣೆ ನಿಲ್ಲಿಸಿ",
+    "Allow content": "ವಿಷಯವನ್ನು ಅನುಮತಿಸಿ"
+  },
+  "ko": {
+    "Strict Mode": "엄격 모드",
+    "Strict mode": "엄격 모드",
+    "Language": "언어",
+    "Stories": "스토리",
+    "Start monitoring": "모니터링 시작",
+    "Stop monitoring": "모니터링 중지",
+    "Allow content": "콘텐츠 허용"
+  },
+  "ky": {
+    "Strict Mode": "Катуу режим",
+    "Strict mode": "Катуу режим",
+    "Language": "Тил",
+    "Stories": "Окуялар",
+    "Start monitoring": "Көзөмөлдөөнү баштоо",
+    "Stop monitoring": "Көзөмөлдөөнү токтотуу",
+    "Allow content": "Мазмунга уруксат берүү"
+  },
+  "lt": {
+    "Strict Mode": "Griežtasis režimas",
+    "Strict mode": "Griežtasis režimas",
+    "Language": "Kalba",
+    "Stories": "Istorijos",
+    "Start monitoring": "Pradėti stebėjimą",
+    "Stop monitoring": "Sustabdyti stebėjimą",
+    "Allow content": "Leisti turinį"
+  },
+  "ml": {
+    "Strict Mode": "കർശന മോഡ്",
+    "Strict mode": "കർശന മോഡ്",
+    "Language": "ഭാഷ",
+    "Stories": "സ്റ്റോറികൾ",
+    "Start monitoring": "നിരീക്ഷണം ആരംഭിക്കുക",
+    "Stop monitoring": "നിരീക്ഷണം നിർത്തുക",
+    "Allow content": "ഉള്ളടക്കം അനുവദിക്കുക"
+  },
+  "mr": {
+    "Strict Mode": "कडक मोड",
+    "Strict mode": "कडक मोड",
+    "Language": "भाषा",
+    "Stories": "कथा",
+    "Start monitoring": "निरीक्षण सुरू करा",
+    "Stop monitoring": "निरीक्षण थांबवा",
+    "Allow content": "सामग्रीला परवानगी द्या"
+  },
+  "ms": {
+    "Strict Mode": "Mod Ketat",
+    "Strict mode": "Mod Ketat",
+    "Language": "Bahasa",
+    "Stories": "Cerita",
+    "Start monitoring": "Mulakan pemantauan",
+    "Stop monitoring": "Hentikan pemantauan",
+    "Allow content": "Benarkan kandungan"
+  },
+  "nb": {
+    "Strict Mode": "Streng modus",
+    "Strict mode": "Streng modus",
+    "Language": "Språk",
+    "Stories": "Historier",
+    "Start monitoring": "Start overvåking",
+    "Stop monitoring": "Stopp overvåking",
+    "Allow content": "Tillat innhold"
+  },
+  "ne": {
+    "Strict Mode": "कडा मोड",
+    "Strict mode": "कडा मोड",
+    "Language": "भाषा",
+    "Stories": "कथाहरू",
+    "Start monitoring": "निगरानी सुरु गर्नुहोस्",
+    "Stop monitoring": "निगरानी रोक्नुहोस्",
+    "Allow content": "सामग्रीलाई अनुमति दिनुहोस्"
+  },
+  "nl": {
+    "Strict Mode": "Strikte modus",
+    "Strict mode": "Strikte modus",
+    "Language": "Taal",
+    "Stories": "Verhalen",
+    "Start monitoring": "Monitoring starten",
+    "Stop monitoring": "Monitoring stoppen",
+    "Allow content": "Content toestaan"
+  },
+  "or": {
+    "Strict Mode": "କଠୋର ମୋଡ୍",
+    "Strict mode": "କଠୋର ମୋଡ୍",
+    "Language": "ଭାଷା",
+    "Stories": "ଷ୍ଟୋରିଗୁଡ଼ିକ",
+    "Start monitoring": "ନିରୀକ୍ଷଣ ଆରମ୍ଭ କରନ୍ତୁ",
+    "Stop monitoring": "ନିରୀକ୍ଷଣ ବନ୍ଦ କରନ୍ତୁ",
+    "Allow content": "ବିଷୟବସ୍ତୁକୁ ଅନୁମତି ଦିଅନ୍ତୁ"
+  },
+  "pa": {
+    "Strict Mode": "ਸਖ਼ਤ ਮੋਡ",
+    "Strict mode": "ਸਖ਼ਤ ਮੋਡ",
+    "Language": "ਭਾਸ਼ਾ",
+    "Stories": "ਸਟੋਰੀਆਂ",
+    "Start monitoring": "ਨਿਗਰਾਨੀ ਸ਼ੁਰੂ ਕਰੋ",
+    "Stop monitoring": "ਨਿਗਰਾਨੀ ਬੰਦ ਕਰੋ",
+    "Allow content": "ਸਮੱਗਰੀ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ"
+  },
+  "pa-Arab": {
+    "Strict Mode": "سخت موڈ",
+    "Strict mode": "سخت موڈ",
+    "Language": "بولی",
+    "Stories": "کہانیاں",
+    "Start monitoring": "نگرانی شروع کرو",
+    "Stop monitoring": "نگرانی بند کرو",
+    "Allow content": "مواد دی اجازت دیو"
+  },
+  "pcm": {
+    "Strict Mode": "Strict mode",
+    "Strict mode": "Strict mode",
+    "Language": "Language",
+    "Stories": "Stories",
+    "Start monitoring": "Start monitoring",
+    "Stop monitoring": "Stop monitoring",
+    "Allow content": "Allow content"
+  },
+  "pl": {
+    "Strict Mode": "Tryb ścisły",
+    "Strict mode": "Tryb ścisły",
+    "Language": "Język",
+    "Stories": "Historie",
+    "Start monitoring": "Włącz monitorowanie",
+    "Stop monitoring": "Wyłącz monitorowanie",
+    "Allow content": "Zezwól na treści"
+  },
+  "pt-BR": {
+    "Strict Mode": "Modo estrito",
+    "Strict mode": "Modo estrito",
+    "Language": "Idioma",
+    "Stories": "Histórias",
+    "Start monitoring": "Iniciar monitoramento",
+    "Stop monitoring": "Parar monitoramento",
+    "Allow content": "Permitir conteúdo"
+  },
+  "pt-PT": {
+    "Strict Mode": "Modo estrito",
+    "Strict mode": "Modo estrito",
+    "Language": "Idioma",
+    "Stories": "Histórias",
+    "Start monitoring": "Iniciar monitorização",
+    "Stop monitoring": "Parar monitorização",
+    "Allow content": "Permitir conteúdo"
+  },
+  "ro": {
+    "Strict Mode": "Mod strict",
+    "Strict mode": "Mod strict",
+    "Language": "Limbă",
+    "Stories": "Povești",
+    "Start monitoring": "Pornește monitorizarea",
+    "Stop monitoring": "Oprește monitorizarea",
+    "Allow content": "Permite conținutul"
+  },
+  "ru": {
+    "Strict Mode": "Строгий режим",
+    "Strict mode": "Строгий режим",
+    "Language": "Язык",
+    "Stories": "Истории",
+    "Start monitoring": "Включить мониторинг",
+    "Stop monitoring": "Выключить мониторинг",
+    "Allow content": "Разрешить контент"
+  },
+  "sk": {
+    "Strict Mode": "Prísny režim",
+    "Strict mode": "Prísny režim",
+    "Language": "Jazyk",
+    "Stories": "Príbehy",
+    "Start monitoring": "Spustiť monitorovanie",
+    "Stop monitoring": "Zastaviť monitorovanie",
+    "Allow content": "Povoliť obsah"
+  },
+  "sl": {
+    "Strict Mode": "Strogi način",
+    "Strict mode": "Strogi način",
+    "Language": "Jezik",
+    "Stories": "Zgodbe",
+    "Start monitoring": "Začni spremljanje",
+    "Stop monitoring": "Ustavi spremljanje",
+    "Allow content": "Dovoli vsebino"
+  },
+  "sv": {
+    "Strict Mode": "Strikt läge",
+    "Strict mode": "Strikt läge",
+    "Language": "Språk",
+    "Stories": "Berättelser",
+    "Start monitoring": "Starta övervakning",
+    "Stop monitoring": "Stoppa övervakning",
+    "Allow content": "Tillåt innehåll"
+  },
+  "sw": {
+    "Strict Mode": "Hali kali",
+    "Strict mode": "Hali kali",
+    "Language": "Lugha",
+    "Stories": "Hadithi",
+    "Start monitoring": "Anza ufuatiliaji",
+    "Stop monitoring": "Simamisha ufuatiliaji",
+    "Allow content": "Ruhusu maudhui"
+  },
+  "ta": {
+    "Strict Mode": "கண்டிப்பான பயன்முறை",
+    "Strict mode": "கண்டிப்பான பயன்முறை",
+    "Language": "மொழி",
+    "Stories": "கதைகள்",
+    "Start monitoring": "கண்காணிப்பைத் தொடங்கு",
+    "Stop monitoring": "கண்காணிப்பை நிறுத்து",
+    "Allow content": "உள்ளடக்கத்தை அனுமதி"
+  },
+  "te": {
+    "Strict Mode": "కఠిన మోడ్",
+    "Strict mode": "కఠిన మోడ్",
+    "Language": "భాష",
+    "Stories": "కథలు",
+    "Start monitoring": "పర్యవేక్షణ ప్రారంభించండి",
+    "Stop monitoring": "పర్యవేక్షణ ఆపండి",
+    "Allow content": "కంటెంట్‌ను అనుమతించండి"
+  },
+  "th": {
+    "Strict Mode": "โหมดเข้มงวด",
+    "Strict mode": "โหมดเข้มงวด",
+    "Language": "ภาษา",
+    "Stories": "เรื่องราว",
+    "Start monitoring": "เริ่มการตรวจสอบ",
+    "Stop monitoring": "หยุดการตรวจสอบ",
+    "Allow content": "อนุญาตเนื้อหา"
+  },
+  "tr": {
+    "Strict Mode": "Katı mod",
+    "Strict mode": "Katı mod",
+    "Language": "Dil",
+    "Stories": "Hikayeler",
+    "Start monitoring": "İzlemeyi başlat",
+    "Stop monitoring": "İzlemeyi durdur",
+    "Allow content": "İçeriğe izin ver"
+  },
+  "uk": {
+    "Strict Mode": "Суворий режим",
+    "Strict mode": "Суворий режим",
+    "Language": "Мова",
+    "Stories": "оповідання",
+    "Start monitoring": "Увімкнути моніторинг",
+    "Stop monitoring": "Вимкнути моніторинг",
+    "Allow content": "Дозволити вміст"
+  },
+  "ur": {
+    "Strict Mode": "سخت موڈ",
+    "Strict mode": "سخت موڈ",
+    "Language": "زبان",
+    "Stories": "کہانیاں",
+    "Start monitoring": "نگرانی شروع کریں",
+    "Stop monitoring": "نگرانی بند کریں",
+    "Allow content": "مواد کی اجازت دیں"
+  },
+  "vi": {
+    "Strict Mode": "Chế độ nghiêm ngặt",
+    "Strict mode": "Chế độ nghiêm ngặt",
+    "Language": "Ngôn ngữ",
+    "Stories": "Truyện",
+    "Start monitoring": "Bắt đầu giám sát",
+    "Stop monitoring": "Dừng giám sát",
+    "Allow content": "Cho phép nội dung"
+  },
+  "yue": {
+    "Strict Mode": "嚴格模式",
+    "Strict mode": "嚴格模式",
+    "Language": "語言",
+    "Stories": "故事",
+    "Start monitoring": "開始監察",
+    "Stop monitoring": "停止監察",
+    "Allow content": "允許內容"
+  },
+  "zh-Hans": {
+    "Strict Mode": "严格模式",
+    "Strict mode": "严格模式",
+    "Language": "语言",
+    "Stories": "故事",
+    "Start monitoring": "开始监测",
+    "Stop monitoring": "停止监测",
+    "Allow content": "允许内容"
+  },
+  "zh-Hant": {
+    "Strict Mode": "嚴格模式",
+    "Strict mode": "嚴格模式",
+    "Language": "語言",
+    "Stories": "故事",
+    "Start monitoring": "開始監測",
+    "Stop monitoring": "停止監測",
+    "Allow content": "允許內容"
+  }
+}

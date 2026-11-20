@@ -52,6 +52,42 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(before, (self.root / '.git/index').read_bytes())
         self.assertEqual(len(tree), 40)
 
+    def test_website_snapshot_preserves_public_assets_and_index(self):
+        files = {
+            '.github/workflows/website.yml': 'name: Website\n',
+            'website/.nojekyll': '',
+            'website/CNAME': 'slowth.app\n',
+            'website/index.html': '<h1>Slowth</h1>\n',
+            'website/ru/support.html': '<h1>Support</h1>\n',
+            'website/localization/messages/ru.json': '{"title": "Slowth"}\n',
+            'website/img/logo.svg': '<svg xmlns="http://www.w3.org/2000/svg"/>\n',
+        }
+        for name, data in files.items():
+            self.write(name, data)
+        self.git('add', '.github/workflows/website.yml')
+        before = (self.root / '.git/index').read_bytes()
+        source, _, _ = release.snapshot(self.root, self.work)
+        for name, data in files.items():
+            self.assertEqual((source / name).read_text(), data)
+        self.assertEqual(before, (self.root / '.git/index').read_bytes())
+
+    def test_website_cannot_publish_private_files(self):
+        for name in ('website/.env.production', 'website/dataset/private.csv',
+                     'website/signing.key', 'website/model.mlpackage/Manifest.json',
+                     '.github/workflows/unreviewed.yml'):
+            with self.subTest(name=name):
+                file = self.write(name, '{}\n')
+                self.git('add', name)
+                with self.assertRaisesRegex(RuntimeError, 'Non-public staged'):
+                    release.snapshot(self.root, self.work)
+                self.git('reset', '-q', 'HEAD', '--', name)
+                file.unlink()
+
+    def test_website_content_is_still_scanned(self):
+        self.write('website/index.html', '-----BEGIN ' + 'PRIVATE KEY-----\n')
+        with self.assertRaisesRegex(RuntimeError, 'Private key in website/index.html'):
+            release.snapshot(self.root, self.work)
+
     def test_private_staged_file_stops_without_changing_index(self):
         self.write('data-model/private.py', '# private\n')
         self.git('add', 'data-model/private.py')

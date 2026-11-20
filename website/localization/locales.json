@@ -1,0 +1,258 @@
+{
+  "ar": {
+    "name": "العربية",
+    "direction": "rtl"
+  },
+  "ar-EG": {
+    "name": "العربية (مصر)",
+    "direction": "rtl"
+  },
+  "be": {
+    "name": "Беларуская",
+    "direction": "ltr"
+  },
+  "bn": {
+    "name": "বাংলা",
+    "direction": "ltr"
+  },
+  "ca": {
+    "name": "Català",
+    "direction": "ltr"
+  },
+  "cs": {
+    "name": "Čeština",
+    "direction": "ltr"
+  },
+  "da": {
+    "name": "Dansk",
+    "direction": "ltr"
+  },
+  "de": {
+    "name": "Deutsch",
+    "direction": "ltr"
+  },
+  "el": {
+    "name": "Ελληνικά",
+    "direction": "ltr"
+  },
+  "en": {
+    "name": "English",
+    "direction": "ltr"
+  },
+  "en-AU": {
+    "name": "English (Australia)",
+    "direction": "ltr"
+  },
+  "en-CA": {
+    "name": "English (Canada)",
+    "direction": "ltr"
+  },
+  "en-GB": {
+    "name": "English (UK)",
+    "direction": "ltr"
+  },
+  "es": {
+    "name": "Español",
+    "direction": "ltr"
+  },
+  "es-MX": {
+    "name": "Español (México)",
+    "direction": "ltr"
+  },
+  "fi": {
+    "name": "Suomi",
+    "direction": "ltr"
+  },
+  "fil": {
+    "name": "Filipino",
+    "direction": "ltr"
+  },
+  "fr": {
+    "name": "Français",
+    "direction": "ltr"
+  },
+  "fr-CA": {
+    "name": "Français (Canada)",
+    "direction": "ltr"
+  },
+  "gu": {
+    "name": "ગુજરાતી",
+    "direction": "ltr"
+  },
+  "ha": {
+    "name": "Hausa",
+    "direction": "ltr"
+  },
+  "he": {
+    "name": "עברית",
+    "direction": "rtl"
+  },
+  "hi": {
+    "name": "हिन्दी",
+    "direction": "ltr"
+  },
+  "hr": {
+    "name": "Hrvatski",
+    "direction": "ltr"
+  },
+  "hu": {
+    "name": "Magyar",
+    "direction": "ltr"
+  },
+  "hy": {
+    "name": "Հայերեն",
+    "direction": "ltr"
+  },
+  "id": {
+    "name": "Bahasa Indonesia",
+    "direction": "ltr"
+  },
+  "it": {
+    "name": "Italiano",
+    "direction": "ltr"
+  },
+  "ja": {
+    "name": "日本語",
+    "direction": "ltr"
+  },
+  "ka": {
+    "name": "ქართული",
+    "direction": "ltr"
+  },
+  "kk": {
+    "name": "Қазақша",
+    "direction": "ltr"
+  },
+  "kn": {
+    "name": "ಕನ್ನಡ",
+    "direction": "ltr"
+  },
+  "ko": {
+    "name": "한국어",
+    "direction": "ltr"
+  },
+  "ky": {
+    "name": "Кыргызча",
+    "direction": "ltr"
+  },
+  "lt": {
+    "name": "Lietuvių",
+    "direction": "ltr"
+  },
+  "ml": {
+    "name": "മലയാളം",
+    "direction": "ltr"
+  },
+  "mr": {
+    "name": "मराठी",
+    "direction": "ltr"
+  },
+  "ms": {
+    "name": "Bahasa Melayu",
+    "direction": "ltr"
+  },
+  "nb": {
+    "name": "Norsk bokmål",
+    "direction": "ltr"
+  },
+  "ne": {
+    "name": "नेपाली",
+    "direction": "ltr"
+  },
+  "nl": {
+    "name": "Nederlands",
+    "direction": "ltr"
+  },
+  "or": {
+    "name": "ଓଡ଼ିଆ",
+    "direction": "ltr"
+  },
+  "pa": {
+    "name": "ਪੰਜਾਬੀ",
+    "direction": "ltr"
+  },
+  "pa-Arab": {
+    "name": "پنجابی (شاہ مکھی)",
+    "direction": "rtl"
+  },
+  "pcm": {
+    "name": "Naijá",
+    "direction": "ltr"
+  },
+  "pl": {
+    "name": "Polski",
+    "direction": "ltr"
+  },
+  "pt-BR": {
+    "name": "Português (Brasil)",
+    "direction": "ltr"
+  },
+  "pt-PT": {
+    "name": "Português (Portugal)",
+    "direction": "ltr"
+  },
+  "ro": {
+    "name": "Română",
+    "direction": "ltr"
+  },
+  "ru": {
+    "name": "Русский",
+    "direction": "ltr"
+  },
+  "sk": {
+    "name": "Slovenčina",
+    "direction": "ltr"
+  },
+  "sl": {
+    "name": "Slovenščina",
+    "direction": "ltr"
+  },
+  "sv": {
+    "name": "Svenska",
+    "direction": "ltr"
+  },
+  "sw": {
+    "name": "Kiswahili",
+    "direction": "ltr"
+  },
+  "ta": {
+    "name": "தமிழ்",
+    "direction": "ltr"
+  },
+  "te": {
+    "name": "తెలుగు",
+    "direction": "ltr"
+  },
+  "th": {
+    "name": "ไทย",
+    "direction": "ltr"
+  },
+  "tr": {
+    "name": "Türkçe",
+    "direction": "ltr"
+  },
+  "uk": {
+    "name": "Українська",
+    "direction": "ltr"
+  },
+  "ur": {
+    "name": "اردو",
+    "direction": "rtl"
+  },
+  "vi": {
+    "name": "Tiếng Việt",
+    "direction": "ltr"
+  },
+  "yue": {
+    "name": "粵語",
+    "direction": "ltr"
+  },
+  "zh-Hans": {
+    "name": "简体中文",
+    "direction": "ltr"
+  },
+  "zh-Hant": {
+    "name": "繁體中文",
+    "direction": "ltr"
+  }
+}

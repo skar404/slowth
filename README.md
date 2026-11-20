@@ -12,7 +12,7 @@ and optional content detection inside supported iPhone and iPad apps.
 Free and open source. No account required. No tracking.
 
 [![Download on the App Store](https://img.shields.io/badge/Download-App_Store-0D96F6?logo=apple&logoColor=white)](https://apps.apple.com/us/app/slowth-short-video-blocker/id6764140763)
-[![Website](https://img.shields.io/badge/Website-malina.page%2Fslowth-6E56CF)](https://malina.page/slowth/)
+[![Website](https://img.shields.io/badge/Website-slowth.app-6E56CF)](https://slowth.app/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 [GitHub Releases](https://github.com/skar404/slowth/releases) · [Support development](#development-and-support)

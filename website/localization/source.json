@@ -1,0 +1,938 @@
+{
+  "sf2f95332fc1c": {
+    "source": "Block Reels &amp; YouTube Shorts in Apps on iPhone | Slowth",
+    "format": "html"
+  },
+  "s24262b763144": {
+    "source": "Skip to content",
+    "format": "html"
+  },
+  "s8be269d0d34e": {
+    "source": "Apps",
+    "format": "html"
+  },
+  "sf8512af73fda": {
+    "source": "Safari",
+    "format": "html"
+  },
+  "s529e630ee8d1": {
+    "source": "Support",
+    "format": "html"
+  },
+  "sd50cb34c9894": {
+    "source": "The project ↗",
+    "format": "html"
+  },
+  "s4b7118f15558": {
+    "source": "App blocking for iPhone &amp; iPad",
+    "format": "html"
+  },
+  "sc8b2d8443c65": {
+    "source": "Block Reels<br>&amp; Shorts.<br><em>Inside your apps.</em>",
+    "format": "html"
+  },
+  "sf57f5503f72d": {
+    "source": "Block Reels, Shorts and other short videos inside Instagram, YouTube, Facebook, X (Twitter) and other social apps. Or choose any app to block with Screen Time.",
+    "format": "html"
+  },
+  "s2329a440cf73": {
+    "source": "Explore app blocking <span aria-hidden=\"true\">↓</span>",
+    "format": "html"
+  },
+  "seb60c65ae671": {
+    "source": "Free &amp; open source <span>No account needed</span>",
+    "format": "html"
+  },
+  "sc2ce77f7e2fc": {
+    "source": "When short videos are detected, Slowth blocks the app. Uses Screen Time and screen monitoring you start. <a href=\"#setup\">How it works</a>",
+    "format": "html"
+  },
+  "sb202aa7feebe": {
+    "source": "Your apps and content rules, in one place.",
+    "format": "html"
+  },
+  "s3a31df729a6a": {
+    "source": "<b>Inside your apps</b><span>iPhone &amp; iPad</span>",
+    "format": "html"
+  },
+  "s9e941b334ebd": {
+    "source": "<b>Also in Safari</b><span>iPhone, iPad &amp; Mac</span>",
+    "format": "html"
+  },
+  "sb50b795fdf12": {
+    "source": "<b>On your device</b><span>No account. No tracking.</span>",
+    "format": "html"
+  },
+  "sed16cb7d27bd": {
+    "source": "You choose the apps and the boundaries.",
+    "format": "html"
+  },
+  "sd2449cf63ed8": {
+    "source": "Your apps. Your boundaries.",
+    "format": "html"
+  },
+  "sbaea653670b6": {
+    "source": "Choose the apps.<br>Break the scroll.",
+    "format": "html"
+  },
+  "s03d161ffd059": {
+    "source": "Block any app you choose on iPhone and iPad. Or interrupt short videos and Stories across social apps with on-device content detection.",
+    "format": "html"
+  },
+  "sa660e32f0546": {
+    "source": "Any app you choose",
+    "format": "html"
+  },
+  "sb76ba1ca1b5c": {
+    "source": "Select apps in Apple’s Screen Time picker — social networks, games and anything else you want a break from. With monitoring off, selected apps are blocked; soft blocking and temporary pauses change when access is allowed.",
+    "format": "html"
+  },
+  "se47a3a2195b1": {
+    "source": "Reels and Shorts inside the app",
+    "format": "html"
+  },
+  "se3766ddd7838": {
+    "source": "Instagram Reels, YouTube Shorts, Facebook, X (Twitter) and other social networks with short videos: choose the content you want to interrupt. With monitoring on, detection briefly blocks the app so you can step away.",
+    "format": "html"
+  },
+  "s5d876b65f6aa": {
+    "source": "A pause when you need one",
+    "format": "html"
+  },
+  "s1d6748e36333": {
+    "source": "Use a leaf for temporary access, then return to your boundaries. Apps and Safari share three pauses per day on iPhone and iPad.",
+    "format": "html"
+  },
+  "s69feb3a34eaa": {
+    "source": "<b>It works by recognizing what’s on screen.</b> Slowth detects short-video and Stories screens across social apps. Layouts change, so it can miss content or block an ordinary screen. Detection blocks the app temporarily; it does not remove tabs inside it.",
+    "format": "html"
+  },
+  "se37403d89cdb": {
+    "source": "App setup &amp; supported behaviour ↗",
+    "format": "html"
+  },
+  "s31d8abdc1479": {
+    "source": "App protection, step by step",
+    "format": "html"
+  },
+  "sc1af8cd76562": {
+    "source": "From download<br>to a little distance.",
+    "format": "html"
+  },
+  "s3a83b9693a69": {
+    "source": "Choose your apps. Start monitoring when you want to detect specific content.",
+    "format": "html"
+  },
+  "s76948a521279": {
+    "source": "Get Slowth",
+    "format": "html"
+  },
+  "sa1aedbf385de": {
+    "source": "Install Slowth, open the Apps tab and allow Screen Time access. This lets iOS block the apps you choose.",
+    "format": "html"
+  },
+  "s817381f01e16": {
+    "source": "Set your boundaries",
+    "format": "html"
+  },
+  "s0ed0c84da3ed": {
+    "source": "Select the apps you want to block. For supported content, choose short videos, Stories or both.",
+    "format": "html"
+  },
+  "s57c51ff2d2f7": {
+    "source": "Start app monitoring",
+    "format": "html"
+  },
+  "sb81c6ace8bf9": {
+    "source": "Tap Start monitoring and confirm Apple’s screen broadcast prompt. Detection runs on your device; screen images are not saved or uploaded.",
+    "format": "html"
+  },
+  "s98b1a62542bc": {
+    "source": "Open the step-by-step guide ↗",
+    "format": "html"
+  },
+  "s466cb1b71faf": {
+    "source": "Also works in Safari",
+    "format": "html"
+  },
+  "s7a01de31a88b": {
+    "source": "Same boundary.<br>In your browser.",
+    "format": "html"
+  },
+  "scd6840788ce4": {
+    "source": "Keep useful pages within reach, with fewer invitations to keep scrolling.",
+    "format": "html"
+  },
+  "s687b6fe31ab3": {
+    "source": "Short videos, out of the way",
+    "format": "html"
+  },
+  "s66cc8a910378": {
+    "source": "Hide YouTube Shorts and Instagram and Facebook Reels. Remove Explore and trends on X.",
+    "format": "html"
+  },
+  "sd9837d2ef5b1": {
+    "source": "Choose where the feed ends",
+    "format": "html"
+  },
+  "s7c8f0a82ccae": {
+    "source": "Feed controls for Instagram and Facebook reduce endless scrolling. Instagram’s feed option also covers Explore, Stories and more Reels surfaces.",
+    "format": "html"
+  },
+  "s306b546291ce": {
+    "source": "A firmer boundary, when you want one",
+    "format": "html"
+  },
+  "s1073b67cfc65": {
+    "source": "Block an entire supported site, including TikTok. Choose settings per site and refresh blocking rules as websites change.",
+    "format": "html"
+  },
+  "s3120e705677f": {
+    "source": "Works on iPhone, iPad and Mac. Safari does not need a screen broadcast.",
+    "format": "html"
+  },
+  "sfd6c6b131bc6": {
+    "source": "Pick the distractions. Keep the rest.",
+    "format": "html"
+  },
+  "scb7cfde98931": {
+    "source": "On your Mac",
+    "format": "html"
+  },
+  "sf7692fce6f57": {
+    "source": "Same intention.<br>A Safari companion.",
+    "format": "html"
+  },
+  "seee562540345": {
+    "source": "Keep the rest of the site available while hiding distracting sections, or block a supported website altogether.",
+    "format": "html"
+  },
+  "s52075c585c1c": {
+    "source": "Mac support is for Safari. In-app recognition and screen monitoring are iPhone and iPad features.",
+    "format": "html"
+  },
+  "s25e17ee2b1dc": {
+    "source": "Personal, by design",
+    "format": "html"
+  },
+  "s18261e2a5084": {
+    "source": "Your screen stays<br>your business.",
+    "format": "html"
+  },
+  "s44cae023a2b3": {
+    "source": "Read the privacy policy ↗",
+    "format": "html"
+  },
+  "s7ace2edec61f": {
+    "source": "App recognition uses a screen broadcast you start yourself. While it runs, Slowth receives screen images, which can include other apps and sensitive information — choosing apps limits blocking, not screen access.",
+    "format": "html"
+  },
+  "s3a321203bfde": {
+    "source": "In the App Store app, images are processed temporarily in device memory. Frames are not saved or uploaded, and audio is ignored. iOS shows its recording indicator while monitoring is active.",
+    "format": "html"
+  },
+  "s57efaafcdbe9": {
+    "source": "No account, analytics or advertising SDK. Safari filtering is local; downloading rule updates still makes an ordinary network request.",
+    "format": "html"
+  },
+  "se41c7b9101a1": {
+    "source": "Good questions",
+    "format": "html"
+  },
+  "s2fe3160e7adf": {
+    "source": "About app blocking.",
+    "format": "html"
+  },
+  "s06a737c24512": {
+    "source": "More answers in <a href=\"support.html\">Support</a>.",
+    "format": "html"
+  },
+  "scfab83540cd7": {
+    "source": "Can I block Instagram Reels inside the Instagram app?",
+    "format": "html"
+  },
+  "s9e919861a458": {
+    "source": "Yes. On iPhone or iPad, select Instagram, enable short-video blocking and start monitoring in Slowth. When Reels are detected, Screen Time temporarily shields the whole Instagram app. Slowth does not remove the Reels tab. You can choose Stories separately. <a href=\"support.html#apps\">Set up Instagram app blocking</a>.",
+    "format": "html"
+  },
+  "s8367d103775c": {
+    "source": "Can I block YouTube Shorts inside the YouTube app?",
+    "format": "html"
+  },
+  "sf0a7eb857b5a": {
+    "source": "Yes. Select YouTube, enable short-video blocking and start monitoring. Slowth detects Shorts and temporarily shields YouTube. It is designed to let you use other content between detections, but recognition can make mistakes. The separate Safari extension hides Shorts on the YouTube website.",
+    "format": "html"
+  },
+  "s56ffe271e31e": {
+    "source": "Can I block Snapchat, TikTok or another app?",
+    "format": "html"
+  },
+  "sfb45d71a7cbc": {
+    "source": "Yes. You can select apps available in Apple’s Screen Time picker, including Snapchat and TikTok. With monitoring off, selected protected apps are blocked unless temporary access or soft blocking allows them. For short-video detection, turn on monitoring. Recognition depends on what is visible on screen and can make mistakes. <a href=\"support.html#without-recording\">How blocking without monitoring works</a>.",
+    "format": "html"
+  },
+  "sc09b53ecf494": {
+    "source": "Does it work in Facebook, X (Twitter) and other social apps?",
+    "format": "html"
+  },
+  "sedba921c7fd7": {
+    "source": "Yes. Short-video recognition works across social apps, including Facebook and X (Twitter), rather than being limited to Instagram and YouTube. Select the app, choose short videos or Stories and start monitoring. Detection depends on the screen layout, so it may miss content or block a normal screen.",
+    "format": "html"
+  },
+  "s9df5bf512ed9": {
+    "source": "Does Safari need screen recording?",
+    "format": "html"
+  },
+  "s6c4cb670cb37": {
+    "source": "No. Safari uses its own extension to filter supported websites. Screen access is only needed for content recognition inside iPhone and iPad apps.",
+    "format": "html"
+  },
+  "sa137b8d3d0fd": {
+    "source": "What happens when monitoring stops?",
+    "format": "html"
+  },
+  "s20905a21a3a7": {
+    "source": "Selected protected apps are normally blocked without recording. Soft blocking can briefly allow an app after leaving Slowth, then block it again when used. An active temporary-access pause also allows access. <a href=\"support.html#without-recording\">Read about these modes</a>.",
+    "format": "html"
+  },
+  "sc778241a230b": {
+    "source": "Can I take a break from blocking?",
+    "format": "html"
+  },
+  "s62575175f971": {
+    "source": "Yes. On iPhone and iPad, a leaf gives temporary access across selected apps and Safari. The shared pause system is experimental; iOS can delay restoring restrictions. Detection rests are separate and do not spend leaves.",
+    "format": "html"
+  },
+  "s93e26302692d": {
+    "source": "What does Strict Mode lock?",
+    "format": "html"
+  },
+  "sd825d6c03bb1": {
+    "source": "For 24 hours, enabled restrictions cannot be weakened. You can add restrictions, but cannot enable whole-site blocking during the lock. The timer survives restarts. Set whether pauses are allowed before starting. It is a commitment aid, not tamper-proof parental control.",
+    "format": "html"
+  },
+  "sfaf35608f2bb": {
+    "source": "Is Slowth free? Is there an Android app?",
+    "format": "html"
+  },
+  "sfb3ca6da376b": {
+    "source": "Slowth is free and open source under GPLv3. Android is a proposed research and prototype workstream, not an available app.",
+    "format": "html"
+  },
+  "s09c2c42653b7": {
+    "source": "Made with care. Built in the open.",
+    "format": "html"
+  },
+  "sc2fd5a04b100": {
+    "source": "A small project.<br>A long-term intention.",
+    "format": "html"
+  },
+  "sc5a95d29ad47": {
+    "source": "Slowth is created and maintained by Denis Malin. The source is open, and feedback helps shape what comes next.",
+    "format": "html"
+  },
+  "see8dcec7b302": {
+    "source": "Explore the source ↗",
+    "format": "html"
+  },
+  "s71df680302c5": {
+    "source": "Say hello ↗",
+    "format": "html"
+  },
+  "sa46378fdffb5": {
+    "source": "For funds &amp; partners",
+    "format": "html"
+  },
+  "s1a32d7d9e8bc": {
+    "source": "Help make slowing down easier.",
+    "format": "html"
+  },
+  "sa21dfcb9633e": {
+    "source": "The project is seeking a one-time <b>$10,000 grant</b> for a six-month development phase. This is a funding request.",
+    "format": "html"
+  },
+  "s5385d6133b87": {
+    "source": "Clearer setup and more reliable iPhone, iPad and Mac experiences.",
+    "format": "html"
+  },
+  "sd75cbfb57bbc": {
+    "source": "Better content recognition, evaluation and compatibility testing.",
+    "format": "html"
+  },
+  "sbe30a6d9ab7b": {
+    "source": "Independent build verification, outreach and Android feasibility research with an experimental prototype.",
+    "format": "html"
+  },
+  "s37f038de0ccd": {
+    "source": "Read the public budget ↗",
+    "format": "html"
+  },
+  "s159eba31a256": {
+    "source": "One less rabbit hole",
+    "format": "html"
+  },
+  "s0cf13430e445": {
+    "source": "Leave a little room<br>for the rest of your day.",
+    "format": "html"
+  },
+  "s174db79aba6d": {
+    "source": "Slowth<span class=\"footer-tag\">A little room to slow down.</span>",
+    "format": "html"
+  },
+  "s03870e4cc2ab": {
+    "source": "Privacy",
+    "format": "html"
+  },
+  "s9418a05f4c95": {
+    "source": "Contact",
+    "format": "html"
+  },
+  "s3b4bdec8d3f0": {
+    "source": "© 2026 Slowth",
+    "format": "html"
+  },
+  "s2d6780c77014": {
+    "source": "Block Reels, Shorts and short videos inside Instagram, YouTube, Facebook, X and other iPhone apps. Choose any app to block. Free and open source.",
+    "format": "text"
+  },
+  "scdb34dfdba11": {
+    "source": "Block Reels & YouTube Shorts in Apps on iPhone | Slowth",
+    "format": "text"
+  },
+  "sf96b79e6b8e7": {
+    "source": "Slowth — Less scrolling. More room for you. iPhone, iPad and Mac.",
+    "format": "text"
+  },
+  "s593ec16c4d84": {
+    "source": "Slowth home",
+    "format": "text"
+  },
+  "sccc15848cb28": {
+    "source": "Main navigation",
+    "format": "text"
+  },
+  "s6fe0b2f9d6bc": {
+    "source": "Download Slowth on the App Store",
+    "format": "text"
+  },
+  "sd4896e5d4e4a": {
+    "source": "Download on the App Store",
+    "format": "text"
+  },
+  "sa81a110904b7": {
+    "source": "Slowth on iPhone: app protection, content settings and pause controls",
+    "format": "text"
+  },
+  "s563a867289c2": {
+    "source": "Slowth setup explaining Screen Time access and on-device app protection",
+    "format": "text"
+  },
+  "s232119de1d14": {
+    "source": "Slowth Safari settings on iPhone, with controls for individual websites",
+    "format": "text"
+  },
+  "s2525e3f31f60": {
+    "source": "Footer navigation",
+    "format": "text"
+  },
+  "s8bb55a3997f1": {
+    "source": "GitHub ↗",
+    "format": "text"
+  },
+  "s98f7ff517cce": {
+    "source": "Block Reels, Shorts and short videos across Instagram, YouTube, Facebook, X (Twitter) and other social apps on iPhone and iPad using on-device detection and Screen Time. Choose apps for whole-app blocking. Safari filtering is also available on iPhone, iPad and Mac.",
+    "format": "text"
+  },
+  "sfbb216009327": {
+    "source": "Screen Time app blocking on iPhone and iPad",
+    "format": "text"
+  },
+  "s67047f1252a4": {
+    "source": "On-device Instagram Reels and Stories detection",
+    "format": "text"
+  },
+  "sa2c25ca56c81": {
+    "source": "On-device YouTube Shorts detection",
+    "format": "text"
+  },
+  "sff04330b1f20": {
+    "source": "Short-video detection across Facebook, X (Twitter) and other social apps",
+    "format": "text"
+  },
+  "s89b0aad1ff69": {
+    "source": "Safari filtering on iPhone, iPad and Mac",
+    "format": "text"
+  },
+  "s1d9030424f7c": {
+    "source": "Temporary access and Strict Mode",
+    "format": "text"
+  },
+  "s3a0c24fa9f5c": {
+    "source": "Block Reels, Shorts &amp; Apps on iPhone: Setup | Slowth",
+    "format": "html"
+  },
+  "s3f69fae20a03": {
+    "source": "A little help",
+    "format": "html"
+  },
+  "s270afe15c619": {
+    "source": "Set up your<br>app boundaries.",
+    "format": "html"
+  },
+  "sdaf8274443a8": {
+    "source": "Set up Slowth, understand the boundaries, or get in touch at <a href=\"mailto:denis@malina.page?subject=Slowth%20support\">denis@malina.page</a>.",
+    "format": "html"
+  },
+  "s8e96821234ea": {
+    "source": "App protection",
+    "format": "html"
+  },
+  "s7be64c43765f": {
+    "source": "Safari setup",
+    "format": "html"
+  },
+  "s415e2ba50641": {
+    "source": "Without recording",
+    "format": "html"
+  },
+  "s3bbf53e8e954": {
+    "source": "Pauses",
+    "format": "html"
+  },
+  "s3e18ac877a67": {
+    "source": "Strict Mode",
+    "format": "html"
+  },
+  "se79b92502c60": {
+    "source": "Troubleshooting",
+    "format": "html"
+  },
+  "s7c0d1608f093": {
+    "source": "Apps · iPhone &amp; iPad only",
+    "format": "html"
+  },
+  "s1c4bd50545a1": {
+    "source": "Block Reels and Shorts inside apps.",
+    "format": "html"
+  },
+  "sd2e02081cdd1": {
+    "source": "To block Instagram Reels, YouTube Shorts or short videos in Facebook, X (Twitter) and other social apps, select the app and follow the steps below. You can also select apps such as Snapchat, TikTok and games for whole-app blocking. <a href=\"#without-recording\">See how blocking works without monitoring</a>.",
+    "format": "html"
+  },
+  "s6f6df0abda24": {
+    "source": "Open the <b>Apps</b> tab and allow <b>Screen Time</b> access when prompted. This lets Slowth ask iOS to shield selected apps. It does not start a recording.",
+    "format": "html"
+  },
+  "s90f9a18a3e59": {
+    "source": "Choose the apps you want to block in Apple’s Screen Time picker. Categories select the apps currently in them; only apps are saved, and website selections are ignored. Select a category again after installing more apps.",
+    "format": "html"
+  },
+  "sdc8f2489f3de": {
+    "source": "Tap an app to choose its rules for <b>short videos</b>, <b>Stories</b> and <b>soft blocking</b>. New selections block both content types, with soft blocking off.",
+    "format": "html"
+  },
+  "s02abd8fe0382": {
+    "source": "Tap <b>Start monitoring</b> in the Apps tab, select Slowth in Apple’s broadcast prompt if needed, and confirm the start. Wait for monitoring to become active before returning to an app.",
+    "format": "html"
+  },
+  "sf1b56dcb981a": {
+    "source": "When selected content is detected, Screen Time shields the <b>whole app</b>. Follow the short rest countdown, then leave that content when you return.",
+    "format": "html"
+  },
+  "sc8ced69f16ec": {
+    "source": "<b>Recognition depends on the screen.</b> Slowth recognizes short-video and Stories screens across social apps, including Instagram, YouTube, Facebook and X (Twitter). App layouts change, and recognition can miss content or block ordinary screens by mistake. Selecting an app alone does not start monitoring.",
+    "format": "html"
+  },
+  "s4570734060ee": {
+    "source": "Understand screen access",
+    "format": "html"
+  },
+  "saf8e2f47d5be": {
+    "source": "The broadcast supplies images of your current screen, potentially including other apps and sensitive information. App selection controls which apps are blocked; it does not limit what appears in the broadcast. In the App Store app, frames are processed temporarily on-device, not saved or uploaded. Audio is ignored.",
+    "format": "html"
+  },
+  "s2edcb8728237": {
+    "source": "Stop monitoring",
+    "format": "html"
+  },
+  "saacddf878f6e": {
+    "source": "Return to Slowth, tap <b>Stop monitoring</b> and confirm in the system prompt. You can also use the iOS recording indicator to stop the broadcast. Check that the indicator has stopped. Stopping monitoring changes app protection as explained below; it does not turn off the Safari extension.",
+    "format": "html"
+  },
+  "sf5926c87e55d": {
+    "source": "Safari · iPhone, iPad &amp; Mac",
+    "format": "html"
+  },
+  "s09561494acdf": {
+    "source": "Start with your browser.",
+    "format": "html"
+  },
+  "sd015f2088cf1": {
+    "source": "iPhone and iPad",
+    "format": "html"
+  },
+  "seaf1934f3346": {
+    "source": "Install and open Slowth.",
+    "format": "html"
+  },
+  "s38eb6417fac2": {
+    "source": "In iOS Settings, open <b>Apps → Safari → Extensions → Slowth</b> and enable the extension. On older iOS versions, Safari is directly in Settings.",
+    "format": "html"
+  },
+  "s995cb98a06d9": {
+    "source": "Allow access to the supported websites you want Slowth to filter. Use All Websites → Allow if you want to cover all supported sites.",
+    "format": "html"
+  },
+  "s9fea34960d5d": {
+    "source": "Open Slowth’s Safari settings and choose the content to block per site. Reload any pages already open in Safari.",
+    "format": "html"
+  },
+  "sba2a8ceeaa87": {
+    "source": "Mac",
+    "format": "html"
+  },
+  "s0aaeb0e97ff3": {
+    "source": "Open Safari → <b>Settings → Extensions</b> and enable Slowth.",
+    "format": "html"
+  },
+  "s9de0c9173b2f": {
+    "source": "Allow website access when Safari asks.",
+    "format": "html"
+  },
+  "s55ab416f88fb": {
+    "source": "Choose your per-site options in Slowth and reload the page.",
+    "format": "html"
+  },
+  "s2d578cba8318": {
+    "source": "Safari does not need Screen Time permission or a screen broadcast. YouTube offers Shorts controls; Instagram and Facebook offer Reels and feed controls; X covers Explore and trends. Supported websites can also be blocked entirely. TikTok has whole-site blocking.",
+    "format": "html"
+  },
+  "sc94b82888be8": {
+    "source": "Use <b>Update rules now</b> to check for changes to the public blocking rules. Rule updates require a network connection and cannot be applied during Strict Mode.",
+    "format": "html"
+  },
+  "sc214bc3422a6": {
+    "source": "When recording is off.",
+    "format": "html"
+  },
+  "s43a3f761df87": {
+    "source": "Selected protected apps are normally shielded without a running broadcast. Stopping recording does not give unrestricted access to those apps.",
+    "format": "html"
+  },
+  "s5465038a473a": {
+    "source": "Soft blocking",
+    "format": "html"
+  },
+  "s8f9b0e0aaef8": {
+    "source": "If enabled for an app, Slowth briefly allows it after you leave Slowth, then asks iOS to shield it when it is used. This can help with background audio. Picture in Picture can still be blocked; it is not an unrestricted mode.",
+    "format": "html"
+  },
+  "s38c61f310772": {
+    "source": "Temporary access",
+    "format": "html"
+  },
+  "sfee755dec250": {
+    "source": "Allow content opens the whole selected group for the pause duration. It works without recording. When access ends, blocking resumes, although iOS may delay applying it.",
+    "format": "html"
+  },
+  "s135021ce04f2": {
+    "source": "To use content recognition, start monitoring again. If you cannot change a setting, check whether Strict Mode is active.",
+    "format": "html"
+  },
+  "sc1a31ed8cff1": {
+    "source": "Two different kinds of pause.",
+    "format": "html"
+  },
+  "sfee2a25f469a": {
+    "source": "A rest after detection",
+    "format": "html"
+  },
+  "sd1e0d0acdb2c": {
+    "source": "After Slowth detects content you chose to block, a short countdown gives you a moment away from the app. These automatic rests last 5–15 seconds and do not use leaves. You can close Slowth while the countdown continues. Leave the blocked content when you return, or another rest may begin.",
+    "format": "html"
+  },
+  "sf0aeab8e9764": {
+    "source": "Temporary access with a leaf",
+    "format": "html"
+  },
+  "s8e0011446133": {
+    "source": "On iPhone and iPad, apps and Safari share three pauses per day. <b>Allow content</b> uses one leaf to temporarily allow blocked content across the selected group. Under <b>Settings → Pause duration</b>, choose 30 seconds, 1 minute or 3 minutes for new pauses. The timer shows the remaining access; <b>Block again</b> ends it early without refunding the leaf.",
+    "format": "html"
+  },
+  "s40bb0c8dd5cf": {
+    "source": "Unused leaves become a saved reward count after the day ends; saved leaves are not additional access. Shared pauses are experimental, and iOS may delay restoring restrictions. A screen broadcast is not required for temporary access.",
+    "format": "html"
+  },
+  "s7599079eaced": {
+    "source": "Strict Mode, with clear limits.",
+    "format": "html"
+  },
+  "sc92ca8778835": {
+    "source": "Strict Mode locks enabled restrictions for <b>24 hours</b>. The timer survives closing the app and restarting the device. You cannot end it early inside Slowth.",
+    "format": "html"
+  },
+  "sef9194e73a33": {
+    "source": "You cannot weaken enabled restrictions. You can add restrictions, but cannot enable whole-site blocking during the lock.",
+    "format": "html"
+  },
+  "s8bf6cc93c26a": {
+    "source": "Rule refresh is locked while Strict Mode is active.",
+    "format": "html"
+  },
+  "s34ef5509f4d6": {
+    "source": "On iPhone and iPad, decide whether to <b>Allow pauses in Strict mode</b> before starting. If pauses are disallowed, you cannot re-enable them during the lock.",
+    "format": "html"
+  },
+  "se79fe76c5eb3": {
+    "source": "Strict Mode is a personal commitment tool. It does not make the device tamper-proof or prevent every change outside Slowth, such as removing the app or changing system permissions. Review your settings before enabling it.",
+    "format": "html"
+  },
+  "se0248055e73e": {
+    "source": "Something not quite right?",
+    "format": "html"
+  },
+  "sd920f13073eb": {
+    "source": "Shorts or Reels still appear in Safari",
+    "format": "html"
+  },
+  "sa022edacc7e3": {
+    "source": "Check that the extension is enabled, has permission for that website and has the relevant blocking option enabled. Reload the page. Outside Strict Mode, update rules and try again. Websites change their layout; if it still fails, send the site name, OS version and steps to reproduce.",
+    "format": "html"
+  },
+  "s23d11c121445": {
+    "source": "An app is blocked as soon as I open it",
+    "format": "html"
+  },
+  "s5e2ca1b744aa": {
+    "source": "Check the monitoring state in Slowth. Without an active broadcast, selected protected apps are normally blocked. Start monitoring for content detection, or use a temporary-access pause if available. Also check whether a detection rest is still active.",
+    "format": "html"
+  },
+  "se390cbc81275": {
+    "source": "Monitoring stops, or does not start",
+    "format": "html"
+  },
+  "s95b5c7ebc3f3": {
+    "source": "Return to Slowth and start monitoring again through Apple’s prompt. Check the system recording indicator and Screen Time permission. iOS can interrupt screen broadcasts; Slowth cannot silently restart one for you. Report repeated interruptions with your device and OS version.",
+    "format": "html"
+  },
+  "s1643eef478d2": {
+    "source": "Slowth blocks the wrong screen or misses content",
+    "format": "html"
+  },
+  "s3b6ec37a842b": {
+    "source": "Recognition is imperfect. Check the selected app’s content rules and whether its content is supported. You can report what happened through the app’s feedback option or by email. Do not send sensitive screen content; a description of the app, screen and steps is a useful start.",
+    "format": "html"
+  },
+  "s2f64c7a2266c": {
+    "source": "The pause ended, but access did not change immediately",
+    "format": "html"
+  },
+  "s221eeada0d98": {
+    "source": "The pause timer and the system shield are separate: iOS may delay restoring restrictions. Reopen Slowth to check its current state. Include the pause duration and whether monitoring was running when reporting the issue.",
+    "format": "html"
+  },
+  "se936071121cb": {
+    "source": "A setting is locked or an app is missing",
+    "format": "html"
+  },
+  "s344453bc480e": {
+    "source": "Check the Strict Mode timer and review your selection in the system picker. Only apps are saved from the system picker; websites are ignored. If you selected a category before installing an app, select the category again.",
+    "format": "html"
+  },
+  "sdef5234bb0dd": {
+    "source": "Still need a hand?",
+    "format": "html"
+  },
+  "s57c307ae9ba7": {
+    "source": "Tell me what happened.",
+    "format": "html"
+  },
+  "s158f250df949": {
+    "source": "Email <a href=\"mailto:denis@malina.page?subject=Slowth%20support\">denis@malina.page</a> or <a href=\"https://github.com/skar404/slowth/issues\">open a GitHub issue</a>. Include the Slowth version, device and OS version, steps to reproduce, and what you expected. Mention whether it happened in Safari or inside an app, and whether monitoring, a pause or Strict Mode was active.",
+    "format": "html"
+  },
+  "s34dc9245f0a1": {
+    "source": "For details about screen access and network requests, read the <a href=\"privacy.html\">privacy policy</a>.",
+    "format": "html"
+  },
+  "s64e25cc4a6f2": {
+    "source": "Learn how to block Instagram Reels, YouTube Shorts and selected apps with Slowth on iPhone and iPad. Set up Screen Time, monitoring and Safari filtering.",
+    "format": "text"
+  },
+  "sd2c972b8d064": {
+    "source": "Set up app blocking with Slowth",
+    "format": "text"
+  },
+  "s4b674f1cf979": {
+    "source": "On this page",
+    "format": "text"
+  },
+  "sd8276018eda0": {
+    "source": "Slowth — Privacy Policy",
+    "format": "html"
+  },
+  "sf3a6cda5dd09": {
+    "source": "Home",
+    "format": "html"
+  },
+  "s88435320e9b6": {
+    "source": "Policy language",
+    "format": "html"
+  },
+  "s107cc54770e4": {
+    "source": "<bdi>English</bdi>",
+    "format": "html"
+  },
+  "s71414ecb5395": {
+    "source": "<bdi>Español (México)</bdi>",
+    "format": "html"
+  },
+  "sb5ec33176030": {
+    "source": "<bdi>Français</bdi>",
+    "format": "html"
+  },
+  "s43e6207d69e5": {
+    "source": "<bdi>Deutsch</bdi>",
+    "format": "html"
+  },
+  "sf477f666d04b": {
+    "source": "Privacy Policy",
+    "format": "html"
+  },
+  "sc79b2a73e2ba": {
+    "source": "Last updated: 20 September 2026",
+    "format": "html"
+  },
+  "s7c1078cfad69": {
+    "source": "Slowth does not collect your browsing history or screen content. The App Store app has no account, analytics, tracking, advertising SDK, or developer-operated backend. Blocking and screen analysis run on your device.",
+    "format": "html"
+  },
+  "sd7acf09242b5": {
+    "source": "Safari blocking",
+    "format": "html"
+  },
+  "s0f31c55e9782": {
+    "source": "Slowth is a Safari extension with a companion app for iPhone, iPad, and Mac. It reads supported pages locally to hide or redirect the content you choose to block. Browsing history, page content, and blocking choices are not sent to the developer.",
+    "format": "html"
+  },
+  "s487e49c99c0a": {
+    "source": "Real-time Blocking (Beta) — iPhone and iPad",
+    "format": "html"
+  },
+  "sa442e13e2fc7": {
+    "source": "If you enable this optional feature, Apple’s ReplayKit supplies screen frames while the broadcast is active. Slowth uses Core ML on your device to detect selected Shorts, Reels, or Stories and asks iOS to show a Screen Time shield. The system recording indicator remains visible while monitoring is active.",
+    "format": "html"
+  },
+  "s4a954dd9c85f": {
+    "source": "Screen frames are not saved or uploaded during normal use of the App Store app. Audio samples are not processed. You can stop monitoring using the recording controls. Developer capture and upload tools are restricted to debug builds and are not available in the App Store app.",
+    "format": "html"
+  },
+  "saf2e37988f45": {
+    "source": "On Mac, Slowth blocks content only in Safari; it does not monitor the screen or block content inside other apps.",
+    "format": "html"
+  },
+  "scdb6fae2d96a": {
+    "source": "What stays on your device",
+    "format": "html"
+  },
+  "sfaf8c918ec47": {
+    "source": "Settings, per-site modes, the Strict Mode timer, app-selection tokens, and local operating status are stored on your device. Downloaded blocking rules are cached locally. These settings and rules are not sent to the developer.",
+    "format": "html"
+  },
+  "sf1fe5e98b3f1": {
+    "source": "Rule updates and network requests",
+    "format": "html"
+  },
+  "s7e5e213cfc60": {
+    "source": "The Safari extension periodically downloads a public blocking-rule file from GitHub Gist over HTTPS. The same rules are available to everyone. The request does not include browsing history, page content, screen frames, or your app selections.",
+    "format": "html"
+  },
+  "s23e26084f7b6": {
+    "source": "GitHub receives ordinary connection information, such as your IP address, when serving the file. Its own privacy policy applies.",
+    "format": "html"
+  },
+  "s8fc43e1ba0cb": {
+    "source": "Screen Time and Family Controls — iOS only",
+    "format": "html"
+  },
+  "sedec0b57f319": {
+    "source": "With your permission, Slowth uses Apple’s Family Controls and Managed Settings frameworks to shield selected apps. Your selections are represented by privacy-protected tokens, stored locally and used to ask iOS to apply the shield.",
+    "format": "html"
+  },
+  "s2116792a007f": {
+    "source": "Website and external services",
+    "format": "html"
+  },
+  "s517d50ce240a": {
+    "source": "The Slowth website is served through GitHub Pages and Cloudflare. Visiting it creates ordinary web requests, so those providers receive connection information such as your IP address. Opening other external links is governed by the destination’s privacy policy. The language links on this page work without cookies or JavaScript.",
+    "format": "html"
+  },
+  "s0c2d4daa93e9": {
+    "source": "Children",
+    "format": "html"
+  },
+  "sb47c7c726371": {
+    "source": "Slowth does not collect browsing history or screen content from users, including children.",
+    "format": "html"
+  },
+  "s0277b63e9445": {
+    "source": "Changes to this policy",
+    "format": "html"
+  },
+  "se2fc790ab655": {
+    "source": "If this policy changes, the date at the top will be updated. Material changes will also be described in app release notes.",
+    "format": "html"
+  },
+  "s7e43887e537a": {
+    "source": "<a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub privacy statement</a>",
+    "format": "html"
+  },
+  "s8427a6df8dbb": {
+    "source": "<a href=\"https://www.cloudflare.com/privacypolicy/\">Cloudflare privacy policy</a>",
+    "format": "html"
+  },
+  "sc5174b6fad3a": {
+    "source": "For privacy questions or requests, email us. If you contact us, we receive your email address and the information you send so we can respond.",
+    "format": "html"
+  },
+  "s6d142708016c": {
+    "source": "Email: <a href=\"mailto:denis@malina.page?subject=Slowth%20privacy\"><bdi dir=\"ltr\">denis@malina.page</bdi></a>",
+    "format": "html"
+  },
+  "s09d6ca4b2e14": {
+    "source": "How Slowth handles settings, Safari blocking, and on-device screen analysis.",
+    "format": "text"
+  },
+  "sf38ff9ed65f6": {
+    "source": "Slowth app logo",
+    "format": "text"
+  },
+  "s4003c6dd0c28": {
+    "source": "Policy language",
+    "format": "text"
+  },
+  "s029947bf6809": {
+    "source": "Privacy Policy",
+    "format": "text"
+  },
+  "s9354cc5e4791": {
+    "source": "© 2026 Slowth.",
+    "format": "text"
+  },
+  "s776c8faeb5a4": {
+    "source": "Language",
+    "format": "text"
+  },
+  "sfdbeb7b4c454": {
+    "source": "Choose a language",
+    "format": "text"
+  },
+  "s7adb464647bb": {
+    "source": "Close language list",
+    "format": "text"
+  },
+  "s4a365f0e0401": {
+    "source": "App screenshots are shown in English.",
+    "format": "text"
+  }
+}
