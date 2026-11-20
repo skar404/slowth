@@ -54,6 +54,7 @@ def resources(runtime_only=False):
     info = plistlib.loads((ROOT / 'iOS/Info.plist').read_bytes())
     del info['NSPhotoLibraryAddUsageDescription']
     del info['NSPhotoLibraryUsageDescription']
+    info.pop('NSMotionUsageDescription', None)  # Debug-only motion experiment.
     return {
         ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json': compact,
         ROOT / 'RealtimeShield/FlatDetectorMetadata.json': flat,

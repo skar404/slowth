@@ -9,6 +9,8 @@
     </dict></array>
     <key>NSLocalNetworkUsageDescription</key>
     <string>Connect to your local screenshot labeler to send sessions you select.</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Record phone movement during a debug experiment to compare scrolling, reading, typing, and walking.</string>
     <key>NSAppTransportSecurity</key>
     <dict><key>NSAllowsLocalNetworking</key><true/></dict>
 	<key>BundleIdPrefix</key>

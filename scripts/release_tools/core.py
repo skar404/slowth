@@ -20,6 +20,8 @@ PUBLIC_DIRS = {
     'scripts', 'tests', 'website',
 }
 PUBLIC_FILES = {
+    'Package.swift',
+    'docs/MOTION_EXPERIMENT.md', 'docs/DEBUG_TRANSFERS.md',
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     '.github/workflows/website.yml',
     'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',

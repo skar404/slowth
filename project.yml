@@ -134,6 +134,7 @@ targets:
     sources:
       - path: Debug/UI
       - path: Debug/iOS
+      - path: Debug/Transfer
       - path: Localization
         buildPhase: resources
       - path: iOS
@@ -268,6 +269,7 @@ targets:
       - path: iOS/PauseActivityCard.swift
       - path: Shared/PauseTargetDisplay.swift
       - path: iOS/PauseActivityActions.swift
+      - path: Debug/iOS/MotionExperimentActivity.swift
       - path: iOS/Assets.xcassets
         buildPhase: resources
       - path: iOS/PauseActivity.xcstrings

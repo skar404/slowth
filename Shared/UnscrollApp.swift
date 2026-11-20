@@ -19,6 +19,8 @@ struct UnscrollApp: App {
 
     #if os(iOS) && DEBUG
     @State private var labelerLink: LabelerLink?
+    @State private var transferLink: DebugTransferLink?
+    @State private var invalidTransferLink = false
     private struct LabelerLink: Identifiable {
         let id = UUID()
         let server: String
@@ -54,6 +56,38 @@ struct UnscrollApp: App {
 
     #if os(iOS)
     @ViewBuilder private var iOSContent: some View {
+        Group {
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("--debug-transfers") {
+                DebugTransfersView()
+            } else if #available(iOS 16.2, *), ProcessInfo.processInfo.arguments.contains("--motion-experiment") {
+                MotionExperimentView()
+
+            } else {
+                normalIOSContent
+            }
+            #else
+            normalIOSContent
+            #endif
+        }
+        #if DEBUG
+        .onOpenURL { url in
+            guard url.scheme == "slowth", url.host == "debug-transfer" else { return }
+            do { transferLink = try DebugTransferLink.parse(url) }
+            catch { invalidTransferLink = true }
+        }
+        .sheet(item: $transferLink) { DebugTransferConnectionView(link: $0) }
+        .alert("Invalid transfer link", isPresented: $invalidTransferLink) {
+            Button("OK", role: .cancel) {}
+        } message: { Text("No connection settings were changed.") }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+            DebugTransferStore.shared.pause()
+            transferLink = nil
+        }
+        #endif
+    }
+
+    @ViewBuilder private var normalIOSContent: some View {
         Group {
             if uiMode == "mac" {
                 MacContentView()
