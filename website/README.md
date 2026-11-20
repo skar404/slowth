@@ -9,7 +9,7 @@ Static HTML/CSS in `website/` in the `skar404/slowth` repository. Production: ht
 | `privacy.html`, `privacy-*.html`, `{locale}/privacy.html` | Localized policies; all seven historical policy URLs and their text are preserved |
 | `sitemap.xml` | Canonical landing, support and privacy URLs for search crawlers |
 | `SEARCH.md` | Search metadata, crawler observations and post-publication indexing steps |
-| `test-cases/` | Independent contribution form; does not use the landing page styles |
+| `test-cases/` | Redirect to the contribution form on malina.page, preserving query and fragment |
 
 Run an HTTP preview from the repository root:
 
@@ -17,7 +17,7 @@ Run an HTTP preview from the repository root:
 python3 -m http.server 8794 --bind 127.0.0.1
 ```
 
-Open http://127.0.0.1:8794/website/. No build step, executable frontend JavaScript, external fonts or analytics are required. The landing includes descriptive SoftwareApplication JSON-LD. The redesign was published on 17 November 2026. Cloudflare currently injects its own scripts at the edge; the static source does not include them.
+Open http://127.0.0.1:8794/website/. No build step, executable frontend JavaScript, external fonts or analytics are required. The landing includes descriptive SoftwareApplication JSON-LD. The redesign was published on 17 November 2026. The new domain is served directly by GitHub Pages; no Cloudflare edge scripts are injected.
 
 ## Content sources
 

@@ -11,7 +11,7 @@ The redesigned English site was published on 17 November 2026. This update adds 
 - `SoftwareApplication` JSON-LD identifies the app, platforms, developer, free offer and official download/source URLs. No invented ratings or reviews. This is descriptive markup, not a guarantee of rich results.
 - `sitemap.xml` lists 192 canonical public landing/support/privacy URLs. It deliberately omits test-cases, internal review notes, duplicate index.html and historical assets. No artificial last-modified dates.
 
-## Live observations
+## Historical live observations (malina.page, 17 November 2026)
 
 After the English publication, GitHub Pages reported the exact deployed commit as built. Live HTML and assets matched the local release after accounting for Cloudflare email protection and injected edge scripts. No noindex response header was observed. Localized pages still require recrawling after their deployment; publication alone does not prove indexing.
 
