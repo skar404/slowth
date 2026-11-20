@@ -887,3 +887,14 @@ footer .wordmark {
 
 footer .wordmark { min-width:0; max-width:100%; }
 .footer-tag { min-width:0; max-width:100%; overflow-wrap:anywhere; }
+
+.portfolio-link {
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  margin-block-end:12px;
+  color:var(--body);
+  font-size:14px;
+  text-decoration:none;
+}
+.portfolio-link:hover { text-decoration:underline; }
