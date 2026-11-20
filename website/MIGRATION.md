@@ -4,7 +4,7 @@ The public website lives in `website/` in `skar404/slowth`. The `Website` GitHub
 
 Production origin: `https://slowth.app/`. Canonical URLs, hreflang, Open Graph images, JSON-LD and sitemap use this origin. `robots.txt` advertises the sitemap.
 
-Cloudflare DNS: apex and www point to `skar404.github.io` (DNS-only CNAME; apex flattening). GitHub Pages custom domain is `slowth.app`; HTTPS enforcement is enabled.
+Cloudflare DNS: apex and www point to `skar404.github.io` using proxied CNAME records with Auto TTL. Cloudflare SSL/TLS mode is Full (strict), with an active Universal SSL certificate. GitHub Pages remains the origin; its custom domain is `slowth.app` and HTTPS enforcement is enabled. HTTP traffic statistics are available under Cloudflare Analytics; proxying was enabled on 20 November 2026, so earlier direct-to-origin traffic is not included.
 
 The old marketing routes under `https://malina.page/slowth/` redirect to the corresponding path on the new domain. The upload frontend remains on malina.page at `/slowth-test-cases/`, outside the `/slowth/` prefix now owned by the project Pages site. A separate edge redirect preserves old `/slowth/test-cases/` links. Keep the API on its existing origin: its cookies and CORS are origin-sensitive. `/test-cases/` on the new site forwards there, preserving query and fragment.
 

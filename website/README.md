@@ -17,7 +17,7 @@ Run an HTTP preview from the repository root:
 python3 -m http.server 8794 --bind 127.0.0.1
 ```
 
-Open http://127.0.0.1:8794/website/. No build step, executable frontend JavaScript, external fonts or analytics are required. The landing includes descriptive SoftwareApplication JSON-LD. The redesign was published on 17 November 2026. The new domain is served directly by GitHub Pages; no Cloudflare edge scripts are injected.
+Open http://127.0.0.1:8794/website/. No build step, executable frontend JavaScript, external fonts or analytics are required for the local site. The landing includes descriptive SoftwareApplication JSON-LD. The redesign was published on 17 November 2026. The production domain uses Cloudflare proxying in front of GitHub Pages, with Full (strict) TLS and Cloudflare HTTP traffic analytics. Cloudflare may inject edge features such as email-address decoding into production responses.
 
 ## Content sources
 
