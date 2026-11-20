@@ -6,7 +6,7 @@ Production origin: `https://slowth.app/`. Canonical URLs, hreflang, Open Graph i
 
 Cloudflare DNS: apex and www point to `skar404.github.io` (DNS-only CNAME; apex flattening). GitHub Pages custom domain is `slowth.app`; HTTPS enforcement is enabled.
 
-The old marketing routes under `https://malina.page/slowth/` redirect to the corresponding path on the new domain. Keep the test-case upload application and its API on their existing origins: its cookies and CORS are origin-sensitive. `/test-cases/` on the new site forwards there, preserving query and fragment.
+The old marketing routes under `https://malina.page/slowth/` redirect to the corresponding path on the new domain. The upload frontend remains on malina.page at `/slowth-test-cases/`, outside the `/slowth/` prefix now owned by the project Pages site. A separate edge redirect preserves old `/slowth/test-cases/` links. Keep the API on its existing origin: its cookies and CORS are origin-sensitive. `/test-cases/` on the new site forwards there, preserving query and fragment.
 
 The website preserves the old robots training opt-out rules and search access.
 
