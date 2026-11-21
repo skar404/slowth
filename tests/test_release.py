@@ -52,6 +52,22 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(before, (self.root / '.git/index').read_bytes())
         self.assertEqual(len(tree), 40)
 
+    def test_issue_templates_snapshot_preserves_files_and_index(self):
+        files = {
+            '.github/ISSUE_TEMPLATE/bug_report.yml': 'name: Bug report\n',
+            '.github/ISSUE_TEMPLATE/config.yml': 'blank_issues_enabled: true\n',
+        }
+        for name, data in files.items():
+            self.write(name, data)
+        self.git('add', '.github/ISSUE_TEMPLATE')
+        before = (self.root / '.git/index').read_bytes()
+        source, _, _ = release.snapshot(self.root, self.work)
+        for name, data in files.items():
+            self.assertEqual((source / name).read_text(), data)
+        self.assertEqual(before, (self.root / '.git/index').read_bytes())
+        self.assertFalse(release.public_path('.github/ISSUE_TEMPLATE/private.yml'))
+        self.assertFalse(release.public_path('.github/ISSUE_TEMPLATE/.env'))
+
     def test_website_snapshot_preserves_public_assets_and_index(self):
         files = {
             '.github/workflows/website.yml': 'name: Website\n',
