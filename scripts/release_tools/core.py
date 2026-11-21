@@ -20,6 +20,7 @@ PUBLIC_DIRS = {
     'scripts', 'tests', 'website',
 }
 PUBLIC_FILES = {
+    '.github/ISSUE_TEMPLATE/bug_report.yml', '.github/ISSUE_TEMPLATE/config.yml',
     'Package.swift',
     'docs/MOTION_EXPERIMENT.md', 'docs/DEBUG_TRANSFERS.md',
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
