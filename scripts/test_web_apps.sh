@@ -12,11 +12,14 @@ if [[ "${1:-}" == "--simulator" ]]; then
     device="${2:-auto}"
     if [[ "$device" == auto ]]; then
         device=$(xcrun simctl list devices available --json | python3 -c '
-import json,sys
+import json,re,sys
 inventory=json.load(sys.stdin)["devices"]
-for runtime in sorted(inventory, reverse=True):
-    if ".iOS-" not in runtime: continue
-    version=tuple(int(v) for v in runtime.split(".iOS-")[1].split("-"))
+# Device-specific runtimes can end in a model suffix, e.g. iOS-27-2-iPhone19-4.
+runtimes=[]
+for runtime in inventory:
+    match=re.search(r"\.iOS-(\d+(?:-\d+)*)", runtime)
+    if match: runtimes.append((tuple(map(int, match[1].split("-"))), runtime))
+for version,runtime in sorted(runtimes, reverse=True):
     if version < (18,4): continue
     for device in inventory[runtime]:
         if device.get("isAvailable") and "iPhone" in device["name"]:
