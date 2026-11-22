@@ -4,6 +4,7 @@ from pathlib import Path
 import subprocess
 import unittest
 from html.parser import HTMLParser
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SERVICES = ('instagram', 'youtube', 'tiktok', 'facebook', 'x')
@@ -28,12 +29,14 @@ class ShortcutTests(unittest.TestCase):
             self.assertTrue((folder / manifest['icons'][0]['src']).is_file())
             tags = Tags((folder / 'index.html').read_text()).tags
             self.assertIn(('meta', {'name': 'apple-mobile-web-app-capable', 'content': 'yes'}), tags)
-            self.assertTrue(any(tag == 'a' and a.get('href') == f'slowth://web/{service}' for tag, a in tags))
+            launch = next(a for tag, a in tags if tag == 'a' and a.get('id') == 'open')
+            self.assertIn('hidden', launch)
+            self.assertNotIn('href', launch)
             for tag, attrs in tags:
                 for key in ('src', 'href'):
                     value = attrs.get(key, '')
                     if value and not value.startswith(('/', '?', 'slowth:')):
-                        self.assertTrue((folder / value).exists(), value)
+                        self.assertTrue((folder / urlsplit(value).path).exists(), value)
 
     def test_launch_behavior(self):
         result = subprocess.run(['node', '--test', str(ROOT / 'WebExt/tests/shortcuts.test.cjs')], capture_output=True, text=True)

@@ -23,13 +23,18 @@
   }
   const standalone = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
   const params = new URLSearchParams(location.search);
-  const launching = params.get('setup') !== '1' && (standalone || params.get('launch') === '1');
+  const launching = standalone && params.get('setup') !== '1';
   const openLink = document.getElementById('open');
-  openLink.href = `slowth://web/${service}`;
+  openLink.hidden = !launching;
   if (launching) {
+    openLink.href = `slowth://web/${service}`;
     document.getElementById('instructions').hidden = true;
     document.getElementById('launcher').hidden = false;
     // One attempt per document. Returning from Slowth must not create a redirect loop.
-    if (standalone) location.href = openLink.href;
+    // The inline head script normally launches before this file is downloaded.
+    if (!globalThis.slowthShortcutLaunchAttempted) {
+      globalThis.slowthShortcutLaunchAttempted = true;
+      location.href = openLink.href;
+    }
   }
 })();

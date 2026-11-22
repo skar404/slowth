@@ -121,7 +121,10 @@ GET URL or home, never a form or unfinished authentication request.
 - `slowth://web/<service>` keeps the existing strict five-service contract.
 - `https://slowth.app/shortcuts/<service>/` remains the installation page, with
   individual manifest identity, scope, icon and `?launch=1` start URL.
-- Standalone pages make one launch attempt and retain a visible launch button;
+- Safari tabs always show installation instructions, including `?launch=1`, without
+  a link that opens Slowth. Standalone Home Screen launches make one automatic
+  launch attempt from inline HTML before fetching styles, icons or the UI script,
+  and retain a visible fallback button;
   returning to the shortcut does not create a redirect loop. `?setup=1` shows help.
 - English/Russian static pages live in `website/shortcuts/` and are included by
   `.github/workflows/website.yml`. No new backend or hosting account is needed.
