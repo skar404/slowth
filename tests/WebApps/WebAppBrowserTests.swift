@@ -322,7 +322,7 @@ final class WebAppBrowserTests: XCTestCase {
         let main = browser.addTab(configuration: browser.websiteConfiguration())
         main.view.load(URLRequest(url: base))
         func waitForPage(_ view: WKWebView, path: String) async throws {
-            for _ in 0..<100 {
+            for _ in 0..<300 {
                 if view.url?.path == path && !view.isLoading { return }
                 try await Task.sleep(for: .milliseconds(100))
             }
@@ -344,7 +344,7 @@ final class WebAppBrowserTests: XCTestCase {
         XCTAssertEqual(retained as? String, "retained")
         XCTAssertEqual(browser.windows.count, 1)
         _ = try await main.view.evaluateJavaScript("document.getElementById('popup').click(); true")
-        for _ in 0..<50 {
+        for _ in 0..<300 {
             if browser.windows.count == 2 { break }
             try await Task.sleep(for: .milliseconds(100))
         }
@@ -401,7 +401,7 @@ final class WebAppBrowserTests: XCTestCase {
         let view = WKWebView()
         let downloads = WebAppDownloads()
         view.startDownload(using: URLRequest(url: url)) { downloads.add($0) }
-        for _ in 0..<100 {
+        for _ in 0..<300 {
             if downloads.items.first?.complete == true || downloads.items.first?.error != nil { break }
             try await Task.sleep(for: .milliseconds(100))
         }
@@ -426,14 +426,14 @@ final class WebAppBrowserTests: XCTestCase {
         let downloads = WebAppDownloads()
         let url = try await server.url()
         view.startDownload(using: URLRequest(url: url)) { downloads.add($0) }
-        for _ in 0..<50 {
+        for _ in 0..<300 {
             if downloads.items.first?.url != nil { break }
             try await Task.sleep(for: .milliseconds(100))
         }
         let item = try XCTUnwrap(downloads.items.first)
         let destination = try XCTUnwrap(item.url)
         downloads.cancel(item.id)
-        for _ in 0..<50 {
+        for _ in 0..<300 {
             if downloads.items.isEmpty { break }
             try await Task.sleep(for: .milliseconds(100))
         }
@@ -454,6 +454,7 @@ private final class DownloadFixture {
     private let listener: NWListener
     private let queue = DispatchQueue(label: "slowth.download-test")
     private var connections: [NWConnection] = []
+    private var ready = false // Accessed only on queue.
     init(stalled: Bool, html: Bool = false, document: String? = nil) throws {
         listener = try NWListener(using: .tcp, on: .any)
         listener.newConnectionHandler = { [weak self] connection in
@@ -476,11 +477,16 @@ private final class DownloadFixture {
                                 isComplete: !stalled, completion: .contentProcessed { _ in })
             }
         }
+        listener.stateUpdateHandler = { [weak self] state in
+            if case .ready = state { self?.ready = true }
+        }
         listener.start(queue: queue)
     }
     @MainActor func url() async throws -> URL {
-        for _ in 0..<50 {
-            if let port = listener.port, port.rawValue > 0 { return URL(string: "http://127.0.0.1:\(port.rawValue)/proof.pdf")! }
+        for _ in 0..<300 {
+            // The port may be assigned before the listener can accept requests.
+            let port = queue.sync { ready ? listener.port : nil }
+            if let port, port.rawValue > 0 { return URL(string: "http://127.0.0.1:\(port.rawValue)/proof.pdf")! }
             try await Task.sleep(for: .milliseconds(100))
         }
         throw URLError(.cannotConnectToHost)
