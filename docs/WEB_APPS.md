@@ -140,18 +140,18 @@ node --test WebExt/tests/*.test.cjs
 python3 -m unittest discover -s tests -p 'test_*.py'
 bash scripts/test_ios_blocking.sh
 bash scripts/test_ios_welcome.sh
-swiftc Shared/AppLocalization.swift Shared/WebSettingsNotifications.swift \
-  Shared/SharedStore.swift Shared/WebAppService.swift Shared/WebAppProfile.swift \
-  Shared/WebAppsRouter.swift Extension/NativeExtensionMessageHandler.swift \
-  WebExt/tests/WebAppsTests.swift -o /tmp/slowth-webapps-tests
-/tmp/slowth-webapps-tests
-xcodegen generate
-xcodebuild -project Unscroll.xcodeproj -scheme 'Web apps tests' \
-  -destination 'platform=iOS Simulator,name=Slowth Locales iPhone' \
-  -derivedDataPath build/webapps-tests CODE_SIGNING_ALLOWED=NO test
+bash scripts/test_web_apps.sh --simulator auto
 python3 scripts/render_slowth.py --check
 python3 scripts/check_slowth.py --app-locales Localization/locales.json
 ```
+
+The browser test script reports contract compilation, app/test compilation,
+simulator boot and hosted test execution separately. It waits for `simctl
+bootstatus` before launching the test host, with a 180-second boot limit; individual
+tests retain their 120-second limit. Pass a simulator UDID instead of `auto` to
+compare runs on the same runtime. Xcode results remain in
+`build/webapps-tests/Logs/Test/`; source-check CI retains them for seven days,
+including failed runs. A passing local run does not establish CI startup latency.
 
 The hosted XCTest suite exercises actual WebKit cookie isolation, Meta sharing,
 retained sessions, nested-window return, a real JavaScript opener, startup with the

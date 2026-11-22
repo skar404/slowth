@@ -8,11 +8,18 @@ cleanup() {
     rm -rf "$output"
 }
 trap cleanup EXIT
-xcrun swiftc Shared/AppLocalization.swift Shared/WebSettingsNotifications.swift \
+phase() {
+    local label="$1" started=$SECONDS
+    shift
+    printf '\n[webapps] %s started (%s)\n' "$label" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+    "$@"
+    printf '[webapps] %s completed in %ss\n' "$label" "$((SECONDS - started))"
+}
+phase 'Compile contracts' xcrun swiftc Shared/AppLocalization.swift Shared/WebSettingsNotifications.swift \
   Shared/SharedStore.swift Shared/WebAppService.swift Shared/WebAppProfile.swift \
   Shared/WebAppsRouter.swift Extension/NativeExtensionMessageHandler.swift \
   WebExt/tests/WebAppsTests.swift -o "$output/contracts"
-"$output/contracts"
+phase 'Run contracts' "$output/contracts"
 if [[ "${1:-}" == "--simulator" ]]; then
     device="${2:-auto}"
     if [[ "$device" == auto ]]; then
@@ -50,9 +57,24 @@ for target in spec["targets"].values():
 (folder / "webapps-project.json").write_text(json.dumps(spec))
 PYTHON
     xcodegen generate --spec "$output/webapps-project.json" --project-root "$PWD" --project "$PWD"
-    xcodebuild -project Unscroll.xcodeproj -scheme 'Web apps tests' \
-      -destination "platform=iOS Simulator,id=$device" \
-      -derivedDataPath build/webapps-tests -parallel-testing-enabled NO \
-      -test-timeouts-enabled YES -default-test-execution-time-allowance 120 \
-      -maximum-test-execution-time-allowance 120 CODE_SIGNING_ALLOWED=NO test
+    build_args=(-project Unscroll.xcodeproj -scheme 'Web apps tests'
+      -destination "platform=iOS Simulator,id=$device"
+      -derivedDataPath build/webapps-tests CODE_SIGNING_ALLOWED=NO)
+    phase 'Build for testing' xcodebuild "${build_args[@]}" build-for-testing
+    # A fresh simulator can fail to launch the test host while first-boot work is
+    # still running. Wait explicitly and report this separately from XCTest time.
+    phase 'Boot simulator' python3 - "$device" <<'PYTHON'
+import subprocess, sys
+try:
+    subprocess.run(["xcrun", "simctl", "bootstatus", sys.argv[1], "-b", "-d"],
+                   check=True, timeout=180)
+except subprocess.TimeoutExpired:
+    sys.exit("Simulator did not finish booting within 180 seconds; tests were not started")
+except subprocess.CalledProcessError as error:
+    sys.exit(error.returncode)
+PYTHON
+    phase 'Run hosted tests' xcodebuild "${build_args[@]}" \
+      -parallel-testing-enabled NO -test-timeouts-enabled YES \
+      -default-test-execution-time-allowance 120 \
+      -maximum-test-execution-time-allowance 120 test-without-building
 fi
