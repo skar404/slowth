@@ -80,7 +80,7 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
             for pattern in webExtension.requestedPermissionMatchPatterns { context.setPermissionStatus(.grantedExplicitly, for: pattern) }
             self.context = context
             try self.controller.load(context)
-            try await context.loadBackgroundContent()
+            try await self.loadBackgroundContent(context)
             try Task.checkCancellation()
             for _ in 0..<100 {
                 if self.bridgeReady && self.port?.isDisconnected == false { break }
@@ -96,6 +96,22 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
             if startupGeneration == generation { protection = .failed }
             throw error
         }
+    }
+
+    private func loadBackgroundContent(_ context: WKWebExtensionContext) async throws {
+        // WebKit may never complete the callback after an unload/process exit.
+        // Polling a callback result keeps recovery cancellation and timeout bounded
+        // without waiting for a cancelled child task to finish inside WebKit.
+        var result: Result<Void, Error>?
+        context.loadBackgroundContent { error in
+            result = error.map { .failure($0) } ?? .success(())
+        }
+        for _ in 0..<300 {
+            try Task.checkCancellation()
+            if let result { return try result.get() }
+            try await Task.sleep(for: .milliseconds(100))
+        }
+        throw RuntimeError.bridgeUnavailable
     }
 
     func setVisible(_ browser: WebAppBrowser, _ isVisible: Bool) {
