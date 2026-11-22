@@ -5,6 +5,15 @@ import Network
 
 @MainActor
 final class WebAppBrowserTests: XCTestCase {
+    override func tearDown() async throws {
+        // Each test owns its extension processes and pages. Retained profiles
+        // otherwise accumulate WebKit processes across unrelated test cases.
+        for profile in WebAppProfile.allCases {
+            WebAppProfileRuntime.shared(profile).prepareRecovery()
+        }
+        try await super.tearDown()
+    }
+
     func testYouTubeDismissalPreservesPresentedVideoAndSuspendsInlineMedia() async throws {
         let browser = WebAppProfileRuntime.shared(.youtube).session(.youtube)
         browser.stop()
