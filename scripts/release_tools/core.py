@@ -20,31 +20,34 @@ PUBLIC_DIRS = {
     'scripts', 'tests', 'website',
 }
 PUBLIC_FILES = {
-    'Package.swift',
-    'docs/MOTION_EXPERIMENT.md', 'docs/DEBUG_TRANSFERS.md',
+    'docs/MOTION_EXPERIMENT.md', 'docs/DEBUG_TRANSFERS.md', 'docs/WEB_APPS.md', 'docs/WEB_BROWSER_REQUEST.md',
+    '.github/ISSUE_TEMPLATE/bug_report.yml', '.github/ISSUE_TEMPLATE/config.yml',
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     '.github/workflows/website.yml',
     'docs/BUILD_TRUST.md', 'docs/IPAD_LAYOUT.md', 'docs/IPHONE_DUO.md',
     'docs/FLAT_MODEL.md', 'docs/IOS_LOCALIZATION.md',
-    'project.yml', 'README.md', 'BUDGET.md', 'funding.json', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
+    'Package.swift', 'project.yml', 'README.md', 'BUDGET.md', 'funding.json', 'LICENSE', 'APP_STORE_DESCRIPTION.txt',
     'AGENTS.md', 'APP_STORE_LOCALIZATION.md',
     'APP_REVIEW_NOTES.md', '.gitignore', 'Configs/Local.xcconfig.example',
     'Configs/Slowth.storekit', 'docs/icon.png', 'docs/showcase-00.jpg',
     'docs/showcase-01.jpg', 'docs/showcase-02.jpg',
 }
 PRIVATE_PARTS = {
+    'Models', 'marketing', 'slowth-dataset', 'slowth-app-store', 'slowth-marketing',
     'data-model', 'logs', 'build', '.venv', '.hermes', '.playwright-mcp',
     'analitics', 'app-store', 'tmp', 'temp', 'sandbox', 'dataset', 'datasets',
-    '__pycache__', '.git', '.agents', '.codex', 'DerivedData', 'node_modules',
+    '__pycache__', '.git', '.agents', '.codex', 'DerivedData', 'node_modules', '.build', '.swiftpm',
 }
 # Retired tracked artifacts are removed from the release tree, kept on disk.
 RETIRED = ('RealtimeShield/SurfaceDetector.mlpackage/',
            'RealtimeShield/SurfaceDetectorMetadata.json')
-MODEL_DIR = 'data-model/exports/flat-15-seed7-20261028/ios-resources'
-MODEL_HASHES = {'FlatDetector15': '86e41923fb8349e0878128db6603fd8609930d32cacd4bf5c11481ad9373ef26'}
+ASSETS = json.loads((ROOT / 'scripts/model-assets.json').read_text())
+RELEASE_MODEL = next(item for item in ASSETS['resources'] if 'Release' in item['profiles'])
+MODEL_DIR = 'Models/exports/' + str(PurePosixPath(RELEASE_MODEL['path']).parent)
+MODEL_HASHES = {'FlatDetector15': RELEASE_MODEL['sha256']}
 MODEL_DIRS = {'FlatDetector15': MODEL_DIR}
 RUNTIME = 'RealtimeShield/FlatDetector15Metadata.json'
-RUNTIME_HASH = '6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d'
+RUNTIME_HASH = next(item['sha256'] for item in ASSETS['runtime_metadata'] if item['path'] == RUNTIME)
 RUNTIME_HASHES = {RUNTIME: RUNTIME_HASH}
 PACKAGE_FILES = {'Manifest.json', 'Data/com.apple.CoreML/model.mlmodel',
                  'Data/com.apple.CoreML/weights/weight.bin'}
@@ -180,8 +183,17 @@ def versions(source):
     return version, build, spec
 
 
+def artifact_path(name):
+    # Archive names are a published compatibility contract, not local paths.
+    return name.replace('data-model/exports/', 'Models/exports/', 1) if name.startswith('data-model/exports/') else name
+
+
+def archive_path(name):
+    return name.replace('Models/exports/', 'data-model/exports/', 1) if name.startswith('Models/exports/') else name
+
+
 def model_files():
-    return {f'{MODEL_DIRS[name]}/{name}.mlpackage/{part}' for name in MODEL_HASHES for part in PACKAGE_FILES} | set(RUNTIME_HASHES)
+    return {archive_path(f'{MODEL_DIRS[name]}/{name}.mlpackage/{part}') for name in MODEL_HASHES for part in PACKAGE_FILES} | set(RUNTIME_HASHES)
 
 
 def package_sha(package):
@@ -220,7 +232,7 @@ def install_models(source, local_root, bundle):
                         f'Unsafe model bundle member: {member.name}')
                 seen.add(member.name)
                 data = tar.extractfile(member).read()
-                dest = source / member.name
+                dest = source / artifact_path(member.name)
                 if member.name in RUNTIME_HASHES:
                     require(data == dest.read_bytes(), 'Bundle runtime metadata differs from source')
                 else:
@@ -228,13 +240,15 @@ def install_models(source, local_root, bundle):
                     dest.write_bytes(data)
         require(seen == model_files(), 'Incomplete model bundle')
     else:
+        # Local builds consume prepared app assets, never a dataset checkout.
         for name in model_files() - set(RUNTIME_HASHES):
-            src = local_root / name
+            src = local_root / artifact_path(name)
             require(src.is_file() and not src.is_symlink()
                     and src.resolve().is_relative_to(local_root.resolve()), f'Invalid model input: {name}')
-            dest = source / name
+            dest = source / artifact_path(name)
             dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(src, dest)
+            if src.resolve() != dest.resolve():
+                shutil.copyfile(src, dest)
     verify_models(source)
 
 
@@ -242,7 +256,7 @@ def model_bundle(source, destination):
     with destination.open('wb') as raw, gzip.GzipFile(filename='', mode='wb', fileobj=raw, mtime=0) as compressed:
         with tarfile.open(fileobj=compressed, mode='w', format=tarfile.USTAR_FORMAT) as tar:
             for name in sorted(model_files()):
-                data = (source / name).read_bytes()
+                data = (source / artifact_path(name)).read_bytes()
                 entry = tarfile.TarInfo(name)
                 entry.size = len(data)
                 entry.mode = 0o644
@@ -251,9 +265,6 @@ def model_bundle(source, destination):
 
 def prepare(source, root, bundle, spec):
     install_models(source, root, bundle)
-    if not bundle and (root / 'data-model').exists():
-        # Verify derivation from the private export locally; never copy it to snapshot.
-        run(sys.executable, root / 'scripts/prepare_release_resources.py', '--check', cwd=root)
     run(sys.executable, 'scripts/prepare_release_resources.py', '--check', '--runtime-only', cwd=source)
     config = root / 'Configs/Local.xcconfig'
     require(config.is_file() and not config.is_symlink(), 'Configure Configs/Local.xcconfig before building')

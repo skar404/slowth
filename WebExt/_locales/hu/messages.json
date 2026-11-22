@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Történetek"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Mégse"
+  },
+  "hideHomeFeed": {
+    "message": "Kezdőlapi hírfolyam elrejtése"
   }
 }

@@ -31,12 +31,32 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
     }
 
     override func configuration(shielding webDomain: WebDomain) -> ShieldConfiguration {
-        Self.currentConfiguration
+        #if DEBUG
+        if WebsiteShieldProbe.handles(webDomain.token) { return Self.websiteProbeConfiguration }
+        #endif
+        return Self.currentConfiguration
     }
 
     override func configuration(shielding webDomain: WebDomain, in category: ActivityCategory) -> ShieldConfiguration {
-        Self.currentConfiguration
+        #if DEBUG
+        if WebsiteShieldProbe.handles(webDomain.token) { return Self.websiteProbeConfiguration }
+        #endif
+        return Self.currentConfiguration
     }
+
+    #if DEBUG
+    private static var websiteProbeConfiguration: ShieldConfiguration {
+        ShieldConfiguration(
+            backgroundBlurStyle: .systemUltraThinMaterialDark,
+            backgroundColor: backgroundTint,
+            icon: slowthAppIcon,
+            title: .init(text: "Slowth website test", color: .white),
+            subtitle: .init(text: "Release removes only this website's explicit shield. Native app protection is unchanged.", color: .white),
+            primaryButtonLabel: .init(text: "Release website", color: buttonTextColor),
+            primaryButtonBackgroundColor: buttonColor,
+            secondaryButtonLabel: .init(text: "Close", color: .white))
+    }
+    #endif
 
     private static func protectionTarget(_ application: Application) -> String? {
         if GroupedApps.isEnabled { return "apps" }

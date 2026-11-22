@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "故事"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "取消"
+  },
+  "hideHomeFeed": {
+    "message": "隱藏首頁動態"
   }
 }

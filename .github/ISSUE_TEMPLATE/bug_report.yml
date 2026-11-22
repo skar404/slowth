@@ -1,0 +1,106 @@
+name: Bug report
+description: Report a problem with Slowth. You can write in any language.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Slowth! **You can write in any language.**
+
+        Please include enough detail to reproduce the problem, along with your device model, app version, and screenshots.
+        Prefer email? Write to [denis@malina.page](mailto:denis@malina.page?subject=Slowth%20bug%20report) in any language and include the same details requested below.
+
+        GitHub issues are public. Hide personal information in screenshots or send them by email instead.
+
+  - type: input
+    id: device-model
+    attributes:
+      label: Device model
+      description: Give the exact model, not just "iPhone", "iPad", or "Mac".
+      placeholder: "e.g. iPhone 15 Pro, iPad Air (M2, 11-inch), MacBook Air (M3, 2024)"
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating system version
+      description: Include the full iOS, iPadOS, or macOS version and mention if it is a beta.
+      placeholder: "e.g. iOS 26.1"
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Slowth version
+      description: Include the version and build number if available. Mention whether you installed it from the App Store, TestFlight, or built it yourself.
+      placeholder: "Version (build), App Store / TestFlight / self-built"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where does the problem happen?
+      options:
+        - Safari extension / website blocking
+        - In-app blocking on iPhone or iPad
+        - Slowth app / settings
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: What happened?
+      description: Describe the problem and include the exact error message, if there is one.
+      placeholder: "What did you see? Which app or website was affected?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Tell us how to trigger the problem and whether it happens every time or only sometimes. If you cannot reproduce it, describe what you were doing when it happened.
+      placeholder: |
+        1. Open...
+        2. Enable...
+        3. Go to...
+        4. The problem appears...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What did you expect to happen?
+      placeholder: "Describe the behavior you expected."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or screen recording
+      description: Drag, paste, or upload screenshots showing the problem and relevant settings. A short screen recording also helps. Hide personal information. If you cannot attach anything, explain why or say that you sent it by email.
+      placeholder: "Attach screenshots here, or explain why they are unavailable."
+    validations:
+      required: true
+
+  - type: textarea
+    id: settings
+    attributes:
+      label: Relevant settings and additional details
+      description: Include anything that may help reproduce the problem. Skip details that do not apply or that you do not know.
+      placeholder: |
+        Affected app or website and its version, if known:
+        Selected blocking options:
+        Monitoring on or off:
+        Temporary access / pause, soft blocking, or Strict Mode active:
+        Safari version and other extensions, for website problems:
+        Anything that changed before the problem started:
+    validations:
+      required: false

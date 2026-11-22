@@ -21,11 +21,11 @@ test('defaults and legacy migration preserve each site’s effective blocking', 
       ['feed', { shorts: site !== 'tiktok', feed: ['instagram', 'facebook'].includes(site), all: false }],
       ['all', { ...plain(ns.DEFAULT_TOGGLES[site]), all: true }],
       [false, { shorts: false, feed: false, all: false }]
-    ]) assert.deepEqual(plain(ns.normalizeSiteSettings(site, value)), expected);
+    ]) assert.deepEqual(plain(ns.normalizeSiteSettings(site, value)), { ...(site === 'instagram' ? { stories: false } : {}), ...(site === 'youtube' ? { hideHomeFeed: false } : {}), ...expected });
   }
   for (const shorts of [false, true]) for (const feed of [false, true]) for (const all of [false, true]) {
     const flags = { shorts, feed, all };
-    assert.deepEqual(plain(ns.normalizeSiteSettings('instagram', flags)), flags);
+    assert.deepEqual(plain(ns.normalizeSiteSettings('instagram', flags)), { ...flags, stories: false });
   }
 });
 
@@ -107,7 +107,7 @@ for (const site of ['instagram', 'facebook']) {
   });
 }
 
-test('Instagram Stories are controlled by Infinite Feed, independently of Reels', async () => {
+test('Instagram preserves the existing optional Stories nudge under Infinite Feed', async () => {
   const h = contentHarness('instagram', { shorts: true, feed: false, all: false }, '/stories/person/123/');
   vm.runInContext(read('content/instagram.js'), h.context);
   await Promise.resolve();
@@ -122,12 +122,44 @@ test('Instagram Stories are controlled by Infinite Feed, independently of Reels'
   assert.equal(h.listeners.has('wheel'), false);
 });
 
+test('Instagram Stories hard block is independent, live, and covers direct and SPA routes', async () => {
+  const h = contentHarness('instagram', { shorts: false, feed: false, all: false, stories: false }, '/stories/person/123/');
+  await h.start();
+  assert.equal(h.redirects.length, 0);
+  await h.update({ shorts: false, feed: false, all: false, stories: true });
+  assert.equal(h.redirects.at(-1), 'https://instagram.com/');
+  assert.match(h.elements.get('unscroll-instagram-style').textContent, /stories/);
+  assert.doesNotMatch(h.elements.get('unscroll-instagram-style').textContent, /reels/);
+  assert.equal(h.context.Unscroll.content.featureEnabled('instagram', 'stories'), true);
+  const tick = h.timers.find(timer => timer.delay === 400).fn;
+  h.context.location.pathname = '/stories/other/456/';
+  h.context.location.href = 'https://instagram.com/stories/other/456/';
+  const before = h.redirects.length;
+  tick();
+  assert.equal(h.redirects.length, before + 1);
+  await h.update({ shorts: false, feed: false, all: false, stories: false });
+  assert.equal(h.elements.has('unscroll-instagram-style'), false);
+  const after = h.redirects.length;
+  h.context.location.href += '?next=1';
+  tick();
+  assert.equal(h.redirects.length, after);
+  for (const pathname of ['/', '/person/', '/direct/inbox/', '/reel/123/', '/stories_archive/']) {
+    const page = contentHarness('instagram', { shorts: false, feed: false, all: false, stories: true }, pathname);
+    await page.start();
+    assert.equal(page.redirects.length, 0, pathname);
+  }
+  await h.update({ shorts: false, feed: false, all: true, stories: true });
+  assert.match(h.redirects.at(-1), /blocked.html/);
+  assert.equal(h.context.Unscroll.content.featureEnabled('instagram', 'stories'), false);
+});
+
 test('background navigation enforces only the selected features', async () => {
   let onNavigate;
   const updates = [];
   const ns = config();
   let state;
   ns.getStateCached = async () => state;
+  ns.getStateFresh = async () => state;
   ns.setOnboardingDone = async () => {};
   const context = vm.createContext({ URL, Unscroll: ns, browser: {
     runtime: { getURL: name => `safari-web-extension://test/${name}`, onInstalled: { addListener() {} }, onMessage: { addListener() {} } },
@@ -135,6 +167,13 @@ test('background navigation enforces only the selected features', async () => {
     tabs: { update(id, change) { updates.push(change.url); } }
   } });
   vm.runInContext(read('background.js'), context);
+  state = { toggles: { instagram: { shorts: false, feed: false, all: false, stories: true } }, rules: ns.DEFAULT_RULES };
+  await onNavigate({ frameId: 0, tabId: 1, url: 'https://www.instagram.com/stories/person/123/?next=1' });
+  assert.equal(updates.at(-1), 'https://www.instagram.com/');
+  const storiesCount = updates.length;
+  state.toggles.instagram.stories = false;
+  await onNavigate({ frameId: 0, tabId: 1, url: 'https://www.instagram.com/stories/person/123/' });
+  assert.equal(updates.length, storiesCount);
   for (const site of ['instagram', 'facebook']) {
     state = { toggles: { [site]: { shorts: false, feed: true, all: false } }, rules: ns.DEFAULT_RULES };
     const nav = { frameId: 0, tabId: 1, url: `https://${site}.com/reel/123/` };
@@ -163,10 +202,10 @@ test('cache migration, transient native failures and per-feature writes preserve
   vm.runInContext(read('rules-loader.js'), context);
   let state = await ns.getStateCached();
   assert.equal(sent.length, 1, 'old cache must re-read native settings');
-  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false });
+  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false, stories: false });
   response = null;
   state = await ns.getStateFresh();
-  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false });
+  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false, stories: false });
   await ns.setToggle('instagram', 'all', true);
   assert.deepEqual(plain(sent.at(-1)), { action: 'setToggle', site: 'instagram', feature: 'all', enabled: true });
 });

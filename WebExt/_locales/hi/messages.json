@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "कहानियां"
+  },
   "extensionDescription": {
     "message": "Safari में हर साइट के नियंत्रण से YouTube Shorts, Reels, TikTok और ध्यान भटकाने वाले फ़ीड ब्लॉक करें।"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "रद्द करें"
+  },
+  "hideHomeFeed": {
+    "message": "होम फ़ीड छिपाएँ"
   }
 }

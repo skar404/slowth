@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Històries"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "No s'ha pogut desar"
+  },
+  "hideHomeFeed": {
+    "message": "Amaga el canal d’inici"
   }
 }

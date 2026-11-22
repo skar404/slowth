@@ -45,7 +45,8 @@
       }
     }
     // Only base preferences are cached by rules-loader. The lease stays separate.
-    return {...base, pause: lease || null};
+    return {...base, pause: lease || null,
+      ...(ns.webAppHost ? {webAppNativeLive: base.webAppNativeLive === true && !!(result?.ok && result.state)} : {})};
   }
   function fresh(site) {
     if (!inFlight.has(site)) inFlight.set(site, fetchState(site).finally(() => { inFlight.delete(site); }));

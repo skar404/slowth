@@ -40,7 +40,12 @@ struct NativeSettingsTests {
             check(settings.feed == ["instagram", "facebook"].contains(site), "Feed defaults: \(site)")
         }
         let controls = SharedState.supportedSites.flatMap { SiteBlockingControl.controls(for: $0) }
-        check(controls.count == 12, "Every Safari setting has a control")
+        check(controls.count == 14, "Every Safari setting has a control")
+        check(controls.contains { $0.id == "safari.instagram.stories" }, "Instagram exposes Stories")
+        check(!fresh.toggles["instagram"]!.stories, "Stories hard block defaults off")
+        let oldJSON = Data(#"{"shorts":false,"feed":true,"all":false}"#.utf8)
+        let decoded = try JSONDecoder().decode(SiteBlockingSettings.self, from: oldJSON)
+        check(decoded == SiteBlockingSettings(feed: true), "Older Codable settings retain choices")
         check(Set(controls.map(\.id)).count == controls.count, "Control IDs must be unique across sites")
         // For each UI control descriptor, flip its stored value in both directions
         // and compare every site's
@@ -76,6 +81,18 @@ struct NativeSettingsTests {
             } catch SharedStoreError.strictModeActive { }
         }
         reset()
+        _ = try SharedStore.setToggle(site: "instagram", feature: .stories, enabled: true)
+        _ = try SharedStore.setToggle(site: "instagram", feature: .all, enabled: true)
+        _ = try SharedStore.setToggle(site: "instagram", feature: .all, enabled: false)
+        check(SharedStore.snapshot().toggles["instagram"]!.stories, "Whole-site toggle preserves Stories")
+        _ = try SharedStore.setToggle(site: "instagram", feature: .stories, enabled: false)
+        defaults.set(Date().addingTimeInterval(3600).timeIntervalSince1970, forKey: SharedStoreKey.strictModeUntil)
+        _ = try SharedStore.setToggle(site: "instagram", feature: .stories, enabled: true)
+        do {
+            _ = try SharedStore.setToggle(site: "instagram", feature: .stories, enabled: false)
+            preconditionFailure("Strict mode allowed disabling Stories")
+        } catch SharedStoreError.strictModeActive { }
+        reset()
         defaults.set(["youtube": false, "instagram": true, "tiktok": true], forKey: SharedStoreKey.toggles)
         var state = SharedStore.snapshot()
         check(state.toggles["youtube"] == SiteBlockingSettings(), "Legacy disabled boolean")
@@ -96,13 +113,13 @@ struct NativeSettingsTests {
         // Migration is persisted once; subsequent legacy writes cannot erase choices.
         defaults.set(["instagram": "off"], forKey: SharedStoreKey.toggles)
         check(SharedStore.snapshot().toggles["instagram"]!.shorts, "V2 settings take priority")
-        for (site, feature) in [("x", SiteFeature.feed), ("tiktok", .shorts), ("unknown", .all)] {
+        for (site, feature) in [("x", SiteFeature.feed), ("tiktok", .shorts), ("youtube", .stories), ("facebook", .stories), ("unknown", .all)] {
             do {
                 _ = try SharedStore.setToggle(site: site, feature: feature, enabled: true)
                 preconditionFailure("Unsupported feature accepted")
             } catch SharedStoreError.invalidValue { }
         }
-        check(SiteFeature.available(for: "youtube") == [.shorts, .feed, .all], "YouTube exposes feed")
+        check(SiteFeature.available(for: "youtube") == [.shorts, .hideHomeFeed, .feed, .all], "YouTube exposes feed")
         check(controls.contains { $0.id == "safari.youtube.feed" }, "YouTube feed UI control")
         for raw: Any in ["off", "shorts", "feed", "all", true, false,
                          ["shorts": false, "all": true]] {
@@ -135,6 +152,27 @@ struct NativeSettingsTests {
         defaults.set(Date().addingTimeInterval(-1).timeIntervalSince1970, forKey: SharedStoreKey.strictModeUntil)
         _ = try SharedStore.setToggle(site: "youtube", feature: .feed, enabled: false)
         check(!SharedStore.snapshot().toggles["youtube"]!.feed, "Expired strict lock permits disabling feed")
+        reset()
+        check(!SharedStore.snapshot().toggles["youtube"]!.hideHomeFeed, "Home hiding defaults off")
+        check(!decoded.hideHomeFeed, "Missing Codable flag defaults off")
+        check(SiteFeature.available(for: "youtube").contains(.hideHomeFeed), "YouTube exposes home setting")
+        for site in ["instagram", "facebook", "x", "tiktok"] {
+            check(!SiteFeature.available(for: site).contains(.hideHomeFeed), "Home setting is YouTube-only")
+        }
+        _ = try SharedStore.setToggle(site: "youtube", feature: .hideHomeFeed, enabled: true)
+        _ = try SharedStore.setToggle(site: "youtube", feature: .all, enabled: true)
+        _ = try SharedStore.setToggle(site: "youtube", feature: .all, enabled: false)
+        let homeSettings = SharedStore.snapshot().toggles["youtube"]!
+        check(homeSettings.hideHomeFeed && homeSettings.shorts && !homeSettings.feed, "Independent persisted home choice")
+        let roundTrip = try JSONDecoder().decode(SiteBlockingSettings.self, from: JSONEncoder().encode(homeSettings))
+        check(roundTrip == homeSettings && homeSettings.dictionary["hideHomeFeed"] == true, "Home setting survives coding and wire serialization")
+        _ = try SharedStore.setToggle(site: "youtube", feature: .hideHomeFeed, enabled: false)
+        defaults.set(Date().addingTimeInterval(3600).timeIntervalSince1970, forKey: SharedStoreKey.strictModeUntil)
+        _ = try SharedStore.setToggle(site: "youtube", feature: .hideHomeFeed, enabled: true)
+        do {
+            _ = try SharedStore.setToggle(site: "youtube", feature: .hideHomeFeed, enabled: false)
+            preconditionFailure("Strict mode allowed showing the home feed")
+        } catch SharedStoreError.strictModeActive { }
         print("Native Safari settings: defaults, migration, strict lock, independent toggles and persistence passed")
     }
 }

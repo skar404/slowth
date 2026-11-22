@@ -25,6 +25,16 @@ test('expired cache restores current base settings without background execution'
   h.time(1180,180);
   assert.equal(h.ns.pauseSettings('youtube',s,current),current);
 });
+test('Instagram Stories follows the pause deadline without changing saved preferences', () => {
+  const h = harness(), s = state();
+  s.pause.target = 'instagram';
+  const saved = { all: false, shorts: false, feed: false, stories: true };
+  assert.equal(h.ns.pauseSettings('instagram', s, saved).stories, false);
+  assert.equal(saved.stories, true);
+  assert.equal(h.ns.pauseSettings('youtube', s, saved), saved);
+  h.time(1180, 180);
+  assert.equal(h.ns.pauseSettings('instagram', s, saved).stories, true);
+});
 test('unconfirmed grant or clock discontinuity cannot authorize', () => {
   const h=harness(), s=state(); s.pause.phase='preparing';
   assert.equal(h.ns.pauseValid(s,'youtube'),false);
@@ -59,3 +69,12 @@ for (const seconds of [30, 60, 180, 300]) {
     assert.equal(h.ns.pauseValid(s, 'youtube'), false);
   });
 }
+
+test('YouTube home hiding suspends only for its active pause and restores at expiry', () => {
+  const h = harness(), s = state();
+  const saved = { all: false, shorts: true, feed: true, hideHomeFeed: true };
+  assert.equal(h.ns.pauseSettings('youtube', s, saved).hideHomeFeed, false);
+  assert.equal(saved.hideHomeFeed, true);
+  h.time(1180, 180);
+  assert.equal(h.ns.pauseSettings('youtube', s, saved).hideHomeFeed, true);
+});

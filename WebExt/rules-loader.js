@@ -74,29 +74,33 @@
     const rulesEtag = (raw && typeof raw.rulesEtag === "string") ? raw.rulesEtag : "";
     const onboardingDone = !!(raw && raw.onboardingDone);
 
-    return { settingsVersion: 2, toggles, strictModeUntil, rules, rulesFetchedAt, rulesEtag, onboardingDone };
+    return { settingsVersion: 3, toggles, strictModeUntil, rules, rulesFetchedAt, rulesEtag, onboardingDone };
   }
 
   async function getStateFresh() {
     const resp = await sendNative({ action: "getState" });
+    ns.webAppHost = resp?.webAppHost === true || ns.webAppHost === true;
     if (!resp?.ok || !resp.state) {
       const items = await storageGet([ns.STORAGE_KEYS.cachedState]);
       // A transient bridge failure must not replace user choices with defaults.
-      return normalizeState(items[ns.STORAGE_KEYS.cachedState]);
+      const cached = normalizeState(items[ns.STORAGE_KEYS.cachedState]);
+      return ns.webAppHost ? { ...cached, webAppNativeLive: false } : cached;
     }
     const state = normalizeState(resp.state);
     await storageSet({
       [ns.STORAGE_KEYS.cachedState]: state,
       [ns.STORAGE_KEYS.cachedAt]: Date.now()
     });
-    return state;
+    // Provenance belongs to this response, never a global flag or persisted cache:
+    // concurrent Safari/content refreshes must not validate a failed native read.
+    return ns.webAppHost ? { ...state, webAppNativeLive: true } : state;
   }
 
   async function getStateCached() {
     const items = await storageGet([ns.STORAGE_KEYS.cachedState, ns.STORAGE_KEYS.cachedAt]);
     const cached = items[ns.STORAGE_KEYS.cachedState];
     const at = items[ns.STORAGE_KEYS.cachedAt] || 0;
-    if (cached && cached.settingsVersion === 2 && Date.now() - at < ns.STATE_CACHE_TTL_MS &&
+    if (cached && cached.settingsVersion === 3 && Date.now() - at < ns.STATE_CACHE_TTL_MS &&
         isValidRules(cached.rules) && cached.rules.version >= ns.DEFAULT_RULES.version) return cached;
     return getStateFresh();
   }

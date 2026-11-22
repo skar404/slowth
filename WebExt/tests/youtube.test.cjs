@@ -6,9 +6,9 @@ const { test } = require('node:test');
 const read = file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const plain = value => JSON.parse(JSON.stringify(value));
 
-async function harness({ feed = true, shorts = false, all = false, route = '/',
+async function harness({ feed = true, shorts = false, all = false, hideHomeFeed = false, route = '/',
   host = 'www.youtube.com', scrollY = 0, loading = false } = {}) {
-  let flags = { feed, shorts, all }, messageListener;
+  let flags = { feed, shorts, all, hideHomeFeed }, messageListener;
   const elements = new Map(), timers = new Map(), redirects = [];
   function eventTarget() {
     const listeners = new Map();
@@ -195,12 +195,67 @@ test('resize recalculates the threshold and never releases an existing block', a
 test('YouTube defaults, missing flags and legacy modes never opt into feed blocking', async () => {
   const h = await harness();
   const ns = h.context.Unscroll;
-  assert.deepEqual(plain(ns.SITE_FEATURES.youtube), ['shorts', 'feed', 'all']);
+  assert.deepEqual(plain(ns.SITE_FEATURES.youtube), ['shorts', 'hideHomeFeed', 'feed', 'all']);
   for (const value of [undefined, 'off', 'shorts', 'feed', 'all', true, false, { shorts: false, all: true }]) {
     assert.equal(ns.normalizeSiteSettings('youtube', value).feed, false);
+    assert.equal(ns.normalizeSiteSettings('youtube', value).hideHomeFeed, false);
   }
-  for (const shorts of [false, true]) for (const feed of [false, true]) for (const all of [false, true]) {
-    const flags = { shorts, feed, all };
+  for (const shorts of [false, true]) for (const feed of [false, true]) for (const all of [false, true]) for (const hideHomeFeed of [false, true]) {
+    const flags = { shorts, feed, all, hideHomeFeed };
     assert.deepEqual(plain(ns.normalizeSiteSettings('youtube', flags)), flags);
   }
+});
+
+for (const host of ['www.youtube.com', 'm.youtube.com']) {
+  for (const event of ['yt-navigate-finish', 'popstate', 'pageshow', 'timer']) {
+    test(`${host}/${event}: hidden home redirects to subscriptions and hides Home on every route`, async () => {
+      const h = await harness({ host, hideHomeFeed: true, route: '/?app=desktop', scrollY: 4000 });
+      const style = () => h.elements.get('unscroll-youtube-home-style');
+      const check = () => event === 'timer' ? h.tick() : h.window.emit(event);
+      assert.ok(style());
+      assert.equal(h.overlay(), undefined);
+      for (const route of ['/results?search_query=test', '/feed/subscriptions', '/feed/library', '/@creator', '/watch?v=123']) {
+        h.navigate(route); check();
+        assert.ok(style(), route);
+        assert.doesNotMatch(style().textContent, /ytm-browse ytm-rich-grid-renderer/, 'subscriptions grid remains visible');
+        assert.equal(h.overlay(), undefined, route);
+        h.navigate('/?persist_gl=1'); check();
+        assert.ok(style());
+      }
+      assert.ok(h.redirects.length > 0);
+      assert.ok(h.redirects.every(url => url === `https://${host}/feed/subscriptions`));
+      const count = h.redirects.length;
+      h.tick(); h.tick();
+      assert.equal(h.redirects.length, count, 'slow home navigation is not restarted');
+      await h.update({ hideHomeFeed: false });
+      assert.equal(style(), undefined);
+      assert.ok(h.overlay(), 'saved scroll limit resumes');
+      await h.update({ hideHomeFeed: true });
+      assert.ok(style());
+      assert.equal(h.overlay(), undefined);
+      assert.equal(h.elements.has('unscroll-youtube-scroll-lock'), false);
+      await h.update({ shorts: true });
+      assert.ok(style());
+      assert.ok(h.elements.has('unscroll-youtube-style'));
+      await h.update({ all: true });
+      assert.equal(style(), undefined);
+      assert.match(h.redirects.at(-1), /blocked.html\?host=youtube$/);
+      await h.update({ all: false, feed: false, shorts: false });
+      assert.ok(style(), 'whole-site setting preserves home choice');
+      await h.update({ hideHomeFeed: false });
+      assert.equal(style(), undefined);
+      assert.equal(h.overlay(), undefined);
+    });
+  }
+}
+
+test('home redirect never overrides whole-site blocking or the disabled setting', async () => {
+  for (const hideHomeFeed of [false, true]) {
+    const h = await harness({ hideHomeFeed, all: true });
+    assert.deepEqual(h.redirects, ['safari-web-extension://test/blocked.html?host=youtube']);
+  }
+  const h = await harness({ hideHomeFeed: false });
+  assert.deepEqual(h.redirects, []);
+  await h.update({ hideHomeFeed: true });
+  assert.deepEqual(h.redirects, ['https://www.youtube.com/feed/subscriptions']);
 });

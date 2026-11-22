@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "कथाहरू"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "रद्द गर्नुहोस्"
+  },
+  "hideHomeFeed": {
+    "message": "होम फिड लुकाउनुहोस्"
   }
 }

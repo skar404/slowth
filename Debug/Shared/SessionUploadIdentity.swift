@@ -26,7 +26,7 @@ enum SessionUploadIdentity {
         parts.append(FileManager.default.fileExists(atPath: nameURL.path) ? try hash(nameURL) : "absent")
         for frame in manifest.frames {
             guard frame.filename == URL(fileURLWithPath: frame.filename).lastPathComponent,
-                  frame.filename.hasPrefix("frame_"), frame.filename.hasSuffix(".jpg") else {
+                  frame.filename.hasPrefix("frame_"), (frame.filename.hasSuffix(".jpg") || frame.filename.hasSuffix(".png")) else {
                 throw CocoaError(.fileReadCorruptFile)
             }
             parts += [frame.filename, try hash(directory.appendingPathComponent(frame.filename))]

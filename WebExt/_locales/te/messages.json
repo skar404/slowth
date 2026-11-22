@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "కథలు"
+  },
   "extensionDescription": {
     "message": "ప్రతి సైట్ నియంత్రణలతో Safariలో YouTube Shorts, Reels, TikTok, దృష్టి మరల్చే ఫీడ్‌లను బ్లాక్ చేయండి."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "రద్దు చేయి"
+  },
+  "hideHomeFeed": {
+    "message": "హోమ్ ఫీడ్‌ను దాచు"
   }
 }

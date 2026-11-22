@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Cerita"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "Tidak dapat menyimpan"
+  },
+  "hideHomeFeed": {
+    "message": "Sembunyikan suapan utama"
   }
 }

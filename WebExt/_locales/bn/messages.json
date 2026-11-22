@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "গল্প"
+  },
   "extensionDescription": {
     "message": "প্রতি সাইটের নিয়ন্ত্রণ দিয়ে Safari-তে YouTube Shorts, Reels, TikTok ও মনোযোগ সরিয়ে নেওয়া ফিড ব্লক করুন।"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "বাতিল"
+  },
+  "hideHomeFeed": {
+    "message": "হোম ফিড লুকান"
   }
 }

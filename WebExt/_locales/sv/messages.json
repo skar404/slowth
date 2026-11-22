@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Berättelser"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Avbryt"
+  },
+  "hideHomeFeed": {
+    "message": "Dölj startsideflödet"
   }
 }

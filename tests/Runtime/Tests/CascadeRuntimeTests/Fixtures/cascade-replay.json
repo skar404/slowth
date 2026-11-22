@@ -1,0 +1,28 @@
+{
+  "policy": {
+    "version": 1,
+    "routing": {"youtube": {"confidence": 0.8, "margin": 0.2}, "instagram": {"confidence": 0.8, "margin": 0.2}},
+    "thresholds": {"youtube_shorts": 0.7, "instagram_reels": 0.7, "instagram_stories": 0.7},
+    "temporal": {"interval_seconds": 0.25, "required_hits": 3, "window_frames": 5, "max_gap_seconds": 1.25}
+  },
+  "frames": [
+    {"time": 0, "app": [0.9, 0.05, 0.05], "content": [0.9, 0.1], "route": "youtube", "reason": "accepted", "events": []},
+    {"time": 0.25, "app": [0.9, 0.05, 0.05], "content": [0.1, 0.9], "route": "youtube", "reason": "accepted", "events": []},
+    {"time": 0.5, "app": [0.9, 0.05, 0.05], "content": [0.9, 0.1], "route": "youtube", "reason": "accepted", "events": []},
+    {"time": 0.75, "app": [0.9, 0.05, 0.05], "content": [0.1, 0.9], "route": "youtube", "reason": "accepted", "events": []},
+    {"time": 1, "app": [0.9, 0.05, 0.05], "content": [0.9, 0.1], "route": "youtube", "reason": "accepted", "events": ["youtube_shorts"]},
+    {"time": 1.25, "app": [0.05, 0.05, 0.9], "content": [], "route": "unknown", "reason": "other", "events": []},
+    {"time": 1.5, "app": [0.05, 0.9, 0.05], "content": [0.9, 0.05, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 1.75, "app": [0.05, 0.9, 0.05], "content": [0.9, 0.05, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 2, "app": [0.05, 0.9, 0.05], "content": [0.9, 0.05, 0.05], "route": "instagram", "reason": "accepted", "events": ["instagram_reels"]},
+    {"time": 2.25, "app": [0.05, 0.9, 0.05], "content": [], "enabled": ["youtube"], "route": "unknown", "reason": "disabled", "events": []},
+    {"time": 2.5, "app": [0.05, 0.9, 0.05], "content": [0.05, 0.9, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 2.75, "app": [0.05, 0.9, 0.05], "content": [0.05, 0.9, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 4.25, "app": [0.05, 0.9, 0.05], "content": [0.05, 0.9, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 4.5, "app": [0.05, 0.9, 0.05], "content": [0.05, 0.9, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 4.75, "app": [0.05, 0.9, 0.05], "content": [0.05, 0.9, 0.05], "route": "instagram", "reason": "accepted", "events": ["instagram_stories"]},
+    {"time": 4.75, "app": [0.05, 0.9, 0.05], "content": [0.05, 0.9, 0.05], "route": "instagram", "reason": "accepted", "events": []},
+    {"time": 4, "app": [0.9, 0.05, 0.05], "content": [0.9, 0.1], "route": "youtube", "reason": "accepted", "events": []},
+    {"time": 4.25, "app": [0.6, 0.3, 0.1], "content": [], "route": "unknown", "reason": "low_confidence", "events": []}
+  ]
+}

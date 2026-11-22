@@ -11,11 +11,11 @@ struct DebugSessionCaptureControls: View {
 
     var body: some View {
         Toggle("Save session screenshots", isOn: $enabled)
-        Picker("Interval (next recording)", selection: $interval) {
+        Picker("Capture interval", selection: $interval) {
             Text("1 second").tag(1.0)
             Text("0.5 seconds").tag(0.5)
         }
-        Picker("Storage limit (next recording)", selection: $storageLimit) {
+        Picker("Storage limit", selection: $storageLimit) {
             ForEach(SessionCaptureSettings.StorageLimit.allCases, id: \.rawValue) { limit in
                 if limit == .unlimited {
                     Text("No limit").tag(limit.rawValue)
@@ -24,8 +24,10 @@ struct DebugSessionCaptureControls: View {
                 }
             }
         }
-        Button("Screenshot sessions") { showSessions = true }
-            .sheet(isPresented: $showSessions) { DebugSessionList() }
+        Button { showSessions = true } label: {
+            Label("Saved sessions", systemImage: "photo.stack")
+        }
+        .sheet(isPresented: $showSessions) { DebugSessionList() }
     }
 }
 
@@ -40,6 +42,7 @@ private struct DebugSessionList: View {
         let dropped: Int
         let error: String?
         let fingerprint: String?
+        let legacyLabelerCompatible: Bool
 
     }
     struct Share: Identifiable {
@@ -58,6 +61,8 @@ private struct DebugSessionList: View {
     @State private var renameRow: Row?
     @State private var nameDraft = ""
     @StateObject private var connection = SessionUploadConnection.shared
+    @ObservedObject private var transfers = DebugTransferStore.shared
+    @State private var showTransfers = false
     @AppStorage(SessionUploadServer.storageKey) private var serverAddress = ""
     @State private var showConnection = false
     @State private var sendRows: [Row] = []
@@ -69,28 +74,10 @@ private struct DebugSessionList: View {
         NavigationStack {
             List {
                 Section {
-                    Text("ZIP contains original JPEGs, session.json and your session name, if set. Predictions are not human labels. Review private screens and the name before sharing. No data is sent until you choose a Share destination.")
-                    Text("Stop broadcasting and refresh for the complete session. Share also works after a crash: active/paused entries export a consistent snapshot of committed frames, not a claim of completion.")
-                }.font(.caption)
-                Section {
-                    Button("Labeler connection") { showConnection = true }.disabled(connection.isUploading)
-                    Text("Manual private upload keeps all local originals. No labels, merge or holdout assignment. Status covers bytes at the last refresh; stop broadcasting before sending the complete recording.").font(.caption)
-                    if let uploader = connection.uploader {
-                        Button("Upload all screenshots") {
-                            if (try? SessionUploadServer.url(from: serverAddress)) == nil {
-                                showConnection = true
-                            } else {
-                                sendingAll = true
-                                sendRows = rows
-                            }
-                        }
-                        .disabled(busy || connection.isUploading || uploadTask != nil || !DebugMode.isEnabled || rows.isEmpty)
-                        Text("Uploads every session in order, skipping unchanged snapshots already accepted by the labeler.")
-                            .font(.caption).foregroundStyle(.secondary)
-                        SessionUploadProgress(uploader: uploader)
+                    Button { showTransfers = true } label: {
+                        DebugToolLabel("Transfers", detail: "Choose a connection or send queued sessions", icon: "arrow.up.arrow.down", color: .teal, showsChevron: true)
                     }
-                    if connection.isUploading { Button("Cancel upload", role: .cancel) { uploadTask?.cancel() } }
-                    if let failure = connection.initializationError { Text(failure).foregroundStyle(.red) }
+                    .buttonStyle(.plain)
                 }
                 if let error { Text(error).foregroundStyle(.red) }
                 if selecting {
@@ -103,19 +90,59 @@ private struct DebugSessionList: View {
                         }
                         .disabled(selectedIDs.isEmpty)
                     }
-                    .disabled(busy || connection.isUploading)
+                    .disabled(busy || connection.isUploading || transfers.preparing)
                 }
-                if rows.isEmpty { Text("No local screenshot sessions") }
-                ForEach(rows) { row in
-                    if let uploader = connection.uploader {
-                        rowContent(row)
-                            .modifier(SessionUploadRowStyle(uploader: uploader, id: row.id, fingerprint: row.fingerprint))
-                    } else {
-                        rowContent(row)
+                Section("Saved sessions") {
+                    if rows.isEmpty && !busy {
+                        VStack(spacing: 10) {
+                            Image(systemName: "photo.stack").font(.largeTitle).foregroundStyle(.secondary)
+                            Text("No screenshots yet").font(.headline)
+                            Text("Enable screenshot capture, then start a screen recording.")
+                                .font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity).padding(.vertical, 24)
+                    }
+                    ForEach(rows) { row in
+                        if let uploader = connection.uploader {
+                            rowContent(row)
+                                .modifier(SessionUploadRowStyle(uploader: uploader, id: row.id, fingerprint: row.fingerprint))
+                        } else {
+                            rowContent(row)
+                        }
+                    }
+                }
+                Section {
+                    DisclosureGroup("About sharing") {
+                        Text("ZIPs include original images, metadata, predictions and the session name. Review private screens before sharing; predictions are not human labels.")
+                        Text("Stop recording for a complete session. While recording, exports contain only frames already saved. Capture can drop frames if encoding or storage cannot keep up.")
+                    }.font(.footnote).foregroundStyle(.secondary)
+                }
+                Section {
+                    DisclosureGroup("Legacy labeler · JPEG sessions") {
+                        Button("Labeler connection") { showConnection = true }.disabled(connection.isUploading)
+                        Text("Manual private upload keeps all local originals. No labels, merge or holdout assignment. Status covers bytes at the last refresh; stop broadcasting before sending the complete recording.").font(.caption)
+                        if let uploader = connection.uploader {
+                            Button("Upload legacy JPEG sessions to labeler") {
+                                if (try? SessionUploadServer.url(from: serverAddress)) == nil {
+                                    showConnection = true
+                                } else {
+                                    sendingAll = true
+                                    sendRows = rows.filter(\.legacyLabelerCompatible)
+                                }
+                            }
+                            .disabled(busy || connection.isUploading || uploadTask != nil || !DebugMode.isEnabled || !rows.contains(where: \.legacyLabelerCompatible))
+                            Text("Legacy labeler upload is available for older JPEG sessions. Use Transfers for new PNG sessions.")
+                                .font(.caption).foregroundStyle(.secondary)
+                            SessionUploadProgress(uploader: uploader)
+                        }
+                        if connection.isUploading { Button("Cancel upload", role: .cancel) { uploadTask?.cancel() } }
+                        if let failure = connection.initializationError { Text(failure).foregroundStyle(.red) }
                     }
                 }
             }
-            .navigationTitle("Screenshot sessions")
+            .debugFormStyle()
+            .navigationTitle("Saved sessions")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() } }
                 ToolbarItemGroup(placement: .primaryAction) {
@@ -124,7 +151,8 @@ private struct DebugSessionList: View {
                         selectedIDs.removeAll()
                     }
                     .disabled(busy || connection.isUploading || rows.isEmpty)
-                    Button("Refresh") { refresh() }.disabled(busy || connection.isUploading)
+                    Button { refresh() } label: { Label("Refresh", systemImage: "arrow.clockwise") }
+                        .disabled(busy || connection.isUploading || transfers.preparing)
                 }
             }
             .overlay { if busy { ProgressView() } }
@@ -140,6 +168,7 @@ private struct DebugSessionList: View {
             .onChange(of: scenePhase) { phase in if phase == .active { refresh() } }
             .onDisappear { uploadTask?.cancel() }
             .sheet(isPresented: $showConnection) { SessionUploadConnectionView() }
+            .sheet(isPresented: $showTransfers) { DebugTransfersView() }
             .alert(sendingAll ? "Upload all screenshots to the private labeler?" : "Send this snapshot to the private labeler?", isPresented: Binding(
                 get: { !sendRows.isEmpty }, set: { if !$0 { sendRows = [] } })) {
                 Button("Cancel", role: .cancel) { sendRows = [] }
@@ -179,11 +208,21 @@ private struct DebugSessionList: View {
 
 
     private func sessionDetails(_ row: Row) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if let name = row.name { Text(name).font(.headline) }
-            Text(row.startedAt, style: .date) + Text(" ") + Text(row.startedAt, style: .time)
-            Text(row.id.uuidString).font(.caption2).textSelection(.enabled)
-            Text("\(row.status) · \(row.frames) frames · \(row.dropped) dropped").font(.caption)
+        VStack(alignment: .leading, spacing: 6) {
+            Group {
+                if let name = row.name { Text(name) }
+                else { Text(row.startedAt.formatted(date: .abbreviated, time: .shortened)) }
+            }.font(.headline)
+            if row.name != nil {
+                Text(row.startedAt.formatted(date: .abbreviated, time: .shortened))
+                    .font(.subheadline).foregroundStyle(.secondary)
+            }
+            Text("\(row.frames) frames · \(row.status.capitalized)")
+                .font(.subheadline).foregroundStyle(.secondary)
+            if row.dropped > 0 {
+                Label("\(row.dropped) dropped frames", systemImage: "exclamationmark.triangle")
+                    .font(.caption).foregroundStyle(SlowthAppearance.pause)
+            }
             if let error = row.error { Text(error).font(.caption).foregroundStyle(.red) }
         }
     }
@@ -205,40 +244,54 @@ private struct DebugSessionList: View {
             }
             .buttonStyle(.plain)
             .accessibilityAddTraits(selectedIDs.contains(row.id) ? .isSelected : [])
-            .disabled(busy || connection.isUploading)
+            .disabled(busy || connection.isUploading || transfers.preparing)
         } else {
             sessionActions(row)
         }
     }
 
     private func sessionActions(_ row: Row) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            sessionDetails(row)
-            if let uploader = connection.uploader {
-                SessionUploadPanel(uploader: uploader, id: row.id, fingerprint: row.fingerprint)
-                Button("Send snapshot to labeler") {
-                    if (try? SessionUploadServer.url(from: serverAddress)) == nil {
-                        showConnection = true
-                    } else {
-                        sendingAll = false
-                        sendRows = [row]
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                sessionDetails(row)
+                Spacer(minLength: 8)
+                Menu {
+                    Button("Rename") {
+                        nameDraft = row.name ?? ""
+                        renameRow = row
                     }
+                    Button("Share snapshot ZIP") { export(row) }
+                    Button("Delete", role: .destructive) { pendingDeletion = [row] }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.title3).frame(minWidth: 44, minHeight: 44)
                 }
-                    .buttonStyle(.borderless)
-                    .disabled(busy || connection.isUploading || !DebugMode.isEnabled || row.fingerprint == nil)
+                .accessibilityLabel("Actions for \(row.name ?? row.startedAt.formatted())")
+                .disabled(busy || connection.isUploading || transfers.preparing)
             }
-            HStack {
-                Button("Rename") {
-                    nameDraft = row.name ?? ""
-                    renameRow = row
+            DisclosureGroup("Transfer and details") {
+                VStack(alignment: .leading, spacing: 12) {
+                    DebugTransferRecordingButton { .screenshots(row.directory, row.id) }
+                    if row.legacyLabelerCompatible, let uploader = connection.uploader {
+                        SessionUploadPanel(uploader: uploader, id: row.id, fingerprint: row.fingerprint)
+                        Button("Send snapshot to labeler") {
+                            if (try? SessionUploadServer.url(from: serverAddress)) == nil {
+                                showConnection = true
+                            } else {
+                                sendingAll = false
+                                sendRows = [row]
+                            }
+                        }
+                        .disabled(busy || connection.isUploading || !DebugMode.isEnabled || row.fingerprint == nil)
+                    }
+                    Text(row.id.uuidString).font(.caption2).foregroundStyle(.secondary).textSelection(.enabled)
                 }
-                Button("Share snapshot ZIP") { export(row) }
-                Spacer()
-                Button("Delete", role: .destructive) { pendingDeletion = [row] }
+                .padding(.vertical, 6)
             }
-            .buttonStyle(.borderless)
-            .disabled(busy || connection.isUploading)
+            .font(.subheadline)
         }
+        .buttonStyle(.borderless)
+        .padding(.vertical, 6)
     }
 
     private func delete(_ targets: [Row]) {
@@ -264,7 +317,7 @@ private struct DebugSessionList: View {
     }
 
     private func refresh(preservingError: Bool = false) {
-        guard !busy, !connection.isUploading, pendingDeletion.isEmpty else { return }
+        guard !busy, !connection.isUploading, !transfers.preparing, pendingDeletion.isEmpty else { return }
         busy = true
         Task {
             let result = await Task.detached(priority: .utility) { () -> Result<[Row], Error> in
@@ -278,7 +331,8 @@ private struct DebugSessionList: View {
                             return Row(id: manifest.sessionID, directory: directory,
                                 name: try? SessionCaptureName.load(from: directory), startedAt: manifest.startedAt,
                                 status: manifest.status, frames: manifest.frames.count, dropped: manifest.droppedFrames,
-                                error: manifest.error, fingerprint: try? SessionUploadIdentity.fingerprint(directory))
+                                error: manifest.error, fingerprint: try? SessionUploadIdentity.fingerprint(directory),
+                                legacyLabelerCompatible: manifest.formatVersion == 1 && manifest.frames.allSatisfy { $0.filename.hasSuffix(".jpg") })
                         }.sorted { $0.startedAt > $1.startedAt }
                 }
             }.value

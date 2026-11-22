@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Mga kwento"
+  },
   "extensionDescription": {
     "message": "I-block ang YouTube Shorts, Reels, TikTok, at mga nakakagambalang feed sa Safari."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Kanselahin"
+  },
+  "hideHomeFeed": {
+    "message": "Itago ang home feed"
   }
 }

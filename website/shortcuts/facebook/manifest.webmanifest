@@ -1,0 +1,18 @@
+{
+  "id": "/shortcuts/facebook/",
+  "name": "Facebook",
+  "short_name": "Facebook",
+  "start_url": "/shortcuts/facebook/?launch=1",
+  "scope": "/shortcuts/facebook/",
+  "display": "standalone",
+  "background_color": "#f4f5f1",
+  "theme_color": "#f4f5f1",
+  "icons": [
+    {
+      "src": "../assets/facebook.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

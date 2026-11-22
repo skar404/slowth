@@ -27,7 +27,7 @@ for mode in Release Debug; do
     swiftc "${flags[@]}" -DGROUPED_APPS_TESTS "$module/BlockingRules.swift" \
         Shared/PauseOnlyApps.swift tests/IOSPauses/GroupedSelectionTests.swift -o "$output/grouped-selection"
     "$output/grouped-selection"
-    swiftc "${flags[@]}" -DPAUSE_COORDINATOR_TESTS "${base[@]}" \
+    swiftc "${flags[@]}" -DPAUSE_COORDINATOR_TESTS "${base[@]}" Shared/WebSettingsNotifications.swift \
         "$module/IOSPauseCoordinator.swift" "$module/BlockingClock.swift" \
         "$module/BlockingStorage.swift" "$module/BlockingShield.swift" "$module/BlockingCoordinator.swift" "$module/BlockingPauseMonitor.swift" \
         tests/IOSPauses/CoordinatorTests.swift -o "$output/coordinator"

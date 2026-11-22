@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "کہانیاں"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "منسوخ کرو"
+  },
+  "hideHomeFeed": {
+    "message": "ہوم فیڈ لکاؤ"
   }
 }

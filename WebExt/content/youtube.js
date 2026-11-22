@@ -138,8 +138,60 @@
     home.focus({ preventScroll: true });
   }
 
+  // Hide Home navigation everywhere, but scope feed renderers to the home
+  // route: mobile YouTube reuses rich grids for subscriptions and channels.
+  const HOME_STYLE_ID = "unscroll-youtube-home-style";
+  const HOME_SELECTORS = [
+    'ytd-browse[page-subtype="home"]',
+    'ytm-browse[tab-identifier="FEwhat_to_watch"]',
+    'ytm-browse[tab-identifier="FEhome"]',
+    'ytm-browse ytm-rich-grid-renderer'
+  ];
+  const HOME_NAV_SELECTORS = [
+    'ytd-guide-entry-renderer:has(a[href="/"])',
+    'ytd-mini-guide-entry-renderer:has(a[href="/"])',
+    'ytm-pivot-bar-item-renderer:has(a[href="/"])',
+    'ytm-pivot-bar-item-renderer:has(.pivot-home)',
+    'ytm-pivot-bar-item-renderer:has(.pivot-w2w)',
+    '.pivot-bar-item-tab.pivot-home',
+    '.pivot-bar-item-tab.pivot-w2w'
+  ];
+  let redirectedHomeURL = null;
+
+  function updateHomeFeed() {
+    const enabled = ns.content.featureEnabled("youtube", "hideHomeFeed");
+    const home = location.pathname === "/";
+    const existing = document.getElementById(HOME_STYLE_ID);
+    if (!enabled) {
+      existing?.remove();
+      redirectedHomeURL = null;
+      return false;
+    }
+    const css = [...HOME_NAV_SELECTORS, ...(home ? HOME_SELECTORS : [])]
+      .map(s => s + " { display:none !important; }").join("\n");
+    const style = existing || document.createElement("style");
+    if (!existing) {
+      style.id = HOME_STYLE_ID;
+      document.documentElement.appendChild(style);
+    }
+    if (style.textContent !== css) style.textContent = css;
+    if (home) {
+      // Replace, rather than push, so Back cannot get trapped on a home entry.
+      // This also handles the logo and YouTube SPA/history navigation without
+      // rewriting YouTube's links or interfering with search and video clicks.
+      if (redirectedHomeURL !== location.href) {
+        redirectedHomeURL = location.href;
+        location.replace(location.origin + "/feed/subscriptions");
+      }
+    } else {
+      redirectedHomeURL = null;
+    }
+    return home;
+  }
+
   function checkFeed() {
-    if (!ns.content.featureEnabled("youtube", "feed") || location.pathname !== "/") {
+    const homeHidden = updateHomeFeed();
+    if (homeHidden || !ns.content.featureEnabled("youtube", "feed") || location.pathname !== "/") {
       removeFeedOverlay();
       return;
     }

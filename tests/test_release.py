@@ -52,6 +52,22 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(before, (self.root / '.git/index').read_bytes())
         self.assertEqual(len(tree), 40)
 
+    def test_issue_templates_snapshot_preserves_files_and_index(self):
+        files = {
+            '.github/ISSUE_TEMPLATE/bug_report.yml': 'name: Bug report\n',
+            '.github/ISSUE_TEMPLATE/config.yml': 'blank_issues_enabled: true\n',
+        }
+        for name, data in files.items():
+            self.write(name, data)
+        self.git('add', '.github/ISSUE_TEMPLATE')
+        before = (self.root / '.git/index').read_bytes()
+        source, _, _ = release.snapshot(self.root, self.work)
+        for name, data in files.items():
+            self.assertEqual((source / name).read_text(), data)
+        self.assertEqual(before, (self.root / '.git/index').read_bytes())
+        self.assertFalse(release.public_path('.github/ISSUE_TEMPLATE/private.yml'))
+        self.assertFalse(release.public_path('.github/ISSUE_TEMPLATE/.env'))
+
     def test_website_snapshot_preserves_public_assets_and_index(self):
         files = {
             '.github/workflows/website.yml': 'name: Website\n',
@@ -170,6 +186,41 @@ class BundleTests(unittest.TestCase):
     def test_complete_but_corrupt_bundle(self):
         with self.assertRaisesRegex(RuntimeError, 'SHA-256 mismatch'):
             release.install_models(self.root, self.root, self.archive(sorted(release.model_files())))
+
+    def test_prepared_assets_preserve_legacy_bundle_paths(self):
+        app = self.root / 'app'
+        app.mkdir()
+        for name in release.model_files() - set(release.RUNTIME_HASHES):
+            path = app / release.artifact_path(name)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b'model')
+        with patch.object(release, 'verify_models') as verify:
+            release.install_models(self.root, app, None)
+            verify.assert_called_once_with(self.root)
+        for name in release.model_files() - set(release.RUNTIME_HASHES):
+            self.assertEqual((self.root / release.artifact_path(name)).read_bytes(), b'model')
+            self.assertTrue(name.startswith('data-model/exports/'))
+        self.assertFalse((self.root / 'data-model').exists())
+
+    def test_dataset_link_is_not_a_model_source(self):
+        app = self.root / 'app'
+        app.mkdir()
+        (app / 'data-model').symlink_to('../slowth-dataset')
+        with self.assertRaisesRegex(RuntimeError, 'Invalid model input'):
+            release.install_models(self.root, app, None)
+
+    def test_nested_model_escape_is_rejected(self):
+        app = self.root / 'app'
+        (app / 'Models').mkdir(parents=True)
+        outside = self.root / 'outside'
+        outside.mkdir()
+        (app / 'Models/exports').symlink_to(outside)
+        for name in release.model_files() - set(release.RUNTIME_HASHES):
+            path = app / release.artifact_path(name)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b'model')
+        with self.assertRaisesRegex(RuntimeError, 'Invalid model input'):
+            release.install_models(self.root, app, None)
 
     def test_real_model_roundtrip(self):
         if not (release.ROOT / release.MODEL_DIR).exists():

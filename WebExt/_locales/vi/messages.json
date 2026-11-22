@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Truyện"
+  },
   "extensionDescription": {
     "message": "Chặn YouTube Shorts, Reels, TikTok và các bảng tin gây xao nhãng trong Safari với tùy chỉnh cho từng trang."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Hủy"
+  },
+  "hideHomeFeed": {
+    "message": "Ẩn bảng tin trang chủ"
   }
 }
