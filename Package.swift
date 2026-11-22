@@ -17,7 +17,7 @@ let runtimeSources: [String] = [
     "Debug/Shared/SessionCaptureArchive.swift",
     "Debug/Shared/SessionCaptureDeletion.swift",
     "Debug/Shared/SessionCaptureSettings.swift",
-    "Debug/Broadcast/SessionJPEG.swift",
+    "Debug/Broadcast/SessionPNG.swift",
     "Debug/Shared/SessionUploadIdentity.swift",
     "Debug/Shared/SessionUploadIndex.swift",
     "Debug/Shared/SessionUploader.swift",
@@ -52,6 +52,6 @@ let package = Package(
     targets: [
         .target(name: "CascadeRuntime", path: ".", exclude: excludedPaths(), sources: runtimeSources),
         .testTarget(name: "CascadeRuntimeTests", dependencies: ["CascadeRuntime"],
-                    path: "tests/Runtime/Tests/CascadeRuntimeTests", sources: ["DebugTransferTests.swift"]),
+                    path: "tests/Runtime/Tests/CascadeRuntimeTests", resources: [.copy("Fixtures")]),
     ]
 )

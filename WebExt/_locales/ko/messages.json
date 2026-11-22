@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "스토리"
+  },
   "extensionDescription": {
     "message": "사이트별 설정으로 Safari에서 YouTube Shorts, Reels, TikTok과 주의를 분산시키는 피드를 차단하세요."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "취소"
+  },
+  "hideHomeFeed": {
+    "message": "홈 피드 숨기기"
   }
 }

@@ -8,129 +8,324 @@ struct DebugIOSSection: View {
     let isReadyForReview: Bool
     @ObservedObject var debugCaptureLibrary: DebugCapturePhotoLibrary
     @Binding var debugCaptureEnabled: Bool
-    @AppStorage(DebugModelSettings.storageKey, store: AppGroup.defaults) private var debugModelBackend = DebugModelSettings.defaultBackend.rawValue
-    @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
-
-    @AppStorage(DebugMode.shieldDiagnosticsStorageKey, store: AppGroup.defaults) private var shieldDiagnosticsEnabled = false
-
-    @State private var showIconProbe = false
-    @State private var showMotionExperiment = false
-    @State private var showTransfers = false
+    @State private var showTools = false
 
     var body: some View {
         Section {
-            Toggle("Debug mode", isOn: $debugModeEnabled)
-                .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
-                .onChange(of: debugModeEnabled) { _ in
-                    #if os(iOS) && canImport(FamilyControls)
-                    state.refreshFacebookModelSelection()
-                    #endif
+            Button { showTools = true } label: {
+                HStack {
+                    DebugToolLabel("Developer tools", detail: "Recordings, diagnostics and testing", icon: "wrench.and.screwdriver", color: .secondary)
+                    Spacer(minLength: 8)
+                    Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
                 }
-            Toggle("Debug Shield", isOn: $shieldDiagnosticsEnabled)
-                .accessibilityIdentifier("debug.shieldDiagnostics")
-            Button(String(localized: "Experiment: get app icons", table: "Interface")) { showIconProbe = true }
-                .disabled(GroupedApps.selection == nil)
-                .sheet(isPresented: $showIconProbe) { FamilyIconProbeSheet() }
-            DebugSessionCaptureControls()
-            if #available(iOS 16.2, *) {
-                Button("Experiment: scroll motion") { showMotionExperiment = true }
-                    .sheet(isPresented: $showMotionExperiment) { MotionExperimentView() }
             }
-            Button("Connections and transfer queue") { showTransfers = true }
-                .sheet(isPresented: $showTransfers) { DebugTransfersView() }
-            if DebugModelSettings.cascadeAvailable {
-                Picker("Model (next recording)", selection: Binding(
-                    get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
-                    set: { debugModelBackend = $0; state.refreshFacebookModelSelection() }
-                )) {
-                    ForEach(ModelBackend.allCases, id: \.rawValue) { backend in
-                        Text(backend.title).tag(backend.rawValue)
-                    }
-                }
-                .disabled(state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive && (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled)))
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("debug.tools")
+            .sheet(isPresented: $showTools) {
+                DebugToolsView(state: state, debugModeEnabled: $debugModeEnabled,
+                    isReadyForReview: isReadyForReview, debugCaptureLibrary: debugCaptureLibrary,
+                    debugCaptureEnabled: $debugCaptureEnabled)
             }
-            Toggle("Save detection frames", isOn: $debugCaptureEnabled)
-            if debugCaptureEnabled {
-                if debugCaptureLibrary.authorizationStatus == .authorized
-                    || debugCaptureLibrary.authorizationStatus == .limited {
-                    Button {
-                        debugCaptureLibrary.importPending()
-                    } label: {
-                        HStack {
-                            Text("Save frames to Photos")
-                            Spacer()
-                            if debugCaptureLibrary.isImporting { ProgressView() }
-                        }
-                    }
-                    .disabled(
-                        debugCaptureLibrary.isImporting
-                            || debugCaptureLibrary.pendingEvents == 0
-                    )
-                } else {
-                    Button("Allow Photos access") {
-                        debugCaptureLibrary.requestAccessAndImport()
-                    }
-                }
-                Button("Clear pending frames", role: .destructive) {
-                    debugCaptureLibrary.clearPending()
-                }
-                .disabled(debugCaptureLibrary.pendingEvents == 0)
-            }
-            DebugAppReviewControls(hasEnabledBlocking: state.hasEnabledBlockingForReview,
-                                   isReady: isReadyForReview)
-            Toggle("Tips", isOn: $tipsFeatureEnabled)
-            DebugSavedLeavesControl()
-            Button(String(localized: "Reset rest progression", table: "Interface")) {
-                do { try IOSPauseCoordinator.resetRestProgressForDebug() }
-                catch { state.lastError = AppLocalization.string("Could not save") }
-            }
-            .accessibilityIdentifier("debug.rest.reset")
-            Button(String(localized: "Reset pauses", table: "Interface")) {
-                do { try IOSPauseCoordinator.resetPausesForDebug() }
-                catch { state.lastError = String(localized: "Could not reset pauses. Try again.", table: "Interface") }
-            }
-            Button("Reset Strict mode") {
-                state.resetStrictModeForDebug()
-            }
-            .disabled(!state.snapshot.isStrictModeActive)
-
         } header: {
             Text("Debug")
         }
     }
-
 }
 
-#Preview("Debug · iOS") {
-    NavigationStack {
-        Form {
-            DebugIOSSection(state: AppState(previewSnapshot: .defaultState),
-                debugModeEnabled: .constant(true), isReadyForReview: true,
-                debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .notDetermined),
-                debugCaptureEnabled: .constant(false))
-        }.navigationTitle("Settings")
+struct DebugToolsView: View {
+    @ObservedObject var state: AppState
+    @Binding var debugModeEnabled: Bool
+    let isReadyForReview: Bool
+    @ObservedObject var debugCaptureLibrary: DebugCapturePhotoLibrary
+    @Binding var debugCaptureEnabled: Bool
+    @Environment(\.dismiss) private var dismiss
+    @AppStorage(DebugModelSettings.storageKey, store: AppGroup.defaults) private var debugModelBackend = DebugModelSettings.defaultBackend.rawValue
+    @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
+    @AppStorage(DebugMode.shieldDiagnosticsStorageKey, store: AppGroup.defaults) private var shieldDiagnosticsEnabled = false
+    @State private var showIconProbe = false
+    @State private var showManagedSettings = false
+    @State private var showMotionExperiment = false
+    @State private var showTransfers = false
+    @State private var actionError: String?
+
+    private var modelSettingsLocked: Bool {
+        state.snapshot.broadcastActive || (state.snapshot.isStrictModeActive &&
+            (state.snapshot.realtimeFacebookBlockingEnabled || state.snapshot.realtimeXBlockingEnabled))
     }
-    .allowsHitTesting(false)
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Toggle("Debug mode", isOn: $debugModeEnabled)
+                        .disabled(modelSettingsLocked)
+                        .onChange(of: debugModeEnabled) { enabled in
+                            state.refreshFacebookModelSelection()
+                            if !enabled { dismiss() }
+                        }
+                } footer: {
+                    if modelSettingsLocked {
+                        Text(state.snapshot.broadcastActive ? "Stop recording to change Debug mode or the model." : "End Strict mode to change Debug mode or the model.")
+                    }
+                }
+                Section("Recordings and data") {
+                    NavigationLink {
+                        DebugRecordingsView()
+                    } label: {
+                        DebugToolLabel("Screenshots", detail: "Capture settings and saved sessions", icon: "photo.stack", color: .blue)
+                    }
+                    Button { showTransfers = true } label: {
+                        DebugToolLabel("Transfers", detail: "Connections and upload queue", icon: "arrow.up.arrow.down", color: .teal, showsChevron: true)
+                    }
+                    .buttonStyle(.plain)
+                    NavigationLink {
+                        detectionSettings
+                    } label: {
+                        DebugToolLabel("Models and frames", detail: "Detection model and frame export", icon: "viewfinder", color: .purple)
+                    }
+                }
+                Section("Testing") {
+                    NavigationLink {
+                        diagnostics
+                    } label: {
+                        DebugToolLabel("Blocking diagnostics", detail: "Shield and Screen Time settings", icon: "shield.lefthalf.filled", color: .orange)
+                    }
+                    NavigationLink {
+                        appTesting
+                    } label: {
+                        DebugToolLabel("App behavior", detail: "Reviews, rewards and resets", icon: "slider.horizontal.3", color: SlowthAppearance.sage)
+                    }
+                    if #available(iOS 16.2, *) {
+                        Button { showMotionExperiment = true } label: {
+                            DebugToolLabel("Scroll motion", detail: "Experimental sensor recording", icon: "waveform.path", color: .indigo, showsChevron: true)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .debugFormStyle()
+            .navigationTitle("Developer tools")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
+            }
+            .sheet(isPresented: $showTransfers) { DebugTransfersView() }
+            .sheet(isPresented: $showMotionExperiment) {
+                if #available(iOS 16.2, *) { MotionExperimentView() }
+            }
+        }
+    }
+
+    private var detectionSettings: some View {
+        Form {
+            if DebugModelSettings.cascadeAvailable {
+                Section {
+                    Picker("Model", selection: Binding(
+                        get: { DebugModelSettings.selection(stored: debugModelBackend).rawValue },
+                        set: { debugModelBackend = $0; state.refreshFacebookModelSelection() }
+                    )) {
+                        ForEach(ModelBackend.allCases, id: \.rawValue) { backend in
+                            Text(backend.title).tag(backend.rawValue)
+                        }
+                    }
+                    .disabled(modelSettingsLocked)
+                } header: { Text("Detection") } footer: {
+                    Text("Applies to the next recording.")
+                }
+            }
+            Section {
+                Toggle("Save detection frames", isOn: $debugCaptureEnabled)
+                if debugCaptureEnabled {
+                    LabeledContent("Pending frames", value: "\(debugCaptureLibrary.pendingEvents)")
+                    if debugCaptureLibrary.authorizationStatus == .authorized
+                        || debugCaptureLibrary.authorizationStatus == .limited {
+                        Button { debugCaptureLibrary.importPending() } label: {
+                            HStack {
+                                Label("Save frames to Photos", systemImage: "square.and.arrow.down")
+                                Spacer()
+                                if debugCaptureLibrary.isImporting { ProgressView() }
+                            }
+                        }
+                        .disabled(debugCaptureLibrary.isImporting || debugCaptureLibrary.pendingEvents == 0)
+                    } else {
+                        Button("Allow Photos access") { debugCaptureLibrary.requestAccessAndImport() }
+                    }
+                    Button("Clear pending frames", role: .destructive) { debugCaptureLibrary.clearPending() }
+                        .disabled(debugCaptureLibrary.pendingEvents == 0)
+                }
+            } header: { Text("Detection frames") }
+            if let error = debugCaptureLibrary.lastError {
+                Section { Text(error).font(.footnote).foregroundStyle(.red) }
+            }
+        }
+        .debugFormStyle()
+        .navigationTitle("Models and frames")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var diagnostics: some View {
+        Form {
+            Section("Shield") {
+                Toggle("Debug Shield", isOn: $shieldDiagnosticsEnabled)
+                    .accessibilityIdentifier("debug.shieldDiagnostics")
+                Button { showManagedSettings = true } label: {
+                    Label("Inspect Managed Settings", systemImage: "list.bullet.rectangle")
+                }
+            }
+            Section {
+                Button { showIconProbe = true } label: {
+                    Label("Get app icons", systemImage: "app.badge")
+                }
+                .disabled(GroupedApps.selection == nil)
+            } header: { Text("Experiments") } footer: {
+                if GroupedApps.selection == nil { Text("Select apps in blocking settings to inspect their icons.") }
+            }
+        }
+        .debugFormStyle()
+        .navigationTitle("Blocking diagnostics")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showManagedSettings) { ManagedSettingsDiagnosticsView() }
+        .sheet(isPresented: $showIconProbe) { FamilyIconProbeSheet() }
+    }
+
+    private var appTesting: some View {
+        Form {
+            Section("App review") {
+                DebugAppReviewControls(hasEnabledBlocking: state.hasEnabledBlockingForReview, isReady: isReadyForReview)
+            }
+            Section("Tips and rewards") {
+                Toggle("Tips", isOn: $tipsFeatureEnabled)
+                DebugSavedLeavesControl()
+            }
+            Section("Resets") {
+                Button(String(localized: "Reset rest progression", table: "Interface")) {
+                    do { try IOSPauseCoordinator.resetRestProgressForDebug() }
+                    catch { actionError = AppLocalization.string("Could not save") }
+                }
+                .accessibilityIdentifier("debug.rest.reset")
+                Button(String(localized: "Reset pauses", table: "Interface")) {
+                    do { try IOSPauseCoordinator.resetPausesForDebug() }
+                    catch { actionError = String(localized: "Could not reset pauses. Try again.", table: "Interface") }
+                }
+                Button("Reset Strict mode") { state.resetStrictModeForDebug() }
+                    .disabled(!state.snapshot.isStrictModeActive)
+            }
+        }
+        .debugFormStyle()
+        .navigationTitle("App behavior")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert("Could not complete action", isPresented: Binding(
+            get: { actionError != nil }, set: { if !$0 { actionError = nil } }
+        )) {
+            Button("OK", role: .cancel) { actionError = nil }
+        } message: { Text(actionError ?? "") }
+    }
 }
-#Preview("Debug · frames ready") {
-    NavigationStack {
+
+struct DebugRecordingsView: View {
+    var body: some View {
         Form {
-            DebugIOSSection(state: AppState(previewSnapshot: .defaultState),
-                debugModeEnabled: .constant(true), isReadyForReview: true,
-                debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .authorized, pending: 8),
-                debugCaptureEnabled: .constant(true))
-        }.navigationTitle("Settings")
+            Section {
+                DebugSessionCaptureControls()
+            } header: { Text("Screenshot capture") } footer: {
+                Text("Interval and storage limit apply to the next recording. Screenshots are saved locally as full-size PNGs.")
+            }
+            Section {
+                Label("Start a screen recording from the main screen to capture screenshots.", systemImage: "record.circle")
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+        }
+        .debugFormStyle()
+        .navigationTitle("Screenshots")
+        .navigationBarTitleDisplayMode(.inline)
     }
-    .preferredColorScheme(.dark)
-    .allowsHitTesting(false)
+}
+
+/// Shared labels keep the tools index readable at larger text sizes.
+struct DebugToolLabel: View {
+    let title: String
+    let detail: String
+    let icon: String
+    let color: Color
+    let showsChevron: Bool
+
+    init(_ title: String, detail: String, icon: String, color: Color, showsChevron: Bool = false) {
+        self.title = title
+        self.detail = detail
+        self.icon = icon
+        self.color = color
+        self.showsChevron = showsChevron
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.body.weight(.medium))
+                .foregroundStyle(color)
+                .frame(width: 36, height: 36)
+                .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title).font(.body).foregroundStyle(.primary)
+                Text(detail).font(.caption).foregroundStyle(.secondary)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            if showsChevron {
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(.vertical, 5)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+    }
 }
 
 extension View {
     func debugFormStyle() -> some View {
-        self.scrollContentBackground(.hidden)
-            .frame(maxWidth: 680).frame(maxWidth: .infinity)
+        self
+            .scrollContentBackground(.hidden)
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
             .background(SlowthAppearance.background)
             .environment(\.defaultMinListRowHeight, 48)
     }
+}
+
+#if targetEnvironment(simulator)
+/// Presentation-only launch fixture; never enables Debug mode or starts capture.
+struct DebugToolsPreview: View {
+    var body: some View {
+        Group {
+            if ProcessInfo.processInfo.arguments.contains("--preview-debug-recordings") {
+                NavigationStack { DebugRecordingsView() }
+            } else {
+                DebugToolsView(state: AppState(previewSnapshot: .defaultState),
+                    debugModeEnabled: .constant(true), isReadyForReview: true,
+                    debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .notDetermined),
+                    debugCaptureEnabled: .constant(false))
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+#endif
+
+#Preview("Developer tools") {
+    DebugToolsView(state: AppState(previewSnapshot: .defaultState),
+        debugModeEnabled: .constant(true), isReadyForReview: true,
+        debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .notDetermined),
+        debugCaptureEnabled: .constant(false))
+}
+
+#Preview("Developer tools · dark / large text") {
+    DebugToolsView(state: AppState(previewSnapshot: .defaultState),
+        debugModeEnabled: .constant(true), isReadyForReview: true,
+        debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .authorized, pending: 8),
+        debugCaptureEnabled: .constant(true))
+        .preferredColorScheme(.dark)
+        .environment(\.dynamicTypeSize, .xxxLarge)
 }
 #endif

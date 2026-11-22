@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Istorijos"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Atšaukti"
+  },
+  "hideHomeFeed": {
+    "message": "Slėpti pagrindinio puslapio srautą"
   }
 }

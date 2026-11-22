@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Historias"
+  },
   "extensionDescription": {
     "message": "Bloquea YouTube Shorts, Reels, TikTok y feeds que distraen en Safari, con controles por sitio."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Cancelar"
+  },
+  "hideHomeFeed": {
+    "message": "Ocultar el feed de inicio"
   }
 }

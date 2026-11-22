@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "оповідання"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Скасувати"
+  },
+  "hideHomeFeed": {
+    "message": "Приховати головну стрічку"
   }
 }

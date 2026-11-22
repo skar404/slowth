@@ -782,6 +782,7 @@ enum IOSPauseCoordinator {
     }
 
     static func finish(id: String, refundKnownNonGrant: Bool = false) throws {
+        defer { NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil) }
         let db = try database()
         try db.transaction { ledger in
             guard ledger.lease?.id == id else { return }
@@ -805,6 +806,7 @@ enum IOSPauseCoordinator {
     }
 
     static func prepareSafari(target: String, id: String) throws {
+        defer { NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil) }
         let now = clock()
         try database().transaction { ledger in
             reconcile(&ledger, now: now, enforceApplications: true)
@@ -834,6 +836,7 @@ enum IOSPauseCoordinator {
     }
 
     static func cancelSafariPreparation(_ id: String) throws {
+        defer { NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil) }
         try database().transaction { ledger in
             guard let lease = ledger.lease, lease.id == id, lease.kind == "safari", lease.phase == "preparing" else { return }
             ledger.finish(now: clock())

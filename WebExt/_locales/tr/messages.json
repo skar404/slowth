@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Hikayeler"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "İptal"
+  },
+  "hideHomeFeed": {
+    "message": "Ana sayfa akışını gizle"
   }
 }

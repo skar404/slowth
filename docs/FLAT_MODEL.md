@@ -59,7 +59,7 @@ Core ML CPU parity passed on all 4,267 validation/test frames with zero argmax
 or threshold differences and identical simulated temporal metrics (max error
 0.0000047684). It does not qualify physical iPhone/ANE/ReplayKit behavior.
 
-Resources: `data-model/exports/flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage`
+Resources: `Models/exports/flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage`
 and `RealtimeShield/FlatDetector14Metadata.json`. Checkpoint SHA-256:
 `fa0f681960bb02a60d008df8735c3d48433416e0915ddfc55fe7226c2b87cdeb`;
 package: `a75bb25d4187800e88f1da8fd5a7a2b943fb33e6dbe4a79c5b2a81123aef30c1`;
@@ -68,7 +68,7 @@ metadata: `59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf`.
 The original Debug-candidate builds and CPU parity checks passed. They do not
 prove physical iPhone/ANE/ReplayKit behavior. Promotion uses version 2026.10.6,
 build 27; current release evidence is recorded by the signed GitHub workflow.
-Full local report: [Flat 14 experiment](../data-model/docs/flat-14-experiment.md).
+Full local report: `docs/flat-14-experiment.md` in the private `slowth-dataset` repository.
 
 ## Flat 13 (historical default)
 
@@ -77,7 +77,7 @@ Debug uses it unless an explicit saved model selection is active. Flat 11 and
 Flat 12 remained selectable alternatives at that time. The selected backend is frozen at broadcast start.
 The class contract, temporal policy and fail-closed identity checks are unchanged.
 
-Resources: `data-model/exports/flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage`
+Resources: `Models/exports/flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage`
 and `RealtimeShield/FlatDetector13Metadata.json`. Release includes all three Flat
 packages in the broadcast extension and no models in the host. macOS model resources
 are unchanged; the shared default and Debug picker also identify Flat 13 there.
@@ -124,7 +124,7 @@ Flat 12 identity: `flat-12-seed7-20261027`, checkpoint SHA-256
 `83179b7136df664691eb391a11b18a3f682365d87c4aa488265743a0329a53ed`;
 package SHA-256 `93e04140935d04ed69b16c416c0c273f3a8037ece821391f795b52f3c6b6259a`;
 runtime metadata SHA-256 `d117451e29c1cf4c3f004e049f1c040abc44ec6ec6a0b5dfcc8b2275b91cbeab`.
-Resources: `data-model/exports/flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage`
+Resources: `Models/exports/flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage`
 and `RealtimeShield/FlatDetector12Metadata.json`. The existing Flat 11 resources
 and hashes remain unchanged. Release bundles both in the broadcast extension and
 neither in the host; Debug includes both plus its historical alternatives.
@@ -204,4 +204,4 @@ This remains experimental: no independent holdout, one training seed, no physica
 
 The local pinned model asset is `build/models-flat-11-seed7-20261015/Slowth-models.tar.gz`. `automatic.py` references `models-flat-11-seed7-20261015`; this GitHub model release has **not** been published. Before an app release, publish and verify the signed model asset using the existing model release process. Archive creation is deterministic so its digest survives regeneration. No App Store upload, version/build increment or phone installation was performed as part of this change.
 
-The private `data-model` export and tools remain ignored by Git, consistent with existing model storage. Public source and runtime metadata alone do not contain the model weights; clean builds need the matching asset.
+Training exports and tools live in the private `slowth-dataset` repository; the app imports only pinned resources into ignored `Models/exports`. Historical `data-model/...` paths in this document identify original experiment records, not current build inputs. Public source and runtime metadata alone do not contain the model weights; clean builds need the matching asset.

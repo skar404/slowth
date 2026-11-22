@@ -45,6 +45,11 @@ coordinator tests for multi-app pause/rest/grace/fault handling, soft YouTube
 priority, replacement bindings and stale detection rejection, in Debug/Release.
 A device build/install is not physical behavior qualification.
 
+Managed Settings website diagnostics and the 2026-11-17 Instagram/Safari device
+reproduction are documented in [WebsiteShieldDiagnostics.md](WebsiteShieldDiagnostics.md).
+An app-only selection does not establish that iOS leaves the associated website
+accessible; verify both surfaces on a device.
+
 Device MVP checklist:
 
 1. Stop recording; choose at least two apps. Confirm both are blocked.

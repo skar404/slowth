@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Priče"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "Nije moguće spremiti"
+  },
+  "hideHomeFeed": {
+    "message": "Sakrij sadržaj početne stranice"
   }
 }

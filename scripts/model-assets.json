@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "resources": [
+    {
+      "path": "cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "275be8a74dcb00f2382071fc5fde6b8ff110878f8b56e66dd0a25c63c11651d5",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "c0ae094ccc890ef6ddd2e420b68e05dc805306c88488222f0e4a61d37f698179",
+        "Data/com.apple.CoreML/weights/weight.bin": "3bbdbf2ab6af74486fea2cb67ced6231004027be688c20b9c5ba572dd04f9fa9",
+        "Manifest.json": "68d699f2c7377ba52d16f83f3fc526c86319796ae08f058cc6d5d839e8b43c0a"
+      }
+    },
+    {
+      "path": "cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "f7fd1ae118afadc139c3e95b4e5bc9eb86eb801da770e5bf2194190320a66760",
+      "files": {
+        "": "f7fd1ae118afadc139c3e95b4e5bc9eb86eb801da770e5bf2194190320a66760"
+      }
+    },
+    {
+      "path": "cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "807e5f31e091db26c8285e92e04f7ebc9cf224db1d25be4d72dbcf8306136c8d",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "08dcf8836cb7fbd6479b58439d728f778e53e5f2de4afeaf33e1e031b2198d8a",
+        "Data/com.apple.CoreML/weights/weight.bin": "b1e0c37668bb38f0bbec97fc0ffeea701f715baf4f1cab0a4b3639677aeb2f90",
+        "Manifest.json": "1b99ab35d5d7d6843feafea2725647354422ac05ad93ac0aa00d2daf5c786018"
+      }
+    },
+    {
+      "path": "cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "64a05d722c785cc62bb4420e6aa1ff14dcc751a30e35b6edbcc93eb396c8b09a",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "6fb0288ae79fa04e88bec573ddd661af1edd6d42d47c0aa4ede129d81f282aa3",
+        "Data/com.apple.CoreML/weights/weight.bin": "10dc2d2952f71276600f2df596983474555e39c46a2c7f44eb6f7d9d724f4fda",
+        "Manifest.json": "93580ab5f5a42e6ac02fa2cb6856c7bea5af5fffa49167c53815c1c4cd9c2e28"
+      }
+    },
+    {
+      "path": "cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "eec050ecc6ba357eac0f430cd2f76ca3c9765bd8130304ef81d8a1a86f6e3b99",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "035b3d3a0dd8462c82311c6cd9509494bde16bb2d100f122f415467f56b3abac",
+        "Data/com.apple.CoreML/weights/weight.bin": "a500d5ff13bf477097a34084016e8fc9e02df891f134d11713372952e1593a42",
+        "Manifest.json": "f2651c86567793e415e4c5216b700d0e197954cf4ec01943d2eb6d88c4da2d9c"
+      }
+    },
+    {
+      "path": "cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "10daf9a48edddba4a480e0376648563094f2196621bf10eb93731cf8c4bd755e",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "5ed6b7532fa8ef049e1654de016927ca9d08b28191d7c466e86ca96f5e55c105",
+        "Data/com.apple.CoreML/weights/weight.bin": "a1c2f420424f6ebf5dd80256736ee5e2b19ea1c841d5e86168161072a681efa9",
+        "Manifest.json": "5a61c5b2bdb92000336f30a09dde05ade4c63001a3cbe60f52fb9a539a767937"
+      }
+    },
+    {
+      "path": "cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "fd1b38ad2ce6b312da6f28a5122ac9306a561287127ab0085563597da082d9c5",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "338231f3e43a044110e22146414aaac3f47d47b7cc43a72488897256a8efb6e2",
+        "Data/com.apple.CoreML/weights/weight.bin": "35c9b054f980044c342636f881ad17e185a57e29a09a77d877c14f9fbc1a0d64",
+        "Manifest.json": "121c7793e08722412c394348e4cb84cbc4f7157490669e4b64e6a0c0ae46d706"
+      }
+    },
+    {
+      "path": "cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "a18028d31e1ebc71a87a35ad48aea4c7740ff2a23a954c6a1059d6c5ac796c79",
+      "files": {
+        "": "a18028d31e1ebc71a87a35ad48aea4c7740ff2a23a954c6a1059d6c5ac796c79"
+      }
+    },
+    {
+      "path": "cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "9a15cd99312f685afc06d8a29bc000f6555a22fda21e6ea5efae4462f71f6da4",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "7fb4a1fd95aee1163a0de9af9d445bd9836e3bb0a7d7d721a0f34e41d8436fd0",
+        "Data/com.apple.CoreML/weights/weight.bin": "adee93f8d5034cec7d94064395bd950c1530ac4bf0b888e55801cce33289442f",
+        "Manifest.json": "bc06d8ad16722cfe5ecdbef7924754b419304900161d6f6430a77418188ba53c"
+      }
+    },
+    {
+      "path": "cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "86fe2aa754bccbddb89ceefbfd7de98783737ff205d66cf0df37228e35db6876",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "687ecc6fd1fa1aa9a167ef9fdc431435082ced54712cc3d2c48f0d71dd121d56",
+        "Data/com.apple.CoreML/weights/weight.bin": "4b4600f535296420d6844e654656f0602c232d62aaf52195347c5b8c29debf89",
+        "Manifest.json": "e7ee0b89bcc30eb0ad3ad2e28d674dc4413de37ee19258fb9945424c3da6ffab"
+      }
+    },
+    {
+      "path": "cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "387813a319c01d31ac0e3f9a701b8fc7a5b851b5cd53db58a17ebfa807cf9575",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "b4064c5c0ec757ad7dec3f4eaa921314730c2fc964c69ce4556cf3726b78d3c9",
+        "Data/com.apple.CoreML/weights/weight.bin": "08689bc101a01d05d7d2a337d119f63cefb9be1f0851f9489fea297a3ddc54d7",
+        "Manifest.json": "036583ecc2789d71ded2802733b6140661394cd15126db8c69e5549e3d167de7"
+      }
+    },
+    {
+      "path": "cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "55475cab16c8b2b6f7d4af88085f123e14fb0fb708978ef59f2f215529e54018",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "596c90349e2e60402d74ff10e0be94d453430b74babf18a5ff580c61639de67d",
+        "Data/com.apple.CoreML/weights/weight.bin": "74e9eedd60c43225de2d03f3b0ade0e3bdb94fbace94330f384f9bc0e041698e",
+        "Manifest.json": "86a72dfe11137652ba6df499d55b6cfdbdbe597f1fa994fd5dbeee4514b32d70"
+      }
+    },
+    {
+      "path": "cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "14d08357cc7bedc7f93fff18e380800ee30e06e279aed50f276efbb9df325977",
+      "files": {
+        "": "14d08357cc7bedc7f93fff18e380800ee30e06e279aed50f276efbb9df325977"
+      }
+    },
+    {
+      "path": "cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "4e93c437848bee00ee7beea828ca05f9831413993580eba25f15853fc6a61d83",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "0784e4132c695132b6491bae6520720019507894a0cc05b81d014a35c3657715",
+        "Data/com.apple.CoreML/weights/weight.bin": "c1d9784578e7cf232b882db6ff9058ae37199c4bc43c70723c29ebcbca64accd",
+        "Manifest.json": "b40f002f94cd2ebc6c77dfb8af65ed9a1cc622a9185578edcaa49d08909448e2"
+      }
+    },
+    {
+      "path": "cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "43f04647e10476aae401333c03584448070f43dbe54db04c963c2b998f780c90",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "85cebdcb42a336d8bc4a2a7821e1a88aa74950eaedf00a08d9954b03cc38d237",
+        "Data/com.apple.CoreML/weights/weight.bin": "6cd484e54db1f1b1b6b914a7f59ba67e9a9bf1816623d56ec371c3b25f36fe20",
+        "Manifest.json": "f6100c0708993936dac2928a351e421176c8e6f1aac7b86a66904de8dca9980e"
+      }
+    },
+    {
+      "path": "cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "a701c1880a50e6abfd09f0e786d0a37d99fc947d80ab59f34978b6e93d2d7f94",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "aafb808bf035b4e608e31156f714b7b04e578ab39c2d5ccb7705c70857fe7f41",
+        "Data/com.apple.CoreML/weights/weight.bin": "3fb6394a4e66c4f0f4fbb7dfcae7cc90b4a288d5534c22eb4f5a2026bdf8cd98",
+        "Manifest.json": "6c1b0d5c5c93362e2c0d9ac4d302d40223efbf420322b87fe18157c42a9919c9"
+      }
+    },
+    {
+      "path": "cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "832fde58b9dc7349dd8e71f3a5286137b1e2543e4b3f9934677569c983031df6",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "19f67f8102e628a2095db9c85504122969a45bcbb60f76e2d72887be31ca5734",
+        "Data/com.apple.CoreML/weights/weight.bin": "269805b5ac5745dd2fb2ccdc42b52ef7a517ebbde4fdd9662226137fb9b82a8f",
+        "Manifest.json": "f47701ce8d7881c93dc0eb0c18c147812fe1aea6def8b0ebcaa0052d7e78edb1"
+      }
+    },
+    {
+      "path": "flat-11-seed7-20261015/FlatDetector.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "4d672879ea1f33e8ddbad369b67d26e048e09836522e2eaad561dbf55b1f7a1e",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "c67f4c34a67426c845b77709bdcb786df0f434b35f55c85fd272afd56a97b3b9",
+        "Data/com.apple.CoreML/weights/weight.bin": "4b43d6a681838b128a88d65f3cb3a54379e38805051f24d6419e69cbd4ecf482",
+        "Manifest.json": "80f4d3e0d880428c1c38484cd1b5c64b9655c08690f300d9815f968246d6c39d"
+      }
+    },
+    {
+      "path": "flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMax.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "9275048e2e85303e8cdc6174028d9b01e2e3f79b68368bfdaaff01dc9c22b4d3",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "93438e10e59909cd32af31f279b90af1ae2493a4573d08c31dd36a887d7c9602",
+        "Data/com.apple.CoreML/weights/weight.bin": "a9a904ae16a09a3906c849056d061d4d6f97db7dc8f859e87028da1067b03ce0",
+        "Manifest.json": "3a24cd0aec227dac37eb98ab721aae59d048c622ba439fccefa0df699ae0ea44"
+      }
+    },
+    {
+      "path": "flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMaxMetadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "405d40f624fdc377f061a4d4837a2dcc081dfa77faf3ae638d9cb3cf05bffabb",
+      "files": {
+        "": "405d40f624fdc377f061a4d4837a2dcc081dfa77faf3ae638d9cb3cf05bffabb"
+      }
+    },
+    {
+      "path": "flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "93e04140935d04ed69b16c416c0c273f3a8037ece821391f795b52f3c6b6259a",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "05c339562cc8510bd84c4b70efe91c93919b0d808c8ece0d15f023dda0d8327c",
+        "Data/com.apple.CoreML/weights/weight.bin": "0025c241f44ed2ba2021ec89e1ae8702055c53c47f0ed3abed3fef52e10ebe71",
+        "Manifest.json": "118cda767021e32b104342ecfddd5d1e6b2efb3fb042cf2fd039ba1c279691e6"
+      }
+    },
+    {
+      "path": "flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "8a1bcb509ca73902fa1056bc5743acc210baa3c09ce1b07bf04d81b0ab2d58e3",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "c1484a2dba8ba60c8766e2dbc9c646fb795cfacf98e40ffda927997151ce0b48",
+        "Data/com.apple.CoreML/weights/weight.bin": "11e52bb7b7cc8f74c500f85dc96dee40d0d6d2afb8e5806d4e5bdc1b52293cd4",
+        "Manifest.json": "85d5c545bef077ce998481f51e87cdba1349ec41041a47e85aac52b0463f0b66"
+      }
+    },
+    {
+      "path": "flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "a75bb25d4187800e88f1da8fd5a7a2b943fb33e6dbe4a79c5b2a81123aef30c1",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "ad006a64a09e7a847a22bd6d123633578b5d24e829f04cff42b0d89c879bce86",
+        "Data/com.apple.CoreML/weights/weight.bin": "330f556d8865308217eff62d72b5cf6414b2f6d9e72d26303d8cb56d5a662c0b",
+        "Manifest.json": "9af54b367c983652eb3669be8896a200b4df2caad35cda4e710053548e600bf4"
+      }
+    },
+    {
+      "path": "flat-15-seed7-20261028/ios-resources/FlatDetector15.mlpackage",
+      "profiles": [
+        "Debug",
+        "Release"
+      ],
+      "sha256": "86e41923fb8349e0878128db6603fd8609930d32cacd4bf5c11481ad9373ef26",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "7a9097445bd6e2d4177e9d0b31d48a6442b5663b31dc5ba40f776bba46d20138",
+        "Data/com.apple.CoreML/weights/weight.bin": "8a222e58409e649971780be77307d936aef954b93075c4e90af309cc22fe767d",
+        "Manifest.json": "e1f3f94f44c36ecba07ed99a5458be298d8b3f0493db63cef6d0a053d0a832f7"
+      }
+    },
+    {
+      "path": "v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "79d4753eb08136040c1a9bbdebb93ce4db68e7ff89770faa96a3afebbc4bb11f",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "0308837fe398c78365671afcb5dd530d087985f23651f09b7753b83b7d215e78",
+        "Data/com.apple.CoreML/weights/weight.bin": "bf30d5d45a9e4b85c4072d0e010c585f5ec825486d3cdc0c8ebccd9019ad440f",
+        "Manifest.json": "0d2290679cd0cf3ed33d93ae8c3f39fe350dbd7541529eb10395d2aed43494aa"
+      }
+    },
+    {
+      "path": "v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "a972f1865a51f6a5c5848f9402a71646beebb2a44c01d9da6c66c2e37373b323",
+      "files": {
+        "": "a972f1865a51f6a5c5848f9402a71646beebb2a44c01d9da6c66c2e37373b323"
+      }
+    },
+    {
+      "path": "v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "61767a0116b589139ea9f143d03af505ec74931e732bda04ab0169063978d88b",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "f6bf3e07ddbfdf556e565f12d4ee8f3ea2d843a07426a1bd3dbaa820706ae93c",
+        "Data/com.apple.CoreML/weights/weight.bin": "7ff026e45ea0c49f2d3209d35f90ab724753562858b317f651cf49901836f0dd",
+        "Manifest.json": "e2aca4224fede77b36c8b180ce5ea6f94317fffe52aa4c144f4ba3d4184c6562"
+      }
+    },
+    {
+      "path": "v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "07eb58f7f1c21ce2f9aefc81cc042c7663aedb3a2d74e8f72df1bf2348ec490b",
+      "files": {
+        "": "07eb58f7f1c21ce2f9aefc81cc042c7663aedb3a2d74e8f72df1bf2348ec490b"
+      }
+    },
+    {
+      "path": "v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "6701a2b056a75cb0d54690658c7e9bfb5ed2823eacae3e50fb0dc7cea8f40728",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "94f7382ae39b8d45f284d9a09f149972ac3cfc7a15bd0ee7d70d86f1a9c12ef0",
+        "Data/com.apple.CoreML/weights/weight.bin": "70186eea01b8540fc13c990382caee22ff3165986eb554a8a40a08e4e80b5937",
+        "Manifest.json": "d2e659a82592a1d44509e8606da2cc6fede6459ccacfa9afb9eec51de22f8bf8"
+      }
+    },
+    {
+      "path": "v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "ac60c10e4bc7f0091b51bd86195b5597ccb78e6c7af3a5b15911f70981cdf404",
+      "files": {
+        "": "ac60c10e4bc7f0091b51bd86195b5597ccb78e6c7af3a5b15911f70981cdf404"
+      }
+    },
+    {
+      "path": "v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "a28cc67c39930d440620727adb09016877db828f20fb757a230f88c0db459cd8",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "77fb584f7fef7e696af050c94fe7d7df228b32b208f5fbea1c2f362d26357e0f",
+        "Data/com.apple.CoreML/weights/weight.bin": "4b4600f535296420d6844e654656f0602c232d62aaf52195347c5b8c29debf89",
+        "Manifest.json": "e752c15f3359f90c76394e40f7169db0e1f31ae1990c2b85bcd973070fe90e38"
+      }
+    },
+    {
+      "path": "v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "83ccc751b04944c3a2561a00d5c0ecd2e6409a57bf5787e6a2b63ac151d87125",
+      "files": {
+        "Data/com.apple.CoreML/model.mlmodel": "a0d58b676e85fab15036642c458d73268d6d12b468b2269c7c2288f34c9f6fcc",
+        "Data/com.apple.CoreML/weights/weight.bin": "08689bc101a01d05d7d2a337d119f63cefb9be1f0851f9489fea297a3ddc54d7",
+        "Manifest.json": "89cb1b1331a411ac4ef67bd37fb62438e778f087f3d5076a4e3bec43a529ee2b"
+      }
+    }
+  ],
+  "runtime_metadata": [
+    {
+      "path": "RealtimeShield/FlatDetectorMetadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "5759a56cccb193afc60faaf6ae8ecbda2838059eb7318afe04df0e87f4b923c9"
+    },
+    {
+      "path": "RealtimeShield/FlatDetector12Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "d117451e29c1cf4c3f004e049f1c040abc44ec6ec6a0b5dfcc8b2275b91cbeab"
+    },
+    {
+      "path": "RealtimeShield/FlatDetector13Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "35211614cd836f8ef6c074edf0df80256bf41fed469bb89a51cb3d5fc020fc1e"
+    },
+    {
+      "path": "RealtimeShield/FlatDetector14Metadata.json",
+      "profiles": [
+        "Debug"
+      ],
+      "sha256": "59d058f4ce0c63fb3395065902f100a13a4ae7010d507fcc54d0e0dbd436aacf"
+    },
+    {
+      "path": "RealtimeShield/FlatDetector15Metadata.json",
+      "profiles": [
+        "Debug",
+        "Release"
+      ],
+      "sha256": "6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d"
+    }
+  ]
+}

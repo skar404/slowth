@@ -19,8 +19,8 @@
 
   // Wire keys and migration mirror Shared/SharedStore.swift.
   ns.SITE_FEATURES = {
-    youtube: ["shorts", "feed", "all"],
-    instagram: ["shorts", "feed", "all"],
+    youtube: ["shorts", "hideHomeFeed", "feed", "all"],
+    instagram: ["shorts", "feed", "stories", "all"],
     tiktok: ["all"],
     facebook: ["shorts", "feed", "all"],
     x: ["shorts", "all"]
@@ -28,7 +28,9 @@
   ns.DEFAULT_TOGGLES = Object.fromEntries(ns.SITES.map(site => [site, {
     shorts: site !== "tiktok",
     feed: site === "instagram" || site === "facebook",
-    all: site === "tiktok"
+    all: site === "tiktok",
+    ...(site === "instagram" ? { stories: false } : {}),
+    ...(site === "youtube" ? { hideHomeFeed: false } : {})
   }]));
   ns.SITE_LABELS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", facebook: "Facebook", x: "X" };
 
@@ -43,12 +45,31 @@
     // Old cached states can survive an extension update.
     if (typeof value === "boolean") value = value ? (site === "tiktok" ? "all" : "shorts") : "off";
     switch (value) {
-      case "off": return { shorts: false, feed: false, all: false };
-      case "shorts": return { shorts: site !== "tiktok", feed: false, all: false };
-      case "feed": return { shorts: site !== "tiktok", feed: site === "instagram" || site === "facebook", all: false };
+      case "off": return { ...defaults, shorts: false, feed: false, all: false };
+      case "shorts": return { ...defaults, shorts: site !== "tiktok", feed: false, all: false };
+      case "feed": return { ...defaults, shorts: site !== "tiktok", feed: site === "instagram" || site === "facebook", all: false };
       case "all": return { ...defaults, all: true };
       default: return defaults;
     }
+  };
+
+  // Independent hard block; the existing Infinite Feed Stories nudge is unchanged.
+  ns.INSTAGRAM_STORIES_RULES = {
+    redirects: [{ from: "^/stories(?:/|[?]|$).*", to: "/" }],
+    hideSelectors: [
+      'a[href="/stories/"]', 'a[href^="/stories/"]',
+      'a[href^="https://www.instagram.com/stories/"]',
+      'a[href^="https://instagram.com/stories/"]',
+      'a[href^="http://www.instagram.com/stories/"]',
+      'a[href^="http://instagram.com/stories/"]',
+      // The mobile home tray uses role=button + canvas rings, not /stories links.
+      // Hide its single-child wrappers too: one reserves height after the tray
+      // disappears. only-child stops before the parent that also contains posts.
+      ...Array.from({ length: 5 }, (_, depth) => depth === 0
+        ? 'div[style*="overflow"]:has(> div > [role="button"] canvas)'
+        : 'div:has(> ' + 'div:only-child > '.repeat(depth - 1) +
+          'div[style*="overflow"]:only-child > div > [role="button"] canvas)')
+    ]
   };
 
   ns.DEFAULT_RULES = {

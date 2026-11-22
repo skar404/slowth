@@ -65,6 +65,11 @@
       return;
     }
 
+    if (site === "instagram" && settings.stories && /^\/stories(?:\/|$)/.test(url.pathname)) {
+      api.tabs.update(details.tabId, { url: url.origin + "/" });
+      return;
+    }
+
     if (settings.shorts) {
       const siteRules = state.rules && state.rules[site];
       if (!siteRules) return;
@@ -172,4 +177,51 @@
   (async () => {
     try { await ns.setOnboardingDone(true); } catch (_) {}
   })();
+  // Warm the native bridge on background startup, including WKWebExtension hosts.
+  // The in-app browser waits for this round trip before loading a service.
+  let nativePort = null;
+  let verification = Promise.resolve();
+  function connectHost() {
+    // Safari keeps its existing polling/notification path. Only the embedded host
+    // advertises this protocol in a successful native getState reply.
+    if (!ns.webAppHost || !api.runtime.connectNative || nativePort) return;
+    try {
+      const port = api.runtime.connectNative("slowth.web-apps");
+      nativePort = port;
+      port.onMessage.addListener(message => {
+        if (message?.type !== "verify" || typeof message.revision !== "string") return;
+        verification = verification.catch(() => {}).then(async () => {
+          const fresh = await ns.getStateFresh();
+          if (fresh.webAppNativeLive !== true) throw new Error("native state unavailable");
+          const tabs = await new Promise(resolve => api.tabs.query({}, result => resolve(result || [])));
+          const checks = await Promise.all(tabs.map(async tab => {
+            let site;
+            try { site = getHostKey(new URL(tab.url).hostname); } catch (_) { return true; }
+            if (!site) return true; // Login providers and internal block pages have no site rules.
+            const state = await ns.getStateFresh(site);
+            if (state.webAppNativeLive !== true) return false;
+            return new Promise(resolve => {
+              const timeout = setTimeout(() => resolve(false), 2500);
+              try {
+                api.tabs.sendMessage(tab.id, { type: "unscroll-verify", revision: message.revision, state }, reply => {
+                  const error = api.runtime.lastError;
+                  clearTimeout(timeout);
+                  resolve(!error && reply?.ok === true && reply.revision === message.revision);
+                });
+              } catch (_) { clearTimeout(timeout); resolve(false); }
+            });
+          }));
+          port.postMessage({ type: "verified", revision: message.revision, ok: checks.every(Boolean) });
+        }).catch(() => {
+          try { port.postMessage({ type: "verified", revision: message.revision, ok: false }); } catch (_) {}
+        });
+      });
+      port.onDisconnect.addListener(() => {
+        void api.runtime.lastError;
+        if (nativePort === port) nativePort = null;
+        setTimeout(connectHost, 1000);
+      });
+    } catch (_) { nativePort = null; }
+  }
+  void ns.getStateFresh().then(connectHost);
 })();

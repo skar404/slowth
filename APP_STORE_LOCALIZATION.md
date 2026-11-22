@@ -2,7 +2,7 @@
 
 Use this support URL for every localization:
 
-`https://malina.page/slowth/support.html`
+`https://slowth.app/support.html`
 
 The keyword values below are comma-separated, contain no app or company names,
 and must remain within App Store Connect's 100-byte limit.

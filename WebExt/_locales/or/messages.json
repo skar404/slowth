@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "ଷ୍ଟୋରିଗୁଡ଼ିକ"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "ସଞ୍ଚୟ ହେଲା ନାହିଁ"
+  },
+  "hideHomeFeed": {
+    "message": "ହୋମ୍ ଫିଡ୍ ଲୁଚାନ୍ତୁ"
   }
 }

@@ -3,9 +3,40 @@
 GitHub Actions checks, build attestations and the optional TestFlight upload are
 documented in [Build provenance and TestFlight](../docs/BUILD_TRUST.md).
 
-Run these macOS utilities from the **repository root**. ML tooling has moved to
-[`data-model/tools`](../data-model/tools/README.md); Python modules use `tools.*`
-from `data-model`, not `scripts.*`.
+Run these macOS utilities from the **repository root**. The neighboring projects
+are `slowth-dataset` (ML/data), `slowth-app-store` (store operations), and
+`slowth-marketing` (screenshot studio). Each owns its dependencies and tests.
+No `data-model` symlink is needed.
+
+## Transfer Debug recordings
+
+See [Debug recording transfers](../docs/DEBUG_TRANSFERS.md) for the local HTTP receiver,
+S3 connection QR generator, persistent iOS queue, and lossless PNG sessions.
+
+## Prepare model resources
+
+Local Xcode builds read app-owned, ignored `Models/exports`, never dataset paths.
+The checked-in `scripts/model-assets.json` pins the resource inventory and hashes.
+
+```sh
+# Published Release bundle; no dataset checkout needed:
+python3 scripts/prepare_models.py --model-bundle /path/to/models.tar.gz
+# Full Debug set from explicit local frozen exports:
+python3 scripts/prepare_models.py --configuration Debug --exports-root ../slowth-dataset/exports
+# Save a private Debug archive for another independent app checkout:
+python3 scripts/prepare_models.py --configuration Debug --check --output-bundle /path/to/new-debug-models.tar.gz
+# Import that archive with --configuration Debug --model-bundle PATH.
+xcodegen generate
+```
+
+Release uses Flat 15; Debug keeps all existing historical candidates. Preparation
+checks every required file before installing it. Release archives retain their
+published `data-model/exports/` member names; import maps them to `Models/exports`.
+Debug archives contain private experimental metadata and must not be published.
+Weights, training data and credentials are not source files and stay out of Git.
+To explicitly verify compact metadata derivation from frozen exports, run
+`python3 scripts/prepare_release_resources.py --check --exports-root ../slowth-dataset/exports`.
+Normal release checks only need app-owned runtime metadata.
 
 ## Generate icons
 
@@ -42,7 +73,7 @@ Outputs: `realtime-shield.logarchive`, `events.ndjson`, `errors.ndjson`,
 as private diagnostics, not training labels or model qualification evidence.
 
 Production resources remain in root `RealtimeShield/`. Run `xcodegen generate`
-from the repository root, never from `data-model`.
+from the application repository root.
 
 ## Release resources
 
@@ -149,18 +180,17 @@ For scope, translation provenance and device QA, see
 ## Local refactoring checks
 
 Run `node --test WebExt/tests/*.test.cjs tests/IOSPauses/*.test.cjs`,
-`python3 -m pytest -q tests`, and `bash scripts/test_ios_blocking.sh` from the root.
+`python3 -m unittest discover -s tests -p 'test_*.py' -v`, and `bash scripts/test_ios_blocking.sh` from the root.
 The blocking script covers both Debug and Release, including shared pause target names.
 Native preference checks are documented in `WebExt/tests/README.md`.
 
-The private app-runtime harness runs with
-`swift test --package-path data-model/tests/integration/swift` and the same command
-with `-c release`. Its source links follow the `Debug/` layout and include model
-contracts, factory and observation state. Missing optional private bundles produce
-explicit XCTest skips; supplied invalid bundles fail. `FLAT_BUNDLE` points to a
-compiled bundle for real Flat inference. Historical Cascade tests remain separate.
-The `data-model/` tree is ignored by Git, so local harness edits require separate
-preservation when transferring this workspace.
+The app-runtime harness runs with `swift test --scratch-path build/runtime-tests`
+and the same command with `-c release`. Its target compiles actual app sources
+listed in the root `Package.swift`; no copies or cross-repository links are used.
+Missing optional model bundles produce explicit XCTest skips; supplied invalid
+bundles fail. `FLAT_BUNDLE` points to a compiled bundle for real Flat inference.
+Python/Swift interoperability tests belong to dataset and run explicitly with
+`SLOWTH_APP_ROOT=../mini-block uv run --locked pytest -m integration` there.
 
 After source membership changes, run `xcodegen generate` and build both platforms
 in both configurations. Verify iOS products with `verify_app_configuration.py`

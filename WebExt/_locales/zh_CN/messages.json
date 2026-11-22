@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "故事"
+  },
   "extensionDescription": {
     "message": "在 Safari 中按网站控制，屏蔽 YouTube Shorts、Reels、TikTok 和让人分心的信息流。"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "取消"
+  },
+  "hideHomeFeed": {
+    "message": "隐藏首页推荐"
   }
 }

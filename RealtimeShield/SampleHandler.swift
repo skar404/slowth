@@ -435,9 +435,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
             ptsEpoch: pts.epoch, ptsFlags: pts.flags.rawValue, orientation: orientation,
             width: CVPixelBufferGetWidth(pixels), height: CVPixelBufferGetHeight(pixels),
             modelVersion: metadata?.modelVersion, predictions: predictions)
-        // At most one full-size ReplayKit buffer is retained; no copy/JPEG work here.
+        // At most one full-size ReplayKit buffer is retained; no copy/PNG work here.
         sessionCapture.offer(frame, uptime: ProcessInfo.processInfo.systemUptime) {
-            try SessionJPEG.encode(pixels, orientation: orientation)
+            try SessionPNG.encode(pixels, orientation: orientation)
         }
     }
 

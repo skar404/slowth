@@ -48,6 +48,8 @@
     const label = document.createElement("span");
     label.textContent = t(feature === "all" ? "blockSite"
       : feature === "feed" ? "blockInfiniteFeed"
+      : feature === "hideHomeFeed" ? "hideHomeFeed"
+      : feature === "stories" ? "stories"
       : site === "youtube" ? "blockShorts" : site === "x" ? "blockExplore" : "blockReels");
     const input = document.createElement("input");
     input.type = "checkbox";

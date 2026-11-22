@@ -82,14 +82,12 @@
   function siteContentScript(site, options) {
     const opts = options || {};
     const STYLE_ID = "unscroll-" + site + "-style";
-    let shortsEnabled = false;
     let compiledRedirects = [];
 
     function applyState(state) {
       if (!state) return;
       const settings = ns.normalizeSiteSettings(site, state.toggles?.[site]);
       const rules = state.rules || ns.DEFAULT_RULES;
-      shortsEnabled = settings.shorts && !settings.all;
       for (const feature of ns.SITE_FEATURES[site]) {
         document.documentElement.setAttribute("data-unscroll-" + site + "-" + feature,
           String(settings[feature] && (feature === "all" || !settings.all)));
@@ -101,23 +99,25 @@
         blockEntireSite(site);
         return;
       }
-      // Feed overlays are independent; only Shorts/Reels/Explore use these rules.
-      if (!shortsEnabled) {
+      // Feed overlays are independent. Stories has its own immediate block.
+      const selectedRules = [];
+      if (settings.shorts) selectedRules.push(rules[site] || {});
+      if (site === "instagram" && settings.stories) selectedRules.push(ns.INSTAGRAM_STORIES_RULES);
+      if (!selectedRules.length) {
         removeHideStyle(STYLE_ID);
         compiledRedirects = [];
         return;
       }
 
-      const r = rules[site] || {};
-      injectHideStyle(STYLE_ID, buildHideCss(r.hideSelectors) + "\n" + (opts.css || ""));
-      compiledRedirects = compileRedirects(r.redirects);
+      injectHideStyle(STYLE_ID, buildHideCss(selectedRules.flatMap(r => r.hideSelectors || [])) + "\n" + (settings.shorts ? opts.css || "" : ""));
+      compiledRedirects = compileRedirects(selectedRules.flatMap(r => r.redirects || []));
       maybeRedirect(compiledRedirects, site);
     }
 
     function watchSpaNav() {
       let lastUrl = location.href;
       const check = () => {
-        if (!shortsEnabled) return;
+        if (!compiledRedirects.length) return;
         if (location.href !== lastUrl) {
           lastUrl = location.href;
           maybeRedirect(compiledRedirects, site);
@@ -132,12 +132,21 @@
       else document.addEventListener("DOMContentLoaded", start, { once: true });
 
       window.addEventListener("popstate", check);
+      // pushState can change a Stories route without a DOM mutation.
+      if (site === "instagram") setInterval(check, 400);
       if (Array.isArray(opts.spaEvents)) {
         for (const ev of opts.spaEvents) window.addEventListener(ev, check);
       }
     }
 
-    api.runtime.onMessage.addListener((message) => {
+    api.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message && message.type === "unscroll-verify" && message.state && message.revision) {
+        try {
+          applyState(message.state);
+          sendResponse({ ok: true, revision: message.revision });
+        } catch (_) { sendResponse({ ok: false, revision: message.revision }); }
+        return false;
+      }
       if (message && message.type === "unscroll-state-updated") {
         sendMessage({ type: "get-state" }).then(applyState);
       }

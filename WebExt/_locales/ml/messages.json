@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "സ്റ്റോറികൾ"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "സംരക്ഷിക്കാനായില്ല"
+  },
+  "hideHomeFeed": {
+    "message": "ഹോം ഫീഡ് മറയ്ക്കുക"
   }
 }

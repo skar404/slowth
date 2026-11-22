@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "कथा"
+  },
   "extensionDescription": {
     "message": "प्रत्येक साइटच्या नियंत्रणासह Safari मध्ये YouTube Shorts, Reels, TikTok आणि लक्ष विचलित करणारे फीड ब्लॉक करा."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "रद्द करा"
+  },
+  "hideHomeFeed": {
+    "message": "होम फीड लपवा"
   }
 }

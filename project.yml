@@ -29,7 +29,7 @@ settings:
   base:
     SWIFT_VERSION: "5.9"
     MARKETING_VERSION: "2026.11.1"
-    CURRENT_PROJECT_VERSION: 34
+    CURRENT_PROJECT_VERSION: 35
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
     ENABLE_HARDENED_RUNTIME: YES
@@ -55,7 +55,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
         PRODUCT_NAME: Slowth
-        CURRENT_PROJECT_VERSION: 34
+        CURRENT_PROJECT_VERSION: 35
         INFOPLIST_FILE: App/Info.plist
         CODE_SIGN_ENTITLEMENTS: App/Unscroll.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -122,7 +122,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios.Extension
         PRODUCT_NAME: UnscrollExtension
-        CURRENT_PROJECT_VERSION: 34
+        CURRENT_PROJECT_VERSION: 35
         INFOPLIST_FILE: Extension/Info.plist
         CODE_SIGN_ENTITLEMENTS: Extension/UnscrollExtension.entitlements
         SKIP_INSTALL: YES
@@ -132,6 +132,7 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
+      - path: Extension/NativeExtensionMessageHandler.swift
       - path: Debug/UI
       - path: Debug/iOS
       - path: Debug/Transfer
@@ -154,84 +155,86 @@ targets:
       - path: RealtimeShield/FlatDetector13Metadata.json
       - path: RealtimeShield/FlatDetector14Metadata.json
       - path: RealtimeShield/FlatDetector15Metadata.json
-      - path: data-model/exports/flat-11-seed7-20261015/FlatDetector.mlpackage
+      - path: Models/exports/flat-11-seed7-20261015/FlatDetector.mlpackage
         optional: true
-      - path: data-model/exports/flat-15-seed7-20261028/ios-resources/FlatDetector15.mlpackage
+      - path: Models/exports/flat-15-seed7-20261028/ios-resources/FlatDetector15.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage
+      - path: Models/exports/flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage
+      - path: Models/exports/flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage
+      - path: Models/exports/flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMax.mlpackage
+      - path: Models/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMax.mlpackage
         optional: true # Local Debug candidate only.
-      - path: data-model/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMaxMetadata.json
+      - path: Models/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMaxMetadata.json
         optional: true
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
         optional: true # Full training metadata is only used in Debug.
       # Retain V8 for explicit Debug comparisons.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json
         optional: true # Full training metadata is only used in Debug.
       # Retain V7 for explicit Debug comparisons.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json
         optional: true # Private experimental exports can be absent.
       # Frozen experimental V15 / V6: quality failed; V15 validation CoreML parity failed.
-      - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage
+      - path: Models/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json
+      - path: Models/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage
         optional: true # Legacy Debug candidate; not required for Release.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage
         optional: true # Legacy Debug candidate; not required for Release.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage
         optional: true # Legacy Debug candidate; not required for Release.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage
+      - path: Models/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14Metadata.json
+      - path: Models/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
         buildPhase: resources
     settings:
       configs:
         Release:
-          INFOPLIST_FILE: iOS/Info-Release.plist
+          INFOPLIST_FILE: $(SLOWTH_IOS_RELEASE_INFO)
           EXCLUDED_SOURCE_FILE_NAMES: "$(inherited) *.mlpackage *Metadata.json"
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).ios
         PRODUCT_NAME: Unscroll
         INFOPLIST_FILE: iOS/Info.plist
-        CODE_SIGN_ENTITLEMENTS: iOS/Unscroll.entitlements
+        SLOWTH_IOS_RELEASE_INFO: iOS/Info-Release.plist
+        SLOWTH_IOS_HOST_ENTITLEMENTS: iOS/Unscroll.entitlements
+        CODE_SIGN_ENTITLEMENTS: $(SLOWTH_IOS_HOST_ENTITLEMENTS)
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
         # There's already a real native macOS app (the `Unscroll` target, using
@@ -307,72 +310,72 @@ targets:
           - "SurfaceDetectorMetadata.json"
       # Release uses Cascade V10 with compact metadata; Debug retains legacy candidates.
       # Flat 15 is the default; Flat 11/12/13/14 and V10 remain alternatives.
-      - path: data-model/exports/flat-11-seed7-20261015/FlatDetector.mlpackage
+      - path: Models/exports/flat-11-seed7-20261015/FlatDetector.mlpackage
         optional: true
-      - path: data-model/exports/flat-15-seed7-20261028/ios-resources/FlatDetector15.mlpackage
+      - path: Models/exports/flat-15-seed7-20261028/ios-resources/FlatDetector15.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage
+      - path: Models/exports/flat-14-seed7-20261028/ios-resources/FlatDetector14.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage
+      - path: Models/exports/flat-13-seed7-20261027/ios-resources/FlatDetector13.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage
+      - path: Models/exports/flat-12-seed7-20261027/ios-resources/FlatDetector12.mlpackage
         optional: true # Required in Release model assets.
-      - path: data-model/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMax.mlpackage
+      - path: Models/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMax.mlpackage
         optional: true # Local Debug candidate only.
-      - path: data-model/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMaxMetadata.json
+      - path: Models/exports/flat-11-seed7-iphone13promax-20261026/ios-resources/FlatDetectorIPhone13ProMaxMetadata.json
         optional: true
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/AppRouterV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/YouTubeDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/InstagramDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/FacebookDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/XDetectorV10.mlpackage
         optional: true # Debug rollback model.
-      - path: data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
+      - path: Models/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json
         optional: true # Full training metadata is only used in Debug.
       # Retain V8 for explicit Debug comparisons.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/AppRouterV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/YouTubeDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/InstagramDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/FacebookDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/XDetectorV8.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json
+      - path: Models/exports/cascade-v8-x-20260928/ios-resources/CascadeV8Metadata.json
         optional: true # Full training metadata is only used in Debug.
       # Retain V7 for explicit Debug comparisons.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/AppRouterV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/YouTubeDetectorV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/InstagramDetectorV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/FacebookDetectorV7.mlpackage
         optional: true # Legacy Debug model.
-      - path: data-model/exports/cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json
+      - path: Models/exports/cascade-v7-facebook-20260928-114500/ios-resources/CascadeV7Metadata.json
         optional: true # Private experimental exports can be absent.
       # Frozen experimental V15 / V6: quality failed; V15 validation CoreML parity failed.
-      - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage
+      - path: Models/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15.mlpackage
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json
+      - path: Models/exports/v15-cascade-v6-20260920-124303/v15/SurfaceDetectorV15Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/AppRouterV6.mlpackage
         optional: true # Legacy Debug candidate; not required for Release.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/YouTubeDetectorV6.mlpackage
         optional: true # Legacy Debug candidate; not required for Release.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/InstagramDetectorV6.mlpackage
         optional: true # Legacy Debug candidate; not required for Release.
-      - path: data-model/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json
+      - path: Models/exports/v15-v6-app-20260920-154340/ios-resources/CascadeV6Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage
+      - path: Models/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14.mlpackage
         optional: true # Debug-only exports are absent in public release checkouts.
-      - path: data-model/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14Metadata.json
+      - path: Models/exports/v14-cascade-v5-20260920-1018/v14/SurfaceDetectorV14Metadata.json
         optional: true # Debug-only exports are absent in public release checkouts.
         buildPhase: resources
       - path: Debug/Shared
@@ -425,6 +428,7 @@ targets:
       - path: Shared/RealtimeShieldLog.swift
         buildPhase: sources
       - path: Shared/SharedStore.swift
+      - path: Shared/WebSettingsNotifications.swift
         buildPhase: sources
       - path: Shared/AppLocalization.swift
         buildPhase: sources
@@ -532,6 +536,7 @@ targets:
         buildPhase: sources
       - path: Localization
         buildPhase: resources
+      - path: Extension/NativeExtensionMessageHandler.swift
       - path: Extension/SafariWebExtensionHandler.swift
         buildPhase: sources
       - path: Debug/Shared
@@ -591,7 +596,31 @@ targets:
         SKIP_INSTALL: YES
         TARGETED_DEVICE_FAMILY: "1,2"
 
+  WebAppBrowserTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "18.4"
+    sources:
+      - path: tests/WebApps
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).web-app-tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Unscroll.app/Unscroll"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+    dependencies:
+      - target: UnscrollIOS
+
 schemes:
+  Web apps tests:
+    build:
+      targets:
+        UnscrollIOS: all
+        WebAppBrowserTests: [test]
+    test:
+      config: Debug
+      targets:
+        - WebAppBrowserTests
   Debug - macOS:
     build:
       targets:
