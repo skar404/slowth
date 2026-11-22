@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "ストーリー"
+  },
   "extensionDescription": {
     "message": "SafariでYouTube Shorts、Reels、TikTok、気が散るフィードをサイトごとの設定でブロックします。"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "キャンセル"
+  },
+  "hideHomeFeed": {
+    "message": "ホームのフィードを非表示"
   }
 }

@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "கதைகள்"
+  },
   "extensionDescription": {
     "message": "Safari-இல் YouTube Shorts, Reels, TikTok மற்றும் கவனத்தைச் சிதறடிக்கும் ஊட்டங்களைத் தடுக்கவும்."
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "ரத்துசெய்"
+  },
+  "hideHomeFeed": {
+    "message": "முகப்புப் பதிவோட்டத்தை மறை"
   }
 }

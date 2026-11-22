@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Historie"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Anuluj"
+  },
+  "hideHomeFeed": {
+    "message": "Ukryj kanał strony głównej"
   }
 }

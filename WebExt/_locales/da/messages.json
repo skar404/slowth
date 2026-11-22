@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Historier"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Annuller"
+  },
+  "hideHomeFeed": {
+    "message": "Skjul startsidefeed"
   }
 }

@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "ಸ್ಟೋರಿಗಳು"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "ಉಳಿಸಲು ಆಗಲಿಲ್ಲ"
+  },
+  "hideHomeFeed": {
+    "message": "ಹೋಮ್ ಫೀಡ್ ಮರೆಮಾಡಿ"
   }
 }

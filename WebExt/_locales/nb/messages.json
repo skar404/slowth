@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Historier"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "Kunne ikke lagre"
+  },
+  "hideHomeFeed": {
+    "message": "Skjul startsidefeeden"
   }
 }

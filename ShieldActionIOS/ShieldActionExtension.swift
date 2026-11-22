@@ -33,6 +33,16 @@ final class ShieldActionExtension: ShieldActionDelegate {
     }
 
     override func handle(action: ShieldAction, for webDomain: WebDomainToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {
+        #if DEBUG
+        if WebsiteShieldProbe.handles(webDomain) {
+            if action == .primaryButtonPressed, WebsiteShieldProbe.releaseFromButton(webDomain) {
+                completionHandler(.none)
+            } else {
+                completionHandler(.close)
+            }
+            return
+        }
+        #endif
         respond(to: action, surface: surface(containing: webDomain), completionHandler: completionHandler)
     }
 

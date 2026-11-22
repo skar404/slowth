@@ -1,0 +1,18 @@
+{
+  "id": "/shortcuts/x/",
+  "name": "X",
+  "short_name": "X",
+  "start_url": "/shortcuts/x/?launch=1",
+  "scope": "/shortcuts/x/",
+  "display": "standalone",
+  "background_color": "#f4f5f1",
+  "theme_color": "#f4f5f1",
+  "icons": [
+    {
+      "src": "../assets/x.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

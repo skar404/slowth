@@ -14,11 +14,13 @@ enum IOSProtectionAuthorization {
 
 // Keys are shared with WebExt/config.js. Legacy modes are read only during migration.
 enum SiteFeature: String, CaseIterable {
-    case shorts, feed, all
+    case shorts, feed, stories, hideHomeFeed, all
 
     static func available(for site: String) -> [SiteFeature] {
         switch site {
-        case "youtube", "instagram", "facebook": return [.shorts, .feed, .all]
+        case "instagram": return [.shorts, .feed, .stories, .all]
+        case "youtube": return [.shorts, .hideHomeFeed, .feed, .all]
+        case "facebook": return [.shorts, .feed, .all]
         case "x": return [.shorts, .all]
         case "tiktok": return [.all]
         default: return []
@@ -29,6 +31,8 @@ enum SiteFeature: String, CaseIterable {
         switch self {
         case .all: return AppLocalization.string("Block site")
         case .feed: return AppLocalization.string("Block Infinite Feed")
+        case .stories: return AppLocalization.string("Stories")
+        case .hideHomeFeed: return AppLocalization.string("Hide home feed")
         case .shorts:
             switch site {
             case "youtube": return AppLocalization.string("Block Shorts")
@@ -58,6 +62,23 @@ struct SiteBlockingSettings: Codable, Equatable {
     var shorts = false
     var feed = false
     var all = false
+    var stories = false
+    var hideHomeFeed = false
+
+    init(shorts: Bool = false, feed: Bool = false, all: Bool = false, stories: Bool = false, hideHomeFeed: Bool = false) {
+        self.shorts = shorts; self.feed = feed; self.all = all; self.stories = stories
+        self.hideHomeFeed = hideHomeFeed
+    }
+
+    private enum CodingKeys: String, CodingKey { case shorts, feed, all, stories, hideHomeFeed }
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        shorts = try values.decodeIfPresent(Bool.self, forKey: .shorts) ?? false
+        feed = try values.decodeIfPresent(Bool.self, forKey: .feed) ?? false
+        all = try values.decodeIfPresent(Bool.self, forKey: .all) ?? false
+        stories = try values.decodeIfPresent(Bool.self, forKey: .stories) ?? false
+        hideHomeFeed = try values.decodeIfPresent(Bool.self, forKey: .hideHomeFeed) ?? false
+    }
 
     subscript(feature: SiteFeature) -> Bool {
         get {
@@ -65,6 +86,8 @@ struct SiteBlockingSettings: Codable, Equatable {
             case .shorts: return shorts
             case .feed: return feed
             case .all: return all
+            case .stories: return stories
+            case .hideHomeFeed: return hideHomeFeed
             }
         }
         set {
@@ -72,11 +95,13 @@ struct SiteBlockingSettings: Codable, Equatable {
             case .shorts: shorts = newValue
             case .feed: feed = newValue
             case .all: all = newValue
+            case .stories: stories = newValue
+            case .hideHomeFeed: hideHomeFeed = newValue
             }
         }
     }
 
-    var dictionary: [String: Bool] { ["shorts": shorts, "feed": feed, "all": all] }
+    var dictionary: [String: Bool] { ["shorts": shorts, "feed": feed, "all": all, "stories": stories, "hideHomeFeed": hideHomeFeed] }
 
     static func defaults(for site: String) -> Self {
         Self(shorts: site != "tiktok", feed: ["instagram", "facebook"].contains(site), all: site == "tiktok")
@@ -459,6 +484,7 @@ enum SharedStore {
         settings[feature] = enabled
         state.toggles[site] = settings
         d.set(state.toggles.mapValues { $0.dictionary }, forKey: SharedStoreKey.siteBlocking)
+        NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil)
         return state
     }
 
@@ -471,9 +497,11 @@ enum SharedStore {
             throw SharedStoreError.strictModeActive
         }
         d.set(allowed, forKey: "strictModeAllowsPauses")
+        NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil)
     }
 
     static func setStrictMode(_ enabled: Bool) throws -> SharedState {
+        defer { NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil) }
         var state = snapshot()
         if state.isStrictModeActive && !enabled {
             throw SharedStoreError.strictModeActive
@@ -497,6 +525,7 @@ enum SharedStore {
             d.set(etag, forKey: SharedStoreKey.rulesEtag)
         }
         d.set(Date().timeIntervalSince1970, forKey: SharedStoreKey.rulesFetchedAt)
+        NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil)
     }
 
     static func rulesJSON() -> Data? {

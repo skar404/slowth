@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "เรื่องราว"
+  },
   "extensionDescription": {
     "message": "บล็อก YouTube Shorts, Reels, TikTok และฟีดที่ทำให้เสียสมาธิใน Safari ด้วยการควบคุมแต่ละเว็บไซต์"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "ยกเลิก"
+  },
+  "hideHomeFeed": {
+    "message": "ซ่อนฟีดหน้าแรก"
   }
 }

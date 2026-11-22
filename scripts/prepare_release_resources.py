@@ -11,16 +11,16 @@ import plistlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'data-model/exports/cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json'
+SOURCE_RELATIVE = 'cascade-v10-study-20260929-1356/diverse/ios-resources/CascadeV10Metadata.json'
 SOURCE_SHA256 = 'f7fd1ae118afadc139c3e95b4e5bc9eb86eb801da770e5bf2194190320a66760'
 RUNTIME_SHA256 = '41ee86e2d0410dd455297c31c8a839aa2d72fb2b39a9698060e0a412ae63896a'
 
 
-def resources(runtime_only=False):
-    if runtime_only:
+def resources(exports_root=None):
+    if exports_root is None:
         compact = (ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json').read_bytes()
     else:
-        source = SOURCE.read_bytes()
+        source = (exports_root / SOURCE_RELATIVE).read_bytes()
         if hashlib.sha256(source).hexdigest() != SOURCE_SHA256:
             raise ValueError('Frozen Cascade V10 metadata identity changed')
         metadata = json.loads(source)
@@ -69,10 +69,11 @@ def resources(runtime_only=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--exports-root', type=Path, help='Explicit frozen exports for derivation validation')
     parser.add_argument('--runtime-only', action='store_true',
                         help='Verify public runtime resources without private training exports')
     args = parser.parse_args()
-    for path, data in resources(args.runtime_only).items():
+    for path, data in resources(None if args.runtime_only else args.exports_root).items():
         if args.check:
             if not path.exists() or path.read_bytes() != data:
                 raise SystemExit(f'Stale resource: {path.relative_to(ROOT)}')

@@ -177,3 +177,12 @@ Slowth's code is licensed under [GNU GPLv3](LICENSE). Distributed model resource
 covered by the [model license notice](RealtimeShield/MODEL_LICENSE.md) are also
 licensed under GPLv3. The private training dataset and captures are not
 published and are not covered by that model notice.
+
+## Development projects
+
+This repository owns all app targets, shared resources, build/release tooling and
+Swift runtime tests. ML tooling lives in the neighboring `slowth-dataset`, store
+operations in `slowth-app-store`, and screenshot production in `slowth-marketing`.
+App builds consume pinned ready-to-use models in ignored `Models/exports`; no
+private dataset checkout is needed when importing a model archive. See
+[model preparation and project boundaries](scripts/README.md#prepare-model-resources).

@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Әңгімелер"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Бас тарту"
+  },
+  "hideHomeFeed": {
+    "message": "Басты бет таспасын жасыру"
   }
 }

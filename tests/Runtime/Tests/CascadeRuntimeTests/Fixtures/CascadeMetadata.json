@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "model_version": "surface-cascade-v2",
+  "architecture": "cascade-spatial-v1",
+  "input": {
+    "width": 192,
+    "height": 384,
+    "color": "RGB",
+    "scale": 0.00392156862745098
+  },
+  "components": {
+    "router": {
+      "resource": "AppRouter",
+      "checkpoint": "router.pt",
+      "checkpoint_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "labels": [
+        "youtube",
+        "instagram",
+        "other"
+      ]
+    },
+    "youtube": {
+      "resource": "YouTubeDetector",
+      "checkpoint": "youtube.pt",
+      "checkpoint_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "labels": [
+        "shorts",
+        "normal"
+      ]
+    },
+    "instagram": {
+      "resource": "InstagramDetector",
+      "checkpoint": "instagram.pt",
+      "checkpoint_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "labels": [
+        "reels",
+        "stories",
+        "normal"
+      ]
+    }
+  },
+  "policy": {
+    "version": 1,
+    "routing": {
+      "youtube": {
+        "confidence": 0.5,
+        "margin": 0.1
+      },
+      "instagram": {
+        "confidence": 0.5,
+        "margin": 0.1
+      }
+    },
+    "thresholds": {
+      "youtube_shorts": 0.043831063820071126,
+      "instagram_reels": 0.30048193110416593,
+      "instagram_stories": 0.03483491882804333
+    },
+    "temporal": {
+      "interval_seconds": 0.25,
+      "required_hits": 3,
+      "window_frames": 5,
+      "max_gap_seconds": 1.25
+    }
+  },
+  "status": "candidate_unverified",
+  "validation_status": "passed",
+  "compute_precision": "float32",
+  "fixture": "synthetic metadata decoder test; no training provenance"
+}

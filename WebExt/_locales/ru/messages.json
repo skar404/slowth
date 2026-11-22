@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Истории"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Отмена"
+  },
+  "hideHomeFeed": {
+    "message": "Скрыть главную ленту"
   }
 }

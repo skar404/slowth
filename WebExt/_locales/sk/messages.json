@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Príbehy"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "Nepodarilo sa uložiť"
+  },
+  "hideHomeFeed": {
+    "message": "Skryť kanál na hlavnej stránke"
   }
 }

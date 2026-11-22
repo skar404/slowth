@@ -2,11 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>UIBackgroundModes</key>
+    <array><string>audio</string></array>
     <key>CFBundleURLTypes</key>
     <array><dict>
         <key>CFBundleURLName</key><string>Slowth labeler connection</string>
         <key>CFBundleURLSchemes</key><array><string>slowth</string></array>
     </dict></array>
+    <key>NSCameraUsageDescription</key>
+    <string>Allow the website you choose to use your camera for photos and video.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow the website you choose to use your microphone for audio and video.</string>
     <key>NSLocalNetworkUsageDescription</key>
     <string>Connect to your local screenshot labeler to send sessions you select.</string>
     <key>NSMotionUsageDescription</key>

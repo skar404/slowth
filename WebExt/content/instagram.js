@@ -214,6 +214,7 @@
   }
 
   function getContext() {
+    if (isStoriesViewer() && ns.content.featureEnabled("instagram", "stories")) return null;
     if (!isFeedModeActive()) return null;
     if (isStoriesViewer()) return "stories";
     if (isInfiniteFeedUrl()) return "chaining";

@@ -3,6 +3,10 @@ import SwiftUI
 @main
 struct UnscrollApp: App {
     init() {
+        #if DEBUG && os(iOS)
+        // Restore a diagnostic-only shield override before normal reconciliation.
+        try? ManagedSettingsDiagnostics.restoreProbe()
+        #endif
         #if os(iOS)
         // SwiftUI constructs App before UIApplicationMain. Reject early access
         // until the delegate installs the real UIKit application at launch.
@@ -39,8 +43,12 @@ struct UnscrollApp: App {
                        minHeight: 520, idealHeight: 600)
             #else
             #if DEBUG && targetEnvironment(simulator)
-            if #available(iOS 16.2, *), ProcessInfo.processInfo.arguments.contains("--preview-live-activity") {
+            if ProcessInfo.processInfo.arguments.contains("--preview-debug-tools") {
+                DebugToolsPreview()
+            } else if #available(iOS 16.2, *), ProcessInfo.processInfo.arguments.contains("--preview-live-activity") {
                 PauseActivityPreviewScreen()
+            } else if #available(iOS 18.4, *), let service = webAppPreviewService {
+                WebAppBrowserScreen(service: service)
             } else {
                 iOSContent
             }
@@ -55,6 +63,13 @@ struct UnscrollApp: App {
     }
 
     #if os(iOS)
+    #if DEBUG && targetEnvironment(simulator)
+    private var webAppPreviewService: WebAppService? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: "--preview-web-app-service"), arguments.indices.contains(index + 1) else { return nil }
+        return WebAppService(rawValue: arguments[index + 1])
+    }
+    #endif
     @ViewBuilder private var iOSContent: some View {
         Group {
             #if DEBUG
@@ -62,7 +77,8 @@ struct UnscrollApp: App {
                 DebugTransfersView()
             } else if #available(iOS 16.2, *), ProcessInfo.processInfo.arguments.contains("--motion-experiment") {
                 MotionExperimentView()
-
+            } else if ProcessInfo.processInfo.arguments.contains("--diagnose-managed-settings") {
+                ManagedSettingsDiagnosticsView()
             } else {
                 normalIOSContent
             }
@@ -95,6 +111,7 @@ struct UnscrollApp: App {
                 ContentView()
             }
         }
+        .modifier(WebAppsPresentation())
         #if DEBUG
         .onOpenURL { url in
             guard url.scheme == "slowth", url.host == "labeler", url.path.isEmpty,

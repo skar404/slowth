@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Storie"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Annulla"
+  },
+  "hideHomeFeed": {
+    "message": "Nascondi il feed della home"
   }
 }

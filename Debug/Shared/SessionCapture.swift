@@ -29,7 +29,7 @@ final class SessionCapture {
     }
 
     struct Manifest: Codable {
-        var formatVersion = 1
+        var formatVersion = 2
         let sessionID: UUID
         let startedAt: Date
         let intervalSeconds: Double
@@ -37,6 +37,7 @@ final class SessionCapture {
         var endedAt: Date?
         var frames: [Frame] = []
         var droppedFrames = 0
+        // Historical JSON key retained so older session readers can account for bytes.
         var jpegBytes = 0
         var error: String?
         var events: [Event] = []
@@ -87,7 +88,7 @@ final class SessionCapture {
     }
 
     @discardableResult
-    func offer(_ frame: Frame, uptime: Double, jpeg: @escaping () throws -> Data) -> Bool {
+    func offer(_ frame: Frame, uptime: Double, image: @escaping () throws -> Data) -> Bool {
         lock.lock()
         defer { lock.unlock() }
         guard !closed, !paused, uptime.isFinite, uptime >= nextUptime else { return false }
@@ -112,8 +113,8 @@ final class SessionCapture {
                     return
                 }
                 var frame = frame
-                frame.filename = String(format: "frame_%06d.jpg", self.manifest.frames.count + 1)
-                let data = try jpeg()
+                frame.filename = String(format: "frame_%06d.png", self.manifest.frames.count + 1)
+                let data = try image()
                 let budget = self.manifest.jpegBytes + data.count + Self.manifestReserve
                 if let totalBytes = self.limits.totalBytes, self.existingBytes + budget > totalBytes {
                     self.stopOnWorker(reason: "total_disk_limit")

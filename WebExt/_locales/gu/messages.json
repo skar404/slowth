@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "સ્ટોરીઝ"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "settingsSaveFailed": {
     "message": "સાચવી શકાયું નહીં"
+  },
+  "hideHomeFeed": {
+    "message": "હોમ ફીડ છુપાવો"
   }
 }

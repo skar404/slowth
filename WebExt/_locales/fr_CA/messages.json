@@ -1,4 +1,7 @@
 {
+  "stories": {
+    "message": "Histoires"
+  },
   "extensionName": {
     "message": "Slowth"
   },
@@ -235,5 +238,8 @@
   },
   "cancel": {
     "message": "Annuler"
+  },
+  "hideHomeFeed": {
+    "message": "Masquer le fil d’accueil"
   }
 }

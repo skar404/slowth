@@ -8,19 +8,6 @@ import FamilyControls
 import ManagedSettings
 #endif
 
-private struct SiteSpec: Identifiable {
-    let id: String
-    let label: String
-}
-
-private let sites: [SiteSpec] = [
-    .init(id: "youtube", label: "YouTube"),
-    .init(id: "instagram", label: "Instagram"),
-    .init(id: "tiktok", label: "TikTok"),
-    .init(id: "facebook", label: "Facebook"),
-    .init(id: "x", label: "X")
-]
-
 private extension View {
     @ViewBuilder
     func compactServiceSpacing() -> some View {
@@ -107,6 +94,8 @@ struct ContentView: View {
     private var pendingRecordingPrompt: Bool { shieldPrompt.isPending }
     @State private var visibleRestID: String?
     @State private var showAppsPrivacy = false
+    @ObservedObject private var webAppsRouter = WebAppsRouter.shared
+    @State private var showWebApps = false
     @State private var selectedSection = 0
     @State private var expandedService: String?
     @State private var expandedSafariService: String?
@@ -160,7 +149,8 @@ struct ContentView: View {
             _pendingRests = State(initialValue: [rest])
             _restToShow = State(initialValue: rest)
         }
-        _selectedSection = State(initialValue: arguments.contains("--preview-settings") ? 2 : arguments.contains("--preview-safari") ? 1 : 0)
+        _selectedSection = State(initialValue: arguments.contains("--preview-web-apps") ? 3 : arguments.contains("--preview-settings") ? 2 : arguments.contains("--preview-safari") ? 1 : 0)
+        _showWebApps = State(initialValue: arguments.contains("--preview-web-apps") && UIDevice.current.userInterfaceIdiom == .pad)
         _showSafariHelp = State(initialValue: arguments.contains("--preview-safari-help"))
         _showAbout = State(initialValue: arguments.contains("--preview-how-it-works"))
         if ScreenshotPresentation.activeProtection && arguments.contains("--screenshot-recording-prompt") {
@@ -178,6 +168,23 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             adaptiveLayout(in: geometry.size)
+        }
+        .disabled(showWebApps)
+        .accessibilityHidden(showWebApps)
+        .overlay {
+            if showWebApps { NavigationStack {
+                WebAppsView { showWebApps = false; selectedSection = 1 }
+                    .toolbar { ToolbarItem(placement: .confirmationAction) {
+                        Button(String(localized: "Close")) { showWebApps = false }
+                    } }
+            } }
+        }
+        .onChange(of: webAppsRouter.service) { service in
+            if service == nil { state.reload() }
+        }
+        .onChange(of: presentationIsIdle) { ready in webAppsRouter.setPresentationReady(ready) }
+        .onChange(of: webAppsRouter.pending) { request in
+            if request != nil && showWelcome { closeWelcome() }
         }
         .modifier(DuoHingeObserver(hasDeviceHinge: $hasDeviceHinge))
         .tint(SlowthAppearance.sage)
@@ -376,6 +383,9 @@ struct ContentView: View {
             sectionNavigation(1)
                 .tabItem { Label("Safari", systemImage: "safari") }
                 .tag(1)
+            NavigationStack { WebAppsView { selectedSection = 1 } }
+                .tabItem { Label(String(localized: "Web apps", table: "WebApps"), systemImage: "app.badge") }
+                .tag(3)
             sectionNavigation(2)
                 .tabItem { Label(String(localized: "Settings", table: "Interface"), systemImage: "gearshape") }
                 .tag(2)
@@ -433,6 +443,11 @@ struct ContentView: View {
                     .navigationTitle("Slowth")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button { showWebApps = true } label: {
+                                Label(String(localized: "Web apps", table: "WebApps"), systemImage: "app.badge")
+                            }
+                        }
                         ToolbarItem(placement: .primaryAction) {
                             Button { selectedSection = selectedSection == 2 ? 0 : 2 } label: {
                                 Label(sectionTitle(2), systemImage: "gearshape")
@@ -495,6 +510,9 @@ struct ContentView: View {
                 HStack {
                     Label("Slowth", systemImage: "leaf.fill").font(.headline)
                     Spacer()
+                    Button { showWebApps = true } label: {
+                        Label(String(localized: "Web apps", table: "WebApps"), systemImage: "app.badge")
+                    }
                     Button { selectedSection = 2 } label: {
                         Label(sectionTitle(2), systemImage: "gearshape")
                     }
@@ -644,9 +662,9 @@ struct ContentView: View {
                             Label(String(localized: "Check Safari extension", table: "Interface"), systemImage: "safari")
                         }
                     }
-                    sitesSection
+                    SafariSiteSettingsSections(state: state, expandedService: (isPad || isDuo) ? $expandedSafariService : $expandedService)
                         .disabled(state.groupSelectionRestSeconds > 0)
-                    updatesSection
+                    SafariRulesUpdateSection(state: state)
                         .disabled(state.groupSelectionRestSeconds > 0)
                 } else {
                     if !isPad && !isDuo { heroSection }
@@ -798,17 +816,6 @@ struct ContentView: View {
         }
     }
 
-    private func siteFeatureTitle(_ feature: SiteFeature, site: String) -> String {
-        switch feature {
-        case .all: return String(localized: "Whole website", table: "Interface")
-        case .feed: return String(localized: "Infinite feed", table: "Interface")
-        case .shorts:
-            if site == "youtube" { return "Shorts" }
-            if site == "x" { return String(localized: "Explore & trends", table: "Interface") }
-            return "Reels"
-        }
-    }
-
     private func restrictionSummary(_ labels: [String]) -> String {
         labels.isEmpty ? String(localized: "Off") : labels.joined(separator: " · ")
     }
@@ -816,7 +823,7 @@ struct ContentView: View {
     private var disabledByStrict: Bool { state.snapshot.isStrictModeActive }
 
     private var isReadyForReview: Bool {
-        guard restToShow == nil, welcomeHandled, !showWelcome, !welcomeDismissing, !pendingWelcomeSafari, !pendingRecordingPrompt,
+        guard webAppsRouter.service == nil, !showWebApps, selectedSection != 3, restToShow == nil, welcomeHandled, !showWelcome, !welcomeDismissing, !pendingWelcomeSafari, !pendingRecordingPrompt,
               state.lastError == nil, !state.refreshing,
               !showSafariHelp, !showAbout, !showAppsPrivacy, !showContribution, !showSupportSheet, !showRealtimeBlockingBeta,
               !showRealtimeRecordingPrompt, !showPauseOnlyPrompt, !showStrictModeConfirmation else { return false }
@@ -893,7 +900,7 @@ struct ContentView: View {
     }
 
     private func considerAutomaticWelcome() {
-        guard !welcomeHandled, !ScreenshotPresentation.activeProtection else { return }
+        guard webAppsRouter.service == nil, webAppsRouter.pending == nil, !showWebApps, selectedSection != 3, !welcomeHandled, !ScreenshotPresentation.activeProtection else { return }
         if IOSWelcomeEligibility.isConfigured() {
             welcomeHandled = true
         } else if !pendingRecordingPrompt && !showRealtimeRecordingPrompt && presentationIsIdle {
@@ -905,6 +912,7 @@ struct ContentView: View {
         guard presentationIsIdle, !pendingRecordingPrompt else { return }
         welcomeHandled = true
         welcomeSession = UUID()
+        webAppsRouter.setPresentationReady(false)
         showWelcome = true
     }
     #endif
@@ -957,37 +965,6 @@ struct ContentView: View {
             selectedSection = 1
             showSafariHelp = true
         }
-    }
-
-    private var sitesSection: some View {
-        Group {
-            ForEach(sites) { site in
-                serviceCard("safari." + site.id, title: site.label, summary: safariSummary(site.id)) {
-                    ForEach(SiteBlockingControl.controls(for: site.id)) { control in
-                        Toggle(siteFeatureTitle(control.feature, site: control.site), isOn: bindingForSite(control.site, feature: control.feature))
-                            .disabled((disabledByStrict &&
-                                       (control.feature == .all || state.setting(control.feature, for: control.site))) ||
-                                      (control.feature != .all && state.setting(.all, for: control.site)))
-                            .accessibilityIdentifier(control.id)
-                    }
-                    if state.setting(.all, for: site.id) {
-                        Text(String(localized: "Whole-site blocking takes priority", table: "Interface"))
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    if site.id == "instagram" {
-                        Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                }
-            }
-        }
-    }
-
-    private func safariSummary(_ id: String) -> String {
-        if state.setting(.all, for: id) { return siteFeatureTitle(.all, site: id) }
-        return restrictionSummary(SiteBlockingControl.controls(for: id).compactMap {
-            $0.feature != .all && state.setting($0.feature, for: id) ? siteFeatureTitle($0.feature, site: id) : nil
-        })
     }
 
     #if canImport(FamilyControls)
@@ -1071,8 +1048,17 @@ struct ContentView: View {
         } else {
             Section {
                 ForEach(["Instagram", "YouTube", "TikTok"], id: \.self) { name in
-                    HStack {
-                        AppBlockingSummaryRow(title: Label(name, systemImage: "app.fill"),
+                    HStack(spacing: 12) {
+                        // Simulator screenshot rows cannot resolve Family Controls tokens.
+                        // Keep the icon beside the complete title-and-rules column.
+                        Image("Service-" + name.lowercased())
+                            .resizable()
+                            .renderingMode(.original)
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                            .accessibilityHidden(true)
+                        AppBlockingSummaryRow(title: Text(name),
                             rules: AppBlockingRuleSummary(settings: AppBlockingSettings(token: name,
                                 shortVideos: true, stories: name != "YouTube", soft: name == "YouTube")))
                         Spacer()
@@ -1156,36 +1142,6 @@ struct ContentView: View {
             }
         } footer: {
             Text(String(localized: "Enabled restrictions are locked for 24 hours.", table: "Interface"))
-        }
-    }
-
-    private var updatesSection: some View {
-        Section {
-            Button {
-                Task { await state.forceRefresh() }
-            } label: {
-                HStack {
-                    Text(String(localized: "Update rules now"))
-                    Spacer()
-                    if state.refreshing {
-                        ProgressView()
-                    }
-                }
-            }
-            .disabled(state.refreshing || disabledByStrict)
-
-            HStack {
-                Text(String(localized: "Last update"))
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text(rulesStatusText)
-                    .foregroundStyle(.secondary)
-                    .font(.footnote)
-            }
-        } header: {
-            Text(String(localized: "Rules"))
-        } footer: {
-            Text(rulesFooterText)
         }
     }
 
@@ -1402,29 +1358,6 @@ struct ContentView: View {
     }
 
     #endif
-    private func bindingForSite(_ siteID: String, feature: SiteFeature) -> Binding<Bool> {
-        Binding(
-            get: { state.setting(feature, for: siteID) },
-            set: { state.setSetting(feature, enabled: $0, for: siteID) }
-        )
-    }
-
-    private var rulesStatusText: String {
-        if let date = state.snapshot.rulesFetchedAt {
-            return Self.relativeFormatter.localizedString(for: date, relativeTo: Date())
-        }
-        return String(localized: "Never")
-    }
-
-    private var rulesFooterText: String {
-        switch state.lastRefreshOutcome {
-        case .updated?: return String(localized: "Rules updated.")
-        case .notModified?: return String(localized: "Rules already up to date.")
-        case .failed(let reason)?: return String(localized: "Update failed (\(L10n.refreshError(reason))).")
-        case .none: return String(localized: "Safari checks for remote rule updates every 6 hours. Strict mode pauses rule changes until the lock expires.")
-        }
-    }
-
     private var appVersion: String {
         let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
         let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
@@ -1472,12 +1405,7 @@ struct ContentView: View {
         return components.url!
     }
 
-    private static let relativeFormatter: RelativeDateTimeFormatter = {
-        let f = RelativeDateTimeFormatter()
-        f.unitsStyle = .short
-        f.locale = L10n.locale
-        return f
-    }()
+
 }
 
 private struct SupportSheet: View {

@@ -1,0 +1,18 @@
+{
+  "id": "/shortcuts/instagram/",
+  "name": "Instagram",
+  "short_name": "Instagram",
+  "start_url": "/shortcuts/instagram/?launch=1",
+  "scope": "/shortcuts/instagram/",
+  "display": "standalone",
+  "background_color": "#f4f5f1",
+  "theme_color": "#f4f5f1",
+  "icons": [
+    {
+      "src": "../assets/instagram.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
