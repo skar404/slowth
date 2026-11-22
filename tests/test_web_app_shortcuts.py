@@ -28,7 +28,9 @@ class ShortcutTests(unittest.TestCase):
             self.assertTrue((folder / manifest['icons'][0]['src']).is_file())
             tags = Tags((folder / 'index.html').read_text()).tags
             self.assertIn(('meta', {'name': 'apple-mobile-web-app-capable', 'content': 'yes'}), tags)
-            self.assertTrue(any(tag == 'a' and a.get('href') == f'slowth://web/{service}' for tag, a in tags))
+            launch = next(a for tag, a in tags if tag == 'a' and a.get('id') == 'open')
+            self.assertIn('hidden', launch)
+            self.assertNotIn('href', launch)
             for tag, attrs in tags:
                 for key in ('src', 'href'):
                     value = attrs.get(key, '')

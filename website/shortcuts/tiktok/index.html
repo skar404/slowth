@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>
+// Request the app before any external resources or page UI are needed.
+if ((navigator.standalone === true || matchMedia('(display-mode: standalone)').matches)
+    && new URLSearchParams(location.search).get('setup') !== '1') {
+  globalThis.slowthShortcutLaunchAttempted = true;
+  location.href = 'slowth://web/tiktok';
+}
+</script>
 <title>TikTok · Slowth shortcut</title>
 <meta name="description" content="Add a TikTok shortcut that opens inside Slowth with your blocking settings.">
 <meta name="robots" content="noindex"><meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,9 +23,9 @@
 <p id="intro" class="muted">Your familiar icon opens the website inside Slowth with your blocking settings.</p>
 <ol class="steps"><li id="step1">Open this page in Safari and tap Share.</li><li id="step2">Choose Add to Home Screen. Keep Open as Web App enabled if that option appears.</li><li id="step3">Tap Add. The name and icon are ready for you.</li></ol></section>
 <section id="launcher" hidden><h1 id="launchTitle">Open TikTok in Slowth</h1><p id="launchHint" class="muted">If Slowth did not open, tap below. iOS may ask for confirmation.</p></section>
-<a id="open" class="action" href="slowth://web/tiktok">Open in Slowth</a>
+<a id="open" class="action" hidden>Open in Slowth</a>
 <p id="note" class="muted">Requires Slowth with Web apps and iOS 18.4 or later. Sign-ins inside Slowth and Safari are separate.</p>
 <p><a id="install" href="/">Get Slowth</a> · <a id="setup" href="?setup=1">Setup instructions</a></p>
 <footer><p id="remove" class="muted">Deleting a shortcut leaves your account and Slowth settings intact.</p></footer>
-<noscript>JavaScript is disabled. Use the Open in Slowth button to launch your shortcut.</noscript>
+<noscript>Enable JavaScript so your saved Home Screen shortcut can open Slowth.</noscript>
 </main></body></html>
