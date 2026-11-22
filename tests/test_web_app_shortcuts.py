@@ -4,6 +4,7 @@ from pathlib import Path
 import subprocess
 import unittest
 from html.parser import HTMLParser
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SERVICES = ('instagram', 'youtube', 'tiktok', 'facebook', 'x')
@@ -35,7 +36,7 @@ class ShortcutTests(unittest.TestCase):
                 for key in ('src', 'href'):
                     value = attrs.get(key, '')
                     if value and not value.startswith(('/', '?', 'slowth:')):
-                        self.assertTrue((folder / value).exists(), value)
+                        self.assertTrue((folder / urlsplit(value).path).exists(), value)
 
     def test_launch_behavior(self):
         result = subprocess.run(['node', '--test', str(ROOT / 'WebExt/tests/shortcuts.test.cjs')], capture_output=True, text=True)
