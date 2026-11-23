@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Piilota etusivun syöte"
+  },
+  "strictCancellationHelp": {
+    "message": "Voit poistaa tiukan tilan käytöstä ensimmäisen minuutin aikana."
   }
 }

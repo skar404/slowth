@@ -16,28 +16,77 @@ private let sites: [SiteSpec] = [
 struct SafariSiteSettingsSections: View {
     @ObservedObject var state: AppState
     @Binding var expandedService: String?
+    var onlySite: String? = nil
+    var showsWebAppActions = false
+    @Environment(\.openURL) private var openURL
+    @AppStorage("webapps.hidden-services") private var hiddenServices = ""
+
+    private var hiddenIDs: Set<String> {
+        Set(hiddenServices.split(separator: ",").map(String.init))
+    }
+
+    private var visibleSites: [SiteSpec] {
+        sites.filter { site in
+            if let onlySite { return site.id == onlySite }
+            return !showsWebAppActions || !hiddenIDs.contains(site.id)
+        }
+    }
 
     var body: some View {
         Group {
-            ForEach(sites) { site in
-                siteCard(site) {
-                    ForEach(SiteBlockingControl.controls(for: site.id)) { control in
-                        Toggle(siteFeatureTitle(control.feature, site: control.site), isOn: bindingForSite(control.site, feature: control.feature))
-                            .disabled((disabledByStrict &&
-                                       (control.feature == .all || state.setting(control.feature, for: control.site))) ||
-                                      (control.feature != .all && state.setting(.all, for: control.site)))
-                            .accessibilityIdentifier(control.id)
+            ForEach(visibleSites) { site in
+                if onlySite != nil {
+                    Section {
+                        siteControls(site)
+                    } footer: {
+                        siteNotes(site)
                     }
-                    if state.setting(.all, for: site.id) {
-                        Text(String(localized: "Whole-site blocking takes priority", table: "Interface"))
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    if site.id == "instagram" {
-                        Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
-                            .font(.caption).foregroundStyle(.secondary)
+                } else {
+                    siteCard(site) {
+                        siteControls(site)
+                        siteNotes(site)
+                        if showsWebAppActions {
+                            Button { setHidden(true, site: site) } label: {
+                                Label(String(localized: "Hide from Web apps", table: "WebApps"), systemImage: "eye.slash")
+                            }
+                            .buttonStyle(.borderless)
+                            .accessibilityIdentifier("webapps.hide." + site.id)
+                        }
                     }
                 }
             }
+
+        }
+    }
+
+    private func setHidden(_ hidden: Bool, site: SiteSpec) {
+        var ids = hiddenIDs
+        if hidden { ids.insert(site.id) } else { ids.remove(site.id) }
+        withAnimation {
+            hiddenServices = ids.sorted().joined(separator: ",")
+            if expandedService == "safari." + site.id { expandedService = nil }
+        }
+    }
+
+    private func siteControls(_ site: SiteSpec) -> some View {
+        ForEach(SiteBlockingControl.controls(for: site.id)) { control in
+            Toggle(siteFeatureTitle(control.feature, site: control.site), isOn: bindingForSite(control.site, feature: control.feature))
+                .disabled(state.groupSelectionRestSeconds > 0 || (disabledByStrict &&
+                           (control.feature == .all || state.setting(control.feature, for: control.site))) ||
+                          (control.feature != .all && state.setting(.all, for: control.site)))
+                .accessibilityIdentifier(control.id)
+        }
+    }
+
+    @ViewBuilder
+    private func siteNotes(_ site: SiteSpec) -> some View {
+        if state.setting(.all, for: site.id) {
+            Text(String(localized: "Whole-site blocking takes priority", table: "Interface"))
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        if site.id == "instagram" {
+            Text(String(localized: "Infinite Feed limits scrolling. On Instagram it also includes Explore and Stories."))
+                .font(.caption).foregroundStyle(.secondary)
         }
     }
 
@@ -51,11 +100,39 @@ struct SafariSiteSettingsSections: View {
     private func siteCard<Content: View>(_ site: SiteSpec, @ViewBuilder content: @escaping () -> Content) -> some View {
         let id = "safari." + site.id
         return Section {
+            if showsWebAppActions, let service = WebAppService(rawValue: site.id) {
+                HStack {
+                    serviceLabel(id, title: site.label, summary: safariSummary(site.id), isConfigured: true)
+                    Spacer()
+                    if #available(iOS 18.4, *) {
+                        Button(String(localized: "Open", table: "WebApps")) {
+                            WebAppsRouter.shared.open(service)
+                        }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("webapps.open." + service.id)
+                    }
+                }
+                if #available(iOS 18.4, *) {
+                    Button { openURL(service.shortcutURL) } label: {
+                        HStack {
+                            Text(String(localized: "Add to Home Screen", table: "WebApps"))
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                        }
+                    }
+                    .buttonStyle(.borderless)
+                    .accessibilityIdentifier("webapps.shortcut." + service.id)
+                }
+            }
             DisclosureGroup(isExpanded: Binding(
                 get: { expandedService == id },
                 set: { expandedService = $0 ? id : nil }
             )) { content() } label: {
-                serviceLabel(id, title: site.label, summary: safariSummary(site.id), isConfigured: true)
+                if showsWebAppActions {
+                    Label(String(localized: "Blocking settings", table: "WebApps"), systemImage: "slider.horizontal.3")
+                } else {
+                    serviceLabel(id, title: site.label, summary: safariSummary(site.id), isConfigured: true)
+                }
             }
             .padding(.vertical, 3)
             .accessibilityIdentifier("service." + id)
@@ -108,6 +185,54 @@ struct SafariSiteSettingsSections: View {
         )
     }
 
+}
+
+struct HiddenWebAppsSection: View {
+    @AppStorage("webapps.hidden-services") private var hiddenServices = ""
+    @State private var isExpanded = false
+
+    private var hiddenIDs: Set<String> {
+        Set(hiddenServices.split(separator: ",").map(String.init))
+    }
+
+    var body: some View {
+        let hidden = sites.filter { hiddenIDs.contains($0.id) }
+        if !hidden.isEmpty {
+            Section {
+                DisclosureGroup(isExpanded: $isExpanded) {
+                    ForEach(hidden) { site in
+                        HStack {
+                            Text(site.label).foregroundStyle(.secondary)
+                            Spacer()
+                            Button { restore(site) } label: {
+                                Label(String(localized: "Show in Web apps", table: "WebApps"), systemImage: "arrow.up")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .buttonStyle(.borderless)
+                            .accessibilityLabel(Text(String(localized: "Show in Web apps", table: "WebApps")) + Text(": " + site.label))
+                            .accessibilityIdentifier("webapps.restore." + site.id)
+                        }
+                    }
+                } label: {
+                    HStack {
+                        Label(String(localized: "Hidden", table: "WebApps"), systemImage: "eye.slash")
+                        Spacer()
+                        Text(hidden.count, format: .number)
+                    }.foregroundStyle(.secondary)
+                }
+                .accessibilityIdentifier("webapps.hidden")
+            }
+        }
+    }
+
+    private func restore(_ site: SiteSpec) {
+        var ids = hiddenIDs
+        ids.remove(site.id)
+        withAnimation {
+            hiddenServices = ids.sorted().joined(separator: ",")
+            if ids.isEmpty { isExpanded = false }
+        }
+    }
 }
 
 struct SafariRulesUpdateSection: View {

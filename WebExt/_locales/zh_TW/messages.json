@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "隱藏首頁動態"
+  },
+  "strictCancellationHelp": {
+    "message": "你可以在第一分鐘內關閉嚴格模式。"
   }
 }

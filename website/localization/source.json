@@ -934,5 +934,73 @@
   "s4a365f0e0401": {
     "source": "App screenshots are shown in English.",
     "format": "text"
+  },
+  "sfea52e13bb5b": {
+    "source": "Add {service} to your Home Screen",
+    "format": "text"
+  },
+  "sa7bad70eafe3": {
+    "source": "Your familiar icon opens the website inside Slowth with your blocking settings.",
+    "format": "text"
+  },
+  "s4dba5cca37f6": {
+    "source": "Open this page in Safari and tap Share.",
+    "format": "text"
+  },
+  "s6dc4e0646967": {
+    "source": "Choose Add to Home Screen. Keep Open as Web App enabled if that option appears.",
+    "format": "text"
+  },
+  "sc0d02d1c8b3d": {
+    "source": "Tap Add. The name and icon are ready for you.",
+    "format": "text"
+  },
+  "s4251392d4962": {
+    "source": "Opening {service}…",
+    "format": "text"
+  },
+  "s62363548fb73": {
+    "source": "in Slowth",
+    "format": "text"
+  },
+  "sa8048fd6c76e": {
+    "source": "Redirecting to the app. If it does not open automatically, tap below. iOS may ask for confirmation.",
+    "format": "text"
+  },
+  "s4011e25b0765": {
+    "source": "Open in Slowth",
+    "format": "text"
+  },
+  "s9cce734699b1": {
+    "source": "Requires Slowth with Web apps and iOS 18.4 or later. Sign-ins inside Slowth and Safari are separate.",
+    "format": "text"
+  },
+  "s15b12301b491": {
+    "source": "Deleting a shortcut leaves your account and Slowth settings intact.",
+    "format": "text"
+  },
+  "sed6c488e5521": {
+    "source": "Get Slowth",
+    "format": "text"
+  },
+  "sd67e32de11ba": {
+    "source": "Setup instructions",
+    "format": "text"
+  },
+  "sb3ef95f1625c": {
+    "source": "{service} · Slowth shortcut",
+    "format": "text"
+  },
+  "s2367b2f71336": {
+    "source": "Add a shortcut to open {service} inside Slowth.",
+    "format": "text"
+  },
+  "s75d3fd457277": {
+    "source": "Enable JavaScript so your saved Home Screen shortcut can open Slowth.",
+    "format": "text"
+  },
+  "sdc5e218f7566": {
+    "source": "Beta",
+    "format": "text"
   }
 }

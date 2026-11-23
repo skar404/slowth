@@ -232,5 +232,22 @@
   "s776c8faeb5a4": "Język",
   "sfdbeb7b4c454": "Wybierz język",
   "s7adb464647bb": "Zamknij listę języków",
-  "s4a365f0e0401": "Zrzuty ekranu aplikacji są wyświetlane w języku angielskim."
+  "s4a365f0e0401": "Zrzuty ekranu aplikacji są wyświetlane w języku angielskim.",
+  "sfea52e13bb5b": "Dodaj {service} do ekranu głównego",
+  "sa7bad70eafe3": "Twoja znajoma ikona otwiera stronę internetową Slowth z ustawieniami blokowania.",
+  "s4dba5cca37f6": "Otwórz tę stronę w przeglądarce Safari i dotknij Udostępnij.",
+  "s6dc4e0646967": "Wybierz opcję Dodaj do ekranu głównego. Pozostaw opcję Otwórz jako aplikację internetową włączoną, jeśli pojawi się ta opcja.",
+  "sc0d02d1c8b3d": "Kliknij Dodaj. Nazwa i ikona są dla Ciebie gotowe.",
+  "s4251392d4962": "Otwieram {service}…",
+  "s62363548fb73": "w aplikacji Slowth",
+  "sa8048fd6c76e": "Przekierowanie do aplikacji. Jeśli nie otworzy się automatycznie, kliknij poniżej. iOS może poprosić o potwierdzenie.",
+  "s4011e25b0765": "Otwórz w aplikacji Slowth",
+  "s9cce734699b1": "Wymaga Slowth z aplikacjami internetowymi i systemem iOS 18.4 lub nowszym. Logowanie w Slowth i Safari jest oddzielne.",
+  "s15b12301b491": "Usunięcie skrótu pozostawia Twoje konto i ustawienia Slowth nienaruszone.",
+  "sed6c488e5521": "Zdobądź Slowth",
+  "sd67e32de11ba": "Instrukcje konfiguracji",
+  "sb3ef95f1625c": "{service} · Skrót Slowth",
+  "s2367b2f71336": "Dodaj skrót, aby otworzyć {service} w Slowth.",
+  "s75d3fd457277": "Włącz JavaScript, aby zapisany skrót na ekranie głównym mógł otworzyć Slowth.",
+  "sdc5e218f7566": "Beta"
 }

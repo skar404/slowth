@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Homefeed verbergen"
+  },
+  "strictCancellationHelp": {
+    "message": "Je kunt de strikte modus binnen de eerste minuut uitschakelen."
   }
 }

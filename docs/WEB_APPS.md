@@ -33,10 +33,21 @@ Clicked external links open a temporary window with the originating profile.
 Google/Apple authentication destinations and links within a redirected login
 provider retain their current browsing context, including sessionStorage.
 WebKit-created windows keep the exact supplied configuration and real
-`window.opener`; closing a nested window returns to its opener. The menu selects
-windows and closes temporary ones. The main window cannot be accidentally closed.
-The compact bar shows the current domain and protection state; the menu includes
-forward, home, reload/stop, share/copy, downloads and existing blocking settings.
+`window.opener`; a window closed by the website returns to its opener.
+The compact bar shows the current domain and protection state, with just two
+controls: Close and Blocking settings. Settings reuse the existing site controls,
+filtered to the service matching the visible URL. On unsupported sites, such as
+external login providers, the settings button is disabled. The unified Web apps tab lists every site with Open, Add to Home Screen and
+expandable blocking settings. Add to Home Screen opens the HTTPS setup page
+directly in the external browser, without an intermediate instructions sheet;
+the action uses a transition arrow. Safari extension setup has an Enable in Safari
+help card at the top of Web apps. Rule updates stay below the catalog. iPad and Duo use the same catalog in their Web apps column.
+There is no separate Safari tab or browser overflow menu.
+Each site can be hidden through its expanded blocking settings. Hidden sites move
+to a collapsed, neutral list below Rules, without service icons or launch
+buttons; its restore action returns a site to the main list. The local visibility
+preference survives app restarts and does not change blocking rules, sign-ins or
+Home Screen shortcuts. Current-site browser settings remain available when hidden.
 Website custom-scheme navigation is cancelled; there is no confirmation action
 that launches another application (including social apps, mail and phone).
 Clicked main-frame/new-window HTTP(S) GET links load explicitly in WKWebView
@@ -45,18 +56,22 @@ context menus and previews are disabled in every tab, including replacement view
 Cross-host main-frame GET navigations initiated by scripts or redirects also
 reload through the public WKWebView load API in the existing window. A per-tab
 one-shot marker prevents replaying that native load recursively. POST requests
-are not replayed. The browser bar retains explicit copy/share actions; its former
-"Open in browser" action was removed because system URL dispatch can open an
-installed social app. Forms and script-created
+are not replayed. The browser bar has no copy/share or "Open in browser" actions.
+Forms and script-created
 OAuth popups retain WebKit's normal browsing context. Physical-device coverage of
 provider-specific script redirects and installed-app Universal Links is still
 required; simulator tests do not establish that coverage.
 Certificate validation uses WebKit's default handling.
 
-Clear profile data closes all profile sessions, cancels downloads, removes
-unexported temporary files, website data and extension storage, and forgets saved
-URLs. Meta's confirmation explicitly names both Instagram and Facebook. Exported
-Files documents and SharedStore rules are unaffected. Reset permissions recreates
+Settings → Web apps → Clear all website data asks for confirmation, then closes
+all profile sessions, cancels downloads, removes unexported temporary files,
+website data and extension storage, and forgets saved URLs. It also clears the
+legacy shared store used before profile separation. System Screen Time history
+is explicitly excluded from website-data removal: it is not a login/cache and
+its deletion requires registered-browser access on newer WebKit versions.
+New browser starts wait until
+cleanup completes. Exported Files documents and SharedStore rules are unaffected. The internal
+reset-permissions operation recreates
 profile pages so websites ask again; OS grants are managed in Settings.
 
 ## Website capabilities
@@ -68,8 +83,8 @@ usage descriptions are present in Debug and Release. Release retains no Debug
 full-photo-library privacy keys.
 
 `WKDownload` handles download actions and unsupported response types. The download
-menu shows progress, cancellation, errors, a Files document exporter, and local
-Quick Look for completed PDFs. Server filenames are confined to a random temporary
+screen code remains available internally, but the compact bar no longer exposes
+its progress, cancellation, Files export or PDF preview. Server filenames are confined to a random temporary
 directory and cannot overwrite an existing download. Inline playback and PiP are
 enabled in ordinary website configurations; actual support depends on the site.
 Both iOS host configurations declare the audio background mode. Opening YouTube
@@ -87,9 +102,8 @@ check passed. The other 11 browser tests passed in the preceding run. Signed Rel
 was installed on chalk (installation sequence 2972). Real YouTube PiP persistence
 is not yet verified: iPhone Mirroring could not connect while the phone was in use.
 
-WebAuthn is handled by system WebKit. The passkey menu requests system browser
-credential access only in the prepared entitlement candidate; an ordinary Beta
-build explains that approval is pending. No user-agent spoofing, injected WebAuthn
+WebAuthn is handled by system WebKit. The compact bar does not expose a request
+for system browser credential access. No user-agent spoofing, injected WebAuthn
 implementation or third-party Associated Domains are used.
 
 ## Protection protocol and recovery
@@ -123,10 +137,14 @@ GET URL or home, never a form or unfinished authentication request.
   individual manifest identity, scope, icon and `?launch=1` start URL.
 - Safari tabs always show installation instructions, including `?launch=1`, without
   a link that opens Slowth. Standalone Home Screen launches make one automatic
-  launch attempt from inline HTML before fetching styles, icons or the UI script,
-  and retain a visible fallback button;
-  returning to the shortcut does not create a redirect loop. `?setup=1` shows help.
-- English/Russian static pages live in `website/shortcuts/` and are included by
+  launch attempt per foreground visit, starting from inline HTML before fetching
+  styles, icons or the UI script. Visibility and page lifecycle events rearm the
+  redirect when the saved window returns, including back-forward cache restores;
+  duplicate events within the same visit do not repeat the attempt. The page says
+  “Opening [service]…” with “in Slowth” below it. The transit screen has no card or manual button.
+  `?setup=1` shows help without automatic launches.
+- Shortcut pages live in `website/shortcuts/`, use the site's 64 locale catalogs
+  (including RTL and regional language matching), and are included by
   `.github/workflows/website.yml`. No new backend or hosting account is needed.
 
 Publication is a separate action. After authorized deployment, check all five
@@ -148,8 +166,12 @@ python3 scripts/check_slowth.py --app-locales Localization/locales.json
 The browser test script reports contract compilation, app/test compilation,
 simulator boot and hosted test execution separately. It waits for `simctl
 bootstatus` before launching the test host, with a 180-second boot limit; individual
-tests retain their 120-second limit. Pass a simulator UDID instead of `auto` to
-compare runs on the same runtime. Xcode results remain in
+tests retain their 120-second limit. With `auto`, it creates a dedicated simulator
+and deletes it on exit; it never reuses or erases an existing device. Pass a
+simulator UDID instead of `auto` to compare runs on the same runtime.
+The test scheme passes `--web-app-tests` to a Debug-only simulator host with a
+real key window but no production onboarding, Screen Time or recording-state
+poller. Tests still load the real browser runtime and bundled WebExtension. Xcode results remain in
 `build/webapps-tests/Logs/Test/`; source-check CI retains them for seven days,
 including failed runs. A passing local run does not establish CI startup latency.
 

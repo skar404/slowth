@@ -5,6 +5,7 @@ import WebKit
 @available(iOS 18.4, *)
 @MainActor
 final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionControllerDelegate {
+    private static var clearingAllData: Task<Void, Error>?
     private static var profiles: [WebAppProfile: WebAppProfileRuntime] = [:]
     static func shared(_ profile: WebAppProfile) -> WebAppProfileRuntime {
         if let existing = profiles[profile] { return existing }
@@ -53,6 +54,7 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
     }
 
     func start() async throws {
+        if let clearing = Self.clearingAllData { try await clearing.value }
         if let startup { return try await startup.value }
         if context?.isLoaded == true, bridgeReady, port?.isDisconnected == false { return }
         let generation = UUID()
@@ -152,13 +154,48 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
         }
     }
 
+    static var websiteDataTypesToClear: Set<String> {
+        var types = WKWebsiteDataStore.allWebsiteDataTypes()
+        if #available(iOS 26.0, *) {
+            // Screen Time is system usage history, not a website login/cache.
+            // Asking WebKit to delete it invokes ScreenTimeSettings, which can
+            // stall an unregistered browser (including the unsigned CI host).
+            types.remove(WKWebsiteDataTypeScreenTime)
+        }
+        return types
+    }
+
+    static func clearAllData() async throws {
+        if let clearingAllData { return try await clearingAllData.value }
+        let task = Task { @MainActor in
+            let runtimes = WebAppProfile.allCases.map { shared($0) }
+            // Unload every background extension before deleting its storage.
+            for runtime in runtimes { runtime.prepareRecovery() }
+            for runtime in runtimes { await runtime.clearData() }
+            // Include sign-ins retained from the browser's earlier shared store.
+            await WKWebsiteDataStore.default().removeData(
+                ofTypes: websiteDataTypesToClear, modifiedSince: .distantPast)
+            let downloads = FileManager.default.temporaryDirectory.appendingPathComponent("SlowthDownloads", isDirectory: true)
+            if FileManager.default.fileExists(atPath: downloads.path) {
+                try FileManager.default.removeItem(at: downloads)
+            }
+        }
+        clearingAllData = task
+        defer { clearingAllData = nil }
+        try await task.value
+    }
+
     func clearData() async {
         // Stop every page first, including the other Meta session, to prevent cookie recreation.
         for browser in sessions.values {
             browser.stop(); browser.clearRestoration()
             await browser.downloads.clear()
         }
-        await dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), modifiedSince: .distantPast)
+        // Saved destinations also exist for services not opened in this process.
+        for service in WebAppService.allCases where service.profile == profile {
+            UserDefaults.standard.removeObject(forKey: "webapps.last-url.v2." + service.id)
+        }
+        await dataStore.removeData(ofTypes: Self.websiteDataTypesToClear, modifiedSince: .distantPast)
         let types = WKWebExtensionController.allExtensionDataTypes
         let records = await controller.dataRecords(ofTypes: types)
         await controller.removeData(ofTypes: types, from: records)

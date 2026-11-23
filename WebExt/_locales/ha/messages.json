@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ɓoye jerin shafin farko"
+  },
+  "strictCancellationHelp": {
+    "message": "Za ka iya kashe yanayin tsauri a cikin minti na farko."
   }
 }

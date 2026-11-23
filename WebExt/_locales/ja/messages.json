@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ホームのフィードを非表示"
+  },
+  "strictCancellationHelp": {
+    "message": "最初の1分間は厳格モードをオフにできます。"
   }
 }

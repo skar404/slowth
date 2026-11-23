@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Dölj startsideflödet"
+  },
+  "strictCancellationHelp": {
+    "message": "Du kan stänga av strikt läge under den första minuten."
   }
 }

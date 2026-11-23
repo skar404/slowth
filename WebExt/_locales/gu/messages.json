@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "હોમ ફીડ છુપાવો"
+  },
+  "strictCancellationHelp": {
+    "message": "તમે પહેલી મિનિટ દરમિયાન કડક મોડ બંધ કરી શકો છો."
   }
 }

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "隐藏首页推荐"
+  },
+  "strictCancellationHelp": {
+    "message": "你可以在第一分钟内关闭严格模式。"
   }
 }

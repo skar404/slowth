@@ -84,6 +84,7 @@ enum NativeExtensionMessageHandler {
             "toggles": togglesRaw,
             "settingsVersion": 2,
             "strictModeUntil": s.strictModeUntil?.timeIntervalSince1970 ?? 0,
+            "strictModeStartedAt": s.strictModeStartedAt?.timeIntervalSince1970 ?? 0,
             "onboardingDone": s.onboardingDone,
             "rulesFetchedAt": s.rulesFetchedAt?.timeIntervalSince1970 ?? 0
         ]

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ਹੋਮ ਫੀਡ ਲੁਕਾਓ"
+  },
+  "strictCancellationHelp": {
+    "message": "ਤੁਸੀਂ ਪਹਿਲੇ ਮਿੰਟ ਦੇ ਅੰਦਰ ਸਖ਼ਤ ਮੋਡ ਬੰਦ ਕਰ ਸਕਦੇ ਹੋ।"
   }
 }

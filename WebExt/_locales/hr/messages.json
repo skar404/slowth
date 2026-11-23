@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Sakrij sadržaj početne stranice"
+  },
+  "strictCancellationHelp": {
+    "message": "Strogi način rada možete isključiti tijekom prve minute."
   }
 }

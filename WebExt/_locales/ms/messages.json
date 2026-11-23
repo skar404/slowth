@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Sembunyikan suapan utama"
+  },
+  "strictCancellationHelp": {
+    "message": "Anda boleh mematikan mod ketat dalam minit pertama."
   }
 }

@@ -232,5 +232,22 @@
   "s776c8faeb5a4": "Nyelv",
   "sfdbeb7b4c454": "Válasszon nyelvet",
   "s7adb464647bb": "Nyelvlista bezárása",
-  "s4a365f0e0401": "Az alkalmazások képernyőképei angol nyelven jelennek meg."
+  "s4a365f0e0401": "Az alkalmazások képernyőképei angol nyelven jelennek meg.",
+  "sfea52e13bb5b": "Adja hozzá a {service}-t a kezdőképernyőhöz",
+  "sa7bad70eafe3": "Az ismerős ikonja megnyitja a webhelyet a Slowth-n belül a letiltási beállításokkal.",
+  "s4dba5cca37f6": "Nyissa meg ezt az oldalt a Safariban, és koppintson a Megosztás elemre.",
+  "s6dc4e0646967": "Válassza a Hozzáadás a kezdőképernyőhöz lehetőséget. Ha ez a lehetőség megjelenik, tartsa engedélyezve a Megnyitás webalkalmazásként lehetőséget.",
+  "sc0d02d1c8b3d": "Koppintson a Hozzáadás elemre. A név és az ikon készen áll az Ön számára.",
+  "s4251392d4962": "A {service} megnyitása…",
+  "s62363548fb73": "a Slowth alkalmazásban",
+  "sa8048fd6c76e": "Átirányítás az alkalmazáshoz. Ha nem nyílik meg automatikusan, koppintson az alábbi gombra. Az iOS megerősítést kérhet.",
+  "s4011e25b0765": "Megnyitás a Slowth alkalmazásban",
+  "s9cce734699b1": "Slowth szükséges webalkalmazásokkal és iOS 18.4 vagy újabb verzióval. A Slowth és a Safari bejelentkezés különálló.",
+  "s15b12301b491": "A parancsikon törlésével fiókja és Slowth beállításai érintetlenül maradnak.",
+  "sed6c488e5521": "Szerezze be a Slowth-t",
+  "sd67e32de11ba": "Beállítási utasítások",
+  "sb3ef95f1625c": "{service} · Slowth parancsikon",
+  "s2367b2f71336": "Adjon hozzá egy parancsikont a {service} megnyitásához a Slowth belsejében.",
+  "s75d3fd457277": "Engedélyezze a JavaScriptet, hogy a mentett kezdőképernyő parancsikonja megnyithassa a Slowth-t.",
+  "sdc5e218f7566": "Beta"
 }

@@ -84,7 +84,7 @@ function harness(requested) {
     elements.set(id, { textContent: '', dataset: {}, setAttribute() {}, addEventListener() {} });
   }
   const context = vm.createContext({
-    Intl, URLSearchParams,
+    Intl, URLSearchParams, setInterval: () => 0,
     location: { search: '?host=youtube' },
     document: { documentElement: {}, querySelectorAll: () => [], getElementById: id => elements.get(id) },
     browser: { i18n: { getMessage(key, substitutions = []) {
@@ -187,6 +187,8 @@ function popupHarness(language, namespace, tabURL, tabError = false) {
   };
   context[namespace] = api;
   if (namespace === 'chrome') delete context.browser;
+  context.popupTimers = [];
+  context.setInterval = callback => { context.popupTimers.push(callback); return 1; };
   context.window = {};
   context.document = {
     body: new Element(), documentElement: {},
@@ -379,5 +381,26 @@ for (const namespace of ['browser', 'chrome']) {
     elements.get('sites').children[1].children[0].listeners.click();
     await context.refreshPopup();
     assert.ok(elements.get('sites').children.every(el => !el.open));
+  });
+}
+
+for (const namespace of ['browser', 'chrome']) {
+  test(`${namespace}: strict cancellation expires locally without renewing or polling`, async () => {
+    const { context, elements, calls, state } = popupHarness('en', namespace);
+    context.testNow = Date.now();
+    vm.runInContext('Date.now = () => globalThis.testNow', context);
+    state.strictModeUntil = context.testNow / 1000 + 86400;
+    state.strictModeStartedAt = context.testNow / 1000;
+    await context.refreshPopup();
+    assert.equal(elements.get('strict-toggle').disabled, false);
+    assert.equal(elements.get('sites').querySelectorAll('input')[1].disabled, true);
+    const count = calls.length;
+    context.testNow += 59999;
+    context.popupTimers.forEach(tick => tick());
+    assert.equal(elements.get('strict-toggle').disabled, false);
+    context.testNow += 1;
+    context.popupTimers.forEach(tick => tick());
+    assert.equal(elements.get('strict-toggle').disabled, true);
+    assert.equal(calls.length, count, 'Timer must not call native messaging or any network');
   });
 }

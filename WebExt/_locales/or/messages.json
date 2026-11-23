@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ହୋମ୍ ଫିଡ୍ ଲୁଚାନ୍ତୁ"
+  },
+  "strictCancellationHelp": {
+    "message": "ପ୍ରଥମ ମିନିଟ୍ ମଧ୍ୟରେ ଆପଣ କଠୋର ମୋଡ୍ ବନ୍ଦ କରିପାରିବେ।"
   }
 }

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Басты бет таспасын жасыру"
+  },
+  "strictCancellationHelp": {
+    "message": "Қатаң режимді алғашқы минут ішінде өшіруге болады."
   }
 }

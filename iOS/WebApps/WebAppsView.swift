@@ -1,99 +1,34 @@
 import SwiftUI
 
-struct WebAppsView: View {
-    @ObservedObject private var router = WebAppsRouter.shared
+/// Shared by the compact tab and the wide Web apps column.
+struct WebAppsIntroSections: View {
     @AppStorage("webapps.profile-migration-v2-acknowledged") private var migrationAcknowledged = false
-    @State private var shortcut: WebAppService?
-    let openSafariSettings: () -> Void
 
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Beta").font(.caption.bold()).padding(.horizontal, 10).padding(.vertical, 4)
-                        .background(SlowthAppearance.sage.opacity(0.15), in: Capsule())
-                    Text(String(localized: "Your sites, with room to breathe", table: "WebApps"))
-                        .font(.title2.bold())
-                    Text(String(localized: "Open websites inside Slowth with your existing blocking settings. Add a shortcut to keep them where your thumb remembers.", table: "WebApps"))
-                        .foregroundStyle(.secondary)
-                }.padding(.vertical, 8)
-            }
+        Section {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Beta").font(.caption.bold()).padding(.horizontal, 10).padding(.vertical, 4)
+                    .background(SlowthAppearance.sage.opacity(0.15), in: Capsule())
+                Text(String(localized: "Your sites, with room to breathe", table: "WebApps"))
+                    .font(.title2.bold())
+                Text(String(localized: "Open websites inside Slowth with your existing blocking settings. Add a shortcut to keep them where your thumb remembers.", table: "WebApps"))
+                    .foregroundStyle(.secondary)
+            }.padding(.vertical, 8)
+        } footer: {
+            Text(String(localized: "Sign in once inside Slowth. Safari sign-ins are separate. Shortcuts open Slowth; deleting a shortcut leaves your account and settings intact.", table: "WebApps"))
+        }
+        if #available(iOS 18.4, *) {
             if !migrationAcknowledged {
                 Section {
                     Text(String(localized: "Web apps now use separate profiles. Please sign in again once. Instagram and Facebook share Meta; your old sign-ins have not been deleted.", table: "WebApps"))
                     Button(String(localized: "Got it", table: "WebApps")) { migrationAcknowledged = true }
                 }
             }
-            if #available(iOS 18.4, *) {
-                Section {
-                    ForEach(WebAppService.allCases) { service in
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack(spacing: 12) {
-                                Image(service.icon).resizable().scaledToFit().frame(width: 44, height: 44)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10)).accessibilityHidden(true)
-                                Text(service.title).font(.headline)
-                                Spacer()
-                                Button(String(localized: "Open", table: "WebApps")) { router.open(service) }
-                                    .buttonStyle(.bordered).accessibilityIdentifier("webapps.open." + service.id)
-                            }
-                            Button {
-                                router.setShortcutInstructionsPresented(true)
-                                shortcut = service
-                            } label: {
-                                Label(String(localized: "Add to Home Screen", table: "WebApps"), systemImage: "plus.app")
-                                    .font(.subheadline)
-                            }.buttonStyle(.borderless).accessibilityIdentifier("webapps.shortcut." + service.id)
-                        }.padding(.vertical, 6)
-                    }
-                } footer: {
-                    Text(String(localized: "Sign in once inside Slowth. Safari sign-ins are separate. Shortcuts open Slowth; deleting a shortcut leaves your account and settings intact.", table: "WebApps"))
-                }
-            } else {
-                Section {
-                    Text(String(localized: "Web apps require iOS 18.4 or later. You can still use the Slowth extension in Safari.", table: "WebApps"))
-                    Button("Safari", action: openSafariSettings)
-                }
-            }
+        } else {
             Section {
-                Button(action: openSafariSettings) {
-                    Label(String(localized: "Blocking settings", table: "WebApps"), systemImage: "slider.horizontal.3")
-                }
+                Text(String(localized: "Web apps require iOS 18.4 or later. You can still use the Slowth extension in Safari.", table: "WebApps"))
             }
         }
-        .scrollContentBackground(.hidden).background(SlowthAppearance.background)
-        .navigationTitle(String(localized: "Web apps", table: "WebApps"))
-        .sheet(item: $shortcut, onDismiss: { router.setShortcutInstructionsPresented(false) }) { service in
-            ShortcutInstructions(service: service)
-        }
-        .onChange(of: router.pending) { request in
-            // A setup-page link can return while these instructions are still open.
-            if request != nil { shortcut = nil }
-        }
-    }
-}
-
-private struct ShortcutInstructions: View {
-    let service: WebAppService
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    Image(service.icon).resizable().scaledToFit().frame(width: 80, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: 18)).accessibilityHidden(true)
-                    Text(service.title).font(.largeTitle.bold())
-                    Text(String(localized: "Open the setup page in Safari, tap Share, then Add to Home Screen. Keep Open as Web App enabled if that option appears, then tap Add.", table: "WebApps"))
-                    Text(String(localized: "The shortcut opens this website inside Slowth. iOS may ask you to confirm opening Slowth.", table: "WebApps"))
-                        .foregroundStyle(.secondary)
-                    Button(String(localized: "Open setup page", table: "WebApps")) { openURL(service.shortcutURL) }
-                        .buttonStyle(.borderedProminent)
-                    Text("slowth.app").font(.footnote).foregroundStyle(.secondary)
-                }.padding(24)
-            }
-            .background(SlowthAppearance.background)
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button(String(localized: "Close")) { dismiss() } } }
-        }.tint(SlowthAppearance.sage)
     }
 }
 
@@ -133,5 +68,43 @@ private struct UnsupportedWebAppScreen: View {
             Text(String(localized: "Web apps require iOS 18.4 or later. You can still use the Slowth extension in Safari.", table: "WebApps"))
             Button(String(localized: "Close")) { dismiss() }
         }.padding(32)
+    }
+}
+
+@available(iOS 18.4, *)
+struct WebAppDataSettingsSection: View {
+    @State private var confirmClear = false
+    @State private var clearing = false
+    @State private var clearError = false
+
+    var body: some View {
+        Section {
+            Button(role: .destructive) { confirmClear = true } label: {
+                HStack {
+                    Label(String(localized: "Clear all website data", table: "WebApps"), systemImage: "trash")
+                    Spacer()
+                    if clearing { ProgressView() }
+                }
+            }
+            .disabled(clearing)
+        } header: {
+            Text(String(localized: "Web apps", table: "WebApps"))
+        }
+        .confirmationDialog(String(localized: "Clear all website data?", table: "WebApps"), isPresented: $confirmClear, titleVisibility: .visible) {
+            Button(String(localized: "Clear all website data", table: "WebApps"), role: .destructive) {
+                clearing = true
+                Task { @MainActor in
+                    do { try await WebAppProfileRuntime.clearAllData() }
+                    catch { clearError = true }
+                    clearing = false
+                }
+            }
+            Button(String(localized: "Cancel"), role: .cancel) {}
+        } message: {
+            Text(String(localized: "This signs you out of all websites in Slowth and deletes their cookies, cache and temporary downloads. Blocking settings, Safari data and files saved to Files stay unchanged.", table: "WebApps"))
+        }
+        .alert(String(localized: "Could not clear all website data. Please try again.", table: "WebApps"), isPresented: $clearError) {
+            Button(String(localized: "OK"), role: .cancel) {}
+        }
     }
 }

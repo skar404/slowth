@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Skjul startsidefeed"
+  },
+  "strictCancellationHelp": {
+    "message": "Du kan slå streng tilstand fra i det første minut."
   }
 }

@@ -132,13 +132,19 @@
 
   let lastState = null;
 
+  function updateStrictSwitch(state) {
+    const strictActive = (state?.strictModeUntil || 0) * 1000 > Date.now();
+    strictToggle.checked = strictActive;
+    const startedAt = (state?.strictModeStartedAt || 0) * 1000;
+    const canCancel = startedAt > 0 && startedAt <= Date.now() && Date.now() < startedAt + 60000;
+    strictToggle.disabled = strictActive && !canCancel;
+  }
+
   function applyState(state) {
     lastState = state || {};
     statusEl.textContent = formatRelative((state?.rulesFetchedAt || 0) * 1000);
-
+    updateStrictSwitch(state);
     const strictActive = (state?.strictModeUntil || 0) * 1000 > Date.now();
-    strictToggle.checked = strictActive;
-    strictToggle.disabled = strictActive;
 
     if (strictActive) {
       strictBanner.classList.remove("hidden");
@@ -216,4 +222,6 @@
 
   api.call("setOnboardingDone");
   refreshState();
+  // Update the grace-period switch locally; no polling or network requests.
+  setInterval(() => { if (lastState && !saving) updateStrictSwitch(lastState); }, 1000);
 })();

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "హోమ్ ఫీడ్‌ను దాచు"
+  },
+  "strictCancellationHelp": {
+    "message": "మొదటి నిమిషంలో కఠిన మోడ్‌ను ఆఫ్ చేయవచ్చు."
   }
 }

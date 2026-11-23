@@ -85585,6 +85585,395 @@
           }
         }
       }
+    },
+    "You can turn Strict mode off during the first minute.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنك إيقاف الوضع الصارم خلال الدقيقة الأولى."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنك إيقاف الوضع الصارم خلال الدقيقة الأولى."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Строгі рэжым можна выключыць на працягу першай хвіліны."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "প্রথম মিনিটের মধ্যে কঠোর মোড বন্ধ করতে পারবেন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pots desactivar el mode estricte durant el primer minut."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Přísný režim můžete vypnout během první minuty."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan slå streng tilstand fra i det første minut."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kannst den strengen Modus innerhalb der ersten Minute ausschalten."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μπορείτε να απενεργοποιήσετε την αυστηρή λειτουργία μέσα στο πρώτο λεπτό."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can turn Strict mode off during the first minute."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can turn Strict mode off during the first minute."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can turn Strict mode off during the first minute."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can turn Strict mode off during the first minute."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes desactivar el modo estricto durante el primer minuto."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes desactivar el modo estricto durante el primer minuto."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voit poistaa tiukan tilan käytöstä ensimmäisen minuutin aikana."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaari mong i-off ang Strict mode sa loob ng unang minuto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez désactiver le mode strict pendant la première minute."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez désactiver le mode strict pendant la première minute."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમે પહેલી મિનિટ દરમિયાન કડક મોડ બંધ કરી શકો છો."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Za ka iya kashe yanayin tsauri a cikin minti na farko."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אפשר לכבות את המצב המחמיר במהלך הדקה הראשונה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आप पहले मिनट के दौरान सख्त मोड बंद कर सकते हैं।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strogi način rada možete isključiti tijekom prve minute."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A szigorú módot az első percben kikapcsolhatod."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Առաջին րոպեի ընթացքում կարող եք անջատել խիստ ռեժիմը։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda dapat menonaktifkan mode ketat dalam satu menit pertama."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puoi disattivare la modalità rigorosa durante il primo minuto."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初の1分間は厳格モードをオフにできます。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "მკაცრი რეჟიმის გამორთვა პირველი წუთის განმავლობაში შეგიძლიათ."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Қатаң режимді алғашқы минут ішінде өшіруге болады."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮೊದಲ ನಿಮಿಷದೊಳಗೆ ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಅನ್ನು ಆಫ್ ಮಾಡಬಹುದು."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "처음 1분 동안은 엄격 모드를 끌 수 있습니다."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Катуу режимди биринчи мүнөттүн ичинде өчүрө аласыз."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Griežtą režimą galite išjungti per pirmąją minutę."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ആദ്യ മിനിറ്റിനുള്ളിൽ കർശന മോഡ് ഓഫാക്കാം."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहिल्या मिनिटात तुम्ही कठोर मोड बंद करू शकता."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda boleh mematikan mod ketat dalam minit pertama."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan slå av streng modus i løpet av det første minuttet."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहिलो मिनेटभित्र कडा मोड बन्द गर्न सक्नुहुन्छ।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je kunt de strikte modus binnen de eerste minuut uitschakelen."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପ୍ରଥମ ମିନିଟ୍ ମଧ୍ୟରେ ଆପଣ କଠୋର ମୋଡ୍ ବନ୍ଦ କରିପାରିବେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਸੀਂ ਪਹਿਲੇ ਮਿੰਟ ਦੇ ਅੰਦਰ ਸਖ਼ਤ ਮੋਡ ਬੰਦ ਕਰ ਸਕਦੇ ਹੋ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسی پہلے منٹ دے اندر سخت موڈ بند کر سکدے او۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You fit turn Strict mode off within the first minute."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryb ścisły możesz wyłączyć w ciągu pierwszej minuty."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você pode desativar o modo estrito durante o primeiro minuto."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podes desativar o modo estrito durante o primeiro minuto."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poți dezactiva modul strict în primul minut."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Строгий режим можно выключить в течение первой минуты."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prísny režim môžete vypnúť počas prvej minúty."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strogi način lahko izklopite v prvi minuti."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan stänga av strikt läge under den första minuten."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unaweza kuzima hali kali ndani ya dakika ya kwanza."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "முதல் நிமிடத்திற்குள் கடுமையான பயன்முறையை அணைக்கலாம்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మొదటి నిమిషంలో కఠిన మోడ్‌ను ఆఫ్ చేయవచ్చు."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณสามารถปิดโหมดเข้มงวดได้ภายในนาทีแรก"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk dakika içinde katı modu kapatabilirsiniz."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Суворий режим можна вимкнути протягом першої хвилини."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ پہلے منٹ کے دوران سخت موڈ بند کر سکتے ہیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn có thể tắt chế độ nghiêm ngặt trong phút đầu tiên."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你可以喺第一分鐘內關閉嚴格模式。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你可以在第一分钟内关闭严格模式。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你可以在第一分鐘內關閉嚴格模式。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

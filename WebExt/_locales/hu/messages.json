@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Kezdőlapi hírfolyam elrejtése"
+  },
+  "strictCancellationHelp": {
+    "message": "A szigorú módot az első percben kikapcsolhatod."
   }
 }

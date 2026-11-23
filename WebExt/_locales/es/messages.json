@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ocultar el feed de inicio"
+  },
+  "strictCancellationHelp": {
+    "message": "Puedes desactivar el modo estricto durante el primer minuto."
   }
 }

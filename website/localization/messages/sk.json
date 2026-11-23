@@ -232,5 +232,22 @@
   "s776c8faeb5a4": "Jazyk",
   "sfdbeb7b4c454": "Vyberte jazyk",
   "s7adb464647bb": "Zavrieť zoznam jazykov",
-  "s4a365f0e0401": "Snímky obrazovky aplikácie sa zobrazujú v angličtine."
+  "s4a365f0e0401": "Snímky obrazovky aplikácie sa zobrazujú v angličtine.",
+  "sfea52e13bb5b": "Pridajte si {service} na svoju domovskú obrazovku",
+  "sa7bad70eafe3": "Vaša známa ikona otvorí webovú stránku v Slowth s vašimi nastaveniami blokovania.",
+  "s4dba5cca37f6": "Otvorte túto stránku v Safari a klepnite na Zdieľať.",
+  "s6dc4e0646967": "Vyberte Pridať na domovskú obrazovku. Ak sa táto možnosť zobrazí, ponechajte možnosť Otvoriť ako webovú aplikáciu povolenú.",
+  "sc0d02d1c8b3d": "Klepnite na Pridať. Meno a ikona sú pre vás pripravené.",
+  "s4251392d4962": "Otvára sa {service}…",
+  "s62363548fb73": "v aplikácii Slowth",
+  "sa8048fd6c76e": "Prebieha presmerovanie do aplikácie. Ak sa neotvorí automaticky, klepnite na nižšie. iOS môže požiadať o potvrdenie.",
+  "s4011e25b0765": "Otvoriť v aplikácii Slowth",
+  "s9cce734699b1": "Vyžaduje Slowth s webovými aplikáciami a iOS 18.4 alebo novším. Prihlásenia do Slowth a Safari sú oddelené.",
+  "s15b12301b491": "Odstránením skratky zostane váš účet a nastavenia Slowth nedotknuté.",
+  "sed6c488e5521": "Získajte Slowth",
+  "sd67e32de11ba": "Pokyny na nastavenie",
+  "sb3ef95f1625c": "Skratka {service} · Slowth",
+  "s2367b2f71336": "Pridajte skratku na otvorenie {service} v Slowth.",
+  "s75d3fd457277": "Povoľte JavaScript, aby vaša uložená skratka na ploche mohla otvoriť Slowth.",
+  "sdc5e218f7566": "Beta"
 }

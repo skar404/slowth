@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Amaga el canal d’inici"
+  },
+  "strictCancellationHelp": {
+    "message": "Pots desactivar el mode estricte durant el primer minut."
   }
 }

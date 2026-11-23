@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Slėpti pagrindinio puslapio srautą"
+  },
+  "strictCancellationHelp": {
+    "message": "Griežtą režimą galite išjungti per pirmąją minutę."
   }
 }

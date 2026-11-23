@@ -22,6 +22,13 @@ Strict mode, supported features, independent Reels/feed combinations, whole-site
 priority, live CSS/overlay removal, Stories, background redirects, cache upgrades,
 native messaging failures, and localized popup switches.
 
+New Strict mode activations can be cancelled during their first 60 seconds.
+The start time is persisted; repeated enable requests do not restart either timer.
+Restrictions remain locked during this cancellation window. After it ends, the
+original 24-hour expiry applies. Existing locks without activation metadata stay
+locked. Native checks cover cancellation, exact boundaries, persistence, repeated
+enabling and legacy locks; popup checks cover local timer expiry without polling.
+
 YouTube tests cover the independent default-off feed switch, four-window-height
 home threshold on desktop/mobile URLs, query parameters, live setting changes,
 SPA/back/forward/restored visits, scroll lock cleanup, the home reset action,
