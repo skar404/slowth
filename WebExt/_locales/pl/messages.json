@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ukryj kanał strony głównej"
+  },
+  "strictCancellationHelp": {
+    "message": "Tryb ścisły możesz wyłączyć w ciągu pierwszej minuty."
   }
 }

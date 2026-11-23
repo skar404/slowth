@@ -232,5 +232,22 @@
   "s776c8faeb5a4": "Sprog",
   "sfdbeb7b4c454": "Vælg et sprog",
   "s7adb464647bb": "Luk sprogliste",
-  "s4a365f0e0401": "App-skærmbilleder vises på engelsk."
+  "s4a365f0e0401": "App-skærmbilleder vises på engelsk.",
+  "sfea52e13bb5b": "Tilføj {service} til din startskærm",
+  "sa7bad70eafe3": "Dit velkendte ikon åbner webstedet inde i Slowth med dine blokeringsindstillinger.",
+  "s4dba5cca37f6": "Åbn denne side i Safari, og tryk på Del.",
+  "s6dc4e0646967": "Vælg Føj til startskærm. Hold Åbn som webapp aktiveret, hvis denne mulighed vises.",
+  "sc0d02d1c8b3d": "Tryk på Tilføj. Navnet og ikonet er klar til dig.",
+  "s4251392d4962": "Åbner {service}...",
+  "s62363548fb73": "i Slowth",
+  "sa8048fd6c76e": "Omdirigerer til appen. Hvis det ikke åbner automatisk, skal du trykke nedenfor. iOS beder muligvis om bekræftelse.",
+  "s4011e25b0765": "Åbn i Slowth",
+  "s9cce734699b1": "Kræver Slowth med webapps og iOS 18.4 eller nyere. Log-ins inde i Slowth og Safari er separate.",
+  "s15b12301b491": "Sletning af en genvej efterlader din konto og Slowth-indstillinger intakte.",
+  "sed6c488e5521": "Få Slowth",
+  "sd67e32de11ba": "Opsætningsinstruktioner",
+  "sb3ef95f1625c": "{service} · Slowth genvej",
+  "s2367b2f71336": "Tilføj en genvej for at åbne {service} inde i Slowth.",
+  "s75d3fd457277": "Aktiver JavaScript, så din gemte genvej til startskærmen kan åbne Slowth.",
+  "sdc5e218f7566": "Beta"
 }

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "הסתרת הפיד בדף הבית"
+  },
+  "strictCancellationHelp": {
+    "message": "אפשר לכבות את המצב המחמיר במהלך הדקה הראשונה."
   }
 }

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Скрыть главную ленту"
+  },
+  "strictCancellationHelp": {
+    "message": "Строгий режим можно выключить в течение первой минуты."
   }
 }

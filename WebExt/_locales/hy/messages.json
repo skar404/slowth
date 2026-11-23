@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Թաքցնել գլխավոր էջի հոսքը"
+  },
+  "strictCancellationHelp": {
+    "message": "Առաջին րոպեի ընթացքում կարող եք անջատել խիստ ռեժիմը։"
   }
 }

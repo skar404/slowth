@@ -95,7 +95,6 @@ struct ContentView: View {
     @State private var visibleRestID: String?
     @State private var showAppsPrivacy = false
     @ObservedObject private var webAppsRouter = WebAppsRouter.shared
-    @State private var showWebApps = false
     @State private var selectedSection = 0
     @State private var expandedService: String?
     @State private var expandedSafariService: String?
@@ -149,8 +148,7 @@ struct ContentView: View {
             _pendingRests = State(initialValue: [rest])
             _restToShow = State(initialValue: rest)
         }
-        _selectedSection = State(initialValue: arguments.contains("--preview-web-apps") ? 3 : arguments.contains("--preview-settings") ? 2 : arguments.contains("--preview-safari") ? 1 : 0)
-        _showWebApps = State(initialValue: arguments.contains("--preview-web-apps") && UIDevice.current.userInterfaceIdiom == .pad)
+        _selectedSection = State(initialValue: arguments.contains("--preview-settings") ? 2 : (arguments.contains("--preview-safari") || arguments.contains("--preview-web-apps")) ? 1 : 0)
         _showSafariHelp = State(initialValue: arguments.contains("--preview-safari-help"))
         _showAbout = State(initialValue: arguments.contains("--preview-how-it-works"))
         if ScreenshotPresentation.activeProtection && arguments.contains("--screenshot-recording-prompt") {
@@ -168,16 +166,6 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             adaptiveLayout(in: geometry.size)
-        }
-        .disabled(showWebApps)
-        .accessibilityHidden(showWebApps)
-        .overlay {
-            if showWebApps { NavigationStack {
-                WebAppsView { showWebApps = false; selectedSection = 1 }
-                    .toolbar { ToolbarItem(placement: .confirmationAction) {
-                        Button(String(localized: "Close")) { showWebApps = false }
-                    } }
-            } }
         }
         .onChange(of: webAppsRouter.service) { service in
             if service == nil { state.reload() }
@@ -201,7 +189,7 @@ struct ContentView: View {
             Button(String(localized: "Enable")) { state.setStrictMode(true) }
             Button(String(localized: "Cancel"), role: .cancel) { }
         } message: {
-            Text(String(localized: "For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."))
+            (Text(String(localized: "For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text("\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
         }
         #if canImport(FamilyControls)
         .sheet(isPresented: Binding(get: { showWelcome }, set: { if !$0 { closeWelcome() } }), onDismiss: {
@@ -381,11 +369,8 @@ struct ContentView: View {
                 .tabItem { Label(String(localized: "Apps", table: "Interface"), systemImage: "square.grid.2x2") }
                 .tag(0)
             sectionNavigation(1)
-                .tabItem { Label("Safari", systemImage: "safari") }
-                .tag(1)
-            NavigationStack { WebAppsView { selectedSection = 1 } }
                 .tabItem { Label(String(localized: "Web apps", table: "WebApps"), systemImage: "app.badge") }
-                .tag(3)
+                .tag(1)
             sectionNavigation(2)
                 .tabItem { Label(String(localized: "Settings", table: "Interface"), systemImage: "gearshape") }
                 .tag(2)
@@ -443,11 +428,6 @@ struct ContentView: View {
                     .navigationTitle("Slowth")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
-                        ToolbarItem(placement: .primaryAction) {
-                            Button { showWebApps = true } label: {
-                                Label(String(localized: "Web apps", table: "WebApps"), systemImage: "app.badge")
-                            }
-                        }
                         ToolbarItem(placement: .primaryAction) {
                             Button { selectedSection = selectedSection == 2 ? 0 : 2 } label: {
                                 Label(sectionTitle(2), systemImage: "gearshape")
@@ -510,9 +490,6 @@ struct ContentView: View {
                 HStack {
                     Label("Slowth", systemImage: "leaf.fill").font(.headline)
                     Spacer()
-                    Button { showWebApps = true } label: {
-                        Label(String(localized: "Web apps", table: "WebApps"), systemImage: "app.badge")
-                    }
                     Button { selectedSection = 2 } label: {
                         Label(sectionTitle(2), systemImage: "gearshape")
                     }
@@ -598,7 +575,7 @@ struct ContentView: View {
 
     private func sectionTitle(_ section: Int) -> String {
         section == 0 ? String(localized: "Apps", table: "Interface")
-            : section == 1 ? "Safari" : String(localized: "Settings", table: "Interface")
+            : section == 1 ? String(localized: "Web apps", table: "WebApps") : String(localized: "Settings", table: "Interface")
     }
 
     private func sectionLabel(_ section: Int) -> some View {
@@ -658,14 +635,26 @@ struct ContentView: View {
                     #endif
                 } else if section == 1 {
                     Section {
-                        Button { showSafariHelp = true } label: {
-                            Label(String(localized: "Check Safari extension", table: "Interface"), systemImage: "safari")
-                        }
+                        IOSFeatureCard(
+                            title: String(localized: "Enable in Safari"),
+                            subtitle: String(localized: "Safari blocking works on websites without screen recording."),
+                            icon: "safari.fill",
+                            gradient: [Color(red: 0.21, green: 0.65, blue: 0.97),
+                                       Color(red: 0.14, green: 0.45, blue: 0.84)],
+                            action: { showSafariHelp = true }, compact: true
+                        )
+                        .accessibilityIdentifier("webapps.safari.help")
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                     }
-                    SafariSiteSettingsSections(state: state, expandedService: (isPad || isDuo) ? $expandedSafariService : $expandedService)
-                        .disabled(state.groupSelectionRestSeconds > 0)
+                    WebAppsIntroSections()
+                    SafariSiteSettingsSections(state: state,
+                        expandedService: (isPad || isDuo) ? $expandedSafariService : $expandedService,
+                        showsWebAppActions: true)
                     SafariRulesUpdateSection(state: state)
                         .disabled(state.groupSelectionRestSeconds > 0)
+                    HiddenWebAppsSection()
                 } else {
                     if !isPad && !isDuo { heroSection }
                     strictModeSection
@@ -677,6 +666,9 @@ struct ContentView: View {
                         Section { ShieldNotificationPermissionView() }
                     }
                     #endif
+                    if #available(iOS 18.4, *) {
+                        WebAppDataSettingsSection()
+                    }
                     helpSection
                     #if DEBUG
                     if debugModeEnabled {
@@ -823,7 +815,7 @@ struct ContentView: View {
     private var disabledByStrict: Bool { state.snapshot.isStrictModeActive }
 
     private var isReadyForReview: Bool {
-        guard webAppsRouter.service == nil, !showWebApps, selectedSection != 3, restToShow == nil, welcomeHandled, !showWelcome, !welcomeDismissing, !pendingWelcomeSafari, !pendingRecordingPrompt,
+        guard webAppsRouter.service == nil, selectedSection != 1, restToShow == nil, welcomeHandled, !showWelcome, !welcomeDismissing, !pendingWelcomeSafari, !pendingRecordingPrompt,
               state.lastError == nil, !state.refreshing,
               !showSafariHelp, !showAbout, !showAppsPrivacy, !showContribution, !showSupportSheet, !showRealtimeBlockingBeta,
               !showRealtimeRecordingPrompt, !showPauseOnlyPrompt, !showStrictModeConfirmation else { return false }
@@ -900,7 +892,7 @@ struct ContentView: View {
     }
 
     private func considerAutomaticWelcome() {
-        guard webAppsRouter.service == nil, webAppsRouter.pending == nil, !showWebApps, selectedSection != 3, !welcomeHandled, !ScreenshotPresentation.activeProtection else { return }
+        guard webAppsRouter.service == nil, webAppsRouter.pending == nil, selectedSection != 1, !welcomeHandled, !ScreenshotPresentation.activeProtection else { return }
         if IOSWelcomeEligibility.isConfigured() {
             welcomeHandled = true
         } else if !pendingRecordingPrompt && !showRealtimeRecordingPrompt && presentationIsIdle {
@@ -1119,17 +1111,28 @@ struct ContentView: View {
 
     private var strictModeSection: some View {
         Section {
-            Toggle(isOn: Binding(
-                get: { state.snapshot.isStrictModeActive },
-                set: { newValue in
-                    if newValue { showStrictModeConfirmation = true }
-                    else { state.setStrictMode(false) }
+            TimelineView(.periodic(from: .now, by: 1)) { context in
+                Toggle(isOn: Binding(
+                    get: { state.snapshot.isStrictModeActive },
+                    set: { newValue in
+                        if newValue { showStrictModeConfirmation = true }
+                        else { state.setStrictMode(false) }
+                    }
+                )) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(String(localized: "Strict mode", table: "Interface"))
+                        if state.snapshot.canCancelStrictMode(at: context.date),
+                           let deadline = state.snapshot.strictModeCancellationUntil {
+                            HStack {
+                                Text(String(localized: "Cancel"))
+                                Text(deadline, style: .timer).monospacedDigit()
+                            }.font(.caption).foregroundStyle(.secondary)
+                        }
+                    }
                 }
-            )) {
-                Text(String(localized: "Strict mode", table: "Interface"))
+                .tint(isPad ? .green : SlowthAppearance.sage)
+                .disabled(disabledByStrict && !state.snapshot.canCancelStrictMode(at: context.date))
             }
-            .tint(isPad ? .green : SlowthAppearance.sage)
-            .disabled(disabledByStrict)
             Toggle(String(localized: "Allow pauses in Strict mode", table: "Interface"), isOn: Binding(
                 get: { SharedStore.pausesAllowedInStrictMode },
                 set: { state.setPausesAllowedInStrictMode($0) }
@@ -1141,7 +1144,7 @@ struct ContentView: View {
                     .font(.footnote).foregroundStyle(.secondary)
             }
         } footer: {
-            Text(String(localized: "Enabled restrictions are locked for 24 hours.", table: "Interface"))
+            Text(String(localized: "Enabled restrictions are locked for 24 hours.", table: "Interface")) + Text(" ") + Text(AppLocalization.string("You can turn Strict mode off during the first minute."))
         }
     }
 

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ഹോം ഫീഡ് മറയ്ക്കുക"
+  },
+  "strictCancellationHelp": {
+    "message": "ആദ്യ മിനിറ്റിനുള്ളിൽ കർശന മോഡ് ഓഫാക്കാം."
   }
 }

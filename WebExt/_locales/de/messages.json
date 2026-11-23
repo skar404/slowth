@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Startseiten-Feed ausblenden"
+  },
+  "strictCancellationHelp": {
+    "message": "Du kannst den strengen Modus innerhalb der ersten Minute ausschalten."
   }
 }

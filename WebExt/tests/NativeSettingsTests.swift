@@ -32,6 +32,42 @@ struct NativeSettingsTests {
             preconditionFailure("X enabled without a valid selection")
         } catch SharedStoreError.invalidValue { }
         reset()
+        _ = try SharedStore.setStrictMode(true)
+        let activated = SharedStore.snapshot()
+        let start = activated.strictModeStartedAt!
+        check(abs(activated.strictModeUntil!.timeIntervalSince(start) - 86400) < 0.001, "Lock still lasts 24 hours")
+        check(activated.canCancelStrictMode(at: start), "Cancellation starts immediately")
+        check(activated.canCancelStrictMode(at: start.addingTimeInterval(59.999)), "Cancellation lasts until 60 seconds")
+        check(!activated.canCancelStrictMode(at: start.addingTimeInterval(60)), "Cancellation ends at exactly 60 seconds")
+        check(!activated.canCancelStrictMode(at: start.addingTimeInterval(-1)), "A future activation does not allow cancellation")
+        check(SharedStore.snapshot().canCancelStrictMode(), "Grace period survives reading persisted state")
+        let repeated = try SharedStore.setStrictMode(true)
+        check(repeated.strictModeStartedAt == start && repeated.strictModeUntil == activated.strictModeUntil,
+              "Repeated enable preserves both deadlines")
+        do {
+            _ = try SharedStore.setToggle(site: "youtube", feature: .shorts, enabled: false)
+            preconditionFailure("Restrictions must stay locked during the cancellation window")
+        } catch SharedStoreError.strictModeActive { }
+        let cancelled = try SharedStore.setStrictMode(false)
+        check(!cancelled.isStrictModeActive && cancelled.strictModeStartedAt == nil, "Can cancel during grace")
+        check(defaults.object(forKey: SharedStoreKey.strictModeStartedAt) == nil, "Cancellation removes persisted activation")
+        _ = try SharedStore.setStrictMode(true)
+        defaults.set(Date().addingTimeInterval(-61).timeIntervalSince1970, forKey: SharedStoreKey.strictModeStartedAt)
+        do {
+            _ = try SharedStore.setStrictMode(false)
+            preconditionFailure("Cannot cancel after one minute")
+        } catch SharedStoreError.strictModeActive { }
+        _ = try SharedStore.setStrictMode(true)
+        check(!SharedStore.snapshot().canCancelStrictMode(), "Re-enabling cannot reopen an expired grace period")
+        defaults.removeObject(forKey: SharedStoreKey.strictModeStartedAt)
+        do {
+            _ = try SharedStore.setStrictMode(false)
+            preconditionFailure("Existing locks without activation metadata stay locked")
+        } catch SharedStoreError.strictModeActive { }
+        defaults.set(Date().addingTimeInterval(-1).timeIntervalSince1970, forKey: SharedStoreKey.strictModeUntil)
+        let renewed = try SharedStore.setStrictMode(true)
+        check(renewed.canCancelStrictMode(), "A new activation after expiry gets its own grace period")
+        reset()
         let fresh = SharedStore.snapshot()
         for site in SharedState.supportedSites {
             let settings = fresh.toggles[site]!

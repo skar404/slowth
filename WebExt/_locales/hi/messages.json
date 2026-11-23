@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "होम फ़ीड छिपाएँ"
+  },
+  "strictCancellationHelp": {
+    "message": "आप पहले मिनट के दौरान सख्त मोड बंद कर सकते हैं।"
   }
 }

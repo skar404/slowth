@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Hide home feed"
+  },
+  "strictCancellationHelp": {
+    "message": "You can turn Strict mode off during the first minute."
   }
 }

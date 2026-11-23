@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Skrij vir na domači strani"
+  },
+  "strictCancellationHelp": {
+    "message": "Strogi način lahko izklopite v prvi minuti."
   }
 }

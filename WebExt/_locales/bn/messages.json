@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "হোম ফিড লুকান"
+  },
+  "strictCancellationHelp": {
+    "message": "প্রথম মিনিটের মধ্যে কঠোর মোড বন্ধ করতে পারবেন।"
   }
 }

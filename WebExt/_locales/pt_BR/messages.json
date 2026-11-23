@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ocultar feed da página inicial"
+  },
+  "strictCancellationHelp": {
+    "message": "Você pode desativar o modo estrito durante o primeiro minuto."
   }
 }

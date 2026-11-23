@@ -884,6 +884,125 @@
           }
         }
       }
+    },
+    "Clear all website data": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear all website data"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить все данные сайтов"
+          }
+        }
+      }
+    },
+    "Clear all website data?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear all website data?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить все данные сайтов?"
+          }
+        }
+      }
+    },
+    "This signs you out of all websites in Slowth and deletes their cookies, cache and temporary downloads. Blocking settings, Safari data and files saved to Files stay unchanged.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This signs you out of all websites in Slowth and deletes their cookies, cache and temporary downloads. Blocking settings, Safari data and files saved to Files stay unchanged."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы выйдете из аккаунтов всех сайтов в Slowth. Их cookies, кэш и временные загрузки будут удалены. Настройки блокировки, данные Safari и файлы, сохранённые в «Файлы», останутся."
+          }
+        }
+      }
+    },
+    "Could not clear all website data. Please try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not clear all website data. Please try again."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось очистить все данные сайтов. Попробуйте ещё раз."
+          }
+        }
+      }
+    },
+    "Hide from Web apps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide from Web apps"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть из веб-приложений"
+          }
+        }
+      }
+    },
+    "Show in Web apps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Web apps"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вернуть в веб-приложения"
+          }
+        }
+      }
+    },
+    "Hidden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hidden"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрытые"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

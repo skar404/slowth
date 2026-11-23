@@ -1,6 +1,5 @@
 import SwiftUI
 import WebKit
-import AuthenticationServices
 import QuickLook
 import AVFAudio
 
@@ -444,63 +443,31 @@ struct WebAppBrowserScreen: View {
     @ObservedObject private var runtime: WebAppProfileRuntime
     @Environment(\.dismiss) private var dismiss
     @State private var attempt = 0
-    @State private var showBlockingSettings = false
-    @State private var showDownloads = false
-    @State private var confirmClear = false
-    @State private var confirmReset = false
-    @State private var passkeyMessage: String?
-    @State private var clearing = false
+    @State private var blockingSettingsService: WebAppService?
     init(service: WebAppService) {
         let runtime = WebAppProfileRuntime.shared(service.profile)
         _runtime = ObservedObject(wrappedValue: runtime)
         _browser = StateObject(wrappedValue: runtime.session(service))
         #if DEBUG && targetEnvironment(simulator)
-        _showBlockingSettings = State(initialValue: ProcessInfo.processInfo.arguments.contains("--preview-web-app-settings"))
+        _blockingSettingsService = State(initialValue: ProcessInfo.processInfo.arguments.contains("--preview-web-app-settings") ? service : nil)
         #endif
     }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                Button { browser.back() } label: { Image(systemName: "chevron.left").frame(width: 44, height: 44).contentShape(Rectangle()) }
-                    .disabled(!browser.canGoBack).accessibilityLabel(String(localized: "Back", table: "WebApps"))
+                Button { dismiss() } label: { Image(systemName: "xmark").frame(width: 44, height: 44).contentShape(Rectangle()) }
+                    .accessibilityLabel(String(localized: "Close"))
                 VStack(spacing: 2) {
                     Text(browser.currentHost.isEmpty ? browser.service.url.host! : browser.currentHost)
                         .font(.subheadline.weight(.semibold)).lineLimit(1).truncationMode(.middle)
                     Text(protectionLabel).font(.caption2).foregroundStyle(.secondary)
                 }.frame(maxWidth: .infinity).accessibilityElement(children: .combine)
-                Menu {
-                    Button(String(localized: "Forward", table: "WebApps"), systemImage: "chevron.right") { browser.forward() }
-                        .disabled(!browser.canGoForward)
-                    Button(String(localized: "Home", table: "WebApps"), systemImage: "house") { browser.home() }
-                    if browser.loading {
-                        Button(String(localized: "Stop loading", table: "WebApps"), systemImage: "xmark") { browser.activeView?.stopLoading() }
-                    }
-                    Menu(String(localized: "Windows", table: "WebApps")) {
-                        ForEach(browser.windows, id: \.self) { tab in
-                            Button(tab.view.url?.host ?? browser.service.title) { browser.select(tab) }
-                        }
-                        Button(String(localized: "Close window", table: "WebApps"), systemImage: "xmark") { browser.closeWindow() }
-                            .disabled(!browser.canCloseWindow)
-                    }
-                    Button(String(localized: "Downloads", table: "WebApps"), systemImage: "arrow.down.circle") { showDownloads = true }
-                    Button(String(localized: "Passkey access", table: "WebApps"), systemImage: "person.badge.key") { requestPasskeys() }
-                    Button(String(localized: "Reset site permissions", table: "WebApps"), systemImage: "hand.raised") {
-                        confirmReset = true
-                    }
-                    Button(String(localized: "Clear profile data", table: "WebApps"), systemImage: "trash", role: .destructive) { confirmClear = true }
-                    Button(String(localized: "Blocking settings", table: "WebApps"), systemImage: "slider.horizontal.3") {
-                        showBlockingSettings = true
-                    }
-                    Button(String(localized: "Reload", table: "WebApps"), systemImage: "arrow.clockwise") { browser.reload() }
-                    if let url = browser.activeView?.url, ["https", "http"].contains(url.scheme ?? "") {
-                        ShareLink(item: url) { Label(String(localized: "Share link", table: "WebApps"), systemImage: "square.and.arrow.up") }
-                        Button(String(localized: "Copy link", table: "WebApps"), systemImage: "doc.on.doc") { UIPasteboard.general.url = url }
-                    }
-                } label: { Image(systemName: "ellipsis.circle").frame(width: 44, height: 44).contentShape(Rectangle()) }
-                    .accessibilityLabel(String(localized: "Menu", table: "WebApps"))
-                Button { dismiss() } label: { Image(systemName: "xmark").frame(width: 44, height: 44).contentShape(Rectangle()) }
-                    .accessibilityLabel(String(localized: "Close"))
+                Button { blockingSettingsService = currentService } label: {
+                    Image(systemName: "slider.horizontal.3").frame(width: 44, height: 44).contentShape(Rectangle())
+                }
+                .disabled(currentService == nil)
+                .accessibilityLabel(String(localized: "Blocking settings", table: "WebApps"))
             }.font(.system(size: 17)).padding(.horizontal, 4).background(.regularMaterial)
             ZStack {
                 if let view = browser.activeView {
@@ -524,29 +491,10 @@ struct WebAppBrowserScreen: View {
         }
         .ignoresSafeArea(.container, edges: .bottom)
         .background(SlowthAppearance.background).tint(SlowthAppearance.sage)
-        .sheet(isPresented: $showBlockingSettings) {
-            WebAppBlockingSettings(service: browser.service)
+        .sheet(item: $blockingSettingsService) { service in
+            WebAppBlockingSettings(service: service)
+                .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $showDownloads) { WebAppDownloadsScreen(downloads: browser.downloads) }
-        .confirmationDialog(String(localized: "Reset site permissions", table: "WebApps"), isPresented: $confirmReset, titleVisibility: .visible) {
-            Button(String(localized: "Reset site permissions", table: "WebApps")) { runtime.resetPermissions(); attempt += 1 }
-        } message: {
-            Text(String(localized: "Pages in this profile will close. Sites will ask for camera and microphone access again. System permissions can be changed in Settings.", table: "WebApps"))
-        }
-        .confirmationDialog(String(localized: "Clear profile data?", table: "WebApps"), isPresented: $confirmClear, titleVisibility: .visible) {
-            Button(String(localized: "Clear profile data", table: "WebApps"), role: .destructive) {
-                clearing = true
-                Task { await runtime.clearData(); clearing = false; attempt += 1 }
-            }
-        } message: {
-            Text(browser.service.profile == .meta
-                 ? String(localized: "This signs you out of Instagram and Facebook and closes their pages. Blocking settings stay the same.", table: "WebApps")
-                 : String(localized: "This signs you out of this profile and closes its pages. Blocking settings stay the same.", table: "WebApps"))
-        }
-        .alert(String(localized: "Passkey access", table: "WebApps"), isPresented: Binding(get: { passkeyMessage != nil }, set: { if !$0 { passkeyMessage = nil } })) {
-            Button(String(localized: "OK"), role: .cancel) { passkeyMessage = nil }
-        } message: { Text(passkeyMessage ?? "") }
-        .disabled(clearing)
         .task(id: attempt) { await browser.start() }
         .onReceive(WebAppsRouter.shared.$websiteURL) { url in
             if url != nil { Task { @MainActor in browser.openRequestedWebsite() } }
@@ -561,19 +509,9 @@ struct WebAppBrowserScreen: View {
         case .failed: return String(localized: "Protection unavailable", table: "WebApps")
         }
     }
-    private func requestPasskeys() {
-        guard Bundle.main.object(forInfoDictionaryKey: "SlowthBrowserEntitlementCandidate") as? Bool == true else {
-            passkeyMessage = String(localized: "Browser passkey access is awaiting Apple approval. Web apps remain Beta.", table: "WebApps")
-            return
-        }
-        let manager = ASAuthorizationWebBrowserPublicKeyCredentialManager()
-        manager.requestAuthorizationForPublicKeyCredentials { state in
-            Task { @MainActor in
-                passkeyMessage = state == .authorized
-                    ? String(localized: "Passkey access is enabled. Continue signing in on the website.", table: "WebApps")
-                    : String(localized: "Passkey access was not enabled. You can try again or review permissions in Settings.", table: "WebApps")
-            }
-        }
+    private var currentService: WebAppService? {
+        guard let url = browser.activeView?.url else { return browser.service }
+        return WebAppService.containing(url)
     }
 
 }
@@ -581,37 +519,44 @@ struct WebAppBrowserScreen: View {
 @available(iOS 18.4, *)
 private struct WebAppBlockingSettings: View {
     @StateObject private var state = AppState()
-    @State private var expandedService: String?
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .body) private var rowHeight = 54.0
+    @ScaledMetric(relativeTo: .caption) private var noteHeight = 56.0
+    let service: WebAppService
 
-    init(service: WebAppService) {
-        _expandedService = State(initialValue: "safari." + service.id)
+    private var compactHeight: CGFloat {
+        84 + rowHeight * Double(SiteBlockingControl.controls(for: service.id).count)
+            + (service == .instagram ? noteHeight : 24)
     }
 
     var body: some View {
         NavigationStack {
-            ScrollViewReader { proxy in
-                Form {
-                    Group {
-                        SafariSiteSettingsSections(state: state, expandedService: $expandedService)
-                        SafariRulesUpdateSection(state: state)
-                    }
+            Form {
+                SafariSiteSettingsSections(state: state, expandedService: .constant(nil), onlySite: service.id)
                     .disabled(state.groupSelectionRestSeconds > 0)
                     .listRowBackground(SlowthAppearance.card)
-                }
-                .scrollContentBackground(.hidden)
-                .listSectionSpacing(.custom(10))
-                .contentMargins(.top, 8, for: .scrollContent)
-                .environment(\.defaultMinListRowHeight, 48)
-                .onAppear {
-                    state.reload()
-                    if let expandedService { proxy.scrollTo(expandedService, anchor: .top) }
-                }
             }
+            .scrollContentBackground(.hidden)
+            .listSectionSpacing(.custom(10))
+            .contentMargins(.top, 8, for: .scrollContent)
+            .environment(\.defaultMinListRowHeight, 48)
+            .onAppear { state.reload() }
             .background(SlowthAppearance.background)
-            .navigationTitle(String(localized: "Blocking settings", table: "WebApps"))
+            .navigationTitle(service.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    HStack(spacing: 8) {
+                        Image(service.icon)
+                            .resizable().renderingMode(.original).scaledToFit()
+                            .frame(width: 24, height: 24)
+                            .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+                            .accessibilityHidden(true)
+                        Text(service.title).font(.headline)
+                    }
+                    .accessibilityAddTraits(.isHeader)
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "Close")) { dismiss() }
                 }
@@ -624,5 +569,6 @@ private struct WebAppBlockingSettings: View {
             } message: { Text(state.lastError ?? "") }
         }
         .tint(SlowthAppearance.sage)
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.height(compactHeight), .large])
     }
 }

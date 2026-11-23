@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Itago ang home feed"
+  },
+  "strictCancellationHelp": {
+    "message": "Maaari mong i-off ang Strict mode sa loob ng unang minuto."
   }
 }

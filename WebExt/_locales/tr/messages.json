@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ana sayfa akışını gizle"
+  },
+  "strictCancellationHelp": {
+    "message": "İlk dakika içinde katı modu kapatabilirsiniz."
   }
 }

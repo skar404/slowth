@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Skryť kanál na hlavnej stránke"
+  },
+  "strictCancellationHelp": {
+    "message": "Prísny režim môžete vypnúť počas prvej minúty."
   }
 }

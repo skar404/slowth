@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ซ่อนฟีดหน้าแรก"
+  },
+  "strictCancellationHelp": {
+    "message": "คุณสามารถปิดโหมดเข้มงวดได้ภายในนาทีแรก"
   }
 }

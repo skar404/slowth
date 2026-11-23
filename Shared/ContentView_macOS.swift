@@ -192,21 +192,23 @@ struct MacContentView: View {
             #endif
 
             Section {
-                Toggle(isOn: Binding(
-                    get: { state.snapshot.isStrictModeActive },
-                    set: { newValue in
-                        if newValue { showStrictModeConfirmation = true }
-                        else { state.setStrictMode(false) }
+                TimelineView(.periodic(from: .now, by: 1)) { context in
+                    Toggle(isOn: Binding(
+                        get: { state.snapshot.isStrictModeActive },
+                        set: { newValue in
+                            if newValue { showStrictModeConfirmation = true }
+                            else { state.setStrictMode(false) }
+                        }
+                    )) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(AppLocalization.string("Strict mode"))
+                            (Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text("\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                        }
                     }
-                )) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(AppLocalization.string("Strict mode"))
-                        Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."))
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                    }
+                    .disabled(disabledByStrict && !state.snapshot.canCancelStrictMode(at: context.date))
                 }
-                .disabled(disabledByStrict && state.snapshot.realtimeShieldEnabled)
             } header: {
                 Text(AppLocalization.string("Strict mode"))
             }
@@ -307,7 +309,7 @@ struct MacContentView: View {
             Button(AppLocalization.string("Enable")) { state.setStrictMode(true) }
             Button(AppLocalization.string("Cancel"), role: .cancel) { }
         } message: {
-            Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking."))
+            (Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text("\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
         }
         .sheet(isPresented: $showAbout) {
             HowItWorksSheet(feedbackURL: feedbackURL)

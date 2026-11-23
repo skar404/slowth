@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Sembunyikan feed beranda"
+  },
+  "strictCancellationHelp": {
+    "message": "Anda dapat menonaktifkan mode ketat dalam satu menit pertama."
   }
 }

@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ہوم فیڈ لکاؤ"
+  },
+  "strictCancellationHelp": {
+    "message": "تسی پہلے منٹ دے اندر سخت موڈ بند کر سکدے او۔"
   }
 }

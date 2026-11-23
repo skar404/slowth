@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "ಹೋಮ್ ಫೀಡ್ ಮರೆಮಾಡಿ"
+  },
+  "strictCancellationHelp": {
+    "message": "ಮೊದಲ ನಿಮಿಷದೊಳಗೆ ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಅನ್ನು ಆಫ್ ಮಾಡಬಹುದು."
   }
 }

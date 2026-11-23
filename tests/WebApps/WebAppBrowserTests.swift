@@ -269,6 +269,33 @@ final class WebAppBrowserTests: XCTestCase {
         await meta.deleteCookie(cookie)
     }
 
+    func testClearAllWebsiteDataIncludesUnopenedProfilesAndLegacyStore() async throws {
+        let name = "slowth-clear-test-" + UUID().uuidString
+        let cookie = try XCTUnwrap(HTTPCookie(properties: [
+            .domain: ".example.com", .path: "/", .name: name, .value: "temporary"
+        ]))
+        let stores = WebAppProfile.allCases.map { WebAppProfileRuntime.shared($0).dataStore }
+            + [WKWebsiteDataStore.default()]
+        for store in stores { await store.httpCookieStore.setCookie(cookie) }
+        for service in WebAppService.allCases {
+            UserDefaults.standard.set(service.url, forKey: "webapps.last-url.v2." + service.id)
+        }
+        let downloads = FileManager.default.temporaryDirectory.appendingPathComponent("SlowthDownloads", isDirectory: true)
+        try FileManager.default.createDirectory(at: downloads, withIntermediateDirectories: true)
+        try Data("temporary download".utf8).write(to: downloads.appendingPathComponent(name))
+
+        try await WebAppProfileRuntime.clearAllData()
+
+        for store in stores {
+            let cookies = await store.httpCookieStore.allCookies()
+            XCTAssertFalse(cookies.contains { $0.name == name })
+        }
+        for service in WebAppService.allCases {
+            XCTAssertNil(UserDefaults.standard.url(forKey: "webapps.last-url.v2." + service.id))
+        }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: downloads.path))
+    }
+
     func testWindowCloseReturnsToOpenerAndCannotCloseMain() {
         let browser = WebAppProfileRuntime.shared(.youtube).session(.youtube)
         browser.stop()

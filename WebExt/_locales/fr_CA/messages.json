@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Masquer le fil d’accueil"
+  },
+  "strictCancellationHelp": {
+    "message": "Vous pouvez désactiver le mode strict pendant la première minute."
   }
 }

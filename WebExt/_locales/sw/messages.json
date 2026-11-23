@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ficha mipasho ya ukurasa wa mwanzo"
+  },
+  "strictCancellationHelp": {
+    "message": "Unaweza kuzima hali kali ndani ya dakika ya kwanza."
   }
 }

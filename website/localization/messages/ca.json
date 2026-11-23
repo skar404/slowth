@@ -232,5 +232,22 @@
   "s776c8faeb5a4": "Llengua",
   "sfdbeb7b4c454": "Tria un idioma",
   "s7adb464647bb": "Tanca la llista d'idiomes",
-  "s4a365f0e0401": "Les captures de pantalla de l'aplicació es mostren en anglès."
+  "s4a365f0e0401": "Les captures de pantalla de l'aplicació es mostren en anglès.",
+  "sfea52e13bb5b": "Afegiu {service} a la vostra pantalla d'inici",
+  "sa7bad70eafe3": "La vostra icona familiar obre el lloc web dins de Slowth amb la vostra configuració de bloqueig.",
+  "s4dba5cca37f6": "Obriu aquesta pàgina a Safari i toqueu Compartir.",
+  "s6dc4e0646967": "Trieu Afegeix a la pantalla d'inici. Manteniu obert com a aplicació web activada si apareix aquesta opció.",
+  "sc0d02d1c8b3d": "Toqueu Afegeix. El nom i la icona estan preparats per a tu.",
+  "s4251392d4962": "S'està obrint {service}...",
+  "s62363548fb73": "a Slowth",
+  "sa8048fd6c76e": "Redirecció a l'aplicació. Si no s'obre automàticament, toqueu a continuació. iOS pot demanar confirmació.",
+  "s4011e25b0765": "Obre a Slowth",
+  "s9cce734699b1": "Requereix Slowth amb aplicacions web i iOS 18.4 o posterior. Els inicis de sessió a Slowth i Safari són separats.",
+  "s15b12301b491": "Si suprimiu una drecera, el vostre compte i la configuració de Slowth deixaran intactes.",
+  "sed6c488e5521": "Obteniu Slowth",
+  "sd67e32de11ba": "Instruccions de configuració",
+  "sb3ef95f1625c": "{service} · Drecera Slowth",
+  "s2367b2f71336": "Afegiu una drecera per obrir {service} dins de Slowth.",
+  "s75d3fd457277": "Activeu JavaScript perquè la drecera desada de la pantalla d'inici pugui obrir Slowth.",
+  "sdc5e218f7566": "Beta"
 }

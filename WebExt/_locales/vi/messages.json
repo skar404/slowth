@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ẩn bảng tin trang chủ"
+  },
+  "strictCancellationHelp": {
+    "message": "Bạn có thể tắt chế độ nghiêm ngặt trong phút đầu tiên."
   }
 }

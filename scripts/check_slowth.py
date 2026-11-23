@@ -89,5 +89,5 @@ def run():
     assert len(locations)==192 and len(set(locations))==192,'Sitemap duplicates/missing pages'
     assert set(locations)=={url(l,p) for l in LOCALES for p in ['index','support','privacy']},'Sitemap mismatch'
     assert not warnings,warnings
-    print(f'Passed: {len(LOCALES)} locales, {len(docs)} pages, 234 messages per locale; links, assets, schema, hreflang, original policies and sitemap.')
+    print(f'Passed: {len(LOCALES)} locales, {len(docs)} pages, {len(SOURCE)} messages per locale; links, assets, schema, hreflang, original policies and sitemap.')
 if __name__=='__main__':run()

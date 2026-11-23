@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "إخفاء خلاصة الصفحة الرئيسية"
+  },
+  "strictCancellationHelp": {
+    "message": "يمكنك إيقاف الوضع الصارم خلال الدقيقة الأولى."
   }
 }

@@ -232,5 +232,22 @@
   "s776c8faeb5a4": "Idioma",
   "sfdbeb7b4c454": "Elige un idioma",
   "s7adb464647bb": "Cerrar lista de idiomas",
-  "s4a365f0e0401": "Las capturas de pantalla de la aplicación se muestran en inglés."
+  "s4a365f0e0401": "Las capturas de pantalla de la aplicación se muestran en inglés.",
+  "sfea52e13bb5b": "Añade {service} a tu pantalla de inicio",
+  "sa7bad70eafe3": "Su ícono familiar abre el sitio web dentro de Slowth con su configuración de bloqueo.",
+  "s4dba5cca37f6": "Abre esta página en Safari y toca Compartir.",
+  "s6dc4e0646967": "Elige Añadir a pantalla de inicio. Deja activada la opción Abrir como app web si aparece.",
+  "sc0d02d1c8b3d": "Toca Añadir. El nombre y el icono ya están preparados.",
+  "s4251392d4962": "Abriendo {service}…",
+  "s62363548fb73": "en Slowth",
+  "sa8048fd6c76e": "Redirigiendo a la aplicación. Si no se abre automáticamente, toque a continuación. iOS puede solicitar confirmación.",
+  "s4011e25b0765": "Abrir en Slowth",
+  "s9cce734699b1": "Requiere Slowth con aplicaciones web y iOS 18.4 o posterior. Los inicios de sesión dentro de Slowth y Safari son independientes.",
+  "s15b12301b491": "Eliminar un acceso directo deja intactas su cuenta y la configuración de Slowth.",
+  "sed6c488e5521": "Obtener Slowth",
+  "sd67e32de11ba": "Instrucciones de configuración",
+  "sb3ef95f1625c": "Acceso directo {service} · Slowth",
+  "s2367b2f71336": "Agregue un acceso directo para abrir {service} dentro de Slowth.",
+  "s75d3fd457277": "Habilite JavaScript para que su acceso directo guardado en la pantalla de inicio pueda abrir Slowth.",
+  "sdc5e218f7566": "Beta"
 }

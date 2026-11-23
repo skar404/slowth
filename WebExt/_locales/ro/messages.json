@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Ascunde fluxul de pe pagina principală"
+  },
+  "strictCancellationHelp": {
+    "message": "Poți dezactiva modul strict în primul minut."
   }
 }

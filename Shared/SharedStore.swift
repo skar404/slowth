@@ -135,6 +135,7 @@ struct SiteBlockingSettings: Codable, Equatable {
 struct SharedState: Codable, Equatable {
     var toggles: [String: SiteBlockingSettings]
     var strictModeUntil: Date?
+    var strictModeStartedAt: Date? = nil
     var rulesFetchedAt: Date?
     var onboardingDone: Bool
     var supportCardDismissed: Bool
@@ -193,6 +194,17 @@ struct SharedState: Codable, Equatable {
     var isStrictModeActive: Bool {
         guard let until = strictModeUntil else { return false }
         return until > Date()
+    }
+
+    var strictModeCancellationUntil: Date? {
+        strictModeStartedAt?.addingTimeInterval(60)
+    }
+
+    func canCancelStrictMode(at now: Date = Date()) -> Bool {
+        guard let until = strictModeUntil, until > now,
+              let start = strictModeStartedAt, start <= now,
+              let deadline = strictModeCancellationUntil else { return false }
+        return now < deadline
     }
 
     var realtimeInstagramBlockingEnabled: Bool {
@@ -285,6 +297,7 @@ enum SharedStoreKey {
     static let toggles = "toggles" // Legacy modes, retained for migration.
     static let siteBlocking = "siteBlockingV2"
     static let strictModeUntil = "strictModeUntil"
+    static let strictModeStartedAt = "strictModeStartedAt"
     static let rules = "rules"
     static let rulesEtag = "rulesEtag"
     static let rulesFetchedAt = "rulesFetchedAt"
@@ -433,6 +446,7 @@ enum SharedStore {
         return SharedState(
             toggles: toggles,
             strictModeUntil: until,
+            strictModeStartedAt: until == nil ? nil : date(forKey: SharedStoreKey.strictModeStartedAt),
             rulesFetchedAt: fetchedAt,
             onboardingDone: onboardingDone,
             supportCardDismissed: supportCardDismissed,
@@ -503,16 +517,23 @@ enum SharedStore {
     static func setStrictMode(_ enabled: Bool) throws -> SharedState {
         defer { NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil) }
         var state = snapshot()
-        if state.isStrictModeActive && !enabled {
+        // Repeated enable requests must not renew either the lock or its grace period.
+        if state.isStrictModeActive && enabled { return state }
+        if state.isStrictModeActive && !enabled && !state.canCancelStrictMode() {
             throw SharedStoreError.strictModeActive
         }
         if enabled {
-            let until = Date().addingTimeInterval(24 * 3600)
+            let startedAt = Date()
+            let until = startedAt.addingTimeInterval(24 * 3600)
             state.strictModeUntil = until
+            state.strictModeStartedAt = startedAt
             d.set(until.timeIntervalSince1970, forKey: SharedStoreKey.strictModeUntil)
+            d.set(startedAt.timeIntervalSince1970, forKey: SharedStoreKey.strictModeStartedAt)
         } else {
             state.strictModeUntil = nil
+            state.strictModeStartedAt = nil
             d.removeObject(forKey: SharedStoreKey.strictModeUntil)
+            d.removeObject(forKey: SharedStoreKey.strictModeStartedAt)
         }
         return state
     }
@@ -559,6 +580,7 @@ enum SharedStore {
     static func resetStrictModeForDebug() {
         guard DebugMode.isEnabled else { return }
         d.removeObject(forKey: SharedStoreKey.strictModeUntil)
+        d.removeObject(forKey: SharedStoreKey.strictModeStartedAt)
     }
     #endif
 

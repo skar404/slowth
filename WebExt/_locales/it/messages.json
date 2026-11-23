@@ -241,5 +241,8 @@
   },
   "hideHomeFeed": {
     "message": "Nascondi il feed della home"
+  },
+  "strictCancellationHelp": {
+    "message": "Puoi disattivare la modalità rigorosa durante il primo minuto."
   }
 }
