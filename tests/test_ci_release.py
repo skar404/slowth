@@ -75,6 +75,24 @@ class EvidenceTests(unittest.TestCase):
 
 
 class SigningTests(unittest.TestCase):
+    def test_project_test_bundles_do_not_require_distribution_profiles(self):
+        _, _, spec = release.versions(release.ROOT)
+        self.assertEqual(spec['targets']['WebAppBrowserTests']['type'], 'bundle.unit-test')
+        spec['targets']['FutureUITests'] = {'type': 'bundle.ui-testing', 'platform': 'iOS'}
+        with tempfile.TemporaryDirectory() as temp:
+            signer = ci_signing.Signing(Path(temp) / 'signing')
+            # Stop before touching credentials; reaching this point proves the
+            # real project's distribution-target mapping accepted test bundles.
+            with patch.object(ci_signing, 'required', side_effect=LookupError('profile secret needed')):
+                with self.assertRaisesRegex(LookupError, 'profile secret needed'):
+                    signer.configure(Path(temp), spec)
+            spec['targets']['UnmappedExtension'] = {'type': 'app-extension', 'platform': 'iOS'}
+            with patch.object(ci_signing, 'required') as secret:
+                with self.assertRaisesRegex(RuntimeError, 'Profile mapping'):
+                    signer.configure(Path(temp), spec)
+                secret.assert_not_called()
+            signer.cleanup()
+
     def test_der_es256_conversion_and_rejection(self):
         self.assertEqual(ci_signing.jwt_signature(bytes.fromhex('3006020101020102')),
                          (1).to_bytes(32, 'big') + (2).to_bytes(32, 'big'))

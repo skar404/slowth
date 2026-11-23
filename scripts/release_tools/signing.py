@@ -126,7 +126,11 @@ class Signing:
         self.previous_build = maximum
 
     def configure(self, source, spec):
-        targets = {name: target for name, target in spec['targets'].items() if target['platform'] == 'iOS'}
+        # XCTest bundles run in the simulator and are not distributed in the app.
+        # Keep the exact profile mapping check for every other iOS target.
+        targets = {name: target for name, target in spec['targets'].items()
+                   if target['platform'] == 'iOS'
+                   and target['type'] not in {'bundle.unit-test', 'bundle.ui-testing'}}
         # Separate secrets avoid exceeding GitHub's per-secret size limit when
         # the provisioning profiles are encoded together.
         profile_secrets = {
