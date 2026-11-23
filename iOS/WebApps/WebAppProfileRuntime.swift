@@ -154,6 +154,17 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
         }
     }
 
+    static var websiteDataTypesToClear: Set<String> {
+        var types = WKWebsiteDataStore.allWebsiteDataTypes()
+        if #available(iOS 26.0, *) {
+            // Screen Time is system usage history, not a website login/cache.
+            // Asking WebKit to delete it invokes ScreenTimeSettings, which can
+            // stall an unregistered browser (including the unsigned CI host).
+            types.remove(WKWebsiteDataTypeScreenTime)
+        }
+        return types
+    }
+
     static func clearAllData() async throws {
         if let clearingAllData { return try await clearingAllData.value }
         let task = Task { @MainActor in
@@ -163,7 +174,7 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
             for runtime in runtimes { await runtime.clearData() }
             // Include sign-ins retained from the browser's earlier shared store.
             await WKWebsiteDataStore.default().removeData(
-                ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), modifiedSince: .distantPast)
+                ofTypes: websiteDataTypesToClear, modifiedSince: .distantPast)
             let downloads = FileManager.default.temporaryDirectory.appendingPathComponent("SlowthDownloads", isDirectory: true)
             if FileManager.default.fileExists(atPath: downloads.path) {
                 try FileManager.default.removeItem(at: downloads)
@@ -184,7 +195,7 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
         for service in WebAppService.allCases where service.profile == profile {
             UserDefaults.standard.removeObject(forKey: "webapps.last-url.v2." + service.id)
         }
-        await dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), modifiedSince: .distantPast)
+        await dataStore.removeData(ofTypes: Self.websiteDataTypesToClear, modifiedSince: .distantPast)
         let types = WKWebExtensionController.allExtensionDataTypes
         let records = await controller.dataRecords(ofTypes: types)
         await controller.removeData(ofTypes: types, from: records)

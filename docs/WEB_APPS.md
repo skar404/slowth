@@ -66,7 +66,10 @@ Certificate validation uses WebKit's default handling.
 Settings → Web apps → Clear all website data asks for confirmation, then closes
 all profile sessions, cancels downloads, removes unexported temporary files,
 website data and extension storage, and forgets saved URLs. It also clears the
-legacy shared store used before profile separation. New browser starts wait until
+legacy shared store used before profile separation. System Screen Time history
+is explicitly excluded from website-data removal: it is not a login/cache and
+its deletion requires registered-browser access on newer WebKit versions.
+New browser starts wait until
 cleanup completes. Exported Files documents and SharedStore rules are unaffected. The internal
 reset-permissions operation recreates
 profile pages so websites ask again; OS grants are managed in Settings.

@@ -276,6 +276,14 @@ final class WebAppBrowserTests: XCTestCase {
     }
 
     func testClearAllWebsiteDataIncludesUnopenedProfilesAndLegacyStore() async throws {
+        let types = WebAppProfileRuntime.websiteDataTypesToClear
+        XCTAssertTrue(types.contains(WKWebsiteDataTypeCookies))
+        XCTAssertTrue(types.contains(WKWebsiteDataTypeDiskCache))
+        XCTAssertTrue(types.contains(WKWebsiteDataTypeLocalStorage))
+        if #available(iOS 26.0, *) {
+            XCTAssertFalse(types.contains(WKWebsiteDataTypeScreenTime),
+                           "Website cleanup must not delete system Screen Time history")
+        }
         let name = "slowth-clear-test-" + UUID().uuidString
         let cookie = try XCTUnwrap(HTTPCookie(properties: [
             .domain: ".example.com", .path: "/", .name: name, .value: "temporary"
