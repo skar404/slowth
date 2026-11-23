@@ -163,8 +163,12 @@ python3 scripts/check_slowth.py --app-locales Localization/locales.json
 The browser test script reports contract compilation, app/test compilation,
 simulator boot and hosted test execution separately. It waits for `simctl
 bootstatus` before launching the test host, with a 180-second boot limit; individual
-tests retain their 120-second limit. Pass a simulator UDID instead of `auto` to
-compare runs on the same runtime. Xcode results remain in
+tests retain their 120-second limit. With `auto`, it creates a dedicated simulator
+and deletes it on exit; it never reuses or erases an existing device. Pass a
+simulator UDID instead of `auto` to compare runs on the same runtime.
+The test scheme passes `--web-app-tests` to a Debug-only simulator host with a
+real key window but no production onboarding, Screen Time or recording-state
+poller. Tests still load the real browser runtime and bundled WebExtension. Xcode results remain in
 `build/webapps-tests/Logs/Test/`; source-check CI retains them for seven days,
 including failed runs. A passing local run does not establish CI startup latency.
 

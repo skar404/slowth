@@ -5,6 +5,12 @@ import Network
 
 @MainActor
 final class WebAppBrowserTests: XCTestCase {
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        XCTAssertTrue(ProcessInfo.processInfo.arguments.contains("--web-app-tests"),
+                      "Use the isolated Web apps tests host, without production UI startup")
+    }
+
     override func tearDown() async throws {
         // Each test owns its extension processes and pages. Retained profiles
         // otherwise accumulate WebKit processes across unrelated test cases.
@@ -276,7 +282,10 @@ final class WebAppBrowserTests: XCTestCase {
         ]))
         let stores = WebAppProfile.allCases.map { WebAppProfileRuntime.shared($0).dataStore }
             + [WKWebsiteDataStore.default()]
-        for store in stores { await store.httpCookieStore.setCookie(cookie) }
+        for (index, store) in stores.enumerated() {
+            NSLog("[clear-data-test] Seed cookie store %d", index)
+            await store.httpCookieStore.setCookie(cookie)
+        }
         for service in WebAppService.allCases {
             UserDefaults.standard.set(service.url, forKey: "webapps.last-url.v2." + service.id)
         }
@@ -284,7 +293,9 @@ final class WebAppBrowserTests: XCTestCase {
         try FileManager.default.createDirectory(at: downloads, withIntermediateDirectories: true)
         try Data("temporary download".utf8).write(to: downloads.appendingPathComponent(name))
 
+        NSLog("[clear-data-test] Clear all website data")
         try await WebAppProfileRuntime.clearAllData()
+        NSLog("[clear-data-test] Verify all stores")
 
         for store in stores {
             let cookies = await store.httpCookieStore.allCookies()

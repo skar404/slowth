@@ -619,6 +619,8 @@ schemes:
         WebAppBrowserTests: [test]
     test:
       config: Debug
+      commandLineArguments:
+        "--web-app-tests": true
       targets:
         - WebAppBrowserTests
   Debug - macOS:

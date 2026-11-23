@@ -2,7 +2,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 output=$(mktemp -d /tmp/slowth-web-apps.XXXXXX)
+owned_device=""
 cleanup() {
+    if [[ -n "$owned_device" ]]; then
+        xcrun simctl shutdown "$owned_device" >/dev/null 2>&1 || true
+        xcrun simctl delete "$owned_device" >/dev/null 2>&1 || true
+    fi
     # Restore the normal local project after the isolated browser-test build.
     if [[ -f "$output/webapps-project.json" ]]; then xcodegen generate >/dev/null; fi
     rm -rf "$output"
@@ -24,7 +29,7 @@ if [[ "${1:-}" == "--simulator" ]]; then
     device="${2:-auto}"
     if [[ "$device" == auto ]]; then
         device=$(xcrun simctl list devices available --json | python3 -c '
-import json,re,sys
+import json,re,subprocess,sys,uuid
 inventory=json.load(sys.stdin)["devices"]
 sdk=tuple(map(int,sys.argv[1].split(".")))
 # Device-specific runtimes can end in a model suffix, e.g. iOS-27-2-iPhone19-4.
@@ -39,9 +44,16 @@ for _,_,version,runtime in sorted(runtimes, reverse=True):
     if version < (18,4): continue
     for device in inventory[runtime]:
         if device.get("isAvailable") and "iPhone" in device["name"]:
-            print(device["udid"]); sys.exit(0)
+            # Never reuse an image-provided device or an existing developer simulator.
+            # Its website stores and process state are outside this test run.
+            name="Slowth WebKit " + str(uuid.uuid4())[:8]
+            created=subprocess.check_output(["xcrun", "simctl", "create", name,
+                device["deviceTypeIdentifier"], runtime], text=True).strip()
+            print(created); sys.exit(0)
 sys.exit("An available iPhone simulator with iOS 18.4+ is required")' "$(xcrun --sdk iphonesimulator --show-sdk-version)")
+        owned_device="$device"
     fi
+    printf '[webapps] Simulator: %s (owned: %s)\n' "$device" "${owned_device:-no}"
     # Browser tests do not exercise ML inference. XcodeGen optional sources still
     # produce CoreML build references when packages are absent in a clean checkout.
     xcodegen dump --type json --no-env > "$output/project.json"

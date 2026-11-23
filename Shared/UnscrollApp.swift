@@ -43,7 +43,11 @@ struct UnscrollApp: App {
                        minHeight: 520, idealHeight: 600)
             #else
             #if DEBUG && targetEnvironment(simulator)
-            if ProcessInfo.processInfo.arguments.contains("--preview-debug-tools") {
+            if ProcessInfo.processInfo.arguments.contains("--web-app-tests") {
+                // Hosted WebKit tests need a key window, not onboarding, Screen Time
+                // authorization, model setup or the live recording-state poller.
+                Color.clear
+            } else if ProcessInfo.processInfo.arguments.contains("--preview-debug-tools") {
                 DebugToolsPreview()
             } else if #available(iOS 16.2, *), ProcessInfo.processInfo.arguments.contains("--preview-live-activity") {
                 PauseActivityPreviewScreen()
