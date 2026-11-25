@@ -116,6 +116,7 @@ final class WebAppBrowserTests: XCTestCase {
         let configuration = WKWebViewConfiguration()
         let bridge = """
         window.testFlags = { shorts:false, feed:true, all:false, hideHomeFeed:true };
+        window.fixtureDocumentID = Math.random().toString(36).slice(2);
         window.browser = { runtime: {
           sendMessage: (_, callback) => callback({toggles:{youtube:window.testFlags}}),
           onMessage: {addListener: callback => window.updateTestSettings = callback},
@@ -153,20 +154,39 @@ final class WebAppBrowserTests: XCTestCase {
         let server = try DownloadFixture(stalled: false, html: true, document: markup)
         defer { server.stop() }
         let origin = try await server.url()
-        func waitForSubscriptions() async throws {
-            for _ in 0..<50 {
-                if !view.isLoading, view.url?.path == "/feed/subscriptions",
-                   (try? await view.evaluateJavaScript("navHidden() && othersVisible()")) as? Bool == true { return }
-                try await Task.sleep(for: .milliseconds(100))
+        // Read the route and DOM from the same committed WebKit document.
+        // The outgoing page may still have the same subscriptions URL.
+        func waitForPage(_ expression: String, file: StaticString = #filePath, line: UInt = #line) async throws -> String {
+            let deadline = ContinuousClock.now + .seconds(5)
+            while ContinuousClock.now < deadline {
+                if !view.isLoading,
+                   let id = (try? await view.evaluateJavaScript(
+                       "(\(expression)) ? window.fixtureDocumentID : null"
+                   )) as? String,
+                   !view.isLoading { return id }
+                try await Task.sleep(for: .milliseconds(50))
             }
-            XCTFail("Expected subscriptions with Home hidden; got \(String(describing: view.url))")
+            let actual = try? await view.evaluateJavaScript("""
+            JSON.stringify({ path: location.pathname, document: window.fixtureDocumentID,
+              hideHome: document.documentElement.getAttribute('data-unscroll-youtube-hideHomeFeed'),
+              hasStyle: !!document.getElementById('unscroll-youtube-home-style') })
+            """)
+            return try XCTUnwrap(nil as String?,
+                                 "Expected \(expression); last page: \(actual as? String ?? "unavailable")",
+                                 file: file, line: line)
         }
+        let subscriptions = "location.pathname === '/feed/subscriptions' && navHidden() && othersVisible()"
+        let homeRestored = """
+        document.documentElement.getAttribute('data-unscroll-youtube-hideHomeFeed') === 'false' &&
+        !document.getElementById('unscroll-youtube-home-style') &&
+        ['desktopHome','miniHome','mobileHome','mobileHomeLink'].every(visible) && othersVisible()
+        """
         func check(_ expression: String, file: StaticString = #filePath, line: UInt = #line) async throws {
             let value = try await view.evaluateJavaScript(expression)
             XCTAssertEqual(value as? Bool, true, expression, file: file, line: line)
         }
         view.load(URLRequest(url: URL(string: "/?app=desktop", relativeTo: origin)!.absoluteURL))
-        try await waitForSubscriptions()
+        _ = try await waitForPage(subscriptions)
         XCTAssertFalse(view.canGoBack, "Home redirect replaces the initial entry")
         try await check("""
         (() => {
@@ -179,17 +199,18 @@ final class WebAppBrowserTests: XCTestCase {
             _ = try await view.evaluateJavaScript("history.pushState({}, '', '\(route)'); window.dispatchEvent(new Event('yt-navigate-finish'));")
             try await check("navHidden() && othersVisible()")
             view.goBack()
-            try await waitForSubscriptions()
+            _ = try await waitForPage(subscriptions)
         }
-        // Real logo navigation loads Home, then the bundled script replaces it.
+        // Do not send the settings update to the outgoing document.
+        let previousDocument = try await waitForPage(subscriptions)
         _ = try await view.evaluateJavaScript("document.getElementById('logo').click(); true")
-        try await waitForSubscriptions()
+        let currentDocument = try await waitForPage("\(subscriptions) && window.fixtureDocumentID !== '\(previousDocument)'")
         _ = try await view.evaluateJavaScript("testFlags.hideHomeFeed=false; updateTestSettings({type:'unscroll-state-updated'}); true")
-        try await check("['desktopHome','miniHome','mobileHome','mobileHomeLink'].every(visible) && othersVisible()")
-        _ = try await view.evaluateJavaScript("history.pushState({}, '', '/'); window.dispatchEvent(new Event('popstate'));")
-        try await check("location.pathname === '/' && !document.getElementById('unscroll-youtube-home-style')")
+        _ = try await waitForPage("location.pathname === '/feed/subscriptions' && window.fixtureDocumentID === '\(currentDocument)' && (\(homeRestored))")
+        _ = try await view.evaluateJavaScript("history.pushState({}, '', '/'); window.dispatchEvent(new Event('popstate')); true")
+        _ = try await waitForPage("location.pathname === '/' && window.fixtureDocumentID === '\(currentDocument)' && (\(homeRestored))")
         _ = try await view.evaluateJavaScript("testFlags.hideHomeFeed=true; updateTestSettings({type:'unscroll-state-updated'}); true")
-        try await waitForSubscriptions()
+        _ = try await waitForPage("\(subscriptions) && window.fixtureDocumentID !== '\(currentDocument)'")
     }
 
     func testStoriesTraySelectorsHideButtonsAndReservedSpaceWithoutHidingPosts() async throws {
