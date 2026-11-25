@@ -8,10 +8,12 @@ are `slowth-dataset` (ML/data), `slowth-app-store` (store operations), and
 `slowth-marketing` (screenshot studio). Each owns its dependencies and tests.
 No `data-model` symlink is needed.
 
-## Transfer Debug recordings
+## Research-code boundary
 
-See [Debug recording transfers](../docs/DEBUG_TRANSFERS.md) for the local HTTP receiver,
-S3 connection QR generator, persistent iOS queue, and lossless PNG sessions.
+Recording/export tools and their HTTP receiver now belong to `slowth-dev`.
+Run `python3 scripts/verify_no_research_code.py --app /path/to/Unscroll.app`
+to reject their symbols in all host/extension executables and Debug dylibs.
+The same check is included in `verify_app_configuration.py` for both configurations.
 
 ## Prepare model resources
 

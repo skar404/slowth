@@ -10,7 +10,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>Slowth labeler connection</string>
+			<string>Slowth application links</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>slowth</string>
@@ -21,13 +21,6 @@
 	<string>Allow the website you choose to use your camera for photos and video.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow the website you choose to use your microphone for audio and video.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>Connect to your local screenshot labeler to send sessions you select.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
 	<key>BundleIdPrefix</key>
 	<string>$(BUNDLE_ID_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>

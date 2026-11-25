@@ -20,7 +20,7 @@ PUBLIC_DIRS = {
     'scripts', 'tests', 'website',
 }
 PUBLIC_FILES = {
-    'docs/MOTION_EXPERIMENT.md', 'docs/DEBUG_TRANSFERS.md', 'docs/WEB_APPS.md', 'docs/WEB_BROWSER_REQUEST.md',
+    'docs/WEB_APPS.md', 'docs/WEB_BROWSER_REQUEST.md',
     '.github/ISSUE_TEMPLATE/bug_report.yml', '.github/ISSUE_TEMPLATE/config.yml',
     '.github/workflows/ci.yml', '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
     '.github/workflows/website.yml',

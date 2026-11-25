@@ -6,15 +6,13 @@ struct DebugIOSSection: View {
     @ObservedObject var state: AppState
     @Binding var debugModeEnabled: Bool
     let isReadyForReview: Bool
-    @ObservedObject var debugCaptureLibrary: DebugCapturePhotoLibrary
-    @Binding var debugCaptureEnabled: Bool
     @State private var showTools = false
 
     var body: some View {
         Section {
             Button { showTools = true } label: {
                 HStack {
-                    DebugToolLabel("Developer tools", detail: "Recordings, diagnostics and testing", icon: "wrench.and.screwdriver", color: .secondary)
+                    DebugToolLabel("Developer tools", detail: "Diagnostics and app testing", icon: "wrench.and.screwdriver", color: .secondary)
                     Spacer(minLength: 8)
                     Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
                 }
@@ -23,8 +21,7 @@ struct DebugIOSSection: View {
             .accessibilityIdentifier("debug.tools")
             .sheet(isPresented: $showTools) {
                 DebugToolsView(state: state, debugModeEnabled: $debugModeEnabled,
-                    isReadyForReview: isReadyForReview, debugCaptureLibrary: debugCaptureLibrary,
-                    debugCaptureEnabled: $debugCaptureEnabled)
+                    isReadyForReview: isReadyForReview)
             }
         } header: {
             Text("Debug")
@@ -36,16 +33,12 @@ struct DebugToolsView: View {
     @ObservedObject var state: AppState
     @Binding var debugModeEnabled: Bool
     let isReadyForReview: Bool
-    @ObservedObject var debugCaptureLibrary: DebugCapturePhotoLibrary
-    @Binding var debugCaptureEnabled: Bool
     @Environment(\.dismiss) private var dismiss
     @AppStorage(DebugModelSettings.storageKey, store: AppGroup.defaults) private var debugModelBackend = DebugModelSettings.defaultBackend.rawValue
     @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
     @AppStorage(DebugMode.shieldDiagnosticsStorageKey, store: AppGroup.defaults) private var shieldDiagnosticsEnabled = false
     @State private var showIconProbe = false
     @State private var showManagedSettings = false
-    @State private var showMotionExperiment = false
-    @State private var showTransfers = false
     @State private var actionError: String?
 
     private var modelSettingsLocked: Bool {
@@ -68,20 +61,11 @@ struct DebugToolsView: View {
                         Text(state.snapshot.broadcastActive ? "Stop recording to change Debug mode or the model." : "End Strict mode to change Debug mode or the model.")
                     }
                 }
-                Section("Recordings and data") {
-                    NavigationLink {
-                        DebugRecordingsView()
-                    } label: {
-                        DebugToolLabel("Screenshots", detail: "Capture settings and saved sessions", icon: "photo.stack", color: .blue)
-                    }
-                    Button { showTransfers = true } label: {
-                        DebugToolLabel("Transfers", detail: "Connections and upload queue", icon: "arrow.up.arrow.down", color: .teal, showsChevron: true)
-                    }
-                    .buttonStyle(.plain)
+                Section("Detection") {
                     NavigationLink {
                         detectionSettings
                     } label: {
-                        DebugToolLabel("Models and frames", detail: "Detection model and frame export", icon: "viewfinder", color: .purple)
+                        DebugToolLabel("Models", detail: "Detection model", icon: "viewfinder", color: .purple)
                     }
                 }
                 Section("Testing") {
@@ -95,12 +79,7 @@ struct DebugToolsView: View {
                     } label: {
                         DebugToolLabel("App behavior", detail: "Reviews, rewards and resets", icon: "slider.horizontal.3", color: SlowthAppearance.sage)
                     }
-                    if #available(iOS 16.2, *) {
-                        Button { showMotionExperiment = true } label: {
-                            DebugToolLabel("Scroll motion", detail: "Experimental sensor recording", icon: "waveform.path", color: .indigo, showsChevron: true)
-                        }
-                        .buttonStyle(.plain)
-                    }
+
                 }
             }
             .debugFormStyle()
@@ -108,10 +87,7 @@ struct DebugToolsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
             }
-            .sheet(isPresented: $showTransfers) { DebugTransfersView() }
-            .sheet(isPresented: $showMotionExperiment) {
-                if #available(iOS 16.2, *) { MotionExperimentView() }
-            }
+
         }
     }
 
@@ -132,33 +108,10 @@ struct DebugToolsView: View {
                     Text("Applies to the next recording.")
                 }
             }
-            Section {
-                Toggle("Save detection frames", isOn: $debugCaptureEnabled)
-                if debugCaptureEnabled {
-                    LabeledContent("Pending frames", value: "\(debugCaptureLibrary.pendingEvents)")
-                    if debugCaptureLibrary.authorizationStatus == .authorized
-                        || debugCaptureLibrary.authorizationStatus == .limited {
-                        Button { debugCaptureLibrary.importPending() } label: {
-                            HStack {
-                                Label("Save frames to Photos", systemImage: "square.and.arrow.down")
-                                Spacer()
-                                if debugCaptureLibrary.isImporting { ProgressView() }
-                            }
-                        }
-                        .disabled(debugCaptureLibrary.isImporting || debugCaptureLibrary.pendingEvents == 0)
-                    } else {
-                        Button("Allow Photos access") { debugCaptureLibrary.requestAccessAndImport() }
-                    }
-                    Button("Clear pending frames", role: .destructive) { debugCaptureLibrary.clearPending() }
-                        .disabled(debugCaptureLibrary.pendingEvents == 0)
-                }
-            } header: { Text("Detection frames") }
-            if let error = debugCaptureLibrary.lastError {
-                Section { Text(error).font(.footnote).foregroundStyle(.red) }
-            }
+
         }
         .debugFormStyle()
-        .navigationTitle("Models and frames")
+        .navigationTitle("Models")
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -221,25 +174,6 @@ struct DebugToolsView: View {
     }
 }
 
-struct DebugRecordingsView: View {
-    var body: some View {
-        Form {
-            Section {
-                DebugSessionCaptureControls()
-            } header: { Text("Screenshot capture") } footer: {
-                Text("Interval and storage limit apply to the next recording. Screenshots are saved locally as full-size PNGs.")
-            }
-            Section {
-                Label("Start a screen recording from the main screen to capture screenshots.", systemImage: "record.circle")
-                    .font(.footnote).foregroundStyle(.secondary)
-            }
-        }
-        .debugFormStyle()
-        .navigationTitle("Screenshots")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
 /// Shared labels keep the tools index readable at larger text sizes.
 struct DebugToolLabel: View {
     let title: String
@@ -295,37 +229,17 @@ extension View {
 }
 
 #if targetEnvironment(simulator)
-/// Presentation-only launch fixture; never enables Debug mode or starts capture.
 struct DebugToolsPreview: View {
     var body: some View {
-        Group {
-            if ProcessInfo.processInfo.arguments.contains("--preview-debug-recordings") {
-                NavigationStack { DebugRecordingsView() }
-            } else {
-                DebugToolsView(state: AppState(previewSnapshot: .defaultState),
-                    debugModeEnabled: .constant(true), isReadyForReview: true,
-                    debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .notDetermined),
-                    debugCaptureEnabled: .constant(false))
-            }
-        }
-        .allowsHitTesting(false)
+        DebugToolsView(state: AppState(previewSnapshot: .defaultState),
+            debugModeEnabled: .constant(true), isReadyForReview: true)
+            .allowsHitTesting(false)
     }
 }
 #endif
 
 #Preview("Developer tools") {
     DebugToolsView(state: AppState(previewSnapshot: .defaultState),
-        debugModeEnabled: .constant(true), isReadyForReview: true,
-        debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .notDetermined),
-        debugCaptureEnabled: .constant(false))
-}
-
-#Preview("Developer tools · dark / large text") {
-    DebugToolsView(state: AppState(previewSnapshot: .defaultState),
-        debugModeEnabled: .constant(true), isReadyForReview: true,
-        debugCaptureLibrary: DebugCapturePhotoLibrary(previewAuthorization: .authorized, pending: 8),
-        debugCaptureEnabled: .constant(true))
-        .preferredColorScheme(.dark)
-        .environment(\.dynamicTypeSize, .xxxLarge)
+        debugModeEnabled: .constant(true), isReadyForReview: true)
 }
 #endif

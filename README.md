@@ -71,9 +71,9 @@ app update. Strict mode defers saving rule updates until the lock expires.
    on-device Core ML model. When supported content is detected, Screen Time
    blocks app access rather than removing just the video or story.
 
-Screen images are processed locally, audio is ignored, and the production app
-does not save or upload screen frames. Developer Debug builds have explicit
-capture tools that are excluded from Release builds. Detection needs an active
+Screen images are processed locally, audio is ignored, and neither Debug nor Release
+builds save or upload screen frames. Dataset recording, motion experiments and
+archive transfers belong to the separate Slowth Dev application. Detection needs an active
 broadcast; stopping it does not necessarily unblock protected apps.
 
 Slowth has no account system or tracking analytics. Local recognition does not

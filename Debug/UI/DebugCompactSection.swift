@@ -11,10 +11,6 @@ struct DebugCompactSection: View {
     @AppStorage(DebugModelSettings.storageKey, store: AppGroup.defaults) private var debugModelBackend = DebugModelSettings.defaultBackend.rawValue
     @AppStorage(FeatureFlags.tipsOverrideStorageKey, store: AppGroup.defaults) private var tipsFeatureEnabled = false
 
-    #if os(iOS)
-    @State private var showMotionExperiment = false
-    @State private var showTransfers = false
-    #endif
 
     var body: some View {
         Section {
@@ -26,15 +22,6 @@ struct DebugCompactSection: View {
                     #endif
                 }
             #if os(iOS)
-            DisclosureGroup("Recordings") {
-                DebugSessionCaptureControls()
-                if #available(iOS 16.2, *) {
-                    Button("Experiment: scroll motion") { showMotionExperiment = true }
-                        .sheet(isPresented: $showMotionExperiment) { MotionExperimentView() }
-                }
-            }
-            Button("Connections and transfer queue") { showTransfers = true }
-                .sheet(isPresented: $showTransfers) { DebugTransfersView() }
             DebugSavedLeavesControl()
             Button(String(localized: "Reset rest progression", table: "Interface")) {
                 do { try IOSPauseCoordinator.resetRestProgressForDebug() }

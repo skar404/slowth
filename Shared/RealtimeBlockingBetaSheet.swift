@@ -4,13 +4,6 @@ import SwiftUI
 enum ScreenRecordingCopy {
     static var privacyExplanation: String {
         let purpose = AppLocalization.string("Slowth checks screen images only to detect short videos and Stories.")
-        #if DEBUG && os(iOS)
-        if DebugCaptureSettings.isEnabled || SessionCaptureSettings.isEnabled {
-            return purpose + "\n\n"
-                + AppLocalization.string("Screen images are analyzed on your device to recognize the content you chose to block. Audio is ignored.")
-                + "\n\n" + AppLocalization.string("Debug capture is enabled, so this test build can save screen images. Saved images can be exported or shared.")
-        }
-        #endif
         return purpose + "\n\n"
             + AppLocalization.string("Slowth does not save a screen recording. Screen images are analyzed temporarily in your device’s memory and are not saved to your device or uploaded. Audio is ignored.")
     }

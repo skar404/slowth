@@ -5,9 +5,6 @@ import WidgetKit
 @main struct PauseActivityBundle: WidgetBundle {
     var body: some Widget {
         PauseActivityWidget()
-        #if DEBUG
-        MotionExperimentWidget()
-        #endif
     }
 }
 

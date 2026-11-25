@@ -72,9 +72,6 @@ private struct DuoHingeObserver: ViewModifier {
 struct ContentView: View {
     @StateObject private var state = AppState()
     @StateObject private var tipStore = TipStore()
-    #if DEBUG
-    @StateObject private var debugCaptureLibrary = DebugCapturePhotoLibrary()
-    #endif
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("iosWelcomeV1Handled") private var welcomeHandled = false
     @AppStorage("shieldNotificationOfferHandled") private var notificationOfferHandled = false
@@ -117,7 +114,6 @@ struct ContentView: View {
     @State private var showStrictModeConfirmation = false
     #if DEBUG
     @AppStorage(DebugMode.storageKey, store: AppGroup.defaults) private var debugModeEnabled = false
-    @AppStorage(DebugCaptureSettings.storageKey, store: AppGroup.defaults) private var debugCaptureEnabled = false
     @State private var versionTapCount = 0
     #endif
     #if canImport(FamilyControls)
@@ -352,10 +348,6 @@ struct ContentView: View {
             presentRestIfNeeded()
             considerAutomaticWelcome()
         }
-        #endif
-        #if DEBUG
-        .modifier(DebugCaptureLifecycle(state: state, debugCaptureLibrary: debugCaptureLibrary,
-            debugCaptureEnabled: $debugCaptureEnabled, debugModeEnabled: debugModeEnabled))
         #endif
     }
 
@@ -1341,7 +1333,7 @@ struct ContentView: View {
 
     #if DEBUG
     private var debugSection: some View {
-        DebugIOSSection(state: state, debugModeEnabled: $debugModeEnabled, isReadyForReview: isReadyForReview, debugCaptureLibrary: debugCaptureLibrary, debugCaptureEnabled: $debugCaptureEnabled)
+        DebugIOSSection(state: state, debugModeEnabled: $debugModeEnabled, isReadyForReview: isReadyForReview)
     }
 
     private func appVersionTapped() {

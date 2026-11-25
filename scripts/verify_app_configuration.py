@@ -7,6 +7,7 @@ import plistlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+from verify_no_research_code import verify_bundle, verify_sources
 from model_assets import resource_maps, verify as verify_model_assets
 
 
@@ -15,6 +16,8 @@ def sha(path):
 
 
 def verify(app, configuration):
+    verify_sources(ROOT)
+    verify_bundle(app)
     release = configuration == 'Release'
     verify_model_assets(ROOT, configuration)
     models_for_profile, metadata = resource_maps(ROOT, configuration)
@@ -41,7 +44,7 @@ def verify(app, configuration):
         print(f'{bundle.name}: {len(models)} compiled models, {len(expected_metadata)} metadata files')
     info = plistlib.loads((app / 'Info.plist').read_bytes())
     for key in ('NSPhotoLibraryUsageDescription', 'NSPhotoLibraryAddUsageDescription'):
-        assert (key in info) == (not release), key
+        assert key not in info, key
     for key in ('NSCameraUsageDescription', 'NSMicrophoneUsageDescription'):
         assert info.get(key), 'Missing website media usage description: ' + key
     assert info.get('NSSupportsLiveActivities') is True, 'Missing Live Activity host support'

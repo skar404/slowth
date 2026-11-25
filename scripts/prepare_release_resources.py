@@ -52,9 +52,9 @@ def resources(exports_root=None):
     if hashlib.sha256(flat15).hexdigest() != '6c99991c66cc6deee7d31794a0b1846198f44170dc8c14dce7ebaaa0e142540d':
         raise ValueError('Flat 15 runtime metadata identity changed')
     info = plistlib.loads((ROOT / 'iOS/Info.plist').read_bytes())
-    del info['NSPhotoLibraryAddUsageDescription']
-    del info['NSPhotoLibraryUsageDescription']
-    info.pop('NSMotionUsageDescription', None)  # Debug-only motion experiment.
+    info.pop('NSPhotoLibraryAddUsageDescription', None)
+    info.pop('NSPhotoLibraryUsageDescription', None)
+    info.pop('NSMotionUsageDescription', None)  # Research capture belongs to Slowth Dev.
     return {
         ROOT / 'RealtimeShield/CascadeV10RuntimeMetadata.json': compact,
         ROOT / 'RealtimeShield/FlatDetectorMetadata.json': flat,
