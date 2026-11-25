@@ -14,7 +14,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      readme_only: ${{ steps.classify.outputs.readme_only }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        if: github.event_name == 'pull_request'
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Detect root README-only PR
+        id: classify
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          readme_only=false
+          if [[ "$EVENT" == pull_request ]]; then
+            changed="$RUNNER_TEMP/source-check-diff"
+            git diff --name-status -z --no-renames "$BASE...$HEAD" > "$changed"
+            if printf 'M\0README.md\0' | cmp -s - "$changed"; then
+              readme_only=true
+            fi
+          fi
+          echo "readme_only=$readme_only" >> "$GITHUB_OUTPUT"
+
+  source:
     runs-on: xcode-27
     timeout-minutes: 20
     env:
@@ -42,6 +69,20 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Check public source, versions and WebExtension
         run: python3 scripts/release.py check
+
+  webkit:
+    needs: scope
+    if: needs.scope.outputs.readme_only == 'false'
+    runs-on: xcode-27
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install verified build tools
+        run: bash scripts/release_tools/install_tools.sh
       - name: Test web app profiles and WebKit lifecycle
         run: |
           test -f Configs/Local.xcconfig || cp Configs/Local.xcconfig.example Configs/Local.xcconfig
@@ -54,3 +95,24 @@ jobs:
           path: build/webapps-tests/Logs/Test/
           if-no-files-found: warn
           retention-days: 7
+
+  # Preserve the required "check" context; a skipped WebKit job is accepted
+  # only when scope positively identified a root README-only pull request.
+  check:
+    if: ${{ always() }}
+    needs: [scope, source, webkit]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all applicable checks
+        env:
+          SCOPE: ${{ needs.scope.result }}
+          SOURCE: ${{ needs.source.result }}
+          WEBKIT: ${{ needs.webkit.result }}
+          README_ONLY: ${{ needs.scope.outputs.readme_only }}
+        run: |
+          echo "scope=$SCOPE source=$SOURCE webkit=$WEBKIT readme_only=$README_ONLY"
+          [[ "$SCOPE" == success && "$SOURCE" == success ]]
+          case "$README_ONLY:$WEBKIT" in
+            true:skipped|false:success) ;;
+            *) exit 1 ;;
+          esac
