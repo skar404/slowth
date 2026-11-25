@@ -52,6 +52,8 @@ for _,_,version,runtime in sorted(runtimes, reverse=True):
             print(created); sys.exit(0)
 sys.exit("An available iPhone simulator with iOS 18.4+ is required")' "$(xcrun --sdk iphonesimulator --show-sdk-version)")
         owned_device="$device"
+        # Boot asynchronously while Xcode builds; still wait for readiness below.
+        phase 'Start boot' xcrun simctl boot "$owned_device"
     fi
     printf '[webapps] Simulator: %s (owned: %s)\n' "$device" "${owned_device:-no}"
     # Browser tests do not exercise ML inference. XcodeGen optional sources still
@@ -75,7 +77,7 @@ PYTHON
     phase 'Build for testing' xcodebuild "${build_args[@]}" build-for-testing
     # A fresh simulator can fail to launch the test host while first-boot work is
     # still running. Wait explicitly and report this separately from XCTest time.
-    phase 'Boot simulator' python3 - "$device" <<'PYTHON'
+    phase 'Wait for simulator readiness' python3 - "$device" <<'PYTHON'
 import subprocess, sys
 try:
     subprocess.run(["xcrun", "simctl", "bootstatus", sys.argv[1], "-b", "-d"],
