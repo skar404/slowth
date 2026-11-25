@@ -1,0 +1,61 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.0.0",
+  "entity": {
+    "type": "individual",
+    "role": "maintainer",
+    "name": "Denis Malin",
+    "email": "denis@malina.page",
+    "description": "I maintain Slowth, a free and open-source digital wellbeing app. Slowth will remain free and open source, without mandatory subscriptions or user tracking. Long-term development is planned to be funded through grants and voluntary donations. I contribute product vision, research and project management without compensation from this grant.",
+    "webpageUrl": {
+      "url": "https://github.com/skar404"
+    }
+  },
+  "projects": [
+    {
+      "guid": "slowth",
+      "name": "Slowth",
+      "description": "Slowth is a GPLv3 digital wellbeing app for iOS and macOS. Its Safari extension hides selected short-video and infinite-scroll surfaces and can block selected sites. On iOS, optional on-device screen-image classification and Screen Time controls support blocking selected content inside native apps. The funding prioritizes clearer onboarding and controls, implementation of UX improvements, and recognition quality. Android work is limited to feasibility research and a prototype. Public App Store listing: https://apps.apple.com/us/app/slowth-short-video-blocker/id6764140763",
+      "webpageUrl": {
+        "url": "https://github.com/skar404/slowth"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/skar404/slowth"
+      },
+      "licenses": [
+        "spdx:GPL-3.0"
+      ],
+      "tags": [
+        "digital-wellbeing",
+        "privacy",
+        "ios",
+        "macos",
+        "safari",
+        "machine-learning"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "contact-maintainer",
+        "type": "other",
+        "description": "Please contact denis@malina.page to arrange grant disbursement. Payment arrangements and any required documentation will be discussed privately."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "slowth-six-months-v5",
+        "status": "active",
+        "name": "Slowth: six-month development and sustainability plan (Budget v5)",
+        "description": "USD 10,000 for 6 months. Budget v5: UX/UI $2,100; iOS/macOS $2,100; ML $1,750; promotion $1,250; Android $1,050; independent build verification $1,000; BrowserStack/testing $300; infrastructure $210; contingency $240. Product Vision, Research & Project Management: $0, unpaid maintainer work. Main work: months 1-3; testing, verification and refinements: months 4-6. Full budget: https://github.com/skar404/slowth/blob/main/BUDGET.md",
+        "amount": 10000,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": [
+          "contact-maintainer"
+        ]
+      }
+    ]
+  }
+}
