@@ -8,6 +8,8 @@ WEBSITE_FILES = {
     'scripts/render_slowth.py', 'scripts/check_slowth.py',
     'scripts/check_slowth_live.py', 'scripts/test_slowth_seo.py',
     'scripts/render_privacy.py', '.github/workflows/website.yml',
+    # Routing changes are covered by scope tests and the required website job.
+    '.github/workflows/ci.yml', 'scripts/ci_scope.py', 'tests/test_ci_scope.py',
 }
 
 

@@ -80,13 +80,14 @@ The language chooser uses native HTML details/links, preserves the current page 
 ## Website-only CI
 
 PRs and pushes to main that change only `website/**`, the explicitly listed
-website scripts in `scripts/ci_scope.py`, or `.github/workflows/website.yml` run
+website scripts in `scripts/ci_scope.py`, or the site/CI-routing workflows and their classifier tests run
 website generation, localization/link/SEO checks and SEO regression tests on
 Linux. The required `check` context requires those checks to pass; Xcode and
 WebKit jobs are skipped. The separate Website workflow still builds and deploys
 GitHub Pages.
 
-Mixed app/site changes, shared app locales, changes to the general CI workflow
-or classifier, manual runs, unknown diffs and file type changes retain full app
-checks. The existing root README-only PR exception is preserved. Rename detection
+Mixed app/site changes, shared app locales, release workflows/build tooling,
+manual runs, unknown diffs and file type changes retain full app checks. Changes
+to `.github/workflows/ci.yml`, `scripts/ci_scope.py` and `tests/test_ci_scope.py`
+run the classifier/gate tests plus website checks without Xcode. The existing root README-only PR exception is preserved. Rename detection
 is disabled so both the old and new paths participate in classification.

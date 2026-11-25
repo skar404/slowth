@@ -19,13 +19,15 @@ class ScopeTests(unittest.TestCase):
     def test_website_changes_skip_app_tests_on_pr_and_push(self):
         changes = diff(('M', 'website/ru/index.html'), ('A', 'website/new page.html'),
                        ('D', 'website/old.html'), ('M', 'scripts/render_slowth.py'),
-                       ('M', '.github/workflows/website.yml'))
+                       ('M', '.github/workflows/website.yml'), ('M', '.github/workflows/ci.yml'),
+                       ('M', 'scripts/ci_scope.py'), ('M', 'tests/test_ci_scope.py'))
         for event in ['pull_request', 'push']:
             self.assertEqual(ci_scope.classify(changes, event), {'readme_only': False, 'website_only': True})
 
-    def test_mixed_app_and_ci_changes_always_require_full_checks(self):
+    def test_mixed_app_and_release_changes_always_require_full_checks(self):
         for path in ['Shared/Store.swift', 'WebExt/content.js', 'Localization/locales.json',
-                     '.github/workflows/ci.yml', 'scripts/ci_scope.py', 'tests/test_ci_scope.py',
+                     '.github/workflows/release-ci.yml', '.github/workflows/release-tag.yml',
+                     'scripts/release_tools/build.py', 'project.yml',
                      'scripts/future_slowth_app.py', 'README.md', 'website-other/page.html']:
             with self.subTest(path=path):
                 self.assertFalse(ci_scope.classify(diff(('M', 'website/index.html'), ('M', path)), 'pull_request')['website_only'])
