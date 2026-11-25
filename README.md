@@ -186,3 +186,6 @@ operations in `slowth-app-store`, and screenshot production in `slowth-marketing
 App builds consume pinned ready-to-use models in ignored `Models/exports`; no
 private dataset checkout is needed when importing a model archive. See
 [model preparation and project boundaries](scripts/README.md#prepare-model-resources).
+
+
+This project is tested with BrowserStack.
