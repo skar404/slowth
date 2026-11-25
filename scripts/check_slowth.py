@@ -27,8 +27,9 @@ def check_seo(d,locale,page,label):
             tokens=set(re.split(r'[\s,]+',meta.get('content','').lower()))
             assert not tokens & {'noindex','none'},(label,'indexing blocked',meta)
     if page=='index':
-        assert len(d.scripts)==1,(label,'missing or duplicate app schema')
-        attrs,body=d.scripts[0]
+        schemas=[(attrs,body) for attrs,body in d.scripts if attrs.get('type')=='application/ld+json']
+        assert len(schemas)==1,(label,'missing or duplicate app schema')
+        attrs,body=schemas[0]
         assert attrs.get('type')=='application/ld+json',(label,'schema type')
         schema=json.loads(body)
         assert schema['@context']=='https://schema.org' and schema['@type']=='SoftwareApplication',(label,'app schema')

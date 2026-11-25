@@ -25,6 +25,9 @@ class SEOTests(unittest.TestCase):
             with self.subTest(old=old), self.assertRaises(AssertionError):
                 self.check(self.html.replace(old,new))
 
+    def test_edge_script_does_not_hide_or_duplicate_schema(self):
+        self.check(self.html.replace('</body>', '<script src="/cdn-cgi/email.js"></script></body>'))
+
     def test_excluded_languages_remain_crawlable(self):
         for locale in ['fil','pcm','yue']:
             doc=Document((SITE/locale/'index.html').read_text())
