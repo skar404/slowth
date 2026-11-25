@@ -4,6 +4,10 @@ from pathlib import Path
 import argparse,html,json,posixpath,re,hashlib
 ROOT=Path(__file__).resolve().parents[1];SITE=ROOT/'website';L10N=SITE/'localization'
 LOCALES=json.loads((L10N/'locales.json').read_text());SOURCE=json.loads((L10N/'source.json').read_text())
+# Google supports ISO 639-1 language codes, not these ISO 639-3 codes.
+# Keep their pages, native language labels and sitemap entries intact.
+# https://developers.google.com/search/docs/specialty/international/localized-versions
+HREFLANG_LOCALES={code:info for code,info in LOCALES.items() if code not in {'fil','pcm','yue'}}
 LEGACY={'en':'privacy.html','ar':'privacy-ar-SA.html','de':'privacy-de-DE.html','es-MX':'privacy-es-MX.html','fr':'privacy-fr-FR.html','hi':'privacy-hi.html','ja':'privacy-ja.html'}
 POLICY_KEYS={'en':'en','ar':'ar-SA','de':'de-DE','es-MX':'es-MX','fr':'fr-FR','hi':'hi','ja':'ja'}
 BASE='https://slowth.app/'
@@ -82,7 +86,7 @@ def render(locale,page,messages):
  result=re.sub(r'<link rel="canonical"[^>]*>',f'<link rel="canonical" href="{url(locale,page)}">',result)
  result=re.sub(r'<meta property="og:url"[^>]*>',f'<meta property="og:url" content="{url(locale,page)}">',result)
  result=re.sub(r'<link rel="alternate"[^>]*>\s*','',result)
- alternates='\n'.join(f'<link rel="alternate" hreflang="{code}" href="{url(code,page)}">' for code in LOCALES)
+ alternates='\n'.join(f'<link rel="alternate" hreflang="{code}" href="{url(code,page)}">' for code in HREFLANG_LOCALES)
  alternates+='\n'+f'<link rel="alternate" hreflang="x-default" href="{url("en",page)}">'
  result=result.replace('</head>',alternates+'\n</head>')
  language=chooser(locale,page,messages)

@@ -52,6 +52,8 @@ Historical image URLs remain intact, but the page no longer loads the old iPhone
 - Preview at 375, 768 and 1440 CSS pixels; inspect navigation, screenshots, FAQ disclosures, focus and overflow. Check all policy languages, especially Arabic RTL.
 - Measure cold navigation consistently; a cached Resource Timing entry with zero bytes is not an empty resource. Safari versions without `layout-shift` observation cannot supply CLS.
 
+Run `python3 scripts/test_slowth_seo.py` for SEO regression cases. After deployment, `python3 scripts/check_slowth_live.py` reads all 192 production pages, the sitemap and robots.txt, checking HTTP status, indexing directives, canonical/hreflang and SoftwareApplication. This does not prove Googlebot access or indexing.
+
 See `REVIEW.md` for the current review result and remaining browser checks.
 
 ## Localization
@@ -72,4 +74,4 @@ python3 scripts/check_slowth.py --app-locales /path/to/mini-block/Localization/l
 
 Translations were prepared with machine assistance, with editorial corrections to Russian, headlines, navigation, operational wording and translation artifacts. Nigerian Pidgin was authored separately. App terminology was reused where available. This is not a claim of professional native-speaker or legal review in 64 locales. English regional variants deliberately share the English copy. Screenshots and the official App Store badge retain their original English artwork; image alternative text is localized.
 
-The language chooser uses native HTML details/links, preserves the current page type and needs no JavaScript, cookies, translation API or automatic redirection. Arabic, Egyptian Arabic, Hebrew, Shahmukhi Punjabi and Urdu use RTL layout. Each page has a self-canonical URL and reciprocal hreflang for all locales, plus English x-default. Search-engine support for individual language codes can vary.
+The language chooser uses native HTML details/links, preserves the current page type and needs no JavaScript, cookies, translation API or automatic redirection. Arabic, Egyptian Arabic, Hebrew, Shahmukhi Punjabi and Urdu use RTL layout. Each page has a self-canonical URL and alternate links for the 61 locales supported by Google, plus English x-default. The `fil`, `pcm` and `yue` pages remain available through the language chooser and sitemap with their original HTML language codes; their ISO 639-3 codes are omitted from search hreflang annotations. Supported locale pages link reciprocally.

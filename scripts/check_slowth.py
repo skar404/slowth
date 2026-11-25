@@ -4,7 +4,43 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import argparse, collections, html, json, re, sys, xml.etree.ElementTree as ET
-from render_slowth import SITE, LOCALES, SOURCE, LEGACY, POLICY, POLICY_KEYS, path, url
+from render_slowth import SITE, LOCALES, HREFLANG_LOCALES, SOURCE, LEGACY, POLICY, POLICY_KEYS, path, url
+
+# ISO 639-1 codes used by this site, independently checked against the locale registry.
+SEARCH_LANGUAGES=set('ar be bn ca cs da de el en es fi fr gu ha he hi hr hu hy id it ja ka kk kn ko ky lt ml mr ms nb ne nl or pa pl pt ro ru sk sl sv sw ta te th tr uk ur vi zh'.split())
+SEARCH_REGIONS={'EG','AU','CA','GB','MX','BR','PT'}
+SEARCH_SCRIPTS={'Arab','Hans','Hant'}
+
+def check_seo(d,locale,page,label):
+    assert d.select('link',rel='canonical')==[{'rel':'canonical','href':url(locale,page)}],(label,'canonical')
+    tags=d.select('link',rel='alternate')
+    alternatives={a['hreflang']:a['href'] for a in tags}
+    assert len(tags)==len(alternatives),(label,'duplicate hreflang')
+    expected={l:url(l,page) for l in HREFLANG_LOCALES};expected['x-default']=url('en',page)
+    assert alternatives==expected,(label,'hreflang cluster')
+    for code in alternatives.keys()-{'x-default'}:
+        parts=code.split('-')
+        assert parts[0] in SEARCH_LANGUAGES and len(parts)<=2,(label,'unsupported language',code)
+        assert len(parts)==1 or parts[1] in SEARCH_REGIONS|SEARCH_SCRIPTS,(label,'unsupported region/script',code)
+    for meta in d.select('meta'):
+        if meta.get('name','').lower() in {'robots','googlebot','bingbot'}:
+            tokens=set(re.split(r'[\s,]+',meta.get('content','').lower()))
+            assert not tokens & {'noindex','none'},(label,'indexing blocked',meta)
+    if page=='index':
+        assert len(d.scripts)==1,(label,'missing or duplicate app schema')
+        attrs,body=d.scripts[0]
+        assert attrs.get('type')=='application/ld+json',(label,'schema type')
+        schema=json.loads(body)
+        assert schema['@context']=='https://schema.org' and schema['@type']=='SoftwareApplication',(label,'app schema')
+        assert schema['name']=='Slowth: Short Video Blocker',(label,'app name')
+        assert schema['applicationCategory']=='UtilitiesApplication',(label,'app category')
+        assert set(schema['operatingSystem'])=={'iOS','iPadOS','macOS'},(label,'platforms')
+        assert schema['downloadUrl']=='https://apps.apple.com/app/id6764140763',(label,'download URL')
+        assert schema['isAccessibleForFree'] is True,(label,'free app')
+        offer=schema['offers']
+        assert offer['@type']=='Offer' and str(offer['price'])=='0' and offer['priceCurrency']=='USD',(label,'free offer')
+        assert offer['url']==schema['downloadUrl'],(label,'offer URL')
+        assert schema['inLanguage']==locale and schema['url']==url(locale,page),(label,'localized schema')
 
 class Document(HTMLParser):
     def __init__(self, value):
@@ -54,12 +90,8 @@ def run():
             p=SITE/path(locale,page);value=p.read_text();d=Document(value);docs[p.resolve()]=d
             assert len(d.select('h1'))==1,(p,'H1 count')
             assert d.select('html')[0]=={'lang':locale,'dir':LOCALES[locale]['direction']},(p,'lang/dir')
-            assert d.select('link',rel='canonical')==[{'rel':'canonical','href':url(locale,page)}],(p,'canonical')
-            alternatives={a['hreflang']:a['href'] for a in d.select('link',rel='alternate')}
-            expected={l:url(l,page) for l in LOCALES};expected['x-default']=url('en',page)
-            assert alternatives==expected,(p,'hreflang cluster')
+            check_seo(d,locale,page,p)
             assert len(d.select('meta',name='description'))==1,(p,'description')
-            assert not d.select('meta',name='robots',content='noindex'),(p,'noindex')
             for a,body in d.scripts:
                 assert a.get('type')=='application/ld+json',(p,'executable JavaScript')
                 schema=json.loads(body)

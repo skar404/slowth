@@ -39,6 +39,7 @@ jobs:
         run: |
           python3 scripts/render_slowth.py --check
           python3 scripts/check_slowth.py --app-locales Localization/locales.json
+          python3 scripts/test_slowth_seo.py
       - name: Prepare public files
         run: |
           mkdir -p _site
