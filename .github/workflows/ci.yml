@@ -18,30 +18,42 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       readme_only: ${{ steps.classify.outputs.readme_only }}
+      website_only: ${{ steps.classify.outputs.website_only }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        if: github.event_name == 'pull_request'
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Detect root README-only PR
+      - name: Test CI scope classification
+        run: python3 -m unittest discover -s tests -p 'test_ci_scope.py' -v
+      - name: Detect website-only changes and README-only PRs
         id: classify
         env:
           EVENT: ${{ github.event_name }}
-          BASE: ${{ github.event.pull_request.base.sha }}
-          HEAD: ${{ github.event.pull_request.head.sha }}
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python3 scripts/ci_scope.py --event "$EVENT" --base "$BASE" --head "$HEAD" >> "$GITHUB_OUTPUT"
+
+  website:
+    needs: scope
+    if: needs.scope.outputs.website_only == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Verify website generation, translations and SEO
         run: |
-          readme_only=false
-          if [[ "$EVENT" == pull_request ]]; then
-            changed="$RUNNER_TEMP/source-check-diff"
-            git diff --name-status -z --no-renames "$BASE...$HEAD" > "$changed"
-            if printf 'M\0README.md\0' | cmp -s - "$changed"; then
-              readme_only=true
-            fi
-          fi
-          echo "readme_only=$readme_only" >> "$GITHUB_OUTPUT"
+          python3 scripts/render_slowth.py --check
+          python3 scripts/check_slowth.py --app-locales Localization/locales.json
+          python3 scripts/test_slowth_seo.py
 
   source:
+    needs: scope
+    if: needs.scope.outputs.website_only == 'false'
     runs-on: xcode-27
     timeout-minutes: 20
     env:
@@ -72,7 +84,7 @@ jobs:
 
   webkit:
     needs: scope
-    if: needs.scope.outputs.readme_only == 'false'
+    if: needs.scope.outputs.readme_only == 'false' && needs.scope.outputs.website_only == 'false'
     runs-on: xcode-27
     timeout-minutes: 20
     env:
@@ -96,11 +108,11 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-  # Preserve the required "check" context; a skipped WebKit job is accepted
-  # only when scope positively identified a root README-only pull request.
+  # Preserve required "check": website-only changes need the website job;
+  # all other changes retain app checks and the existing README exception.
   check:
     if: ${{ always() }}
-    needs: [scope, source, webkit]
+    needs: [scope, source, webkit, website]
     runs-on: ubuntu-latest
     steps:
       - name: Require all applicable checks
@@ -109,10 +121,17 @@ jobs:
           SOURCE: ${{ needs.source.result }}
           WEBKIT: ${{ needs.webkit.result }}
           README_ONLY: ${{ needs.scope.outputs.readme_only }}
+          WEBSITE_ONLY: ${{ needs.scope.outputs.website_only }}
+          WEBSITE: ${{ needs.website.result }}
         run: |
-          echo "scope=$SCOPE source=$SOURCE webkit=$WEBKIT readme_only=$README_ONLY"
-          [[ "$SCOPE" == success && "$SOURCE" == success ]]
-          case "$README_ONLY:$WEBKIT" in
-            true:skipped|false:success) ;;
-            *) exit 1 ;;
-          esac
+          echo "scope=$SCOPE source=$SOURCE webkit=$WEBKIT website=$WEBSITE readme_only=$README_ONLY website_only=$WEBSITE_ONLY"
+          [[ "$SCOPE" == success ]] || exit 1
+          if [[ "$WEBSITE_ONLY" == true ]]; then
+            [[ "$SOURCE" == skipped && "$WEBKIT" == skipped && "$WEBSITE" == success ]] || exit 1
+          else
+            [[ "$WEBSITE_ONLY" == false && "$SOURCE" == success && "$WEBSITE" == skipped ]] || exit 1
+            case "$README_ONLY:$WEBKIT" in
+              true:skipped|false:success) ;;
+              *) exit 1 ;;
+            esac
+          fi

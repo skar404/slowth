@@ -17,7 +17,7 @@ Run an HTTP preview from the repository root:
 python3 -m http.server 8794 --bind 127.0.0.1
 ```
 
-Open http://127.0.0.1:8794/website/. No build step, executable frontend JavaScript, external fonts or analytics are required for the local site. The landing includes descriptive SoftwareApplication JSON-LD. The redesign was published on 17 November 2026. The production domain uses Cloudflare proxying in front of GitHub Pages, with Full (strict) TLS and Cloudflare HTTP traffic analytics. Cloudflare may inject edge features such as email-address decoding into production responses.
+Open http://127.0.0.1:8794/website/. No build step, executable frontend JavaScript, external fonts or analytics are required for the local site. The landing includes descriptive SoftwareApplication and FAQPage JSON-LD. The FAQ schema is generated from its nine visible localized questions and answers, without a separate translation catalog. The redesign was published on 17 November 2026. The production domain uses Cloudflare proxying in front of GitHub Pages, with Full (strict) TLS and Cloudflare HTTP traffic analytics. Cloudflare may inject edge features such as email-address decoding into production responses.
 
 ## Content sources
 
@@ -52,6 +52,8 @@ Historical image URLs remain intact, but the page no longer loads the old iPhone
 - Preview at 375, 768 and 1440 CSS pixels; inspect navigation, screenshots, FAQ disclosures, focus and overflow. Check all policy languages, especially Arabic RTL.
 - Measure cold navigation consistently; a cached Resource Timing entry with zero bytes is not an empty resource. Safari versions without `layout-shift` observation cannot supply CLS.
 
+Run `python3 scripts/test_slowth_seo.py` for SEO regression cases. After deployment, `python3 scripts/check_slowth_live.py` reads all 192 production pages, the sitemap and robots.txt, checking HTTP status, indexing directives, canonical/hreflang and SoftwareApplication. This does not prove Googlebot access or indexing.
+
 See `REVIEW.md` for the current review result and remaining browser checks.
 
 ## Localization
@@ -72,4 +74,20 @@ python3 scripts/check_slowth.py --app-locales /path/to/mini-block/Localization/l
 
 Translations were prepared with machine assistance, with editorial corrections to Russian, headlines, navigation, operational wording and translation artifacts. Nigerian Pidgin was authored separately. App terminology was reused where available. This is not a claim of professional native-speaker or legal review in 64 locales. English regional variants deliberately share the English copy. Screenshots and the official App Store badge retain their original English artwork; image alternative text is localized.
 
-The language chooser uses native HTML details/links, preserves the current page type and needs no JavaScript, cookies, translation API or automatic redirection. Arabic, Egyptian Arabic, Hebrew, Shahmukhi Punjabi and Urdu use RTL layout. Each page has a self-canonical URL and reciprocal hreflang for all locales, plus English x-default. Search-engine support for individual language codes can vary.
+The language chooser uses native HTML details/links, preserves the current page type and needs no JavaScript, cookies, translation API or automatic redirection. Arabic, Egyptian Arabic, Hebrew, Shahmukhi Punjabi and Urdu use RTL layout. Each page has a self-canonical URL and alternate links for the 61 locales supported by Google, plus English x-default. The `fil`, `pcm` and `yue` pages remain available through the language chooser and sitemap with their original HTML language codes; their ISO 639-3 codes are omitted from search hreflang annotations. Supported locale pages link reciprocally.
+
+
+## Website-only CI
+
+PRs and pushes to main that change only `website/**`, the explicitly listed
+website scripts in `scripts/ci_scope.py`, or the site/CI-routing workflows and their classifier tests run
+website generation, localization/link/SEO checks and SEO regression tests on
+Linux. The required `check` context requires those checks to pass; Xcode and
+WebKit jobs are skipped. The separate Website workflow still builds and deploys
+GitHub Pages.
+
+Mixed app/site changes, shared app locales, release workflows/build tooling,
+manual runs, unknown diffs and file type changes retain full app checks. Changes
+to `.github/workflows/ci.yml`, `scripts/ci_scope.py` and `tests/test_ci_scope.py`
+run the classifier/gate tests plus website checks without Xcode. The existing root README-only PR exception is preserved. Rename detection
+is disabled so both the old and new paths participate in classification.

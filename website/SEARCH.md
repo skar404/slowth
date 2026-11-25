@@ -1,4 +1,4 @@
-# Search visibility — 17 November 2026
+# Search visibility — audit 26 November 2026
 
 The redesigned English site was published on 17 November 2026. This update adds static translations for all 64 app locale variants. Search Console/Bing submission and indexing remain unverified.
 
@@ -32,8 +32,20 @@ Sources:
 4. Measure impressions/clicks for “block Instagram Reels iPhone”, “block YouTube Shorts in app”, “Facebook Reels blocker”, “X Twitter video blocker”, and “Snapchat app blocker”. Evaluate citations separately; a manual AI query is not a stable ranking metric.
 5. The Russian page is `/ru/`; its visible copy and metadata describe “блокировка Reels в приложении”. Equivalent localized pages cover the other app languages. They use self-canonical URLs, reciprocal hreflang and crawlable links, with no automatic language redirect. This is technical eligibility for discovery, not a ranking or AI citation guarantee.
 
-The 64 locale identifiers match the app, including regional variants. Google documents language-code constraints for hreflang; unsupported codes may be ignored by a particular engine. The pages remain independently crawlable through ordinary links and the sitemap. English regional variants intentionally share content.
+The 64 locale identifiers match the app, including regional variants. Search annotations use the 61 locales with Google-supported codes; `fil`, `pcm` and `yue` are omitted from the head hreflang cluster without substituting a different language. Their pages retain self-canonical URLs, original HTML language codes, navigation links and sitemap coverage. English regional variants intentionally share content; their self-canonical URLs remain until URL Inspection supplies evidence for a different policy.
 
 Localization references:
 - https://developers.google.com/search/docs/specialty/international/localized-versions
 - https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites
+
+
+## Audit and remaining external steps — 26 November 2026
+
+- Local generation and SEO validation passed for all 192 pages. The production sitemap matched all 192 canonical URLs. Root, Russian, Spanish, German and Australian English landing pages had the expected canonical/alternate metadata and SoftwareApplication. HTTP redirects to HTTPS with 301.
+- GitHub About already links to `https://slowth.app` and includes `ios`, `macos`, `safari-extension`, `digital-wellbeing`, `youtube-shorts`. No repository metadata change is needed.
+- SoftwareApplication already declares iOS, iPadOS, macOS, UtilitiesApplication, a free USD offer and the official App Store download. Checks now validate these values, duplicate hreflang and case/comma variants of robots noindex. No ratings or reviews are fabricated to satisfy rich-result eligibility.
+- FAQPage describes all nine visible questions and answers on each of the 64 landing pages. It is generated from the rendered localized FAQ, with matching text checked in CI and the production audit. This is descriptive markup: Google stopped displaying FAQ rich results on 7 May 2026, so it is not a promise of expanded Google results. See https://developers.google.com/search/updates#may-2026.
+- The owner confirms the GSC property is verified. Authenticated inspection, sitemap submission and the homepage indexing request still need to be completed; no indexing claim is made from an HTTP check.
+- App Store Connect read-only inspection found `https://malina.page/slowth/` in all 50 localizations of version 2026.11.2 on both iOS and macOS. The separate App Store project now provides a marketing-URL-only operation for the next editable release. No new version, build or App Review submission is part of this SEO change.
+
+After deployment run `python3 scripts/check_slowth_live.py`. In GSC compare the declared and Google-selected canonicals for `/` and `/en-AU/`, run the live homepage test, submit `https://slowth.app/sitemap.xml`, and request homepage indexing. Record submission acceptance separately from later crawl/index status. Crawler policy is not modified by this SEO change.
