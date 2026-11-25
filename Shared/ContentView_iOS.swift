@@ -1158,23 +1158,15 @@ struct ContentView: View {
                         .foregroundStyle(.tint)
                 }
 
-                Text(String(localized: "Share screen recordings of short-form feeds and everyday app use to help improve recognition."))
+                Text(AppLocalization.string("Slowth may miss content or block a regular app screen by mistake. If this happens, you can report it using Send feedback below."))
 
-                Text(String(localized: "Social apps look different across devices, languages and app versions. Your recordings will help me train Slowth to recognize what should be blocked and avoid blocking regular content."))
-
-                Text(String(localized: "Just record yourself using the app as usual. No explanations or labels needed — I’ll review and label the footage myself to train and test the blocking model."))
-
-                Text(String(localized: "Please leave out private messages, notifications and personal information."))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-
-                Link(destination: AppLocalization.contributionUploadURL()) {
-                    Label("Upload test cases", systemImage: "square.and.arrow.up")
+                Link(destination: realtimeBlockingFeedbackURL) {
+                    Label(String(localized: "Send feedback"), systemImage: "envelope")
                         .font(.subheadline.weight(.semibold))
                         .frame(maxWidth: .infinity, minHeight: 32)
                 }
                 .buttonStyle(.borderedProminent)
-                .accessibilityIdentifier("contribution.upload")
+                .accessibilityIdentifier("contribution.feedback")
             }
             .font(.subheadline)
             .fixedSize(horizontal: false, vertical: true)
