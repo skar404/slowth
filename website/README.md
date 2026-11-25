@@ -75,3 +75,18 @@ python3 scripts/check_slowth.py --app-locales /path/to/mini-block/Localization/l
 Translations were prepared with machine assistance, with editorial corrections to Russian, headlines, navigation, operational wording and translation artifacts. Nigerian Pidgin was authored separately. App terminology was reused where available. This is not a claim of professional native-speaker or legal review in 64 locales. English regional variants deliberately share the English copy. Screenshots and the official App Store badge retain their original English artwork; image alternative text is localized.
 
 The language chooser uses native HTML details/links, preserves the current page type and needs no JavaScript, cookies, translation API or automatic redirection. Arabic, Egyptian Arabic, Hebrew, Shahmukhi Punjabi and Urdu use RTL layout. Each page has a self-canonical URL and alternate links for the 61 locales supported by Google, plus English x-default. The `fil`, `pcm` and `yue` pages remain available through the language chooser and sitemap with their original HTML language codes; their ISO 639-3 codes are omitted from search hreflang annotations. Supported locale pages link reciprocally.
+
+
+## Website-only CI
+
+PRs and pushes to main that change only `website/**`, the explicitly listed
+website scripts in `scripts/ci_scope.py`, or `.github/workflows/website.yml` run
+website generation, localization/link/SEO checks and SEO regression tests on
+Linux. The required `check` context requires those checks to pass; Xcode and
+WebKit jobs are skipped. The separate Website workflow still builds and deploys
+GitHub Pages.
+
+Mixed app/site changes, shared app locales, changes to the general CI workflow
+or classifier, manual runs, unknown diffs and file type changes retain full app
+checks. The existing root README-only PR exception is preserved. Rename detection
+is disabled so both the old and new paths participate in classification.
