@@ -4,7 +4,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import argparse, collections, html, json, re, sys, xml.etree.ElementTree as ET
-from render_slowth import SITE, LOCALES, HREFLANG_LOCALES, SOURCE, LEGACY, POLICY, POLICY_KEYS, path, url
+from render_slowth import SITE, LOCALES, HREFLANG_LOCALES, SOURCE, LEGACY, POLICY, POLICY_KEYS, path, url, faq_pairs
 
 # ISO 639-1 codes used by this site, independently checked against the locale registry.
 SEARCH_LANGUAGES=set('ar be bn ca cs da de el en es fi fr gu ha he hi hr hu hy id it ja ka kk kn ko ky lt ml mr ms nb ne nl or pa pl pt ro ru sk sl sv sw ta te th tr uk ur vi zh'.split())
@@ -28,10 +28,9 @@ def check_seo(d,locale,page,label):
             assert not tokens & {'noindex','none'},(label,'indexing blocked',meta)
     if page=='index':
         schemas=[(attrs,body) for attrs,body in d.scripts if attrs.get('type')=='application/ld+json']
-        assert len(schemas)==1,(label,'missing or duplicate app schema')
-        attrs,body=schemas[0]
-        assert attrs.get('type')=='application/ld+json',(label,'schema type')
-        schema=json.loads(body)
+        parsed=[json.loads(body) for attrs,body in schemas]
+        assert len(parsed)==2 and sorted(s.get('@type','') for s in parsed)==['FAQPage','SoftwareApplication'],(label,'missing or duplicate schema')
+        schema=next(s for s in parsed if s['@type']=='SoftwareApplication')
         assert schema['@context']=='https://schema.org' and schema['@type']=='SoftwareApplication',(label,'app schema')
         assert schema['name']=='Slowth: Short Video Blocker',(label,'app name')
         assert schema['applicationCategory']=='UtilitiesApplication',(label,'app category')
@@ -42,10 +41,18 @@ def check_seo(d,locale,page,label):
         assert offer['@type']=='Offer' and str(offer['price'])=='0' and offer['priceCurrency']=='USD',(label,'free offer')
         assert offer['url']==schema['downloadUrl'],(label,'offer URL')
         assert schema['inLanguage']==locale and schema['url']==url(locale,page),(label,'localized schema')
+        faq=next(s for s in parsed if s['@type']=='FAQPage')
+        assert faq['@context']=='https://schema.org' and faq['@id']==url(locale,page)+'#faq',(label,'FAQ identity')
+        assert faq['inLanguage']==locale and faq['url']==url(locale,page),(label,'localized FAQ')
+        pairs=faq_pairs(d.source)
+        assert len(pairs)==9 and all(p['question'] and p['answer'] for p in pairs),(label,'visible FAQ')
+        expected=[{'@type':'Question','name':p['question'],'acceptedAnswer':{'@type':'Answer','text':p['answer']}} for p in pairs]
+        assert faq['mainEntity']==expected,(label,'FAQ differs from visible content')
 
 class Document(HTMLParser):
     def __init__(self, value):
         super().__init__(convert_charrefs=True)
+        self.source=value
         self.tags=[]; self.ids=set(); self.scripts=[]; self.script=None; self.words=[]
         self.feed(value)
     def handle_starttag(self, tag, attrs):
@@ -97,7 +104,7 @@ def run():
                 assert a.get('type')=='application/ld+json',(p,'executable JavaScript')
                 schema=json.loads(body)
                 assert schema['inLanguage']==locale and schema['url']==url(locale,page),(p,'schema')
-            if page=='index':assert len(d.scripts)==1,(p,'missing app schema')
+            if page=='index':assert len(d.scripts)==2,(p,'missing app/FAQ schema')
             for a in d.select('img'):
                 assert 'alt' in a and a.get('width') and a.get('height'),(p,'image accessibility/dimensions')
             if page=='privacy' and locale in POLICY_KEYS:

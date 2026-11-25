@@ -47,7 +47,7 @@ def main():
     items=[(locale,page) for locale in LOCALES for page in ['index','support','privacy']]
     with ThreadPoolExecutor(max_workers=6) as pool:
         checked=list(pool.map(check,items))
-    print(f'Passed live audit: {len(checked)} HTTP 200 pages; canonical, hreflang, robots, SoftwareApplication and sitemap.')
+    print(f'Passed live audit: {len(checked)} HTTP 200 pages; canonical, hreflang, robots, SoftwareApplication, FAQPage and sitemap.')
     print('This checks HTTP responses, not Google indexing or access from verified Googlebot IPs.')
 
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Render the static Slowth site in every app locale; no runtime translation or JS."""
 from pathlib import Path
+from html.parser import HTMLParser
 import argparse,html,json,posixpath,re,hashlib
 ROOT=Path(__file__).resolve().parents[1];SITE=ROOT/'website';L10N=SITE/'localization'
 LOCALES=json.loads((L10N/'locales.json').read_text());SOURCE=json.loads((L10N/'source.json').read_text())
@@ -13,6 +14,31 @@ POLICY_KEYS={'en':'en','ar':'ar-SA','de':'de-DE','es-MX':'es-MX','fr':'fr-FR','h
 BASE='https://slowth.app/'
 STYLE_REV=hashlib.sha256((SITE/'style.css').read_bytes()).hexdigest()[:12]
 POLICY=json.loads((SITE/'privacy-content.json').read_text())
+
+class FAQParser(HTMLParser):
+ """Extract visible question/answer text from the rendered FAQ, in display order."""
+ def __init__(self):
+  super().__init__(convert_charrefs=True)
+  self.in_faq=False;self.in_summary=False;self.current=None;self.pairs=[]
+ def handle_starttag(self,tag,attrs):
+  if tag=='section' and dict(attrs).get('id')=='faq':self.in_faq=True
+  if not self.in_faq:return
+  if tag=='details':self.current={'question':[],'answer':[]}
+  if tag=='summary':self.in_summary=True
+  if tag in {'br','p'} and self.current is not None:self.handle_data(' ')
+ def handle_endtag(self,tag):
+  if not self.in_faq:return
+  if tag=='summary':self.in_summary=False
+  if tag=='details' and self.current is not None:
+   self.pairs.append({key:' '.join(''.join(parts).split()) for key,parts in self.current.items()})
+   self.current=None
+  if tag=='p' and self.current is not None:self.handle_data(' ')
+  if tag=='section':self.in_faq=False
+ def handle_data(self,data):
+  if self.in_faq and self.current is not None:self.current['question' if self.in_summary else 'answer'].append(data)
+
+def faq_pairs(document):
+ parser=FAQParser();parser.feed(document);return parser.pairs
 
 def path(locale,page):
  if page=='privacy' and locale in LEGACY:return LEGACY[locale]
@@ -98,6 +124,15 @@ def render(locale,page,messages):
   result=re.sub(r'(<h[12]\b[^>]*>)(.*?)(</h[12]>)',lambda m:m[1]+re.sub(r'<br\s*/?>',' ',m[2])+m[3],result,flags=re.S)
   if page=='index':
    result=result.replace('<span class="copyright">','<p class="screenshot-language-note">'+html.escape(text(messages,'App screenshots are shown in English.'))+'</p><span class="copyright">')
+ if page=='index':
+  pairs=faq_pairs(result)
+  assert pairs and all(pair['question'] and pair['answer'] for pair in pairs),(locale,'empty FAQ')
+  faq={'@context':'https://schema.org','@type':'FAQPage','@id':url(locale,page)+'#faq',
+       'url':url(locale,page),'inLanguage':locale,
+       'mainEntity':[{'@type':'Question','name':pair['question'],
+                      'acceptedAnswer':{'@type':'Answer','text':pair['answer']}} for pair in pairs]}
+  script='<script type="application/ld+json">\n'+json.dumps(faq,ensure_ascii=False,indent=2).replace('</','<\\/')+'\n</script>\n'
+  result=result.replace('</head>',script+'</head>')
  return result
 
 def main():

@@ -1,7 +1,8 @@
 """Regression cases that the old metadata checks silently accepted."""
 import unittest
+import json
 from check_slowth import Document, check_seo
-from render_slowth import SITE
+from render_slowth import SITE, faq_pairs
 
 
 class SEOTests(unittest.TestCase):
@@ -27,6 +28,17 @@ class SEOTests(unittest.TestCase):
 
     def test_edge_script_does_not_hide_or_duplicate_schema(self):
         self.check(self.html.replace('</body>', '<script src="/cdn-cgi/email.js"></script></body>'))
+
+    def test_faq_must_match_visible_answer(self):
+        body=Document(self.html).scripts[1][1]
+        schema=json.loads(body)
+        schema['mainEntity'][0]['acceptedAnswer']['text']='Not the visible answer'
+        with self.assertRaisesRegex(AssertionError,'FAQ differs'):
+            self.check(self.html.replace(body,json.dumps(schema)))
+
+    def test_faq_text_decodes_entities_and_preserves_inline_spacing(self):
+        document='<section id="faq"><details><summary>Can I block <b>Reels</b>?</summary><p>Yes &amp; no.</p><p>Read <a href="support.html">support</a>.</p></details></section><details><summary>Language chooser</summary></details>'
+        self.assertEqual(faq_pairs(document),[{'question':'Can I block Reels?','answer':'Yes & no. Read support.'}])
 
     def test_excluded_languages_remain_crawlable(self):
         for locale in ['fil','pcm','yue']:
