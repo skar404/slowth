@@ -69,7 +69,7 @@ def verify_app(app, catalogs, locales):
         resources = bundle / 'Contents/Resources' if is_mac else bundle
         info = read_plist(bundle / ('Contents/Info.plist' if is_mac else 'Info.plist'))
         identifier = info['CFBundleIdentifier']
-        tables = ['Localizable']
+        tables = ['Localizable', 'WebApps']
         if not is_mac:
             if bundle == app or identifier.endswith('.Broadcast'):
                 tables.append('ApplicationNavigation')

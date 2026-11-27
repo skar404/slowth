@@ -43,13 +43,15 @@ content detection. See below for how it works and its limits.
 | Feature | Safari on iPhone, iPad, and Mac | Native apps on iPhone and iPad |
 | --- | --- | --- |
 | Selected content | Hide YouTube Shorts, Instagram/Facebook Reels, and X Explore and trends; limit supported infinite feeds | Recognize supported Shorts, Reels, and Stories on-device, then temporarily block app access |
-| Whole-site or app blocking | Block any of the five supported sites; TikTok is blocked as a whole site | Protect selected apps using Apple's Screen Time controls |
+| Whole-site or app blocking | Block any of the five supported sites | Protect selected apps using Apple's Screen Time controls |
 | Pauses | Temporary access on iPhone/iPad through the pause controls | Temporarily allow access; detection can trigger a rest before access resumes |
 | Strict mode | Lock restrictions for 24 hours | Lock blocking settings, with a configurable policy for pauses |
 
 Safari offers separate content and whole-site controls. YouTube, Instagram,
-and Facebook have Infinite Feed controls; X targets Explore and trends;
-TikTok has whole-site blocking. “Block site” applies to these supported sites,
+Facebook and TikTok have Infinite Feed controls; X targets Explore and trends.
+TikTok's optional feed limit stops scrolling after four screens on Home,
+For You, Following and Friends; search, profiles and direct video links remain
+available. Whole-site blocking takes priority. “Block site” applies to these supported sites,
 not an arbitrary website list.
 
 Strict mode prevents weakening restrictions until its timer expires and

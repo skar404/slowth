@@ -70,6 +70,7 @@ private struct DuoHingeObserver: ViewModifier {
 
 
 struct ContentView: View {
+    private let openRests: () throws -> [IOSDetectionRest]
     @StateObject private var state = AppState()
     @StateObject private var tipStore = TipStore()
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -129,7 +130,8 @@ struct ContentView: View {
     @State private var youtubeSelection = FamilyActivitySelection()
     #endif
 
-    init() {
+    init(openRests: @escaping () throws -> [IOSDetectionRest] = IOSPauseCoordinator.openRests) {
+        self.openRests = openRests
         #if DEBUG && targetEnvironment(simulator)
         // Presentation-only screenshot arguments; never override settings or authorization.
         let arguments = ProcessInfo.processInfo.arguments
@@ -166,9 +168,17 @@ struct ContentView: View {
         .onChange(of: webAppsRouter.service) { service in
             if service == nil { state.reload() }
         }
+        .onChange(of: webAppsRouter.isDismissing) { dismissing in
+            #if canImport(FamilyControls)
+            if !dismissing {
+                presentRealtimeRecordingPromptIfRequested()
+                presentRestIfNeeded()
+            }
+            #endif
+        }
         .onChange(of: presentationIsIdle) { ready in webAppsRouter.setPresentationReady(ready) }
         .onChange(of: webAppsRouter.pending) { request in
-            if request != nil && showWelcome { closeWelcome() }
+            if request != nil { dismissPromptsForWebApp() }
         }
         .modifier(DuoHingeObserver(hasDeviceHinge: $hasDeviceHinge))
         .tint(SlowthAppearance.sage)
@@ -281,7 +291,12 @@ struct ContentView: View {
                     preferredExtensionBundleID: state.broadcastExtensionBundleID,
                     isRecording: ScreenshotPresentation.activeProtection
                         ? ScreenshotPresentation.recordingActive : state.snapshot.broadcastActive,
-                    pauseTarget: target
+                    pauseTarget: target,
+                    onOpenWebApps: {
+                        selectedSection = 1
+                        selectedDuoSection = 1
+                        showRealtimeRecordingPrompt = false
+                    }
                 )
             } else {
                 ShieldAppChoiceSheet { target in
@@ -339,6 +354,8 @@ struct ContentView: View {
             state.refreshProtectionAuthorization()
         }
         .onAppear {
+            webAppsRouter.setPresentationReady(presentationIsIdle)
+            dismissPromptsForWebApp()
             presentRealtimeRecordingPromptIfRequested()
             presentRestIfNeeded()
             considerAutomaticWelcome()
@@ -867,9 +884,11 @@ struct ContentView: View {
             showGroupedPicker = false
             showYouTubePicker = false
             showStrictModeConfirmation = false
+            webAppsRouter.dismissForNativePrompt()
         }
-        guard active, presentationIsIdle, pendingRecordingPrompt else { return }
-        let rests = try? IOSPauseCoordinator.openRests()
+        guard active, webAppsRouter.service == nil, webAppsRouter.pending == nil,
+              presentationIsIdle, pendingRecordingPrompt else { return }
+        let rests = try? openRests()
         guard let destination = shieldPrompt.take(isActive: active, isIdle: presentationIsIdle,
                                                    rests: rests, isPauseOnly: PauseOnlyApps.contains) else { return }
         switch destination {
@@ -907,8 +926,25 @@ struct ContentView: View {
         showWelcome = false
     }
 
+    private func dismissPromptsForWebApp() {
+        guard webAppsRouter.pending != nil else { return }
+        let hasPrompt = showWelcome || restToShow != nil || showRealtimeRecordingPrompt ||
+            showPauseOnlyPrompt || showRealtimeBlockingBeta
+        guard hasPrompt else { return }
+        // Keep the browser queued until onDismiss, not just until the bindings
+        // become false: UIKit is still dismissing the current presentation.
+        webAppsRouter.setPresentationReady(false)
+        shieldPrompt.beginDismissal()
+        pendingWelcomeSafari = false
+        closeWelcome()
+        restToShow = nil
+        showRealtimeRecordingPrompt = false
+        showPauseOnlyPrompt = false
+        showRealtimeBlockingBeta = false
+    }
+
     private var presentationIsIdle: Bool {
-        guard !shieldPrompt.waitingForDismissal, restToShow == nil, !showWelcome, !welcomeDismissing, !showSafariHelp, !showAbout, !showAppsPrivacy, !showContribution,
+        guard !webAppsRouter.isDismissing, !shieldPrompt.waitingForDismissal, restToShow == nil, !showWelcome, !welcomeDismissing, !showSafariHelp, !showAbout, !showAppsPrivacy, !showContribution,
               !showSupportSheet, !showRealtimeBlockingBeta, !showRealtimeRecordingPrompt, !showPauseOnlyPrompt,
               !showStrictModeConfirmation, state.lastError == nil else { return false }
         #if canImport(FamilyControls)
@@ -922,12 +958,13 @@ struct ContentView: View {
         if ProcessInfo.processInfo.arguments.contains("--preview-rest") { return }
         #endif
         guard UIApplication.shared.applicationState == .active else { return }
-        let rests = (try? IOSPauseCoordinator.openRests()) ?? []
+        let rests = (try? openRests()) ?? []
         pendingRests = rests
         if let shown = restToShow {
             restToShow = restPresentation.refreshedRest(shown, activeRests: rests)
             if let current = restToShow, visibleRestID == current.id { restPresentation.acknowledge(current) }
-        } else if !pendingRecordingPrompt, presentationIsIdle, let rest = rests.first(where: { restPresentation.shouldPresent($0) }) {
+        } else if webAppsRouter.service == nil, webAppsRouter.pending == nil,
+                  !pendingRecordingPrompt, presentationIsIdle, let rest = rests.first(where: { restPresentation.shouldPresent($0) }) {
             restToShow = rest
             if rest.requestedOrder != nil { selectedSection = 0 }
             expandedService = nil
@@ -938,11 +975,13 @@ struct ContentView: View {
 
     private func finishSheetDismissal() {
         shieldPrompt.finishDismissal()
+        webAppsRouter.setPresentationReady(presentationIsIdle)
+        guard webAppsRouter.service == nil, webAppsRouter.pending == nil else { return }
         #if canImport(FamilyControls)
         presentRealtimeRecordingPromptIfRequested()
         #endif
         guard UIApplication.shared.applicationState == .active, presentationIsIdle, !pendingRecordingPrompt else { return }
-        if let rest = (try? IOSPauseCoordinator.openRests())?.first(where: { restPresentation.shouldPresent($0) }) {
+        if let rest = (try? openRests())?.first(where: { restPresentation.shouldPresent($0) }) {
             restToShow = rest
         } else if pendingWelcomeSafari {
             pendingWelcomeSafari = false
@@ -1717,6 +1756,7 @@ private struct DetectionRestSheet: View {
 #if DEBUG && os(iOS)
 private extension ContentView {
     init(previewSection: Int) {
+        openRests = { [] }
         _state = StateObject(wrappedValue: AppState(previewSnapshot: .defaultState))
         _selectedSection = State(initialValue: previewSection)
         _selectedDuoSection = State(initialValue: previewSection)

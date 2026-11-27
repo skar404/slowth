@@ -10,6 +10,7 @@ struct IOSFeatureCard: View {
     var compact = false
     var flexible = false
     var onDismiss: (() -> Void)? = nil
+    var actionTitle: String? = nil
 
     var body: some View {
         Group {
@@ -48,8 +49,14 @@ struct IOSFeatureCard: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title).font(.headline)
                     Text(subtitle).font(.caption)
+                    if let actionTitle {
+                        Label(actionTitle, systemImage: "arrow.forward")
+                            .font(.caption.weight(.semibold))
+                            .padding(.top, 5)
+                    }
                 }
                 .fixedSize(horizontal: false, vertical: true)
+                .padding(.trailing, onDismiss == nil ? 0 : 28)
                 Spacer(minLength: 0)
             }
             .foregroundStyle(.white)

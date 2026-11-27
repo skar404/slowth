@@ -1,5 +1,36 @@
 # iOS and iPadOS localization
 
+## Web apps update — November 2026
+
+`Localization/WebApps.xcstrings` contains 62 entries in all 64 locales from
+`Localization/locales.json`. This covers the browser, downloads, profile and
+permission messages, shortcut instructions, the Beta badge, and the dismissible
+browser alternative card in the monitoring sheet. Existing English and Russian
+copy is retained. Shared Back, Reload and Try again translations reuse the
+existing app or extension catalogs.
+
+Missing translations were drafted with Google Translate and then checked for
+missing entries, English leftovers, product names and technical terminology.
+Ambiguous commands were translated with browser context; selected language
+copy and passkey terminology received manual corrections. Nigerian Pidgin was
+drafted separately. Regional variants share neutral base-language wording where
+appropriate. These checks are not a professional native-speaker review of every
+locale. Some languages retain the technical term Passkey to distinguish it from
+passwords and access codes.
+
+Both catalog and compiled-bundle validators now include WebApps. A regression
+check also verifies that the Swift screens' WebApps keys exist in the catalog.
+The card uses a directional arrow that follows right-to-left layout.
+
+Validation for this update: all six catalog tables, 11 localization regression
+tests, and compiled catalogs in the signed iOS and unsigned simulator builds
+passed. The monitoring card and Web apps introduction were visually checked in
+Russian, German, Arabic and Japanese on an iPhone 17 Pro Max simulator. Those
+eight screenshots verify sampled text layout, not every language or browser
+interaction. Local QA images are in `/tmp/slowth-webapps-l10n-qa/`.
+
+The following sections document the earlier app-wide localization work.
+
 The supported set is the 46 BCP 47 identifiers already in
 `Localization/Localizable.xcstrings`, including `ar-EG`, `pa-Arab`, `pt-BR`,
 `pt-PT`, `yue`, `zh-Hans` and `zh-Hant` as separate entries.

@@ -162,17 +162,16 @@ Apple secrets, and evidence verification.
 
 ## Native localization
 
-Run `python3 scripts/verify_localization_catalogs.py` before a build. The 46 locale
-identifiers in `Localization/Localizable.xcstrings` are required for every
-translatable entry in that catalog and in `iOS/Interface.xcstrings` and
-`iOS/PauseActivity.xcstrings`. Explicit `shouldTranslate: false` entries are exempt.
+Run `python3 scripts/verify_localization_catalogs.py` before a build. The 64 locale
+identifiers in `Localization/locales.json` are required for every translatable
+entry in `Localizable`, `WebApps`, `Interface`, `ApplicationNavigation`,
+`PauseActivity` and `ShieldNotifications`. Explicit `shouldTranslate: false` entries are exempt.
 The gate checks nonempty translated values, positional format arguments, and
 plural branches (including the mandatory `other` fallback).
 
 After building, run `python3 scripts/verify_localization_bundles.py PATH_TO_APP`.
-It checks `Localizable` in the host and every extension, `Interface` in the iOS
-host and Shield Configuration extension, and `PauseActivity` in the iOS host and
-Live Activity extension. Both `.strings` and `.stringsdict` values are compared
+It checks `Localizable` and `WebApps` in the host and every extension, plus the
+iOS-specific tables in their host and extension consumers. Both `.strings` and `.stringsdict` values are compared
 with the source catalogs. Release builds run both gates automatically.
 
 Regression tests: `python3 -m unittest discover -s tests -p 'test_localization_catalogs.py'`.

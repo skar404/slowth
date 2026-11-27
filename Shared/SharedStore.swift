@@ -22,7 +22,7 @@ enum SiteFeature: String, CaseIterable {
         case "youtube": return [.shorts, .hideHomeFeed, .feed, .all]
         case "facebook": return [.shorts, .feed, .all]
         case "x": return [.shorts, .all]
-        case "tiktok": return [.all]
+        case "tiktok": return [.feed, .all]
         default: return []
         }
     }

@@ -430,25 +430,57 @@ private struct RecordingSheetBackground: ViewModifier {
     }
 }
 
-private struct RecordingPromptHeight: PreferenceKey {
-    static var defaultValue: CGFloat = 220
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
-}
-
 struct RealtimeRecordingPromptSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var applicationOpenFailed = false
-    @State private var contentHeight: CGFloat = 220
+    @State private var compactDetent: PresentationDetent = .height(220)
+    @State private var selectedDetent: PresentationDetent = .height(220)
+    @AppStorage("webapps.monitoring-alternative-v1-dismissed") private var browserAlternativeDismissed = false
 
     let preferredExtensionBundleID: String
     let isRecording: Bool
     var onLearnMore: () -> Void = {}
     var pauseTarget: String? = nil
+    var onOpenWebApps: (() -> Void)? = nil
+
+    private var showsBrowserAlternative: Bool {
+        if #available(iOS 18.4, *) { return !browserAlternativeDismissed }
+        return false
+    }
 
     var body: some View {
+        scrollContent
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [compactDetent, .large],
+                             selection: Binding(
+                                get: { dynamicTypeSize.isAccessibilitySize ? .large : selectedDetent },
+                                set: { selectedDetent = $0 }))
+        .presentationDragIndicator(.visible)
+        .accessibilityAction(.escape) { dismiss() }
+        .modifier(RecordingSheetBackground())
+        .tint(Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
+                : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
+        }))
+    }
+
+    private var scrollContent: some View {
         ScrollView {
             VStack(spacing: 12) {
+                if showsBrowserAlternative {
+                    IOSFeatureCard(
+                        title: String(localized: "New: social sites in your browser", table: "WebApps"),
+                        subtitle: String(localized: "Use Slowth’s browser or Safari with the Slowth extension instead of starting screen recording.", table: "WebApps"),
+                        icon: "safari",
+                        gradient: [Color(red: 0.20, green: 0.42, blue: 0.37), Color(red: 0.12, green: 0.31, blue: 0.34)],
+                        action: onOpenWebApps,
+                        compact: true,
+                        onDismiss: { withAnimation { browserAlternativeDismissed = true } },
+                        actionTitle: onOpenWebApps == nil ? nil : String(localized: "Web apps", table: "WebApps")
+                    )
+                    .accessibilityIdentifier("recording.browser-alternative")
+                }
                 AppRecordingCard(preferredExtensionBundleID: preferredExtensionBundleID,
                                  isRecording: isRecording, showsPause: pauseTarget != nil,
                                  pauseTarget: pauseTarget, compact: true, showsStateBackground: false)
@@ -483,24 +515,14 @@ struct RealtimeRecordingPromptSheet: View {
             .padding(.horizontal, 12)
             .padding(.top, 24)
             .padding(.bottom, 20)
-            .background {
-                GeometryReader { geometry in
-                    Color.clear.preference(key: RecordingPromptHeight.self, value: geometry.size.height)
-                }
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
+                let followsContent = selectedDetent == compactDetent
+                let next = PresentationDetent.height(max(220, height))
+                compactDetent = next
+                if followsContent { selectedDetent = next }
             }
         }
         .scrollIndicators(.hidden)
-        .onPreferenceChange(RecordingPromptHeight.self) { contentHeight = $0 }
-        .presentationDetents(dynamicTypeSize.isAccessibilitySize
-            ? [.large] : [.height(max(220, contentHeight)), .large])
-        .presentationDragIndicator(.visible)
-        .accessibilityAction(.escape) { dismiss() }
-        .modifier(RecordingSheetBackground())
-        .tint(Color(uiColor: UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor(red: 0.66, green: 0.81, blue: 0.62, alpha: 1)
-                : UIColor(red: 0.27, green: 0.44, blue: 0.29, alpha: 1)
-        }))
     }
 
 

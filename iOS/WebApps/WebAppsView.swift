@@ -7,7 +7,7 @@ struct WebAppsIntroSections: View {
     var body: some View {
         Section {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Beta").font(.caption.bold()).padding(.horizontal, 10).padding(.vertical, 4)
+                Text(String(localized: "Beta", table: "WebApps")).font(.caption.bold()).padding(.horizontal, 10).padding(.vertical, 4)
                     .background(SlowthAppearance.sage.opacity(0.15), in: Capsule())
                 Text(String(localized: "Your sites, with room to breathe", table: "WebApps"))
                     .font(.title2.bold())

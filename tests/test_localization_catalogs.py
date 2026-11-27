@@ -22,6 +22,20 @@ FALLBACK_FIXTURE = {'locales': ['fr'], 'tables': {'Interface': ['Choose %@']}}
 
 
 class LocalizationTests(unittest.TestCase):
+    def test_web_apps_strings_are_registered(self):
+        catalog = load_catalogs()['WebApps']
+        root = Path(__file__).resolve().parents[1]
+        sources = [*root.glob('iOS/WebApps/*.swift'),
+                   root / 'iOS/Views/SafariSettingsSections.swift',
+                   root / 'iOS/BroadcastPickerView.swift',
+                   root / 'Shared/ContentView_iOS.swift']
+        pattern = re.compile(r'String\(localized:\s*"((?:\\.|[^"\\])*)",\s*table:\s*"WebApps"')
+        keys = {json.loads('"' + match[1] + '"')
+                for source in sources for match in pattern.finditer(source.read_text())}
+        self.assertGreater(len(keys), 20)
+        for key in keys:
+            self.assertIn(key, catalog['strings'], key)
+
     def test_guide_and_picker_strings_are_registered(self):
         # A well-formed catalog can still omit a newly added Swift source key.
         # These screens previously showed English-only category instructions.

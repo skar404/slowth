@@ -99,6 +99,24 @@ struct WebAppsTests {
         precondition(router.takeWebsiteURL(for: .instagram) == nil)
         precondition(router.takeWebsiteURL(for: .youtube)?.query == "v=123")
         precondition(router.takeWebsiteURL(for: .youtube) == nil)
+
+        let handoff = WebAppsRouter()
+        handoff.open(.instagram)
+        handoff.dismissForNativePrompt()
+        precondition(handoff.service == nil && handoff.isDismissing)
+        // Clearing the cover binding is not a completed UIKit dismissal.
+        handoff.open(.youtube)
+        precondition(handoff.service == nil && handoff.pending == .youtube)
+        handoff.dismissForNativePrompt() // A repeated Shield request wins.
+        precondition(handoff.pending == nil && handoff.isDismissing)
+        handoff.didDismiss()
+        precondition(!handoff.isDismissing && handoff.service == nil)
+        handoff.setPresentationReady(false) // Native popup now occupies the screen.
+        precondition(handoff.openWebsite(URL(string: "https://www.tiktok.com/following")!))
+        handoff.dismissForNativePrompt()
+        precondition(!handoff.isDismissing && handoff.pending == nil && handoff.websiteURL == nil)
+        handoff.setPresentationReady(true)
+        precondition(handoff.service == nil, "A superseded website must not reopen after the popup")
         print("Web app routes, modal routing and shared native messaging: passed")
     }
 }

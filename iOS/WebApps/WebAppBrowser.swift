@@ -134,6 +134,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         startToken = nil
         observations.removeAll()
         for tab in browserTabs {
+            tab.view.scrollView.refreshControl?.endRefreshing()
             tab.view.stopLoading()
             tab.view.navigationDelegate = nil; tab.view.uiDelegate = nil
             controller.didCloseTab(tab, windowIsClosing: true)
@@ -145,9 +146,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func addTab(configuration: WKWebViewConfiguration) -> WebAppTab {
         configuration.webExtensionController = controller
         let view = WKWebView(frame: .zero, configuration: configuration)
-        view.allowsBackForwardNavigationGestures = true
-        view.allowsLinkPreview = false
-        view.navigationDelegate = self; view.uiDelegate = self
+        configure(view)
         let previous = browserTabs.last
         let tab = WebAppTab(view: view, owner: self)
         tab.opener = browserTabs.first { $0.view === activeView }
@@ -157,6 +156,34 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         controller.didActivateTab(tab, previousActiveTab: previous)
         show(tab)
         return tab
+    }
+
+    private func configure(_ view: WKWebView) {
+        view.allowsBackForwardNavigationGestures = true
+        view.allowsLinkPreview = false
+        view.navigationDelegate = self; view.uiDelegate = self
+        view.scrollView.alwaysBounceVertical = true
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(refreshPage(_:)), for: .valueChanged)
+        view.scrollView.refreshControl = refresh
+    }
+
+    @objc private func refreshPage(_ refresh: UIRefreshControl) {
+        guard activeView?.scrollView.refreshControl === refresh else {
+            refresh.endRefreshing()
+            return
+        }
+        reload()
+    }
+
+    var copyableURL: URL? {
+        guard let url = activeView?.url, ["https", "http"].contains(url.scheme?.lowercased() ?? "") else { return nil }
+        return url
+    }
+
+    func copyCurrentLink(to pasteboard: UIPasteboard = .general) {
+        guard let url = copyableURL else { return }
+        pasteboard.url = url
     }
 
     private func isExtensionURL(_ url: URL) -> Bool {
@@ -177,13 +204,12 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         config.webExtensionController = controller
         if !extensionPage { config.websiteDataStore = runtime.dataStore; config.allowsInlineMediaPlayback = true; config.allowsPictureInPictureMediaPlayback = true }
         let view = WKWebView(frame: .zero, configuration: config)
-        view.allowsBackForwardNavigationGestures = true
-        view.allowsLinkPreview = false
-        view.navigationDelegate = self; view.uiDelegate = self
+        configure(view)
         let replacement = WebAppTab(view: view, owner: self, isExtensionPage: extensionPage)
         replacement.opener = tab.opener
         replacement.lastRequestedURL = url
         let active = activeView === tab.view
+        tab.view.scrollView.refreshControl?.endRefreshing()
         tab.view.navigationDelegate = nil; tab.view.uiDelegate = nil
         tab.view.stopLoading()
         browserTabs[index] = replacement
@@ -199,6 +225,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
 
     private func show(_ tab: WebAppTab) {
         mediaVisibilityRevision = UUID()
+        if activeView !== tab.view { activeView?.scrollView.refreshControl?.endRefreshing() }
         observations.removeAll()
         activeView = tab.view
         tab.view.setAllMediaPlaybackSuspended(false, completionHandler: nil)
@@ -223,6 +250,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         canGoBack = activeView?.canGoBack == true || canCloseWindow
         canGoForward = activeView?.canGoForward == true
         loading = activeView?.isLoading ?? false
+        if !loading { activeView?.scrollView.refreshControl?.endRefreshing() }
         if let url = activeView?.url, isExtensionURL(url) { currentHost = "Slowth" }
         else { currentHost = activeView?.url?.host ?? service.url.host ?? service.title }
     }
@@ -272,6 +300,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func webViewDidClose(_ webView: WKWebView) {
         guard let index = browserTabs.firstIndex(where: { $0.view === webView }), index > 0 else { return }
         let old = browserTabs.remove(at: index)
+        old.view.scrollView.refreshControl?.endRefreshing()
         windows = browserTabs
         old.view.navigationDelegate = nil; old.view.uiDelegate = nil
         old.view.stopLoading()
@@ -347,6 +376,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) { navigationFailed(webView, error) }
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { navigationFailed(webView, error) }
     private func navigationFailed(_ webView: WKWebView, _ error: Error) {
+        webView.scrollView.refreshControl?.endRefreshing()
         guard webView === activeView else { return }
         let navigationError = error as NSError
         // WebKit reports a policy interruption when we intentionally keep an
@@ -363,6 +393,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         loading = false
     }
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.scrollView.refreshControl?.endRefreshing()
         if let main = browserTabs.first, main.view === webView {
             if let url = webView.url.flatMap({ service.restorableURL($0, method: main.requestMethod) }) {
                 UserDefaults.standard.set(url, forKey: restorationKey)
@@ -371,6 +402,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         runtime.requestVerification(force: true)
     }
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        webView.scrollView.refreshControl?.endRefreshing()
         // Do not replay POST or authentication on crash recovery.
         guard let tab = browserTabs.first(where: { $0.view === webView }) else { return }
         let destination = webView.url.flatMap { service.restorableURL($0, method: tab.requestMethod) } ?? service.url
@@ -397,7 +429,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func webView(_ webView: WKWebView, contextMenuConfigurationFor elementInfo: WKContextMenuElementInfo,
                  completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
         // The system link menu can offer to open the native app or another
-        // browser. The browser bar still provides explicit copy/share actions.
+        // browser. The address menu provides an explicit copy action.
         completionHandler(nil)
     }
 
@@ -458,11 +490,25 @@ struct WebAppBrowserScreen: View {
             HStack(spacing: 0) {
                 Button { dismiss() } label: { Image(systemName: "xmark").frame(width: 44, height: 44).contentShape(Rectangle()) }
                     .accessibilityLabel(String(localized: "Close"))
-                VStack(spacing: 2) {
-                    Text(browser.currentHost.isEmpty ? browser.service.url.host! : browser.currentHost)
-                        .font(.subheadline.weight(.semibold)).lineLimit(1).truncationMode(.middle)
-                    Text(protectionLabel).font(.caption2).foregroundStyle(.secondary)
-                }.frame(maxWidth: .infinity).accessibilityElement(children: .combine)
+                Menu {
+                    Button {
+                        browser.copyCurrentLink()
+                    } label: {
+                        Label(String(localized: "Copy link", table: "WebApps"), systemImage: "doc.on.doc")
+                    }
+                } label: {
+                    VStack(spacing: 2) {
+                        HStack(spacing: 4) {
+                            Text(browser.currentHost.isEmpty ? browser.service.url.host! : browser.currentHost)
+                                .font(.subheadline.weight(.semibold)).lineLimit(1).truncationMode(.middle)
+                            Image(systemName: "chevron.down").font(.caption2).accessibilityHidden(true)
+                        }
+                        Text(protectionLabel).font(.caption2).foregroundStyle(.secondary)
+                    }.frame(maxWidth: .infinity, minHeight: 44).contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(browser.copyableURL == nil)
+                .accessibilityIdentifier("webapps.address")
                 Button { blockingSettingsService = currentService } label: {
                     Image(systemName: "slider.horizontal.3").frame(width: 44, height: 44).contentShape(Rectangle())
                 }

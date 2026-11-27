@@ -215,7 +215,7 @@ for (const namespace of ['browser', 'chrome']) {
       assert.ok(!read('app.html').includes('id="onboarding"'));
       assert.equal(translated.find(el => el.dataset.i18n === 'strictMode').textContent, messages.strictMode.message);
       const switches = elements.get('sites').querySelectorAll('input');
-      assert.equal(switches.length, 14);
+      assert.equal(switches.length, 15);
       assert.equal(switches[0].dataset.feature, 'all');
       assert.equal(switches[0].checked, false);
       assert.equal(switches[1].checked, true);
@@ -223,6 +223,9 @@ for (const namespace of ['browser', 'chrome']) {
       assert.equal(homeFeed.checked, false);
       assert.equal(homeFeed.disabled, false);
       const youtubeFeed = switches.find(input => input.dataset.site === 'youtube' && input.dataset.feature === 'feed');
+      const tiktokFeed = switches.find(input => input.dataset.site === 'tiktok' && input.dataset.feature === 'feed');
+      assert.equal(tiktokFeed.checked, false);
+      assert.equal(tiktokFeed.disabled, true, 'Whole-site blocking takes priority by default');
       const stories = switches.find(input => input.dataset.site === 'instagram' && input.dataset.feature === 'stories');
       assert.equal(stories.checked, false);
       assert.equal(stories.disabled, false);
@@ -238,7 +241,8 @@ for (const namespace of ['browser', 'chrome']) {
       state.strictModeUntil = Date.now() / 1000 + 3600;
       await context.refreshPopup();
       for (const input of switches) {
-        assert.equal(input.disabled, input.dataset.feature === 'all' || input.checked);
+        const wholeSite = context.Unscroll.normalizeSiteSettings(input.dataset.site, state.toggles[input.dataset.site]).all;
+        assert.equal(input.disabled, input.dataset.feature === 'all' || input.checked || wholeSite);
       }
       assert.equal(youtubeFeed.disabled, false, 'Strict mode permits strengthening the policy');
       assert.ok(elements.get('strict-toggle').disabled);
@@ -371,9 +375,12 @@ for (const namespace of ['browser', 'chrome']) {
     assert.ok(sections.every(el => fs.existsSync(path.join(root, el.children[0].children[0].src))));
   });
   test(`${namespace}: failed tab access still loads controls`, async () => {
-    const { context, elements } = popupHarness('en', namespace, undefined, true);
+    const { context, elements, state } = popupHarness('en', namespace, undefined, true);
     await context.refreshPopup();
-    assert.ok(elements.get('sites').querySelectorAll('input').every(el => !el.disabled));
+    for (const input of elements.get('sites').querySelectorAll('input')) {
+      const wholeSite = context.Unscroll.normalizeSiteSettings(input.dataset.site, state.toggles[input.dataset.site]).all;
+      assert.equal(input.disabled, input.dataset.feature !== 'all' && wholeSite);
+    }
     assert.ok(elements.get('sites').children.every(el => !el.open));
   });
   test(`${namespace}: automatic expansion respects manual interaction`, async () => {

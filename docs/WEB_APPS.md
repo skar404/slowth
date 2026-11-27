@@ -29,13 +29,23 @@ an authentication-related path. Other destinations fall back to the service home
 Forms, POST bodies and temporary windows are never serialized. Restoration stores
 only the last eligible URL per service, not a global browsing history.
 
+An explicit request from a native app's Shield closes the browser cover and waits
+for dismissal before presenting recording, pause or an existing detection rest.
+The target is retained throughout the transition; a rest's countdown is not
+restarted. Website links can likewise dismiss these prompts before opening the
+browser. Background rest polling alone does not interrupt browsing.
+
 Clicked external links open a temporary window with the originating profile.
 Google/Apple authentication destinations and links within a redirected login
 provider retain their current browsing context, including sessionStorage.
 WebKit-created windows keep the exact supplied configuration and real
 `window.opener`; a window closed by the website returns to its opener.
-The compact bar shows the current domain and protection state, with just two
-controls: Close and Blocking settings. Settings reuse the existing site controls,
+The compact bar shows the current domain and protection state, alongside Close
+and Blocking settings. Tapping the domain opens Copy link for the full current
+HTTP(S) URL, including its path, query and fragment. Pulling down at the top of
+the page reloads it, including pages shorter than the viewport. Refresh controls
+belong to each web view and stop on completion, failure or a tab switch.
+Settings reuse the existing site controls,
 filtered to the service matching the visible URL. On unsupported sites, such as
 external login providers, the settings button is disabled. The unified Web apps tab lists every site with Open, Add to Home Screen and
 expandable blocking settings. Add to Home Screen opens the HTTPS setup page
@@ -43,6 +53,9 @@ directly in the external browser, without an intermediate instructions sheet;
 the action uses a transition arrow. Safari extension setup has an Enable in Safari
 help card at the top of Web apps. Rule updates stay below the catalog. iPad and Duo use the same catalog in their Web apps column.
 There is no separate Safari tab or browser overflow menu.
+Instagram's mobile bottom navigation uses equal-width slots for the visible
+icons, including when Reels is hidden. This adjustment uses the bottom bar's
+links and geometry, and leaves post actions and desktop sidebars unchanged.
 Each site can be hidden through its expanded blocking settings. Hidden sites move
 to a collapsed, neutral list below Rules, without service icons or launch
 buttons; its restore action returns a site to the main list. The local visibility

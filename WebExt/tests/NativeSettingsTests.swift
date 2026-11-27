@@ -76,7 +76,7 @@ struct NativeSettingsTests {
             check(settings.feed == ["instagram", "facebook"].contains(site), "Feed defaults: \(site)")
         }
         let controls = SharedState.supportedSites.flatMap { SiteBlockingControl.controls(for: $0) }
-        check(controls.count == 14, "Every Safari setting has a control")
+        check(controls.count == 15, "Every Safari setting has a control")
         check(controls.contains { $0.id == "safari.instagram.stories" }, "Instagram exposes Stories")
         check(!fresh.toggles["instagram"]!.stories, "Stories hard block defaults off")
         let oldJSON = Data(#"{"shorts":false,"feed":true,"all":false}"#.utf8)
@@ -156,6 +156,22 @@ struct NativeSettingsTests {
             } catch SharedStoreError.invalidValue { }
         }
         check(SiteFeature.available(for: "youtube") == [.shorts, .hideHomeFeed, .feed, .all], "YouTube exposes feed")
+        check(SiteFeature.available(for: "tiktok") == [.feed, .all], "TikTok exposes feed")
+        check(controls.contains { $0.id == "safari.tiktok.feed" }, "TikTok feed UI control")
+        for raw: Any in ["off", "shorts", "feed", "all", true, false, ["all": false]] {
+            check(!SiteBlockingSettings.migrated(raw, site: "tiktok").feed,
+                  "Existing TikTok settings must not opt into feed blocking")
+        }
+        reset()
+        _ = try SharedStore.setToggle(site: "tiktok", feature: .feed, enabled: true)
+        _ = try SharedStore.setToggle(site: "tiktok", feature: .all, enabled: false)
+        check(SharedStore.snapshot().toggles["tiktok"] == SiteBlockingSettings(feed: true),
+              "TikTok feed persists independently of whole-site blocking")
+        defaults.set(Date().addingTimeInterval(3600).timeIntervalSince1970, forKey: SharedStoreKey.strictModeUntil)
+        do {
+            _ = try SharedStore.setToggle(site: "tiktok", feature: .feed, enabled: false)
+            preconditionFailure("Strict mode allowed disabling TikTok feed")
+        } catch SharedStoreError.strictModeActive { }
         check(controls.contains { $0.id == "safari.youtube.feed" }, "YouTube feed UI control")
         for raw: Any in ["off", "shorts", "feed", "all", true, false,
                          ["shorts": false, "all": true]] {

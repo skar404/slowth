@@ -25,6 +25,71 @@
   // Time spent in the current stories session — reset only on URL leave.
   let storiesStartedAt = 0;
 
+  // Instagram leaves differently sized wrappers (including empty Reels slots)
+  // in its mobile navigation. Identify the bottom row by links and geometry,
+  // without relying on generated class names or translated icon labels.
+  const NAV_ROW = "data-unscroll-instagram-nav-row";
+  const NAV_SLOT = "data-unscroll-instagram-nav-slot";
+  const NAV_HIDDEN = "data-unscroll-instagram-nav-hidden";
+  let navigationMarks = new Map();
+
+  function updateBottomNavigation() {
+    const marks = new Map();
+    function path(link) {
+      try {
+        const url = new URL(link.getAttribute("href"), location.href);
+        return url.origin === location.origin ? url.pathname.replace(/\/$/, "") || "/" : null;
+      } catch (_) { return null; }
+    }
+    for (const home of document.querySelectorAll('a[href="/"],a[href="https://www.instagram.com/"],a[href="https://instagram.com/"]')) {
+      const homeRect = home.getBoundingClientRect();
+      if (!homeRect.width || homeRect.top < window.innerHeight / 2) continue;
+      for (let row = home.parentElement; row && row !== document.body; row = row.parentElement) {
+        const rect = row.getBoundingClientRect();
+        if (rect.height > 128) break;
+        if (rect.height < 40 || rect.width < window.innerWidth * 0.6) continue;
+        const links = [...row.querySelectorAll("a[href]")];
+        if (!links.some(link => path(link) === "/explore") ||
+            !links.some(link => path(link) === "/direct/inbox" || path(link) === "/direct")) continue;
+        let fixed = false;
+        for (let parent = row; parent && parent !== document.body; parent = parent.parentElement) {
+          if (["fixed", "sticky"].includes(getComputedStyle(parent).position)) { fixed = true; break; }
+        }
+        if (!fixed) continue;
+        const slots = [...row.children];
+        if (slots.length < 3 || slots.length > 7) continue;
+        // Do not reshape a containing panel, post actions or unrelated controls.
+        if (!slots.every(slot => (slot.matches("a[href]") ? 1 : slot.querySelectorAll("a[href]").length) === 1)) continue;
+        marks.set(row, NAV_ROW);
+        for (const slot of slots) {
+          const link = slot.matches("a[href]") ? slot : slot.querySelector("a[href]");
+          const hiddenReels = ns.content.featureEnabled("instagram", "shorts") && /^\/reels?(\/|$)/.test(path(link) || "");
+          marks.set(slot, hiddenReels ? NAV_HIDDEN : NAV_SLOT);
+        }
+        break;
+      }
+    }
+    for (const [node, attribute] of navigationMarks) {
+      if (marks.get(node) !== attribute) node.removeAttribute(attribute);
+    }
+    for (const [node, attribute] of marks) {
+      if (!node.hasAttribute(attribute)) node.setAttribute(attribute, "");
+    }
+    navigationMarks = marks;
+    const id = "unscroll-instagram-navigation-style";
+    if (marks.size && !document.getElementById(id)) {
+      const style = document.createElement("style");
+      style.id = id;
+      style.textContent = `
+        [${NAV_ROW}]{display:flex!important;align-items:center!important;column-gap:0!important;padding-inline:0!important;}
+        [${NAV_SLOT}]{display:flex!important;flex:1 1 0!important;min-width:0!important;width:0!important;margin-inline:0!important;padding-inline:0!important;justify-content:center!important;align-items:center!important;}
+        [${NAV_SLOT}] a,[${NAV_SLOT}]:is(a){display:flex!important;align-items:center!important;justify-content:center!important;margin-inline:0!important;}
+        [${NAV_HIDDEN}]{display:none!important;}
+      `;
+      document.documentElement.appendChild(style);
+    }
+  }
+
   function isFeedModeActive() {
     return globalThis.Unscroll.content.featureEnabled("instagram", "feed");
   }
@@ -227,6 +292,7 @@
   let currentContext = null;
 
   function check() {
+    updateBottomNavigation();
     const ctx = getContext();
     if (ctx !== currentContext) {
       // Context switched — drop any in-flight overlay/trigger from the previous one.

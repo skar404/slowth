@@ -9,7 +9,7 @@ final class WebAppsRouter: ObservableObject {
     @Published private(set) var websiteURL: URL?
     private var presentationReady = true
     private var shortcutInstructionsPresented = false
-    private var isDismissing = false
+    @Published private(set) var isDismissing = false
 
     func open(_ next: WebAppService) {
         if isDismissing || !presentationReady || shortcutInstructionsPresented { pending = next; return }
@@ -37,6 +37,16 @@ final class WebAppsRouter: ObservableObject {
     func didDismiss() {
         isDismissing = false
         presentPending()
+    }
+    func dismissForNativePrompt() {
+        // An explicit Shield handoff supersedes a queued website. Keep the
+        // presentation occupied until the cover's onDismiss has actually run.
+        pending = nil
+        websiteURL = nil
+        if service != nil {
+            isDismissing = true
+            service = nil
+        }
     }
     func setPresentationReady(_ ready: Bool) {
         presentationReady = ready

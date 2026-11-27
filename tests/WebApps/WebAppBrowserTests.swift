@@ -1,6 +1,7 @@
 import XCTest
 import WebKit
 import Network
+import SwiftUI
 @testable import Unscroll
 
 @MainActor
@@ -18,6 +19,287 @@ final class WebAppBrowserTests: XCTestCase {
             WebAppProfileRuntime.shared(profile).prepareRecovery()
         }
         try await super.tearDown()
+    }
+
+    func testShieldRequestReplacesBrowserCoverWithNativePromptAndCanReturnToBrowser() async throws {
+        let router = WebAppsRouter.shared
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        let previousRoot = window.rootViewController
+        let welcome = UserDefaults.standard.object(forKey: "iosWelcomeV1Handled")
+        UserDefaults.standard.set(true, forKey: "iosWelcomeV1Handled")
+        router.dismissForNativePrompt()
+        router.didDismiss()
+        router.setPresentationReady(true)
+        let host = UIHostingController(rootView: ShieldHandoffTestRoot())
+        window.rootViewController = host
+        defer {
+            host.dismiss(animated: false)
+            window.rootViewController = previousRoot
+            UserDefaults.standard.set(welcome, forKey: "iosWelcomeV1Handled")
+            _ = SharedStore.consumeRealtimeRecordingPromptRequest()
+            router.dismissForNativePrompt()
+            router.didDismiss()
+            router.setPresentationReady(true)
+        }
+        func waitUntil(_ condition: () -> Bool) async throws {
+            for _ in 0..<100 {
+                if condition() { return }
+                try await Task.sleep(for: .milliseconds(100))
+            }
+            XCTFail("Native/browser presentation did not complete")
+            throw URLError(.timedOut)
+        }
+        router.open(.instagram)
+        try await waitUntil { host.presentedViewController != nil }
+        let browserCover = try XCTUnwrap(host.presentedViewController)
+        SharedStore.requestRealtimeRecordingPrompt(target: "apps")
+        // Exercise ContentView's actual polling/consumption and SwiftUI dismissal.
+        try await waitUntil {
+            router.service == nil && !router.isDismissing && host.presentedViewController != nil &&
+                host.presentedViewController !== browserCover
+        }
+        XCTAssertNil(router.pending)
+        let prompt = try XCTUnwrap(host.presentedViewController)
+        router.open(.youtube)
+        try await waitUntil {
+            router.service == .youtube && host.presentedViewController != nil &&
+                host.presentedViewController !== prompt
+        }
+    }
+
+    func testShieldDestinationsStayQueuedUntilBrowserDismissalCompletes() {
+        for target in ["youtube", "tiktok", "instagram"] {
+            let router = WebAppsRouter()
+            var prompt = IOSShieldPromptPresentation()
+            router.open(.instagram)
+            XCTAssertTrue(prompt.receive(isActive: true) { $0 = target; return true })
+            router.dismissForNativePrompt()
+            let rest = IOSDetectionRest(target: "instagram", started: IOSPauseClock(wall: 1000, continuous: 500, boot: "test"))
+            func take() -> IOSShieldPromptPresentation.Destination? {
+                prompt.take(isActive: true, isIdle: !router.isDismissing, rests: [rest], isPauseOnly: { $0 == "tiktok" })
+            }
+            XCTAssertNil(take())
+            XCTAssertTrue(prompt.isPending)
+            router.didDismiss()
+            switch (target, take()) {
+            case ("youtube", .recording("youtube")), ("tiktok", .pause("tiktok")): break
+            case ("instagram", .rest(let shown)):
+                XCTAssertEqual(shown.id, rest.id)
+                XCTAssertEqual(shown.started?.continuous, 500, "The handoff must not restart the rest")
+            default: XCTFail("Lost Shield destination: \(target)")
+            }
+            XCTAssertNil(take())
+        }
+    }
+
+    func testInstagramBottomNavigationHasEqualSpacingAfterHidingReels() async throws {
+        let extensionURL = try XCTUnwrap(Bundle.main.builtInPlugInsURL)
+            .appendingPathComponent("UnscrollExtension.appex")
+        let configuration = WKWebViewConfiguration()
+        var scripts = ["""
+        window.testFlags = {shorts:true, feed:false, all:false, stories:false};
+        window.browser = {runtime:{
+          sendMessage: (_, callback) => callback({toggles:{instagram:window.testFlags}}),
+          onMessage:{addListener: callback => window.updateTestSettings = callback},
+          getURL: file => 'https://example.com/' + file
+        }};
+        """]
+        for file in ["config.js", "pause-policy.js", "i18n.js", "content/common.js", "content/instagram.js"] {
+            scripts.append(file == "i18n.js" ? "Unscroll.i18n = {t:key=>key, setLocale:()=>{}}" :
+                try String(contentsOf: extensionURL.appendingPathComponent(file), encoding: .utf8))
+        }
+        scripts.append("""
+        window.equallySpaced = count => {
+          const icons = [...document.querySelectorAll('#nav svg')].map(n => n.getBoundingClientRect()).filter(r => r.width);
+          if (icons.length !== count) return false;
+          const centers = icons.map(r => r.x + r.width / 2).sort((a,b) => a-b);
+          const step = document.getElementById('nav').clientWidth / count;
+          return centers.every((x,i) => Math.abs(x - step * (i + 0.5)) < 1);
+        };
+        """)
+        configuration.userContentController.addUserScript(WKUserScript(
+            source: scripts.joined(separator: ";\n"), injectionTime: .atDocumentEnd, forMainFrameOnly: true))
+        let view = WKWebView(frame: CGRect(x: 0, y: 0, width: 400, height: 800), configuration: configuration)
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        window.addSubview(view)
+        defer { view.removeFromSuperview(); view.stopLoading() }
+        let items = ["/", "/explore/", "/reels/", "/direct/inbox/", "/person/"]
+            .enumerated().map { index, href in
+                "<div style='width:\(45 + index * 13)px;margin-left:\(index * 3)px'><a href='\(href)'><svg width='24' height='24'><circle cx='12' cy='12' r='10'/></svg></a></div>"
+            }.joined()
+        let markup = """
+        <html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>body{margin:0}#nav{position:fixed;bottom:0;width:100%;height:60px;display:flex;justify-content:space-between}a{display:inline-block}</style>
+        </head><body><header><a href="/">Home</a></header><section id="post">Post actions</section>
+        <div id="nav">\(items)</div></body></html>
+        """
+        let server = try DownloadFixture(stalled: false, html: true, document: markup)
+        defer { server.stop() }
+        let origin = try await server.url()
+        view.load(URLRequest(url: try XCTUnwrap(URL(string: "/", relativeTo: origin)?.absoluteURL)))
+        func expect(_ expression: String, file: StaticString = #filePath, line: UInt = #line) async throws {
+            for _ in 0..<50 {
+                if (try? await view.evaluateJavaScript(expression)) as? Bool == true { return }
+                try await Task.sleep(for: .milliseconds(100))
+            }
+            XCTFail(expression, file: file, line: line)
+            throw URLError(.cannotParseResponse)
+        }
+        try await expect("equallySpaced(4)")
+        try await expect("!document.querySelector('header [data-unscroll-instagram-nav-slot]') && !document.getElementById('post').hasAttribute('data-unscroll-instagram-nav-row')")
+        _ = try await view.evaluateJavaScript("testFlags.shorts = false; updateTestSettings({type:'unscroll-state-updated'}); true")
+        try await expect("equallySpaced(5)")
+        _ = try await view.evaluateJavaScript("document.documentElement.dir = 'rtl'; true")
+        try await expect("equallySpaced(5)")
+        _ = try await view.evaluateJavaScript("document.getElementById('nav').innerHTML = [...document.querySelectorAll('#nav a')].map(a => a.outerHTML).join(''); true")
+        try await expect("equallySpaced(5)")
+        _ = try await view.evaluateJavaScript("document.getElementById('nav').style.cssText = 'width:64px;height:100%;top:0;left:0'; true")
+        try await expect("!document.getElementById('nav').hasAttribute('data-unscroll-instagram-nav-row') && !document.querySelector('[data-unscroll-instagram-nav-slot]')")
+    }
+
+    func testAddressCopiesFullCurrentURLAfterSPANavigationAndTabSwitches() async throws {
+        let browser = WebAppProfileRuntime.shared(.tiktok).session(.tiktok)
+        browser.stop()
+        defer { browser.stop() }
+        let pasteboard = UIPasteboard.withUniqueName()
+        defer { UIPasteboard.remove(withName: pasteboard.name) }
+        let server = try DownloadFixture(stalled: false, html: true)
+        defer { server.stop() }
+        let url = try await server.url()
+        let main = browser.addTab(configuration: browser.websiteConfiguration())
+        XCTAssertNil(browser.copyableURL)
+        main.view.load(URLRequest(url: url))
+        try await waitForBrowserPage(main.view, url: url)
+        browser.copyCurrentLink(to: pasteboard)
+        XCTAssertEqual(pasteboard.url, url)
+
+        _ = try await main.view.evaluateJavaScript("history.pushState({}, '', '/post?id=123#reply'); true")
+        let post = try XCTUnwrap(URL(string: "/post?id=123#reply", relativeTo: url)?.absoluteURL)
+        try await waitForBrowserPage(main.view, url: post)
+        browser.copyCurrentLink(to: pasteboard)
+        XCTAssertEqual(pasteboard.url, post, "Copy the current path, query and fragment, not just the host")
+
+        let popup = browser.addTab(configuration: browser.websiteConfiguration())
+        browser.copyCurrentLink(to: pasteboard)
+        XCTAssertEqual(pasteboard.url, post, "An empty tab must not replace the clipboard with a made-up URL")
+        popup.view.load(URLRequest(url: url))
+        try await waitForBrowserPage(popup.view, url: url)
+        browser.copyCurrentLink(to: pasteboard)
+        XCTAssertEqual(pasteboard.url, url)
+        browser.select(main)
+        browser.copyCurrentLink(to: pasteboard)
+        XCTAssertEqual(pasteboard.url, post)
+    }
+
+    func testPullToRefreshReloadsTheActivePageAndEndsOnFailureOrTabSwitch() async throws {
+        let browser = WebAppProfileRuntime.shared(.tiktok).session(.tiktok)
+        browser.stop()
+        defer { browser.stop() }
+        let server = try DownloadFixture(stalled: false, html: true,
+            document: "<html><script>window.pageInstance = Math.random().toString()</script><body>Short page</body></html>")
+        defer { server.stop() }
+        let url = try await server.url()
+        let main = browser.addTab(configuration: browser.websiteConfiguration())
+        main.view.load(URLRequest(url: url))
+        try await waitForBrowserPage(main.view, url: url)
+        let instance = try await main.view.evaluateJavaScript("window.pageInstance")
+        let initial = try XCTUnwrap(instance as? String)
+        let refresh = try XCTUnwrap(main.view.scrollView.refreshControl)
+        XCTAssertTrue(main.view.scrollView.alwaysBounceVertical, "Short pages also support pulling down")
+        refresh.beginRefreshing()
+        refresh.sendActions(for: .valueChanged)
+        var reloaded = false
+        for _ in 0..<50 {
+            if !main.view.isLoading,
+               let current = (try? await main.view.evaluateJavaScript("window.pageInstance")) as? String,
+               current != initial { reloaded = true; break }
+            try await Task.sleep(for: .milliseconds(100))
+        }
+        XCTAssertTrue(reloaded, "The refresh control must perform a real page reload")
+        XCTAssertFalse(refresh.isRefreshing)
+        XCTAssertEqual(main.view.url, url)
+        for error in [URLError(.notConnectedToInternet), URLError(.cancelled)] {
+            refresh.beginRefreshing()
+            browser.webView(main.view, didFailProvisionalNavigation: nil, withError: error)
+            XCTAssertFalse(refresh.isRefreshing)
+        }
+        refresh.beginRefreshing()
+        let popup = browser.addTab(configuration: browser.websiteConfiguration())
+        XCTAssertFalse(refresh.isRefreshing, "Switching tabs must not leave the old spinner running")
+        XCTAssertNotNil(popup.view.scrollView.refreshControl)
+        refresh.beginRefreshing()
+        refresh.sendActions(for: .valueChanged)
+        XCTAssertFalse(refresh.isRefreshing, "A stale control must not reload the newly selected tab")
+        XCTAssertNil(popup.view.url)
+    }
+
+    private func waitForBrowserPage(_ view: WKWebView, url: URL) async throws {
+        for _ in 0..<50 {
+            if view.url == url && !view.isLoading,
+               (try? await view.evaluateJavaScript("document.readyState")) as? String == "complete" { return }
+            try await Task.sleep(for: .milliseconds(100))
+        }
+        XCTFail("Page did not finish loading: \(url)")
+        throw URLError(.timedOut)
+    }
+
+    func testTikTokFeedLimitLocksNestedScrollingAndRestoresLiveSettings() async throws {
+        let extensionURL = try XCTUnwrap(Bundle.main.builtInPlugInsURL)
+            .appendingPathComponent("UnscrollExtension.appex")
+        let configuration = WKWebViewConfiguration()
+        var scripts = ["""
+        window.testFlags = {feed:true, all:false};
+        window.browser = {runtime:{
+          sendMessage: (_, callback) => callback({toggles:{tiktok:window.testFlags}}),
+          onMessage:{addListener: callback => window.updateTestSettings = callback},
+          getURL: file => 'https://example.com/' + file
+        }};
+        """]
+        for file in ["config.js", "pause-policy.js", "i18n.js", "content/common.js", "content/tiktok.js"] {
+            scripts.append(file == "i18n.js" ? "Unscroll.i18n = {t:key=>key, setLocale:()=>{}}" :
+                try String(contentsOf: extensionURL.appendingPathComponent(file), encoding: .utf8))
+        }
+        configuration.userContentController.addUserScript(WKUserScript(
+            source: scripts.joined(separator: ";\n"), injectionTime: .atDocumentEnd, forMainFrameOnly: true))
+        let view = WKWebView(frame: CGRect(x: 0, y: 0, width: 400, height: 800), configuration: configuration)
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        window.addSubview(view)
+        defer { view.removeFromSuperview(); view.stopLoading() }
+        let markup = """
+        <html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>html,body{margin:0;height:100%;overflow:hidden}#feed{height:100%;width:100%;overflow-y:scroll}
+        video{display:block;width:100%;height:100%}#comments{position:fixed;right:0;top:0;width:100px;height:200px;overflow:auto}
+        </style></head><body><div id="feed" style="overflow-y:scroll">
+        <video></video><video></video><video></video><video></video><video></video><video></video>
+        </div><div id="comments"><div style="height:10000px">Comments</div></div></body></html>
+        """
+        let server = try DownloadFixture(stalled: false, html: true, document: markup)
+        defer { server.stop() }
+        let origin = try await server.url()
+        view.load(URLRequest(url: try XCTUnwrap(URL(string: "/", relativeTo: origin)?.absoluteURL)))
+        func expect(_ expression: String, file: StaticString = #filePath, line: UInt = #line) async throws {
+            for _ in 0..<50 {
+                if (try? await view.evaluateJavaScript(expression)) as? Bool == true { return }
+                try await Task.sleep(for: .milliseconds(100))
+            }
+            let diagnostic = try? await view.evaluateJavaScript("JSON.stringify({url:location.href, flags:window.testFlags, feed:document.documentElement.getAttribute('data-unscroll-tiktok-feed')})")
+            XCTFail("\(expression): \(diagnostic ?? "unavailable")", file: file, line: line)
+            throw URLError(.cannotParseResponse)
+        }
+        try await expect("document.documentElement.getAttribute('data-unscroll-tiktok-feed') === 'true'")
+        _ = try await view.evaluateJavaScript("document.getElementById('comments').scrollTop = 5000; true")
+        try await expect("!document.getElementById('unscroll-block-overlay') && window.scrollY === 0")
+        _ = try await view.evaluateJavaScript("document.getElementById('feed').scrollTop = document.getElementById('feed').clientHeight * 4; true")
+        try await expect("!!document.getElementById('unscroll-block-overlay') && getComputedStyle(document.getElementById('feed')).overflowY === 'hidden' && window.scrollY === 0")
+        _ = try await view.evaluateJavaScript("window.testFlags.feed = false; window.updateTestSettings({type:'unscroll-state-updated'}); true")
+        try await expect("!document.getElementById('unscroll-block-overlay') && getComputedStyle(document.getElementById('feed')).overflowY === 'scroll' && !document.getElementById('feed').hasAttribute('data-unscroll-tiktok-scroll-lock')")
+        _ = try await view.evaluateJavaScript("window.testFlags.feed = true; window.updateTestSettings({type:'unscroll-state-updated'}); true")
+        try await expect("!!document.getElementById('unscroll-block-overlay')")
+        _ = try await view.evaluateJavaScript("history.pushState({}, '', '/search?q=test'); true")
+        try await expect("!document.getElementById('unscroll-block-overlay') && getComputedStyle(document.getElementById('feed')).overflowY === 'scroll'")
     }
 
     func testYouTubeDismissalPreservesPresentedVideoAndSuspendsInlineMedia() async throws {
@@ -513,6 +795,20 @@ final class WebAppBrowserTests: XCTestCase {
         try await runtime.start()
         XCTAssertTrue(runtime.context?.isLoaded == true)
         XCTAssertNotEqual(runtime.protection, .failed)
+    }
+}
+
+// Use a real SwiftUI cover without starting network/extension sessions: this
+// fixture isolates ContentView's native popup arbitration from website loading.
+private struct ShieldHandoffTestRoot: View {
+    @ObservedObject private var router = WebAppsRouter.shared
+    var body: some View {
+        // Unsigned simulator hosts have no App Group container. Supply a fresh
+        // empty rest snapshot while exercising the production request and UI path.
+        ContentView(openRests: { [] })
+            .fullScreenCover(item: $router.service, onDismiss: router.didDismiss) { _ in
+                Color.clear
+            }
     }
 }
 

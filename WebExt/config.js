@@ -21,7 +21,7 @@
   ns.SITE_FEATURES = {
     youtube: ["shorts", "hideHomeFeed", "feed", "all"],
     instagram: ["shorts", "feed", "stories", "all"],
-    tiktok: ["all"],
+    tiktok: ["feed", "all"],
     facebook: ["shorts", "feed", "all"],
     x: ["shorts", "all"]
   };
