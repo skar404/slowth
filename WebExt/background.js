@@ -183,11 +183,20 @@
   // Warm the native bridge on background startup, including WKWebExtension hosts.
   // The in-app browser waits for this round trip before loading a service.
   let nativePort = null;
+  let reconnectPending = false;
   let verification = Promise.resolve();
+  function scheduleReconnect() {
+    if (reconnectPending) return;
+    reconnectPending = true;
+    setTimeout(() => {
+      reconnectPending = false;
+      connectHost();
+    }, 1000);
+  }
   function connectHost() {
     // Safari keeps its existing polling/notification path. Only the embedded host
     // advertises this protocol in a successful native getState reply.
-    if (!ns.webAppHost || !api.runtime.connectNative || nativePort) return;
+    if (!ns.webAppHost || !api.runtime.connectNative || nativePort || reconnectPending) return;
     try {
       const port = api.runtime.connectNative("slowth.web-apps");
       nativePort = port;
@@ -221,10 +230,22 @@
       });
       port.onDisconnect.addListener(() => {
         void api.runtime.lastError;
-        if (nativePort === port) nativePort = null;
-        setTimeout(connectHost, 1000);
+        if (nativePort !== port) return;
+        nativePort = null;
+        scheduleReconnect();
       });
-    } catch (_) { nativePort = null; }
+    } catch (_) {
+      nativePort = null;
+      scheduleReconnect();
+    }
   }
-  void ns.getStateFresh().then(connectHost);
+  async function discoverHost(attempt = 0) {
+    await ns.getStateFresh();
+    connectHost();
+    if (api.runtime.connectNative && ns.webAppHost === undefined && attempt < 3) {
+      setTimeout(() => { void discoverHost(attempt + 1); }, 1000);
+    }
+  }
+  ns.onWebAppHostReady = connectHost;
+  void discoverHost();
 })();

@@ -86,13 +86,7 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
             for pattern in webExtension.requestedPermissionMatchPatterns { context.setPermissionStatus(.grantedExplicitly, for: pattern) }
             self.context = context
             try self.controller.load(context)
-            try await self.loadBackgroundContent(context)
-            try Task.checkCancellation()
-            for _ in 0..<100 {
-                if self.bridgeReady && self.port?.isDisconnected == false { break }
-                try await Task.sleep(for: .milliseconds(100))
-            }
-            guard self.bridgeReady, self.port?.isDisconnected == false else { throw RuntimeError.bridgeUnavailable }
+            try await self.startBackgroundBridge(context)
             self.requestVerification(force: true)
         }
         startup = task
@@ -104,20 +98,20 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
         }
     }
 
-    private func loadBackgroundContent(_ context: WKWebExtensionContext) async throws {
-        // WebKit may never complete the callback after an unload/process exit.
-        // Polling a callback result keeps recovery cancellation and timeout bounded
-        // without waiting for a cancelled child task to finish inside WebKit.
+    private func startBackgroundBridge(_ context: WKWebExtensionContext) async throws {
+        // The native handshake can finish before WebKit calls its load completion.
+        // Require both a fresh settings request and a connected port before opening a page.
         var result: Result<Void, Error>?
         context.loadBackgroundContent { error in
             result = error.map { .failure($0) } ?? .success(())
         }
-        for _ in 0..<300 {
+        for _ in 0..<400 {
             try Task.checkCancellation()
-            if let result { return try result.get() }
+            if case let .failure(error) = result { throw error }
+            if bridgeReady && port?.isDisconnected == false { return }
             try await Task.sleep(for: .milliseconds(100))
         }
-        throw RuntimeError.bridgeUnavailable
+        throw result == nil ? RuntimeError.backgroundStartupTimedOut : RuntimeError.nativePortTimedOut
     }
 
     func setVisible(_ browser: WebAppBrowser, _ isVisible: Bool) {
@@ -233,6 +227,22 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
         protection = .recovering
     }
 
+    #if DEBUG && targetEnvironment(simulator)
+    static func tearDownTestProfiles() async {
+        // Only stop profiles a test actually opened. Creating every possible
+        // data store and controller during teardown starts additional WebKit processes.
+        let active = Array(profiles.values)
+        profiles.removeAll()
+        for runtime in active {
+            let startup = runtime.startup
+            runtime.prepareRecovery()
+            runtime.sessions.removeAll()
+            for observer in runtime.observers { NotificationCenter.default.removeObserver(observer) }
+            _ = try? await startup?.value
+        }
+    }
+    #endif
+
     func webExtensionController(_ controller: WKWebExtensionController, openWindowsFor context: WKWebExtensionContext) -> [any WKWebExtensionWindow] {
         Array(sessions.values)
     }
@@ -279,5 +289,5 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
         if let url = configuration.url { focused.navigate(url, in: tab) }
         completionHandler(tab, nil)
     }
-    enum RuntimeError: Error { case extensionMissing, bridgeUnavailable }
+    enum RuntimeError: Error { case extensionMissing, bridgeUnavailable, backgroundStartupTimedOut, nativePortTimedOut }
 }

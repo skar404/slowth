@@ -77,6 +77,69 @@ test('a broken port reconnects for the embedded host', async () => {
   h.timers.at(-1)();
   assert.equal(h.connections, 2);
 });
+
+function startupHarness({ embedded = true, nativeAvailable = true, failFirstConnect = false } = {}) {
+  const timers = [];
+  const attempts = [];
+  const runtime = {
+    onInstalled: { addListener() {} }, onMessage: { addListener() {} },
+    sendNativeMessage(_, payload, reply) {
+      reply(nativeAvailable ? {ok: true, state: {}, webAppHost: embedded} : null);
+    },
+    connectNative(name) {
+      attempts.push(name);
+      if (failFirstConnect && attempts.length === 1) throw new Error('port not ready');
+      return {onMessage: {addListener() {}}, onDisconnect: {addListener() {}}};
+    }
+  };
+  const context = vm.createContext({
+    URL, setTimeout(fn) { timers.push(fn); }, browser: {
+      runtime, storage: {local: {get(_, reply) { reply({}); }, set(_, reply) { reply(); }}}
+    }
+  });
+  for (const script of ['config.js', 'rules-loader.js', 'background.js']) vm.runInContext(read(script), context);
+  return {timers, attempts, state: context.Unscroll, restoreNative() { nativeAvailable = true; }};
+}
+
+test('first connectNative failure retries once and further live reads keep the same port', async () => {
+  const h = startupHarness({failFirstConnect: true});
+  await flush();
+  assert.deepEqual(h.attempts, ['slowth.web-apps']);
+  assert.equal(h.timers.length, 1);
+  h.timers.shift()();
+  await h.state.getStateFresh();
+  assert.deepEqual(h.attempts, ['slowth.web-apps', 'slowth.web-apps']);
+  assert.equal(h.timers.length, 0);
+});
+
+for (const embedded of [true, false]) {
+  test(`missing initial settings are retried until the native host identifies itself (embedded=${embedded})`, async () => {
+    const h = startupHarness({embedded, nativeAvailable: false});
+    await flush();
+    assert.equal(h.attempts.length, 0);
+    assert.equal(h.timers.length, 1);
+    h.restoreNative();
+    h.timers.shift()();
+    await flush();
+    assert.equal(h.attempts.length, embedded ? 1 : 0);
+    assert.equal(h.timers.length, 0);
+  });
+}
+
+test('a later live read recovers the port after bounded startup probes are exhausted', async () => {
+  const h = startupHarness({nativeAvailable: false});
+  await flush();
+  for (let i = 0; i < 3; i++) {
+    assert.equal(h.timers.length, 1);
+    h.timers.shift()();
+    await flush();
+  }
+  assert.equal(h.timers.length, 0);
+  assert.equal(h.attempts.length, 0);
+  h.restoreNative();
+  await h.state.getStateFresh();
+  assert.deepEqual(h.attempts, ['slowth.web-apps']);
+});
 test('native freshness belongs to one response and is never restored from cached state', async () => {
   const storage = {};
   let response = {ok: true, webAppHost: true, state: {toggles: {}}};

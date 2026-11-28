@@ -15,9 +15,9 @@ final class WebAppBrowserTests: XCTestCase {
     override func tearDown() async throws {
         // Each test owns its extension processes and pages. Retained profiles
         // otherwise accumulate WebKit processes across unrelated test cases.
-        for profile in WebAppProfile.allCases {
-            WebAppProfileRuntime.shared(profile).prepareRecovery()
-        }
+        #if DEBUG && targetEnvironment(simulator)
+        await WebAppProfileRuntime.tearDownTestProfiles()
+        #endif
         try await super.tearDown()
     }
 
@@ -1002,6 +1002,32 @@ final class WebAppBrowserTests: XCTestCase {
         try await runtime.start()
         XCTAssertTrue(runtime.context?.isLoaded == true)
         XCTAssertNotEqual(runtime.protection, .failed)
+    }
+
+    func testClosingOneSiteThenOpeningAnotherVerifiesBothProfiles() async throws {
+        let fixture = try DownloadFixture(stalled: false, html: true)
+        defer { fixture.stop() }
+        let url = try await fixture.url()
+        for service in [WebAppService.youtube, .threads] {
+            let runtime = WebAppProfileRuntime.shared(service.profile)
+            let browser = runtime.session(service)
+            // Keep navigation local while using the real extension, native port
+            // and browser startup, dismissal and verification code.
+            let tab = browser.addTab(configuration: browser.websiteConfiguration())
+            tab.view.load(URLRequest(url: url))
+            try await waitForBrowserPage(tab.view, url: url)
+            await browser.start()
+            XCTAssertNil(browser.failure)
+            XCTAssertTrue(browser.activeView === tab.view)
+            let deadline = ContinuousClock.now + .seconds(15)
+            while runtime.protection != .working && ContinuousClock.now < deadline {
+                try await Task.sleep(for: .milliseconds(100))
+            }
+            XCTAssertEqual(runtime.protection, .working, service.rawValue)
+            browser.stop()
+            XCTAssertNil(browser.activeView)
+            XCTAssertNil(runtime.focused)
+        }
     }
 }
 

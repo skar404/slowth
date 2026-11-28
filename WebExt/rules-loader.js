@@ -82,13 +82,17 @@
 
   async function getStateFresh() {
     const resp = await sendNative({ action: "getState" });
-    ns.webAppHost = resp?.webAppHost === true || ns.webAppHost === true;
     if (!resp?.ok || !resp.state) {
       const items = await storageGet([ns.STORAGE_KEYS.cachedState]);
       // A transient bridge failure must not replace user choices with defaults.
       const cached = normalizeState(items[ns.STORAGE_KEYS.cachedState]);
       return ns.webAppHost ? { ...cached, webAppNativeLive: false } : cached;
     }
+    // An empty native reply cannot tell Safari apart from an embedded host
+    // that is still starting. A later successful read can finish discovery.
+    const wasEmbedded = ns.webAppHost === true;
+    ns.webAppHost = wasEmbedded || resp.webAppHost === true;
+    if (!wasEmbedded && ns.webAppHost) ns.onWebAppHostReady?.();
     const state = normalizeState(resp.state);
     await storageSet({
       [ns.STORAGE_KEYS.cachedState]: state,
