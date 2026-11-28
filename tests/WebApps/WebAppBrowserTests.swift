@@ -696,6 +696,10 @@ final class WebAppBrowserTests: XCTestCase {
     func testBrowserDismissalDiscardsMainDocumentAndPopup() async throws {
         let router = WebAppsRouter.shared
         let runtime = WebAppProfileRuntime.shared(.youtube)
+        // The real browser finishes extension startup before it creates a tab.
+        // Dismissing while that first startup is still in flight exercises a
+        // different lifecycle and leaves WebKit loading an unloading context.
+        try await runtime.start()
         let browser = runtime.session(.youtube)
         browser.stop()
         let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -1010,6 +1014,7 @@ final class WebAppBrowserTests: XCTestCase {
         let url = try await fixture.url()
         for service in [WebAppService.youtube, .threads] {
             let runtime = WebAppProfileRuntime.shared(service.profile)
+            try await runtime.start()
             let browser = runtime.session(service)
             // Keep navigation local while using the real extension, native port
             // and browser startup, dismissal and verification code.
