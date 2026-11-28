@@ -5,7 +5,7 @@ import SwiftUI
 @testable import Unscroll
 
 @MainActor
-final class WebAppBrowserTests: XCTestCase {
+class WebAppHostedTestCase: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         XCTAssertTrue(ProcessInfo.processInfo.arguments.contains("--web-app-tests"),
@@ -21,6 +21,19 @@ final class WebAppBrowserTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func waitForBrowserPage(_ view: WKWebView, url: URL) async throws {
+        for _ in 0..<50 {
+            if view.url == url && !view.isLoading,
+               (try? await view.evaluateJavaScript("document.readyState")) as? String == "complete" { return }
+            try await Task.sleep(for: .milliseconds(100))
+        }
+        XCTFail("Page did not finish loading: \(url)")
+        throw URLError(.timedOut)
+    }
+}
+
+@MainActor
+final class WebAppPresentationTests: WebAppHostedTestCase {
     func testShieldRequestReplacesBrowserCoverWithNativePromptAndCanReturnToBrowser() async throws {
         let router = WebAppsRouter.shared
         let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -68,6 +81,64 @@ final class WebAppBrowserTests: XCTestCase {
         }
     }
 
+    func testBrowserDismissalDiscardsMainDocumentAndPopup() async throws {
+        let router = WebAppsRouter.shared
+        let runtime = WebAppProfileRuntime.shared(.youtube)
+        // The real browser finishes extension startup before it creates a tab.
+        // Dismissing while that first startup is still in flight exercises a
+        // different lifecycle and leaves WebKit loading an unloading context.
+        try await runtime.start()
+        let browser = runtime.session(.youtube)
+        browser.stop()
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        let previousRoot = window.rootViewController
+        let host = UIHostingController(rootView: Color.clear.modifier(WebAppsPresentation()))
+        window.rootViewController = host
+        defer {
+            router.dismissForNativePrompt()
+            router.didDismiss()
+            browser.stop()
+            window.rootViewController = previousRoot
+        }
+        let server = try DownloadFixture(stalled: false, html: true, document:
+            "<script>window.pageTicks = 1; setInterval(() => ++window.pageTicks, 10)</script>")
+        defer { server.stop() }
+        let url = try await server.url()
+        // Keep references through dismissal, as a system media presentation can do.
+        let main = browser.addTab(configuration: browser.websiteConfiguration()).view
+        main.load(URLRequest(url: url))
+        try await waitForBrowserPage(main, url: url)
+        let popup = browser.addTab(configuration: browser.websiteConfiguration()).view
+        popup.load(URLRequest(url: url))
+        try await waitForBrowserPage(popup, url: url)
+
+        router.open(.youtube)
+        for _ in 0..<100 {
+            if host.presentedViewController != nil, runtime.focused === browser { break }
+            try await Task.sleep(for: .milliseconds(50))
+        }
+        XCTAssertTrue(runtime.focused === browser)
+        let ticking = try await popup.evaluateJavaScript("window.pageTicks > 0")
+        XCTAssertEqual(ticking as? Bool, true)
+        router.dismissForNativePrompt()
+        for _ in 0..<100 {
+            if browser.activeView == nil, !router.isDismissing { break }
+            try await Task.sleep(for: .milliseconds(50))
+        }
+        XCTAssertNil(browser.activeView)
+        XCTAssertTrue(browser.windows.isEmpty)
+        XCTAssertNil(runtime.focused)
+        for view in [main, popup] {
+            try await waitForBrowserPage(view, url: try XCTUnwrap(URL(string: "about:blank")))
+            let discarded = try await view.evaluateJavaScript("typeof window.pageTicks === 'undefined'")
+            XCTAssertEqual(discarded as? Bool, true)
+        }
+    }
+}
+
+@MainActor
+final class WebAppBrowserTests: WebAppHostedTestCase {
     func testShieldDestinationsStayQueuedUntilBrowserDismissalCompletes() {
         for target in ["youtube", "tiktok", "instagram"] {
             let router = WebAppsRouter()
@@ -233,16 +304,6 @@ final class WebAppBrowserTests: XCTestCase {
         refresh.sendActions(for: .valueChanged)
         XCTAssertFalse(refresh.isRefreshing, "A stale control must not reload the newly selected tab")
         XCTAssertNil(popup.view.url)
-    }
-
-    private func waitForBrowserPage(_ view: WKWebView, url: URL) async throws {
-        for _ in 0..<50 {
-            if view.url == url && !view.isLoading,
-               (try? await view.evaluateJavaScript("document.readyState")) as? String == "complete" { return }
-            try await Task.sleep(for: .milliseconds(100))
-        }
-        XCTFail("Page did not finish loading: \(url)")
-        throw URLError(.timedOut)
     }
 
     func testFeedFiltersInWebKit() async throws {
@@ -691,61 +752,6 @@ final class WebAppBrowserTests: XCTestCase {
             XCTAssertNil(UserDefaults.standard.url(forKey: "webapps.last-url.v2." + service.id))
         }
         XCTAssertFalse(FileManager.default.fileExists(atPath: downloads.path))
-    }
-
-    func testBrowserDismissalDiscardsMainDocumentAndPopup() async throws {
-        let router = WebAppsRouter.shared
-        let runtime = WebAppProfileRuntime.shared(.youtube)
-        // The real browser finishes extension startup before it creates a tab.
-        // Dismissing while that first startup is still in flight exercises a
-        // different lifecycle and leaves WebKit loading an unloading context.
-        try await runtime.start()
-        let browser = runtime.session(.youtube)
-        browser.stop()
-        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-            .flatMap(\.windows).first { $0.isKeyWindow })
-        let previousRoot = window.rootViewController
-        let host = UIHostingController(rootView: Color.clear.modifier(WebAppsPresentation()))
-        window.rootViewController = host
-        defer {
-            router.dismissForNativePrompt()
-            router.didDismiss()
-            browser.stop()
-            window.rootViewController = previousRoot
-        }
-        let server = try DownloadFixture(stalled: false, html: true, document:
-            "<script>window.pageTicks = 1; setInterval(() => ++window.pageTicks, 10)</script>")
-        defer { server.stop() }
-        let url = try await server.url()
-        // Keep references through dismissal, as a system media presentation can do.
-        let main = browser.addTab(configuration: browser.websiteConfiguration()).view
-        main.load(URLRequest(url: url))
-        try await waitForBrowserPage(main, url: url)
-        let popup = browser.addTab(configuration: browser.websiteConfiguration()).view
-        popup.load(URLRequest(url: url))
-        try await waitForBrowserPage(popup, url: url)
-
-        router.open(.youtube)
-        for _ in 0..<100 {
-            if host.presentedViewController != nil, runtime.focused === browser { break }
-            try await Task.sleep(for: .milliseconds(50))
-        }
-        XCTAssertTrue(runtime.focused === browser)
-        let ticking = try await popup.evaluateJavaScript("window.pageTicks > 0")
-        XCTAssertEqual(ticking as? Bool, true)
-        router.dismissForNativePrompt()
-        for _ in 0..<100 {
-            if browser.activeView == nil, !router.isDismissing { break }
-            try await Task.sleep(for: .milliseconds(50))
-        }
-        XCTAssertNil(browser.activeView)
-        XCTAssertTrue(browser.windows.isEmpty)
-        XCTAssertNil(runtime.focused)
-        for view in [main, popup] {
-            try await waitForBrowserPage(view, url: try XCTUnwrap(URL(string: "about:blank")))
-            let discarded = try await view.evaluateJavaScript("typeof window.pageTicks === 'undefined'")
-            XCTAssertEqual(discarded as? Bool, true)
-        }
     }
 
     func testPageCannotReadDeviceLocation() async throws {

@@ -85,8 +85,14 @@ except subprocess.TimeoutExpired:
 except subprocess.CalledProcessError as error:
     sys.exit(error.returncode)
 PYTHON
-    phase 'Run complete hosted WebKit suite' xcodebuild "${build_args[@]}" \
-      -parallel-testing-enabled NO -test-timeouts-enabled YES \
-      -default-test-execution-time-allowance 120 -maximum-test-execution-time-allowance 120 \
-      test-without-building
+    # These tests replace the application's key-window root controller. Give them
+    # their own application lifetime; all web-app switching/recovery tests run
+    # together in the other host. Every test belongs to exactly one invocation.
+    presentation_suite='WebAppBrowserTests/WebAppPresentationTests'
+    test_args=(-parallel-testing-enabled NO -test-timeouts-enabled YES
+      -default-test-execution-time-allowance 120 -maximum-test-execution-time-allowance 120)
+    phase 'Test application window presentation and dismissal' xcodebuild "${build_args[@]}" "${test_args[@]}" \
+      "-only-testing:$presentation_suite" test-without-building
+    phase 'Test browser sessions and extension lifecycle' xcodebuild "${build_args[@]}" "${test_args[@]}" \
+      "-skip-testing:$presentation_suite" test-without-building
 fi
