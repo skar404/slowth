@@ -85,14 +85,16 @@ except subprocess.TimeoutExpired:
 except subprocess.CalledProcessError as error:
     sys.exit(error.returncode)
 PYTHON
-    # The popup test requires a fresh live extension port. On the CI simulator,
-    # WebKit can stall during that handshake after the other cases have created
-    # and unloaded several extension contexts in the same host process.
+    # Start each live-port handshake in a fresh host. After the browser teardown
+    # fixtures, WebKit can stall while connecting the extension on CI.
     popup_test='WebAppBrowserTests/WebAppBrowserTests/testRealPopupPreservesWindowOpener'
+    port_test='WebAppBrowserTests/WebAppBrowserTests/testBundledExtensionStartsWithLiveNativePort'
     test_args=(-parallel-testing-enabled NO -test-timeouts-enabled YES
       -default-test-execution-time-allowance 120 -maximum-test-execution-time-allowance 120)
     phase 'Test popup with live extension' xcodebuild "${build_args[@]}" "${test_args[@]}" \
       "-only-testing:$popup_test" test-without-building
+    phase 'Test bundled extension startup' xcodebuild "${build_args[@]}" "${test_args[@]}" \
+      "-only-testing:$port_test" test-without-building
     phase 'Run remaining hosted tests' xcodebuild "${build_args[@]}" "${test_args[@]}" \
-      "-skip-testing:$popup_test" test-without-building
+      "-skip-testing:$popup_test" "-skip-testing:$port_test" test-without-building
 fi
