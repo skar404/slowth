@@ -6,7 +6,7 @@ const { test } = require('node:test');
 const read = file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const plain = value => JSON.parse(JSON.stringify(value));
 function config() {
-  const context = vm.createContext({});
+  const context = vm.createContext({ URL });
   vm.runInContext(read('config.js'), context);
   return context.Unscroll;
 }
@@ -15,17 +15,28 @@ test('defaults and legacy migration preserve each site’s effective blocking', 
   const ns = config();
   for (const site of ns.SITES) {
     assert.equal(ns.DEFAULT_TOGGLES[site].all, site === 'tiktok');
+    const allOff = Object.fromEntries(Object.keys(ns.DEFAULT_TOGGLES[site]).map(feature => [feature, false]));
     for (const [value, expected] of [
       ['off', { shorts: false, feed: false, all: false }],
-      ['shorts', { shorts: site !== 'tiktok', feed: false, all: false }],
-      ['feed', { shorts: site !== 'tiktok', feed: ['instagram', 'facebook'].includes(site), all: false }],
+      ['shorts', { shorts: ['youtube', 'instagram', 'facebook', 'x'].includes(site), feed: false, all: false }],
+      ['feed', { shorts: ['youtube', 'instagram', 'facebook', 'x'].includes(site), feed: ['instagram', 'facebook'].includes(site), all: false }],
       ['all', { ...plain(ns.DEFAULT_TOGGLES[site]), all: true }],
       [false, { shorts: false, feed: false, all: false }]
-    ]) assert.deepEqual(plain(ns.normalizeSiteSettings(site, value)), { ...(site === 'instagram' ? { stories: false } : {}), ...(site === 'youtube' ? { hideHomeFeed: false } : {}), ...expected });
+    ]) assert.deepEqual(plain(ns.normalizeSiteSettings(site, value)), { ...allOff, ...expected });
   }
   for (const shorts of [false, true]) for (const feed of [false, true]) for (const all of [false, true]) {
     const flags = { shorts, feed, all };
-    assert.deepEqual(plain(ns.normalizeSiteSettings('instagram', flags)), { ...flags, stories: false });
+    assert.deepEqual(plain(ns.normalizeSiteSettings('instagram', flags)), { ...flags, stories: false, following: false, hideSuggestions: false });
+  }
+});
+
+test('new networks start with one light filter and honor stored choices', () => {
+  const ns = config();
+  for (const [site, feature] of Object.entries({threads: 'following', reddit: 'hidePromoted', linkedin: 'hidePromoted'})) {
+    const initial = ns.normalizeSiteSettings(site, undefined);
+    assert.deepEqual(Object.keys(initial).filter(key => initial[key]), [feature]);
+    assert.equal(ns.normalizeSiteSettings(site, { [feature]: false })[feature], false);
+    assert.equal(ns.normalizeSiteSettings(site, { all: true }).all, true);
   }
 });
 
@@ -52,6 +63,8 @@ function contentHarness(site, flags, pathname = '/') {
       addEventListener(event, fn) { listeners.set(event, fn); },
       removeEventListener(event) { listeners.delete(event); } },
     setInterval(fn, delay) { timers.push({ fn, delay }); },
+    setTimeout(fn, delay) { const timer = { fn, delay }; timers.push(timer); return timer; },
+    clearTimeout(timer) { timer.cancelled = true; },
     MutationObserver: class { observe() {} },
     browser: { runtime: {
       getURL: name => `safari-web-extension://test/${name}`,
@@ -64,7 +77,7 @@ function contentHarness(site, flags, pathname = '/') {
   vm.runInContext(read('content/common.js'), context);
   return { context, redirects, elements, listeners, timers,
     async start() { context.Unscroll.content.siteContentScript(site); await Promise.resolve(); },
-    async update(flags) { state.toggles[site] = flags; messageListener({ type: 'unscroll-state-updated' }); await Promise.resolve(); }
+    async update(flags, preferences = {}) { Object.assign(state, preferences); state.toggles[site] = flags; messageListener({ type: 'unscroll-state-updated' }); await Promise.resolve(); }
   };
 }
 
@@ -137,7 +150,7 @@ test('Instagram Stories hard block is independent, live, and covers direct and S
   const before = h.redirects.length;
   tick();
   assert.equal(h.redirects.length, before + 1);
-  await h.update({ shorts: false, feed: false, all: false, stories: false });
+  await h.update({ shorts: false, feed: false, all: false, stories: false, following: false, hideSuggestions: false });
   assert.equal(h.elements.has('unscroll-instagram-style'), false);
   const after = h.redirects.length;
   h.context.location.href += '?next=1';
@@ -190,7 +203,7 @@ test('background navigation enforces only the selected features', async () => {
 });
 
 test('cache migration, transient native failures and per-feature writes preserve choices', async () => {
-  const storage = { cachedAt: Date.now(), cachedState: { toggles: { instagram: 'off' } } };
+  const storage = { cachedAt: Date.now(), cachedState: { settingsVersion: 4, toggles: { instagram: 'off', reddit: { hidePromoted: false } } } };
   const sent = [];
   let response = { ok: true, state: { toggles: { instagram: { shorts: false, feed: true, all: false } } } };
   const ns = config();
@@ -202,10 +215,68 @@ test('cache migration, transient native failures and per-feature writes preserve
   vm.runInContext(read('rules-loader.js'), context);
   let state = await ns.getStateCached();
   assert.equal(sent.length, 1, 'old cache must re-read native settings');
-  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false, stories: false });
+  assert.equal(state.toggles.reddit.hidePromoted, true);
+  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false, stories: false, following: false, hideSuggestions: false });
   response = null;
   state = await ns.getStateFresh();
-  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false, stories: false });
+  assert.deepEqual(plain(state.toggles.instagram), { shorts: false, feed: true, all: false, stories: false, following: false, hideSuggestions: false });
   await ns.setToggle('instagram', 'all', true);
   assert.deepEqual(plain(sent.at(-1)), { action: 'setToggle', site: 'instagram', feature: 'all', enabled: true });
+});
+
+test('five-site stored rules remain valid with the added platform settings', async () => {
+  const context = vm.createContext({ URL, chrome: {} });
+  vm.runInContext(read('config.js') + read('rules-loader.js'), context);
+  const ns = context.Unscroll;
+  const remote = plain(ns.DEFAULT_RULES);
+  remote.instagram.hideSelectors.push('.from-stored-rules');
+  assert.ok(ns.isValidRules(remote));
+  delete remote.x;
+  assert.equal(ns.isValidRules(remote), false);
+});
+
+test('feed destinations preserve explicit navigation and full-site blocking', () => {
+  const context = vm.createContext({ URL });
+  vm.runInContext(read('config.js') + read('content/feed-filters.js'), context);
+  const ns = context.Unscroll;
+  const flags = { following: true, facebookFeeds: true, networkFeed: true, oldReddit: true };
+  for (const [url, expected] of [
+    ['https://www.instagram.com/?utm_source=link', '/?variant=following'],
+    ['https://www.instagram.com/?variant=favorites', null],
+    ['https://www.instagram.com/direct/inbox/', null],
+    ['https://www.facebook.com/', '/?filter=all&sk=h_chr'],
+    ['https://m.facebook.com/home.php', '/?filter=all&sk=h_chr'],
+    ['https://www.facebook.com/?filter=friends&sk=h_chr', null],
+    ['https://www.facebook.com/?sk=groups', null],
+    ['https://www.tiktok.com/de-DE/', '/following'],
+    ['https://www.tiktok.com/foryou/', '/following'],
+    ['https://www.tiktok.com/following', null],
+    ['https://www.tiktok.com/@user/video/123', null],
+    ['https://www.threads.net/', '/following'],
+    ['https://threads.com/@user/post/123', null],
+    ['https://www.linkedin.com/feed/foryou/', '/feed/network/'],
+    ['https://www.linkedin.com/feed/', null],
+    ['https://www.reddit.com/r/test/comments/1/?sort=new#comment', 'https://old.reddit.com/r/test/comments/1/?sort=new#comment'],
+    ['https://old.reddit.com/r/test', null],
+    ['https://oauth.reddit.com/', null],
+    ['https://www.x.com/home', null],
+    ['https://instagram.com.attacker.invalid/', null]
+  ]) {
+    const target = new URL(url);
+    const site = ns.siteForURL(url);
+    assert.equal(ns.feedFilters.feedDestination(site, target, flags), expected, url);
+    assert.equal(ns.feedFilters.feedDestination(site, target, {}), null);
+    assert.equal(ns.feedFilters.feedDestination(site, target, { ...flags, all: true }), null);
+    if (expected) assert.equal(ns.feedFilters.feedDestination(site, new URL(expected, url), flags), null);
+  }
+});
+
+test('saved site filters apply immediately with a cached snapshot from the previous build', async () => {
+  const flags = { following: true, hideSuggestions: true, feed: true };
+  const page = contentHarness('instagram', flags);
+  await page.start();
+  await page.update(flags, { feedPauseUntil: Date.now() / 1000 + 3600 });
+  for (const key of Object.keys(flags)) {
+    assert.equal(page.context.Unscroll.content.featureEnabled('instagram', key), true, key);
+  }
 });

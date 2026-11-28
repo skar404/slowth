@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Μπορείτε να απενεργοποιήσετε την αυστηρή λειτουργία μέσα στο πρώτο λεπτό."
+  },
+  "autoplayOff": {
+    "message": "Απενεργοποίηση αυτόματης αναπαραγωγής"
+  },
+  "hideRelated": {
+    "message": "Απόκρυψη προτεινόμενων βίντεο"
+  },
+  "following": {
+    "message": "Άνοιγμα ροής ακολουθούμενων"
+  },
+  "hideSuggestions": {
+    "message": "Απόκρυψη προτεινόμενων λογαριασμών"
+  },
+  "facebookFeeds": {
+    "message": "Άνοιγμα ροών"
+  },
+  "hideUpsells": {
+    "message": "Απόκρυψη προσφορών αγοράς και εγκατάστασης"
+  },
+  "hidePromoted": {
+    "message": "Απόκρυψη προωθούμενων αναρτήσεων"
+  },
+  "hideRecommendations": {
+    "message": "Απόκρυψη προτάσεων"
+  },
+  "oldReddit": {
+    "message": "Χρήση παλιού Reddit"
+  },
+  "networkFeed": {
+    "message": "Άνοιγμα ροής δικτύου"
+  },
+  "hideNews": {
+    "message": "Απόκρυψη πλαϊνής στήλης ειδήσεων"
+  },
+  "feedChanged": {
+    "message": "Η ροή άλλαξε"
   }
 }

@@ -83,10 +83,12 @@
     const opts = options || {};
     const STYLE_ID = "unscroll-" + site + "-style";
     let compiledRedirects = [];
+    const updateFilters = ns.feedFilters?.install(site);
 
     function applyState(state) {
       if (!state) return;
       const settings = ns.normalizeSiteSettings(site, state.toggles?.[site]);
+      updateFilters?.(settings);
       const rules = state.rules || ns.DEFAULT_RULES;
       for (const feature of ns.SITE_FEATURES[site]) {
         document.documentElement.setAttribute("data-unscroll-" + site + "-" + feature,
@@ -109,7 +111,11 @@
         return;
       }
 
-      injectHideStyle(STYLE_ID, buildHideCss(selectedRules.flatMap(r => r.hideSelectors || [])) + "\n" + (settings.shorts ? opts.css || "" : ""));
+      let selectors = selectedRules.flatMap(r => r.hideSelectors || []);
+      if (site === "x" && settings.following) {
+        selectors = selectors.filter(selector => !selector.includes('[role="tablist"] a[href="/home"]'));
+      }
+      injectHideStyle(STYLE_ID, buildHideCss(selectors) + "\n" + (settings.shorts ? opts.css || "" : ""));
       compiledRedirects = compileRedirects(selectedRules.flatMap(r => r.redirects || []));
       maybeRedirect(compiledRedirects, site);
     }

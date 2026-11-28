@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "آپ پہلے منٹ کے دوران سخت موڈ بند کر سکتے ہیں۔"
+  },
+  "autoplayOff": {
+    "message": "خودکار پلے بند کریں"
+  },
+  "hideRelated": {
+    "message": "تجویز کردہ ویڈیوز چھپائیں"
+  },
+  "following": {
+    "message": "فالو کیے گئے اکاؤنٹس کی فیڈ کھولیں"
+  },
+  "hideSuggestions": {
+    "message": "تجویز کردہ اکاؤنٹس چھپائیں"
+  },
+  "facebookFeeds": {
+    "message": "فیڈز کھولیں"
+  },
+  "hideUpsells": {
+    "message": "خریداری اور انسٹال کرنے کی پیشکشیں چھپائیں"
+  },
+  "hidePromoted": {
+    "message": "تشہیری پوسٹس چھپائیں"
+  },
+  "hideRecommendations": {
+    "message": "تجاویز چھپائیں"
+  },
+  "oldReddit": {
+    "message": "پرانا ریڈٹ استعمال کریں"
+  },
+  "networkFeed": {
+    "message": "نیٹ ورک فیڈ کھولیں"
+  },
+  "hideNews": {
+    "message": "خبروں کی سائیڈ بار چھپائیں"
+  },
+  "feedChanged": {
+    "message": "فیڈ بدل گئی"
   }
 }

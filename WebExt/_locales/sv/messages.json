@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Du kan stänga av strikt läge under den första minuten."
+  },
+  "autoplayOff": {
+    "message": "Stäng av automatisk uppspelning"
+  },
+  "hideRelated": {
+    "message": "Dölj föreslagna videor"
+  },
+  "following": {
+    "message": "Öppna Följer"
+  },
+  "hideSuggestions": {
+    "message": "Dölj föreslagna konton"
+  },
+  "facebookFeeds": {
+    "message": "Öppna flöden"
+  },
+  "hideUpsells": {
+    "message": "Dölj köp- och installationserbjudanden"
+  },
+  "hidePromoted": {
+    "message": "Dölj sponsrade inlägg"
+  },
+  "hideRecommendations": {
+    "message": "Dölj rekommendationer"
+  },
+  "oldReddit": {
+    "message": "Använd gamla Reddit"
+  },
+  "networkFeed": {
+    "message": "Öppna nätverksflödet"
+  },
+  "hideNews": {
+    "message": "Dölj nyhetspanelen"
+  },
+  "feedChanged": {
+    "message": "Flödet har bytts"
   }
 }

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "A szigorú módot az első percben kikapcsolhatod."
+  },
+  "autoplayOff": {
+    "message": "Automatikus lejátszás kikapcsolása"
+  },
+  "hideRelated": {
+    "message": "Ajánlott videók elrejtése"
+  },
+  "following": {
+    "message": "Követett fiókok megnyitása"
+  },
+  "hideSuggestions": {
+    "message": "Ajánlott fiókok elrejtése"
+  },
+  "facebookFeeds": {
+    "message": "Hírfolyamok megnyitása"
+  },
+  "hideUpsells": {
+    "message": "Vásárlási és telepítési ajánlatok elrejtése"
+  },
+  "hidePromoted": {
+    "message": "Hirdetett bejegyzések elrejtése"
+  },
+  "hideRecommendations": {
+    "message": "Ajánlások elrejtése"
+  },
+  "oldReddit": {
+    "message": "Régi Reddit használata"
+  },
+  "networkFeed": {
+    "message": "Kapcsolati hírfolyam megnyitása"
+  },
+  "hideNews": {
+    "message": "Hírek oldalsávjának elrejtése"
+  },
+  "feedChanged": {
+    "message": "Hírfolyam átváltva"
   }
 }

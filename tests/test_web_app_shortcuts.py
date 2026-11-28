@@ -1,13 +1,14 @@
 """Check install metadata and real launch JS without a browser or external account."""
 import json
 from pathlib import Path
+import struct
 import subprocess
 import unittest
 from html.parser import HTMLParser
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-SERVICES = ('instagram', 'youtube', 'tiktok', 'facebook', 'x')
+SERVICES = ('instagram', 'youtube', 'tiktok', 'facebook', 'x', 'threads', 'reddit', 'linkedin')
 
 class Tags(HTMLParser):
     def __init__(self, source):
@@ -26,8 +27,19 @@ class ShortcutTests(unittest.TestCase):
             self.assertEqual(manifest['scope'], manifest['id'])
             self.assertEqual(manifest['start_url'], manifest['id'] + '?launch=1')
             self.assertEqual(manifest['display'], 'standalone')
-            self.assertTrue((folder / manifest['icons'][0]['src']).is_file())
+            icon_url = f'../assets/slowth-{service}-linen.png'
+            icon = manifest['icons'][0]
+            self.assertEqual(icon['src'], icon_url)
+            self.assertEqual(icon['sizes'], '1024x1024')
+            with (folder / icon_url).open('rb') as png:
+                self.assertEqual(png.read(16), b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR')
+                self.assertEqual(struct.unpack('>II', png.read(8)), (1024, 1024))
             tags = Tags((folder / 'index.html').read_text()).tags
+            for rel in ('apple-touch-icon', 'icon'):
+                self.assertEqual([a['href'] for t, a in tags if t == 'link' and a.get('rel') == rel], [icon_url])
+            for css_class in ('icon', 'launch-service'):
+                self.assertEqual([a['src'] for t, a in tags if t == 'img' and a.get('class') == css_class], [icon_url])
+            self.assertFalse(any(a.get('class') == 'launch-slowth' for _, a in tags))
             self.assertIn(('meta', {'name': 'apple-mobile-web-app-capable', 'content': 'yes'}), tags)
             launch = next(a for tag, a in tags if tag == 'a' and a.get('id') == 'open')
             self.assertIn('hidden', launch)

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Poți dezactiva modul strict în primul minut."
+  },
+  "autoplayOff": {
+    "message": "Dezactivează redarea automată"
+  },
+  "hideRelated": {
+    "message": "Ascunde videoclipurile sugerate"
+  },
+  "following": {
+    "message": "Deschide conturile urmărite"
+  },
+  "hideSuggestions": {
+    "message": "Ascunde conturile sugerate"
+  },
+  "facebookFeeds": {
+    "message": "Deschide fluxurile"
+  },
+  "hideUpsells": {
+    "message": "Ascunde ofertele de cumpărare și instalare"
+  },
+  "hidePromoted": {
+    "message": "Ascunde postările promovate"
+  },
+  "hideRecommendations": {
+    "message": "Ascunde recomandările"
+  },
+  "oldReddit": {
+    "message": "Folosește vechiul Reddit"
+  },
+  "networkFeed": {
+    "message": "Deschide fluxul rețelei"
+  },
+  "hideNews": {
+    "message": "Ascunde bara de știri"
+  },
+  "feedChanged": {
+    "message": "Flux schimbat"
   }
 }

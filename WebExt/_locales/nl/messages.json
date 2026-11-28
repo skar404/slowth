@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Je kunt de strikte modus binnen de eerste minuut uitschakelen."
+  },
+  "autoplayOff": {
+    "message": "Automatisch afspelen uitzetten"
+  },
+  "hideRelated": {
+    "message": "Voorgestelde video's verbergen"
+  },
+  "following": {
+    "message": "Volgend openen"
+  },
+  "hideSuggestions": {
+    "message": "Voorgestelde accounts verbergen"
+  },
+  "facebookFeeds": {
+    "message": "Feeds openen"
+  },
+  "hideUpsells": {
+    "message": "Aankoop- en installatieaanbiedingen verbergen"
+  },
+  "hidePromoted": {
+    "message": "Gesponsorde berichten verbergen"
+  },
+  "hideRecommendations": {
+    "message": "Aanbevelingen verbergen"
+  },
+  "oldReddit": {
+    "message": "Oude Reddit gebruiken"
+  },
+  "networkFeed": {
+    "message": "Netwerkfeed openen"
+  },
+  "hideNews": {
+    "message": "Nieuwszijbalk verbergen"
+  },
+  "feedChanged": {
+    "message": "Feed gewijzigd"
   }
 }

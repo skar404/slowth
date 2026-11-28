@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "你可以喺第一分鐘內關閉嚴格模式。"
+  },
+  "autoplayOff": {
+    "message": "關閉自動播放"
+  },
+  "hideRelated": {
+    "message": "隱藏推薦影片"
+  },
+  "following": {
+    "message": "開啟追蹤動態"
+  },
+  "hideSuggestions": {
+    "message": "隱藏推薦帳戶"
+  },
+  "facebookFeeds": {
+    "message": "開啟動態消息"
+  },
+  "hideUpsells": {
+    "message": "隱藏購買同安裝提示"
+  },
+  "hidePromoted": {
+    "message": "隱藏推廣帖文"
+  },
+  "hideRecommendations": {
+    "message": "隱藏推薦內容"
+  },
+  "oldReddit": {
+    "message": "用舊版 Reddit"
+  },
+  "networkFeed": {
+    "message": "開啟人脈動態"
+  },
+  "hideNews": {
+    "message": "隱藏新聞側欄"
+  },
+  "feedChanged": {
+    "message": "已轉換動態"
   }
 }

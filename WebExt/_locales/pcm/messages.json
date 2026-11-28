@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "You fit turn Strict mode off within the first minute."
+  },
+  "autoplayOff": {
+    "message": "Off autoplay"
+  },
+  "hideRelated": {
+    "message": "Hide video wey dem suggest"
+  },
+  "following": {
+    "message": "Open people wey you dey follow"
+  },
+  "hideSuggestions": {
+    "message": "Hide account wey dem suggest"
+  },
+  "facebookFeeds": {
+    "message": "Open feeds"
+  },
+  "hideUpsells": {
+    "message": "Hide offer to buy or install"
+  },
+  "hidePromoted": {
+    "message": "Hide post wey dem promote"
+  },
+  "hideRecommendations": {
+    "message": "Hide suggestions"
+  },
+  "oldReddit": {
+    "message": "Use old Reddit"
+  },
+  "networkFeed": {
+    "message": "Open network feed"
+  },
+  "hideNews": {
+    "message": "Hide news for side"
+  },
+  "feedChanged": {
+    "message": "Feed don change"
   }
 }

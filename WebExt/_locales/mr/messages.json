@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "पहिल्या मिनिटात तुम्ही कठोर मोड बंद करू शकता."
+  },
+  "autoplayOff": {
+    "message": "ऑटोप्ले बंद करा"
+  },
+  "hideRelated": {
+    "message": "सुचवलेले व्हिडिओ लपवा"
+  },
+  "following": {
+    "message": "फॉलो केलेल्या खात्यांचा फीड उघडा"
+  },
+  "hideSuggestions": {
+    "message": "सुचवलेली खाती लपवा"
+  },
+  "facebookFeeds": {
+    "message": "फीड उघडा"
+  },
+  "hideUpsells": {
+    "message": "खरेदी आणि इंस्टॉल करण्याच्या ऑफर लपवा"
+  },
+  "hidePromoted": {
+    "message": "प्रचारित पोस्ट लपवा"
+  },
+  "hideRecommendations": {
+    "message": "शिफारसी लपवा"
+  },
+  "oldReddit": {
+    "message": "जुने Reddit वापरा"
+  },
+  "networkFeed": {
+    "message": "नेटवर्क फीड उघडा"
+  },
+  "hideNews": {
+    "message": "बातम्यांची साइडबार लपवा"
+  },
+  "feedChanged": {
+    "message": "फीड बदलला"
   }
 }

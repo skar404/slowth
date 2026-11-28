@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "最初の1分間は厳格モードをオフにできます。"
+  },
+  "autoplayOff": {
+    "message": "自動再生をオフにする"
+  },
+  "hideRelated": {
+    "message": "おすすめ動画を非表示"
+  },
+  "following": {
+    "message": "フォロー中を開く"
+  },
+  "hideSuggestions": {
+    "message": "おすすめアカウントを非表示"
+  },
+  "facebookFeeds": {
+    "message": "フィードを開く"
+  },
+  "hideUpsells": {
+    "message": "購入・インストールの案内を非表示"
+  },
+  "hidePromoted": {
+    "message": "宣伝投稿を非表示"
+  },
+  "hideRecommendations": {
+    "message": "おすすめを非表示"
+  },
+  "oldReddit": {
+    "message": "旧版のRedditを使う"
+  },
+  "networkFeed": {
+    "message": "ネットワークのフィードを開く"
+  },
+  "hideNews": {
+    "message": "ニュース欄を非表示"
+  },
+  "feedChanged": {
+    "message": "フィードを切り替えました"
   }
 }

@@ -1,0 +1,18 @@
+{
+  "id": "/shortcuts/reddit/",
+  "name": "Reddit",
+  "short_name": "Reddit",
+  "start_url": "/shortcuts/reddit/?launch=1",
+  "scope": "/shortcuts/reddit/",
+  "display": "standalone",
+  "background_color": "#f4f5f1",
+  "theme_color": "#f4f5f1",
+  "icons": [
+    {
+      "src": "../assets/slowth-reddit-linen.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

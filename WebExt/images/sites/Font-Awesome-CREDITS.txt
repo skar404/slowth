@@ -1,0 +1,1 @@
+The Threads, Reddit and LinkedIn glyphs are based on Font Awesome Free 6.7.2 by Fonticons, Inc. (https://fontawesome.com/). The original glyphs are licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Slowth scaled and recolored them for the launcher icons and combined them with its mascot for Home Screen shortcuts.

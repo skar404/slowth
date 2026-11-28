@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Voit poistaa tiukan tilan käytöstä ensimmäisen minuutin aikana."
+  },
+  "autoplayOff": {
+    "message": "Poista automaattinen toisto käytöstä"
+  },
+  "hideRelated": {
+    "message": "Piilota videoehdotukset"
+  },
+  "following": {
+    "message": "Avaa seurattujen syöte"
+  },
+  "hideSuggestions": {
+    "message": "Piilota tiliehdotukset"
+  },
+  "facebookFeeds": {
+    "message": "Avaa syötteet"
+  },
+  "hideUpsells": {
+    "message": "Piilota osto- ja asennustarjoukset"
+  },
+  "hidePromoted": {
+    "message": "Piilota sponsoroidut julkaisut"
+  },
+  "hideRecommendations": {
+    "message": "Piilota suositukset"
+  },
+  "oldReddit": {
+    "message": "Käytä vanhaa Redditiä"
+  },
+  "networkFeed": {
+    "message": "Avaa verkoston syöte"
+  },
+  "hideNews": {
+    "message": "Piilota uutispalkki"
+  },
+  "feedChanged": {
+    "message": "Syöte vaihdettu"
   }
 }

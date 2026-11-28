@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "يمكنك إيقاف الوضع الصارم خلال الدقيقة الأولى."
+  },
+  "autoplayOff": {
+    "message": "إيقاف التشغيل التلقائي"
+  },
+  "hideRelated": {
+    "message": "إخفاء الفيديوهات المقترحة"
+  },
+  "following": {
+    "message": "فتح موجز المتابَعين"
+  },
+  "hideSuggestions": {
+    "message": "إخفاء الحسابات المقترحة"
+  },
+  "facebookFeeds": {
+    "message": "فتح الموجزات"
+  },
+  "hideUpsells": {
+    "message": "إخفاء عروض الشراء والتثبيت"
+  },
+  "hidePromoted": {
+    "message": "إخفاء المنشورات المروّجة"
+  },
+  "hideRecommendations": {
+    "message": "إخفاء التوصيات"
+  },
+  "oldReddit": {
+    "message": "استخدام ريديت القديم"
+  },
+  "networkFeed": {
+    "message": "فتح موجز الشبكة"
+  },
+  "hideNews": {
+    "message": "إخفاء الشريط الجانبي للأخبار"
+  },
+  "feedChanged": {
+    "message": "تم تغيير الموجز"
   }
 }

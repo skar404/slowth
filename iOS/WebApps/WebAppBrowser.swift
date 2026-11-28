@@ -63,7 +63,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
             // another app's audio. WebKit activates playback when the user plays.
             try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
         }
-        guard startToken == nil else { return }
+        guard startToken == nil, !Task.isCancelled else { return }
         let token = UUID()
         startToken = token
         defer { if startToken == token { startToken = nil } }
@@ -103,8 +103,8 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
 
     func suspend() {
         runtime.setVisible(self, false)
-        // Keep the main page and its history. Temporary login windows are retained too,
-        // so dismissing the screen never silently cancels an in-progress sign-in.
+        // A full-screen player can temporarily cover the browser. The presentation
+        // owner calls stop() when the browser cover itself is dismissed.
         let revision = UUID()
         mediaVisibilityRevision = revision
         guard let view = activeView else { return }
@@ -132,20 +132,38 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func stop() {
         mediaVisibilityRevision = UUID()
         startToken = nil
+        runtime.setVisible(self, false)
         observations.removeAll()
+        downloads.cancelActive()
         for tab in browserTabs {
-            tab.view.scrollView.refreshControl?.endRefreshing()
-            tab.view.stopLoading()
-            tab.view.navigationDelegate = nil; tab.view.uiDelegate = nil
+            discardPage(tab)
             controller.didCloseTab(tab, windowIsClosing: true)
         }
         browserTabs.removeAll(); windows = []; activeView = nil
+        updateState()
     }
+
+    private func discardPage(_ tab: WebAppTab) {
+        tab.owner = nil
+        let view = tab.view
+        view.scrollView.refreshControl?.endRefreshing()
+        view.navigationDelegate = nil
+        view.uiDelegate = nil
+        view.stopLoading()
+        view.setCameraCaptureState(.none, completionHandler: nil)
+        view.setMicrophoneCaptureState(.none, completionHandler: nil)
+        view.setAllMediaPlaybackSuspended(true, completionHandler: nil)
+        view.closeAllMediaPresentations(completionHandler: nil)
+        // SwiftUI or a system presentation may still hold the view during dismissal.
+        // Replace the document so its scripts stop even while that reference exists.
+        view.loadHTMLString("", baseURL: nil)
+    }
+
     func clearRestoration() { UserDefaults.standard.removeObject(forKey: restorationKey) }
 
     func addTab(configuration: WKWebViewConfiguration) -> WebAppTab {
         configuration.webExtensionController = controller
-        let view = WKWebView(frame: .zero, configuration: configuration)
+        let view = makeWebsiteView(configuration)
         configure(view)
         let previous = browserTabs.last
         let tab = WebAppTab(view: view, owner: self)
@@ -157,6 +175,37 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         show(tab)
         return tab
     }
+
+    private func makeWebsiteView(_ configuration: WKWebViewConfiguration) -> WKWebView {
+        // Runtime startup prepares the list before loading the extension or opening
+        // the first tab. Popups keep WebKit's supplied configuration and opener.
+        let content = configuration.userContentController
+        if let rules = runtime.trackingRules { content.add(rules) }
+        if #unavailable(iOS 27.0), !content.userScripts.contains(Self.legacyLocationDenial) {
+            content.addUserScript(Self.legacyLocationDenial)
+        }
+        return WKWebView(frame: .zero, configuration: configuration)
+    }
+
+    // Older WebKit lacks the native location delegate. The host has no system
+    // location permission; complete site callbacks even when Core Location cannot.
+    private static let legacyLocationDenial = WKUserScript(source: """
+        (() => {
+            if (!navigator.geolocation) return;
+            const api = Object.getPrototypeOf(navigator.geolocation);
+            if (!Object.getOwnPropertyDescriptor(api, 'getCurrentPosition')?.configurable) return;
+            const error = Object.freeze({ code: 1, message: 'Geolocation permission denied.',
+                PERMISSION_DENIED: 1, POSITION_UNAVAILABLE: 2, TIMEOUT: 3 });
+            function deny(success, failure) {
+                if (typeof failure === 'function') queueMicrotask(() => failure(error));
+            }
+            Object.defineProperties(api, {
+                getCurrentPosition: { value: deny, configurable: false, writable: false },
+                watchPosition: { value(success, failure) { deny(success, failure); return 0; },
+                    configurable: false, writable: false }
+            });
+        })();
+        """, injectionTime: .atDocumentStart, forMainFrameOnly: false, in: .page)
 
     private func configure(_ view: WKWebView) {
         view.allowsBackForwardNavigationGestures = true
@@ -200,18 +249,15 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
         guard let index = browserTabs.firstIndex(where: { $0 === tab }), let context else { return }
         // WebKit forbids extension URLs in ordinary WKWebViews (and vice versa).
         // Replace the tab's view using the extension's privileged configuration.
-        guard let config = extensionPage ? context.webViewConfiguration : WKWebViewConfiguration() else { return }
+        guard let config = extensionPage ? context.webViewConfiguration : websiteConfiguration() else { return }
         config.webExtensionController = controller
-        if !extensionPage { config.websiteDataStore = runtime.dataStore; config.allowsInlineMediaPlayback = true; config.allowsPictureInPictureMediaPlayback = true }
-        let view = WKWebView(frame: .zero, configuration: config)
+        let view = extensionPage ? WKWebView(frame: .zero, configuration: config) : makeWebsiteView(config)
         configure(view)
         let replacement = WebAppTab(view: view, owner: self, isExtensionPage: extensionPage)
         replacement.opener = tab.opener
         replacement.lastRequestedURL = url
         let active = activeView === tab.view
-        tab.view.scrollView.refreshControl?.endRefreshing()
-        tab.view.navigationDelegate = nil; tab.view.uiDelegate = nil
-        tab.view.stopLoading()
+        discardPage(tab)
         browserTabs[index] = replacement
         windows = browserTabs
         controller.didReplaceTab(tab, with: replacement)
@@ -291,8 +337,7 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
                  for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         // Keep the supplied configuration so window.opener and login popups work.
-        guard context?.isLoaded == true else { return nil }
-        let opener = browserTabs.first { $0.view === webView }
+        guard context?.isLoaded == true, let opener = browserTabs.first(where: { $0.view === webView }) else { return nil }
         let tab = addTab(configuration: configuration)
         tab.opener = opener
         return tab.view
@@ -300,10 +345,8 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func webViewDidClose(_ webView: WKWebView) {
         guard let index = browserTabs.firstIndex(where: { $0.view === webView }), index > 0 else { return }
         let old = browserTabs.remove(at: index)
-        old.view.scrollView.refreshControl?.endRefreshing()
         windows = browserTabs
-        old.view.navigationDelegate = nil; old.view.uiDelegate = nil
-        old.view.stopLoading()
+        discardPage(old)
         controller.didCloseTab(old)
         if let tab = old.opener ?? browserTabs.first {
             controller.didActivateTab(tab, previousActiveTab: old)
@@ -420,10 +463,22 @@ final class WebAppBrowser: NSObject, ObservableObject, WKWebExtensionWindow, WKN
     func webView(_ webView: WKWebView, requestMediaCapturePermissionFor origin: WKSecurityOrigin,
                  initiatedByFrame frame: WKFrameInfo, type: WKMediaCaptureType,
                  decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // WebKit's system prompt names the requesting origin. Never silently grant
-        // camera/microphone, including cross-origin frames or previously denied sites.
-        guard origin.protocol == "https", webView.window != nil else { decisionHandler(.deny); return }
+        guard frame.isMainFrame, origin.protocol == "https", webView === activeView,
+              runtime.focused === self, webView.window?.windowScene?.activationState == .foregroundActive else {
+            decisionHandler(.deny); return
+        }
         decisionHandler(.prompt)
+    }
+
+    @available(iOS 27.0, *)
+    func webView(_ webView: WKWebView, requestGeolocationPermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo, decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        decisionHandler(.deny)
+    }
+
+    func webView(_ webView: WKWebView, requestDeviceOrientationAndMotionPermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo, decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        decisionHandler(.deny)
     }
 
     func webView(_ webView: WKWebView, contextMenuConfigurationFor elementInfo: WKContextMenuElementInfo,
@@ -563,7 +618,7 @@ struct WebAppBrowserScreen: View {
 }
 
 @available(iOS 18.4, *)
-private struct WebAppBlockingSettings: View {
+struct WebAppBlockingSettings: View {
     @StateObject private var state = AppState()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -572,13 +627,20 @@ private struct WebAppBlockingSettings: View {
     let service: WebAppService
 
     private var compactHeight: CGFloat {
-        84 + rowHeight * Double(SiteBlockingControl.controls(for: service.id).count)
+        84 + rowHeight * Double(SiteBlockingControl.controls(for: service.id).count + 1) + 10
             + (service == .instagram ? noteHeight : 24)
     }
 
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Link(destination: service.shortcutURL) {
+                        Label(String(localized: "Add to Home Screen", table: "WebApps"), systemImage: "square.and.arrow.up")
+                    }
+                    .accessibilityIdentifier("webapps.shortcut." + service.id)
+                }
+                .listRowBackground(SlowthAppearance.card)
                 SafariSiteSettingsSections(state: state, expandedService: .constant(nil), onlySite: service.id)
                     .disabled(state.groupSelectionRestSeconds > 0)
                     .listRowBackground(SlowthAppearance.card)

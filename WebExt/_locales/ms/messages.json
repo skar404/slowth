@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Anda boleh mematikan mod ketat dalam minit pertama."
+  },
+  "autoplayOff": {
+    "message": "Matikan main automatik"
+  },
+  "hideRelated": {
+    "message": "Sembunyikan video cadangan"
+  },
+  "following": {
+    "message": "Buka Mengikuti"
+  },
+  "hideSuggestions": {
+    "message": "Sembunyikan akaun cadangan"
+  },
+  "facebookFeeds": {
+    "message": "Buka suapan"
+  },
+  "hideUpsells": {
+    "message": "Sembunyikan tawaran pembelian dan pemasangan"
+  },
+  "hidePromoted": {
+    "message": "Sembunyikan siaran promosi"
+  },
+  "hideRecommendations": {
+    "message": "Sembunyikan cadangan"
+  },
+  "oldReddit": {
+    "message": "Gunakan Reddit lama"
+  },
+  "networkFeed": {
+    "message": "Buka suapan rangkaian"
+  },
+  "hideNews": {
+    "message": "Sembunyikan bar sisi berita"
+  },
+  "feedChanged": {
+    "message": "Suapan telah ditukar"
   }
 }

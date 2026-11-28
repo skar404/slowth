@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "તમે પહેલી મિનિટ દરમિયાન કડક મોડ બંધ કરી શકો છો."
+  },
+  "autoplayOff": {
+    "message": "આપમેળે પ્લે કરવાનું બંધ કરો"
+  },
+  "hideRelated": {
+    "message": "સૂચવેલા વીડિયો છુપાવો"
+  },
+  "following": {
+    "message": "ફૉલો કરેલાં એકાઉન્ટ ખોલો"
+  },
+  "hideSuggestions": {
+    "message": "સૂચવેલાં એકાઉન્ટ છુપાવો"
+  },
+  "facebookFeeds": {
+    "message": "ફીડ ખોલો"
+  },
+  "hideUpsells": {
+    "message": "ખરીદી અને ઇન્સ્ટૉલની ઑફર છુપાવો"
+  },
+  "hidePromoted": {
+    "message": "પ્રમોટ કરેલી પોસ્ટ છુપાવો"
+  },
+  "hideRecommendations": {
+    "message": "ભલામણો છુપાવો"
+  },
+  "oldReddit": {
+    "message": "જૂનું Reddit વાપરો"
+  },
+  "networkFeed": {
+    "message": "નેટવર્ક ફીડ ખોલો"
+  },
+  "hideNews": {
+    "message": "સમાચારની સાઇડબાર છુપાવો"
+  },
+  "feedChanged": {
+    "message": "ફીડ બદલાઈ"
   }
 }

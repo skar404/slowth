@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "आप पहले मिनट के दौरान सख्त मोड बंद कर सकते हैं।"
+  },
+  "autoplayOff": {
+    "message": "अपने आप चलना बंद करें"
+  },
+  "hideRelated": {
+    "message": "सुझाए गए वीडियो छिपाएँ"
+  },
+  "following": {
+    "message": "फ़ॉलो किए गए खाते खोलें"
+  },
+  "hideSuggestions": {
+    "message": "सुझाए गए खाते छिपाएँ"
+  },
+  "facebookFeeds": {
+    "message": "फ़ीड खोलें"
+  },
+  "hideUpsells": {
+    "message": "खरीदने और इंस्टॉल करने के ऑफ़र छिपाएँ"
+  },
+  "hidePromoted": {
+    "message": "प्रचारित पोस्ट छिपाएँ"
+  },
+  "hideRecommendations": {
+    "message": "सुझाव छिपाएँ"
+  },
+  "oldReddit": {
+    "message": "पुराना Reddit इस्तेमाल करें"
+  },
+  "networkFeed": {
+    "message": "नेटवर्क फ़ीड खोलें"
+  },
+  "hideNews": {
+    "message": "समाचार साइडबार छिपाएँ"
+  },
+  "feedChanged": {
+    "message": "फ़ीड बदल गई"
   }
 }

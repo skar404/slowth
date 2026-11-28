@@ -195,14 +195,14 @@ test('resize recalculates the threshold and never releases an existing block', a
 test('YouTube defaults, missing flags and legacy modes never opt into feed blocking', async () => {
   const h = await harness();
   const ns = h.context.Unscroll;
-  assert.deepEqual(plain(ns.SITE_FEATURES.youtube), ['shorts', 'hideHomeFeed', 'feed', 'all']);
+  assert.deepEqual(plain(ns.SITE_FEATURES.youtube), ['shorts', 'hideHomeFeed', 'feed', 'autoplayOff', 'hideRelated', 'all']);
   for (const value of [undefined, 'off', 'shorts', 'feed', 'all', true, false, { shorts: false, all: true }]) {
     assert.equal(ns.normalizeSiteSettings('youtube', value).feed, false);
     assert.equal(ns.normalizeSiteSettings('youtube', value).hideHomeFeed, false);
   }
   for (const shorts of [false, true]) for (const feed of [false, true]) for (const all of [false, true]) for (const hideHomeFeed of [false, true]) {
     const flags = { shorts, feed, all, hideHomeFeed };
-    assert.deepEqual(plain(ns.normalizeSiteSettings('youtube', flags)), flags);
+    assert.deepEqual(plain(ns.normalizeSiteSettings('youtube', flags)), { ...flags, autoplayOff: false, hideRelated: false });
   }
 });
 

@@ -36,6 +36,9 @@ enum NativeExtensionMessageHandler {
                 return ["ok": false, "reason": "unknown"]
             }
 
+        case "claimFeedReminder":
+            return ["show": SharedStore.claimFeedReminder()]
+
         case "setStrictMode":
             guard let enabled = payload["enabled"] as? Bool else {
                 return ["ok": false, "reason": "invalid_args"]
@@ -82,7 +85,7 @@ enum NativeExtensionMessageHandler {
         let togglesRaw = s.toggles.mapValues { $0.dictionary }
         var dict: [String: Any] = [
             "toggles": togglesRaw,
-            "settingsVersion": 2,
+            "settingsVersion": 4,
             "strictModeUntil": s.strictModeUntil?.timeIntervalSince1970 ?? 0,
             "strictModeStartedAt": s.strictModeStartedAt?.timeIntervalSince1970 ?? 0,
             "onboardingDone": s.onboardingDone,

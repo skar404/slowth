@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Суворий режим можна вимкнути протягом першої хвилини."
+  },
+  "autoplayOff": {
+    "message": "Вимкнути автовідтворення"
+  },
+  "hideRelated": {
+    "message": "Приховувати рекомендовані відео"
+  },
+  "following": {
+    "message": "Відкривати підписки"
+  },
+  "hideSuggestions": {
+    "message": "Приховувати рекомендовані облікові записи"
+  },
+  "facebookFeeds": {
+    "message": "Відкривати стрічки"
+  },
+  "hideUpsells": {
+    "message": "Приховувати пропозиції купівлі та встановлення"
+  },
+  "hidePromoted": {
+    "message": "Приховувати рекламні дописи"
+  },
+  "hideRecommendations": {
+    "message": "Приховувати рекомендації"
+  },
+  "oldReddit": {
+    "message": "Використовувати старий Reddit"
+  },
+  "networkFeed": {
+    "message": "Відкривати стрічку контактів"
+  },
+  "hideNews": {
+    "message": "Приховувати панель новин"
+  },
+  "feedChanged": {
+    "message": "Стрічку змінено"
   }
 }

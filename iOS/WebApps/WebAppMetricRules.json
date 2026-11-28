@@ -1,0 +1,65 @@
+[
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://([a-z0-9-]+[.])*google-analytics[.]com(:[0-9]+)?/(g/)?collect([?#].*)?$",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image", "raw", "fetch", "ping"]
+    },
+    "action": { "type": "block" }
+  },
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://([a-z0-9-]+[.])*google-analytics[.]com(:[0-9]+)?/mp/collect([?#].*)?$",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image", "raw", "fetch", "ping"]
+    },
+    "action": { "type": "block" }
+  },
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://analytics[.]google[.]com(:[0-9]+)?/g/collect([?#].*)?$",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image", "raw", "fetch", "ping"]
+    },
+    "action": { "type": "block" }
+  },
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://([a-z0-9-]+[.])*clarity[.]ms(:[0-9]+)?/collect([?#].*)?$",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image", "raw", "fetch", "ping"]
+    },
+    "action": { "type": "block" }
+  },
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://www[.]facebook[.]com(:[0-9]+)?/tr/?([?#].*)?$",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image", "raw", "fetch", "ping"]
+    },
+    "action": { "type": "block" }
+  },
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://in[.]hotjar[.]com(:[0-9]+)?/api/v2/client/sites/[0-9]+/visit-data([?#].*)?$",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image", "raw", "fetch", "ping"]
+    },
+    "action": { "type": "block" }
+  },
+  {
+    "trigger": {
+      "url-filter": "^[a-z]+://ad[.]doubleclick[.]net(:[0-9]+)?/(ddm/)?activity[/;]src=[0-9]+;",
+      "url-filter-is-case-sensitive": true,
+      "load-type": ["third-party"],
+      "resource-type": ["image"]
+    },
+    "action": { "type": "block" }
+  }
+]

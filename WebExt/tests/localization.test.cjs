@@ -215,7 +215,7 @@ for (const namespace of ['browser', 'chrome']) {
       assert.ok(!read('app.html').includes('id="onboarding"'));
       assert.equal(translated.find(el => el.dataset.i18n === 'strictMode').textContent, messages.strictMode.message);
       const switches = elements.get('sites').querySelectorAll('input');
-      assert.equal(switches.length, 15);
+      assert.equal(switches.length, 35);
       assert.equal(switches[0].dataset.feature, 'all');
       assert.equal(switches[0].checked, false);
       assert.equal(switches[1].checked, true);
@@ -338,10 +338,10 @@ test('whole-site blocking disables content controls without changing their check
   const flags = state.toggles.facebook = { shorts: false, feed: true, all: true };
   await context.refreshPopup();
   const controls = elements.get('sites').querySelectorAll('input').filter(input => input.dataset.site === 'facebook');
-  assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[true, false], [false, true], [true, true]]);
+  assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[true, false], [false, true], [true, true], [false, true]]);
   flags.all = false;
   await context.refreshPopup();
-  assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[false, false], [false, false], [true, false]]);
+  assert.deepEqual(controls.map(input => [input.checked, input.disabled]), [[false, false], [false, false], [true, false], [false, false]]);
 });
 
 for (const namespace of ['browser', 'chrome']) {
@@ -370,7 +370,7 @@ for (const namespace of ['browser', 'chrome']) {
       ? [expected, ...originalOrder.filter(site => site !== expected)] : originalOrder;
     assert.deepEqual(sections.map(el => el['aria-label']),
       expectedOrder.map(site => context.Unscroll.SITE_LABELS[site]));
-    assert.equal(sections.length, 5);
+    assert.equal(sections.length, 8);
     assert.ok(sections.every(el => el.tagName === 'details'));
     assert.ok(sections.every(el => fs.existsSync(path.join(root, el.children[0].children[0].src))));
   });

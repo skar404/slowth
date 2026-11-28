@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "İlk dakika içinde katı modu kapatabilirsiniz."
+  },
+  "autoplayOff": {
+    "message": "Otomatik oynatmayı kapat"
+  },
+  "hideRelated": {
+    "message": "Önerilen videoları gizle"
+  },
+  "following": {
+    "message": "Takip edilenleri aç"
+  },
+  "hideSuggestions": {
+    "message": "Önerilen hesapları gizle"
+  },
+  "facebookFeeds": {
+    "message": "Akışları aç"
+  },
+  "hideUpsells": {
+    "message": "Satın alma ve yükleme tekliflerini gizle"
+  },
+  "hidePromoted": {
+    "message": "Tanıtılan gönderileri gizle"
+  },
+  "hideRecommendations": {
+    "message": "Önerileri gizle"
+  },
+  "oldReddit": {
+    "message": "Eski Reddit’i kullan"
+  },
+  "networkFeed": {
+    "message": "Ağ akışını aç"
+  },
+  "hideNews": {
+    "message": "Haber kenar çubuğunu gizle"
+  },
+  "feedChanged": {
+    "message": "Akış değiştirildi"
   }
 }

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "אפשר לכבות את המצב המחמיר במהלך הדקה הראשונה."
+  },
+  "autoplayOff": {
+    "message": "כיבוי הפעלה אוטומטית"
+  },
+  "hideRelated": {
+    "message": "הסתרת סרטונים מוצעים"
+  },
+  "following": {
+    "message": "פתיחת פיד הנעקבים"
+  },
+  "hideSuggestions": {
+    "message": "הסתרת חשבונות מוצעים"
+  },
+  "facebookFeeds": {
+    "message": "פתיחת פידים"
+  },
+  "hideUpsells": {
+    "message": "הסתרת הצעות רכישה והתקנה"
+  },
+  "hidePromoted": {
+    "message": "הסתרת פוסטים מקודמים"
+  },
+  "hideRecommendations": {
+    "message": "הסתרת המלצות"
+  },
+  "oldReddit": {
+    "message": "שימוש בגרסה הישנה של Reddit"
+  },
+  "networkFeed": {
+    "message": "פתיחת פיד הרשת"
+  },
+  "hideNews": {
+    "message": "הסתרת סרגל החדשות"
+  },
+  "feedChanged": {
+    "message": "הפיד הוחלף"
   }
 }

@@ -2,6 +2,8 @@
   const ns = (globalThis.Unscroll = globalThis.Unscroll || {});
   const api = (typeof browser !== "undefined" ? browser : chrome);
 
+  const settingsVersion = 5;
+
   function sendNative(payload) {
     return new Promise((resolve) => {
       try {
@@ -44,7 +46,7 @@
   function isValidRules(obj) {
     if (!obj || typeof obj !== "object") return false;
     if (typeof obj.version !== "number") return false;
-    for (const site of ns.SITES) {
+    for (const site of ns.LEGACY_SITES) {
       if (!obj[site] || typeof obj[site] !== "object") return false;
       if (!Array.isArray(obj[site].redirects)) return false;
       if (!Array.isArray(obj[site].hideSelectors)) return false;
@@ -74,7 +76,8 @@
     const rulesEtag = (raw && typeof raw.rulesEtag === "string") ? raw.rulesEtag : "";
     const onboardingDone = !!(raw && raw.onboardingDone);
 
-    return { settingsVersion: 3, toggles, strictModeUntil, rules, rulesFetchedAt, rulesEtag, onboardingDone };
+    return { settingsVersion, toggles, strictModeUntil, strictModeStartedAt: raw?.strictModeStartedAt || 0,
+      rules, rulesFetchedAt, rulesEtag, onboardingDone };
   }
 
   async function getStateFresh() {
@@ -100,7 +103,7 @@
     const items = await storageGet([ns.STORAGE_KEYS.cachedState, ns.STORAGE_KEYS.cachedAt]);
     const cached = items[ns.STORAGE_KEYS.cachedState];
     const at = items[ns.STORAGE_KEYS.cachedAt] || 0;
-    if (cached && cached.settingsVersion === 3 && Date.now() - at < ns.STATE_CACHE_TTL_MS &&
+    if (cached && cached.settingsVersion === settingsVersion && Date.now() - at < ns.STATE_CACHE_TTL_MS &&
         isValidRules(cached.rules) && cached.rules.version >= ns.DEFAULT_RULES.version) return cached;
     return getStateFresh();
   }
@@ -180,6 +183,7 @@
     }
   }
 
+  ns.claimFeedReminder = async () => (await sendNative({ action: "claimFeedReminder" }))?.show === true;
   ns.getStateFresh = getStateFresh;
   ns.getStateCached = getStateCached;
   ns.setToggle = setToggle;

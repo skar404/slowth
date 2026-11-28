@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Строгі рэжым можна выключыць на працягу першай хвіліны."
+  },
+  "autoplayOff": {
+    "message": "Выключыць аўтапрайграванне"
+  },
+  "hideRelated": {
+    "message": "Хаваць прапанаваныя відэа"
+  },
+  "following": {
+    "message": "Адкрываць падпіскі"
+  },
+  "hideSuggestions": {
+    "message": "Хаваць прапанаваныя акаўнты"
+  },
+  "facebookFeeds": {
+    "message": "Адкрываць стужкі"
+  },
+  "hideUpsells": {
+    "message": "Хаваць прапановы пакупкі і ўсталявання"
+  },
+  "hidePromoted": {
+    "message": "Хаваць рэкламныя допісы"
+  },
+  "hideRecommendations": {
+    "message": "Хаваць рэкамендацыі"
+  },
+  "oldReddit": {
+    "message": "Карыстацца старым Reddit"
+  },
+  "networkFeed": {
+    "message": "Адкрываць стужку кантактаў"
+  },
+  "hideNews": {
+    "message": "Хаваць панэль навін"
+  },
+  "feedChanged": {
+    "message": "Стужка зменена"
   }
 }

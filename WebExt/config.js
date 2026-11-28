@@ -4,14 +4,16 @@
   ns.CONFIG_URL =
     "https://gist.githubusercontent.com/skar404/485fdd43d2d94b068a6869fa0670fce9/raw/unscroll_v0.json";
 
-  ns.SITES = ["youtube", "instagram", "tiktok", "facebook", "x"];
+  ns.LEGACY_SITES = ["youtube", "instagram", "tiktok", "facebook", "x"];
+  ns.SITES = [...ns.LEGACY_SITES, "threads", "reddit", "linkedin"];
 
   ns.siteForURL = function (value) {
     try {
       const url = new URL(value);
       if (url.protocol !== "https:" && url.protocol !== "http:") return null;
       const domains = { youtube: ["youtube.com"], instagram: ["instagram.com"],
-        tiktok: ["tiktok.com"], facebook: ["facebook.com"], x: ["x.com", "twitter.com"] };
+        tiktok: ["tiktok.com"], facebook: ["facebook.com"], x: ["x.com", "twitter.com"],
+        threads: ["threads.net", "threads.com"], reddit: ["reddit.com"], linkedin: ["linkedin.com"] };
       return ns.SITES.find(site => domains[site].some(domain =>
         url.hostname === domain || url.hostname.endsWith("." + domain))) || null;
     } catch (_) { return null; }
@@ -19,20 +21,25 @@
 
   // Wire keys and migration mirror Shared/SharedStore.swift.
   ns.SITE_FEATURES = {
-    youtube: ["shorts", "hideHomeFeed", "feed", "all"],
-    instagram: ["shorts", "feed", "stories", "all"],
-    tiktok: ["feed", "all"],
-    facebook: ["shorts", "feed", "all"],
-    x: ["shorts", "all"]
+    youtube: ["shorts", "hideHomeFeed", "feed", "autoplayOff", "hideRelated", "all"],
+    instagram: ["shorts", "feed", "stories", "following", "hideSuggestions", "all"],
+    tiktok: ["feed", "following", "hideUpsells", "all"],
+    facebook: ["shorts", "feed", "facebookFeeds", "all"],
+    x: ["shorts", "following", "hideSuggestions", "all"],
+    threads: ["following", "all"],
+    reddit: ["following", "hidePromoted", "hideRecommendations", "oldReddit", "all"],
+    linkedin: ["networkFeed", "hidePromoted", "hideNews", "all"]
   };
+  const lightDefault = { threads: "following", reddit: "hidePromoted", linkedin: "hidePromoted" };
   ns.DEFAULT_TOGGLES = Object.fromEntries(ns.SITES.map(site => [site, {
-    shorts: site !== "tiktok",
+    ...Object.fromEntries(ns.SITE_FEATURES[site].map(feature => [feature, feature === lightDefault[site]])),
+    shorts: ns.SITE_FEATURES[site].includes("shorts"),
     feed: site === "instagram" || site === "facebook",
     all: site === "tiktok",
     ...(site === "instagram" ? { stories: false } : {}),
     ...(site === "youtube" ? { hideHomeFeed: false } : {})
   }]));
-  ns.SITE_LABELS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", facebook: "Facebook", x: "X" };
+  ns.SITE_LABELS = { youtube: "YouTube", instagram: "Instagram", tiktok: "TikTok", facebook: "Facebook", x: "X", threads: "Threads", reddit: "Reddit", linkedin: "LinkedIn" };
 
   ns.normalizeSiteSettings = function (site, value) {
     const defaults = { ...ns.DEFAULT_TOGGLES[site] };
@@ -44,13 +51,13 @@
     }
     // Old cached states can survive an extension update.
     if (typeof value === "boolean") value = value ? (site === "tiktok" ? "all" : "shorts") : "off";
-    switch (value) {
-      case "off": return { ...defaults, shorts: false, feed: false, all: false };
-      case "shorts": return { ...defaults, shorts: site !== "tiktok", feed: false, all: false };
-      case "feed": return { ...defaults, shorts: site !== "tiktok", feed: site === "instagram" || site === "facebook", all: false };
-      case "all": return { ...defaults, all: true };
-      default: return defaults;
+    if (value === "off" || value === "shorts" || value === "feed") {
+      const legacy = Object.fromEntries(Object.keys(defaults).map(feature => [feature, false]));
+      legacy.shorts = value !== "off" && ns.SITE_FEATURES[site].includes("shorts");
+      legacy.feed = value === "feed" && (site === "instagram" || site === "facebook");
+      return legacy;
     }
+    return value === "all" ? { ...defaults, all: true } : defaults;
   };
 
   // Independent hard block; the existing Infinite Feed Stories nudge is unchanged.

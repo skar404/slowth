@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "คุณสามารถปิดโหมดเข้มงวดได้ภายในนาทีแรก"
+  },
+  "autoplayOff": {
+    "message": "ปิดการเล่นอัตโนมัติ"
+  },
+  "hideRelated": {
+    "message": "ซ่อนวิดีโอแนะนำ"
+  },
+  "following": {
+    "message": "เปิดฟีดที่ติดตาม"
+  },
+  "hideSuggestions": {
+    "message": "ซ่อนบัญชีแนะนำ"
+  },
+  "facebookFeeds": {
+    "message": "เปิดฟีด"
+  },
+  "hideUpsells": {
+    "message": "ซ่อนข้อเสนอซื้อและติดตั้ง"
+  },
+  "hidePromoted": {
+    "message": "ซ่อนโพสต์โปรโมต"
+  },
+  "hideRecommendations": {
+    "message": "ซ่อนคำแนะนำ"
+  },
+  "oldReddit": {
+    "message": "ใช้ Reddit แบบเก่า"
+  },
+  "networkFeed": {
+    "message": "เปิดฟีดเครือข่าย"
+  },
+  "hideNews": {
+    "message": "ซ่อนแถบข่าวด้านข้าง"
+  },
+  "feedChanged": {
+    "message": "เปลี่ยนฟีดแล้ว"
   }
 }

@@ -162,23 +162,12 @@ header h1 {
   min-width: 0;
 }
 
-.row select {
-  font: inherit;
-  font-size: 14px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: none;
-  background: var(--bg);
-  color: var(--label);
-  appearance: auto;
-}
-
 .row input[type="checkbox"] {
   margin: 0;
   transform: scale(1.05);
 }
 
-.row select:disabled, .row input:disabled, .row-btn:disabled {
+.row input:disabled, .row-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
@@ -218,13 +207,8 @@ dialog {
 dialog::backdrop { background: #0008; }
 .strict-confirmation-card { margin: 0; }
 
-/* Keep translated options fully visible in Safari's narrow popup. */
+/* Allow translated labels to wrap in Safari's narrow popup. */
 .row { flex-wrap: wrap; gap: 8px; }
-.row select { max-width: 100%; min-width: 0; }
-@media (max-width: 480px) {
-  .row:has(select) { align-items: stretch; flex-direction: column; }
-  .row select { width: 100%; }
-}
 
 #sites.rows { background: transparent; overflow: visible; }
 .site-settings {

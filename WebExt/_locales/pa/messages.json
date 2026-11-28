@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "ਤੁਸੀਂ ਪਹਿਲੇ ਮਿੰਟ ਦੇ ਅੰਦਰ ਸਖ਼ਤ ਮੋਡ ਬੰਦ ਕਰ ਸਕਦੇ ਹੋ।"
+  },
+  "autoplayOff": {
+    "message": "ਆਟੋਪਲੇ ਬੰਦ ਕਰੋ"
+  },
+  "hideRelated": {
+    "message": "ਸੁਝਾਏ ਵੀਡੀਓ ਲੁਕਾਓ"
+  },
+  "following": {
+    "message": "ਫਾਲੋ ਕੀਤੇ ਖਾਤਿਆਂ ਦੀ ਫੀਡ ਖੋਲ੍ਹੋ"
+  },
+  "hideSuggestions": {
+    "message": "ਸੁਝਾਏ ਖਾਤੇ ਲੁਕਾਓ"
+  },
+  "facebookFeeds": {
+    "message": "ਫੀਡਾਂ ਖੋਲ੍ਹੋ"
+  },
+  "hideUpsells": {
+    "message": "ਖਰੀਦਣ ਅਤੇ ਇੰਸਟਾਲ ਕਰਨ ਦੀਆਂ ਪੇਸ਼ਕਸ਼ਾਂ ਲੁਕਾਓ"
+  },
+  "hidePromoted": {
+    "message": "ਪ੍ਰਚਾਰਿਤ ਪੋਸਟਾਂ ਲੁਕਾਓ"
+  },
+  "hideRecommendations": {
+    "message": "ਸਿਫ਼ਾਰਸ਼ਾਂ ਲੁਕਾਓ"
+  },
+  "oldReddit": {
+    "message": "ਪੁਰਾਣਾ Reddit ਵਰਤੋ"
+  },
+  "networkFeed": {
+    "message": "ਨੈੱਟਵਰਕ ਫੀਡ ਖੋਲ੍ਹੋ"
+  },
+  "hideNews": {
+    "message": "ਖ਼ਬਰਾਂ ਦੀ ਸਾਈਡਬਾਰ ਲੁਕਾਓ"
+  },
+  "feedChanged": {
+    "message": "ਫੀਡ ਬਦਲ ਗਈ"
   }
 }

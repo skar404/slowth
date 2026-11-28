@@ -245,6 +245,81 @@ final class WebAppBrowserTests: XCTestCase {
         throw URLError(.timedOut)
     }
 
+    func testFeedFiltersInWebKit() async throws {
+        let bundle = try XCTUnwrap(Bundle.main.builtInPlugInsURL).appendingPathComponent("UnscrollExtension.appex")
+        let script = try String(contentsOf: bundle.appendingPathComponent("content/feed-filters.js"), encoding: .utf8)
+        let config = WKWebViewConfiguration()
+        config.userContentController.addUserScript(WKUserScript(source: """
+        window.Unscroll = {};
+        window.browser = {runtime: {sendMessage: (_, cb) => cb(false)}};
+        \(script)
+        """, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        let view = WKWebView(frame: CGRect(x: 0, y: 0, width: 400, height: 800), configuration: config)
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        window.addSubview(view)
+        defer { view.removeFromSuperview(); view.stopLoading() }
+        let server = try DownloadFixture(stalled: false, html: true, document: "<html><body></body></html>")
+        defer { server.stop() }
+        let url = try await server.url()
+        view.load(URLRequest(url: url))
+        try await waitForBrowserPage(view, url: url)
+
+        func verify(_ site: String, route: String, markup: String, flags: [String: Bool],
+                    enabled: String, disabled: String) async throws {
+            // Run checks in the rendered document, including hide/restore on the same page.
+            let result = try await view.callAsyncJavaScript("""
+            history.replaceState(null, '', route);
+            document.body.innerHTML = markup;
+            const search = document.querySelector('reddit-search-large');
+            if (search) search.attachShadow({mode:'open'}).innerHTML =
+              '<p id="recent">Recent</p><p id="section_2_trending_query">Trending</p><div id="trend1">A</div><div id="trend2">B</div><p id="section_results">Results</p>';
+            const searchVisible = id => getComputedStyle(search.shadowRoot.getElementById(id)).display !== 'none';
+            const apply = Unscroll.feedFilters.install(site);
+            const visible = id => getComputedStyle(document.getElementById(id)).display !== 'none';
+            const paint = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            apply(flags);
+            await paint();
+            const active = eval(enabled);
+            apply({});
+            await paint();
+            return [active, eval(disabled)];
+            """, arguments: ["site": site, "route": route, "markup": markup, "flags": flags,
+                             "enabled": enabled, "disabled": disabled], in: nil, contentWorld: .page)
+            XCTAssertEqual(result as? [Bool], [true, true], site)
+        }
+        try await verify("youtube", route: "/watch?v=example", markup: """
+            <button onclick="this.firstChild.setAttribute('aria-checked','false')"><span id="auto" class="ytp-autonav-toggle-button" aria-checked="true"></span></button>
+            <ytd-watch-next-secondary-results-renderer id="related">Videos</ytd-watch-next-secondary-results-renderer>
+            <div id="end" class="ytp-endscreen-content"></div><div id="queue">Playlist</div><div id="chat">Chat</div>
+            """, flags: ["autoplayOff": true, "hideRelated": true],
+            enabled: "!visible('related') && !visible('end') && visible('queue') && visible('chat') && document.getElementById('auto').getAttribute('aria-checked') === 'false'",
+            disabled: "visible('related') && visible('end')")
+        try await verify("instagram", route: "/", markup: """
+            <main><aside id="suggest"><a href="/explore/people">People</a></aside><article id="post">Post</article></main>
+            """, flags: ["hideSuggestions": true], enabled: "!visible('suggest') && visible('post')", disabled: "visible('suggest')")
+        try await verify("tiktok", route: "/following", markup: """
+            <div id="top-right-action-bar"><a id="buy" href="/coin">Coins</a><button id="me">Account</button></div>
+            """, flags: ["hideUpsells": true], enabled: "!visible('buy') && visible('me')", disabled: "visible('buy')")
+        try await verify("x", route: "/home", markup: """
+            <main><div role="tablist"><button role="tab" aria-selected="true">Для вас</button><button id="follow" role="tab" onclick="this.setAttribute('aria-selected','true');this.previousSibling.setAttribute('aria-selected','false')">Подписки</button><button role="tab" id="list">List</button></div></main>
+            <div data-testid="sidebarColumn"><span id="account" data-testid="UserCell">Suggested</span><input id="search"></div>
+            """, flags: ["following": true, "hideSuggestions": true],
+            enabled: "document.getElementById('follow').getAttribute('aria-selected') === 'true' && !visible('account') && visible('search') && visible('list')",
+            disabled: "visible('account')")
+        try await verify("reddit", route: "/", markup: """
+            <shreddit-feed-tabs><button data-feed-token="for-you" faceplate-tab-selected></button><button data-feed-token="following" id="follow" onclick="this.setAttribute('faceplate-tab-selected','');this.previousSibling.removeAttribute('faceplate-tab-selected')"></button></shreddit-feed-tabs>
+            <reddit-search-large></reddit-search-large><shreddit-ad-post id="ad"></shreddit-ad-post><games-section-badge-wrapper id="games"></games-section-badge-wrapper><shreddit-post id="post"></shreddit-post>
+            """, flags: ["following": true, "hidePromoted": true, "hideRecommendations": true],
+            enabled: "document.getElementById('follow').hasAttribute('faceplate-tab-selected') && !visible('ad') && !visible('games') && visible('post') && searchVisible('recent') && !searchVisible('trend1') && !searchVisible('trend2') && searchVisible('section_results')",
+            disabled: "visible('ad') && visible('games') && searchVisible('trend2')")
+        try await verify("linkedin", route: "/feed/network/", markup: """
+            <main><div data-testid="NetworkFeedListCollection"><article id="ad"><span>Реклама</span></article><article id="post"><p>Мы обсуждали рекламу</p></article></div><aside id="news"><a href="/news/story/example">News</a></aside></main>
+            """, flags: ["hideNews": true, "hidePromoted": true],
+            enabled: "!visible('news') && !visible('ad') && visible('post')",
+            disabled: "visible('news') && visible('ad')")
+    }
+
     func testTikTokFeedLimitLocksNestedScrollingAndRestoresLiveSettings() async throws {
         let extensionURL = try XCTUnwrap(Bundle.main.builtInPlugInsURL)
             .appendingPathComponent("UnscrollExtension.appex")
@@ -302,7 +377,7 @@ final class WebAppBrowserTests: XCTestCase {
         try await expect("!document.getElementById('unscroll-block-overlay') && getComputedStyle(document.getElementById('feed')).overflowY === 'scroll'")
     }
 
-    func testYouTubeDismissalPreservesPresentedVideoAndSuspendsInlineMedia() async throws {
+    func testYouTubeTemporaryDisappearancePreservesPresentedVideoAndSuspendsInlineMedia() async throws {
         let browser = WebAppProfileRuntime.shared(.youtube).session(.youtube)
         browser.stop()
         let configuration = browser.websiteConfiguration()
@@ -569,7 +644,7 @@ final class WebAppBrowserTests: XCTestCase {
         let facebook = WebAppProfileRuntime.shared(WebAppService.facebook.profile).dataStore.httpCookieStore
         let shared = await facebook.allCookies()
         XCTAssertTrue(shared.contains { $0.name == name })
-        for profile in [WebAppProfile.youtube, .tiktok, .x] {
+        for profile in WebAppProfile.allCases where profile != .meta {
             let cookies = await WebAppProfileRuntime.shared(profile).dataStore.httpCookieStore.allCookies()
             XCTAssertFalse(cookies.contains { $0.name == name })
         }
@@ -618,6 +693,84 @@ final class WebAppBrowserTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: downloads.path))
     }
 
+    func testBrowserDismissalDiscardsMainDocumentAndPopup() async throws {
+        let router = WebAppsRouter.shared
+        let runtime = WebAppProfileRuntime.shared(.youtube)
+        let browser = runtime.session(.youtube)
+        browser.stop()
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        let previousRoot = window.rootViewController
+        let host = UIHostingController(rootView: Color.clear.modifier(WebAppsPresentation()))
+        window.rootViewController = host
+        defer {
+            router.dismissForNativePrompt()
+            router.didDismiss()
+            browser.stop()
+            window.rootViewController = previousRoot
+        }
+        let server = try DownloadFixture(stalled: false, html: true, document:
+            "<script>window.pageTicks = 1; setInterval(() => ++window.pageTicks, 10)</script>")
+        defer { server.stop() }
+        let url = try await server.url()
+        // Keep references through dismissal, as a system media presentation can do.
+        let main = browser.addTab(configuration: browser.websiteConfiguration()).view
+        main.load(URLRequest(url: url))
+        try await waitForBrowserPage(main, url: url)
+        let popup = browser.addTab(configuration: browser.websiteConfiguration()).view
+        popup.load(URLRequest(url: url))
+        try await waitForBrowserPage(popup, url: url)
+
+        router.open(.youtube)
+        for _ in 0..<100 {
+            if host.presentedViewController != nil, runtime.focused === browser { break }
+            try await Task.sleep(for: .milliseconds(50))
+        }
+        XCTAssertTrue(runtime.focused === browser)
+        let ticking = try await popup.evaluateJavaScript("window.pageTicks > 0")
+        XCTAssertEqual(ticking as? Bool, true)
+        router.dismissForNativePrompt()
+        for _ in 0..<100 {
+            if browser.activeView == nil, !router.isDismissing { break }
+            try await Task.sleep(for: .milliseconds(50))
+        }
+        XCTAssertNil(browser.activeView)
+        XCTAssertTrue(browser.windows.isEmpty)
+        XCTAssertNil(runtime.focused)
+        for view in [main, popup] {
+            try await waitForBrowserPage(view, url: try XCTUnwrap(URL(string: "about:blank")))
+            let discarded = try await view.evaluateJavaScript("typeof window.pageTicks === 'undefined'")
+            XCTAssertEqual(discarded as? Bool, true)
+        }
+    }
+
+    func testPageCannotReadDeviceLocation() async throws {
+        XCTAssertNil(Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription"))
+        let server = try DownloadFixture(stalled: false, html: true)
+        defer { server.stop() }
+        let site = try await server.url()
+        let browser = WebAppProfileRuntime.shared(.x).session(.x)
+        defer { browser.stop() }
+        let view = browser.addTab(configuration: browser.websiteConfiguration()).view
+        let window = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first { $0.isKeyWindow })
+        window.addSubview(view)
+        defer { view.removeFromSuperview() }
+        view.load(URLRequest(url: site))
+        try await waitForBrowserPage(view, url: site)
+        let denied = try await view.callAsyncJavaScript("""
+            const denied = method => new Promise(resolve => {
+                const timeout = setTimeout(() => resolve(false), 4000);
+                navigator.geolocation[method](() => resolve(false), error => {
+                    clearTimeout(timeout);
+                    resolve(error.code === error.PERMISSION_DENIED);
+                });
+            });
+            return await denied('getCurrentPosition') && await denied('watchPosition');
+            """, arguments: [:], in: nil, contentWorld: .page)
+        XCTAssertEqual(denied as? Bool, true)
+    }
+
     func testWindowCloseReturnsToOpenerAndCannotCloseMain() {
         let browser = WebAppProfileRuntime.shared(.youtube).session(.youtube)
         browser.stop()
@@ -635,6 +788,60 @@ final class WebAppBrowserTests: XCTestCase {
         XCTAssertTrue(browser.activeView === main.view)
         XCTAssertTrue(WebAppProfileRuntime.shared(.youtube).session(.youtube).activeView === main.view)
         browser.stop()
+    }
+
+    func testThirdPartyTrackingRequestsAreFilteredBeforeReachingTheHandler() async throws {
+        let runtime = WebAppProfileRuntime.shared(.youtube)
+        try await runtime.start()
+        let browser = runtime.session(.youtube)
+        defer { browser.stop() }
+        let configuration = browser.websiteConfiguration()
+        let fixture = TrackingResourceFixture()
+        configuration.setURLSchemeHandler(fixture, forURLScheme: "fixture")
+        let view = browser.addTab(configuration: configuration).view
+        let scripts = [
+            "fixture://www.google-analytics.com/analytics.js",
+            "fixture://www.clarity.ms/tag/project",
+            "fixture://static.hotjar.com/widget.js",
+            "fixture://ad.doubleclick.net/player.js",
+        ]
+        let blocked = [
+            "fixture://region1.google-analytics.com/g/collect?v=2",
+            "fixture://www.google-analytics.com/mp/collect",
+            "fixture://analytics.google.com/g/collect",
+            "fixture://p.clarity.ms/collect",
+            "fixture://www.facebook.com/tr/?id=1",
+            "fixture://ad.doubleclick.net/ddm/activity/src=123;type=example",
+            "fixture://in.hotjar.com/api/v2/client/sites/42/visit-data",
+        ]
+        let allowed = [
+            "fixture://www.google-analytics.com/g/collection",
+            "fixture://google-analytics.com.example.org/g/collect",
+            "fixture://news.example/google-analytics.com/g/collect",
+            "fixture://www.facebook.com/tr/login",
+            "fixture://www.clarity.ms/collect/config",
+            "fixture://in.hotjar.com/api/v2/client/sites/42/survey",
+            "fixture://ad.doubleclick.net/activity/player",
+        ]
+        let markup = scripts.map { "<script src='\($0)'></script>" }.joined()
+            + (blocked + allowed).map { "<img src='\($0)'>" }.joined()
+            + """
+              <script>
+              window.fixtureFinished = Promise.all([
+                'fixture://www.clarity.ms/collect?upload=1',
+                'fixture://www.clarity.ms/settings'
+              ].map(url => fetch(url, {method:'POST', mode:'no-cors', body:'event'}).catch(() => {})));
+              </script>
+              """
+        let server = try DownloadFixture(stalled: false, html: true, document: markup)
+        defer { server.stop() }
+        let site = try await server.url()
+        view.load(URLRequest(url: site))
+        try await waitForBrowserPage(view, url: site)
+        _ = try await view.callAsyncJavaScript("await window.fixtureFinished; return true",
+                                               arguments: [:], in: nil, contentWorld: .page)
+        XCTAssertEqual(fixture.requests.sorted(),
+                       (scripts + allowed + ["fixture://www.clarity.ms/settings"]).sorted())
     }
 
     func testRealPopupPreservesWindowOpener() async throws {
@@ -810,6 +1017,19 @@ private struct ShieldHandoffTestRoot: View {
                 Color.clear
             }
     }
+}
+
+@MainActor
+private final class TrackingResourceFixture: NSObject, WKURLSchemeHandler {
+    var requests: [String] = []
+    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+        let url = urlSchemeTask.request.url!
+        requests.append(url.absoluteString)
+        urlSchemeTask.didReceive(URLResponse(url: url, mimeType: "application/javascript",
+                                             expectedContentLength: 0, textEncodingName: "utf-8"))
+        urlSchemeTask.didFinish()
+    }
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {}
 }
 
 private final class DownloadFixture {

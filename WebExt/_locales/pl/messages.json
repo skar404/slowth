@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Tryb ścisły możesz wyłączyć w ciągu pierwszej minuty."
+  },
+  "autoplayOff": {
+    "message": "Wyłącz autoodtwarzanie"
+  },
+  "hideRelated": {
+    "message": "Ukryj proponowane filmy"
+  },
+  "following": {
+    "message": "Otwórz obserwowane"
+  },
+  "hideSuggestions": {
+    "message": "Ukryj proponowane konta"
+  },
+  "facebookFeeds": {
+    "message": "Otwórz aktualności"
+  },
+  "hideUpsells": {
+    "message": "Ukryj oferty zakupu i instalacji"
+  },
+  "hidePromoted": {
+    "message": "Ukryj promowane posty"
+  },
+  "hideRecommendations": {
+    "message": "Ukryj rekomendacje"
+  },
+  "oldReddit": {
+    "message": "Używaj starego Reddita"
+  },
+  "networkFeed": {
+    "message": "Otwórz aktualności sieci"
+  },
+  "hideNews": {
+    "message": "Ukryj panel wiadomości"
+  },
+  "feedChanged": {
+    "message": "Zmieniono kanał"
   }
 }

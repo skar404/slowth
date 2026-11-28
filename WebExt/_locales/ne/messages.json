@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "पहिलो मिनेटभित्र कडा मोड बन्द गर्न सक्नुहुन्छ।"
+  },
+  "autoplayOff": {
+    "message": "स्वचालित प्ले बन्द गर्नुहोस्"
+  },
+  "hideRelated": {
+    "message": "सुझाइएका भिडियोहरू लुकाउनुहोस्"
+  },
+  "following": {
+    "message": "फलो गरिएका खाताको फिड खोल्नुहोस्"
+  },
+  "hideSuggestions": {
+    "message": "सुझाइएका खाताहरू लुकाउनुहोस्"
+  },
+  "facebookFeeds": {
+    "message": "फिडहरू खोल्नुहोस्"
+  },
+  "hideUpsells": {
+    "message": "किन्ने र इन्स्टल गर्ने प्रस्तावहरू लुकाउनुहोस्"
+  },
+  "hidePromoted": {
+    "message": "प्रचारित पोस्टहरू लुकाउनुहोस्"
+  },
+  "hideRecommendations": {
+    "message": "सिफारिसहरू लुकाउनुहोस्"
+  },
+  "oldReddit": {
+    "message": "पुरानो Reddit प्रयोग गर्नुहोस्"
+  },
+  "networkFeed": {
+    "message": "सञ्जालको फिड खोल्नुहोस्"
+  },
+  "hideNews": {
+    "message": "समाचार साइडबार लुकाउनुहोस्"
+  },
+  "feedChanged": {
+    "message": "फिड परिवर्तन भयो"
   }
 }

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "تسی پہلے منٹ دے اندر سخت موڈ بند کر سکدے او۔"
+  },
+  "autoplayOff": {
+    "message": "آٹو پلے بند کرو"
+  },
+  "hideRelated": {
+    "message": "دسے ہوئے ویڈیو لکاؤ"
+  },
+  "following": {
+    "message": "فالو کیتے کھاتیاں دی فیڈ کھولو"
+  },
+  "hideSuggestions": {
+    "message": "دسے ہوئے کھاتے لکاؤ"
+  },
+  "facebookFeeds": {
+    "message": "فیڈاں کھولو"
+  },
+  "hideUpsells": {
+    "message": "خریدن تے انسٹال کرن دیاں پیشکشاں لکاؤ"
+  },
+  "hidePromoted": {
+    "message": "مشتہری والیاں پوسٹاں لکاؤ"
+  },
+  "hideRecommendations": {
+    "message": "سفارشاں لکاؤ"
+  },
+  "oldReddit": {
+    "message": "پرانا ریڈٹ ورتو"
+  },
+  "networkFeed": {
+    "message": "نیٹ ورک دی فیڈ کھولو"
+  },
+  "hideNews": {
+    "message": "خبراں دی سائیڈ بار لکاؤ"
+  },
+  "feedChanged": {
+    "message": "فیڈ بدل گئی"
   }
 }

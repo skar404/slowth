@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "ആദ്യ മിനിറ്റിനുള്ളിൽ കർശന മോഡ് ഓഫാക്കാം."
+  },
+  "autoplayOff": {
+    "message": "സ്വയമേവ പ്ലേ ചെയ്യുന്നത് നിർത്തുക"
+  },
+  "hideRelated": {
+    "message": "നിർദേശിച്ച വീഡിയോകൾ മറയ്ക്കുക"
+  },
+  "following": {
+    "message": "പിന്തുടരുന്നവരുടെ ഫീഡ് തുറക്കുക"
+  },
+  "hideSuggestions": {
+    "message": "നിർദേശിച്ച അക്കൗണ്ടുകൾ മറയ്ക്കുക"
+  },
+  "facebookFeeds": {
+    "message": "ഫീഡുകൾ തുറക്കുക"
+  },
+  "hideUpsells": {
+    "message": "വാങ്ങാനും ഇൻസ്റ്റാൾ ചെയ്യാനുമുള്ള ഓഫറുകൾ മറയ്ക്കുക"
+  },
+  "hidePromoted": {
+    "message": "പ്രമോട്ട് ചെയ്ത പോസ്റ്റുകൾ മറയ്ക്കുക"
+  },
+  "hideRecommendations": {
+    "message": "ശുപാർശകൾ മറയ്ക്കുക"
+  },
+  "oldReddit": {
+    "message": "പഴയ Reddit ഉപയോഗിക്കുക"
+  },
+  "networkFeed": {
+    "message": "നെറ്റ്‌വർക്ക് ഫീഡ് തുറക്കുക"
+  },
+  "hideNews": {
+    "message": "വാർത്താ സൈഡ്‌ബാർ മറയ്ക്കുക"
+  },
+  "feedChanged": {
+    "message": "ഫീഡ് മാറി"
   }
 }

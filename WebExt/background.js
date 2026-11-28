@@ -7,15 +7,7 @@
   const BLOCK_TOKEN = "unscroll:blocked";
 
   function getHostKey(hostname) {
-    if (!hostname) return null;
-    const h = hostname.toLowerCase();
-    if (h === "tiktok.com"    || h.endsWith(".tiktok.com"))    return "tiktok";
-    if (h === "youtube.com"   || h.endsWith(".youtube.com"))   return "youtube";
-    if (h === "instagram.com" || h.endsWith(".instagram.com")) return "instagram";
-    if (h === "facebook.com"  || h.endsWith(".facebook.com"))  return "facebook";
-    if (h === "x.com"         || h.endsWith(".x.com"))         return "x";
-    if (h === "twitter.com"   || h.endsWith(".twitter.com"))   return "x";
-    return null;
+    return ns.siteForURL("https://" + hostname + "/");
   }
 
   function applyRedirect(pathname, search, redirects) {
@@ -132,7 +124,9 @@
         return r;
       }
       case "setStrictMode": {
-        return await ns.setStrictMode(!!payload.enabled);
+        const result = await ns.setStrictMode(!!payload.enabled);
+        if (result.ok) await broadcastUpdated();
+        return result;
       }
       case "forceRefresh": {
         const res = await ns.refreshRules({ force: true });
@@ -157,6 +151,15 @@
   api.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message || typeof message !== "object") return false;
 
+    if (message.type === "feed-switched") {
+      ns.claimFeedReminder().then(sendResponse, () => sendResponse(false));
+      return true;
+    }
+    if (message.type === "open-feed-settings") {
+      const openPage = () => api.tabs.create({ url: api.runtime.getURL("app.html") });
+      try { Promise.resolve(api.action.openPopup()).catch(openPage); } catch (_) { openPage(); }
+      return false;
+    }
     if (message.type === "rpc") {
       (async () => sendResponse(await handleRpc(message.action, message.payload)))();
       return true;

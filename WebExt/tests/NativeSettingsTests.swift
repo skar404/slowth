@@ -72,11 +72,33 @@ struct NativeSettingsTests {
         for site in SharedState.supportedSites {
             let settings = fresh.toggles[site]!
             check(settings.all == (site == "tiktok"), "Full-site defaults: \(site)")
-            check(settings.shorts == (site != "tiktok"), "Content defaults: \(site)")
+            check(settings.shorts == ["youtube", "instagram", "facebook", "x"].contains(site), "Content defaults: \(site)")
             check(settings.feed == ["instagram", "facebook"].contains(site), "Feed defaults: \(site)")
         }
+        let lightDefaults: [String: SiteFeature] = ["threads": .following, "reddit": .hidePromoted, "linkedin": .hidePromoted]
+        for (site, feature) in lightDefaults {
+            let enabled = SiteFeature.available(for: site).filter { fresh.toggles[site]![$0] }
+            check(enabled == [feature], "Only the light filter starts enabled: \(site)")
+            _ = try SharedStore.setToggle(site: site, feature: feature, enabled: false)
+            check(!SharedStore.snapshot().toggles[site]![feature], "An explicit opt-out survives reload: \(site)")
+            check(SiteBlockingSettings.migrated("off", site: site) == SiteBlockingSettings(), "Legacy off: \(site)")
+        }
+        let calendar = Calendar.current
+        let firstDay = calendar.startOfDay(for: Date())
+        let firstShow = calendar.date(byAdding: .hour, value: 20, to: firstDay)!
+        let nextWeek = calendar.date(byAdding: .day, value: 7, to: firstDay)!
+        for legacyInterval: Int? in [nil, 0, 1, 7, 30] {
+            defaults.set(legacyInterval, forKey: "feedReminderDays")
+            // Simulate an installation with a reminder shown before the update.
+            defaults.set(firstShow.timeIntervalSince1970, forKey: "lastFeedReminder")
+            check(!SharedStore.claimFeedReminder(now: nextWeek.addingTimeInterval(-1)), "Reminder stays hidden through day six")
+            check(SharedStore.claimFeedReminder(now: nextWeek), "Reminder becomes eligible on day seven")
+            check(!SharedStore.claimFeedReminder(now: nextWeek), "Another site must wait a new week")
+        }
+        defaults.removeObject(forKey: "lastFeedReminder")
+        check(SharedStore.claimFeedReminder(now: firstShow), "First feed switch shows a reminder")
         let controls = SharedState.supportedSites.flatMap { SiteBlockingControl.controls(for: $0) }
-        check(controls.count == 15, "Every Safari setting has a control")
+        check(controls.count == 35, "Every Safari setting has a control")
         check(controls.contains { $0.id == "safari.instagram.stories" }, "Instagram exposes Stories")
         check(!fresh.toggles["instagram"]!.stories, "Stories hard block defaults off")
         let oldJSON = Data(#"{"shorts":false,"feed":true,"all":false}"#.utf8)
@@ -155,8 +177,8 @@ struct NativeSettingsTests {
                 preconditionFailure("Unsupported feature accepted")
             } catch SharedStoreError.invalidValue { }
         }
-        check(SiteFeature.available(for: "youtube") == [.shorts, .hideHomeFeed, .feed, .all], "YouTube exposes feed")
-        check(SiteFeature.available(for: "tiktok") == [.feed, .all], "TikTok exposes feed")
+        check(SiteFeature.available(for: "youtube") == [.shorts, .hideHomeFeed, .feed, .autoplayOff, .hideRelated, .all], "YouTube exposes feed")
+        check(SiteFeature.available(for: "tiktok") == [.feed, .following, .hideUpsells, .all], "TikTok exposes feed")
         check(controls.contains { $0.id == "safari.tiktok.feed" }, "TikTok feed UI control")
         for raw: Any in ["off", "shorts", "feed", "all", true, false, ["all": false]] {
             check(!SiteBlockingSettings.migrated(raw, site: "tiktok").feed,

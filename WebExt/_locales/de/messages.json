@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Du kannst den strengen Modus innerhalb der ersten Minute ausschalten."
+  },
+  "autoplayOff": {
+    "message": "Automatische Wiedergabe ausschalten"
+  },
+  "hideRelated": {
+    "message": "Videovorschläge ausblenden"
+  },
+  "following": {
+    "message": "Feed „Folge ich“ öffnen"
+  },
+  "hideSuggestions": {
+    "message": "Kontovorschläge ausblenden"
+  },
+  "facebookFeeds": {
+    "message": "Feeds öffnen"
+  },
+  "hideUpsells": {
+    "message": "Kauf- und Installationsangebote ausblenden"
+  },
+  "hidePromoted": {
+    "message": "Gesponserte Beiträge ausblenden"
+  },
+  "hideRecommendations": {
+    "message": "Empfehlungen ausblenden"
+  },
+  "oldReddit": {
+    "message": "Altes Reddit verwenden"
+  },
+  "networkFeed": {
+    "message": "Netzwerk-Feed öffnen"
+  },
+  "hideNews": {
+    "message": "Nachrichtenleiste ausblenden"
+  },
+  "feedChanged": {
+    "message": "Feed gewechselt"
   }
 }

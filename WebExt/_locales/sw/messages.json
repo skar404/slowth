@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Unaweza kuzima hali kali ndani ya dakika ya kwanza."
+  },
+  "autoplayOff": {
+    "message": "Zima uchezaji otomatiki"
+  },
+  "hideRelated": {
+    "message": "Ficha video zilizopendekezwa"
+  },
+  "following": {
+    "message": "Fungua unaowafuata"
+  },
+  "hideSuggestions": {
+    "message": "Ficha akaunti zilizopendekezwa"
+  },
+  "facebookFeeds": {
+    "message": "Fungua milisho"
+  },
+  "hideUpsells": {
+    "message": "Ficha ofa za kununua na kusakinisha"
+  },
+  "hidePromoted": {
+    "message": "Ficha machapisho yanayodhaminiwa"
+  },
+  "hideRecommendations": {
+    "message": "Ficha mapendekezo"
+  },
+  "oldReddit": {
+    "message": "Tumia Reddit ya zamani"
+  },
+  "networkFeed": {
+    "message": "Fungua mlisho wa mtandao"
+  },
+  "hideNews": {
+    "message": "Ficha upau wa habari"
+  },
+  "feedChanged": {
+    "message": "Mlisho umebadilishwa"
   }
 }

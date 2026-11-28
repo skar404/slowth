@@ -2,40 +2,27 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>
-// Request the app before any external resources or page UI are needed.
 if ((navigator.standalone === true || matchMedia('(display-mode: standalone)').matches)
     && new URLSearchParams(location.search).get('setup') !== '1') {
-  // Launch once per foreground visit, including a restored Home Screen window.
-  const launch = () => {
-    if (document.visibilityState === 'hidden' || globalThis.slowthShortcutLaunchAttempted) return;
-    globalThis.slowthShortcutLaunchAttempted = true;
-    location.href = 'slowth://web/tiktok';
-  };
-  const rearm = () => { globalThis.slowthShortcutLaunchAttempted = false; };
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') rearm();
-    else launch();
-  });
-  window.addEventListener('pagehide', rearm);
-  window.addEventListener('pageshow', launch);
-  launch();
+  document.documentElement.classList.add('launching');
 }
 </script>
 <title id="pageTitle">TikTok · Slowth shortcut</title>
 <meta id="description" name="description" content="Add a TikTok shortcut that opens inside Slowth with your blocking settings.">
 <meta name="robots" content="noindex"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TikTok"><meta name="theme-color" content="#f4f5f1">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../assets/tiktok.png">
-<link rel="icon" href="../assets/tiktok.png"><link rel="stylesheet" href="../shortcuts.css?v=7">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../assets/slowth-tiktok-linen.png">
+<link rel="icon" href="../assets/slowth-tiktok-linen.png"><link rel="stylesheet" href="../shortcuts.css?v=9">
+<script src="../launch.js?v=1" defer></script>
 <script src="../translations.js?v=1" defer></script>
-<script src="../shortcuts.js?v=4" defer></script></head>
+<script src="../shortcuts.js?v=5" defer></script></head>
 <body data-service="tiktok" data-name="TikTok"><main>
 <header><a class="brand" href="/">Slowth</a><span id="beta" class="badge">Beta</span></header>
-<img class="icon" src="../assets/tiktok.png" width="100" height="100" alt="TikTok">
+<img class="icon" src="../assets/slowth-tiktok-linen.png" width="100" height="100" alt="TikTok">
 <section id="instructions"><h1 id="title">Add TikTok to your Home Screen</h1>
 <p id="intro" class="muted">Your familiar icon opens the website inside Slowth with your blocking settings.</p>
 <ol class="steps"><li id="step1">Open this page in Safari and tap Share.</li><li id="step2">Choose Add to Home Screen. Keep Open as Web App enabled if that option appears.</li><li id="step3">Tap Add. The name and icon are ready for you.</li></ol></section>
-<section id="launcher" hidden><div class="launch-route" aria-hidden="true"><img class="launch-service" src="../assets/tiktok.png" width="76" height="76" alt=""><div class="launch-waves"><span></span><span></span><span></span></div><img class="launch-slowth" src="../../img/optimized/mascot-96.webp" width="36" height="36" alt=""></div><h1 id="launchTitle">Opening TikTok…</h1><p id="launchContext" class="launch-context">in Slowth</p></section>
+<section id="launcher"><div class="launch-route" aria-hidden="true"><img class="launch-service" src="../assets/slowth-tiktok-linen.png" width="76" height="76" alt=""><div class="launch-waves"><span></span><span></span><span></span></div></div><h1 id="launchTitle">Opening TikTok…</h1><p id="launchContext" class="launch-context">in Slowth</p></section>
 <div class="launch-fallback" hidden><p id="launchHint" class="muted">Redirecting to the app. If it does not open automatically, tap below. iOS may ask for confirmation.</p>
 <a id="open" class="action" hidden>Open in Slowth</a></div>
 <p id="note" class="muted">Requires Slowth with Web apps and iOS 18.4 or later. Sign-ins inside Slowth and Safari are separate.</p>

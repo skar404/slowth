@@ -12,5 +12,4 @@ enum BlockingStorage {
         return IOSPauseDatabase(url: folder.appendingPathComponent("state.sqlite"))
         #endif
     }
-
 }

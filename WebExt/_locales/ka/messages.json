@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "მკაცრი რეჟიმის გამორთვა პირველი წუთის განმავლობაში შეგიძლიათ."
+  },
+  "autoplayOff": {
+    "message": "ავტომატური დაკვრის გამორთვა"
+  },
+  "hideRelated": {
+    "message": "შემოთავაზებული ვიდეოების დამალვა"
+  },
+  "following": {
+    "message": "გამოწერების გახსნა"
+  },
+  "hideSuggestions": {
+    "message": "შემოთავაზებული ანგარიშების დამალვა"
+  },
+  "facebookFeeds": {
+    "message": "ლენტების გახსნა"
+  },
+  "hideUpsells": {
+    "message": "შეძენისა და დაყენების შეთავაზებების დამალვა"
+  },
+  "hidePromoted": {
+    "message": "რეკლამირებული პოსტების დამალვა"
+  },
+  "hideRecommendations": {
+    "message": "რეკომენდაციების დამალვა"
+  },
+  "oldReddit": {
+    "message": "ძველი Reddit-ის გამოყენება"
+  },
+  "networkFeed": {
+    "message": "კონტაქტების ლენტის გახსნა"
+  },
+  "hideNews": {
+    "message": "სიახლეების გვერდითი ზოლის დამალვა"
+  },
+  "feedChanged": {
+    "message": "ლენტა შეიცვალა"
   }
 }

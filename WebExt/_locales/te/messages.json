@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "మొదటి నిమిషంలో కఠిన మోడ్‌ను ఆఫ్ చేయవచ్చు."
+  },
+  "autoplayOff": {
+    "message": "ఆటోప్లే ఆపండి"
+  },
+  "hideRelated": {
+    "message": "సూచించిన వీడియోలను దాచండి"
+  },
+  "following": {
+    "message": "అనుసరిస్తున్న వారి ఫీడ్ తెరవండి"
+  },
+  "hideSuggestions": {
+    "message": "సూచించిన ఖాతాలను దాచండి"
+  },
+  "facebookFeeds": {
+    "message": "ఫీడ్‌లను తెరవండి"
+  },
+  "hideUpsells": {
+    "message": "కొనుగోలు మరియు ఇన్‌స్టాల్ ఆఫర్‌లను దాచండి"
+  },
+  "hidePromoted": {
+    "message": "ప్రచారం చేసిన పోస్ట్‌లను దాచండి"
+  },
+  "hideRecommendations": {
+    "message": "సిఫార్సులను దాచండి"
+  },
+  "oldReddit": {
+    "message": "పాత Reddit వాడండి"
+  },
+  "networkFeed": {
+    "message": "నెట్‌వర్క్ ఫీడ్ తెరవండి"
+  },
+  "hideNews": {
+    "message": "వార్తల సైడ్‌బార్ దాచండి"
+  },
+  "feedChanged": {
+    "message": "ఫీడ్ మారింది"
   }
 }

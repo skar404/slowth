@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Strogi način rada možete isključiti tijekom prve minute."
+  },
+  "autoplayOff": {
+    "message": "Isključi automatsku reprodukciju"
+  },
+  "hideRelated": {
+    "message": "Sakrij predložene videozapise"
+  },
+  "following": {
+    "message": "Otvori praćene račune"
+  },
+  "hideSuggestions": {
+    "message": "Sakrij predložene račune"
+  },
+  "facebookFeeds": {
+    "message": "Otvori sažetke"
+  },
+  "hideUpsells": {
+    "message": "Sakrij ponude za kupnju i instalaciju"
+  },
+  "hidePromoted": {
+    "message": "Sakrij promovirane objave"
+  },
+  "hideRecommendations": {
+    "message": "Sakrij preporuke"
+  },
+  "oldReddit": {
+    "message": "Koristi stari Reddit"
+  },
+  "networkFeed": {
+    "message": "Otvori sažetak mreže"
+  },
+  "hideNews": {
+    "message": "Sakrij bočnu traku s vijestima"
+  },
+  "feedChanged": {
+    "message": "Sažetak je promijenjen"
   }
 }

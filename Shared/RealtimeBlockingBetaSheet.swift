@@ -24,7 +24,6 @@ struct RealtimeBlockingBetaSheet: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    private let sourceCodeURL = URL(string: "https://github.com/skar404/slowth")!
     private let iOSAppStoreURL = URL(string: "https://apps.apple.com/app/id6764140763")!
 
     var body: some View {
@@ -100,7 +99,7 @@ struct RealtimeBlockingBetaSheet: View {
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Link(destination: sourceCodeURL) {
+                                Link(destination: BuildProvenance.repositoryURL) {
                                     Label(AppLocalization.string("View source on GitHub"), systemImage: "arrow.up.right.square")
                                 }
                             }
@@ -184,7 +183,7 @@ struct RealtimeBlockingBetaSheet: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Link(destination: sourceCodeURL) {
+            Link(destination: BuildProvenance.repositoryURL) {
                 Label(AppLocalization.string("View source code"), systemImage: "arrow.up.right.square")
                     .frame(maxWidth: .infinity)
                     .fixedSize(horizontal: false, vertical: true)

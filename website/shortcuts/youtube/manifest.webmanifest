@@ -9,8 +9,8 @@
   "theme_color": "#f4f5f1",
   "icons": [
     {
-      "src": "../assets/youtube.png",
-      "sizes": "512x512",
+      "src": "../assets/slowth-youtube-linen.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     }

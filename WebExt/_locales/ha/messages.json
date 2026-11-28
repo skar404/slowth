@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Za ka iya kashe yanayin tsauri a cikin minti na farko."
+  },
+  "autoplayOff": {
+    "message": "Kashe kunna kai tsaye"
+  },
+  "hideRelated": {
+    "message": "Ɓoye bidiyoyin da aka ba da shawara"
+  },
+  "following": {
+    "message": "Buɗe waɗanda kake bi"
+  },
+  "hideSuggestions": {
+    "message": "Ɓoye asusun da aka ba da shawara"
+  },
+  "facebookFeeds": {
+    "message": "Buɗe jerin saƙonni"
+  },
+  "hideUpsells": {
+    "message": "Ɓoye tayin saye da girkawa"
+  },
+  "hidePromoted": {
+    "message": "Ɓoye saƙonnin talla"
+  },
+  "hideRecommendations": {
+    "message": "Ɓoye shawarwari"
+  },
+  "oldReddit": {
+    "message": "Yi amfani da tsohon Reddit"
+  },
+  "networkFeed": {
+    "message": "Buɗe jerin saƙonnin abokan hulɗa"
+  },
+  "hideNews": {
+    "message": "Ɓoye gefen labarai"
+  },
+  "feedChanged": {
+    "message": "An sauya jerin saƙonni"
   }
 }

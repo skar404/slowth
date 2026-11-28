@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Pots desactivar el mode estricte durant el primer minut."
+  },
+  "autoplayOff": {
+    "message": "Desactiva la reproducció automàtica"
+  },
+  "hideRelated": {
+    "message": "Amaga els vídeos suggerits"
+  },
+  "following": {
+    "message": "Obre els comptes seguits"
+  },
+  "hideSuggestions": {
+    "message": "Amaga els comptes suggerits"
+  },
+  "facebookFeeds": {
+    "message": "Obre els canals"
+  },
+  "hideUpsells": {
+    "message": "Amaga les ofertes de compra i instal·lació"
+  },
+  "hidePromoted": {
+    "message": "Amaga les publicacions promocionades"
+  },
+  "hideRecommendations": {
+    "message": "Amaga les recomanacions"
+  },
+  "oldReddit": {
+    "message": "Utilitza el Reddit antic"
+  },
+  "networkFeed": {
+    "message": "Obre el canal de la xarxa"
+  },
+  "hideNews": {
+    "message": "Amaga la barra de notícies"
+  },
+  "feedChanged": {
+    "message": "S’ha canviat el canal"
   }
 }

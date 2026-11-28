@@ -176,6 +176,39 @@ struct HowItWorksSheet: View {
 }
 
 #if os(iOS)
+struct WebAppsHowItWorksSheet: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    HowItWorksCard(title: String(localized: "Web apps", table: "WebApps"),
+                                   icon: "app.badge", tint: .indigo) {
+                        Text(String(localized: "Tap a site to open it in Slowth. Touch and hold its icon to change blocking settings or add it to your Home Screen.", table: "WebApps"))
+                        Text(String(localized: "Inside Slowth, the extension uses the same blocking settings as in Safari. Screen recording is not required.", table: "WebApps"))
+                    }
+                    HowItWorksCard(title: String(localized: "Add to Home Screen", table: "WebApps"),
+                                   icon: "square.and.arrow.up", tint: .blue) {
+                        Text(String(localized: "Sign in once inside Slowth. Safari sign-ins are separate. Shortcuts open Slowth; deleting a shortcut leaves your account and settings intact.", table: "WebApps"))
+                        Text(String(localized: "Open the setup page in Safari, tap Share, then Add to Home Screen. Keep Open as Web App enabled if that option appears, then tap Add.", table: "WebApps"))
+                    }
+                }
+                .padding(20)
+                .frame(maxWidth: 680, alignment: .leading)
+                .frame(maxWidth: .infinity)
+            }
+            .navigationTitle(AppLocalization.string("How it works"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(AppLocalization.string("Done")) { dismiss() }
+                }
+            }
+        }
+    }
+}
+
 struct ScreenRecordingSafetySheet: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -195,6 +228,20 @@ struct ScreenRecordingSafetySheet: View {
                     HowItWorksCard(title: AppLocalization.string("Stopping screen access"),
                                    icon: "record.circle", tint: .red) {
                         Text(String(localized: "iOS shows a recording indicator while screen access is active. To stop, return to Slowth, tap Stop monitoring, and confirm in the system prompt.", table: "Interface"))
+                    }
+                    HowItWorksCard(title: AppLocalization.string("Open source"),
+                                   icon: "chevron.left.forwardslash.chevron.right", tint: .teal) {
+                        Text(AppLocalization.string("Slowth is open source. You can inspect the app and its on-device detection pipeline on GitHub."))
+                        Text(String(localized: "Apple adapts the build for your device. I can’t independently verify that the installed app matches the published source. To know which code you’re running, build Slowth yourself.", table: "Interface"))
+                        Link(AppLocalization.string("View source code"), destination: BuildProvenance.repositoryURL)
+                            .foregroundStyle(.tint)
+                        if let evidence = BuildProvenance.current {
+                            let format = String(localized: "Build commit · %@", table: "Interface")
+                            Link(String(format: format, evidence.shortCommit), destination: evidence.commitURL)
+                                .foregroundStyle(.tint)
+                        } else {
+                            Text(String(localized: "Xcode build", table: "Interface"))
+                        }
                     }
                 }
                 .padding(20)

@@ -10,10 +10,11 @@ are not used to identify Duo.
   ratio. `ArrangementView` owns exactly one Apps pane and one Safari pane;
   the system can adapt the split to the fold. Each pane scrolls independently.
 - The shared iPad components use Duo-specific **16 pt** outer margins and a
-  **16 pt** horizontal pane gap. Feature cards sit above the headings: below
-  900 pt they scroll horizontally as compact icon-and-text cards (88 pt minimum
-  height at standard text); at 900 pt and
-  above they share a single row.
+  **16 pt** horizontal pane gap. A single horizontally scrollable row above
+  the panes contains the feature, safety, and web help cards. Cards share a
+  width that scales with text size and the height of the tallest card. The
+  same row stays above the section picker when the Settings inspector narrows
+  the content.
 - Outer-display, narrow, compact-size-class and accessibility-text windows
   use Apps / Safari / Settings tabs. Cards begin Apps. Recording and pauses
   stay inside Apps; Strict mode stays in Settings. There are no Duo-only

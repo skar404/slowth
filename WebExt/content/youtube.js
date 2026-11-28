@@ -181,7 +181,8 @@
       // rewriting YouTube's links or interfering with search and video clicks.
       if (redirectedHomeURL !== location.href) {
         redirectedHomeURL = location.href;
-        location.replace(location.origin + "/feed/subscriptions");
+        if (ns.feedFilters) ns.feedFilters.switchFeed("/feed/subscriptions");
+        else location.replace(location.origin + "/feed/subscriptions");
       }
     } else {
       redirectedHomeURL = null;

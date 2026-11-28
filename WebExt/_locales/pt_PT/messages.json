@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Podes desativar o modo estrito durante o primeiro minuto."
+  },
+  "autoplayOff": {
+    "message": "Desativar reprodução automática"
+  },
+  "hideRelated": {
+    "message": "Ocultar vídeos sugeridos"
+  },
+  "following": {
+    "message": "Abrir contas seguidas"
+  },
+  "hideSuggestions": {
+    "message": "Ocultar contas sugeridas"
+  },
+  "facebookFeeds": {
+    "message": "Abrir feeds"
+  },
+  "hideUpsells": {
+    "message": "Ocultar ofertas de compra e instalação"
+  },
+  "hidePromoted": {
+    "message": "Ocultar publicações promovidas"
+  },
+  "hideRecommendations": {
+    "message": "Ocultar recomendações"
+  },
+  "oldReddit": {
+    "message": "Usar o Reddit antigo"
+  },
+  "networkFeed": {
+    "message": "Abrir o feed da rede"
+  },
+  "hideNews": {
+    "message": "Ocultar a barra de notícias"
+  },
+  "feedChanged": {
+    "message": "Feed alterado"
   }
 }

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Bạn có thể tắt chế độ nghiêm ngặt trong phút đầu tiên."
+  },
+  "autoplayOff": {
+    "message": "Tắt tự động phát"
+  },
+  "hideRelated": {
+    "message": "Ẩn video được đề xuất"
+  },
+  "following": {
+    "message": "Mở mục Đang theo dõi"
+  },
+  "hideSuggestions": {
+    "message": "Ẩn tài khoản được đề xuất"
+  },
+  "facebookFeeds": {
+    "message": "Mở bảng feed"
+  },
+  "hideUpsells": {
+    "message": "Ẩn lời mời mua và cài đặt"
+  },
+  "hidePromoted": {
+    "message": "Ẩn bài viết quảng cáo"
+  },
+  "hideRecommendations": {
+    "message": "Ẩn nội dung đề xuất"
+  },
+  "oldReddit": {
+    "message": "Dùng Reddit cũ"
+  },
+  "networkFeed": {
+    "message": "Mở bảng tin mạng lưới"
+  },
+  "hideNews": {
+    "message": "Ẩn thanh tin tức"
+  },
+  "feedChanged": {
+    "message": "Đã đổi bảng tin"
   }
 }

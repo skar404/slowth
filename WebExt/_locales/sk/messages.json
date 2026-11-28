@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Prísny režim môžete vypnúť počas prvej minúty."
+  },
+  "autoplayOff": {
+    "message": "Vypnúť automatické prehrávanie"
+  },
+  "hideRelated": {
+    "message": "Skryť odporúčané videá"
+  },
+  "following": {
+    "message": "Otvoriť sledované"
+  },
+  "hideSuggestions": {
+    "message": "Skryť odporúčané účty"
+  },
+  "facebookFeeds": {
+    "message": "Otvoriť kanály"
+  },
+  "hideUpsells": {
+    "message": "Skryť ponuky nákupu a inštalácie"
+  },
+  "hidePromoted": {
+    "message": "Skryť propagované príspevky"
+  },
+  "hideRecommendations": {
+    "message": "Skryť odporúčania"
+  },
+  "oldReddit": {
+    "message": "Používať starý Reddit"
+  },
+  "networkFeed": {
+    "message": "Otvoriť kanál kontaktov"
+  },
+  "hideNews": {
+    "message": "Skryť panel správ"
+  },
+  "feedChanged": {
+    "message": "Kanál bol zmenený"
   }
 }

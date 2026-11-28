@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "You can turn Strict mode off during the first minute."
+  },
+  "autoplayOff": {
+    "message": "Disable autoplay"
+  },
+  "hideRelated": {
+    "message": "Hide suggested videos"
+  },
+  "following": {
+    "message": "Open Following"
+  },
+  "hideSuggestions": {
+    "message": "Hide suggested accounts"
+  },
+  "facebookFeeds": {
+    "message": "Open Feeds"
+  },
+  "hideUpsells": {
+    "message": "Hide purchase and install offers"
+  },
+  "hidePromoted": {
+    "message": "Hide promoted posts"
+  },
+  "hideRecommendations": {
+    "message": "Hide recommendations"
+  },
+  "oldReddit": {
+    "message": "Use old Reddit"
+  },
+  "networkFeed": {
+    "message": "Open Network feed"
+  },
+  "hideNews": {
+    "message": "Hide news sidebar"
+  },
+  "feedChanged": {
+    "message": "Feed switched"
   }
 }

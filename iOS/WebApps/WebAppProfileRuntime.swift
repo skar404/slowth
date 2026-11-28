@@ -17,6 +17,7 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
     let profile: WebAppProfile
     let dataStore: WKWebsiteDataStore
     let controller: WKWebExtensionController
+    private(set) var trackingRules: WKContentRuleList?
     private(set) var context: WKWebExtensionContext?
     @Published private(set) var protection = WebAppProtectionState.starting
     private var sessions: [WebAppService: WebAppBrowser] = [:]
@@ -72,6 +73,9 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
                     .compactMap({ Bundle(url: $0) }).first(where: {
                         $0.bundleIdentifier == (Bundle.main.bundleIdentifier ?? "") + ".Extension"
                     }) else { throw RuntimeError.extensionMissing }
+            if self.trackingRules == nil {
+                self.trackingRules = try await WebAppTrackingProtection.compile()
+            }
             let webExtension = try await WKWebExtension(appExtensionBundle: bundle)
             try Task.checkCancellation()
             guard self.startupGeneration == generation else { throw CancellationError() }
@@ -117,7 +121,12 @@ final class WebAppProfileRuntime: NSObject, ObservableObject, WKWebExtensionCont
     }
 
     func setVisible(_ browser: WebAppBrowser, _ isVisible: Bool) {
-        if isVisible { focused = browser }
+        if isVisible {
+            focused = browser
+        } else {
+            guard focused === browser else { return }
+            focused = nil
+        }
         watchdog?.cancel()
         guard isVisible else { return }
         requestVerification(force: true)

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "ಮೊದಲ ನಿಮಿಷದೊಳಗೆ ಕಟ್ಟುನಿಟ್ಟಿನ ಮೋಡ್ ಅನ್ನು ಆಫ್ ಮಾಡಬಹುದು."
+  },
+  "autoplayOff": {
+    "message": "ಸ್ವಯಂಚಾಲಿತ ಪ್ಲೇ ಆಫ್ ಮಾಡಿ"
+  },
+  "hideRelated": {
+    "message": "ಸೂಚಿಸಿದ ವೀಡಿಯೊಗಳನ್ನು ಮರೆಮಾಡಿ"
+  },
+  "following": {
+    "message": "ಅನುಸರಿಸುತ್ತಿರುವವರ ಫೀಡ್ ತೆರೆಯಿರಿ"
+  },
+  "hideSuggestions": {
+    "message": "ಸೂಚಿಸಿದ ಖಾತೆಗಳನ್ನು ಮರೆಮಾಡಿ"
+  },
+  "facebookFeeds": {
+    "message": "ಫೀಡ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ"
+  },
+  "hideUpsells": {
+    "message": "ಖರೀದಿ ಮತ್ತು ಸ್ಥಾಪನೆಯ ಕೊಡುಗೆಗಳನ್ನು ಮರೆಮಾಡಿ"
+  },
+  "hidePromoted": {
+    "message": "ಪ್ರಚಾರದ ಪೋಸ್ಟ್‌ಗಳನ್ನು ಮರೆಮಾಡಿ"
+  },
+  "hideRecommendations": {
+    "message": "ಶಿಫಾರಸುಗಳನ್ನು ಮರೆಮಾಡಿ"
+  },
+  "oldReddit": {
+    "message": "ಹಳೆಯ Reddit ಬಳಸಿ"
+  },
+  "networkFeed": {
+    "message": "ಸಂಪರ್ಕಗಳ ಫೀಡ್ ತೆರೆಯಿರಿ"
+  },
+  "hideNews": {
+    "message": "ಸುದ್ದಿ ಸೈಡ್‌ಬಾರ್ ಮರೆಮಾಡಿ"
+  },
+  "feedChanged": {
+    "message": "ಫೀಡ್ ಬದಲಾಗಿದೆ"
   }
 }

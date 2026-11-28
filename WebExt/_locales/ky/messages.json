@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Катуу режимди биринчи мүнөттүн ичинде өчүрө аласыз."
+  },
+  "autoplayOff": {
+    "message": "Автоматтык ойнотууну өчүрүү"
+  },
+  "hideRelated": {
+    "message": "Сунушталган видеолорду жашыруу"
+  },
+  "following": {
+    "message": "Жазылууларды ачуу"
+  },
+  "hideSuggestions": {
+    "message": "Сунушталган аккаунттарды жашыруу"
+  },
+  "facebookFeeds": {
+    "message": "Тасмаларды ачуу"
+  },
+  "hideUpsells": {
+    "message": "Сатып алуу жана орнотуу сунуштарын жашыруу"
+  },
+  "hidePromoted": {
+    "message": "Жарнамаланган билдирүүлөрдү жашыруу"
+  },
+  "hideRecommendations": {
+    "message": "Сунуштарды жашыруу"
+  },
+  "oldReddit": {
+    "message": "Эски Reddit нускасын колдонуу"
+  },
+  "networkFeed": {
+    "message": "Байланыштар тасмасын ачуу"
+  },
+  "hideNews": {
+    "message": "Жаңылыктар каптал тилкесин жашыруу"
+  },
+  "feedChanged": {
+    "message": "Тасма алмашты"
   }
 }

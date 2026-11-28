@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "你可以在第一分钟内关闭严格模式。"
+  },
+  "autoplayOff": {
+    "message": "关闭自动播放"
+  },
+  "hideRelated": {
+    "message": "隐藏推荐视频"
+  },
+  "following": {
+    "message": "打开关注动态"
+  },
+  "hideSuggestions": {
+    "message": "隐藏推荐账号"
+  },
+  "facebookFeeds": {
+    "message": "打开动态流"
+  },
+  "hideUpsells": {
+    "message": "隐藏购买和安装提示"
+  },
+  "hidePromoted": {
+    "message": "隐藏推广帖子"
+  },
+  "hideRecommendations": {
+    "message": "隐藏推荐内容"
+  },
+  "oldReddit": {
+    "message": "使用旧版 Reddit"
+  },
+  "networkFeed": {
+    "message": "打开人脉动态"
+  },
+  "hideNews": {
+    "message": "隐藏新闻侧栏"
+  },
+  "feedChanged": {
+    "message": "已切换动态"
   }
 }

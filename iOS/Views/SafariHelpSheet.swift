@@ -24,13 +24,14 @@ struct SafariHelpSheet: View {
                         VStack(alignment: .leading) {
                             Text(String(localized: "Enable Slowth in Safari"))
                                 .font(.title3.weight(.semibold))
-                            Text(String(localized: "Apple doesn't allow apps to deep-link directly into the Safari extensions list. Follow the steps below."))
+                            Text(AppLocalization.string("Safari blocking works on websites without screen recording."))
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
                     }
 
                     VStack(alignment: .leading, spacing: 14) {
+                        Text(AppLocalization.string("Enable Slowth in Safari, then choose what to hide or block for each website."))
                         StepRow(number: 1, title: String(localized: "Open Settings"),
                                 detail: String(localized: "Tap the button below — it opens iOS Settings."))
                         StepRow(number: 2, title: String(localized: "Go to Apps → Safari → Extensions"),

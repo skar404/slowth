@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "প্রথম মিনিটের মধ্যে কঠোর মোড বন্ধ করতে পারবেন।"
+  },
+  "autoplayOff": {
+    "message": "স্বয়ংক্রিয় প্লে বন্ধ করুন"
+  },
+  "hideRelated": {
+    "message": "প্রস্তাবিত ভিডিও লুকান"
+  },
+  "following": {
+    "message": "অনুসরণ করা অ্যাকাউন্টের ফিড খুলুন"
+  },
+  "hideSuggestions": {
+    "message": "প্রস্তাবিত অ্যাকাউন্ট লুকান"
+  },
+  "facebookFeeds": {
+    "message": "ফিড খুলুন"
+  },
+  "hideUpsells": {
+    "message": "কেনা ও ইনস্টল করার অফার লুকান"
+  },
+  "hidePromoted": {
+    "message": "প্রচারিত পোস্ট লুকান"
+  },
+  "hideRecommendations": {
+    "message": "সুপারিশ লুকান"
+  },
+  "oldReddit": {
+    "message": "পুরোনো Reddit ব্যবহার করুন"
+  },
+  "networkFeed": {
+    "message": "নেটওয়ার্ক ফিড খুলুন"
+  },
+  "hideNews": {
+    "message": "সংবাদের সাইডবার লুকান"
+  },
+  "feedChanged": {
+    "message": "ফিড বদলানো হয়েছে"
   }
 }

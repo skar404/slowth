@@ -26,7 +26,7 @@ Selection limit — 2026.11.5
   and verify blocking/pause/restore in the selected apps.
 
 Per-app settings — 2026.11.5
-- Apps now opens an individual editor from each native token label. New apps
+- Tap a selected app in Apps to expand its blocking settings inline. New apps
   block short videos and stories; soft blocking starts off. An empty list has
   only the selection card. The icon experiment lives in Settings / Debug.
 - groupedApps.settings.v2 stores version 2 and opaque-token settings. Migration

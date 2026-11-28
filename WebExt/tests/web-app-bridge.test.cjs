@@ -27,7 +27,7 @@ function harness({ embedded = true, ack = true, live = true } = {}) {
     connectNative(name) { assert.equal(name, 'slowth.web-apps'); connections++; return port; },
     onInstalled: { addListener() {} }, onMessage: { addListener() {} }
   };
-  vm.runInNewContext(read('background.js'), {
+  vm.runInNewContext(read('config.js') + read('background.js'), {
     URL, Unscroll: ns, setTimeout(fn) { timers.push(fn); return fn; }, clearTimeout() {},
     browser: { runtime, tabs: {
       query(_, cb) { cb([{id: 1, url: 'https://www.youtube.com/'}, {id: 2, url: 'https://accounts.google.com/'}]); },

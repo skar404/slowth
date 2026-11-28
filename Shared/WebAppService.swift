@@ -2,7 +2,7 @@ import Foundation
 
 /// Closed catalog: shortcuts can select a service, never supply an arbitrary URL.
 enum WebAppService: String, CaseIterable, Identifiable {
-    case instagram, youtube, tiktok, facebook, x
+    case youtube, instagram, tiktok, facebook, x, threads, reddit, linkedin
 
     var id: String { rawValue }
     var title: String {
@@ -12,6 +12,9 @@ enum WebAppService: String, CaseIterable, Identifiable {
         case .tiktok: return "TikTok"
         case .facebook: return "Facebook"
         case .x: return "X"
+        case .threads: return "Threads"
+        case .reddit: return "Reddit"
+        case .linkedin: return "LinkedIn"
         }
     }
     var url: URL {

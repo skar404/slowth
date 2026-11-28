@@ -5,39 +5,89 @@ const fs = require('node:fs');
 const path = require('node:path');
 const code = fs.readFileSync(path.join(__dirname, '../../website/shortcuts/shortcuts.js'), 'utf8');
 const translations = fs.readFileSync(path.join(__dirname, '../../website/shortcuts/translations.js'), 'utf8');
-function run({standalone = false, search = '', language = 'en', languages, service = 'instagram', displayMode = false} = {}) {
+const shortcutDir = path.join(__dirname, '../../website/shortcuts');
+const launchCode = fs.readFileSync(path.join(shortcutDir, 'launch.js'), 'utf8');
+const services = ['instagram', 'youtube', 'tiktok', 'facebook', 'x', 'threads', 'reddit', 'linkedin'];
+
+function run({standalone = false, search = '', language = 'en', languages, service = 'instagram',
+              displayMode = false, visibility = 'visible'} = {}) {
+  const page = services.includes(service) ? service : 'instagram';
+  const html = fs.readFileSync(path.join(shortcutDir, page, 'index.html'), 'utf8');
+  const inline = html.match(/<script>([\s\S]*?)<\/script>/)[1];
   const elements = new Map();
-  const document = {body: {dataset: {service, name: 'Instagram'}, classList: {add() {}}}, documentElement: {}, getElementById(id) {
-    if (!elements.has(id)) elements.set(id, {hidden: id === 'launcher' || id === 'open'});
-    return elements.get(id);
-  }};
-  const location = {search, href: 'https://slowth.app/shortcuts/instagram/'};
-  vm.runInNewContext(translations + code, {document, navigator: {standalone, language, languages}, matchMedia: () => ({matches: displayMode}), location, URLSearchParams});
-  return {document, location, elements};
+  const classes = new Set();
+  const document = Object.assign(new EventTarget(), {
+    visibilityState: visibility,
+    body: {dataset: {service, name: 'Instagram'}},
+    documentElement: {classList: {add: name => classes.add(name), contains: name => classes.has(name)}},
+    getElementById(id) {
+      if (!elements.has(id)) elements.set(id, {hidden: id === 'open'});
+      return elements.get(id);
+    }
+  });
+  const window = new EventTarget();
+  const frames = new Map();
+  const timers = new Map();
+  const launches = [];
+  let nextId = 0;
+  const location = {
+    search,
+    get href() { return launches.at(-1) ?? 'https://slowth.app/shortcuts/instagram/'; },
+    set href(url) { launches.push(url); }
+  };
+  const context = vm.createContext({
+    document, window, navigator: {standalone, language, languages}, location, URLSearchParams,
+    matchMedia: () => ({matches: displayMode}),
+    requestAnimationFrame(fn) { frames.set(++nextId, fn); return nextId; },
+    cancelAnimationFrame(id) { frames.delete(id); },
+    setTimeout(fn, delay) { assert.equal(delay, 2000); timers.set(++nextId, fn); return nextId; },
+    clearTimeout(id) { timers.delete(id); }
+  });
+  vm.runInContext(inline, context);
+  vm.runInContext(launchCode, context);
+  vm.runInContext(translations + code, context);
+  function tick(queue) {
+    for (const [id, fn] of [...queue]) {
+      if (queue.delete(id)) fn();
+    }
+  }
+  return {document, window, classes, location, elements, launches, frames, timers,
+    frame: () => tick(frames), retry: () => tick(timers),
+    visibility(state) {
+      document.visibilityState = state;
+      document.dispatchEvent(new Event('visibilitychange'));
+    }
+  };
 }
 test('installation page does not redirect before Add to Home Screen', () => {
   const r = run();
   assert.equal(r.location.href, 'https://slowth.app/shortcuts/instagram/');
-  assert.equal(r.elements.get('open').href, undefined);
-  assert.equal(r.elements.get('open').hidden, true);
+  assert.equal(r.document.getElementById('open').href, undefined);
+  assert.equal(r.document.getElementById('open').hidden, true);
 });
 test('standalone launch selects service and shows the launch status', () => {
   const r = run({standalone: true, service: 'youtube'});
+  assert.ok(r.classes.has('launching'));
+  assert.equal(r.launches.length, 0);
+  r.frame();
+  assert.equal(r.launches.length, 0);
+  r.frame();
   assert.equal(r.location.href, 'slowth://web/youtube');
-  assert.equal(r.elements.get('instructions').hidden, true);
-  assert.equal(r.elements.get('launcher').hidden, false);
   assert.equal(r.elements.get('open').hidden, false);
 });
 test('browser launch URL stays on installation instructions without an app link', () => {
   const r = run({search: '?launch=1'});
-  assert.equal(r.elements.has('launcher'), false);
-  assert.equal(r.elements.get('open').hidden, true);
-  assert.equal(r.elements.get('open').href, undefined);
+  assert.equal(r.classes.has('launching'), false);
+  assert.equal(r.frames.size, 0);
+  assert.equal(r.document.getElementById('open').hidden, true);
+  assert.equal(r.document.getElementById('open').href, undefined);
   assert.match(r.location.href, /^https:/);
 });
 test('standalone display mode launches each service without requiring a query flag', () => {
-  for (const service of ['instagram', 'youtube', 'tiktok', 'facebook', 'x']) {
+  for (const service of services) {
     const r = run({displayMode: true, service});
+    r.frame();
+    r.frame();
     assert.equal(r.location.href, `slowth://web/${service}`);
     assert.equal(r.elements.get('open').hidden, false);
   }
@@ -52,71 +102,51 @@ test('Russian instructions and unsupported service', () => {
 test('installed shortcut can reopen instructions without relaunching the app', () => {
   const r = run({standalone: true, search: '?setup=1'});
   assert.match(r.location.href, /^https:/);
-  assert.equal(r.elements.has('launcher'), false);
-  assert.equal(r.elements.get('open').hidden, true);
-  assert.equal(r.elements.get('open').href, undefined);
+  assert.equal(r.classes.has('launching'), false);
+  assert.equal(r.frames.size, 0);
+  assert.equal(r.document.getElementById('open').hidden, true);
+  assert.equal(r.document.getElementById('open').href, undefined);
 });
 
 
-test('installed shortcuts launch before external assets and do not launch twice', () => {
-  for (const service of ['instagram', 'youtube', 'tiktok', 'facebook', 'x']) {
-    const html = fs.readFileSync(path.join(__dirname, `../../website/shortcuts/${service}/index.html`), 'utf8');
-    const inline = html.match(/<script>([\s\S]*?)<\/script>/);
-    assert.ok(inline, service);
-    assert.ok(html.indexOf(inline[0]) < html.indexOf('<link'), 'launch precedes styles/icons/manifest');
-    assert.ok(html.indexOf(inline[0]) < html.indexOf('<script src='), 'launch precedes external JS');
-    for (const standalone of [false, true]) for (const search of ['', '?launch=1', '?setup=1']) {
-      const launches = [];
-      const documentEvents = new Map();
-      const windowEvents = new Map();
-      const context = vm.createContext({
-        document: {visibilityState: 'visible', addEventListener(type, listener) { documentEvents.set(type, listener); }},
-        window: {addEventListener(type, listener) { windowEvents.set(type, listener); }},
-        navigator: {standalone, language: 'en'},
-        matchMedia: () => ({matches: false}), URLSearchParams,
-        location: {search, set href(value) { launches.push(value); }}
-      });
-      // The document exists, but its body and external assets do not exist yet.
-      vm.runInContext(inline[1], context);
-      const expected = standalone && search !== '?setup=1' ? [`slowth://web/${service}`] : [];
-      assert.deepEqual(launches, expected);
-      const elements = new Map();
-      Object.assign(context.document, {
-        body: {dataset: {service, name: service}, classList: {add() {}}}, documentElement: {},
-        getElementById(id) {
-          if (!elements.has(id)) elements.set(id, {});
-          return elements.get(id);
-        }
-      });
-      vm.runInContext(translations + code, context);
-      assert.deepEqual(launches, expected, 'deferred UI must not repeat the automatic launch');
-      const emit = (events, type) => events.get(type)?.();
-      emit(windowEvents, 'pageshow');
-      emit(documentEvents, 'visibilitychange');
-      assert.deepEqual(launches, expected, 'initial lifecycle events must not duplicate the launch');
-      for (let visit = 2; visit <= 4; visit++) {
-        context.document.visibilityState = 'hidden';
-        emit(documentEvents, 'visibilitychange');
-        emit(windowEvents, 'pagehide');
-        emit(windowEvents, 'pageshow');
-        assert.equal(launches.length, expected.length * (visit - 1), 'never launch in the background');
-        context.document.visibilityState = 'visible';
-        emit(documentEvents, 'visibilitychange');
-        emit(windowEvents, 'pageshow');
-        assert.deepEqual(launches, Array(visit).fill(expected).flat(), 'each foreground visit launches exactly once');
-      }
-      // Back-forward cache can restore a document through page events alone.
-      emit(windowEvents, 'pagehide');
-      emit(windowEvents, 'pageshow');
-      assert.deepEqual(launches, Array(5).fill(expected).flat());
-      // A suspended standalone window may only emit visibility changes.
-      context.document.visibilityState = 'hidden';
-      emit(documentEvents, 'visibilitychange');
-      context.document.visibilityState = 'visible';
-      emit(documentEvents, 'visibilitychange');
-      emit(documentEvents, 'visibilitychange');
-      assert.deepEqual(launches, Array(6).fill(expected).flat());
+test('foreground retries stop when hidden and restart after a painted frame on return', () => {
+  const r = run({standalone: true, visibility: 'hidden'});
+  assert.equal(r.frames.size, 0);
+  const show = () => r.window.dispatchEvent(new Event('pageshow'));
+  const hide = () => r.window.dispatchEvent(new Event('pagehide'));
+  function assertStopped() {
+    assert.equal(r.frames.size, 0);
+    assert.equal(r.timers.size, 0);
+  }
+  r.visibility('visible');
+  r.frame();
+  r.visibility('hidden');
+  assertStopped();
+  assert.equal(r.launches.length, 0);
+
+  for (let visit = 0; visit < 3; visit++) {
+    r.visibility('visible');
+    show();
+    show();
+    assert.equal(r.frames.size, 1);
+    r.frame();
+    assert.equal(r.launches.length, visit * 5);
+    r.frame();
+    for (let retry = 1; retry <= 4; retry++) {
+      show();
+      r.visibility('visible');
+      assert.equal(r.frames.size, 0);
+      assert.equal(r.timers.size, 1);
+      r.retry();
     }
+    assert.deepEqual(r.launches, Array((visit + 1) * 5).fill('slowth://web/instagram'));
+    if (visit === 0) {
+      r.visibility('hidden'); // Suspension with only a visibility event.
+    } else {
+      hide(); // Back-forward cache, even if visibility still reads visible.
+      r.visibility('visible');
+    }
+    assertStopped();
   }
 });
 
@@ -136,6 +166,8 @@ test('language preferences resolve regions, scripts, RTL and unsupported languag
   assert.equal(ru.elements.get('launchTitle').textContent, 'Открываем Instagram…');
   assert.equal(ru.elements.get('launchContext').textContent, 'в Slowth');
   assert.equal(ru.elements.get('setup').href, '?setup=1&lang=ru');
+  ru.frame();
+  ru.frame();
   assert.equal(ru.location.href, 'slowth://web/instagram');
 });
 

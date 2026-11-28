@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Maaari mong i-off ang Strict mode sa loob ng unang minuto."
+  },
+  "autoplayOff": {
+    "message": "I-off ang autoplay"
+  },
+  "hideRelated": {
+    "message": "Itago ang mga iminumungkahing video"
+  },
+  "following": {
+    "message": "Buksan ang Sinusundan"
+  },
+  "hideSuggestions": {
+    "message": "Itago ang mga iminumungkahing account"
+  },
+  "facebookFeeds": {
+    "message": "Buksan ang mga feed"
+  },
+  "hideUpsells": {
+    "message": "Itago ang mga alok na bumili at mag-install"
+  },
+  "hidePromoted": {
+    "message": "Itago ang mga pino-promote na post"
+  },
+  "hideRecommendations": {
+    "message": "Itago ang mga rekomendasyon"
+  },
+  "oldReddit": {
+    "message": "Gamitin ang lumang Reddit"
+  },
+  "networkFeed": {
+    "message": "Buksan ang feed ng network"
+  },
+  "hideNews": {
+    "message": "Itago ang sidebar ng balita"
+  },
+  "feedChanged": {
+    "message": "Napalitan ang feed"
   }
 }

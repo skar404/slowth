@@ -50,7 +50,10 @@
       : feature === "feed" ? "blockInfiniteFeed"
       : feature === "hideHomeFeed" ? "hideHomeFeed"
       : feature === "stories" ? "stories"
-      : site === "youtube" ? "blockShorts" : site === "x" ? "blockExplore" : "blockReels");
+      : feature === "shorts" ? (site === "youtube" ? "blockShorts" : site === "x" ? "blockExplore" : "blockReels") : feature);
+    if (site === "linkedin" && feature === "hidePromoted") {
+      label.textContent += " · " + t("hideRecommendations");
+    }
     const input = document.createElement("input");
     input.type = "checkbox";
     input.setAttribute("role", "switch");
@@ -70,7 +73,7 @@
     heading.className = "site-heading";
     const icon = document.createElement("img");
     icon.className = "site-icon";
-    icon.src = `images/sites/${site}.svg`;
+    icon.src = `images/sites/${site}.${ns.LEGACY_SITES.includes(site) ? "svg" : "png"}`;
     icon.alt = "";
     icon.width = 32;
     icon.height = 32;
@@ -131,7 +134,6 @@
   }
 
   let lastState = null;
-
   function updateStrictSwitch(state) {
     const strictActive = (state?.strictModeUntil || 0) * 1000 > Date.now();
     strictToggle.checked = strictActive;
@@ -155,7 +157,7 @@
 
     for (const input of sitesEl.querySelectorAll("input")) {
       const settings = ns.normalizeSiteSettings(input.dataset.site, state?.toggles?.[input.dataset.site]);
-      input.checked = settings[input.dataset.feature];
+      input.checked = !!settings[input.dataset.feature];
       input.disabled = (strictActive &&
         (input.dataset.feature === "all" || input.checked))
         || (input.dataset.feature !== "all" && settings.all);

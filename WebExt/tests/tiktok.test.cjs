@@ -217,12 +217,12 @@ test('blocked gestures cannot scroll the feed; the overlay remains interactive',
 test('defaults and legacy migration retain TikTok choices without enabling the new limit', async () => {
   const h = await harness();
   const ns = h.context.Unscroll;
-  assert.deepEqual(plain(ns.SITE_FEATURES.tiktok), ['feed', 'all']);
+  assert.deepEqual(plain(ns.SITE_FEATURES.tiktok), ['feed', 'following', 'hideUpsells', 'all']);
   for (const old of [undefined, 'off', 'shorts', 'feed', 'all', true, false, { all: false }]) {
     assert.equal(ns.normalizeSiteSettings('tiktok', old).feed, false);
   }
   assert.equal(ns.DEFAULT_TOGGLES.tiktok.all, true);
   for (const feed of [true, false]) for (const all of [true, false]) {
-    assert.deepEqual(plain(ns.normalizeSiteSettings('tiktok', { feed, all })), { shorts: false, feed, all });
+    assert.deepEqual(plain(ns.normalizeSiteSettings('tiktok', { feed, all })), { shorts: false, feed, all, following: false, hideUpsells: false });
   }
 });

@@ -1,6 +1,11 @@
 import SwiftUI
 
+extension EnvironmentValues {
+    @Entry var featureRowCardWidth: CGFloat? = nil
+}
+
 struct IOSFeatureCard: View {
+    @Environment(\.featureRowCardWidth) private var rowCardWidth
     @ScaledMetric(relativeTo: .title3) private var cardWidth = 180.0
     let title: String
     let subtitle: String
@@ -61,7 +66,8 @@ struct IOSFeatureCard: View {
             }
             .foregroundStyle(.white)
             .padding(16)
-            .frame(maxWidth: .infinity, minHeight: 88, alignment: .leading)
+            .frame(width: rowCardWidth, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: 88, maxHeight: rowCardWidth == nil ? nil : .infinity, alignment: .leading)
             .background(LinearGradient(colors: gradient, startPoint: .topLeading, endPoint: .bottomTrailing))
             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         } else {

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Anda dapat menonaktifkan mode ketat dalam satu menit pertama."
+  },
+  "autoplayOff": {
+    "message": "Matikan putar otomatis"
+  },
+  "hideRelated": {
+    "message": "Sembunyikan video yang disarankan"
+  },
+  "following": {
+    "message": "Buka Mengikuti"
+  },
+  "hideSuggestions": {
+    "message": "Sembunyikan akun yang disarankan"
+  },
+  "facebookFeeds": {
+    "message": "Buka beranda feed"
+  },
+  "hideUpsells": {
+    "message": "Sembunyikan tawaran pembelian dan pemasangan"
+  },
+  "hidePromoted": {
+    "message": "Sembunyikan postingan promosi"
+  },
+  "hideRecommendations": {
+    "message": "Sembunyikan rekomendasi"
+  },
+  "oldReddit": {
+    "message": "Gunakan Reddit lama"
+  },
+  "networkFeed": {
+    "message": "Buka feed jaringan"
+  },
+  "hideNews": {
+    "message": "Sembunyikan bilah berita"
+  },
+  "feedChanged": {
+    "message": "Feed telah diganti"
   }
 }

@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Առաջին րոպեի ընթացքում կարող եք անջատել խիստ ռեժիմը։"
+  },
+  "autoplayOff": {
+    "message": "Անջատել ավտոմատ նվագարկումը"
+  },
+  "hideRelated": {
+    "message": "Թաքցնել առաջարկվող տեսանյութերը"
+  },
+  "following": {
+    "message": "Բացել բաժանորդագրությունները"
+  },
+  "hideSuggestions": {
+    "message": "Թաքցնել առաջարկվող հաշիվները"
+  },
+  "facebookFeeds": {
+    "message": "Բացել ժապավենները"
+  },
+  "hideUpsells": {
+    "message": "Թաքցնել գնման և տեղադրման առաջարկները"
+  },
+  "hidePromoted": {
+    "message": "Թաքցնել գովազդային գրառումները"
+  },
+  "hideRecommendations": {
+    "message": "Թաքցնել առաջարկները"
+  },
+  "oldReddit": {
+    "message": "Օգտագործել հին Reddit-ը"
+  },
+  "networkFeed": {
+    "message": "Բացել կապերի ժապավենը"
+  },
+  "hideNews": {
+    "message": "Թաքցնել նորությունների կողագոտին"
+  },
+  "feedChanged": {
+    "message": "Ժապավենը փոխվեց"
   }
 }

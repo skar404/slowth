@@ -1,6 +1,1173 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "Safari extension": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة Safari"
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة Safari"
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пашырэнне Safari"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari এক্সটেনশন"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensió de Safari"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozšíření Safari"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-udvidelse"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-Erweiterung"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επέκταση Safari"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari extension"
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari extension"
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari extension"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari extension"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensión de Safari"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensión de Safari"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-laajennus"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extension ng Safari"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extension Safari"
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extension Safari"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari એક્સ્ટેન્શન"
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ƙarin Safari"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הרחבה ל־Safari"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari एक्सटेंशन"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proširenje za Safari"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-bővítmény"
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-ի ընդլայնում"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekstensi Safari"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estensione Safari"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari機能拡張"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-ს გაფართოება"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari кеңейтімі"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari ವಿಸ್ತರಣೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari 확장 프로그램"
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari кеңейтүүсү"
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„Safari“ plėtinys"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari എക്സ്റ്റൻഷൻ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari एक्स्टेन्शन"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sambungan Safari"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-utvidelse"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari एक्सटेन्सन"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-extensie"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari ଏକ୍ସଟେନସନ୍"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari ਐਕਸਟੈਂਸ਼ਨ"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari ایکسٹینشن"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extension for Safari"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozszerzenie Safari"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensão do Safari"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensão do Safari"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensie Safari"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расширение Safari"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozšírenie Safari"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Razširitev za Safari"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari-tillägg"
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kiendelezi cha Safari"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari நீட்டிப்பு"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari పొడిగింపు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ส่วนขยาย Safari"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari genişletmesi"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Розширення Safari"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari ایکسٹینشن"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiện ích mở rộng Safari"
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari 延伸功能"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari 扩展"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safari 延伸功能"
+          }
+        }
+      }
+    },
+    "Tap a site to open it in Slowth. Touch and hold its icon to change blocking settings or add it to your Home Screen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضغط على موقع لفتحه في Slowth. المس أيقونته مطولًا لتغيير إعدادات الحظر أو لإضافته إلى الشاشة الرئيسية."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضغط على موقع لفتحه في Slowth. المس أيقونته مطولًا لتغيير إعدادات الحظر أو لإضافته إلى الشاشة الرئيسية."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Націсніце на значок сайта, каб адкрыць яго ў Slowth. Утрымлівайце значок, каб змяніць налады блакіроўкі або дадаць ярлык на галоўны экран."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "কোনো সাইটে ট্যাপ করে সেটি Slowth-এ খুলুন। ব্লক করার সেটিংস বদলাতে বা হোম স্ক্রিনে সাইটটি যোগ করতে এর আইকন চেপে ধরে রাখুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca un lloc web per obrir-lo a Slowth. Mantén premuda la seva icona per canviar els ajustos de bloqueig o afegir-lo a la pantalla d’inici."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klepnutím na web ho otevřete ve Slowth. Podržením jeho ikony můžete změnit nastavení blokování nebo web přidat na plochu."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryk på et websted for at åbne det i Slowth. Hold fingeren på ikonet for at ændre blokeringsindstillingerne eller føje webstedet til hjemmeskærmen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippe auf eine Website, um sie in Slowth zu öffnen. Halte ihr Symbol gedrückt, um die Blockiereinstellungen zu ändern oder die Website zum Home-Bildschirm hinzuzufügen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πάτησε έναν ιστότοπο για να τον ανοίξεις στο Slowth. Κράτησε πατημένο το εικονίδιό του για να αλλάξεις τις ρυθμίσεις αποκλεισμού ή να τον προσθέσεις στην οθόνη Αφετηρίας."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a site to open it in Slowth. Touch and hold its icon to change blocking settings or add it to your Home Screen."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a site to open it in Slowth. Touch and hold its icon to change blocking settings or add it to your Home Screen."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a site to open it in Slowth. Touch and hold its icon to change blocking settings or add it to your Home Screen."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a site to open it in Slowth. Touch and hold its icon to change blocking settings or add it to your Home Screen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca un sitio para abrirlo en Slowth. Mantén pulsado su icono para cambiar los ajustes de bloqueo o añadirlo a la pantalla de inicio."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca un sitio para abrirlo en Slowth. Mantén pulsado su icono para cambiar los ajustes de bloqueo o añadirlo a la pantalla de inicio."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avaa sivusto Slowthissa napauttamalla sitä. Pidä sivuston kuvaketta painettuna, jos haluat muuttaa estoasetuksia tai lisätä sivuston Koti-valikkoon."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I-tap ang isang site para buksan ito sa Slowth. Pindutin nang matagal ang icon nito para baguhin ang mga setting ng pag-block o idagdag ang site sa Home Screen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez un site pour l’ouvrir dans Slowth. Maintenez le doigt sur son icône pour modifier les réglages de blocage ou l’ajouter à l’écran d’accueil."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez un site pour l’ouvrir dans Slowth. Maintenez le doigt sur son icône pour modifier les réglages de blocage ou l’ajouter à l’écran d’accueil."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "કોઈ સાઇટને Slowthમાં ખોલવા તેના પર ટૅપ કરો. બ્લોકિંગ સેટિંગ્સ બદલવા અથવા સાઇટને હોમ સ્ક્રીન પર ઉમેરવા તેના આઇકનને દબાવી રાખો."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taɓa shafi don buɗe shi a Slowth. Taɓa alamarsa ka riƙe don sauya saitunan toshewa ko ƙara shi a allon farko."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הקשה על אתר תפתח אותו ב־Slowth. לחיצה ממושכת על הסמל שלו מאפשרת לשנות את הגדרות החסימה או להוסיף אותו למסך הבית."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "किसी साइट को Slowth में खोलने के लिए उस पर टैप करें। ब्लॉकिंग सेटिंग्स बदलने या साइट को होम स्क्रीन पर जोड़ने के लिए उसके आइकॉन को दबाकर रखें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dodirnite web-mjesto da biste ga otvorili u aplikaciji Slowth. Zadržite prst na njegovoj ikoni da biste promijenili postavke blokiranja ili ga dodali na početni zaslon."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koppints egy webhelyre a Slowth-ban való megnyitásához. Tartsd nyomva az ikonját a blokkolási beállítások módosításához vagy a webhely Főképernyőhöz adásához."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Հպեք կայքին՝ այն Slowth-ում բացելու համար։ Սեղմած պահեք դրա պատկերակը՝ արգելափակման կարգավորումները փոխելու կամ կայքը գլխավոր էկրանին ավելացնելու համար։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ketuk situs untuk membukanya di Slowth. Sentuh dan tahan ikonnya untuk mengubah pengaturan pemblokiran atau menambahkannya ke Layar Utama."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca un sito per aprirlo in Slowth. Tieni premuta la sua icona per modificare le impostazioni di blocco o aggiungerlo alla schermata Home."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サイトをタップすると Slowth で開きます。アイコンを長押しすると、ブロック設定を変更したり、サイトをホーム画面に追加したりできます。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "შეეხეთ საიტს Slowth-ში მის გასახსნელად. ხატულაზე თითის დაჭერითა და შეყოვნებით შეგიძლიათ შეცვალოთ დაბლოკვის პარამეტრები ან საიტი მთავარ ეკრანზე დაამატოთ."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сайтты Slowth ішінде ашу үшін оны түртіңіз. Бұғаттау параметрлерін өзгерту немесе сайтты негізгі экранға қосу үшін оның белгішесін басып тұрыңыз."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸೈಟ್ ಅನ್ನು Slowth ನಲ್ಲಿ ತೆರೆಯಲು ಅದನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ. ನಿರ್ಬಂಧಿಸುವ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಬದಲಾಯಿಸಲು ಅಥವಾ ಸೈಟ್ ಅನ್ನು ಹೋಮ್ ಸ್ಕ್ರೀನ್‌ಗೆ ಸೇರಿಸಲು ಅದರ ಐಕಾನ್ ಅನ್ನು ಒತ್ತಿ ಹಿಡಿಯಿರಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사이트를 탭하면 Slowth에서 열립니다. 아이콘을 길게 누르면 차단 설정을 변경하거나 사이트를 홈 화면에 추가할 수 있습니다."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сайтты Slowth ичинде ачуу үчүн аны таптаңыз. Бөгөттөө жөндөөлөрүн өзгөртүү же сайтты башкы экранга кошуу үчүн анын сөлөкөтүн басып туруңуз."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palieskite svetainę, kad ją atidarytumėte programoje „Slowth“. Palaikykite nuspaudę jos piktogramą, jei norite pakeisti blokavimo nustatymus arba pridėti svetainę prie pradžios ekrano."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഒരു സൈറ്റ് Slowth-ൽ തുറക്കാൻ അതിൽ ടാപ്പ് ചെയ്യുക. ബ്ലോക്കിങ് ക്രമീകരണങ്ങൾ മാറ്റാനോ സൈറ്റ് ഹോം സ്ക്രീനിൽ ചേർക്കാനോ അതിന്റെ ഐക്കൺ അമർത്തിപ്പിടിക്കുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "साइट Slowth मध्ये उघडण्यासाठी तिच्यावर टॅप करा. ब्लॉकिंग सेटिंग्ज बदलण्यासाठी किंवा साइट होम स्क्रीनवर जोडण्यासाठी तिचे चिन्ह दाबून ठेवा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ketik laman untuk membukanya dalam Slowth. Sentuh dan tahan ikonnya untuk menukar tetapan sekatan atau menambah laman itu ke Skrin Utama."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trykk på et nettsted for å åpne det i Slowth. Hold fingeren på ikonet for å endre blokkeringsinnstillingene eller legge nettstedet til på Hjem-skjermen."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कुनै साइटलाई Slowth मा खोल्न त्यसमा ट्याप गर्नुहोस्। ब्लक गर्ने सेटिङ बदल्न वा साइटलाई होम स्क्रिनमा थप्न त्यसको आइकन थिचिराख्नुहोस्।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tik op een website om deze in Slowth te openen. Houd het symbool ingedrukt om de blokkeerinstellingen te wijzigen of de website op het beginscherm te zetten."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "କୌଣସି ସାଇଟ୍‌କୁ Slowth ରେ ଖୋଲିବା ପାଇଁ ଏହା ଉପରେ ଟ୍ୟାପ୍ କରନ୍ତୁ। ବ୍ଲକିଂ ସେଟିଂସ୍ ବଦଳାଇବାକୁ କିମ୍ବା ସାଇଟ୍‌କୁ ହୋମ୍ ସ୍କ୍ରିନ୍‌ରେ ଯୋଡ଼ିବାକୁ ଏହାର ଆଇକନ୍‌କୁ ଚାପି ଧରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕਿਸੇ ਸਾਈਟ ਨੂੰ Slowth ਵਿੱਚ ਖੋਲ੍ਹਣ ਲਈ ਉਸ ’ਤੇ ਟੈਪ ਕਰੋ। ਬਲੌਕਿੰਗ ਸੈਟਿੰਗਾਂ ਬਦਲਣ ਜਾਂ ਸਾਈਟ ਨੂੰ ਹੋਮ ਸਕ੍ਰੀਨ ’ਤੇ ਜੋੜਨ ਲਈ ਉਸ ਦੇ ਆਈਕਨ ਨੂੰ ਦਬਾ ਕੇ ਰੱਖੋ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سائٹ نوں Slowth وچ کھولن لئی اوہدے اُتے ٹیپ کرو۔ بلاک کرن دیاں سیٹنگاں بدلن یا سائٹ نوں ہوم سکرین اُتے شامل کرن لئی اوہدا آئیکن دبا کے رکھو۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap one site to open am for Slowth. Press and hold di icon to change wetin you dey block or add di site to your Home Screen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuknij witrynę, aby otworzyć ją w Slowth. Przytrzymaj jej ikonę, aby zmienić ustawienia blokowania lub dodać witrynę do ekranu początkowego."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque em um site para abri-lo no Slowth. Mantenha o ícone pressionado para alterar os ajustes de bloqueio ou adicionar o site à Tela de Início."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque num site para o abrir no Slowth. Mantenha o ícone premido para alterar as definições de bloqueio ou adicionar o site ao ecrã principal."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atinge un site pentru a-l deschide în Slowth. Ține apăsată pictograma pentru a schimba configurările de blocare sau pentru a adăuga site-ul pe ecranul principal."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на значок сайта, чтобы открыть его в Slowth. Удерживайте значок, чтобы изменить настройки блокировки или добавить ярлык на экран «Домой»."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klepnutím na web ho otvoríte v aplikácii Slowth. Podržaním jeho ikony môžete zmeniť nastavenia blokovania alebo ho pridať na plochu."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tapnite spletno mesto, da ga odprete v aplikaciji Slowth. Pridržite njegovo ikono, da spremenite nastavitve blokiranja ali dodate mesto na začetni zaslon."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryck på en webbplats för att öppna den i Slowth. Håll fingret på symbolen för att ändra blockeringsinställningarna eller lägga till webbplatsen på hemskärmen."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gusa tovuti ili kuifungua katika Slowth. Gusa na ushikilie aikoni yake ili kubadilisha mipangilio ya kuzuia maudhui au kuongeza tovuti kwenye skrini ya mwanzo."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ஓர் இணையதளத்தை Slowth இல் திறக்க அதைத் தட்டுங்கள். தடுப்பு அமைப்புகளை மாற்ற அல்லது தளத்தை முகப்புத் திரையில் சேர்க்க அதன் ஐகானை அழுத்திப் பிடியுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సైట్‌ను Slowthలో తెరవడానికి దానిపై ట్యాప్ చేయండి. బ్లాకింగ్ సెట్టింగ్‌లను మార్చడానికి లేదా సైట్‌ను హోమ్ స్క్రీన్‌కు జోడించడానికి దాని చిహ్నాన్ని నొక్కి పట్టుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แตะเว็บไซต์เพื่อเปิดใน Slowth แตะไอคอนค้างไว้เพื่อเปลี่ยนการตั้งค่าการบล็อกหรือเพิ่มเว็บไซต์ไปยังหน้าจอโฮม"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir siteyi Slowth’ta açmak için siteye dokunun. Engelleme ayarlarını değiştirmek veya siteyi Ana Ekran’a eklemek için simgesini basılı tutun."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Торкніться сайту, щоб відкрити його у Slowth. Утримуйте його іконку, щоб змінити налаштування блокування або додати сайт на початковий екран."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "کسی سائٹ کو Slowth میں کھولنے کے لیے اس پر ٹیپ کریں۔ بلاک کرنے کی ترتیبات بدلنے یا سائٹ کو ہوم اسکرین پر شامل کرنے کے لیے اس کے آئیکن کو دبا کر رکھیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chạm vào một trang web để mở trong Slowth. Nhấn giữ biểu tượng của trang để đổi cài đặt chặn hoặc thêm trang vào Màn hình chính."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "撳一下網站就可以喺 Slowth 開啟。撳住個圖示，就可以更改封鎖設定或者將網站加到主畫面。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "轻点网站即可在 Slowth 中打开。按住图标可以更改屏蔽设置，或将网站添加到主屏幕。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點一下網站即可在 Slowth 中開啟。按住圖像可以更改封鎖設定，或將網站加入主畫面。"
+          }
+        }
+      }
+    },
+    "Inside Slowth, the extension uses the same blocking settings as in Safari. Screen recording is not required.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "داخل Slowth، تستخدم الإضافة إعدادات الحظر نفسها المستخدمة في Safari. لا حاجة إلى تسجيل الشاشة."
+          }
+        },
+        "ar-EG": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "داخل Slowth، تستخدم الإضافة إعدادات الحظر نفسها المستخدمة في Safari. لا حاجة إلى تسجيل الشاشة."
+          }
+        },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У Slowth пашырэнне выкарыстоўвае тыя ж налады блакіроўкі, што і ў Safari. Запіс экрана не патрэбны."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth-এর ভেতরে এক্সটেনশনটি Safari-র মতো একই ব্লকিং সেটিংস ব্যবহার করে। স্ক্রিন রেকর্ড করার প্রয়োজন নেই।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dins de Slowth, l’extensió fa servir els mateixos ajustos de bloqueig que a Safari. No cal gravar la pantalla."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ve Slowth používá rozšíření stejné nastavení blokování jako v Safari. Nahrávání obrazovky není potřeba."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I Slowth bruger udvidelsen de samme blokeringsindstillinger som i Safari. Skærmoptagelse er ikke nødvendig."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Slowth verwendet die Erweiterung dieselben Blockiereinstellungen wie in Safari. Eine Bildschirmaufnahme ist dafür nicht nötig."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Στο Slowth, η επέκταση χρησιμοποιεί τις ίδιες ρυθμίσεις αποκλεισμού με το Safari. Δεν χρειάζεται εγγραφή οθόνης."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inside Slowth, the extension uses the same blocking settings as in Safari. Screen recording is not required."
+          }
+        },
+        "en-AU": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inside Slowth, the extension uses the same blocking settings as in Safari. Screen recording is not required."
+          }
+        },
+        "en-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inside Slowth, the extension uses the same blocking settings as in Safari. Screen recording is not required."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inside Slowth, the extension uses the same blocking settings as in Safari. Screen recording is not required."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dentro de Slowth, la extensión usa los mismos ajustes de bloqueo que en Safari. No hace falta grabar la pantalla."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dentro de Slowth, la extensión usa los mismos ajustes de bloqueo que en Safari. No hace falta grabar la pantalla."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laajennus käyttää Slowthissa samoja estoasetuksia kuin Safarissa. Näyttöä ei tarvitse tallentaa."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sa loob ng Slowth, pareho ang mga setting ng pag-block ng extension at ng Safari. Hindi kailangang i-record ang screen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans Slowth, l’extension utilise les mêmes réglages de blocage que dans Safari. Aucun enregistrement de l’écran n’est nécessaire."
+          }
+        },
+        "fr-CA": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans Slowth, l’extension utilise les mêmes réglages de blocage que dans Safari. Aucun enregistrement de l’écran n’est nécessaire."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowthમાં એક્સ્ટેન્શન Safari જેવાં જ બ્લોકિંગ સેટિંગ્સ વાપરે છે. સ્ક્રીન રેકોર્ડ કરવાની જરૂર નથી."
+          }
+        },
+        "ha": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cikin Slowth, ƙarin yana amfani da saitunan toshewa iri ɗaya da na Safari. Ba sai an yi rikodin allo ba."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בתוך Slowth ההרחבה משתמשת באותן הגדרות חסימה כמו ב־Safari. אין צורך בהקלטת מסך."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth के अंदर एक्सटेंशन उन्हीं ब्लॉकिंग सेटिंग्स का उपयोग करता है जो Safari में हैं। स्क्रीन रिकॉर्ड करने की ज़रूरत नहीं है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "U aplikaciji Slowth proširenje koristi iste postavke blokiranja kao u Safariju. Snimanje zaslona nije potrebno."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A bővítmény a Slowth-ban ugyanazokat a blokkolási beállításokat használja, mint a Safariban. Nincs szükség képernyőfelvételre."
+          }
+        },
+        "hy": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth-ում ընդլայնումն օգտագործում է արգելափակման նույն կարգավորումները, ինչ Safari-ում։ Էկրանի ձայնագրման կարիք չկա։"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di dalam Slowth, ekstensi menggunakan pengaturan pemblokiran yang sama seperti di Safari. Layar tidak perlu direkam."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Slowth, l’estensione usa le stesse impostazioni di blocco di Safari. Non serve registrare lo schermo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth 内でも機能拡張は Safari と同じブロック設定を使用します。画面収録は必要ありません。"
+          }
+        },
+        "ka": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth-ში გაფართოება დაბლოკვის იმავე პარამეტრებს იყენებს, რასაც Safari-ში. ეკრანის ჩაწერა საჭირო არ არის."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ішінде кеңейтім Safari-дегідей бұғаттау параметрлерін пайдаланады. Экранды жазудың қажеті жоқ."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ಒಳಗೆ ವಿಸ್ತರಣೆಯು Safari ಯಲ್ಲಿರುವ ಅದೇ ನಿರ್ಬಂಧಿಸುವ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಬಳಸುತ್ತದೆ. ಸ್ಕ್ರೀನ್ ರೆಕಾರ್ಡಿಂಗ್ ಅಗತ್ಯವಿಲ್ಲ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth 안에서도 확장 프로그램은 Safari와 같은 차단 설정을 사용합니다. 화면을 녹화할 필요가 없습니다."
+          }
+        },
+        "ky": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ичинде кеңейтүү Safari’дегидей эле бөгөттөө жөндөөлөрүн колдонот. Экранды жаздыруунун кереги жок."
+          }
+        },
+        "lt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programoje „Slowth“ plėtinys naudoja tuos pačius blokavimo nustatymus kaip ir „Safari“. Ekrano įrašyti nereikia."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth-നുള്ളിൽ എക്സ്റ്റൻഷൻ Safari-യിലെ അതേ ബ്ലോക്കിങ് ക്രമീകരണങ്ങൾ ഉപയോഗിക്കുന്നു. സ്ക്രീൻ റെക്കോർഡ് ചെയ്യേണ്ടതില്ല."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth मध्ये एक्स्टेन्शन Safari मधीलच ब्लॉकिंग सेटिंग्ज वापरते. स्क्रीन रेकॉर्ड करण्याची गरज नाही."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalam Slowth, sambungan menggunakan tetapan sekatan yang sama seperti dalam Safari. Rakaman skrin tidak diperlukan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I Slowth bruker utvidelsen de samme blokkeringsinnstillingene som i Safari. Du trenger ikke å ta opp skjermen."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth भित्र एक्सटेन्सनले Safari कै ब्लक गर्ने सेटिङहरू प्रयोग गर्छ। स्क्रिन रेकर्ड गर्नुपर्दैन।"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Binnen Slowth gebruikt de extensie dezelfde blokkeerinstellingen als in Safari. Een schermopname is niet nodig."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ଭିତରେ ଏକ୍ସଟେନସନ୍ Safari ଭଳି ସମାନ ବ୍ଲକିଂ ସେଟିଂସ୍ ବ୍ୟବହାର କରେ। ସ୍କ୍ରିନ୍ ରେକର୍ଡ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth ਵਿੱਚ ਐਕਸਟੈਂਸ਼ਨ Safari ਵਾਲੀਆਂ ਹੀ ਬਲੌਕਿੰਗ ਸੈਟਿੰਗਾਂ ਵਰਤਦੀ ਹੈ। ਸਕ੍ਰੀਨ ਰਿਕਾਰਡ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ ਹੈ।"
+          }
+        },
+        "pa-Arab": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth دے اندر ایکسٹینشن اوہو بلاکنگ سیٹنگاں ورتدی اے جو Safari وچ نیں۔ سکرین ریکارڈ کرن دی لوڑ نہیں۔"
+          }
+        },
+        "pcm": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For Slowth, di extension dey use di same blocking settings wey dey for Safari. You no need to record your screen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W Slowth rozszerzenie korzysta z tych samych ustawień blokowania co w Safari. Nie wymaga nagrywania ekranu."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Slowth, a extensão usa os mesmos ajustes de bloqueio do Safari. Não é preciso gravar a tela."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Slowth, a extensão usa as mesmas definições de bloqueio que no Safari. Não é necessário gravar o ecrã."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "În Slowth, extensia folosește aceleași configurări de blocare ca în Safari. Nu este necesară înregistrarea ecranului."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Внутри Slowth расширение использует те же настройки блокировки, что и в Safari. Запускать запись экрана не нужно."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V aplikácii Slowth používa rozšírenie rovnaké nastavenia blokovania ako v Safari. Nahrávanie obrazovky nie je potrebné."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V aplikaciji Slowth razširitev uporablja enake nastavitve blokiranja kot v Safariju. Snemanje zaslona ni potrebno."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I Slowth använder tillägget samma blockeringsinställningar som i Safari. Ingen skärminspelning behövs."
+          }
+        },
+        "sw": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ndani ya Slowth, kiendelezi hutumia mipangilio ileile ya kuzuia maudhui kama katika Safari. Huhitaji kurekodi skrini."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth இல் நீட்டிப்பு Safari இல் உள்ள அதே தடுப்பு அமைப்புகளைப் பயன்படுத்துகிறது. திரையைப் பதிவு செய்ய வேண்டியதில்லை."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowthలో పొడిగింపు Safariలో ఉన్న అవే బ్లాకింగ్ సెట్టింగ్‌లను ఉపయోగిస్తుంది. స్క్రీన్‌ను రికార్డ్ చేయాల్సిన అవసరం లేదు."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ใน Slowth ส่วนขยายใช้การตั้งค่าการบล็อกชุดเดียวกับใน Safari โดยไม่ต้องบันทึกหน้าจอ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genişletme, Slowth’ta da Safari’deki engelleme ayarlarını kullanır. Ekran kaydı gerekmez."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У Slowth розширення використовує ті самі налаштування блокування, що й у Safari. Записувати екран не потрібно."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowth میں ایکسٹینشن وہی بلاکنگ ترتیبات استعمال کرتی ہے جو Safari میں ہیں۔ اسکرین ریکارڈ کرنے کی ضرورت نہیں ہے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trong Slowth, tiện ích mở rộng dùng cùng cài đặt chặn như trong Safari. Bạn không cần ghi màn hình."
+          }
+        },
+        "yue": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延伸功能喺 Slowth 入面會用同 Safari 一樣嘅封鎖設定，唔需要錄製螢幕。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Slowth 中，扩展使用的屏蔽设置与 Safari 相同，无需录屏。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Slowth 中，延伸功能使用與 Safari 相同的封鎖設定，不需要錄製螢幕。"
+          }
+        }
+      }
+    },
     "Web apps": {
       "extractionState": "manual",
       "localizations": {
@@ -19455,391 +20622,391 @@
         }
       }
     },
-    "Slowth opens Instagram, YouTube, TikTok, Facebook and X. Open this link in your regular browser.": {
+    "Slowth opens %@. Open this link in your regular browser.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth يفتح Instagram، YouTube، TikTok، Facebook وX. افتح هذا الرابط في متصفحك العادي."
+            "value": "Slowth يفتح ⁨%@⁩. افتح هذا الرابط في متصفحك العادي."
           }
         },
         "ar-EG": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth يفتح Instagram، YouTube، TikTok، Facebook وX. افتح هذا الرابط في متصفحك العادي."
+            "value": "Slowth يفتح ⁨%@⁩. افتح هذا الرابط في متصفحك العادي."
           }
         },
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth адкрывае Instagram, YouTube, TikTok, Facebook і X. Адкрыйце гэту спасылку ў звычайным браўзеры."
+            "value": "Slowth адкрывае %@. Адкрыйце гэту спасылку ў звычайным браўзеры."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth খুলবে Instagram, YouTube, TikTok, Facebook এবং X। আপনার নিয়মিত ব্রাউজারে এই লিঙ্কটি খুলুন।"
+            "value": "Slowth খুলবে %@। আপনার নিয়মিত ব্রাউজারে এই লিঙ্কটি খুলুন।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth obre Instagram, YouTube, TikTok, Facebook i X. Obriu aquest enllaç al vostre navegador habitual."
+            "value": "Slowth obre %@. Obriu aquest enllaç al vostre navegador habitual."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth otevře Instagram, YouTube, TikTok, Facebook a X. Otevřete tento odkaz ve svém běžném prohlížeči."
+            "value": "Slowth otevře %@. Otevřete tento odkaz ve svém běžném prohlížeči."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth åbner Instagram, YouTube, TikTok, Facebook og X. Åbn dette link i din almindelige browser."
+            "value": "Slowth åbner %@. Åbn dette link i din almindelige browser."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth öffnet Instagram, YouTube, TikTok, Facebook und X. Öffnen Sie diesen Link in Ihrem normalen Browser."
+            "value": "Slowth öffnet %@. Öffnen Sie diesen Link in Ihrem normalen Browser."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το Slowth ανοίγει Instagram, YouTube, TikTok, Facebook και X. Ανοίξτε αυτόν τον σύνδεσμο στο κανονικό πρόγραμμα περιήγησής σας."
+            "value": "Το Slowth ανοίγει %@. Ανοίξτε αυτόν τον σύνδεσμο στο κανονικό πρόγραμμα περιήγησής σας."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth opens Instagram, YouTube, TikTok, Facebook and X. Open this link in your regular browser."
+            "value": "Slowth opens %@. Open this link in your regular browser."
           }
         },
         "en-AU": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth opens Instagram, YouTube, TikTok, Facebook and X. Open this link in your regular browser."
+            "value": "Slowth opens %@. Open this link in your regular browser."
           }
         },
         "en-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth opens Instagram, YouTube, TikTok, Facebook and X. Open this link in your regular browser."
+            "value": "Slowth opens %@. Open this link in your regular browser."
           }
         },
         "en-GB": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth opens Instagram, YouTube, TikTok, Facebook and X. Open this link in your regular browser."
+            "value": "Slowth opens %@. Open this link in your regular browser."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth abre Instagram, YouTube, TikTok, Facebook y X. Abre este enlace en tu navegador habitual."
+            "value": "Slowth abre %@. Abre este enlace en tu navegador habitual."
           }
         },
         "es-MX": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth abre Instagram, YouTube, TikTok, Facebook y X. Abre este enlace en tu navegador habitual."
+            "value": "Slowth abre %@. Abre este enlace en tu navegador habitual."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth avaa Instagram, YouTube, TikTok, Facebook ja X. Avaa tämä linkki tavallisessa selaimessasi."
+            "value": "Slowth avaa %@. Avaa tämä linkki tavallisessa selaimessasi."
           }
         },
         "fil": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth ay nagbubukas ng Instagram, YouTube, TikTok, Facebook at X. Buksan ang link na ito sa iyong regular na browser."
+            "value": "Slowth ay nagbubukas ng %@. Buksan ang link na ito sa iyong regular na browser."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth ouvre Instagram, YouTube, TikTok, Facebook et X. Ouvrez ce lien dans votre navigateur habituel."
+            "value": "Slowth ouvre %@. Ouvrez ce lien dans votre navigateur habituel."
           }
         },
         "fr-CA": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth ouvre Instagram, YouTube, TikTok, Facebook et X. Ouvrez ce lien dans votre navigateur habituel."
+            "value": "Slowth ouvre %@. Ouvrez ce lien dans votre navigateur habituel."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook અને X ખોલે છે. આ લિંક તમારા નિયમિત બ્રાઉઝરમાં ખોલો."
+            "value": "Slowth %@ ખોલે છે. આ લિંક તમારા નિયમિત બ્રાઉઝરમાં ખોલો."
           }
         },
         "ha": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth yana buɗewa Instagram, YouTube, TikTok, Facebook da X. Buɗe wannan hanyar haɗin yanar gizonku na yau da kullun."
+            "value": "Slowth yana buɗewa %@. Buɗe wannan hanyar haɗin yanar gizonku na yau da kullun."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth פותח את Instagram, YouTube, TikTok, Facebook ו-X. פתח את הקישור הזה בדפדפן הרגיל שלך."
+            "value": "Slowth פותח את ⁨%@⁩. פתח את הקישור הזה בדפדפן הרגיל שלך."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook और X खोलता है। इस लिंक को अपने नियमित ब्राउज़र में खोलें।"
+            "value": "Slowth %@ खोलता है। इस लिंक को अपने नियमित ब्राउज़र में खोलें।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth otvara Instagram, YouTube, TikTok, Facebook i X. Otvorite ovu vezu u svom uobičajenom pregledniku."
+            "value": "Slowth otvara %@. Otvorite ovu vezu u svom uobičajenom pregledniku."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Slowth megnyitja a következőt: Instagram, YouTube, TikTok, Facebook és X. Nyissa meg ezt a hivatkozást normál böngészőjében."
+            "value": "A Slowth megnyitja a következőt: %@. Nyissa meg ezt a hivatkozást normál böngészőjében."
           }
         },
         "hy": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth-ը բացում է Instagram, YouTube, TikTok, Facebook և X: Բացեք այս հղումը ձեր սովորական դիտարկիչում:"
+            "value": "Slowth-ը բացում է %@: Բացեք այս հղումը ձեր սովորական դիտարկիչում:"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth membuka Instagram, YouTube, TikTok, Facebook dan X. Buka tautan ini di browser biasa Anda."
+            "value": "Slowth membuka %@. Buka tautan ini di browser biasa Anda."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth apre Instagram, YouTube, TikTok, Facebook e X. Apri questo collegamento nel tuo normale browser."
+            "value": "Slowth apre %@. Apri questo collegamento nel tuo normale browser."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth は、Instagram、YouTube、TikTok、Facebook、および X を開きます。このリンクを通常のブラウザで開きます。"
+            "value": "Slowth は、%@ を開きます。このリンクを通常のブラウザで開きます。"
           }
         },
         "ka": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth ხსნის Instagram, YouTube, TikTok, Facebook და X. გახსენით ეს ბმული თქვენს ჩვეულებრივ ბრაუზერში."
+            "value": "Slowth ხსნის %@. გახსენით ეს ბმული თქვენს ჩვეულებრივ ბრაუზერში."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook және X ашады. Бұл сілтемені кәдімгі шолғышта ашыңыз."
+            "value": "Slowth %@ ашады. Бұл сілтемені кәдімгі шолғышта ашыңыз."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook ಮತ್ತು X ಅನ್ನು ತೆರೆಯುತ್ತದೆ. ನಿಮ್ಮ ಸಾಮಾನ್ಯ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಈ ಲಿಂಕ್ ತೆರೆಯಿರಿ."
+            "value": "Slowth %@ ಅನ್ನು ತೆರೆಯುತ್ತದೆ. ನಿಮ್ಮ ಸಾಮಾನ್ಯ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಈ ಲಿಂಕ್ ತೆರೆಯಿರಿ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth은 Instagram, YouTube, TikTok, Facebook 및 X를 엽니다. 일반 브라우저에서 이 링크를 엽니다."
+            "value": "Slowth은 %@를 엽니다. 일반 브라우저에서 이 링크를 엽니다."
           }
         },
         "ky": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook жана X ачат. Бул шилтемени кадимки серепчиңизден ачыңыз."
+            "value": "Slowth %@ ачат. Бул шилтемени кадимки серепчиңизден ачыңыз."
           }
         },
         "lt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth atidaro Instagram, YouTube, TikTok, Facebook ir X. Atidarykite šią nuorodą įprastoje naršyklėje."
+            "value": "Slowth atidaro %@. Atidarykite šią nuorodą įprastoje naršyklėje."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook, X എന്നിവ തുറക്കുന്നു. നിങ്ങളുടെ സാധാരണ ബ്രൗസറിൽ ഈ ലിങ്ക് തുറക്കുക."
+            "value": "Slowth %@ എന്നിവ തുറക്കുന്നു. നിങ്ങളുടെ സാധാരണ ബ്രൗസറിൽ ഈ ലിങ്ക് തുറക്കുക."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth उघडते Instagram, YouTube, TikTok, Facebook आणि X. ही लिंक तुमच्या नियमित ब्राउझरमध्ये उघडा."
+            "value": "Slowth उघडते %@. ही लिंक तुमच्या नियमित ब्राउझरमध्ये उघडा."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth membuka Instagram, YouTube, TikTok, Facebook dan X. Buka pautan ini dalam penyemak imbas biasa anda."
+            "value": "Slowth membuka %@. Buka pautan ini dalam penyemak imbas biasa anda."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth åpner Instagram, YouTube, TikTok, Facebook og X. Åpne denne lenken i din vanlige nettleser."
+            "value": "Slowth åpner %@. Åpne denne lenken i din vanlige nettleser."
           }
         },
         "ne": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth खोल्छ Instagram, YouTube, TikTok, Facebook र X। आफ्नो नियमित ब्राउजरमा यो लिङ्क खोल्नुहोस्।"
+            "value": "Slowth खोल्छ %@। आफ्नो नियमित ब्राउजरमा यो लिङ्क खोल्नुहोस्।"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth opent Instagram, YouTube, TikTok, Facebook en X. Open deze link in uw gewone browser."
+            "value": "Slowth opent %@. Open deze link in uw gewone browser."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook ଏବଂ X. ଖୋଲିବ ତୁମର ନିୟମିତ ବ୍ରାଉଜରରେ ଏହି ଲିଙ୍କ୍ ଖୋଲ |"
+            "value": "Slowth %@. ଖୋଲିବ ତୁମର ନିୟମିତ ବ୍ରାଉଜରରେ ଏହି ଲିଙ୍କ୍ ଖୋଲ |"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth ਖੁੱਲ੍ਹਦਾ ਹੈ Instagram, YouTube, TikTok, Facebook ਅਤੇ X। ਇਸ ਲਿੰਕ ਨੂੰ ਆਪਣੇ ਨਿਯਮਤ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਖੋਲ੍ਹੋ।"
+            "value": "Slowth ਖੁੱਲ੍ਹਦਾ ਹੈ %@। ਇਸ ਲਿੰਕ ਨੂੰ ਆਪਣੇ ਨਿਯਮਤ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਖੋਲ੍ਹੋ।"
           }
         },
         "pa-Arab": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram، YouTube، TikTok، Facebook تے X کھولدا اے۔ اپنے باقاعدہ براؤزر چ ایہ لنک کھولو۔"
+            "value": "Slowth ⁨%@⁩ کھولدا اے۔ اپنے باقاعدہ براؤزر چ ایہ لنک کھولو۔"
           }
         },
         "pcm": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth dey open Instagram, YouTube, TikTok, Facebook and X. Open this link for your normal browser."
+            "value": "Slowth dey open %@. Open this link for your normal browser."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth otwiera Instagram, YouTube, TikTok, Facebook i X. Otwórz ten link w swojej zwykłej przeglądarce."
+            "value": "Slowth otwiera %@. Otwórz ten link w swojej zwykłej przeglądarce."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth abre Instagram, YouTube, TikTok, Facebook e X. Abra este link em seu navegador normal."
+            "value": "Slowth abre %@. Abra este link em seu navegador normal."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth abre Instagram, YouTube, TikTok, Facebook e X. Abra esta ligação no seu browser normal."
+            "value": "Slowth abre %@. Abra esta ligação no seu browser normal."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth deschide Instagram, YouTube, TikTok, Facebook și X. Deschideți acest link în browserul dvs. obișnuit."
+            "value": "Slowth deschide %@. Deschideți acest link în browserul dvs. obișnuit."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth открывает Instagram, YouTube, TikTok, Facebook и X. Откройте эту ссылку в обычном браузере."
+            "value": "Slowth открывает %@. Откройте эту ссылку в обычном браузере."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth otvára Instagram, YouTube, TikTok, Facebook a X. Otvorte tento odkaz vo svojom bežnom prehliadači."
+            "value": "Slowth otvára %@. Otvorte tento odkaz vo svojom bežnom prehliadači."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth odpre Instagram, YouTube, TikTok, Facebook in X. Odprite to povezavo v običajnem brskalniku."
+            "value": "Slowth odpre %@. Odprite to povezavo v običajnem brskalniku."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth öppnar Instagram, YouTube, TikTok, Facebook och X. Öppna den här länken i din vanliga webbläsare."
+            "value": "Slowth öppnar %@. Öppna den här länken i din vanliga webbläsare."
           }
         },
         "sw": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth hufungua Instagram, YouTube, TikTok, Facebook na X. Fungua kiungo hiki katika kivinjari chako cha kawaida."
+            "value": "Slowth hufungua %@. Fungua kiungo hiki katika kivinjari chako cha kawaida."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook மற்றும் X ஐ திறக்கிறது. உங்கள் வழக்கமான உலாவியில் இந்த இணைப்பைத் திறக்கவும்."
+            "value": "Slowth %@ ஐ திறக்கிறது. உங்கள் வழக்கமான உலாவியில் இந்த இணைப்பைத் திறக்கவும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth Instagram, YouTube, TikTok, Facebook మరియు Xని తెరుస్తుంది. మీ సాధారణ బ్రౌజర్‌లో ఈ లింక్‌ను తెరవండి."
+            "value": "Slowth %@ని తెరుస్తుంది. మీ సాధారణ బ్రౌజర్‌లో ఈ లింక్‌ను తెరవండి."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth เปิด Instagram, YouTube, TikTok, Facebook และ X เปิดลิงก์นี้ในเบราว์เซอร์ปกติของคุณ"
+            "value": "Slowth เปิด %@ เปิดลิงก์นี้ในเบราว์เซอร์ปกติของคุณ"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth, Instagram, YouTube, TikTok, Facebook ve X'i açar. Bu bağlantıyı normal tarayıcınızda açın."
+            "value": "Slowth, %@'i açar. Bu bağlantıyı normal tarayıcınızda açın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth відкриває Instagram, YouTube, TikTok, Facebook та X. Відкрийте це посилання у звичайному браузері."
+            "value": "Slowth відкриває %@. Відкрийте це посилання у звичайному браузері."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth کھولتا ہے Instagram، YouTube، TikTok، Facebook اور X۔ اس لنک کو اپنے باقاعدہ براؤزر میں کھولیں۔"
+            "value": "Slowth کھولتا ہے ⁨%@⁩۔ اس لنک کو اپنے باقاعدہ براؤزر میں کھولیں۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth mở Instagram, YouTube, TikTok, Facebook và X. Mở liên kết này trong trình duyệt thông thường của bạn."
+            "value": "Slowth mở %@. Mở liên kết này trong trình duyệt thông thường của bạn."
           }
         },
         "yue": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth 會打開 Instagram 、 YouTube 、 TikTok 、 Facebook 同 X 。喺你嘅普通瀏覽器打開呢個連結。"
+            "value": "Slowth 會打開 %@ 。喺你嘅普通瀏覽器打開呢個連結。"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth 打开 Instagram、YouTube、TikTok、Facebook 和 X。在常规浏览器中打开此链接。"
+            "value": "Slowth 打开 %@。在常规浏览器中打开此链接。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slowth 開啟 Instagram、YouTube、TikTok、Facebook 和 X。在常規瀏覽器中開啟此連結。"
+            "value": "Slowth 開啟 %@。在常規瀏覽器中開啟此連結。"
           }
         }
       }

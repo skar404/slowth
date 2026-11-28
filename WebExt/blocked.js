@@ -4,7 +4,7 @@
   globalThis.Unscroll.i18n.setLocale(document.documentElement);
   const params = new URLSearchParams(location.search);
   const host = params.get("host") || "";
-  const label = { facebook: "Facebook", instagram: "Instagram", youtube: "YouTube", x: "X", tiktok: "TikTok" }[host] || host || t("thisSite");
+  const label = { facebook: "Facebook", instagram: "Instagram", youtube: "YouTube", x: "X", tiktok: "TikTok", threads: "Threads", reddit: "Reddit", linkedin: "LinkedIn" }[host] || host || t("thisSite");
   document.title = t("blockedTabTitle", label);
   document.getElementById("blocked-title").textContent = t("blockedTitle", label);
   const subtitle = document.getElementById("subtitle");
@@ -13,6 +13,9 @@
   // "Back to <site>" button — maps the host key to its home URL. The blocked
   // paths (reels/watch/etc.) never match "/", so home is safe to return to.
   const HOME_URLS = {
+    threads:   "https://www.threads.com/",
+    reddit:    "https://www.reddit.com/",
+    linkedin:  "https://www.linkedin.com/",
     facebook:  "https://www.facebook.com/",
     instagram: "https://www.instagram.com/",
     youtube:   "https://www.youtube.com/",
@@ -21,7 +24,7 @@
   };
   const HOST_LABELS = {
     facebook: "Facebook", instagram: "Instagram", youtube: "YouTube",
-    x: "X", tiktok: "TikTok"
+    x: "X", tiktok: "TikTok", threads: "Threads", reddit: "Reddit", linkedin: "LinkedIn"
   };
   const footer = document.getElementById("footer");
   const backLink = document.getElementById("back-link");

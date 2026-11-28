@@ -15,14 +15,18 @@ enum IOSProtectionAuthorization {
 // Keys are shared with WebExt/config.js. Legacy modes are read only during migration.
 enum SiteFeature: String, CaseIterable {
     case shorts, feed, stories, hideHomeFeed, all
+    case autoplayOff, hideRelated, following, hideSuggestions, facebookFeeds, hideUpsells, hidePromoted, hideRecommendations, oldReddit, networkFeed, hideNews
 
     static func available(for site: String) -> [SiteFeature] {
         switch site {
-        case "instagram": return [.shorts, .feed, .stories, .all]
-        case "youtube": return [.shorts, .hideHomeFeed, .feed, .all]
-        case "facebook": return [.shorts, .feed, .all]
-        case "x": return [.shorts, .all]
-        case "tiktok": return [.feed, .all]
+        case "instagram": return [.shorts, .feed, .stories, .following, .hideSuggestions, .all]
+        case "youtube": return [.shorts, .hideHomeFeed, .feed, .autoplayOff, .hideRelated, .all]
+        case "facebook": return [.shorts, .feed, .facebookFeeds, .all]
+        case "x": return [.shorts, .following, .hideSuggestions, .all]
+        case "tiktok": return [.feed, .following, .hideUpsells, .all]
+        case "threads": return [.following, .all]
+        case "reddit": return [.following, .hidePromoted, .hideRecommendations, .oldReddit, .all]
+        case "linkedin": return [.networkFeed, .hidePromoted, .hideNews, .all]
         default: return []
         }
     }
@@ -33,6 +37,19 @@ enum SiteFeature: String, CaseIterable {
         case .feed: return AppLocalization.string("Block Infinite Feed")
         case .stories: return AppLocalization.string("Stories")
         case .hideHomeFeed: return AppLocalization.string("Hide home feed")
+        case .autoplayOff: return AppLocalization.string("Disable autoplay")
+        case .hideRelated: return AppLocalization.string("Hide suggested videos")
+        case .following: return AppLocalization.string("Open Following")
+        case .hideSuggestions: return AppLocalization.string("Hide suggested accounts")
+        case .facebookFeeds: return AppLocalization.string("Open Feeds")
+        case .hideUpsells: return AppLocalization.string("Hide purchase and install offers")
+        case .hidePromoted:
+            let label = AppLocalization.string("Hide promoted posts")
+            return site == "linkedin" ? label + " · " + AppLocalization.string("Hide recommendations") : label
+        case .hideRecommendations: return AppLocalization.string("Hide recommendations")
+        case .oldReddit: return AppLocalization.string("Use old Reddit")
+        case .networkFeed: return AppLocalization.string("Open Network feed")
+        case .hideNews: return AppLocalization.string("Hide news sidebar")
         case .shorts:
             switch site {
             case "youtube": return AppLocalization.string("Block Shorts")
@@ -59,52 +76,50 @@ struct SiteBlockingControl: Identifiable {
 }
 
 struct SiteBlockingSettings: Codable, Equatable {
-    var shorts = false
-    var feed = false
-    var all = false
-    var stories = false
-    var hideHomeFeed = false
+    private var flags: [String: Bool] = [:]
 
     init(shorts: Bool = false, feed: Bool = false, all: Bool = false, stories: Bool = false, hideHomeFeed: Bool = false) {
-        self.shorts = shorts; self.feed = feed; self.all = all; self.stories = stories
-        self.hideHomeFeed = hideHomeFeed
+        self[.shorts] = shorts
+        self[.feed] = feed
+        self[.all] = all
+        self[.stories] = stories
+        self[.hideHomeFeed] = hideHomeFeed
     }
 
-    private enum CodingKeys: String, CodingKey { case shorts, feed, all, stories, hideHomeFeed }
     init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        shorts = try values.decodeIfPresent(Bool.self, forKey: .shorts) ?? false
-        feed = try values.decodeIfPresent(Bool.self, forKey: .feed) ?? false
-        all = try values.decodeIfPresent(Bool.self, forKey: .all) ?? false
-        stories = try values.decodeIfPresent(Bool.self, forKey: .stories) ?? false
-        hideHomeFeed = try values.decodeIfPresent(Bool.self, forKey: .hideHomeFeed) ?? false
+        let values = try decoder.singleValueContainer().decode([String: Bool].self)
+        flags = values.filter { $0.value && SiteFeature(rawValue: $0.key) != nil }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(dictionary)
     }
 
     subscript(feature: SiteFeature) -> Bool {
-        get {
-            switch feature {
-            case .shorts: return shorts
-            case .feed: return feed
-            case .all: return all
-            case .stories: return stories
-            case .hideHomeFeed: return hideHomeFeed
-            }
-        }
-        set {
-            switch feature {
-            case .shorts: shorts = newValue
-            case .feed: feed = newValue
-            case .all: all = newValue
-            case .stories: stories = newValue
-            case .hideHomeFeed: hideHomeFeed = newValue
-            }
-        }
+        get { flags[feature.rawValue] == true }
+        set { flags[feature.rawValue] = newValue ? true : nil }
     }
 
-    var dictionary: [String: Bool] { ["shorts": shorts, "feed": feed, "all": all, "stories": stories, "hideHomeFeed": hideHomeFeed] }
+    var dictionary: [String: Bool] {
+        Dictionary(uniqueKeysWithValues: SiteFeature.allCases.map { ($0.rawValue, self[$0]) })
+    }
+
+    var shorts: Bool { self[.shorts] }
+    var feed: Bool { self[.feed] }
+    var all: Bool { self[.all] }
+    var stories: Bool { self[.stories] }
+    var hideHomeFeed: Bool { self[.hideHomeFeed] }
 
     static func defaults(for site: String) -> Self {
-        Self(shorts: site != "tiktok", feed: ["instagram", "facebook"].contains(site), all: site == "tiktok")
+        var settings = Self(shorts: SiteFeature.available(for: site).contains(.shorts),
+                            feed: ["instagram", "facebook"].contains(site), all: site == "tiktok")
+        switch site {
+        case "threads": settings[.following] = true
+        case "reddit", "linkedin": settings[.hidePromoted] = true
+        default: break
+        }
+        return settings
     }
 
     static func migrated(_ raw: Any?, site: String) -> Self {
@@ -121,11 +136,11 @@ struct SiteBlockingSettings: Codable, Equatable {
         else { return defaults(for: site) }
         switch mode {
         case "off": return Self()
-        case "shorts": return Self(shorts: site != "tiktok")
-        case "feed": return Self(shorts: site != "tiktok", feed: ["instagram", "facebook"].contains(site))
+        case "shorts": return Self(shorts: SiteFeature.available(for: site).contains(.shorts))
+        case "feed": return Self(shorts: SiteFeature.available(for: site).contains(.shorts), feed: ["instagram", "facebook"].contains(site))
         case "all":
             var settings = defaults(for: site)
-            settings.all = true
+            settings[.all] = true
             return settings
         default: return defaults(for: site)
         }
@@ -163,7 +178,7 @@ struct SharedState: Codable, Equatable {
     var lastShieldActionInvokedAt: Date?
     var realtimeShieldDiagnostics: RealtimeShieldDiagnostics
 
-    static let supportedSites = ["youtube", "instagram", "tiktok", "facebook", "x"]
+    static let supportedSites = ["youtube", "instagram", "tiktok", "facebook", "x", "threads", "reddit", "linkedin"]
 
     static var defaultState: SharedState {
         // ⚠️ Mirrors WebExt/config.js DEFAULT_TOGGLES — keep both in sync.
@@ -500,6 +515,18 @@ enum SharedStore {
         d.set(state.toggles.mapValues { $0.dictionary }, forKey: SharedStoreKey.siteBlocking)
         NotificationCenter.default.post(name: .slowthWebSettingsChanged, object: nil)
         return state
+    }
+
+    static func claimFeedReminder(now: Date = Date()) -> Bool {
+        if let timestamp = d.object(forKey: "lastFeedReminder") as? Double {
+            let calendar = Calendar.current
+            let previousDay = calendar.startOfDay(for: Date(timeIntervalSince1970: timestamp))
+            let today = calendar.startOfDay(for: now)
+            let elapsed = calendar.dateComponents([.day], from: previousDay, to: today).day ?? 0
+            guard elapsed >= 7 else { return false }
+        }
+        d.set(now.timeIntervalSince1970, forKey: "lastFeedReminder")
+        return true
     }
 
     static var pausesAllowedInStrictMode: Bool {

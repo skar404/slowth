@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Қатаң режимді алғашқы минут ішінде өшіруге болады."
+  },
+  "autoplayOff": {
+    "message": "Автоматты ойнатуды өшіру"
+  },
+  "hideRelated": {
+    "message": "Ұсынылған бейнелерді жасыру"
+  },
+  "following": {
+    "message": "Жазылымдарды ашу"
+  },
+  "hideSuggestions": {
+    "message": "Ұсынылған аккаунттарды жасыру"
+  },
+  "facebookFeeds": {
+    "message": "Таспаларды ашу"
+  },
+  "hideUpsells": {
+    "message": "Сатып алу және орнату ұсыныстарын жасыру"
+  },
+  "hidePromoted": {
+    "message": "Жарнамаланған жазбаларды жасыру"
+  },
+  "hideRecommendations": {
+    "message": "Ұсыныстарды жасыру"
+  },
+  "oldReddit": {
+    "message": "Ескі Reddit нұсқасын қолдану"
+  },
+  "networkFeed": {
+    "message": "Байланыстар таспасын ашу"
+  },
+  "hideNews": {
+    "message": "Жаңалықтардың бүйір тақтасын жасыру"
+  },
+  "feedChanged": {
+    "message": "Таспа ауыстырылды"
   }
 }

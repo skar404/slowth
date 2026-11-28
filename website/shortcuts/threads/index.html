@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>
+if ((navigator.standalone === true || matchMedia('(display-mode: standalone)').matches)
+    && new URLSearchParams(location.search).get('setup') !== '1') {
+  document.documentElement.classList.add('launching');
+}
+</script>
+<title id="pageTitle">Threads · Slowth shortcut</title>
+<meta id="description" name="description" content="Add a Threads shortcut that opens inside Slowth with your blocking settings.">
+<meta name="robots" content="noindex"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Threads"><meta name="theme-color" content="#f4f5f1">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../assets/slowth-threads-linen.png">
+<link rel="icon" href="../assets/slowth-threads-linen.png"><link rel="stylesheet" href="../shortcuts.css?v=9">
+<script src="../launch.js?v=2" defer></script>
+<script src="../translations.js?v=1" defer></script>
+<script src="../shortcuts.js?v=6" defer></script></head>
+<body data-service="threads" data-name="Threads"><main>
+<header><a class="brand" href="/">Slowth</a><span id="beta" class="badge">Beta</span></header>
+<img class="icon" src="../assets/slowth-threads-linen.png" width="100" height="100" alt="Threads">
+<section id="instructions"><h1 id="title">Add Threads to your Home Screen</h1>
+<p id="intro" class="muted">Your familiar icon opens the website inside Slowth with your blocking settings.</p>
+<ol class="steps"><li id="step1">Open this page in Safari and tap Share.</li><li id="step2">Choose Add to Home Screen. Keep Open as Web App enabled if that option appears.</li><li id="step3">Tap Add. The name and icon are ready for you.</li></ol></section>
+<section id="launcher"><div class="launch-route" aria-hidden="true"><img class="launch-service" src="../assets/slowth-threads-linen.png" width="76" height="76" alt=""><div class="launch-waves"><span></span><span></span><span></span></div></div><h1 id="launchTitle">Opening Threads…</h1><p id="launchContext" class="launch-context">in Slowth</p></section>
+<div class="launch-fallback" hidden><p id="launchHint" class="muted">Redirecting to the app. If it does not open automatically, tap below. iOS may ask for confirmation.</p>
+<a id="open" class="action" hidden>Open in Slowth</a></div>
+<p id="note" class="muted">Requires Slowth with Web apps and iOS 18.4 or later. Sign-ins inside Slowth and Safari are separate.</p>
+<p class="setup-links"><a id="install" href="/">Get Slowth</a> · <a id="setup" href="?setup=1">Setup instructions</a></p>
+<footer><p id="remove" class="muted">Deleting a shortcut leaves your account and Slowth settings intact.</p></footer>
+<noscript id="noscript">Enable JavaScript so your saved Home Screen shortcut can open Slowth.</noscript>
+</main></body></html>

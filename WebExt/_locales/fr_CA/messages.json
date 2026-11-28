@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Vous pouvez désactiver le mode strict pendant la première minute."
+  },
+  "autoplayOff": {
+    "message": "Désactiver la lecture automatique"
+  },
+  "hideRelated": {
+    "message": "Masquer les vidéos suggérées"
+  },
+  "following": {
+    "message": "Ouvrir les abonnements"
+  },
+  "hideSuggestions": {
+    "message": "Masquer les comptes suggérés"
+  },
+  "facebookFeeds": {
+    "message": "Ouvrir les fils"
+  },
+  "hideUpsells": {
+    "message": "Masquer les offres d’achat et d’installation"
+  },
+  "hidePromoted": {
+    "message": "Masquer les publications sponsorisées"
+  },
+  "hideRecommendations": {
+    "message": "Masquer les recommandations"
+  },
+  "oldReddit": {
+    "message": "Utiliser l’ancien Reddit"
+  },
+  "networkFeed": {
+    "message": "Ouvrir le fil du réseau"
+  },
+  "hideNews": {
+    "message": "Masquer le volet d’actualités"
+  },
+  "feedChanged": {
+    "message": "Fil changé"
   }
 }

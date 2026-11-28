@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "ପ୍ରଥମ ମିନିଟ୍ ମଧ୍ୟରେ ଆପଣ କଠୋର ମୋଡ୍ ବନ୍ଦ କରିପାରିବେ।"
+  },
+  "autoplayOff": {
+    "message": "ସ୍ୱୟଂଚାଳିତ ପ୍ଲେ ବନ୍ଦ କରନ୍ତୁ"
+  },
+  "hideRelated": {
+    "message": "ପ୍ରସ୍ତାବିତ ଭିଡିଓ ଲୁଚାନ୍ତୁ"
+  },
+  "following": {
+    "message": "ଅନୁସରଣ କରୁଥିବା ଆକାଉଣ୍ଟର ଫିଡ୍ ଖୋଲନ୍ତୁ"
+  },
+  "hideSuggestions": {
+    "message": "ପ୍ରସ୍ତାବିତ ଆକାଉଣ୍ଟ ଲୁଚାନ୍ତୁ"
+  },
+  "facebookFeeds": {
+    "message": "ଫିଡ୍ ଖୋଲନ୍ତୁ"
+  },
+  "hideUpsells": {
+    "message": "କିଣିବା ଓ ଇନଷ୍ଟଲ୍ କରିବାର ଅଫର୍ ଲୁଚାନ୍ତୁ"
+  },
+  "hidePromoted": {
+    "message": "ପ୍ରଚାରିତ ପୋଷ୍ଟ ଲୁଚାନ୍ତୁ"
+  },
+  "hideRecommendations": {
+    "message": "ସୁପାରିସ ଲୁଚାନ୍ତୁ"
+  },
+  "oldReddit": {
+    "message": "ପୁରୁଣା Reddit ବ୍ୟବହାର କରନ୍ତୁ"
+  },
+  "networkFeed": {
+    "message": "ନେଟୱର୍କ ଫିଡ୍ ଖୋଲନ୍ତୁ"
+  },
+  "hideNews": {
+    "message": "ଖବର ସାଇଡବାର୍ ଲୁଚାନ୍ତୁ"
+  },
+  "feedChanged": {
+    "message": "ଫିଡ୍ ବଦଳିଛି"
   }
 }

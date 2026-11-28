@@ -17,7 +17,10 @@ private let sites: [SiteSpec] = [
     .init(id: "instagram", label: "Instagram"),
     .init(id: "tiktok", label: "TikTok"),
     .init(id: "facebook", label: "Facebook"),
-    .init(id: "x", label: "X")
+    .init(id: "x", label: "X"),
+    .init(id: "threads", label: "Threads"),
+    .init(id: "reddit", label: "Reddit"),
+    .init(id: "linkedin", label: "LinkedIn")
 ]
 
 
@@ -181,6 +184,10 @@ struct MacContentView: View {
             }
             #endif
 
+            #if os(iOS)
+            AppIconSection()
+            #endif
+
             #if os(iOS) && canImport(FamilyControls)
             if #unavailable(iOS 26.5) {
                 Section {
@@ -202,7 +209,7 @@ struct MacContentView: View {
                     )) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(AppLocalization.string("Strict mode"))
-                            (Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text("\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
+                            (Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text(verbatim: "\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
                                 .font(.callout)
                                 .foregroundStyle(.secondary)
                         }
@@ -309,7 +316,7 @@ struct MacContentView: View {
             Button(AppLocalization.string("Enable")) { state.setStrictMode(true) }
             Button(AppLocalization.string("Cancel"), role: .cancel) { }
         } message: {
-            (Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text("\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
+            (Text(AppLocalization.string("For 24 hours, enabled restrictions cannot be turned off. You can add restrictions, but cannot enable whole-site blocking.")) + Text(verbatim: "\n\n") + Text(AppLocalization.string("You can turn Strict mode off during the first minute.")))
         }
         .sheet(isPresented: $showAbout) {
             HowItWorksSheet(feedbackURL: feedbackURL)

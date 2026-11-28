@@ -10,12 +10,13 @@ struct WebAppsTests {
     @MainActor
     static func main() throws {
         defer { AppGroup.defaults.removePersistentDomain(forName: AppGroup.identifier) }
+        precondition(Set(WebAppService.allCases.map(\.id)) == Set(SharedState.supportedSites))
         for service in WebAppService.allCases {
             precondition(WebAppService(shortcut: URL(string: "slowth://web/" + service.id)!) == service)
             precondition(service.url.scheme == "https")
             precondition(service.shortcutURL.host == "slowth.app")
         }
-        for value in ["https://web/instagram", "slowth://labeler/instagram", "slowth://web/reddit",
+        for value in ["https://web/instagram", "slowth://labeler/instagram", "slowth://web/unknown",
                       "slowth://web/instagram?url=https://evil.test", "slowth://web/instagram#x",
                       "slowth://user@web/instagram", "slowth://web:443/instagram", "slowth://web/instagram/",
                       "slowth://web//instagram", "slowth://web/%69nstagram", "slowth://web/../instagram",
@@ -23,7 +24,9 @@ struct WebAppsTests {
             precondition(WebAppService(shortcut: URL(string: value)!) == nil, "Accepted invalid route: \(value)")
         }
         precondition(WebAppService.x.url.absoluteString == "https://x.com/")
-        precondition(Set(WebAppProfile.allCases.map(\.identifier)).count == 4)
+        let profiles = Set(WebAppService.allCases.map(\.profile))
+        precondition(profiles == Set(WebAppProfile.allCases))
+        precondition(Set(profiles.map(\.identifier)).count == WebAppService.allCases.count - 1)
         precondition(WebAppService.instagram.profile == WebAppService.facebook.profile)
         precondition(WebAppService.youtube.profile != WebAppService.tiktok.profile)
         for service in WebAppService.allCases {
@@ -34,6 +37,13 @@ struct WebAppsTests {
             precondition(WebAppService.youtube.restorableURL(URL(string: value)!) == nil)
         }
         precondition(WebAppService.containing(URL(string: "https://mobile.twitter.com/")!) == .x)
+        for (host, service) in [("www.threads.net", WebAppService.threads), ("threads.com", .threads),
+                                ("old.reddit.com", .reddit), ("uk.linkedin.com", .linkedin)] {
+            let url = URL(string: "https://" + host + "/example")!
+            precondition(WebAppService.containing(url) == service)
+            precondition(service.restorableURL(url) == url)
+            precondition(WebAppService.containing(URL(string: "https://" + host + ".example/")!) == nil)
+        }
         let clickedURL = URL(string: "https://www.youtube.com/watch?v=123")!
         precondition(WebAppNavigationPolicy.loadsClickedLinkInApp(clickedURL, method: "GET", isLink: true, isMainOrNewWindow: true))
         precondition(!WebAppNavigationPolicy.loadsClickedLinkInApp(clickedURL, method: "POST", isLink: true, isMainOrNewWindow: true))

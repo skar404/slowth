@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Strogi način lahko izklopite v prvi minuti."
+  },
+  "autoplayOff": {
+    "message": "Izklopi samodejno predvajanje"
+  },
+  "hideRelated": {
+    "message": "Skrij predlagane videe"
+  },
+  "following": {
+    "message": "Odpri sledene račune"
+  },
+  "hideSuggestions": {
+    "message": "Skrij predlagane račune"
+  },
+  "facebookFeeds": {
+    "message": "Odpri vire"
+  },
+  "hideUpsells": {
+    "message": "Skrij ponudbe za nakup in namestitev"
+  },
+  "hidePromoted": {
+    "message": "Skrij promovirane objave"
+  },
+  "hideRecommendations": {
+    "message": "Skrij priporočila"
+  },
+  "oldReddit": {
+    "message": "Uporabi stari Reddit"
+  },
+  "networkFeed": {
+    "message": "Odpri vir omrežja"
+  },
+  "hideNews": {
+    "message": "Skrij stransko vrstico z novicami"
+  },
+  "feedChanged": {
+    "message": "Vir je zamenjan"
   }
 }

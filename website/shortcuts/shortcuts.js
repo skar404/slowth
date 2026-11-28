@@ -1,6 +1,6 @@
 (() => {
   const service = document.body.dataset.service;
-  if (!['instagram', 'youtube', 'tiktok', 'facebook', 'x'].includes(service)) return;
+  if (!['instagram', 'youtube', 'tiktok', 'facebook', 'x', 'threads', 'reddit', 'linkedin'].includes(service)) return;
   const name = document.body.dataset.name;
   const catalogs = globalThis.slowthShortcutTranslations || {};
   function resolveLocale(value) {
@@ -36,21 +36,9 @@
     document.getElementById('setup').href = `?setup=1&lang=${encodeURIComponent(locale)}`;
     document.getElementById('install').href = locale === 'en' ? '/' : `/${locale}/`;
   }
-  const standalone = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
-  const params = new URLSearchParams(location.search);
-  const launching = standalone && params.get('setup') !== '1';
-  const openLink = document.getElementById('open');
-  openLink.hidden = !launching;
-  if (launching) {
-    document.body.classList.add('launching');
+  if (document.documentElement.classList.contains('launching')) {
+    const openLink = document.getElementById('open');
     openLink.href = `slowth://web/${service}`;
-    document.getElementById('instructions').hidden = true;
-    document.getElementById('launcher').hidden = false;
-    // The inline script handles foreground returns; do not duplicate its launch.
-    // The inline head script normally launches before this file is downloaded.
-    if (document.visibilityState !== 'hidden' && !globalThis.slowthShortcutLaunchAttempted) {
-      globalThis.slowthShortcutLaunchAttempted = true;
-      location.href = openLink.href;
-    }
+    openLink.hidden = false;
   }
 })();

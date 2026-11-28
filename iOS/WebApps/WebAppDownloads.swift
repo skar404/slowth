@@ -33,7 +33,10 @@ final class WebAppDownloads: NSObject, ObservableObject, WKDownloadDelegate {
         body(&items[index])
     }
     func cancel(_ id: ObjectIdentifier) {
-        downloads[id]?.cancel { [weak self] _ in self?.remove(id) }
+        downloads.removeValue(forKey: id)?.cancel { [weak self] _ in self?.remove(id) }
+    }
+    func cancelActive() {
+        for id in Array(downloads.keys) { cancel(id) }
     }
     func clear() async {
         for item in items {
@@ -52,6 +55,7 @@ final class WebAppDownloads: NSObject, ObservableObject, WKDownloadDelegate {
     }
     func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String,
                   completionHandler: @escaping (URL?) -> Void) {
+        guard downloads[ObjectIdentifier(download)] != nil else { completionHandler(nil); return }
         do {
             // A separate random directory avoids overwrites and path traversal by server filenames.
             let directory = FileManager.default.temporaryDirectory.appendingPathComponent("SlowthDownloads", isDirectory: true)

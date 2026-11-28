@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Строгий режим можно выключить в течение первой минуты."
+  },
+  "autoplayOff": {
+    "message": "Отключить автовоспроизведение"
+  },
+  "hideRelated": {
+    "message": "Скрывать рекомендованные видео"
+  },
+  "following": {
+    "message": "Открывать подписки"
+  },
+  "hideSuggestions": {
+    "message": "Скрывать рекомендованные аккаунты"
+  },
+  "facebookFeeds": {
+    "message": "Открывать раздел «Ленты»"
+  },
+  "hideUpsells": {
+    "message": "Скрывать предложения покупки и установки"
+  },
+  "hidePromoted": {
+    "message": "Скрывать продвигаемые публикации"
+  },
+  "hideRecommendations": {
+    "message": "Скрывать рекомендации"
+  },
+  "oldReddit": {
+    "message": "Открывать старый Reddit"
+  },
+  "networkFeed": {
+    "message": "Открывать ленту контактов"
+  },
+  "hideNews": {
+    "message": "Скрывать боковую панель новостей"
+  },
+  "feedChanged": {
+    "message": "Лента переключена"
   }
 }

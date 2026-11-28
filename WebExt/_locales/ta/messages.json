@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "முதல் நிமிடத்திற்குள் கடுமையான பயன்முறையை அணைக்கலாம்."
+  },
+  "autoplayOff": {
+    "message": "தானியக்க இயக்கத்தை முடக்கு"
+  },
+  "hideRelated": {
+    "message": "பரிந்துரைக்கப்பட்ட வீடியோக்களை மறை"
+  },
+  "following": {
+    "message": "பின்தொடர்பவர்களின் ஊட்டத்தைத் திற"
+  },
+  "hideSuggestions": {
+    "message": "பரிந்துரைக்கப்பட்ட கணக்குகளை மறை"
+  },
+  "facebookFeeds": {
+    "message": "ஊட்டங்களைத் திற"
+  },
+  "hideUpsells": {
+    "message": "வாங்கவும் நிறுவவுமான சலுகைகளை மறை"
+  },
+  "hidePromoted": {
+    "message": "விளம்பரப் பதிவுகளை மறை"
+  },
+  "hideRecommendations": {
+    "message": "பரிந்துரைகளை மறை"
+  },
+  "oldReddit": {
+    "message": "பழைய Reddit ஐப் பயன்படுத்து"
+  },
+  "networkFeed": {
+    "message": "தொடர்புகளின் ஊட்டத்தைத் திற"
+  },
+  "hideNews": {
+    "message": "செய்திப் பக்கப்பட்டியை மறை"
+  },
+  "feedChanged": {
+    "message": "ஊட்டம் மாற்றப்பட்டது"
   }
 }

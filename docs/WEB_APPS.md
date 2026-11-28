@@ -1,6 +1,6 @@
 # Web apps (Beta)
 
-Slowth's iOS/iPadOS catalog opens Instagram, YouTube, TikTok, Facebook and X with
+Slowth's iOS/iPadOS catalog opens Instagram, YouTube, TikTok, Facebook, X, Threads, Reddit and LinkedIn with
 system WKWebView and the bundled Slowth WebExtension on iOS 18.4+. It remains
 **Beta** until the signed Google/passkey and physical-device acceptance below
 passes. The Apple request is prepared in [WEB_BROWSER_REQUEST.md](WEB_BROWSER_REQUEST.md),
@@ -8,22 +8,29 @@ not submitted. A successful build does not establish provider sign-in support.
 
 ## Profiles and page lifetime
 
-`WebAppProfile` assigns fixed UUIDs to four persistent `WKWebsiteDataStore`s and
-four `WKWebExtensionController.Configuration`s. Meta is shared by Instagram and
-Facebook; YouTube, TikTok and X each have their own profile. Each profile owns one
+`WebAppProfile` assigns fixed UUIDs to seven persistent `WKWebsiteDataStore`s and
+seven `WKWebExtensionController.Configuration`s. Meta is shared by Instagram and
+Facebook; YouTube, TikTok, X, Threads, Reddit and LinkedIn each have their own profile. Each profile owns one
 extension context and its extension storage. `SharedStore` blocking settings stay
-common to all profiles and Safari.
+common to all profiles and Safari. Threads also accepts links on its former domain,
+`threads.net`, including subdomains.
+
+The browser compiles the bundled [measurement rules](../iOS/WebApps/WebAppMetricRules.json)
+before opening a page. Each rule names a third-party collection endpoint and the
+request types it can block. They cover Google Analytics and Clarity event uploads,
+the Meta and Floodlight image pixels, and Hotjar visit data. Scripts, login pages,
+media and other paths on the same hosts remain available. A site can still record
+activity on its own servers.
 
 The old `.default()` website store and `slowth.web-apps.v1` extension storage are
 left intact. Cookies are not copied from the old mixed store. A dismissible,
-one-time catalog notice explains the new sign-in requirement and Meta sharing.
+one-time notice in Web apps settings explains the new sign-in requirement and Meta sharing.
 
-`WebAppProfileRuntime` retains a separate main session for each service. Closing
-the browser screen suspends ordinary media and retains the page, history and login
-windows in memory. YouTube's active PiP or full-screen presentation is exempt from
-this suspension, including the full-screen-to-PiP transition. An asynchronous
-presentation check is ignored if the screen has reopened or changed tabs meanwhile.
-Reopening resumes that session. Cold launches restore only a successful
+Dismissing the browser closes the service's main document and every popup, ends
+media playback and capture, and cancels active downloads. The next visit creates
+a fresh web view with the profile's saved cookies. A settings sheet or full-screen
+video can temporarily cover the browser without closing the session. On reopening,
+Slowth can load the last successful
 same-service HTTPS GET destination without credentials, port, query, fragment or
 an authentication-related path. Other destinations fall back to the service home.
 Forms, POST bodies and temporary windows are never serialized. Restoration stores
@@ -47,18 +54,20 @@ the page reloads it, including pages shorter than the viewport. Refresh controls
 belong to each web view and stop on completion, failure or a tab switch.
 Settings reuse the existing site controls,
 filtered to the service matching the visible URL. On unsupported sites, such as
-external login providers, the settings button is disabled. The unified Web apps tab lists every site with Open, Add to Home Screen and
-expandable blocking settings. Add to Home Screen opens the HTTPS setup page
-directly in the external browser, without an intermediate instructions sheet;
-the action uses a transition arrow. Safari extension setup has an Enable in Safari
-help card at the top of Web apps. Rule updates stay below the catalog. iPad and Duo use the same catalog in their Web apps column.
-There is no separate Safari tab or browser overflow menu.
+external login providers, the settings button is disabled. The Web apps tab shows a grid of eight service icons. Tap an icon to open the site
+inside Slowth. Touch and hold for blocking settings, Add to Home Screen or Hide.
+Edit keeps the grid in place and shows all eight icons. A minus badge hides a site;
+a plus badge restores it. Hidden icons appear dimmed until Done. Tapping an icon
+while editing opens its blocking settings directly. The first row, Add to Home
+Screen, opens the shortcut setup page for that site. Touch and hold an icon for the action menu.
+Icons jiggle while editing unless Reduce Motion is enabled. Blocking settings
+opens the selected site's sheet. Safari setup and rule updates are in Settings. After an automatic feed switch,
+Slowth can show a reminder once every seven calendar days across all sites. Add to Home Screen opens the HTTPS setup page in the external
+browser. iPad and Duo use the same launcher in their Web apps column.
 Instagram's mobile bottom navigation uses equal-width slots for the visible
 icons, including when Reels is hidden. This adjustment uses the bottom bar's
 links and geometry, and leaves post actions and desktop sidebars unchanged.
-Each site can be hidden through its expanded blocking settings. Hidden sites move
-to a collapsed, neutral list below Rules, without service icons or launch
-buttons; its restore action returns a site to the main list. The local visibility
+The local visibility
 preference survives app restarts and does not change blocking rules, sign-ins or
 Home Screen shortcuts. Current-site browser settings remain available when hidden.
 Website custom-scheme navigation is cancelled; there is no confirmation action
@@ -90,8 +99,11 @@ profile pages so websites ask again; OS grants are managed in Settings.
 ## Website capabilities
 
 File/photo inputs use WKWebView's system picker; no custom full-library access is
-added. Camera/microphone requests use `.prompt` for a visible HTTPS page, allowing
-WebKit to name the requesting origin; hidden or insecure pages are denied. Both
+added. Only the main frame of the active foreground HTTPS tab can prompt for camera
+or microphone access. Motion and orientation requests are denied. Slowth declares
+no location usage permission. On iOS 27+, the geolocation delegate also denies
+website requests explicitly. Earlier versions install a document-start script in
+each frame so geolocation calls receive a permission-denied callback. Both
 usage descriptions are present in Debug and Release. Release retains no Debug
 full-photo-library privacy keys.
 
@@ -109,7 +121,7 @@ outside this release.
 
 PiP follow-up (2026-11-22): the hosted WebKit regression uses generated local audio
 to check actual playing/suspended states while simulating the video's presentation
-mode. PiP/full-screen exemptions, inline suspension and reopening during a pending
+mode. While the browser remains open, PiP/full-screen exemptions, inline suspension and reopening during a pending
 check passed. The other 11 browser tests passed in the preceding run. Signed Release
 2026.11.1 (35), with `UIBackgroundModes = [audio]`, passed bundle verification and
 was installed on chalk (installation sequence 2972). Real YouTube PiP persistence
@@ -145,22 +157,24 @@ GET URL or home, never a form or unfinished authentication request.
 
 ## Shortcuts and publication
 
-- `slowth://web/<service>` keeps the existing strict five-service contract.
+- `slowth://web/<service>` accepts only service IDs in the eight-site catalog.
 - `https://slowth.app/shortcuts/<service>/` remains the installation page, with
   individual manifest identity, scope, icon and `?launch=1` start URL.
 - Safari tabs always show installation instructions, including `?launch=1`, without
-  a link that opens Slowth. Standalone Home Screen launches make one automatic
-  launch attempt per foreground visit, starting from inline HTML before fetching
-  styles, icons or the UI script. Visibility and page lifecycle events rearm the
-  redirect when the saved window returns, including back-forward cache restores;
-  duplicate events within the same visit do not repeat the attempt. The page says
-  “Opening [service]…” with “in Slowth” below it. The transit screen has no card or manual button.
+  a link that opens Slowth. The installed Home Screen shortcut shows the animated
+  “Opening [service]…” page on its first render. After a frame has been available
+  to display it, the shortcut opens the app and retries every two seconds while
+  visible. Hiding or leaving the page cancels pending work. Returning to the
+  shortcut starts the same sequence again, including after a back-forward cache
+  restore. The transit screen has no card or manual button.
   `?setup=1` shows help without automatic launches.
 - Shortcut pages live in `website/shortcuts/`, use the site's 64 locale catalogs
   (including RTL and regional language matching), and are included by
   `.github/workflows/website.yml`. No new backend or hosting account is needed.
 
-Publication is a separate action. After authorized deployment, check all five
+The Threads, Reddit and LinkedIn icons use [Font Awesome Free glyphs](../website/shortcuts/assets/Font-Awesome-CREDITS.txt).
+
+Publication is a separate action. After authorized deployment, check all eight
 production pages, their manifests/icons, and Home Screen installation plus repeat
 launch on physical iPhone and iPad. Local shortcut tests are not that evidence.
 
@@ -189,7 +203,7 @@ poller. Tests still load the real browser runtime and bundled WebExtension. Xcod
 including failed runs. A passing local run does not establish CI startup latency.
 
 The hosted XCTest suite exercises actual WebKit cookie isolation, Meta sharing,
-retained sessions, nested-window return, a real JavaScript opener, startup with the
+document disposal on dismissal, location denial, nested-window return, a real JavaScript opener, startup with the
 bundled extension/native port, extension unload/recovery, HTTP downloads and cancel.
 Node tests cover native freshness, successful/failed content acknowledgements,
 disconnection and Safari compatibility. Foundation tests cover routing, shared
@@ -201,7 +215,7 @@ visual checks. Neither preview switch is compiled into Release.
 
 ## Physical acceptance still required
 
-Record each row separately for **all five services on iPhone and iPad**:
+Record each row separately for **all eight services on iPhone and iPad**:
 
 | Scenario | Required evidence |
 |---|---|

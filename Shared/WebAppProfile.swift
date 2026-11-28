@@ -2,7 +2,7 @@ import Foundation
 
 /// Stable IDs are storage identities. Never rotate them during an app update.
 enum WebAppProfile: String, CaseIterable {
-    case meta, youtube, tiktok, x
+    case meta, youtube, tiktok, x, threads, reddit, linkedin
 
     var identifier: UUID {
         let suffix: String
@@ -11,10 +11,13 @@ enum WebAppProfile: String, CaseIterable {
         case .youtube: suffix = "02"
         case .tiktok: suffix = "03"
         case .x: suffix = "04"
+        case .threads: suffix = "05"
+        case .reddit: suffix = "06"
+        case .linkedin: suffix = "07"
         }
         return UUID(uuidString: "54C08251-2534-420A-9A92-9814DC8A00" + suffix)!
     }
-    var title: String { self == .meta ? "Meta (Instagram + Facebook)" : rawValue.capitalized }
+    var title: String { self == .meta ? "Meta (Instagram + Facebook)" : (WebAppService(rawValue: rawValue)?.title ?? rawValue) }
 }
 
 extension WebAppService {
@@ -24,13 +27,21 @@ extension WebAppService {
         case .youtube: return .youtube
         case .tiktok: return .tiktok
         case .x: return .x
+        case .threads: return .threads
+        case .reddit: return .reddit
+        case .linkedin: return .linkedin
         }
     }
 
     static func containing(_ url: URL) -> WebAppService? {
         guard let host = url.host?.lowercased() else { return nil }
         return allCases.first { service in
-            let domains = service == .x ? ["x.com", "twitter.com"] : [service.rawValue + ".com"]
+            let domains: [String]
+            switch service {
+            case .x: domains = ["x.com", "twitter.com"]
+            case .threads: domains = ["threads.com", "threads.net"]
+            default: domains = [service.rawValue + ".com"]
+            }
             return domains.contains { host == $0 || host.hasSuffix("." + $0) }
         }
     }

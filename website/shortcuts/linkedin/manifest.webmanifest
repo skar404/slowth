@@ -1,0 +1,18 @@
+{
+  "id": "/shortcuts/linkedin/",
+  "name": "LinkedIn",
+  "short_name": "LinkedIn",
+  "start_url": "/shortcuts/linkedin/?launch=1",
+  "scope": "/shortcuts/linkedin/",
+  "display": "standalone",
+  "background_color": "#f4f5f1",
+  "theme_color": "#f4f5f1",
+  "icons": [
+    {
+      "src": "../assets/slowth-linkedin-linen.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

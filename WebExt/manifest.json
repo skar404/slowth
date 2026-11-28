@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Slowth",
-  "version": "2026.11.4",
+  "version": "2026.11.5",
   "default_locale": "en",
   "description": "__MSG_extensionDescription__",
   "permissions": [
@@ -19,7 +19,11 @@
     "*://*.facebook.com/*",
     "*://*.x.com/*",
     "*://*.twitter.com/*",
-    "https://gist.githubusercontent.com/*"
+    "https://gist.githubusercontent.com/*",
+    "*://*.threads.com/*",
+    "*://*.threads.net/*",
+    "*://*.reddit.com/*",
+    "*://*.linkedin.com/*"
   ],
   "action": {
     "default_popup": "app.html",
@@ -55,6 +59,7 @@
         "config.js",
         "i18n.js",
         "content/common.js",
+        "content/feed-filters.js",
         "content/youtube.js"
       ],
       "run_at": "document_start",
@@ -68,6 +73,7 @@
         "config.js",
         "i18n.js",
         "content/common.js",
+        "content/feed-filters.js",
         "content/instagram.js"
       ],
       "run_at": "document_start",
@@ -81,6 +87,7 @@
         "config.js",
         "i18n.js",
         "content/common.js",
+        "content/feed-filters.js",
         "content/tiktok.js"
       ],
       "run_at": "document_start",
@@ -94,6 +101,7 @@
         "config.js",
         "i18n.js",
         "content/common.js",
+        "content/feed-filters.js",
         "content/facebook.js"
       ],
       "run_at": "document_start",
@@ -108,7 +116,51 @@
         "config.js",
         "i18n.js",
         "content/common.js",
+        "content/feed-filters.js",
         "content/x.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.threads.com/*",
+        "*://*.threads.net/*"
+      ],
+      "js": [
+        "config.js",
+        "i18n.js",
+        "content/common.js",
+        "content/feed-filters.js",
+        "content/threads.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.reddit.com/*"
+      ],
+      "js": [
+        "config.js",
+        "i18n.js",
+        "content/common.js",
+        "content/feed-filters.js",
+        "content/reddit.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.linkedin.com/*"
+      ],
+      "js": [
+        "config.js",
+        "i18n.js",
+        "content/common.js",
+        "content/feed-filters.js",
+        "content/linkedin.js"
       ],
       "run_at": "document_start",
       "all_frames": false
@@ -126,7 +178,11 @@
         "*://*.instagram.com/*",
         "*://*.facebook.com/*",
         "*://*.x.com/*",
-        "*://*.twitter.com/*"
+        "*://*.twitter.com/*",
+        "*://*.threads.com/*",
+        "*://*.threads.net/*",
+        "*://*.reddit.com/*",
+        "*://*.linkedin.com/*"
       ]
     }
   ]

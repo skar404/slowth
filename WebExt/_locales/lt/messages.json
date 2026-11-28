@@ -244,5 +244,41 @@
   },
   "strictCancellationHelp": {
     "message": "Griežtą režimą galite išjungti per pirmąją minutę."
+  },
+  "autoplayOff": {
+    "message": "Išjungti automatinį paleidimą"
+  },
+  "hideRelated": {
+    "message": "Slėpti siūlomus vaizdo įrašus"
+  },
+  "following": {
+    "message": "Atverti sekamus"
+  },
+  "hideSuggestions": {
+    "message": "Slėpti siūlomas paskyras"
+  },
+  "facebookFeeds": {
+    "message": "Atverti srautus"
+  },
+  "hideUpsells": {
+    "message": "Slėpti pirkimo ir diegimo pasiūlymus"
+  },
+  "hidePromoted": {
+    "message": "Slėpti reklamuojamus įrašus"
+  },
+  "hideRecommendations": {
+    "message": "Slėpti rekomendacijas"
+  },
+  "oldReddit": {
+    "message": "Naudoti senąjį Reddit"
+  },
+  "networkFeed": {
+    "message": "Atverti tinklo srautą"
+  },
+  "hideNews": {
+    "message": "Slėpti naujienų juostą"
+  },
+  "feedChanged": {
+    "message": "Srautas pakeistas"
   }
 }
