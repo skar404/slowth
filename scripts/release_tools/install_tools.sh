@@ -2,7 +2,15 @@
 set -euo pipefail
 
 # GitHub runner images move; fail rather than silently selecting another Xcode.
-test "$(xcodebuild -version)" = $'Xcode 27.0\nBuild version 27A266a'
+expected_xcode=$'Xcode 27.0\nBuild version 27A266a'
+if [[ "${1:-}" == "--webkit" ]]; then
+  expected_xcode=$'Xcode 27.1\nBuild version 27A9275'
+fi
+actual_xcode=$(xcodebuild -version)
+if [[ "$actual_xcode" != "$expected_xcode" ]]; then
+  printf 'Expected %s, found %s\n' "$expected_xcode" "$actual_xcode" >&2
+  exit 1
+fi
 tool_dir="${RUNNER_TEMP:?}/slowth-tools"
 mkdir -p "$tool_dir"
 curl --fail --location --silent --show-error --retry 3 \

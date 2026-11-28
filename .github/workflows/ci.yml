@@ -94,7 +94,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install verified build tools
-        run: bash scripts/release_tools/install_tools.sh
+        run: bash scripts/release_tools/install_tools.sh --webkit
       - name: Test web app profiles and WebKit lifecycle
         run: |
           test -f Configs/Local.xcconfig || cp Configs/Local.xcconfig.example Configs/Local.xcconfig
